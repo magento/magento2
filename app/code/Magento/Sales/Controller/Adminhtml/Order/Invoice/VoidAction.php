@@ -1,13 +1,22 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
-class VoidAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View;
+
+class VoidAction extends View implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
     /**
      * Void invoice action
      *

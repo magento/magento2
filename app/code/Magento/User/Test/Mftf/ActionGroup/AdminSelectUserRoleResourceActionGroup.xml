@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectUserRoleResourceActionGroup">
+        <annotations>
+            <description>Admin check the resource access checkbox </description>
+        </annotations>
+        <arguments>
+            <argument name="resourceId" type="string"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminEditRoleResourcesSection.resourceId(resourceId)}}" stepKey="waitForResourceCheckboxVisible"/>
+        <click selector="{{AdminEditRoleResourcesSection.resourceId(resourceId)}}" stepKey="checkResourceName"/>
+    </actionGroup>
+</actionGroups>

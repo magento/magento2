@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model;
 
@@ -77,10 +77,10 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_localeDate = $localeDate;
         $this->_dateTime = $dateTime;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
   */
 -->
 
@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46344"/>
             <group value="testNotIsolated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategoryC"/>
@@ -37,9 +38,18 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToStores"/>
             <actionGroup ref="AdminDeleteMultipleWebsitesActionGroup" stepKey="deleteWebsites"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
+            <!-- Rename New Root Category to Default category -->
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
+            <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
+            <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryDefaultCategory"/>
+            <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
@@ -75,6 +85,11 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptModal" />
         <waitForElementVisible selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="waitForPageAdminStoresGridReload"/>
         <see userInput="You saved the store." stepKey="seeSavedMessage"/>
+        <!-- Run the consumer to start processing scheduled update of the product url rewrites values. -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{CatalogProductGenerateUrlsConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{CatalogProductGenerateUrlsConsumerData.messageLimit}}"/>
+        </actionGroup>
 
         <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!-- Perform cli reindex. -->
@@ -152,12 +167,12 @@
         <actionGroup ref="StorefrontCheckSimpleProductActionGroup" stepKey="browseAssertProduct3Page">
             <argument name="product" value="$$createProduct3$$"/>
         </actionGroup>
-        <!-- Rename New Root Category to Default category -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
-        <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryDefaultCategory"/>
-        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
+
+        <comment userInput="BIC workaround" stepKey="navigateToCategoryPageAfterStoreFrontProductsAssertions"/>
+        <comment userInput="BIC workaround" stepKey="clickOnNewRootCategoryA"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageNewRootCategoryALoad" />
+        <comment userInput="BIC workaround" stepKey="enterCategoryNameAsDefaultCategory"/>
+        <comment userInput="BIC workaround"  stepKey="saveCategoryDefaultCategory"/>
+        <comment userInput="BIC workaround"  stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
     </test>
 </tests>

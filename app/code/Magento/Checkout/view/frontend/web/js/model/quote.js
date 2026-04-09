@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 /**
  * @api
@@ -141,6 +141,13 @@ define([
             });
 
             return total;
+        },
+
+        /**
+         * @return {Boolean}
+         */
+        isPersistent: function () {
+            return !!Number(quoteData['is_persistent']);
         }
     };
 });

@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Url.
  *
- * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
  * @magentoAppArea frontend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -37,6 +37,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
+     */
     public function testGetUrlInStore()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -53,10 +56,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @dataProvider getUrlsWithSecondStoreProvider
      * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
+    #[DataProvider('getUrlsWithSecondStoreProvider')]
     public function testGetUrlInStoreWithSecondStore($storeCode, $expectedProductUrl)
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -79,7 +82,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getUrlsWithSecondStoreProvider()
+    public static function getUrlsWithSecondStoreProvider()
     {
         return [
            'case1' => ['fixturestore', 'http://sample-second.com/index.php/simple-product-one.html'],
@@ -89,6 +92,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
      */
     public function testGetProductUrl()
     {
@@ -99,52 +103,10 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('simple-product.html', $this->_model->getProductUrl($product));
     }
 
-    public function testFormatUrlKey()
-    {
-        $this->assertEquals('abc-test', $this->_model->formatUrlKey('AbC#-$^test'));
-    }
-
-    public function testGetUrlPath()
-    {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $product->setUrlPath('product.html');
-
-        /** @var $category \Magento\Catalog\Model\Category */
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class,
-            ['data' => ['url_path' => 'category', 'entity_id' => 5, 'path_ids' => [2, 3, 5]]]
-        );
-        $category->setOrigData();
-
-        $this->assertEquals('product.html', $this->urlPathGenerator->getUrlPath($product));
-        $this->assertEquals('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
-    }
-
-    /**
-     * @magentoDbIsolation disabled
-     * @magentoAppArea frontend
-     */
-    public function testGetUrl()
-    {
-        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ProductRepository::class
-        );
-        $product = $repository->get('simple');
-        $this->assertStringEndsWith('simple-product.html', $this->_model->getUrl($product));
-
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $product->setId(100);
-        $this->assertStringContainsString('catalog/product/view/id/100/', $this->_model->getUrl($product));
-    }
-
     /**
      * Check that rearranging product url rewrites do not influence on whether to use category in product links
      *
+     * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
@@ -186,5 +148,53 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         }
         $urlPersist->replace($rewrites);
         $this->assertStringNotContainsString($category->getUrlPath(), $this->_model->getProductUrl($product));
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     */
+    public function testFormatUrlKey()
+    {
+        $this->assertEquals('abc-test', $this->_model->formatUrlKey('AbC#-$^test'));
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
+     * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
+     */
+    public function testGetUrl()
+    {
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\ProductRepository::class
+        );
+        $product = $repository->get('simple');
+        $this->assertStringEndsWith('simple-product.html', $this->_model->getProductUrl($product));
+
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
+        );
+        $product->setId(100);
+        $this->assertStringContainsString('catalog/product/view/id/100/', $this->_model->getUrl($product));
+    }
+
+    public function testGetUrlPath()
+    {
+        /** @var $product \Magento\Catalog\Model\Product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Product::class
+        );
+        $product->setUrlPath('product.html');
+
+        /** @var $category \Magento\Catalog\Model\Category */
+        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Model\Category::class,
+            ['data' => ['url_path' => 'category', 'entity_id' => 5, 'path_ids' => [2, 3, 5]]]
+        );
+        $category->setOrigData();
+
+        $this->assertEquals('product.html', $this->urlPathGenerator->getUrlPath($product));
+        $this->assertEquals('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
     }
 }

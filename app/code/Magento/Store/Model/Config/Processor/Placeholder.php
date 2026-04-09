@@ -1,9 +1,7 @@
 <?php
 /**
- * Placeholder configuration values processor. Replace placeholders in configuration with config values
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model\Config\Processor;
 

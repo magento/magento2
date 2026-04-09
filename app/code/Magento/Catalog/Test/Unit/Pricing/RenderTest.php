@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Test\Unit\ManagerStub;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\Pricing\Render as PricingRender;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutInterface;
@@ -21,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class RenderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Render
      */
@@ -45,22 +48,16 @@ class RenderTest extends TestCase
     {
         $this->registry = $this->createPartialMock(Registry::class, ['registry']);
 
-        $this->pricingRenderBlock = $this->createMock(\Magento\Framework\Pricing\Render::class);
+        $this->pricingRenderBlock = $this->createMock(PricingRender::class);
 
         $this->layout = $this->createMock(Layout::class);
 
         $eventManager = $this->createMock(ManagerStub::class);
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $context = $this->createMock(Context::class);
-        $context->expects($this->any())
-            ->method('getEventManager')
-            ->willReturn($eventManager);
-        $context->expects($this->any())
-            ->method('getLayout')
-            ->willReturn($this->layout);
-        $context->expects($this->any())
-            ->method('getScopeConfig')
-            ->willReturn($scopeConfigMock);
+        $context->method('getEventManager')->willReturn($eventManager);
+        $context->method('getLayout')->willReturn($this->layout);
+        $context->method('getScopeConfig')->willReturn($scopeConfigMock);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -83,9 +80,7 @@ class RenderTest extends TestCase
 
         $product = $this->createMock(Product::class);
 
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->willReturn($this->pricingRenderBlock);
+        $this->layout->method('getBlock')->willReturn($this->pricingRenderBlock);
 
         $this->registry->expects($this->once())
             ->method('registry')
@@ -115,33 +110,35 @@ class RenderTest extends TestCase
         $this->registry->expects($this->never())
             ->method('registry');
 
-        $block = $this->getMockBuilder(\Magento\Framework\Pricing\Render::class)->addMethods(['getProductItem'])
-            ->onlyMethods(['render'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentBlock = $this->createPartialMockWithReflection(
+            Render::class,
+            ['getProductItem']
+        );
+        $parentBlock->method('getProductItem')->willReturn($product);
 
         $arguments = $this->object->getData();
         $arguments['render_block'] = $this->object;
-        $block->expects($this->any())
-            ->method('render')
-            ->with(
-                'test_price_type_code',
-                $product,
-                $arguments
-            )
-            ->willReturn($expectedValue);
-
-        $block->expects($this->any())
-            ->method('getProductItem')
-            ->willReturn($product);
 
         $this->layout->expects($this->once())
             ->method('getParentName')
             ->willReturn('parent_name');
 
-        $this->layout->expects($this->any())
-            ->method('getBlock')
-            ->willReturn($block);
+        $this->layout->method('getBlock')->willReturnCallback(function ($name) use ($parentBlock) {
+            if ($name === 'test_price_render') {
+                return $this->pricingRenderBlock;
+            }
+            if ($name === 'parent_name') {
+                return $parentBlock;
+            }
+            return null;
+        });
+
+        $this->pricingRenderBlock->expects($this->once())
+            ->method('render')
+            ->with('test_price_type_code', $product, $this->callback(function ($args) {
+                return isset($args['render_block']);
+            }))
+            ->willReturn($expectedValue);
 
         $this->assertEquals($expectedValue, $this->object->toHtml());
     }

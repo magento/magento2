@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\ResourceModel\Attribute;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,13 +33,13 @@ class CollectionTest extends TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @dataProvider attributesCollectionGetCurrentPageDataProvider
      *
      * @param array|null $condition
      * @param int $currentPage
      * @param int $expectedCurrentPage
      * @return void
      */
+    #[DataProvider('attributesCollectionGetCurrentPageDataProvider')]
     public function testAttributesCollectionGetCurrentPage(
         ?array $condition,
         int $currentPage,
@@ -57,7 +58,7 @@ class CollectionTest extends TestCase
     /**
      * @return array[]
      */
-    public function attributesCollectionGetCurrentPageDataProvider(): array
+    public static function attributesCollectionGetCurrentPageDataProvider(): array
     {
         return [
             [

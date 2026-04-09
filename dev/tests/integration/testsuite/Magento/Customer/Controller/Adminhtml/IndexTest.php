@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Controller\Adminhtml;
@@ -247,13 +247,15 @@ class IndexTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->setMethods(['sendMessage'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['sendMessage', 'getMessage'])
+            ->getMock();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
+        $transportMock->method('getMessage')
+            ->willReturn(null);
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'addTo',
                     'setFrom',

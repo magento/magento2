@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * WYSIWYG widget plugin form
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
@@ -86,9 +84,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _getWidgetSelectOptions()
     {
+        $options = [];
+
         foreach ($this->_getAvailableWidgets(true) as $data) {
             $options[$data['type']] = $data['name'];
         }
+
         return $options;
     }
 

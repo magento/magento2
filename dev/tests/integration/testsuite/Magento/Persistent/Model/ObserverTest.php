@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Persistent\Model;
@@ -60,7 +60,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         $this->_checkoutSession = $this->getMockBuilder(
             \Magento\Checkout\Model\Session::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+        )->disableOriginalConstructor()->onlyMethods([])->getMock();
 
         $this->_observer = $this->_objectManager->create(
             \Magento\Persistent\Model\Observer::class,

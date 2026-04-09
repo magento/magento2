@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,7 +87,7 @@ class InvoiceSender extends Sender
         InvoiceResource $invoiceResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         ManagerInterface $eventManager,
-        Emulation $appEmulation = null
+        ?Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;
@@ -126,6 +126,7 @@ class InvoiceSender extends Sender
                 $order->setBaseTaxAmount((float) $invoice->getBaseTaxAmount());
                 $order->setBaseShippingAmount((float) $invoice->getBaseShippingAmount());
             }
+            $paymentHTML = $this->getPaymentHtml($order);
             $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
             $transport = [
                 'order' => $order,
@@ -134,7 +135,7 @@ class InvoiceSender extends Sender
                 'invoice_id' => $invoice->getId(),
                 'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
-                'payment_html' => $this->getPaymentHtml($order),
+                'payment_html' => $paymentHTML,
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),

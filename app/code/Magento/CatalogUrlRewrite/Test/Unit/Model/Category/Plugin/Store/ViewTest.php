@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,8 @@ use Magento\Store\Model\Store;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ArrayIterator;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,42 +90,37 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->abstractModelMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isObjectNew'])
-            ->getMockForAbstractClass();
+        $this->abstractModelMock = $this->createMock(AbstractModel::class);
         $this->subjectMock = $this->getMockBuilder(StoreResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
-            ->setMethods(['deleteByData'])
-            ->getMockForAbstractClass();
+        $this->urlPersistMock = $this->createMock(UrlPersistInterface::class);
         $this->categoryMock = $this->getMockBuilder(Category::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCategories'])
+            ->onlyMethods(['getCategories'])
             ->getMock();
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->productFactoryMock = $this->getMockBuilder(ProductFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->categoryUrlRewriteGeneratorMock = $this->getMockBuilder(CategoryUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productUrlRewriteGeneratorMock = $this->getMockBuilder(ProductUrlRewriteGenerator::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generate'])
+            ->onlyMethods(['generate'])
             ->getMock();
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'getIterator', 'addStoreFilter'])
+            ->onlyMethods(['addCategoryIds', 'addAttributeToSelect', 'getIterator', 'addStoreFilter'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCollection'])
+            ->onlyMethods(['getCollection'])
             ->getMock();
         $this->plugin = new StoreViewPlugin(
             $this->urlPersistMock,
@@ -144,9 +141,8 @@ class ViewTest extends TestCase
         $origStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $reflectionStore = new \ReflectionClass($this->plugin);
+        $reflectionStore = new ReflectionClass($this->plugin);
         $origStore = $reflectionStore->getProperty('origStore');
-        $origStore->setAccessible(true);
         $origStore->setValue($this->plugin, $origStoreMock);
 
         $origStoreMock->expects($this->atLeastOnce())
@@ -158,16 +154,12 @@ class ViewTest extends TestCase
             ->method('isObjectNew')
             ->willReturn(true);
 
-        $this->abstractModelMock->expects($this->any())
-            ->method('isObjectNew')
-            ->willReturn(true);
+        $this->abstractModelMock->method('isObjectNew')->willReturn(true);
         $categoryCollection = $this->getMockBuilder(CategoryCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
-        $categoryCollection->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([]));
+        $categoryCollection->method('getIterator')->willReturn(new ArrayIterator([]));
         $this->categoryMock->expects($this->once())
             ->method('getCategories')
             ->willReturn($categoryCollection);
@@ -189,7 +181,7 @@ class ViewTest extends TestCase
         $this->productCollectionMock->expects($this->once())
             ->method('addStoreFilter')
             ->willReturn($this->productCollectionMock);
-        $iterator = new \ArrayIterator([$this->productMock]);
+        $iterator = new ArrayIterator([$this->productMock]);
         $this->productCollectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn($iterator);
@@ -209,9 +201,8 @@ class ViewTest extends TestCase
         $origStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $reflectionStore = new \ReflectionClass($this->plugin);
+        $reflectionStore = new ReflectionClass($this->plugin);
         $origStore = $reflectionStore->getProperty('origStore');
-        $origStore->setAccessible(true);
         $origStore->setValue($this->plugin, $origStoreMock);
 
         $origStoreMock->expects($this->atLeastOnce())
@@ -219,20 +210,14 @@ class ViewTest extends TestCase
             ->with('group_id')
             ->willReturn(null);
 
-        $origStoreMock->expects($this->any())
-            ->method('isObjectNew')
-            ->willReturn(true);
+        $origStoreMock->method('isObjectNew')->willReturn(true);
 
-        $this->abstractModelMock->expects($this->any())
-            ->method('isObjectNew')
-            ->willReturn(true);
+        $this->abstractModelMock->method('isObjectNew')->willReturn(true);
         $categoryCollection = $this->getMockBuilder(CategoryCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
-        $categoryCollection->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([]));
+        $categoryCollection->method('getIterator')->willReturn(new ArrayIterator([]));
         $this->categoryMock->expects($this->never())
             ->method('getCategories');
         $this->categoryFactoryMock->expects($this->never())->method('create');

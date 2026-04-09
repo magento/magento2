@@ -1,21 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Newsletter\Controller\Subscriber;
 
+use Exception;
+use Laminas\Stdlib\Parameters;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection as GridCollection;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\TestCase\AbstractController;
-use Laminas\Stdlib\Parameters;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks subscription behaviour from frontend
@@ -25,6 +30,9 @@ use Laminas\Stdlib\Parameters;
  */
 class NewActionTest extends AbstractController
 {
+    /** @var CustomerRepositoryInterface */
+    private $customerRepository;
+
     /** @var Session */
     private $session;
 
@@ -36,9 +44,6 @@ class NewActionTest extends AbstractController
 
     /** @var string|null */
     private $subscriberToDelete;
-
-    /** @var CustomerRepositoryInterface */
-    private $customerRepository;
 
     /** @var Url */
     private $customerUrl;
@@ -70,12 +75,11 @@ class NewActionTest extends AbstractController
     }
 
     /**
-     * @dataProvider subscribersDataProvider
-     *
      * @param string $email
      * @param string $expectedMessage
      * @return void
      */
+    #[DataProvider('subscribersDataProvider')]
     public function testNewAction(string $email, string $expectedMessage): void
     {
         $this->subscriberToDelete = $email ? $email : null;
@@ -86,32 +90,64 @@ class NewActionTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture current_store newsletter/general/active 1
+     *
+     * @return void
+     */
+    public function testNewActionWithSubscriptionConfigEnabled(): void
+    {
+        $email = 'good_subscription@example.com';
+        $this->subscriberToDelete = $email;
+        $this->prepareRequest($email);
+        $this->dispatch('newsletter/subscriber/new');
+        $subscriberCollection = $this->subscriberCollectionFactory->create();
+        $subscriberCollection->addFieldToFilter('subscriber_email', $email)->setPageSize(1);
+        $this->assertEquals(1, count($subscriberCollection));
+        $this->assertEquals($email, $subscriberCollection->getFirstItem()->getEmail());
+    }
+
+    /**
+     * @magentoConfigFixture current_store newsletter/general/active 0
+     *
+     * @return void
+     */
+    public function testNewActionWithSubscriptionConfigDisabled(): void
+    {
+        $email = 'bad_subscription@example.com';
+        $this->prepareRequest($email);
+        $this->dispatch('newsletter/subscriber/new');
+        $subscriberCollection = $this->subscriberCollectionFactory->create();
+        $subscriberCollection->addFieldToFilter('subscriber_email', $email)->setPageSize(1);
+        $this->assertEquals(0, count($subscriberCollection));
+    }
+
+    /**
      * @return array
      */
-    public function subscribersDataProvider(): array
+    public static function subscribersDataProvider(): array
     {
         return [
             'without_email' => [
                 'email' => '',
-                'message' => '',
+                'expectedMessage' => '',
             ],
             'with_unused_email' => [
                 'email' => 'not_used@example.com',
-                'message' => 'Thank you for your subscription.',
+                'expectedMessage' => 'Thank you for your subscription.',
             ],
             'with_invalid_email' => [
                 'email' => 'invalid_email.com',
-                'message' => 'Please enter a valid email address.'
+                'expectedMessage' => 'Please enter a valid email address.'
             ],
         ];
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
-     * @dataProvider emailAndStatusDataProvider
      *
      * @return void
      */
+    #[DataProvider('emailAndStatusDataProvider')]
     public function testNewActionUsedEmail($email, $subscriptionType): void
     {
         $this->prepareRequest($email);
@@ -127,11 +163,11 @@ class NewActionTest extends AbstractController
     /**
      * @return array
      */
-    public function emailAndStatusDataProvider()
+    public static function emailAndStatusDataProvider()
     {
         return [
-            'customer' => ['new_customer@example.com', 2],
-            'not_a_customer' => ['not_a_customer@gmail.com', 1],
+            'email' => ['new_customer@example.com', 2],
+            'subscriptionType' => ['not_a_customer@gmail.com', 1],
         ];
     }
 
@@ -222,8 +258,18 @@ class NewActionTest extends AbstractController
         $this->session->loginById(1);
         $this->prepareRequest('customer2@search.example.com');
         $this->dispatch('newsletter/subscriber/new');
+        $scopeConfig = $this->_objectManager->get(ScopeConfigInterface::class);
+        $guestLoginConfig = $scopeConfig->getValue(
+            AccountManagement::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            1
+        );
 
-        $this->performAsserts('This email address is already assigned to another user.');
+        if ($guestLoginConfig) {
+            $this->performAsserts('This email address is already assigned to another user.');
+        } else {
+            $this->performAsserts('This email address is already subscribed.');
+        }
     }
 
     /**
@@ -259,7 +305,9 @@ class NewActionTest extends AbstractController
      * Delete subscribers by email
      *
      * @param string $email
+     *
      * @return void
+     * @throws Exception
      */
     private function deleteSubscriber(string $email): void
     {

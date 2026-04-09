@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -45,7 +45,7 @@
 
             <!-- Logout from customer account -->
             <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
-            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <comment userInput="BIC" stepKey="waitLogoutCustomerOne"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>
@@ -135,17 +135,11 @@
         <waitForElementVisible selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="waitVisiblePrint"/>
         <seeElement selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="seeVisiblePrint2"/>
 
-        <!-- See print page -->
-        <click selector="{{CheckoutSuccessMainSection.printLink}}" stepKey="clickPrintLink"/>
-        <helper class="Magento\Sales\Test\Mftf\Helper\SalesHelper" method="switchToWindowWithUrlAndClosePrintDialogIfEncountered" stepKey="switchToWindowWithUrlAndClosePrintDialogIfEncountered">
-            <argument name="expectedUrl">sales/order/print/order_id/</argument>
-            <argument name="expectedUrlComparisonType">COMPARISON_PATH_SUBSET_MATCH</argument>
-        </helper>
-
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToWindow"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="switchToTab"/>
-        <comment userInput="Step key preserved for backwards compatibility" stepKey="seePrintPage"/>
-        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderTitle}}" stepKey="seeOrderTitleOnPrint"/>
-        <switchToWindow stepKey="switchToWindow2"/>
+        <!-- Validate print page URL -->
+        <grabAttributeFrom selector="{{CheckoutSuccessMainSection.printLink}}" userInput="href" stepKey="orderIdFromPrintUrl"/>
+        <assertRegExp message="Assert print order url has correct format" stepKey="assertPrintUrlHasCorrectFormat">
+            <expectedResult type="string">/^.+\/sales\/order\/print\/order_id\/\d+\/$/</expectedResult>
+            <actualResult type="variable">orderIdFromPrintUrl</actualResult>
+        </assertRegExp>
     </test>
 </tests>

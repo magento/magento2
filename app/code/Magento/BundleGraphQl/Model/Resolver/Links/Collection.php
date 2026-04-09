@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,13 +15,13 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\Uid;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Zend_Db_Select_Exception;
 
 /**
  * Collection to fetch link data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var CollectionFactory
@@ -52,28 +52,19 @@ class Collection
     private $uidEncoder;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @param CollectionFactory $linkCollectionFactory
      * @param EnumLookup $enumLookup
      * @param Uid|null $uidEncoder
-     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         CollectionFactory $linkCollectionFactory,
         EnumLookup $enumLookup,
-        Uid $uidEncoder = null,
-        ?ProductRepositoryInterface $productRepository = null
+        ?Uid $uidEncoder = null
     ) {
         $this->linkCollectionFactory = $linkCollectionFactory;
         $this->enumLookup = $enumLookup;
         $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
             ->get(Uid::class);
-        $this->productRepository = $productRepository ?: ObjectManager::getInstance()
-            ->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -117,7 +108,6 @@ class Collection
      * Fetch link data and return in array format. Keys for links will be their option Ids.
      *
      * @return array
-     * @throws NoSuchEntityException
      * @throws RuntimeException
      * @throws Zend_Db_Select_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -143,35 +133,38 @@ class Collection
 
         /** @var Selection $link */
         foreach ($linkCollection as $link) {
-            $productDetails = [];
             $data = $link->getData();
-            if (isset($data['product_id'])) {
-                $productDetails = $this->productRepository->getById($data['product_id']);
+            $formattedLink = [
+                'price' => $link->getSelectionPriceValue(),
+                'position' => $link->getPosition(),
+                'id' => $link->getSelectionId(),
+                'uid' => $this->uidEncoder->encode((string)$link->getSelectionId()),
+                'qty' => (float)$link->getSelectionQty(),
+                'quantity' => (float)$link->getSelectionQty(),
+                'is_default' => (bool)$link->getIsDefault(),
+                'price_type' => $this->enumLookup->getEnumValueFromField(
+                    'PriceTypeEnum',
+                    (string)$link->getSelectionPriceType()
+                ) ?: 'DYNAMIC',
+                'can_change_quantity' => $link->getSelectionCanChangeQty(),
+            ];
+            $data = array_replace($data, $formattedLink);
+            if (!isset($this->links[$link->getOptionId()])) {
+                $this->links[$link->getOptionId()] = [];
             }
-
-            if ($productDetails && $productDetails->getIsSalable()) {
-                $formattedLink = [
-                    'price' => $link->getSelectionPriceValue(),
-                    'position' => $link->getPosition(),
-                    'id' => $link->getSelectionId(),
-                    'uid' => $this->uidEncoder->encode((string)$link->getSelectionId()),
-                    'qty' => (float)$link->getSelectionQty(),
-                    'quantity' => (float)$link->getSelectionQty(),
-                    'is_default' => (bool)$link->getIsDefault(),
-                    'price_type' => $this->enumLookup->getEnumValueFromField(
-                        'PriceTypeEnum',
-                        (string)$link->getSelectionPriceType()
-                    ) ?: 'DYNAMIC',
-                    'can_change_quantity' => $link->getSelectionCanChangeQty(),
-                ];
-                $data = array_replace($data, $formattedLink);
-                if (!isset($this->links[$link->getOptionId()])) {
-                    $this->links[$link->getOptionId()] = [];
-                }
-                $this->links[$link->getOptionId()][] = $data;
-            }
+            $this->links[$link->getOptionId()][] = $data;
         }
 
         return $this->links;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->links = [];
+        $this->optionIds = [];
+        $this->parentIds = [];
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -10,7 +10,7 @@
         <section id="catalog">
             <group id="product_video" translate="label" type="text" sortOrder="350" showInDefault="1" showInWebsite="1">
                 <label>Product Video</label>
-                <field id="youtube_api_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1">
+                <field id="youtube_api_key" translate="label" type="text" sortOrder="10" showInDefault="1">
                     <label>YouTube API Key</label>
                 </field>
                 <field id="play_if_base" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

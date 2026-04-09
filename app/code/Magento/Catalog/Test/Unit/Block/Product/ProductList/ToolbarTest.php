@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\ProductList\Toolbar;
 use Magento\Catalog\Helper\Product\ProductList;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\EncoderInterface;
@@ -26,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ToolbarTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Toolbar
      */
@@ -96,13 +99,13 @@ class ToolbarTest extends TestCase
             ]
         );
         $this->layout = $this->createPartialMock(Layout::class, ['getChildName', 'getBlock']);
-        $this->pagerBlock = $this->getMockBuilder(Pager::class)
-            ->addMethods(['setUseContainer', 'setShowAmounts'])
-            ->onlyMethods(['setShowPerPage', 'setFrameLength', 'setJump', 'setLimit', 'setCollection', 'toHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pagerBlock = $this->createPartialMockWithReflection(
+            Pager::class,
+            ['setShowPerPage', 'setShowAmounts', 'setLimit', 'setCollection',
+             'setAvailableLimit', 'setUseContainer', 'setFrameLength', 'toHtml', 'setJump']
+        );
         $this->urlBuilder = $this->createPartialMock(Url::class, ['getUrl']);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $scopeConfig = [
             [Config::XML_PATH_LIST_DEFAULT_SORT_BY, null, 'name'],
@@ -125,15 +128,9 @@ class ToolbarTest extends TestCase
             Context::class,
             ['getUrlBuilder', 'getScopeConfig', 'getLayout']
         );
-        $context->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($this->urlBuilder);
-        $context->expects($this->any())
-            ->method('getScopeConfig')
-            ->willReturn($this->scopeConfig);
-        $context->expects($this->any())
-            ->method('getlayout')
-            ->willReturn($this->layout);
+        $context->method('getUrlBuilder')->willReturn($this->urlBuilder);
+        $context->method('getScopeConfig')->willReturn($this->scopeConfig);
+        $context->method('getlayout')->willReturn($this->layout);
         $this->productListHelper = $this->createMock(ProductList::class);
 
         $this->urlEncoder = $this->createPartialMock(EncoderInterface::class, ['encode']);
@@ -198,9 +195,7 @@ class ToolbarTest extends TestCase
     {
         $direction = 'desc';
 
-        $this->memorizer->expects($this->any())
-            ->method('getDirection')
-            ->willReturn($direction);
+        $this->memorizer->method('getDirection')->willReturn($direction);
 
         $this->assertEquals($direction, $this->block->getCurrentDirection());
     }
@@ -233,8 +228,8 @@ class ToolbarTest extends TestCase
     /**
      * @param string[] $mode
      * @param string[] $expected
-     * @dataProvider setModesDataProvider
      */
+    #[DataProvider('setModesDataProvider')]
     public function testSetModes($mode, $expected)
     {
         $this->productListHelper->expects($this->once())
@@ -248,7 +243,7 @@ class ToolbarTest extends TestCase
     /**
      * @return array
      */
-    public function setModesDataProvider()
+    public static function setModesDataProvider()
     {
         return [
             [['list' => 'List'], ['list' => 'List']],
@@ -275,9 +270,7 @@ class ToolbarTest extends TestCase
             ->method('getDefaultLimitPerPageValue')
             ->with('list')
             ->willReturn(10);
-        $this->productListHelper->expects($this->any())
-            ->method('getAvailableViewMode')
-            ->willReturn(['list' => 'List']);
+        $this->productListHelper->method('getAvailableViewMode')->willReturn(['list' => 'List']);
 
         $this->assertEquals($limit, $this->block->getLimit());
     }
@@ -295,6 +288,10 @@ class ToolbarTest extends TestCase
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
             ->willReturn([10 => 10, 20 => 20]);
+        $this->productListHelper->method('getAvailableViewMode')->willReturn(['list' => 'List']);
+        $this->memorizer->expects($this->once())
+            ->method('getMode')
+            ->willReturn('list');
         $this->memorizer->expects($this->once())
             ->method('getLimit')
             ->willReturn($limit);

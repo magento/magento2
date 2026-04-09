@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
@@ -30,6 +31,7 @@ use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -38,6 +40,8 @@ use PHPUnit\Framework\TestCase;
  */
 class VoidActionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AddComment
      */
@@ -123,31 +127,19 @@ class VoidActionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', 'void'])
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $this->helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            ['cancel', 'void', 'getInvoice', 'getOrder', 'getId']
+        );
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->helperMock = $this->createMock(Data::class);
+        $this->messageManagerMock = $this->createMock(Manager::class);
+        $this->sessionMock = $this->createMock(Session::class);
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getRequest',
                     'getResponse',
@@ -161,28 +153,20 @@ class VoidActionTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loaderMock = $this->getMockBuilder(CreditmemoLoader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->senderMock = $this->getMockBuilder(CreditmemoSender::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->loaderMock = $this->createMock(CreditmemoLoader::class);
+        $this->senderMock = $this->createMock(CreditmemoSender::class);
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')
@@ -325,15 +309,9 @@ class VoidActionTest extends TestCase
     {
         $id = '111';
 
-        $transactionMock = $this->getMockBuilder(Transaction::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $transactionMock = $this->createMock(Transaction::class);
+        $orderMock = $this->createMock(Order::class);
+        $invoiceMock = $this->createMock(Invoice::class);
 
         $this->requestMock->expects($this->any())
             ->method('getParam')

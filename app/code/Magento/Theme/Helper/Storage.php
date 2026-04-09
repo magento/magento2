@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -119,8 +119,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Framework\Filesystem\Io\File $file = null,
-        DriverInterface $filesystemDriver = null
+        ?\Magento\Framework\Filesystem\Io\File $file = null,
+        ?DriverInterface $filesystemDriver = null
     ) {
         parent::__construct($context);
         $this->filesystem = $filesystem;

@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Store\App\Request;
@@ -11,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\PathInfo;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
@@ -19,7 +21,7 @@ use Magento\Store\Model\Validation\StoreCodeValidator;
 /**
  * Gets the store from the path if valid
  */
-class StorePathInfoValidator
+class StorePathInfoValidator implements ResetAfterRequestInterface
 {
     /**
      * Store Config
@@ -42,6 +44,11 @@ class StorePathInfoValidator
      * @var StoreCodeValidator
      */
     private $storeCodeValidator;
+
+    /**
+     * @var array
+     */
+    private array $validatedStoreCodes = [];
 
     /**
      * @param ScopeConfigInterface $config
@@ -70,27 +77,29 @@ class StorePathInfoValidator
      */
     public function getValidStoreCode(Http $request, string $pathInfo = '') : ?string
     {
-        $useStoreCodeInUrl = (bool) $this->config->getValue(Store::XML_PATH_STORE_IN_URL);
-        if (!$useStoreCodeInUrl) {
+        if (!$this->config->isSetFlag(Store::XML_PATH_STORE_IN_URL)) {
             return null;
         }
 
-        if (empty($pathInfo)) {
+        if ($pathInfo === '') {
             $pathInfo = $this->pathInfo->getPathInfo($request->getRequestUri(), $request->getBaseUrl());
         }
         $storeCode = $this->getStoreCode($pathInfo);
-        if (empty($storeCode) || $storeCode === Store::ADMIN_CODE || !$this->storeCodeValidator->isValid($storeCode)) {
+
+        if ($storeCode === '' || $storeCode === Store::ADMIN_CODE || !$this->storeCodeValidator->isValid($storeCode)) {
             return null;
+        }
+
+        if (array_key_exists($storeCode, $this->validatedStoreCodes)) {
+            return $this->validatedStoreCodes[$storeCode];
         }
 
         try {
             $this->storeRepository->getActiveStoreByCode($storeCode);
 
-            return $storeCode;
-        } catch (NoSuchEntityException $e) {
-            return null;
-        } catch (StoreIsInactiveException $e) {
-            return null;
+            return $this->validatedStoreCodes[$storeCode] = $storeCode;
+        } catch (NoSuchEntityException|StoreIsInactiveException) {
+            return $this->validatedStoreCodes[$storeCode] = null;
         }
     }
 
@@ -104,5 +113,13 @@ class StorePathInfoValidator
     {
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
         return current($pathParts);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->validatedStoreCodes = [];
     }
 }

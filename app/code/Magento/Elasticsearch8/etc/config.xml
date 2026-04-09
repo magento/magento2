@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <catalog>
+            <search>
+                <elasticsearch8_server_hostname>localhost</elasticsearch8_server_hostname>
+                <elasticsearch8_server_port>9200</elasticsearch8_server_port>
+                <elasticsearch8_index_prefix>magento2</elasticsearch8_index_prefix>
+                <elasticsearch8_enable_auth>0</elasticsearch8_enable_auth>
+                <elasticsearch8_server_timeout>15</elasticsearch8_server_timeout>
+                <elasticsearch8_minimum_should_match/>
+            </search>
+        </catalog>
+    </default>
+</config>

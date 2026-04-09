@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\Template;
 
@@ -138,7 +138,7 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Element\Template\File\Resolver $resolver,
         \Magento\Framework\View\Element\Template\File\Validator $validator,
-        LockGuardedCacheLoader $lockQuery = null
+        ?LockGuardedCacheLoader $lockQuery = null
     ) {
         parent::__construct(
             $request,

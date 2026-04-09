@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Factories;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\DB\Charset\DefaultCharsetCollationMap;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -21,29 +23,27 @@ class Table implements FactoryInterface
     public const DEFAULT_ENGINE = 'innodb';
 
     /**
-     * Default charset for SQL
-     */
-    public const DEFAULT_CHARSET = 'utf8';
-
-    /**
-     * Default collation
-     */
-    public const DEFAULT_COLLATION = 'utf8_general_ci';
-
-    /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @var string
      */
-    private $className;
+    private string $className;
 
     /**
      * @var ResourceConnection
      */
-    private $resourceConnection;
+    private ResourceConnection $resourceConnection;
+
+    /** @var SqlVersionProvider|null */
+    private ?SqlVersionProvider $sqlVersionProvider = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $sqlVersion = null;
 
     /**
      * Constructor.
@@ -51,15 +51,18 @@ class Table implements FactoryInterface
      * @param ObjectManagerInterface $objectManager
      * @param ResourceConnection $resourceConnection
      * @param string $className
+     * @param SqlVersionProvider|null $sqlVersionProvider
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ResourceConnection $resourceConnection,
-        $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class
+        string $className = \Magento\Framework\Setup\Declaration\Schema\Dto\Table::class,
+        ?SqlVersionProvider $sqlVersionProvider = null
     ) {
         $this->objectManager = $objectManager;
         $this->className = $className;
         $this->resourceConnection = $resourceConnection;
+        $this->sqlVersionProvider = $sqlVersionProvider ?? $this->objectManager->get(SqlVersionProvider::class);
     }
 
     /**
@@ -72,11 +75,11 @@ class Table implements FactoryInterface
         }
         //Prepare charset
         if (!isset($data['charset'])) {
-            $data['charset'] = self::DEFAULT_CHARSET;
+            $data['charset'] = $this->getDefaultCharset();
         }
         //Prepare collation
         if (!isset($data['collation'])) {
-            $data['collation'] = self::DEFAULT_COLLATION;
+            $data['collation'] = $this->getDefaultCollation();
         }
         //Prepare triggers
         if (!isset($data['onCreate'])) {
@@ -93,5 +96,41 @@ class Table implements FactoryInterface
         }
 
         return $this->objectManager->create($this->className, $data);
+    }
+
+    /**
+     * Get default charset based on sql version (uses DefaultCharsetCollationMap).
+     *
+     * @return string
+     */
+    public function getDefaultCharset(): string
+    {
+        $versionKey = $this->sqlVersionProvider->isMysqlGte8029() ? 'mysql_8_29' : $this->getSqlVersion();
+        return DefaultCharsetCollationMap::getCharset($versionKey);
+    }
+
+    /**
+     * Get default collation based on sql version (uses DefaultCharsetCollationMap).
+     *
+     * @return string
+     */
+    public function getDefaultCollation(): string
+    {
+        $versionKey = $this->sqlVersionProvider->isMysqlGte8029() ? 'mysql_8_29' : $this->getSqlVersion();
+        return DefaultCharsetCollationMap::getCollation($versionKey);
+    }
+
+    /**
+     * Get sql version
+     *
+     * @return string
+     */
+    private function getSqlVersion(): string
+    {
+        if ($this->sqlVersion === null) {
+            $this->sqlVersion = $this->sqlVersionProvider->getSqlVersion();
+        }
+
+        return $this->sqlVersion;
     }
 }

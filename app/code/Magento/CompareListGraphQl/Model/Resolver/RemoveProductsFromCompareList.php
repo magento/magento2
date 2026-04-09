@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
+use Magento\CompareListGraphQl\Model\Service\CompareCookieManager;
+use Magento\Catalog\Helper\Product\Compare;
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\CompareListGraphQl\Model\Service\RemoveFromCompareList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -21,6 +24,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Remove items from compare list
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RemoveProductsFromCompareList implements ResolverInterface
 {
@@ -45,21 +50,39 @@ class RemoveProductsFromCompareList implements ResolverInterface
     private $getListIdByCustomerId;
 
     /**
+     * @var Compare
+     */
+    private mixed $productCompareHelper;
+
+    /**
+     * @var CompareCookieManager
+     */
+    private CompareCookieManager $compareCookieManager;
+
+    /**
      * @param GetCompareList $getCompareList
      * @param RemoveFromCompareList $removeFromCompareList
      * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
      * @param GetListIdByCustomerId $getListIdByCustomerId
+     * @param Compare|null $productCompareHelper
+     * @param CompareCookieManager|null $compareCookieManager
      */
     public function __construct(
         GetCompareList $getCompareList,
         RemoveFromCompareList $removeFromCompareList,
         MaskedListIdToCompareListId $maskedListIdToCompareListId,
-        GetListIdByCustomerId $getListIdByCustomerId
+        GetListIdByCustomerId $getListIdByCustomerId,
+        ?Compare $productCompareHelper = null,
+        ?CompareCookieManager $compareCookieManager = null
     ) {
         $this->getCompareList = $getCompareList;
         $this->removeFromCompareList = $removeFromCompareList;
         $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
         $this->getListIdByCustomerId = $getListIdByCustomerId;
+        $this->productCompareHelper = $productCompareHelper ?: ObjectManager::getInstance()
+            ->get(Compare::class);
+        $this->compareCookieManager = $compareCookieManager ?: ObjectManager::getInstance()
+            ->get(CompareCookieManager::class);
     }
 
     /**
@@ -81,8 +104,8 @@ class RemoveProductsFromCompareList implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['input']['products'])) {
             throw new GraphQlInputException(__('"products" value must be specified.'));
@@ -111,6 +134,8 @@ class RemoveProductsFromCompareList implements ResolverInterface
 
         try {
             $this->removeFromCompareList->execute($listId, $args['input']['products']);
+            $this->productCompareHelper->calculate();
+            $this->compareCookieManager->invalidate();
         } catch (LocalizedException $exception) {
             throw new GraphQlInputException(
                 __('Something was wrong during removing products from compare list')

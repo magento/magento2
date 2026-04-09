@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Block\Wysiwyg;
 
@@ -17,7 +17,7 @@ use Magento\Ui\Model;
  */
 class ActiveEditor extends \Magento\Framework\View\Element\Template
 {
-    const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter';
+    public const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymceAdapter';
 
     /**
      * @var ScopeConfigInterface

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Math\Test\Unit;
 use Magento\Framework\Math\Calculator;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CalculatorTest extends TestCase
 {
@@ -40,11 +41,10 @@ class CalculatorTest extends TestCase
     /**
      * @param float $price
      * @param bool $negative
-     * @param float $expected
-     * @dataProvider deltaRoundDataProvider
-     * @covers \Magento\Framework\Math\Calculator::deltaRound
+     * @param float $expected     * @covers \Magento\Framework\Math\Calculator::deltaRound
      * @covers \Magento\Framework\Math\Calculator::__construct
      */
+    #[DataProvider('deltaRoundDataProvider')]
     public function testDeltaRound($price, $negative, $expected)
     {
         $this->assertEquals($expected, $this->_model->deltaRound($price, $negative));
@@ -53,7 +53,7 @@ class CalculatorTest extends TestCase
     /**
      * @return array
      */
-    public function deltaRoundDataProvider()
+    public static function deltaRoundDataProvider()
     {
         return [
             [0, false, 0],

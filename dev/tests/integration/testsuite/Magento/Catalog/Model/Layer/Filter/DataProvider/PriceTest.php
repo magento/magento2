@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\DataProvider\Price.
@@ -90,7 +91,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getRangeItemCountsDataProvider(): array
+    public static function getRangeItemCountsDataProvider(): array
     {
         return [
             // These are $inputRange, [$expectedItemCounts] values
@@ -102,7 +103,6 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @dataProvider getRangeItemCountsDataProvider
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
@@ -110,6 +110,7 @@ class PriceTest extends TestCase
      * @param array $expectedItemCounts
      * @return void
      */
+    #[DataProvider('getRangeItemCountsDataProvider')]
     public function testGetRangeItemCounts(int $inputRange, array $expectedItemCounts): void
     {
         $this->layer->setCurrentCategory(4);
@@ -133,11 +134,11 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @dataProvider getAdditionalRequestDataDataProvider
      * @param array $priceFilters
      * @param string $expectedRequest
      * @return void
      */
+    #[DataProvider('getAdditionalRequestDataDataProvider')]
     public function testGetAdditionalRequestData(array $priceFilters, string $expectedRequest): void
     {
         $filter = explode('-', $priceFilters[0]);
@@ -154,20 +155,20 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function getAdditionalRequestDataDataProvider(): array
+    public static function getAdditionalRequestDataDataProvider(): array
     {
         return [
             'with_prior_filters' => [
-                'price_filters' => ['10-11', '20-21', '30-31'],
-                'expected_request' => ',10-11,20-21,30-31',
+                'priceFilters' => ['10-11', '20-21', '30-31'],
+                'expectedRequest' => ',10-11,20-21,30-31',
             ],
             'without_prior_filters' => [
-                'price_filters' => ['10-11'],
-                'expected_request' => ',10-11',
+                'priceFilters' => ['10-11'],
+                'expectedRequest' => ',10-11',
             ],
             'not_valid_prior_filters' => [
-                'price_filters' => ['10-11', '20-21', '31', '40-41'],
-                'expected_request' => ',10-11',
+                'priceFilters' => ['10-11', '20-21', '31', '40-41'],
+                'expectedRequest' => ',10-11',
             ],
         ];
     }

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Filter;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -301,8 +302,8 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param string[] $expectedRuleCodes The codes of the tax rules that are expected to be found
      *
      * @magentoDbIsolation enabled
-     * @dataProvider searchTaxRulesDataProvider
      */
+    #[DataProvider('searchTaxRulesDataProvider')]
     public function testGetList($filters, $filterGroup, $expectedRuleCodes)
     {
         $this->setUpDefaultRules();
@@ -334,7 +335,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->tearDownDefaultRules();
     }
 
-    public function searchTaxRulesDataProvider()
+    public static function searchTaxRulesDataProvider()
     {
         $filterBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
 

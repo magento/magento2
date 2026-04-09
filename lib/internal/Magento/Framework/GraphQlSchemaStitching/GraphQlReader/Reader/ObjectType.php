@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,8 +58,8 @@ class ObjectType implements TypeMetaReaderInterface
         FieldMetaReader $fieldMetaReader,
         DocReader $docReader,
         ImplementsReader $implementsAnnotation,
-        CacheAnnotationReader $cacheAnnotationReader = null,
-        DeprecatedAnnotationReader $deprecatedAnnotationReader = null
+        ?CacheAnnotationReader $cacheAnnotationReader = null,
+        ?DeprecatedAnnotationReader $deprecatedAnnotationReader = null
     ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;

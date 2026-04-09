@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,13 +16,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Swatches\Model\SwatchAttributeCodes;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SwatchAttributeCodesTest extends TestCase
 {
-    const ATTRIBUTE_TABLE = 'eav_attribute';
-    const ATTRIBUTE_OPTION_TABLE = 'eav_attribute_option';
-    const SWATCH_OPTION_TABLE = 'eav_attribute_option_swatch';
-    const CACHE_KEY = 'swatch-attribute-list';
+    public const ATTRIBUTE_TABLE = 'eav_attribute';
+    public const ATTRIBUTE_OPTION_TABLE = 'eav_attribute_option';
+    public const SWATCH_OPTION_TABLE = 'eav_attribute_option_swatch';
+    public const CACHE_KEY = 'swatch-attribute-list';
 
     /**
      * @var SwatchAttributeCodes
@@ -42,7 +43,7 @@ class SwatchAttributeCodesTest extends TestCase
     /**
      * @var array
      */
-    private $swatchAttributesCodes = [
+    private static $swatchAttributesCodes = [
         10 => 'text_swatch',
         11 => 'image_swatch',
     ];
@@ -71,10 +72,10 @@ class SwatchAttributeCodesTest extends TestCase
     }
 
     /**
-     * @dataProvider dataForGettingCodes
      * @param array|bool $swatchAttributeCodesCache
      * @param array $expected
      */
+    #[DataProvider('dataForGettingCodes')]
     public function testGetCodes($swatchAttributeCodesCache, $expected)
     {
         $this->cache
@@ -87,19 +88,13 @@ class SwatchAttributeCodesTest extends TestCase
         $selectMock = $this->createPartialMock(Select::class, ['from', 'where', 'join']);
         $selectMock
             ->method('from')
-            ->withConsecutive(
-                [
-                    self::identicalTo(
-                        ['a' => self::ATTRIBUTE_TABLE]
-                    )
-                ],
-                [
-                    self::identicalTo(
-                        ['o' => self::ATTRIBUTE_OPTION_TABLE]
-                    )
-                ]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($selectMock) {
+                if ($arg1 == ['a' => self::ATTRIBUTE_TABLE]) {
+                     return $selectMock;
+                } elseif ($arg1 == ['o' => self::ATTRIBUTE_OPTION_TABLE]) {
+                    return $selectMock;
+                }
+            });
 
         // used anything for second argument because of new \Zend_Db_Expt used in code.
         $selectMock->method('where')
@@ -113,7 +108,7 @@ class SwatchAttributeCodesTest extends TestCase
             ->willReturn($selectMock);
         $adapterMock->method('fetchPairs')
             ->with($selectMock)
-            ->willReturn($this->swatchAttributesCodes);
+            ->willReturn(self::$swatchAttributesCodes);
 
         $this->resourceConnection
             ->method('getConnection')
@@ -121,15 +116,15 @@ class SwatchAttributeCodesTest extends TestCase
 
         $this->resourceConnection
             ->method('getTableName')
-            ->withConsecutive(
-                [self::ATTRIBUTE_TABLE],
-                [self::ATTRIBUTE_OPTION_TABLE],
-                [self::SWATCH_OPTION_TABLE]
-            )->will(self::onConsecutiveCalls(
-                self::ATTRIBUTE_TABLE,
-                self::ATTRIBUTE_OPTION_TABLE,
-                self::SWATCH_OPTION_TABLE
-            ));
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == self::ATTRIBUTE_TABLE) {
+                    return self::ATTRIBUTE_TABLE;
+                } elseif ($arg1 == self::ATTRIBUTE_OPTION_TABLE) {
+                    return self::ATTRIBUTE_OPTION_TABLE;
+                } elseif ($arg1 == self::SWATCH_OPTION_TABLE) {
+                    return self::SWATCH_OPTION_TABLE;
+                }
+            });
 
         $result = $this->swatchAttributeCodesModel->getCodes();
         $this->assertEquals($expected, $result);
@@ -138,11 +133,11 @@ class SwatchAttributeCodesTest extends TestCase
     /**
      * @return array
      */
-    public function dataForGettingCodes()
+    public static function dataForGettingCodes()
     {
         return [
-            [false, $this->swatchAttributesCodes],
-            [json_encode($this->swatchAttributesCodes), $this->swatchAttributesCodes]
+            [false, self::$swatchAttributesCodes],
+            [json_encode(self::$swatchAttributesCodes), self::$swatchAttributesCodes]
         ];
     }
 }

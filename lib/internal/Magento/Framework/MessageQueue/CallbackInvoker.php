@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillCompareInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillReadInterface;
-use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Class CallbackInvoker to invoke callbacks for consumer classes
@@ -56,11 +56,12 @@ class CallbackInvoker implements CallbackInvokerInterface
      * @param QueueInterface $queue
      * @param int $maxNumberOfMessages
      * @param \Closure $callback
-     * @param int|null $maxIdleTime
-     * @param int|null $sleep
+     * @param mixed $maxIdleTime
+     * @param mixed $sleep
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function invoke(
         QueueInterface $queue,
@@ -72,6 +73,10 @@ class CallbackInvoker implements CallbackInvokerInterface
         $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
         $sleep = (int) $sleep ?: 1;
         $maxIdleTime = $maxIdleTime ? (int) $maxIdleTime : PHP_INT_MAX;
+        $connectionName = method_exists($queue, 'getConnectionName') ? $queue->getConnectionName(): null;
+        if ($connectionName === 'stomp') {
+            $queue->subscribeQueue();
+        }
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             $idleStartTime = microtime(true);
             do {

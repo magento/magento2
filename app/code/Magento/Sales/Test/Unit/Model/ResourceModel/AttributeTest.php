@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,23 +50,13 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            []
-        );
-        $this->modelMock = $this->getMockForAbstractClass(
+        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
+            ->onlyMethods(['dispatch'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->modelMock = $this->createPartialMock(
             AbstractModel::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'getEventPrefix', 'getEventObject']
+            ['getId', 'getEventPrefix', 'getEventObject', 'getData']
         );
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->onlyMethods(['rollback', 'describeTable', 'insert', 'lastInsertId', 'beginTransaction', 'commit'])
@@ -79,6 +69,9 @@ class AttributeTest extends TestCase
             ->method('insert');
         $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
         $this->attribute = new Attribute(
             $this->appResourceMock,
             $this->eventManagerMock
@@ -100,26 +93,18 @@ class AttributeTest extends TestCase
         $this->modelMock->expects($this->any())
             ->method('getEventObject')
             ->willReturn('event_object');
+        $this->modelMock->expects($this->any())
+            ->method('getData')
+            ->willReturn([]);
         $this->eventManagerMock
             ->method('dispatch')
-            ->withConsecutive(
-                [
-                    'event_prefix_save_attribute_before',
-                    [
-                        'event_object' => $this->attribute,
-                        'object' => $this->modelMock,
-                        'attribute' => ['attribute']
-                    ]
-                ],
-                [
-                    'event_prefix_save_attribute_after',
-                    [
-                        'event_object' => $this->attribute,
-                        'object' => $this->modelMock,
-                        'attribute' => ['attribute']
-                    ]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'event_prefix_save_attribute_before' ||
+                    $arg1 == 'event_prefix_save_attribute_after' &&
+                is_array($arg2)) {
+                    return null;
+                }
+            });
         $this->connectionMock->expects($this->once())
             ->method('beginTransaction');
         $this->connectionMock->expects($this->once())

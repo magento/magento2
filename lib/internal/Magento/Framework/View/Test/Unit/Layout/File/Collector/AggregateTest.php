@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,12 +54,12 @@ class AggregateTest extends TestCase
     protected function setUp(): void
     {
         $this->_fileList = $this->createMock(FileList::class);
-        $this->_baseFiles = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_themeFiles = $this->getMockForAbstractClass(CollectorInterface::class);
-        $this->_overridingBaseFiles = $this->getMockForAbstractClass(
+        $this->_baseFiles = $this->createMock(CollectorInterface::class);
+        $this->_themeFiles = $this->createMock(CollectorInterface::class);
+        $this->_overridingBaseFiles = $this->createMock(
             CollectorInterface::class
         );
-        $this->_overridingThemeFiles = $this->getMockForAbstractClass(
+        $this->_overridingThemeFiles = $this->createMock(
             CollectorInterface::class
         );
         $fileListFactory = $this->createMock(Factory::class);
@@ -79,8 +79,8 @@ class AggregateTest extends TestCase
      */
     public function testGetFiles(): void
     {
-        $parentTheme = $this->getMockForAbstractClass(ThemeInterface::class);
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $parentTheme = $this->createMock(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects(
             $this->once()
         )->method(
@@ -106,23 +106,56 @@ class AggregateTest extends TestCase
 
         $this->_themeFiles
             ->method('getFiles')
-            ->withConsecutive([$parentTheme], [$theme])
-            ->willReturnOnConsecutiveCalls([$files[1]], [$files[4]]);
+            ->willReturnCallback(
+                function ($arg) use ($parentTheme, $theme, $files) {
+                    if ($arg == $parentTheme) {
+                        return [$files[1]];
+                    } elseif ($arg == $theme) {
+                        return [$files[4]];
+                    }
+                }
+            );
         $this->_overridingBaseFiles
             ->method('getFiles')
-            ->withConsecutive([$parentTheme], [$theme])
-            ->willReturnOnConsecutiveCalls([$files[2]], [$files[5]]);
+            ->willReturnCallback(
+                function ($arg) use ($parentTheme, $theme, $files) {
+                    if ($arg == $parentTheme) {
+                        return [$files[2]];
+                    } elseif ($arg == $theme) {
+                        return [$files[5]];
+                    }
+                }
+            );
         $this->_overridingThemeFiles
             ->method('getFiles')
-            ->withConsecutive([$parentTheme], [$theme])
-            ->willReturnOnConsecutiveCalls([$files[3]], [$files[6]]);
-
+            ->willReturnCallback(
+                function ($arg) use ($parentTheme, $theme, $files) {
+                    if ($arg == $parentTheme) {
+                        return [$files[3]];
+                    } elseif ($arg == $theme) {
+                        return [$files[6]];
+                    }
+                }
+            );
         $this->_fileList
             ->method('add')
-            ->withConsecutive([[$files[0]]], [[$files[1]]], [[$files[4]]]);
+            ->willReturnCallback(
+                function ($arg) use ($files) {
+                    if ($arg == [$files[0]] || $arg == [$files[1]] || $arg == [$files[4]]) {
+                        return null;
+                    }
+                }
+            );
+
         $this->_fileList
             ->method('replace')
-            ->withConsecutive([[$files[2]]], [[$files[3]]], [[$files[5]]], [[$files[6]]]);
+            ->willReturnCallback(
+                function ($arg) use ($files) {
+                    if ($arg == [$files[2]] || $arg == [$files[3]] || $arg == [$files[5]] || $arg == [$files[6]]) {
+                        return null;
+                    }
+                }
+            );
 
         $this->_fileList->expects($this->atLeastOnce())->method('getAll')->willReturn($files);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Controller\Adminhtml\History\Index;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Context|MockObject
      */
@@ -37,6 +40,9 @@ class IndexTest extends TestCase
      */
     protected $resultFactory;
 
+    /**
+     * @var MockObject
+     */
     protected $resultPage;
 
     /**
@@ -44,11 +50,10 @@ class IndexTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->addMethods(['getTitle', 'prepend'])
-            ->onlyMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPage = $this->createPartialMockWithReflection(
+            Page::class,
+            ['setActiveMenu', 'getConfig', 'addBreadcrumb', 'getTitle', 'prepend']
+        );
         $this->resultPage->expects($this->any())->method('getConfig')->willReturnSelf();
         $this->resultPage->expects($this->any())->method('getTitle')->willReturnSelf();
         $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);

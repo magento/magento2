@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableDHLAPWithoutAccountAndCountryConfigurationActionGroup" extends="AdminEnableDHLConfigurationActionGroup">
+        <annotations>
+            <description>Admin Enable DHL shipping method with AP without account number and specific country</description>
+        </annotations>
+        <remove keyForRemoval="DHLAccount"/>
+        <remove keyForRemoval="DHLSpecificCountries"/>
+        <remove keyForRemoval="DHLSelectSpecificCountry"/>
+    </actionGroup>
+</actionGroups>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Framework\Jwt\Payload\ArbitraryPayload;
 use Magento\Framework\Jwt\Payload\ClaimsPayloadInterface;
 use Magento\Framework\Jwt\Payload\NestedPayloadInterface;
 use Magento\JwtFrameworkAdapter\Model\UnsecuredJwtFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class UnsecuredJwtFactoryTest extends TestCase
@@ -32,7 +33,7 @@ class UnsecuredJwtFactoryTest extends TestCase
         $this->model = new UnsecuredJwtFactory();
     }
 
-    public function getCreateCases(): array
+    public static function getCreateCases(): array
     {
         return [
             'compact-arbitrary' => [
@@ -83,8 +84,8 @@ class UnsecuredJwtFactoryTest extends TestCase
      * @param array|null $unprotected
      * @param string $payloadClass
      * @return void
-     * @dataProvider getCreateCases
      */
+    #[DataProvider('getCreateCases')]
     public function testCreate(
         array $headers,
         string $content,

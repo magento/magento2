@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Model;
@@ -28,9 +28,9 @@ use Magento\ImportExport\Model\Import\Adapter;
 use Magento\ImportExport\Model\Import\ConfigInterface;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\Entity\Factory;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\Source\Base64EncodedCsvData;
 use Magento\ImportExport\Model\ResourceModel\Import\Data;
 use Magento\ImportExport\Model\Source\Import\AbstractBehavior;
 use Magento\ImportExport\Model\Source\Import\Behavior\Factory as BehaviorFactory;
@@ -79,7 +79,7 @@ class Import extends AbstractModel
     public const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
 
     /**
-     * Validation startegt field name
+     * Validation strategy field name
      */
     public const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
 
@@ -97,6 +97,11 @@ class Import extends AbstractModel
      * Import empty attribute value constant.
      */
     public const FIELD_EMPTY_ATTRIBUTE_VALUE_CONSTANT = '_import_empty_attribute_value_constant';
+
+    /**
+     * Id of the `importexport_importdata` row after validation.
+     */
+    public const FIELD_IMPORT_IDS = '_import_ids';
 
     /**
      * Allow multiple values wrapping in double quotes for additional attributes.
@@ -118,7 +123,7 @@ class Import extends AbstractModel
     public const IMPORT_DIR = 'import/';
 
     /**
-     * @var AbstractEntity|ImportAbstractEntity
+     * @var EntityInterface
      */
     protected $_entityAdapter;
 
@@ -206,17 +211,22 @@ class Import extends AbstractModel
     private $upload;
 
     /**
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
      * @param LoggerInterface $logger
      * @param Filesystem $filesystem
      * @param DataHelper $importExportData
      * @param ScopeConfigInterface $coreConfig
-     * @param Import\ConfigInterface $importConfig
-     * @param Import\Entity\Factory $entityFactory
+     * @param ConfigInterface $importConfig
+     * @param Factory $entityFactory
      * @param Data $importData
-     * @param Export\Adapter\CsvFactory $csvFactory
+     * @param CsvFactory $csvFactory
      * @param FileTransferFactory $httpFactory
      * @param UploaderFactory $uploaderFactory
-     * @param Source\Import\Behavior\Factory $behaviorFactory
+     * @param Factory $behaviorFactory
      * @param IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
      * @param DateTime $localeDate
@@ -224,6 +234,7 @@ class Import extends AbstractModel
      * @param ManagerInterface|null $messageManager
      * @param Random|null $random
      * @param Upload|null $upload
+     * @param LocaleEmulatorInterface|null $localeEmulator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -242,9 +253,10 @@ class Import extends AbstractModel
         History $importHistoryModel,
         DateTime $localeDate,
         array $data = [],
-        ManagerInterface $messageManager = null,
-        Random $random = null,
-        Upload $upload = null
+        ?ManagerInterface $messageManager = null,
+        ?Random $random = null,
+        ?Upload $upload = null,
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->_importExportData = $importExportData;
         $this->_coreConfig = $coreConfig;
@@ -265,16 +277,36 @@ class Import extends AbstractModel
             ->get(Random::class);
         $this->upload = $upload ?: ObjectManager::getInstance()
             ->get(Upload::class);
+        $this->localeEmulator = $localeEmulator ?: ObjectManager::getInstance()
+            ->get(LocaleEmulatorInterface::class);
         parent::__construct($logger, $filesystem, $data);
+    }
+
+    /**
+     * Returns or create existing instance of entity adapter
+     *
+     * @throws LocalizedException
+     * @return EntityInterface
+     */
+    protected function _getEntityAdapter()
+    {
+        if (!$this->_entityAdapter) {
+            $this->_entityAdapter = $this->localeEmulator->emulate(
+                $this->createEntityAdapter(...),
+                $this->getData('locale') ?: null
+            );
+        }
+
+        return $this->_entityAdapter;
     }
 
     /**
      * Create instance of entity adapter and return it
      *
      * @throws LocalizedException
-     * @return AbstractEntity|ImportAbstractEntity
+     * @return EntityInterface
      */
-    protected function _getEntityAdapter()
+    private function createEntityAdapter()
     {
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
@@ -475,7 +507,22 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $ids = $this->_getEntityAdapter()->getIds();
+        return $this->localeEmulator->emulate(
+            $this->importSourceCallback(...),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Import source file structure to DB.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function importSourceCallback()
+    {
+        $ids = $this->getImportIds();
+        $this->_getEntityAdapter()->setIds($ids);
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
 
@@ -507,24 +554,46 @@ class Import extends AbstractModel
         $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
-            $this->addLogComment(
-                [
-                    __(
-                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                        $this->getProcessedRowsCount(),
-                        $this->getProcessedEntitiesCount(),
-                        $this->getErrorAggregator()->getInvalidRowsCount(),
-                        $this->getErrorAggregator()->getErrorsCount()
-                    ),
-                    __('The import was successful.'),
-                ]
-            );
+            $logComments = [
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $this->getProcessedRowsCount(),
+                    $this->getProcessedEntitiesCount(),
+                    $this->getErrorAggregator()->getInvalidRowsCount(),
+                    $this->getErrorAggregator()->getErrorsCount()
+                )
+            ];
+            foreach ($this->getErrorAggregator()->getAllErrors() as $error) {
+                $logComments[] = $error->getErrorMessage();
+            }
+            $logComments[] = $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
+                __('The import was not successful.') : __('The import was successful.');
+            $this->addLogComment($logComments);
             $this->importHistoryModel->updateReport($this, true);
         } else {
             $this->importHistoryModel->invalidateReport($this);
         }
 
         return $result;
+    }
+
+    /**
+     * Get entity import ids
+     *
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getImportIds(): array
+    {
+        $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);
+            }
+        }
+
+        return $ids;
     }
 
     /**
@@ -620,6 +689,21 @@ class Import extends AbstractModel
     /**
      * Validates source file and returns validation result
      *
+     * @param AbstractSource $source
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function validateSource(AbstractSource $source)
+    {
+        return $this->localeEmulator->emulate(
+            fn () => $this->validateSourceCallback($source),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Validates source file and returns validation result
+     *
      * Before validate data the method requires to initialize error aggregator (ProcessingErrorAggregatorInterface)
      * with 'validation strategy' and 'allowed error count' values to allow using this parameters in validation process.
      *
@@ -627,7 +711,7 @@ class Import extends AbstractModel
      * @return bool
      * @throws LocalizedException
      */
-    public function validateSource(AbstractSource $source)
+    private function validateSourceCallback(AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
 
@@ -653,11 +737,18 @@ class Import extends AbstractModel
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
 
-        $result = !$errorAggregator->isErrorLimitExceeded();
-        if ($result) {
-            $this->addLogComment(__('Import data validation is complete.'));
+        if ($errorAggregator->isErrorLimitExceeded()) {
+            return false;
         }
-        return $result;
+
+        if ($this->getProcessedRowsCount() <= $errorAggregator->getInvalidRowsCount()) {
+            $this->addLogComment(__('There are no valid rows to import.'));
+            return false;
+        }
+
+        $this->addLogComment(__('Import data validation is complete.'));
+
+        return true;
     }
 
     /**
@@ -813,7 +904,7 @@ class Import extends AbstractModel
                     $this->_varDirectory->writeFile($copyFile, $content);
                 }
             } catch (FileSystemException $e) {
-                throw new LocalizedException(__('Source file coping failed'));
+                throw new LocalizedException(__('Source file copying failed'));
             }
             $this->importHistoryModel->addReport($copyName);
         }
@@ -851,5 +942,15 @@ class Import extends AbstractModel
     public function getDeletedItemsCount()
     {
         return $this->_getEntityAdapter()->getDeletedItemsCount();
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return int[]
+     */
+    public function getValidatedIds() : array
+    {
+        return $this->_getEntityAdapter()->getIds() ?? [];
     }
 }

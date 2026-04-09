@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -28,6 +28,7 @@
             <argument name="submenuUiId" value="{{AdminMenuStoresCurrencyCurrencyRates.dataUiId}}"/>
         </actionGroup>
         <actionGroup ref="AdminNavigateToCurrencyRatesOptionActionGroup" stepKey="navigateToOptions" />
+        <waitForElementVisible selector="{{CurrencySetupSection.currencyOptions}}" stepKey="waitForCurrencyOptionsVisible"/>
         <grabAttributeFrom selector="{{CurrencySetupSection.currencyOptions}}" userInput="class" stepKey="grabClass"/>
         <assertStringContainsString stepKey="assertClass">
             <actualResult type="string">{$grabClass}</actualResult>

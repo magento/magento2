@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Service;
 
-use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Gateway\Command\CommandException;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\OrderMutexInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -60,6 +63,16 @@ class OrderService implements OrderManagementInterface
     private $logger;
 
     /**
+     * @var OrderMutexInterface
+     */
+    private $orderMutex;
+
+    /**
+     * @var Config
+     */
+    private $orderConfig;
+
+    /**
      * Constructor
      *
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -71,6 +84,9 @@ class OrderService implements OrderManagementInterface
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender
      * @param \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures
      * @param LoggerInterface $logger
+     * @param OrderMutexInterface|null $orderMutex
+     * @param Config|null $orderConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -81,7 +97,9 @@ class OrderService implements OrderManagementInterface
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Order\Email\Sender\OrderCommentSender $orderCommentSender,
         \Magento\Sales\Api\PaymentFailuresInterface $paymentFailures,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?OrderMutexInterface $orderMutex = null,
+        ?Config $orderConfig = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->historyRepository = $historyRepository;
@@ -92,6 +110,8 @@ class OrderService implements OrderManagementInterface
         $this->orderCommentSender = $orderCommentSender;
         $this->paymentFailures = $paymentFailures;
         $this->logger = $logger;
+        $this->orderMutex = $orderMutex ?: ObjectManager::getInstance()->get(OrderMutexInterface::class);
+        $this->orderConfig = $orderConfig ?: ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -101,6 +121,22 @@ class OrderService implements OrderManagementInterface
      * @return bool
      */
     public function cancel($id)
+    {
+        return $this->orderMutex->execute(
+            (int) $id,
+            \Closure::fromCallable([$this, 'cancelOrder']),
+            [$id]
+        );
+    }
+
+    /**
+     * Order cancel
+     *
+     * @param int $id
+     * @return bool
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function cancelOrder($id): bool
     {
         $order = $this->orderRepository->get($id);
         if ($order->canCancel()) {
@@ -133,10 +169,31 @@ class OrderService implements OrderManagementInterface
      * @param int $id
      * @param \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory
      * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function addComment($id, \Magento\Sales\Api\Data\OrderStatusHistoryInterface $statusHistory)
     {
         $order = $this->orderRepository->get($id);
+        $statuses = $this->orderConfig->getStateStatuses($order->getState());
+        $orderStatus = $order->getStatus();
+        $orderStatusHistory = $statusHistory->getStatus();
+        if ($orderStatusHistory) {
+            /**
+             * change order status in the scope of different state is not allowed during add comment to the order
+             */
+            if (!array_key_exists($orderStatusHistory, $statuses)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __(
+                        'Unable to add comment: The status "%1" is not part of the order status history.',
+                        $orderStatusHistory
+                    )
+                );
+            }
+            $orderStatus = $orderStatusHistory;
+        }
+        $statusHistory->setStatus($orderStatus);
+        $order->setStatus($orderStatus);
+
         $order->addStatusHistory($statusHistory);
         $this->orderRepository->save($order);
         $notify = $statusHistory['is_customer_notified'] ?? false;

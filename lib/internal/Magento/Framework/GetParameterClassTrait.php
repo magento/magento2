@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework;
 
 use ReflectionClass;
 use ReflectionParameter;
+use Magento\Framework\Interception\Code\InterfaceValidator;
 
 /**
  * Returns a reflection parameter's class if possible.
@@ -30,8 +31,16 @@ trait GetParameterClassTrait
             return null;
         }
 
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
+        // get $parameterType package name
+        $parameterPackage = strstr(trim((string)$parameterType), "\\", true);
+
+        if ($parameterType
+            && !$parameterType->isBuiltin()
+            && !in_array($parameterPackage, InterfaceValidator::$optionalPackages)
+        ) {
+            return new ReflectionClass($parameterType->getName());
+        } else {
+            return null;
+        }
     }
 }

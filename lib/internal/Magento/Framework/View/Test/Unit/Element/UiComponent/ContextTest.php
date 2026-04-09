@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -97,9 +98,7 @@ class ContextTest extends TestCase
             $this->getMockBuilder(ActionPoolFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->actionPool = $this->createMock(ActionPoolInterface::class);
         $this->actionPoolFactory->method('create')->willReturn($this->actionPool);
         $this->contentTypeFactory =
             $this->getMockBuilder(ContentTypeFactory::class)
@@ -113,9 +112,7 @@ class ContextTest extends TestCase
             $this->getMockBuilder(UiComponentFactory::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->authorization = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->authorization = $this->createMock(AuthorizationInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->context = $objectManagerHelper->getObject(
@@ -136,9 +133,7 @@ class ContextTest extends TestCase
 
     public function testAddButtonWithoutAclResource()
     {
-        $component = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $component = $this->createMock(UiComponentInterface::class);
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->never())->method('isAllowed');
@@ -152,9 +147,7 @@ class ContextTest extends TestCase
 
     public function testAddButtonWithAclResourceAllowed()
     {
-        $component = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $component = $this->createMock(UiComponentInterface::class);
 
         $this->actionPool->expects($this->once())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(true);
@@ -169,9 +162,7 @@ class ContextTest extends TestCase
 
     public function testAddButtonWithAclResourceDenied()
     {
-        $component = $this->getMockBuilder(UiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $component = $this->createMock(UiComponentInterface::class);
 
         $this->actionPool->expects($this->never())->method('add');
         $this->authorization->expects($this->once())->method('isAllowed')->willReturn(false);
@@ -184,11 +175,10 @@ class ContextTest extends TestCase
         ], $component);
     }
 
-    /**
-     * @dataProvider addComponentDefinitionDataProvider
-     * @param array $components
+    /**     * @param array $components
      * @param array $expected
      */
+    #[DataProvider('addComponentDefinitionDataProvider')]
     public function testAddComponentDefinition($components, $expected)
     {
         foreach ($components as $component) {
@@ -200,9 +190,8 @@ class ContextTest extends TestCase
     /**
      * @param string $headerAccept
      * @param string $acceptType
-     *
-     * @dataProvider getAcceptTypeDataProvider
-     */
+     *     */
+    #[DataProvider('getAcceptTypeDataProvider')]
     public function testGetAcceptType($headerAccept, $acceptType)
     {
         $request = $this->getMockBuilder(Http::class)
@@ -235,7 +224,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function getAcceptTypeDataProvider()
+    public static function getAcceptTypeDataProvider()
     {
         return [
             ['json', 'json'],
@@ -254,7 +243,7 @@ class ContextTest extends TestCase
     /**
      * @return array
      */
-    public function addComponentDefinitionDataProvider()
+    public static function addComponentDefinitionDataProvider()
     {
         return [
             [

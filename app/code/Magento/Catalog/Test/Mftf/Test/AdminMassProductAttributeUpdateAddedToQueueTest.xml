@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,6 +19,7 @@
             <useCaseId value="MC-29179"/>
             <group value="catalog"/>
             <group value="asynchronousOperations"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="createFirstProduct"/>
@@ -39,6 +40,7 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForSelectThirdProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectThirdProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="selectSecondProduct"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('3')}}" stepKey="selectFirstProduct"/>
@@ -46,8 +48,10 @@
         <checkOption selector="{{AdminEditProductAttributesSection.changeAttributeShortDescriptionToggle}}" stepKey="toggleToChangeShortDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.attributeShortDescription}}" userInput="Test Update" stepKey="fillShortDescriptionField"/>
         <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="saveMassAttributeUpdate"/>
+        <waitForElementVisible selector="{{AdminSystemMessagesSection.info}}" stepKey="waitForInfoMessage" />
         <see selector="{{AdminSystemMessagesSection.info}}" userInput="Task &quot;Update attributes for 3 selected products&quot;: 1 item(s) have been scheduled for update." stepKey="seeInfoMessage"/>
         <click selector="{{AdminSystemMessagesSection.viewDetailsLink}}" stepKey="seeDetails"/>
+        <waitForElementVisible selector="{{AdminBulkDetailsModalSection.descriptionValue}}" stepKey="waitForDescription" />
         <see selector="{{AdminBulkDetailsModalSection.descriptionValue}}" userInput="Update attributes for 3 selected products" stepKey="seeDescription"/>
         <see selector="{{AdminBulkDetailsModalSection.summaryValue}}" userInput="Pending, in queue..." stepKey="seeSummary"/>
         <grabTextFrom selector="{{AdminBulkDetailsModalSection.startTimeValue}}" stepKey="grabStartTimeValue"/>

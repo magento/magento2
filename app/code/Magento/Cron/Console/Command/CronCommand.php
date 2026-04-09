@@ -1,7 +1,8 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cron\Console\Command;
@@ -35,6 +36,12 @@ class CronCommand extends Command
     public const INPUT_KEY_GROUP = 'group';
 
     /**
+     * Name of input option
+     */
+    public const INPUT_KEY_EXCLUDE_GROUP = 'exclude-group';
+
+    /**
+     *
      * @var ObjectManagerFactory
      */
     private $objectManagerFactory;
@@ -52,7 +59,7 @@ class CronCommand extends Command
      */
     public function __construct(
         ObjectManagerFactory $objectManagerFactory,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->objectManagerFactory = $objectManagerFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(
@@ -72,6 +79,12 @@ class CronCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'Run jobs only from specified group'
+            ),
+            new InputOption(
+                self::INPUT_KEY_EXCLUDE_GROUP,
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Exclude jobs from the specified group'
             ),
             new InputOption(
                 Cli::INPUT_KEY_BOOTSTRAP,
@@ -96,12 +109,13 @@ class CronCommand extends Command
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->deploymentConfig->get('cron/enabled', 1)) {
             $output->writeln('<info>' . 'Cron is disabled. Jobs were not run.' . '</info>');
             return Cli::RETURN_SUCCESS;
         }
+
         // phpcs:ignore Magento2.Security.Superglobal
         $omParams = $_SERVER;
         $omParams[StoreManager::PARAM_RUN_CODE] = 'admin';
@@ -109,6 +123,7 @@ class CronCommand extends Command
         $objectManager = $this->objectManagerFactory->create($omParams);
 
         $params[self::INPUT_KEY_GROUP] = $input->getOption(self::INPUT_KEY_GROUP);
+        $params[self::INPUT_KEY_EXCLUDE_GROUP] = $input->getOption(self::INPUT_KEY_EXCLUDE_GROUP);
         $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = '0';
         $bootstrap = $input->getOption(Cli::INPUT_KEY_BOOTSTRAP);
         if ($bootstrap) {
@@ -121,10 +136,15 @@ class CronCommand extends Command
                 $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
             }
         }
+
         /** @var Cron $cronObserver */
         $cronObserver = $objectManager->create(Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
-        $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
+
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged,Magento2.Exceptions.TryProcessSystemResources.MissingTryCatch
+        if (stream_isatty(STDOUT)) {
+            $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
+        }
 
         return Cli::RETURN_SUCCESS;
     }

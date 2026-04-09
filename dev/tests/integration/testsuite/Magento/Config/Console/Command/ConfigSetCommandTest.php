@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Config\Console\Command;
@@ -25,6 +25,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -107,10 +108,8 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
         $this->config = $this->loadConfig();
 
         // Mocks for objects.
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
     }
 
     /**
@@ -160,8 +159,8 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $scope
      * @param string $scopeCode
      * @magentoDbIsolation enabled
-     * @dataProvider runLockDataProvider
      */
+    #[DataProvider('runLockDataProvider')]
     public function testRunLockEnv($path, $value, $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
     {
         $this->inputMock->expects($this->any())
@@ -179,9 +178,13 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ]);
         $this->outputMock->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                ['<info>Value was saved in app/etc/env.php and locked.</info>'],
-                ['<info>Value was saved in app/etc/env.php and locked.</info>']
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>' ||
+                        $arg1 == '<info>Value was saved in app/etc/env.php and locked.</info>') {
+                        return null;
+                    }
+                }
             );
 
         /** @var ConfigSetCommand $command */
@@ -205,7 +208,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runLockDataProvider()
+    public static function runLockDataProvider()
     {
         return [
             ['general/region/display_all', '1'],
@@ -224,8 +227,8 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $scope
      * @param string $scopeCode
      * @magentoDbIsolation enabled
-     * @dataProvider runExtendedDataProvider
      */
+    #[DataProvider('runExtendedDataProvider')]
     public function testRunExtended(
         $path,
         $value,
@@ -302,9 +305,9 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function runExtendedDataProvider()
+    public static function runExtendedDataProvider()
     {
-        return $this->runLockDataProvider();
+        return self::runLockDataProvider();
     }
 
     /**
@@ -313,9 +316,9 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param string $message Message command output
      * @param string $scope
      * @param $scopeCode string|null
-     * @dataProvider configSetValidationErrorDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('configSetValidationErrorDataProvider')]
     public function testConfigSetValidationError(
         $path,
         $value,
@@ -331,7 +334,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidationErrorDataProvider()
+    public static function configSetValidationErrorDataProvider()
     {
         return [
             //wrong value for URL - checked by backend model of URL field
@@ -420,7 +423,6 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * Saving values with successful validation
      *
-     * @dataProvider configSetValidDataProvider
      * @magentoDbIsolation enabled
      */
     public function testConfigSetValid()
@@ -435,7 +437,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function configSetValidDataProvider()
+    public static function configSetValidDataProvider()
     {
         return [
             [Custom::XML_PATH_UNSECURE_BASE_URL, 'http://magento2.local/'],

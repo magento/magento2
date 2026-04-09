@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -43,6 +43,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Unassign order status -->
@@ -103,15 +104,16 @@
             <argument name="tags" value="config full_page"/>
         </actionGroup>
 
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPageToAssertChanges"/>
         <!-- Assert order status in grid -->
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterOrderStatusGrid">
             <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
             <argument name="statusCode" value="{{defaultOrderStatus.status}}"/>
         </actionGroup>
-        <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
+        <see selector="{{AdminOrderStatusGridSection.gridStatusCell('1', '1')}}" userInput="{{defaultOrderStatus.label}}" stepKey="seeOrderStatusInOrderGrid"/>
 
         <!-- Create order and grab order id -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">

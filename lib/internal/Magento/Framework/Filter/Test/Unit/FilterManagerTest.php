@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,12 @@ use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Filter\FilterManager\Config;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class FilterManagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FilterManager
      */
@@ -42,7 +45,7 @@ class FilterManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['canCreateFilter', 'createFilter'])
             ->getMock();
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -69,7 +72,6 @@ class FilterManagerTest extends TestCase
         $this->initMocks();
         $method =
             new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
-        $method->setAccessible(true);
         $this->assertEquals([$this->_factoryMock], $method->invoke($this->_filterManager));
     }
 
@@ -82,7 +84,7 @@ class FilterManagerTest extends TestCase
         ));
         $factoryName = Factory::class;
         $this->_factoryMock = new \stdClass();
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(
@@ -104,19 +106,17 @@ class FilterManagerTest extends TestCase
         $this->_filterManager = new FilterManager($this->_objectManager, $this->_config);
 
         $method = new \ReflectionMethod(FilterManager::class, 'getFilterFactories');
-        $method->setAccessible(true);
         $method->invoke($this->_filterManager);
     }
 
     public function testCreateFilterInstance()
     {
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')
+        $filterMock = $this->getMockBuilder(\stdClass::class)
             ->getMock();
         $this->configureFactoryMock($filterMock, 'alias', ['123']);
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
-        $method->setAccessible(true);
         $this->assertEquals($filterMock, $method->invoke($this->_filterManager, 'alias', ['123']));
     }
 
@@ -137,7 +137,6 @@ class FilterManagerTest extends TestCase
         );
 
         $method = new \ReflectionMethod(FilterManager::class, 'createFilterInstance');
-        $method->setAccessible(true);
         $method->invoke($this->_filterManager, $filterAlias, []);
     }
 
@@ -174,8 +173,10 @@ class FilterManagerTest extends TestCase
     {
         $value = 'testValue';
         $this->initMocks();
-        $filterMock = $this->getMockBuilder('FactoryInterface')
-            ->setMethods(['filter'])->getMock();
+        $filterMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['filter']
+        );
         $filterMock->expects(
             $this->atLeastOnce()
         )->method(

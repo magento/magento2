@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Captcha\Model\Checkout\ConfigProvider;
 use Magento\Captcha\Model\DefaultModel;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -40,7 +41,7 @@ class ConfigProviderTest extends TestCase
     /**
      * @var integer
      */
-    protected $formId = 1;
+    protected static $formId = 1;
 
     /**
      * @var ConfigProvider
@@ -49,11 +50,11 @@ class ConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->captchaHelperMock = $this->createMock(Data::class);
         $this->captchaMock = $this->createMock(DefaultModel::class);
         $this->storeMock = $this->createMock(Store::class);
-        $formIds = [$this->formId];
+        $formIds = [self::$formId];
 
         $this->model = new ConfigProvider(
             $this->storeManagerMock,
@@ -63,14 +64,14 @@ class ConfigProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider getConfigDataProvider
-     * @param bool $isRequired
-     * @param integer $captchaGenerations
-     * @param array $expectedConfig
+     * @param $isRequired
+     * @param $captchaGenerations
+     * @param $expectedConfig
      */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig($isRequired, $captchaGenerations, $expectedConfig)
     {
-        $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($this->formId)
+        $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with(self::$formId)
             ->willReturn($this->captchaMock);
 
         $this->captchaMock->expects($this->any())->method('isCaseSensitive')->willReturn(1);
@@ -87,14 +88,14 @@ class ConfigProviderTest extends TestCase
             ->willReturn('https://magento.com/captcha');
 
         $config = $this->model->getConfig();
-        unset($config['captcha'][$this->formId]['timestamp']);
+        unset($config['captcha'][self::$formId]['timestamp']);
         $this->assertEquals($config, $expectedConfig);
     }
 
     /**
      * @return array
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [
             [
@@ -102,7 +103,7 @@ class ConfigProviderTest extends TestCase
                 'captchaGenerations' => 1,
                 'expectedConfig' => [
                     'captcha' => [
-                        $this->formId => [
+                        self::$formId => [
                             'isCaseSensitive' => true,
                             'imageHeight' => '12px',
                             'imageSrc' => 'source',
@@ -117,7 +118,7 @@ class ConfigProviderTest extends TestCase
                 'captchaGenerations' => 0,
                 'expectedConfig' => [
                     'captcha' => [
-                        $this->formId => [
+                        self::$formId => [
                             'isCaseSensitive' => true,
                             'imageHeight' => '12px',
                             'imageSrc' => '',

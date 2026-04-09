@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Wishlist\Controller\Index;
 
@@ -45,7 +45,7 @@ class Remove extends \Magento\Wishlist\Controller\AbstractIndex implements Actio
         Action\Context $context,
         WishlistProviderInterface $wishlistProvider,
         Validator $formKeyValidator,
-        AttributeValueProvider $attributeValueProvider = null
+        ?AttributeValueProvider $attributeValueProvider = null
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->formKeyValidator = $formKeyValidator;

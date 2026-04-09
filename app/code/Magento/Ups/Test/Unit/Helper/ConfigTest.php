@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Ups\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ups\Helper\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,8 +34,8 @@ class ConfigTest extends TestCase
      * @param mixed $result
      * @param null|string $type
      * @param string $code
-     * @dataProvider getCodeDataProvider
      */
+    #[DataProvider('getCodeDataProvider')]
     public function testGetData($result, $type = null, $code = null)
     {
         $this->assertEquals($result, $this->helper->getCode($type, $code));
@@ -45,7 +46,7 @@ class ConfigTest extends TestCase
      *
      * @return array
      */
-    public function getCodeDataProvider()
+    public static function getCodeDataProvider()
     {
         return [
             [false],

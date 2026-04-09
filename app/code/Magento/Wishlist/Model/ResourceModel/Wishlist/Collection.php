@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Wishlist model collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Model\ResourceModel\Wishlist;
 

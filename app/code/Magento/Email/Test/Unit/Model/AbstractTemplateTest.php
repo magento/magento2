@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,14 +26,18 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Url;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractTemplateTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var DesignInterface|MockObject
      */
@@ -84,20 +88,19 @@ class AbstractTemplateTest extends TestCase
      */
     private $templateFactory;
 
+    /**
+     * @var Url|MockObject
+     */
+    private $urlModel;
+
     protected function setUp(): void
     {
-        $this->design = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->appEmulation = $this->getMockBuilder(Emulation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->design = $this->createMock(DesignInterface::class);
+        $this->appEmulation = $this->createMock(Emulation::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
+            ->onlyMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
@@ -119,19 +122,18 @@ class AbstractTemplateTest extends TestCase
         $this->assetRepo = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->emailConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterFactory = $this->getMockBuilder(FilterFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->templateFactory = $this->getMockBuilder(TemplateFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->urlModel = $this->createMock(Url::class);
     }
 
     /**
@@ -143,30 +145,32 @@ class AbstractTemplateTest extends TestCase
      */
     protected function getModelMock(array $mockedMethods = [], array $data = [])
     {
-        $helper = new ObjectManager($this);
-        return $this->getMockForAbstractClass(
-            AbstractTemplate::class,
-            $helper->getConstructArguments(
-                AbstractTemplate::class,
-                [
-                    'design' => $this->design,
-                    'appEmulation' => $this->appEmulation,
-                    'storeManager' => $this->storeManager,
-                    'filesystem' => $this->filesystem,
-                    'assetRepo' => $this->assetRepo,
-                    'scopeConfig' => $this->scopeConfig,
-                    'emailConfig' => $this->emailConfig,
-                    'filterFactory' => $this->filterFactory,
-                    'templateFactory' => $this->templateFactory,
-                    'data' => $data,
-                ]
-            ),
-            '',
-            true,
-            true,
-            true,
-            array_merge($mockedMethods, ['__wakeup', '__sleep', '_init'])
-        );
+        $allMethods = array_merge($mockedMethods, ['__wakeup', '__sleep', '_init']);
+        $mock = $this->createPartialMockWithReflection(Template::class, $allMethods);
+        
+        $this->addPropertyValue($mock, [
+            'design' => $this->design,
+            'appEmulation' => $this->appEmulation,
+            'storeManager' => $this->storeManager,
+            'filesystem' => $this->filesystem,
+            'assetRepo' => $this->assetRepo,
+            'scopeConfig' => $this->scopeConfig,
+            'emailConfig' => $this->emailConfig,
+            'filterFactory' => $this->filterFactory,
+            'templateFactory' => $this->templateFactory,
+            'urlModel' => $this->urlModel,
+        ], Template::class);
+        
+        if (!empty($data)) {
+            foreach ($data as $key => $value) {
+                $mock->setData($key, $value);
+                if ($key === 'area') {
+                    $this->addPropertyValue($mock, ['area' => $value], Template::class);
+                }
+            }
+        }
+        
+        return $mock;
     }
 
     /**
@@ -175,12 +179,12 @@ class AbstractTemplateTest extends TestCase
      * @param        $storeId int
      * @param        $expectedVariables array
      * @param        $expectedResult string
-     * @dataProvider getProcessedTemplateProvider
      */
+    #[DataProvider('getProcessedTemplateProvider')]
     public function testGetProcessedTemplate($variables, $templateType, $storeId, $expectedVariables, $expectedResult)
     {
         $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setUseSessionInUrl',
                     'setPlainTemplateMode',
@@ -259,7 +263,7 @@ class AbstractTemplateTest extends TestCase
     {
         $this->expectException('LogicException');
         $filterTemplate = $this->getMockBuilder(Filter::class)
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setPlainTemplateMode',
                     'setIsChildTemplate',
@@ -316,7 +320,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateProvider()
+    public static function getProcessedTemplateProvider()
     {
         return [
             'default' => [
@@ -378,8 +382,8 @@ class AbstractTemplateTest extends TestCase
 
     /**
      * @param             array $config
-     * @dataProvider      invalidInputParametersDataProvider
      */
+    #[DataProvider('invalidInputParametersDataProvider')]
     public function testSetDesignConfigWithInvalidInputParametersThrowsException($config)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -397,7 +401,7 @@ class AbstractTemplateTest extends TestCase
     /**
      * @return array
      */
-    public function invalidInputParametersDataProvider()
+    public static function invalidInputParametersDataProvider()
     {
         return [[[]], [['area' => 'some_area']], [['store' => 'any_store']]];
     }
@@ -428,26 +432,20 @@ class AbstractTemplateTest extends TestCase
 
     public function testGetDesignConfig()
     {
-        $helper = new ObjectManager($this);
-
-        $designMock = $this->getMockForAbstractClass(DesignInterface::class);
+        $designMock = $this->createMock(DesignInterface::class);
         $designMock->expects($this->any())->method('getArea')->willReturn('test_area');
 
         $storeMock = $this->createMock(Store::class);
         $storeMock->expects($this->any())->method('getId')->willReturn(2);
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
 
-        $model = $this->getMockForAbstractClass(
-            AbstractTemplate::class,
-            $helper->getConstructArguments(
-                AbstractTemplate::class,
-                [
-                    'design' => $designMock,
-                    'storeManager' => $storeManagerMock
-                ]
-            )
-        );
+        $model = $this->createPartialMockWithReflection(Template::class, ['__wakeup', '__sleep', '_init']);
+
+        $this->addPropertyValue($model, [
+            'design' => $designMock,
+            'storeManager' => $storeManagerMock,
+        ], Template::class);
 
         $expectedConfig = ['area' => 'test_area', 'store' => 2];
         $this->assertEquals($expectedConfig, $model->getDesignConfig()->getData());

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -73,6 +73,38 @@ class PriceTest extends TestCase
         $indexPrices = [
             'simple_10' => [
                 'price' => 10,
+                'final_price' => 5,
+                'min_price' => 5,
+                'max_price' => 9,
+                'tier_price' => null
+            ],
+            'simple_20' => [
+                'price' => 20,
+                'final_price' => 10,
+                'min_price' => 10,
+                'max_price' => 15,
+                'tier_price' => 15
+            ],
+            'configurable' => [
+                'price' => 0,
+                'final_price' => 0,
+                'min_price' => 5,
+                'max_price' => 25,
+                'tier_price' => 15
+            ],
+        ];
+        $this->assertConfigurableProductPrice(20, 25, $indexPrices);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rules_for_children.php
+     * @return void
+     */
+    public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
+    {
+        $indexPrices = [
+            'simple_10' => [
+                'price' => 10,
                 'final_price' => 9,
                 'min_price' => 9,
                 'max_price' => 9,
@@ -93,39 +125,7 @@ class PriceTest extends TestCase
                 'tier_price' => 15
             ],
         ];
-        $this->assertConfigurableProductPrice(20, 25, $indexPrices);
-    }
-
-    /**
-     * @magentoDataFixture Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rules_for_children.php
-     * @return void
-     */
-    public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
-    {
-        $indexPrices = [
-            'simple_10' => [
-                'price' => 10,
-                'final_price' => 4.5,
-                'min_price' => 4.5,
-                'max_price' => 9,
-                'tier_price' => null
-            ],
-            'simple_20' => [
-                'price' => 20,
-                'final_price' => 8,
-                'min_price' => 8,
-                'max_price' => 15,
-                'tier_price' => 15
-            ],
-            'configurable' => [
-                'price' => 0,
-                'final_price' => 0,
-                'min_price' => 4.5,
-                'max_price' => 23,
-                'tier_price' => 15
-            ],
-        ];
-        $this->assertConfigurableProductPrice(19.5, 23, $indexPrices);
+        $this->assertConfigurableProductPrice(24, 30, $indexPrices);
     }
 
     /**

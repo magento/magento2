@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Store\Model\Store\StoresConfig
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Test\Unit\Model;
@@ -49,8 +47,8 @@ class StoresConfigTest extends TestCase
     {
         $this->_storeOne = $this->createMock(Store::class);
         $this->_storeTwo = $this->createMock(Store::class);
-        $this->_storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->_config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->_config = $this->createMock(ScopeConfigInterface::class);
 
         $this->_model = new StoresConfig(
             $this->_storeManager,
@@ -87,8 +85,13 @@ class StoresConfigTest extends TestCase
 
         $this->_config
             ->method('getValue')
-            ->withConsecutive([$path, 'store', 'code_0'], [$path, 'store', 'code_1'])
-            ->willReturnOnConsecutiveCalls(0, 1);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($path) {
+                if ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_0') {
+                    return 0;
+                } elseif ($arg1 == $path && $arg2 == 'store' && $arg3 == 'code_1') {
+                    return 1;
+                }
+            });
 
         $this->assertEquals([0 => 0, 1 => 1], $this->_model->getStoresConfigByPath($path));
     }

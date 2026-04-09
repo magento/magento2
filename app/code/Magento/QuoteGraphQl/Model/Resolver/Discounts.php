@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\QuoteGraphQl\Model\GetDiscounts;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -18,44 +19,32 @@ use Magento\Quote\Model\Quote;
  */
 class Discounts implements ResolverInterface
 {
+    public const TYPE_SHIPPING = "SHIPPING";
+    public const TYPE_ITEM = "ITEM";
+
+    /**
+     * @param GetDiscounts $getDiscounts
+     */
+    public function __construct(
+        private readonly GetDiscounts $getDiscounts,
+    ) {
+    }
+
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
+        /** @var Quote $quote */
         $quote = $value['model'];
-
-        return $this->getDiscountValues($quote);
-    }
-
-    /**
-     * Get Discount Values
-     *
-     * @param Quote $quote
-     * @return array
-     */
-    private function getDiscountValues(Quote $quote)
-    {
-        $discountValues=[];
-        $address = $quote->getShippingAddress();
-        $totals = $address->getTotals();
-        if ($totals && is_array($totals)) {
-            foreach ($totals as $total) {
-                if (stripos($total->getCode(), 'total') === false && $total->getValue() < 0.00) {
-                    $discount = [];
-                    $amount = [];
-                    $discount['label'] = $total->getTitle() ?: __('Discount');
-                    $amount['value'] = $total->getValue() * -1;
-                    $amount['currency'] = $quote->getQuoteCurrencyCode();
-                    $discount['amount'] = $amount;
-                    $discountValues[] = $discount;
-                }
-            }
-            return $discountValues;
-        }
-        return null;
+        $address = $quote->getIsVirtual() ? $quote->getBillingAddress() : $quote->getShippingAddress();
+        $discounts = $address->getExtensionAttributes()?->getDiscounts() ?? [];
+        return $this->getDiscounts->execute(
+            $quote,
+            $discounts
+        );
     }
 }

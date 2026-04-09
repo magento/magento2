@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Block;
 use Magento\Directory\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
@@ -19,6 +20,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SwitcherTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Switcher
      */
@@ -100,10 +104,10 @@ class SwitcherTest extends TestCase
 
         $stores = [];
         foreach ($storesSortOrder as $storeId => $sortOrder) {
-            $storeMock = $this->getMockBuilder(Store::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['getId', 'getGroupId', 'getSortOrder', 'isActive', 'getUrl'])
-                ->getMock();
+            $storeMock = $this->createPartialMockWithReflection(
+                Store::class,
+                ['getSortOrder', 'getId', 'getGroupId', 'isActive', 'getUrl']
+            );
             $storeMock->method('getId')->willReturn($storeId);
             $storeMock->method('getGroupId')->willReturn($groupId);
             $storeMock->method('getSortOrder')->willReturn($sortOrder);
@@ -137,9 +141,7 @@ class SwitcherTest extends TestCase
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $oldStoreMock = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $oldStoreMock = $this->createMock(StoreInterface::class);
         $storeMock->method('getCode')
             ->willReturn('new-store');
         $storeSwitchUrl = 'http://domain.com/stores/store/redirect';
@@ -163,9 +165,9 @@ class SwitcherTest extends TestCase
     }
 
     /**
-     * @dataProvider isStoreInUrlDataProvider
      * @param bool $isUseStoreInUrl
      */
+    #[DataProvider('isStoreInUrlDataProvider')]
     public function testIsStoreInUrl($isUseStoreInUrl)
     {
         $storeMock = $this->createMock(Store::class);
@@ -182,7 +184,7 @@ class SwitcherTest extends TestCase
      * @see self::testIsStoreInUrlDataProvider()
      * @return array
      */
-    public function isStoreInUrlDataProvider(): array
+    public static function isStoreInUrlDataProvider(): array
     {
         return [[true], [false]];
     }

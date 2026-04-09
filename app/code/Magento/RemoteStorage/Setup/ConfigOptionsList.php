@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,7 +38,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private const OPTION_REMOTE_STORAGE_SECRET_KEY = 'remote-storage-secret';
     private const CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY = RemoteDriverPool::PATH_CONFIG . '/credentials/secret';
     private const OPTION_REMOTE_STORAGE_PATH_STYLE = 'remote-storage-path-style';
-    private const CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE = RemoteDriverPool::PATH_CONFIG . '/path-style';
+    private const CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE = RemoteDriverPool::PATH_CONFIG . '/path_style';
 
     /**
      * Map of option to config path relations.
@@ -129,7 +129,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             ),
             new TextConfigOption(
                 self::OPTION_REMOTE_STORAGE_PATH_STYLE,
-                TextConfigOption::FRONTEND_WIZARD_PASSWORD,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE,
                 'Remote storage path style',
                 '0'

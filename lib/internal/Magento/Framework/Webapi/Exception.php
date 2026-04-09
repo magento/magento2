@@ -1,11 +1,8 @@
 <?php
 /**
- * Webapi module exception. Should be used in web API services implementation.
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
@@ -27,27 +24,29 @@ class Exception extends LocalizedException
     /**#@+
      * Error HTTP response codes.
      */
-    const HTTP_BAD_REQUEST = 400;
+    public const HTTP_BAD_REQUEST = 400;
 
-    const HTTP_UNAUTHORIZED = 401;
+    public const HTTP_UNAUTHORIZED = 401;
 
-    const HTTP_FORBIDDEN = 403;
+    public const HTTP_FORBIDDEN = 403;
 
-    const HTTP_NOT_FOUND = 404;
+    public const HTTP_NOT_FOUND = 404;
 
-    const HTTP_METHOD_NOT_ALLOWED = 405;
+    public const HTTP_METHOD_NOT_ALLOWED = 405;
 
-    const HTTP_NOT_ACCEPTABLE = 406;
+    public const HTTP_NOT_ACCEPTABLE = 406;
 
-    const HTTP_INTERNAL_ERROR = 500;
+    public const HTTP_TOO_MANY_REQUESTS = 429;
+
+    public const HTTP_INTERNAL_ERROR = 500;
 
     /**#@-*/
 
     /**#@+
      * Fault codes that are used in SOAP faults.
      */
-    const FAULT_CODE_SENDER = 'Sender';
-    const FAULT_CODE_RECEIVER = 'Receiver';
+    public const FAULT_CODE_SENDER = 'Sender';
+    public const FAULT_CODE_RECEIVER = 'Receiver';
 
     /**
      * Optional exception details.
@@ -71,8 +70,6 @@ class Exception extends LocalizedException
     protected $_name;
 
     /**
-     * Stacktrace
-     *
      * @var string
      */
     protected $_stackTrace;

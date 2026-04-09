@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,11 +10,15 @@ namespace Magento\Quote\Model;
 use Magento\Customer\Api\AccountManagementInterface as AccountManagement;
 use Magento\Customer\Api\AddressRepositoryInterface as CustomerAddressRepository;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Model\AddressFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Framework\Validator\Factory as ValidatorFactory;
 use Magento\Quote\Model\Quote as QuoteEntity;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Class Customer
@@ -47,10 +51,22 @@ class CustomerManagement
     private $addressFactory;
 
     /**
+     * @var AddressInterfaceFactory
+     */
+    private $customerAddressFactory;
+
+    /**
+     * @var RegionInterfaceFactory
+     */
+    private $regionFactory;
+
+    /**
      * CustomerManagement constructor.
      * @param CustomerRepository $customerRepository
      * @param CustomerAddressRepository $customerAddressRepository
      * @param AccountManagement $accountManagement
+     * @param AddressInterfaceFactory $customerAddressFactory
+     * @param RegionInterfaceFactory $regionFactory
      * @param ValidatorFactory|null $validatorFactory
      * @param AddressFactory|null $addressFactory
      */
@@ -58,12 +74,16 @@ class CustomerManagement
         CustomerRepository $customerRepository,
         CustomerAddressRepository $customerAddressRepository,
         AccountManagement $accountManagement,
-        ValidatorFactory $validatorFactory = null,
-        AddressFactory $addressFactory = null
+        AddressInterfaceFactory $customerAddressFactory,
+        RegionInterfaceFactory $regionFactory,
+        ?ValidatorFactory $validatorFactory = null,
+        ?AddressFactory $addressFactory = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->customerAddressRepository = $customerAddressRepository;
         $this->accountManagement = $accountManagement;
+        $this->customerAddressFactory = $customerAddressFactory;
+        $this->regionFactory = $regionFactory;
         $this->validatorFactory = $validatorFactory ?: ObjectManager::getInstance()
             ->get(ValidatorFactory::class);
         $this->addressFactory = $addressFactory ?: ObjectManager::getInstance()
@@ -150,19 +170,60 @@ class CustomerManagement
                 $quote->getShippingAddress()->getCustomerAddressId()
             );
         }
-        if (!empty($addresses)) {
-            foreach ($addresses as $address) {
-                $validator = $this->validatorFactory->createValidator('customer_address', 'save');
-                $addressModel = $this->addressFactory->create();
-                $addressModel->updateData($address);
-                if (!$validator->isValid($addressModel)) {
-                    throw new ValidatorException(
-                        null,
-                        null,
-                        $validator->getMessages()
-                    );
-                }
+        if (empty($addresses) && $quote->getCustomerIsGuest()) {
+            $billingAddress = $quote->getBillingAddress();
+            $addresses[] = $this->createCustomerAddressFromBilling($billingAddress);
+        }
+        foreach ($addresses as $address) {
+            $validator = $this->validatorFactory->createValidator('customer_address', 'save');
+            $addressModel = $this->addressFactory->create();
+            $addressModel->updateData($address);
+            if (!$validator->isValid($addressModel)) {
+                throw new ValidatorException(
+                    null,
+                    null,
+                    $validator->getMessages()
+                );
             }
         }
+    }
+
+    /**
+     * Creates guest customer address from a billing address.
+     *
+     * @param QuoteAddress $billingAddress
+     * @return AddressInterface
+     */
+    private function createCustomerAddressFromBilling(QuoteAddress $billingAddress): AddressInterface
+    {
+        $customerAddress = $this->customerAddressFactory->create();
+        $customerAddress->setPrefix($billingAddress?->getPrefix());
+        $customerAddress->setFirstname($billingAddress->getFirstname());
+        $customerAddress->setMiddlename($billingAddress?->getMiddlename());
+        $customerAddress->setLastname($billingAddress->getLastname());
+        $customerAddress->setSuffix($billingAddress?->getSuffix());
+        $customerAddress->setCompany($billingAddress?->getCompany());
+        $customerAddress->setStreet($billingAddress->getStreet());
+        $customerAddress->setCountryId($billingAddress->getCountryId());
+        $customerAddress->setCity($billingAddress->getCity());
+        $customerAddress->setPostcode($billingAddress->getPostcode());
+        $customerAddress->setTelephone($billingAddress->getTelephone());
+        $customerAddress->setFax($billingAddress?->getFax());
+        $customerAddress->setVatId($billingAddress?->getVatId());
+        $regionData = $billingAddress->getRegion();
+        if (is_array($regionData)) {
+            $region = $this->regionFactory->create();
+            $region->setRegion($regionData['region'] ?? null);
+            $region->setRegionCode($regionData['region_code'] ?? null);
+            $region->setRegionId($regionData['region_id'] ?? null);
+        } elseif (is_string($regionData)) {
+            $region = $this->regionFactory->create();
+            $region->setRegion($regionData);
+        } else {
+            $region = null;
+        }
+        $customerAddress->setRegion($region);
+        $customerAddress->setCustomAttributes($billingAddress->getCustomAttributes());
+        return $customerAddress;
     }
 }

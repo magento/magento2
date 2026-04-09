@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Exception;
 
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Exception\AggregateExceptionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -17,9 +18,10 @@ use GraphQL\Error\ClientAware;
  *
  * @api
  */
-class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware
+// phpcs:disable Generic.Files.LineLength.TooLong
+class GraphQlInputException extends LocalizedException implements AggregateExceptionInterface, ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-input';
+    public const EXCEPTION_CATEGORY = 'graphql-input';
 
     /**
      * @var boolean
@@ -41,7 +43,7 @@ class GraphQlInputException extends LocalizedException implements AggregateExcep
      * @param int $code
      * @param boolean $isSafe
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0, $isSafe = true)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0, $isSafe = true)
     {
         $this->isSafe = $isSafe;
         parent::__construct($phrase, $cause, $code);
@@ -83,5 +85,16 @@ class GraphQlInputException extends LocalizedException implements AggregateExcep
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }

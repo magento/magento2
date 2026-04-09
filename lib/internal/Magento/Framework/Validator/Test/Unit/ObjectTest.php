@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Laminas\Validator\Identical;
 use Magento\Framework\Validator\StringLength;
 use Magento\Framework\Validator\DataObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ObjectTest extends TestCase
 {
@@ -82,9 +83,8 @@ class ObjectTest extends TestCase
 
     /**
      * @param array $inputEntityData
-     * @param array $expectedErrors
-     * @dataProvider validateDataProvider
-     */
+     * @param array $expectedErrors     */
+    #[DataProvider('validateDataProvider')]
     public function testIsValid(array $inputEntityData, array $expectedErrors)
     {
         $entity = new \Magento\Framework\DataObject($inputEntityData);
@@ -103,7 +103,7 @@ class ObjectTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'only "field_one" is invalid' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -29,6 +29,8 @@ $price->setCustomerId(
     $product->getPrice()+1
 )->setWebsiteId(
     1
+)->setStoreId(
+    1
 );
 $price->save();
 
@@ -38,6 +40,8 @@ $stock->setCustomerId(
 )->setProductId(
     $product->getId()
 )->setWebsiteId(
+    1
+)->setStoreId(
     1
 );
 $stock->save();

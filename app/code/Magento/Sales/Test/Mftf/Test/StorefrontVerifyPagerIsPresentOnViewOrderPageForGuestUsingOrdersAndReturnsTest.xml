@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyPagerIsPresentOnViewOrderPageForGuestUsingOrdersAndReturnsTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Pager should be present on view order page if quantity of ordered products exceeds limit"/>
+            <title value="Pager should be present on view order page"/>
+            <description value="Verify Pager is present on View Order page for Guest using Orders and Returns functionality if qty of ordered products exceeds display limit"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4415"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!-- Create simple products -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct1"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct2"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct3"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct4"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct5"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct6"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct7"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct8"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct9"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct10"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct11"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct12"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct13"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct14"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct15"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct16"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct17"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct18"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct19"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct20"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct21"/>
+            <!-- Pre-condition 1,2: Place an order with 21 products -->
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+            <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct1"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem2">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct2"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem3">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct3"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem4">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct4"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem5">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct5"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem6">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct6"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem7">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct7"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem8">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct8"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem9">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct9"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem10">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct10"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem11">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct11"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem12">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct12"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem13">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct13"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem14">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct14"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem15">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct15"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem16">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct16"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem17">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct17"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem18">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct18"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem19">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct19"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem20">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct20"/>
+            </createData>
+            <createData entity="SimpleCartItem" stepKey="addCartItem21">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createProduct21"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
+        </before>
+        <after>
+            <!-- Delete simple products -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="createProduct4" stepKey="deleteProductT4"/>
+            <deleteData createDataKey="createProduct5" stepKey="deleteProduct5"/>
+            <deleteData createDataKey="createProduct6" stepKey="deleteProduct6"/>
+            <deleteData createDataKey="createProduct7" stepKey="deleteProduct7"/>
+            <deleteData createDataKey="createProduct8" stepKey="deleteProduct8"/>
+            <deleteData createDataKey="createProduct9" stepKey="deleteProduct9"/>
+            <deleteData createDataKey="createProduct10" stepKey="deleteProduct10"/>
+            <deleteData createDataKey="createProduct11" stepKey="deleteProduct11"/>
+            <deleteData createDataKey="createProduct12" stepKey="deleteProduct12"/>
+            <deleteData createDataKey="createProduct13" stepKey="deleteProduct13"/>
+            <deleteData createDataKey="createProduct14" stepKey="deleteProduct14"/>
+            <deleteData createDataKey="createProduct15" stepKey="deleteProduct15"/>
+            <deleteData createDataKey="createProduct16" stepKey="deleteProduct16"/>
+            <deleteData createDataKey="createProduct17" stepKey="deleteProduct17"/>
+            <deleteData createDataKey="createProduct18" stepKey="deleteProduct18"/>
+            <deleteData createDataKey="createProduct19" stepKey="deleteProduct19"/>
+            <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
+            <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Get order-id, email -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCart.return$)}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openCreatedOrder">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.customerEmail}}" stepKey="grabEmail"/>
+        <!-- Step 1,2: Go to storefront as guest and navigate to: orders and returns page -->
+        <actionGroup ref="StorefrontOpenOrdersAndReturnsPageActionGroup" stepKey="goToOrdersAndReturnsPage"/>
+        <waitForPageLoad stepKey="waiForStorefrontPage"/>
+        <!-- Step 3: Fill the form with address data form and precondition-->
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormByEmailActionGroup" stepKey="fillOrder">
+            <argument name="orderNumber" value="$grabOrderNumber"/>
+            <argument name="customer" value="BillingAddressTX"/>
+            <argument name="emailId" value="$grabEmail"/>
+        </actionGroup>
+        <!-- Step 4:  Click on the "continue" Button -->
+        <click selector="{{StorefrontOrderAndReturnInformationSection.continueButton}}" stepKey="clickContinueButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!-- Step 4 Assertion: Verify order page is opened, only 20 items present on the first page and pagers (Top and Bottom) and text "Items 1-20 of 21 total" are present -->
+        <waitForElementVisible selector="{{StorefrontOrderAndReturnInformationSection.orderPage({$grabOrderNumber})}}" stepKey="verifyOrderPage" />
+        <waitForText userInput="Items 1 to 20 of 21 total" selector="{{StorefrontOrderAndReturnInformationSection.pagerAtTop}}" stepKey="seeTotalProductsAndNumberOfProductsPerPageAtTop"/>
+        <waitForText userInput="Items 1 to 20 of 21 total" selector="{{StorefrontOrderAndReturnInformationSection.pagerAtBottom}}" stepKey="seePagerAtBottom"/>
+    </test>
+</tests>

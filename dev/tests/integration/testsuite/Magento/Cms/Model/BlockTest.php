@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Model;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -58,8 +59,8 @@ class BlockTest extends TestCase
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider testGetByIdentifierDataProvider
      */
+    #[DataProvider('blockGetByIdentifierDataProvider')]
     public function testGetByIdentifier(array $blockData)
     {
         # Prepare and save the temporary block
@@ -79,8 +80,8 @@ class BlockTest extends TestCase
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider testGetByIdentifierDataProvider
      */
+    #[DataProvider('blockGetByIdentifierDataProvider')]
     public function testUpdateTime(array $blockData)
     {
         /**
@@ -112,11 +113,11 @@ class BlockTest extends TestCase
      * Data provider for "testGetByIdentifier" and "testUpdateTime" method
      * @return array
      */
-    public function testGetByIdentifierDataProvider(): array
+    public static function blockGetByIdentifierDataProvider(): array
     {
         return [
             [
-                'data' => [
+                'blockData' => [
                     'title'      => 'Test title',
                     'stores'     => [0],
                     'identifier' => 'test-identifier',

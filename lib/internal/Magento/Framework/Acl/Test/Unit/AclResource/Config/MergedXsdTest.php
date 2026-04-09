@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Acl\Test\Unit\AclResource\Config;
 use Magento\Framework\Acl\AclResource\Config\SchemaLocator;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MergedXsdTest extends TestCase
@@ -45,8 +46,8 @@ class MergedXsdTest extends TestCase
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
@@ -67,7 +68,7 @@ class MergedXsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to acl.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidMergedAclXmlArray.php';
     }

@@ -1,26 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * An associative data structure, that features "nested set" parent-child relations
  */
-class Structure
+class Structure implements ResetAfterRequestInterface
 {
     /**
      * Reserved keys for storing structural relations
      */
-    const PARENT = 'parent';
+    public const PARENT = 'parent';
 
-    const CHILDREN = 'children';
+    public const CHILDREN = 'children';
 
-    const GROUPS = 'groups';
+    public const GROUPS = 'groups';
 
     /**
      * @var array
@@ -32,7 +33,7 @@ class Structure
      *
      * @param array $elements
      */
-    public function __construct(array $elements = null)
+    public function __construct(?array $elements = null)
     {
         if (null !== $elements) {
             $this->importElements($elements);
@@ -377,14 +378,14 @@ class Structure
         $offset = $position;
         if ($position > 0) {
             if ($position >= $currentOffset + 1) {
-                $offset -= 1;
+                --$offset;
             }
         } elseif ($position < 0) {
             if ($position < $currentOffset + 1 - count($this->_elements[$parentId][self::CHILDREN])) {
                 if ($position === -1) {
                     $offset = null;
                 } else {
-                    $offset += 1;
+                    ++$offset;
                 }
             }
         }
@@ -433,7 +434,7 @@ class Structure
     {
         $newOffset = $this->_getChildOffset($parentId, $siblingId) + $delta;
         if ($delta < 0) {
-            $newOffset += 1;
+            ++$newOffset;
         }
         if ($newOffset < 0) {
             $newOffset = 0;
@@ -450,7 +451,7 @@ class Structure
      */
     public function getChildId($parentId, $alias)
     {
-        if (isset($this->_elements[$parentId][self::CHILDREN])) {
+        if ($parentId !== null && isset($this->_elements[$parentId][self::CHILDREN])) {
             return array_search($alias, $this->_elements[$parentId][self::CHILDREN]);
         }
         return false;
@@ -466,7 +467,9 @@ class Structure
      */
     public function getChildren($parentId)
     {
-        return $this->_elements[$parentId][self::CHILDREN] ?? [];
+        return ($parentId !== null && isset($this->_elements[$parentId][self::CHILDREN])) 
+            ? $this->_elements[$parentId][self::CHILDREN] 
+            : [];
     }
 
     /**
@@ -477,6 +480,7 @@ class Structure
      */
     public function getParentId($childId)
     {
+        $childId = $childId ?? '';
         return $this->_elements[$childId][self::PARENT] ?? false;
     }
 
@@ -672,5 +676,13 @@ class Structure
                 new \Magento\Framework\Phrase("An array expected: %1", [var_export($value, 1)])
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_elements = [];
     }
 }

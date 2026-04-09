@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -27,11 +27,12 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="use_store_in_url" xsi:type="string">web/url/use_store</item>
+                <item name="default_country" xsi:type="string">general/country/default</item>
+                <item name="countries_with_required_region" xsi:type="string">general/region/state_required</item>
+                <item name="display_state_if_optional" xsi:type="string">general/region/display_all</item>
+                <item name="optional_zip_countries" xsi:type="string">general/country/optional_zip_countries</item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Mail\Template\TransportBuilder">
-        <plugin name="graphQlEmulateEmail" type="Magento\StoreGraphQl\Plugin\LocalizeEmail" />
     </type>
     <type name="Magento\GraphQlCache\Model\CacheId\CacheIdCalculator">
         <arguments>

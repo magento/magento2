@@ -1,23 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Convert\Order;
 use Magento\Sales\Model\Convert\OrderFactory;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Item as ShipmentItem;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\Shipment\TrackFactory;
 use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\Sales\Model\Order as SalesOrder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for shipment factory class.
@@ -52,8 +54,6 @@ class ShipmentFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
         $this->converter = $this->createPartialMock(
             Order::class,
             ['toShipment', 'itemToShipmentItem']
@@ -69,20 +69,16 @@ class ShipmentFactoryTest extends TestCase
             ['create']
         );
 
-        $this->subject = $objectManager->getObject(
-            ShipmentFactory::class,
-            [
-                'convertOrderFactory' => $convertOrderFactory,
-                'trackFactory' => $this->trackFactory
-            ]
+        $this->subject = new ShipmentFactory(
+            $convertOrderFactory,
+            $this->trackFactory
         );
     }
 
     /**
-     * @param array|null $tracks
-     * @dataProvider createDataProvider
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param array|null $tracks     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate($tracks)
     {
         $orderItem = $this->createPartialMock(
@@ -99,7 +95,7 @@ class ShipmentFactoryTest extends TestCase
         $orderItem->expects($this->any())->method('getIsVirtual')->willReturn(false);
 
         $shipmentItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment\Item::class,
+            ShipmentItem::class,
             ['setQty', 'getOrderItem', 'getQty']
         );
         $shipmentItem->expects($this->once())
@@ -111,7 +107,7 @@ class ShipmentFactoryTest extends TestCase
 
         $shipmentItem->expects($this->atLeastOnce())->method('getOrderItem')->willReturn($orderItem);
 
-        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getAllItems']);
+        $order = $this->createPartialMock(SalesOrder::class, ['getAllItems']);
         $order->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$orderItem]);
@@ -172,10 +168,9 @@ class ShipmentFactoryTest extends TestCase
     }
 
     /**
-     * @param array|null $tracks
-     * @dataProvider createDataProvider
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @param array|null $tracks     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('createDataProvider')]
     public function testCreateWithFloatQtyShipment(?array $tracks): void
     {
         $orderItem = $this->createPartialMock(
@@ -195,7 +190,7 @@ class ShipmentFactoryTest extends TestCase
         $orderItem->expects($this->any())->method('getIsVirtual')->willReturn(false);
 
         $shipmentItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment\Item::class,
+            ShipmentItem::class,
             ['setQty', 'getOrderItem', 'getQty']
         );
         $shipmentItem->expects($this->once())
@@ -207,7 +202,7 @@ class ShipmentFactoryTest extends TestCase
 
         $shipmentItem->expects($this->atLeastOnce())->method('getOrderItem')->willReturn($orderItem);
 
-        $order = $this->createPartialMock(\Magento\Sales\Model\Order::class, ['getAllItems']);
+        $order = $this->createPartialMock(SalesOrder::class, ['getAllItems']);
         $order->expects($this->any())
             ->method('getAllItems')
             ->willReturn([$orderItem]);
@@ -270,7 +265,7 @@ class ShipmentFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function createDataProvider()
+    public static function createDataProvider()
     {
         return [
             [null],

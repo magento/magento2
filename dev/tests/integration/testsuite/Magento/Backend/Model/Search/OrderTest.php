@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Model\Search;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -16,8 +17,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 class OrderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider loadDataProvider
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($query, $limit, $start, $expectedResult)
     {
         /** @var $order \Magento\Sales\Model\Order */

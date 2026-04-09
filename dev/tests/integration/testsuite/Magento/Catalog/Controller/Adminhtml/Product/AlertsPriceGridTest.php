@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for price alert grid controller
@@ -18,8 +20,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class AlertsPriceGridTest extends AbstractAlertTest
 {
     /**
-     * @dataProvider priceLimitProvider
-     *
      * @magentoDataFixture Magento/ProductAlert/_files/simple_product_with_two_alerts.php
      *
      * @param string $email
@@ -27,6 +27,7 @@ class AlertsPriceGridTest extends AbstractAlertTest
      * @param $expectedCount
      * @return void
      */
+    #[DataProvider('priceLimitProvider')]
     public function testExecute(string $email, ?int $limit, $expectedCount): void
     {
         $this->prepareRequest('simple', 'default', $limit);
@@ -37,18 +38,18 @@ class AlertsPriceGridTest extends AbstractAlertTest
     /**
      * @return array
      */
-    public function priceLimitProvider(): array
+    public static function priceLimitProvider(): array
     {
         return [
             'default_limit' => [
                 'email' => 'customer@example.com',
                 'limit' => null,
-                'expected_count' => 2,
+                'expectedCount' => 2,
             ],
             'limit_1' => [
                 'email' => 'customer@example.com',
                 'limit' => 1,
-                'expected_count' => 1,
+                'expectedCount' => 1,
             ],
         ];
     }

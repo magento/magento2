@@ -2,8 +2,8 @@
 /**
  * Test for \Magento\Framework\Filesystem\Directory\Write
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Directory;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class ReadTest
@@ -39,13 +40,13 @@ class WriteTest extends TestCase
     /**
      * Test for create method
      *
-     * @dataProvider createProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('createProvider')]
     public function testCreate($basePath, $permissions, $path)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -58,7 +59,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function createProvider()
+    public static function createProvider()
     {
         return [
             ['newDir1', 0777, "newDir1"],
@@ -98,11 +99,11 @@ class WriteTest extends TestCase
     /**
      * Test for delete method
      *
-     * @dataProvider deleteProvider
      * @param string $path
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('deleteProvider')]
     public function testDelete($path)
     {
         $directory = $this->getDirectoryInstance('newDir', 0777);
@@ -117,7 +118,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function deleteProvider()
+    public static function deleteProvider()
     {
         return [['subdir'], ['subdir/subsubdir']];
     }
@@ -152,7 +153,6 @@ class WriteTest extends TestCase
     /**
      * Test for rename method (in scope of one directory instance)
      *
-     * @dataProvider renameProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $name
@@ -160,6 +160,7 @@ class WriteTest extends TestCase
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('renameProvider')]
     public function testRename($basePath, $permissions, $name, $newName)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -177,7 +178,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function renameProvider()
+    public static function renameProvider()
     {
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
     }
@@ -215,7 +216,6 @@ class WriteTest extends TestCase
     /**
      * Test for rename method (moving to new directory instance)
      *
-     * @dataProvider renameTargetDirProvider
      * @param string $firstDir
      * @param string $secondDir
      * @param int $permission
@@ -224,6 +224,7 @@ class WriteTest extends TestCase
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('renameTargetDirProvider')]
     public function testRenameTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
         $dir1 = $this->getDirectoryInstance($firstDir, $permission);
@@ -243,7 +244,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function renameTargetDirProvider()
+    public static function renameTargetDirProvider()
     {
         return [['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt']];
     }
@@ -251,7 +252,6 @@ class WriteTest extends TestCase
     /**
      * Test for copy method (copy in scope of one directory instance)
      *
-     * @dataProvider renameProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $name
@@ -259,6 +259,7 @@ class WriteTest extends TestCase
      * @throws ValidatorException
      * @throws FileSystemException
      */
+    #[DataProvider('renameProvider')]
     public function testCopy($basePath, $permissions, $name, $newName)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -324,7 +325,6 @@ class WriteTest extends TestCase
     /**
      * Test for copy method (copy to another directory instance)
      *
-     * @dataProvider copyTargetDirProvider
      * @param string $firstDir
      * @param string $secondDir
      * @param int $permission
@@ -333,6 +333,7 @@ class WriteTest extends TestCase
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('copyTargetDirProvider')]
     public function testCopyTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
         $dir1 = $this->getDirectoryInstance($firstDir, $permission);
@@ -351,7 +352,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function copyTargetDirProvider()
+    public static function copyTargetDirProvider()
     {
         return [
             ['dir1', 'dir2', 0777, 'first_name.txt', 'second_name.txt'],
@@ -443,7 +444,6 @@ class WriteTest extends TestCase
     /**
      * Test for touch method
      *
-     * @dataProvider touchProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
@@ -451,6 +451,7 @@ class WriteTest extends TestCase
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('touchProvider')]
     public function testTouch($basePath, $permissions, $path, $time)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -464,7 +465,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function touchProvider()
+    public static function touchProvider()
     {
         return [
             ['test_directory', 0777, 'touch_file.txt', time() - 3600],
@@ -542,7 +543,6 @@ class WriteTest extends TestCase
     /**
      * Test for openFile method
      *
-     * @dataProvider openFileProvider
      * @param string $basePath
      * @param int $permissions
      * @param string $path
@@ -550,6 +550,7 @@ class WriteTest extends TestCase
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('openFileProvider')]
     public function testOpenFile($basePath, $permissions, $path, $mode)
     {
         $directory = $this->getDirectoryInstance($basePath, $permissions);
@@ -563,7 +564,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function openFileProvider()
+    public static function openFileProvider()
     {
         return [
             ['newDir1', 0777, 'newFile.txt', 'w+'],
@@ -601,13 +602,13 @@ class WriteTest extends TestCase
     /**
      * Test writeFile
      *
-     * @dataProvider writeFileProvider
      * @param string $path
      * @param string $content
      * @param string $extraContent
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('writeFileProvider')]
     public function testWriteFile($path, $content, $extraContent)
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
@@ -620,13 +621,13 @@ class WriteTest extends TestCase
     /**
      * Test writeFile for append mode
      *
-     * @dataProvider writeFileProvider
      * @param string $path
      * @param string $content
      * @param string $extraContent
      * @throws FileSystemException
      * @throws ValidatorException
      */
+    #[DataProvider('writeFileProvider')]
     public function testWriteFileAppend($path, $content, $extraContent)
     {
         $directory = $this->getDirectoryInstance('writeFileDir', 0777);
@@ -641,7 +642,7 @@ class WriteTest extends TestCase
      *
      * @return array
      */
-    public function writeFileProvider()
+    public static function writeFileProvider()
     {
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
     }

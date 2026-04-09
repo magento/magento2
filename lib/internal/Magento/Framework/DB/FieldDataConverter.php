@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB;
 
@@ -93,7 +93,7 @@ class FieldDataConverter
         $table,
         $identifier,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ) {
         $identifiers = explode(',', (string)$identifier);
         if (count($identifiers) > 1) {
@@ -118,7 +118,7 @@ class FieldDataConverter
         $table,
         $identifier,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ): void {
         $select = $this->selectFactory->create($connection)
             ->from($table, [$identifier, $field])
@@ -173,7 +173,7 @@ class FieldDataConverter
         $table,
         $identifiers,
         $field,
-        QueryModifierInterface $queryModifier = null
+        ?QueryModifierInterface $queryModifier = null
     ): void {
         $columns = $identifiers;
         $columns[] = $field;
@@ -242,9 +242,17 @@ class FieldDataConverter
     private function getBatchSize()
     {
         if (null !== $this->envBatchSize) {
-            $batchSize = (int) $this->envBatchSize;
-            $envBatchSize = preg_replace('#[^0-9]+#', '', $this->envBatchSize);
-            if (bccomp($envBatchSize, (string)PHP_INT_MAX, 0) === 1 || $batchSize < 1) {
+            $rawValue = (string)$this->envBatchSize;
+            $numeric = preg_replace('#[^0-9]+#', '', $rawValue);
+            // Reject empty, non-numeric or out-of-range values before any integer cast (avoid PHP 8.1+ warnings)
+            if ($numeric === '' || bccomp($numeric, (string)PHP_INT_MAX, 0) === 1) {
+                throw new \InvalidArgumentException(
+                    'Invalid value for environment variable ' . self::BATCH_SIZE_VARIABLE_NAME . '. '
+                    . 'Should be integer, >= 1 and < value of PHP_INT_MAX'
+                );
+            }
+            $batchSize = (int)$numeric;
+            if ($batchSize < 1) {
                 throw new \InvalidArgumentException(
                     'Invalid value for environment variable ' . self::BATCH_SIZE_VARIABLE_NAME . '. '
                     . 'Should be integer, >= 1 and < value of PHP_INT_MAX'

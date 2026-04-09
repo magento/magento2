@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Model\Product;
 
@@ -105,8 +105,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;

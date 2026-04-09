@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,34 +56,29 @@ class DirectoryResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider validatePathDataProvider
      * @param string $path
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('validatePathDataProvider')]
     public function testValidatePath(string $path, bool $expectedResult): void
     {
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';
-        $directory = $this->getMockBuilder(WriteInterface::class)
-            ->setMethods(['getDriver'])
-            ->getMockForAbstractClass();
-        $driver = $this->getMockBuilder(DriverInterface::class)
-            ->setMethods(['getRealPathSafety'])
-            ->getMockForAbstractClass();
-        $directory->expects($this->atLeastOnce())->method('getDriver')->willReturn($driver);
-        $driver->expects($this->atLeastOnce())->method('getRealPathSafety')->with($path)
-            ->willReturnArgument(0);
+        $directory = $this->createStub(WriteInterface::class);
+        $driver = $this->createStub(DriverInterface::class);
+        $directory->method('getDriver')->willReturn($driver);
+        $driver->method('getRealPathSafety')->with($path)->willReturnArgument(0);
         $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->with($directoryConfig)
             ->willReturn($directory);
-        $directory->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturn($rootPath);
+        $directory->method('getAbsolutePath')->willReturn($rootPath);
         $this->assertEquals($expectedResult, $this->directoryResolver->validatePath($path, $directoryConfig));
     }
 
     /**
      * @return array
      */
-    public function validatePathDataProvider()
+    public static function validatePathDataProvider()
     {
         return [
             ['/path/root/for/validation', true],

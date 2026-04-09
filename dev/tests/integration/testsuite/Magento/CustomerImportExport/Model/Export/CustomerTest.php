@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Export;
@@ -17,11 +17,14 @@ use Magento\ImportExport\Model\Export\Adapter\Csv;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for customer export model.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,6 +54,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeCollection;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -58,6 +66,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
         $this->attributeCollection = $this->objectManager->create(Collection::class);
+        $this->localeDate = $this->objectManager->create(TimezoneInterface::class);
     }
 
     /**
@@ -153,6 +162,15 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
+
+            $data['created_at'] = $this->localeDate
+                ->scopeDate(null, $data['created_at'], true)
+                ->format('Y-m-d H:i:s');
+
+            $data['updated_at'] = $this->localeDate
+                ->scopeDate(null, $data['updated_at'], true)
+                ->format('Y-m-d H:i:s');
+
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 
@@ -243,7 +261,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private function getAttributeValueById(string $attributeCode, $valueId)
     {
-        if (isset($this->attributeValues[$attributeCode])
+        // PHP 8.5 Compatibility: Check for null before using as array offset
+        if ($valueId !== null
+            && isset($this->attributeValues[$attributeCode])
             && isset($this->attributeValues[$attributeCode][$valueId])
         ) {
             return $this->attributeValues[$attributeCode][$valueId];
@@ -329,11 +349,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * Test for method filterEntityCollection()
      *
      * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
-     * @dataProvider filterDataProvider
      * @param string $locale
      * @param int $count
      * @param array $filter
      */
+    #[DataProvider('filterDataProvider')]
     public function testFilterEntityCollection(string $locale, int $count, array $filter)
     {
         $localeResolver = $this->objectManager->get(LocaleResolver::class);
@@ -359,7 +379,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterDataProvider(): array
+    public static function filterDataProvider(): array
     {
         return [
             ['en_US', 1, ['created_at' => ['01/02/1999', '01/03/1999']]],
@@ -388,12 +408,12 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {

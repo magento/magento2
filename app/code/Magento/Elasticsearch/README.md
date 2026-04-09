@@ -1,32 +1,33 @@
-#Magento_Elasticsearch module
+# Magento_Elasticsearch module
 
-Magento_Elasticsearch module allows using the Elasticsearch engine for the product searching capabilities. This module 
-provides logic used by other modules implementing newer versions of Elasticsearch, this module by itself only adds 
-support for Elasticsearch v5.
+This module allows using the Elasticsearch engine for the product searching capabilities.
+It provides logic used by other modules implementing newer versions of Elasticsearch.
+This module by itself only adds support for Elasticsearch v7 and v8.
 
 The module implements Magento_Search library interfaces.
 
 ## Installation details
 
-The Magento_Elasticsearch module is one of the base Magento 2 modules. You cannot disable or uninstall this module.
+This module is one of the base modules. You cannot disable or uninstall this module.
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Structure
 
-`Elasticsearch5/` - the directory that contains solutions for providing ElasticSearch 5.x version.
+`ElasticAdapter/` - the directory that contains the core files for providing support to Elasticsearch 7.x and 8.x
+version.
 
-`SearchAdapter/` - the directory that contains solutions for adapting ElasticSearch query searching.
+`SearchAdapter/` - the directory that contains solutions for adapting Elasticsearch query searching.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Additional information
 
-For information about significant changes in patch releases, see [2.4.x Release information](https://devdocs.magento.com/guides/v2.4/release-notes/bk-release-notes.html).
+For information about significant changes in patch releases, see [Release information](https://experienceleague.adobe.com/en/docs/commerce-operations/release/notes/overview).
 
-More information about ElasticSearch are at articles:
+You can get more information about Elasticsearch at the following articles:
 
-- [Configuring Catalog Search](https://docs.magento.com/user-guide/catalog/search-configuration.html).
-- [Installation Guide/Elasticsearch](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/elasticsearch.html).
-- [Configure and maintain Elasticsearch](https://devdocs.magento.com/guides/v2.4/config-guide/elasticsearch/es-overview.html).
-- Magento Commerce Cloud - [set up Elasticsearch service](https://devdocs.magento.com/cloud/project/services-elastic.html).
+- [Configuring Catalog Search](https://experienceleague.adobe.com/en/docs/commerce-admin/catalog/catalog/search/search-configuration).
+- [Installation Guide/Elasticsearch](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/prerequisites/search-engine/overview).
+- [Configure and maintain Elasticsearch](https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/search/overview-search).
+- [Set up Elasticsearch service](https://experienceleague.adobe.com/en/docs/commerce-on-cloud/user-guide/configure/service/elasticsearch).

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -19,6 +19,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        require_once __DIR__ . '/FileResolverStub.php';
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             [

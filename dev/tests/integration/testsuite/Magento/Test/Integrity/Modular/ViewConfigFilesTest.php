@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $file
-     * @dataProvider viewConfigFileDataProvider
      */
+    #[DataProvider('viewConfigFileDataProvider')]
     public function testViewConfigFile($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
@@ -32,7 +34,7 @@ class ViewConfigFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function viewConfigFileDataProvider()
+    public static function viewConfigFileDataProvider()
     {
         $result = [];
         $files = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

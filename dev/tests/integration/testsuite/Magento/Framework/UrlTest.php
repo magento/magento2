@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework;
 
 use Laminas\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Framework\Url
@@ -58,8 +59,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
-     * @dataProvider getBaseUrlConfiguredDataProvider
-     *
      * @magentoConfigFixture current_store web/secure/base_url http://sample.com/base_path/
      * @magentoConfigFixture current_store web/unsecure/base_link_url http://sample.com/base_link_path/
      * @magentoConfigFixture current_store web/secure/base_link_url https://sample.com/base_link_path/
@@ -68,6 +67,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param array $params
      * @param string $expectedUrl
      */
+    #[DataProvider('getBaseUrlConfiguredDataProvider')]
     public function testGetBaseUrlConfigured($params, $expectedUrl)
     {
         $actualUrl = $this->model->getBaseUrl($params);
@@ -185,7 +185,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
     }
 
-    public function getBaseUrlConfiguredDataProvider()
+    public static function getBaseUrlConfiguredDataProvider()
     {
         return [
             [['_type' => \Magento\Framework\UrlInterface::URL_TYPE_WEB], 'http://sample.com/base_path/'],
@@ -205,7 +205,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setRouteName('catalog');
         $this->assertEquals('catalog', $this->model->getRouteName());
 
-        $this->markTestIncomplete('setRouteName() logic is unclear.');
+        $this->markTestSkipped('setRouteName() logic is unclear.');
     }
 
     public function testSetGetControllerName()
@@ -213,7 +213,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setControllerName('product');
         $this->assertEquals('product', $this->model->getControllerName());
 
-        $this->markTestIncomplete('setControllerName() logic is unclear.');
+        $this->markTestSkipped('setControllerName() logic is unclear.');
     }
 
     public function testSetGetActionName()
@@ -221,7 +221,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model->setActionName('view');
         $this->assertEquals('view', $this->model->getActionName());
 
-        $this->markTestIncomplete('setActionName() logic is unclear.');
+        $this->markTestSkipped('setActionName() logic is unclear.');
     }
 
     /**
@@ -289,8 +289,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Note: isolation flushes the URL memory cache
      * @magentoAppIsolation enabled
      *
-     * @dataProvider consequentCallsDataProvider
-     *
      * @param string $firstCallUrl
      * @param string $secondCallUrl
      * @param array $firstRouteParams
@@ -299,6 +297,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param string $secondExpectedUrl
      * @covers \Magento\Framework\Url::getUrl
      */
+    #[DataProvider('consequentCallsDataProvider')]
     public function testGetUrlOnConsequentCalls(
         $firstCallUrl,
         $secondCallUrl,
@@ -320,7 +319,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function consequentCallsDataProvider()
+    public static function consequentCallsDataProvider()
     {
         return [
             [

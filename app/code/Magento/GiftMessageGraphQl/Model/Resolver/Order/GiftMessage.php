@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,8 +44,8 @@ class GiftMessage implements ResolverInterface
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        LoggerInterface $logger = null,
-        Uid $uidEncoder = null
+        ?LoggerInterface $logger = null,
+        ?Uid $uidEncoder = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
@@ -69,8 +69,8 @@ class GiftMessage implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($value['id'])) {
             throw new GraphQlInputException(__('"id" value should be specified'));

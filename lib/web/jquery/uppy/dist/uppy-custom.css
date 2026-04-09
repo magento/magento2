@@ -1,0 +1,22 @@
+/** css related to Uppy **/
+.uppy-Dashboard-progressindicators,
+.uppy-Dashboard-close,
+.uppy-Dashboard-dropFilesHereHint,
+.uppy-Dashboard-inner{
+    display:none;
+}
+
+.image.image-placeholder #fileUploader{
+    border:500px solid transparent;
+    bottom:0;
+    cursor:pointer;
+    font-size:10em;
+    height:100%;
+    left:0;
+    opacity:0;
+    position:absolute;
+    right:0;
+    top:0;
+    width:100%;
+    z-index:3
+}

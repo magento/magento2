@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\Component\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Ui\Component\Product\MassAction;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -44,10 +45,8 @@ class MassActionTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
 
         $this->massAction = $this->objectManager->getObject(
             MassAction::class,
@@ -70,13 +69,11 @@ class MassActionTest extends TestCase
      * @param bool $isAllowed
      * @param bool $expectActionConfig
      * @return void
-     * @dataProvider getPrepareDataProvider
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare($componentName, $componentData, $isAllowed = true, $expectActionConfig = true)
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var \Magento\Ui\Component\MassAction $action */
         $action = $this->objectManager->getObject(
@@ -101,7 +98,7 @@ class MassActionTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPrepareDataProvider() : array
+    public static function getPrepareDataProvider() : array
     {
         return [
             [
@@ -224,8 +221,8 @@ class MassActionTest extends TestCase
      * @param int $callNum
      * @param string $resource
      * @param bool $isAllowed
-     * @dataProvider isActionAllowedDataProvider
      */
+    #[DataProvider('isActionAllowedDataProvider')]
     public function testIsActionAllowed($expected, $actionType, $callNum, $resource = '', $isAllowed = true)
     {
         $this->authorizationMock->expects($this->exactly($callNum))
@@ -239,7 +236,7 @@ class MassActionTest extends TestCase
     /**
      * @return array
      */
-    public function isActionAllowedDataProvider()
+    public static function isActionAllowedDataProvider()
     {
         return [
             'other' => [true, 'other', 0],

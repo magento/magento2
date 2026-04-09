@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SampleData\Console\Command;
@@ -85,14 +85,14 @@ class SampleDataRemoveCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sampleDataPackages = $this->sampleDataDependency->getSampleDataPackages();
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
             $commonArgs = ['--working-dir' => $baseDir, '--no-interaction' => 1, '--no-progress' => 1];
             if ($input->getOption(self::OPTION_NO_UPDATE)) {
-                $commonArgs['--no-update'] = 1;
+                $commonArgs['--no-update'] = true;
             }
             $packages = array_keys($sampleDataPackages);
             $arguments = array_merge(['command' => 'remove', 'packages' => $packages], $commonArgs);

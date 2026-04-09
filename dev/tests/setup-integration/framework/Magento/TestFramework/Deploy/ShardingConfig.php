@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Deploy;
 
@@ -51,7 +51,6 @@ class ShardingConfig
                     'dbname' => $dbData['dbname'],
                     'model' => 'mysql4',
                     'engine' => 'innodb',
-                    'initStatements' => 'SET NAMES utf8;',
                     'active' => '1'
                 ];
                 $config['resource'][$connectionName] = [

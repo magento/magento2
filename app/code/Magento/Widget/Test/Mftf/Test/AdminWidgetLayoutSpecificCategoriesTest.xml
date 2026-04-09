@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminWidgetLayoutSpecificCategoriesTest">
+        <annotations>
+            <features value="Widget"/>
+            <stories value="Content Widget With Anchor and Non Anchor Categories are shown properly"/>
+            <title value="Anchor and Non Anchor Categories trees with layouts display properly"/>
+            <description value="Admin should be able to select Anchor and Non Anchor Categories trees successfully"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="ACP2E-3131"/>
+            <useCaseId value="AC-12581"/>
+            <group value="Widget"/>
+        </annotations>
+        <before>
+            <!-- Category AN1 is an anchor category -->
+            <createData entity="_defaultCategory" stepKey="createAnchorCategoryAN1"/>
+            <!-- Category NA1 is a non-anchor subcategory of category AN1-->
+            <createData entity="SubCategoryNonAnchor" stepKey="createNonAnchorCategoryNA1">
+                <requiredEntity createDataKey="createAnchorCategoryAN1"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createNonAnchorCategoryNA1" stepKey="deleteCategoryNA1"/>
+            <deleteData createDataKey="createAnchorCategoryAN1" stepKey="deleteCategoryAN1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentWidgetsPageFirst">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitleFirst">
+            <argument name="title" value="{{AdminMenuContentElementsWidgets.pageTitle}}"/>
+        </actionGroup>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <actionGroup ref="AdminVerifySpecificEntityWidgetTreeActionGroup" stepKey="fillForm">
+            <argument name="widget" value="CatalogCategoryLinkSpecifiedCategory"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForDisplayAnchorCategories"/>
+        <click selector="{{AdminNewWidgetSection.expandJsTree}}" stepKey="clickExpandedJsTree"/>
+        <waitForPageLoad  time="160" stepKey="waitRuleJsTreeAnchorToLoad"/>
+        <seeElement selector="{{AdminNewWidgetSection.jsTreeAnchorCheckbox}}" stepKey="seeAnchorCheckboxEnabled"/>
+    </test>
+</tests>

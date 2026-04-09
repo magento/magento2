@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -79,6 +79,14 @@
                 <options class="Magento\AsynchronousOperations\Model\BulkDescription\Options"/>
                 <dataType>select</dataType>
                 <label translate="true">Description of Operation</label>
+            </settings>
+        </column>
+        <column name="user_type" component="Magento_Ui/js/grid/columns/select" sortOrder="55">
+            <settings>
+                <filter>select</filter>
+                <options class="\Magento\AsynchronousOperations\Model\BulkUserType\Options"/>
+                <dataType>select</dataType>
+                <label translate="true">User Type</label>
             </settings>
         </column>
         <column name="status" component="Magento_Ui/js/grid/columns/select" sortOrder="60">

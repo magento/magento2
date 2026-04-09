@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint max-nested-callbacks: 0 */
@@ -61,6 +61,17 @@ define(['squire', 'underscore'], function (Squire, _) {
             it('Check that storage "requestConfig" is updated.', function () {
                 model.updateRequestConfig({method: 'PATCH'});
                 expect(storage.requestConfig.method).toEqual('PATCH');
+            });
+        });
+        describe('"onError" method', function () {
+            it('test onError.', function () {
+                model.trigger = jasmine.createSpy();
+                model.set = jasmine.createSpy();
+                model.onError({statusText: 'error'});
+                expect(model.set).toHaveBeenCalledWith('lastError', true);
+                expect(model.trigger).toHaveBeenCalledWith('reloaded');
+                expect(model.firstLoad).toEqual(false);
+                expect(model.triggerDataReload).toEqual(false);
             });
         });
     });

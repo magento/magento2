@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,8 +74,8 @@ class SessionCleaner implements SessionCleanerInterface
         VisitorCollectionFactory $visitorCollectionFactory,
         SessionManagerInterface $sessionManager,
         SaveHandlerInterface $saveHandler,
-        CustomerResourceModel $customerResourceModel = null,
-        VisitorResourceModel $visitorResourceModel = null
+        ?CustomerResourceModel $customerResourceModel = null,
+        ?VisitorResourceModel $visitorResourceModel = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->dateTimeFactory = $dateTimeFactory;
@@ -97,10 +97,26 @@ class SessionCleaner implements SessionCleanerInterface
         $dateTime = $this->dateTimeFactory->create();
         $timestamp = $dateTime->getTimestamp();
         $this->customerResourceModel->updateSessionCutOff($customerId, $timestamp);
-        if ($this->sessionManager->getVisitorData() !== null) {
-            $visitorId = $this->sessionManager->getVisitorData()['visitor_id'];
-            $this->visitorResourceModel->updateCreatedAt((int) $visitorId, $timestamp + 1);
+        $visitorData = $this->sessionManager->getVisitorData();
+        if ($visitorData !== null) {
+            if (isset($visitorData['visitor_id'])) {
+                $this->visitorResourceModel->updateCreatedAt((int) $visitorData['visitor_id'], $timestamp + 1);
+            }
+            $this->clearCustomerDataFromVisitorSession($visitorData);
         }
     }
-}
 
+    /**
+     * Clear authenticated customer linkage from visitor session payload.
+     *
+     * @param array $visitorData
+     * @return void
+     */
+    private function clearCustomerDataFromVisitorSession(array $visitorData): void
+    {
+        $visitorData['customer_id'] = null;
+        $visitorData['do_customer_login'] = false;
+        $visitorData['do_customer_logout'] = false;
+        $this->sessionManager->setVisitorData($visitorData);
+    }
+}

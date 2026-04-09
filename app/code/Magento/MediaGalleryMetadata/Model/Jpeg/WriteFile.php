@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,7 +51,7 @@ class WriteFile implements WriteFileInterface
     public function __construct(
         DriverInterface $driver,
         SegmentNames $segmentNames,
-        Filesystem $filesystem = null
+        ?Filesystem $filesystem = null
     ) {
         $this->segmentNames = $segmentNames;
         $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);

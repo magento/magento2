@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,15 +56,13 @@ class DbStorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlRewriteFactory = $this->createPartialMock(
+            UrlRewriteFactory::class,
+            ['create']
+        );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createMock(Select::class);
         $this->resource = $this->createMock(ResourceConnection::class);
 
         $this->resource->method('getConnection')
@@ -84,6 +82,7 @@ class DbStorageTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testFindAllByData(): void
     {
@@ -91,7 +90,13 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'col1 IN (?)' && $value == 'val1') {
+                     return null;
+                } elseif ($column == 'col2 IN (?)' && $value == 'val2') {
+                    return null;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -104,11 +109,13 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [['urlRewrite1'], ['row1'], UrlRewrite::class],
-                [['urlRewrite2'], ['row2'], UrlRewrite::class]
-            )
-            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == ['urlRewrite1'] && $arg2 == ['row1'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                } elseif ($arg1 == ['urlRewrite2'] && $arg2 == ['row2'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->urlRewriteFactory
             ->method('create')
@@ -126,7 +133,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -164,11 +175,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -213,11 +224,14 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+                ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                        return $this->dataObjectHelper;
+                    }
+                    if ($arg1 === ['request_path IN (?)', [$arg3, $arg3 . '/']]) {
+                        return $this->dataObjectHelper;
+                    }
+                });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -275,11 +289,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [rtrim($origRequestPath, '/'), rtrim($origRequestPath, '/') . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -338,11 +356,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -388,11 +410,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -439,45 +465,24 @@ class DbStorageTest extends TestCase
     {
         $urlFirst = $this->createMock(UrlRewrite::class);
         $urlSecond = $this->createMock(UrlRewrite::class);
-
         // delete
-        $urlFirst->method('getEntityType')
-            ->willReturn('product');
-        $urlFirst->method('getEntityId')
-            ->willReturn('entity_1');
-        $urlFirst->method('getStoreId')
-            ->willReturn('store_id_1');
-
-        $urlSecond->method('getEntityType')
-            ->willReturn('category');
-        $urlSecond->method('getEntityId')
-            ->willReturn('entity_2');
-        $urlSecond->method('getStoreId')
-            ->willReturn('store_id_2');
-
-        $this->connectionMock->method('quoteIdentifier')
-            ->willReturnArgument(0);
-
-        $this->select->method($this->anything())
-            ->willReturnSelf();
-
-        $this->resource->method('getTableName')
-            ->with(DbStorage::TABLE_NAME)
-            ->willReturn('table_name');
-
+        $urlFirst->method('getEntityType')->willReturn('product');
+        $urlFirst->method('getEntityId')->willReturn('1');
+        $urlFirst->method('getStoreId')->willReturn('store_id_1');
+        $urlFirst->method('getRequestPath')->willReturn('store_id_1.html');
+        $urlSecond->method('getEntityType')->willReturn('category');
+        $urlSecond->method('getEntityId')->willReturn('2');
+        $urlSecond->method('getStoreId')->willReturn('store_id_2');
+        $urlSecond->method('getRequestPath')->willReturn('store_id_2.html');
+        $this->connectionMock->method('quoteIdentifier')->willReturnArgument(0);
+        $this->select->method($this->anything())->willReturnSelf();
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
         // insert
-
-        $urlFirst->method('toArray')
-            ->willReturn(['row1']);
-        $urlSecond->method('toArray')
-            ->willReturn(['row2']);
-
-        $this->resource->method('getTableName')
-            ->with(DbStorage::TABLE_NAME)
-            ->willReturn('table_name');
-
+        $urlFirst->method('toArray')->willReturn(['row1']);
+        $urlSecond->method('toArray')->willReturn(['row2']);
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
         $urls = [$urlFirst, $urlSecond];
-
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
         $this->assertEquals($urls, $this->storage->replace($urls));
     }
 
@@ -488,22 +493,24 @@ class DbStorageTest extends TestCase
     {
         $this->expectException('Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException');
         $url = $this->createMock(UrlRewrite::class);
-
-        $url->method('toArray')
-            ->willReturn(['row1']);
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->willThrowException(
-                new Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
-            );
-        $conflictingUrl = [
-            UrlRewrite::URL_REWRITE_ID => 'conflicting-url'
-        ];
-        $this->connectionMock
-            ->method('fetchRow')
-            ->willReturn($conflictingUrl);
-
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([[
+            'url_rewrite_id' => '5718',
+            'entity_type' => 'product',
+            'entity_id' => '1',
+            'request_path' => 'store_id_1.html',
+            'target_path' => 'catalog/product/view/id/1',
+            'redirect_type' => '0',
+            'store_id' => '1',
+            'description' => null,
+            'is_autogenerated' => '1',
+            'metadata' => null,
+        ]]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, true);
         $this->storage->replace([$url]);
     }
 
@@ -517,19 +524,44 @@ class DbStorageTest extends TestCase
     public function testReplaceIfThrewExceptionOnDuplicateEntry(): void
     {
         $this->expectException('Exception');
-        $this->expectExceptionMessage('SQLSTATE[23000]: test: 1062 test');
+        $this->expectExceptionMessage('Unique constraint violation found');
         $url = $this->createMock(UrlRewrite::class);
-
-        $url->method('toArray')
-            ->willReturn(['row1']);
-
-        $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
-            ->willThrowException(
-                new Exception('SQLSTATE[23000]: test: 1062 test', DbStorage::ERROR_CODE_DUPLICATE_ENTRY)
-            );
-
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, true);
         $this->storage->replace([$url]);
+    }
+
+    /**
+     * Validates a case when we try to insert multiple URL rewrites with same requestPath
+     *
+     * The Exception is different than duplicating an existing rewrite because there's no url_rewrite_id.
+     *
+     * @return void
+     */
+    public function testReplaceIfThrewExceptionOnDuplicateUrlInInput(): void
+    {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Unique constraint violation found');
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
+        $url2 = $this->createMock(UrlRewrite::class);
+        $url2->method('toArray')->willReturn(['row2']);
+        $url2->method('getEntityType')->willReturn('product');
+        $url2->method('getEntityId')->willReturn('2');
+        $url2->method('getStoreId')->willReturn('store_id_1');
+        $url2->method('getRequestPath')->willReturn('store_id_1.html');
+        $this->connectionMock->method('fetchALL')->willReturn([]);
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
+        $this->storage->replace([$url, $url2]);
     }
 
     /**
@@ -539,14 +571,15 @@ class DbStorageTest extends TestCase
     {
         $this->expectException('RuntimeException');
         $url = $this->createMock(UrlRewrite::class);
-
-        $url->method('toArray')
-            ->willReturn(['row1']);
-
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('store_id_1');
+        $url->method('getRequestPath')->willReturn('store_id_1.html');
         $this->connectionMock->expects($this->once())
-            ->method('insertMultiple')
+            ->method('insertOnDuplicate')
             ->willThrowException(new \RuntimeException());
-
+        $this->connectionMock->method('fetchOne')->willReturnOnConsecutiveCalls(false, false);
         $this->storage->replace([$url]);
     }
 
@@ -562,7 +595,12 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
+
         $this->select
             ->method('deleteFromSelect')
             ->with('table_name')

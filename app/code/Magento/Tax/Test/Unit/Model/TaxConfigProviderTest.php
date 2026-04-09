@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxConfigProvider;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +55,7 @@ class TaxConfigProviderTest extends TestCase
         $this->taxHelperMock = $this->createMock(Data::class);
         $this->taxConfigMock = $this->createMock(Config::class);
         $this->checkoutSessionMock = $this->createMock(Session::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($this->quoteMock);
         $this->model = new TaxConfigProvider(
@@ -65,29 +66,18 @@ class TaxConfigProviderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getConfigDataProvider
-     * @param array $expectedResult
-     * @param int $cartShippingBoth
-     * @param int $cartShippingExclTax
-     * @param int $cartBothPrices
-     * @param int $cartPriceExclTax
-     * @param int $cartSubTotalBoth
-     * @param int $cartSubTotalExclTax
-     * @param string|null $calculationType
-     * @param bool $isQuoteVirtual
-     */
+    #[DataProvider('getConfigDataProvider')]
     public function testGetConfig(
-        $expectedResult,
-        $cartShippingBoth,
-        $cartShippingExclTax,
-        $cartBothPrices,
-        $cartPriceExclTax,
-        $cartSubTotalBoth,
-        $cartSubTotalExclTax,
-        $isQuoteVirtual,
-        $config
-    ) {
+        array $expectedResult,
+        int $cartShippingBoth,
+        int $cartShippingExclTax,
+        int $cartBothPrices,
+        int $cartPriceExclTax,
+        int $cartSubTotalBoth,
+        int $cartSubTotalExclTax,
+        bool $isQuoteVirtual,
+        array $config
+    ): void {
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingBoth')
             ->willReturn($cartShippingBoth);
         $this->taxConfigMock->expects($this->any())->method('displayCartShippingExclTax')
@@ -129,7 +119,7 @@ class TaxConfigProviderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getConfigDataProvider()
+    public static function getConfigDataProvider()
     {
         return [
             [

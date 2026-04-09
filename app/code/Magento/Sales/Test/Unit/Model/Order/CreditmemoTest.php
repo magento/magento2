@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,8 @@ use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\CommentFactory;
 use Magento\Sales\Model\Order\Creditmemo\Config;
 use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory as CommentCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -32,6 +34,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CreditmemoTest extends TestCase
 {
+
     /**
      * @var OrderRepositoryInterface|MockObject
      */
@@ -54,14 +57,14 @@ class CreditmemoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderRepository = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->cmItemCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $arguments = [
@@ -76,10 +79,10 @@ class CreditmemoTest extends TestCase
             ),
             'cmItemCollectionFactory' => $this->cmItemCollectionFactoryMock,
             'calculatorFactory' => $this->createMock(CalculatorFactory::class),
-            'storeManager' => $this->getMockForAbstractClass(StoreManagerInterface::class),
+            'storeManager' => $this->createMock(StoreManagerInterface::class),
             'commentFactory' => $this->createMock(CommentFactory::class),
             'commentCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory::class
+                CommentCollectionFactory::class
             ),
             'scopeConfig' => $this->scopeConfigMock,
             'orderRepository' => $this->orderRepository,
@@ -146,20 +149,16 @@ class CreditmemoTest extends TestCase
         $this->creditmemo->setId($id);
 
         $items = [];
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $itemMock->expects($this->once())
             ->method('setCreditmemo')
             ->with($this->creditmemo);
         $items[] = $itemMock;
 
         /** @var ItemCollection|MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemCollectionMock = $this->createMock(
+            ItemCollection::class
+        );
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with($id)
@@ -176,19 +175,15 @@ class CreditmemoTest extends TestCase
     public function testGetItemsCollectionWithoutId()
     {
         $items = [];
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $itemMock->expects($this->never())
             ->method('setCreditmemo');
         $items[] = $itemMock;
 
         /** @var ItemCollection|MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder(
-            \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Item\Collection::class
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemCollectionMock = $this->createMock(
+            ItemCollection::class
+        );
         $itemCollectionMock->expects($this->once())
             ->method('setCreditmemoFilter')
             ->with(null)
@@ -200,5 +195,41 @@ class CreditmemoTest extends TestCase
 
         $itemsCollection = $this->creditmemo->getItemsCollection();
         $this->assertEquals($items, $itemsCollection);
+    }
+
+    public function testIsLastForLastCreditMemo(): void
+    {
+        $item = $this->createMock(Item::class);
+        $orderItem = $this->createMock(OrderItem::class);
+        $orderItem
+            ->expects($this->once())
+            ->method('isDummy')
+            ->willReturn(true);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $this->creditmemo->setItems([$item]);
+        $this->assertTrue($this->creditmemo->isLast());
+    }
+
+    public function testIsLastForNonLastCreditMemo(): void
+    {
+        $item = $this->createMock(Item::class);
+        $orderItem = $this->createMock(OrderItem::class);
+        $orderItem
+            ->expects($this->once())
+            ->method('isDummy')
+            ->willReturn(false);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $item->expects($this->once())
+            ->method('getOrderItem')
+            ->willReturn($orderItem);
+        $item->expects($this->once())
+            ->method('isLast')
+            ->willReturn(false);
+        $this->creditmemo->setItems([$item]);
+        $this->assertFalse($this->creditmemo->isLast());
     }
 }

@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test\Helper;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -37,10 +39,14 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     {
         $this->_shell
             ->method('execute')
-            ->withConsecutive([$this->stringStartsWith('ps ')], [$this->stringStartsWith('tasklist.exe ')])
-            ->willReturnOnConsecutiveCalls(
-                $this->throwException(new \Magento\Framework\Exception\LocalizedException(__('command not found'))),
-                '"php.exe","12345","N/A","0","26,321 K"'
+            ->willReturnCallback(
+                function ($arg1) {
+                    if (strpos($arg1, 'ps ') === 0) {
+                        throw new \Magento\Framework\Exception\LocalizedException(__('command not found'));
+                    } elseif (strpos($arg1, 'tasklist.exe ') === 0) {
+                        return '"php.exe","12345","N/A","0","26,321 K"';
+                    }
+                }
             );
 
         $object = new \Magento\TestFramework\Helper\Memory($this->_shell);
@@ -50,8 +56,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @param string $expected
-     * @dataProvider convertToBytesDataProvider
      */
+    #[DataProvider('convertToBytesDataProvider')]
     public function testConvertToBytes($number, $expected)
     {
         $this->assertEquals($expected, \Magento\TestFramework\Helper\Memory::convertToBytes($number));
@@ -60,7 +66,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytesDataProvider()
+    public static function convertToBytesDataProvider()
     {
         return [
             'B' => ['1B', '1'],
@@ -77,8 +83,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $number
-     * @dataProvider convertToBytesBadFormatDataProvider
      */
+    #[DataProvider('convertToBytesBadFormatDataProvider')]
     public function testConvertToBytesBadFormat($number)
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -89,7 +95,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytesBadFormatDataProvider()
+    public static function convertToBytesBadFormatDataProvider()
     {
         return [
             'more than one unit of measure' => ['1234KB'],
@@ -101,8 +107,8 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $number
      * @param string $expected
-     * @dataProvider convertToBytes64DataProvider
      */
+    #[DataProvider('convertToBytes64DataProvider')]
     public function testConvertToBytes64($number, $expected)
     {
         if (PHP_INT_SIZE <= 4) {
@@ -114,7 +120,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function convertToBytes64DataProvider()
+    public static function convertToBytes64DataProvider()
     {
         return [
             ['2T', '2199023255552'],

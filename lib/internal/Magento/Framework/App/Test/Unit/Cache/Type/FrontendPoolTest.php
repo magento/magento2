@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FrontendPoolTest extends TestCase
@@ -40,7 +41,7 @@ class FrontendPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->_cachePool = $this->createMock(Pool::class);
         $this->_model = new FrontendPool(
@@ -51,13 +52,9 @@ class FrontendPoolTest extends TestCase
         );
     }
 
-    /**
-     * @param string|null $fixtureConfigData
-     * @param string $inputCacheType
-     * @param string $expectedFrontendId
-     *
-     * @dataProvider getDataProvider
+        /**
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($fixtureConfigData, $inputCacheType, $expectedFrontendId)
     {
         $this->deploymentConfig->expects(
@@ -70,7 +67,7 @@ class FrontendPoolTest extends TestCase
             $fixtureConfigData
         );
 
-        $cacheFrontend = $this->getMockForAbstractClass(FrontendInterface::class);
+        $cacheFrontend = $this->createMock(FrontendInterface::class);
         $this->_cachePool->expects(
             $this->once()
         )->method(
@@ -101,7 +98,7 @@ class FrontendPoolTest extends TestCase
     /**
      * @return array
      */
-    public function getDataProvider()
+    public static function getDataProvider()
     {
         $configData1 = [
             'frontend' => [],

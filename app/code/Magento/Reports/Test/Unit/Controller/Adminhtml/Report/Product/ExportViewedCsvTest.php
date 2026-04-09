@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,10 +14,10 @@ use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Product\Viewed\Grid;
 use Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedCsv;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ExportViewedCsvTest extends AbstractControllerTest
+class ExportViewedCsvTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportViewedCsv
@@ -54,9 +54,7 @@ class ExportViewedCsvTest extends AbstractControllerTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock
             ->expects($this->any())
             ->method('get')

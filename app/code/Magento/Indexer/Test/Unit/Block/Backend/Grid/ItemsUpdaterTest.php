@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,20 +10,19 @@ namespace Magento\Indexer\Test\Unit\Block\Backend\Grid;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Indexer\Block\Backend\Grid\ItemsUpdater;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ItemsUpdaterTest extends TestCase
 {
     /**
      * @param bool $argument
-     * @dataProvider updateDataProvider
      */
+    #[DataProvider('updateDataProvider')]
     public function testUpdate($argument)
     {
         $params = ['change_mode_onthefly' => 1, 'change_mode_changelog' => 2];
 
-        $auth = $this->getMockBuilder(AuthorizationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $auth = $this->createMock(AuthorizationInterface::class);
         $auth->expects($this->once())
             ->method('isAllowed')
             ->with('Magento_Indexer::changeMode')
@@ -40,7 +39,7 @@ class ItemsUpdaterTest extends TestCase
     /**
      * @return array
      */
-    public function updateDataProvider()
+    public static function updateDataProvider()
     {
         return [
             [true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Observer\Visitor;
@@ -14,7 +14,7 @@ use Magento\Framework\Event\Observer;
 class InitByRequestObserver extends AbstractVisitorObserver
 {
     /**
-     * initByRequest
+     * Init visitor by request
      *
      * @param Observer $observer
      * @return void

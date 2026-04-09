@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,7 @@ use Magento\Framework\View\Page\FaviconInterface;
 use Magento\Framework\View\Page\Title;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers \Magento\Framework\View\Page\Config
@@ -104,14 +105,15 @@ class ConfigTest extends TestCase
         $this->assetRepo = $this->createMock(Repository::class);
         $this->pageAssets = $this->createMock(GroupedCollection::class);
         $this->scopeConfig =
-            $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->favicon = $this->getMockForAbstractClass(FaviconInterface::class);
-        $this->builder = $this->getMockForAbstractClass(BuilderInterface::class);
+            $this->createMock(ScopeConfigInterface::class);
+        $this->favicon = $this->createMock(FaviconInterface::class);
+        $this->builder = $this->createMock(BuilderInterface::class);
         $this->asset = $this->createMock(File::class);
         $this->remoteAsset = $this->createMock(Remote::class);
         $this->title = $this->createMock(Title::class);
-        $this->localeMock =
-            $this->getMockForAbstractClass(ResolverInterface::class, [], '', false);
+        $this->localeMock = $this->getMockBuilder(ResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->localeMock->expects($this->any())
             ->method('getLocale')
             ->willReturn(Resolver::DEFAULT_LOCALE);
@@ -134,7 +136,6 @@ class ConfigTest extends TestCase
 
         $this->areaResolverMock = $this->createMock(State::class);
         $areaResolverReflection = (new \ReflectionClass(get_class($this->model)))->getProperty('areaResolver');
-        $areaResolverReflection->setAccessible(true);
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 
@@ -218,11 +219,14 @@ class ConfigTest extends TestCase
         $this->model->setContentType('auto');
         $this->scopeConfig
             ->method('getValue')
-            ->withConsecutive(
-                ['design/head/default_media_type', 'store'],
-                ['design/head/default_charset', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('default_media_type', 'default_charset');
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'design/head/default_media_type' && $arg2 == 'store') {
+                    return 'default_media_type';
+                } elseif ($arg1 == 'design/head/default_charset' && $arg2 == 'store') {
+                    return 'default_charset';
+                }
+            });
+
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
@@ -368,9 +372,8 @@ class ConfigTest extends TestCase
      * @param string|null $name
      * @param string $expectedName
      *
-     * @return void
-     * @dataProvider pageAssetDataProvider
-     */
+     * @return void     */
+    #[DataProvider('pageAssetDataProvider')]
     public function testAddPageAsset($file, $properties, $name, $expectedName): void
     {
         $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->willReturn(
@@ -386,7 +389,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageAssetDataProvider(): array
+    public static function pageAssetDataProvider(): array
     {
         return [
             [
@@ -411,9 +414,8 @@ class ConfigTest extends TestCase
      * @param string|null $name
      * @param string $expectedName
      *
-     * @return void
-     * @dataProvider remotePageAssetDataProvider
-     */
+     * @return void     */
+    #[DataProvider('remotePageAssetDataProvider')]
     public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName): void
     {
         $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->willReturn(
@@ -429,7 +431,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function remotePageAssetDataProvider(): array
+    public static function remotePageAssetDataProvider(): array
     {
         return [
             [
@@ -483,9 +485,8 @@ class ConfigTest extends TestCase
      * @param string $attribute
      * @param string $value
      *
-     * @return void
-     * @dataProvider elementAttributeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('elementAttributeDataProvider')]
     public function testElementAttribute($elementType, $attribute, $value): void
     {
         $this->model->setElementAttribute($elementType, $attribute, $value);
@@ -495,7 +496,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeDataProvider(): array
+    public static function elementAttributeDataProvider(): array
     {
         return [
             [
@@ -521,9 +522,8 @@ class ConfigTest extends TestCase
      * @param string $attribute
      * @param string $value
      *
-     * @return void
-     * @dataProvider elementAttributeExceptionDataProvider
-     */
+     * @return void     */
+    #[DataProvider('elementAttributeExceptionDataProvider')]
     public function testElementAttributeException($elementType, $attribute, $value): void
     {
         $this->expectException(LocalizedException::class);
@@ -534,7 +534,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeExceptionDataProvider(): array
+    public static function elementAttributeExceptionDataProvider(): array
     {
         return [
             [
@@ -559,9 +559,8 @@ class ConfigTest extends TestCase
      * @param string $elementType
      * @param string $attributes
      *
-     * @return void
-     * @dataProvider elementAttributesDataProvider
-     */
+     * @return void     */
+    #[DataProvider('elementAttributesDataProvider')]
     public function testElementAttributes($elementType, $attributes): void
     {
         foreach ($attributes as $attribute => $value) {
@@ -573,7 +572,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributesDataProvider(): array
+    public static function elementAttributesDataProvider(): array
     {
         return [
             [
@@ -589,9 +588,8 @@ class ConfigTest extends TestCase
     /**
      * @param string $handle
      *
-     * @return void
-     * @dataProvider pageLayoutDataProvider
-     */
+     * @return void     */
+    #[DataProvider('pageLayoutDataProvider')]
     public function testPageLayout($handle): void
     {
         $this->model->setPageLayout($handle);
@@ -601,7 +599,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageLayoutDataProvider(): array
+    public static function pageLayoutDataProvider(): array
     {
         return [
             [
@@ -644,9 +642,8 @@ class ConfigTest extends TestCase
      * @param bool $isAvailable
      * @param string $result
      *
-     * @return void
-     * @dataProvider getIncludesDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getIncludesDataProvider')]
     public function testGetIncludes($isAvailable, $result): void
     {
         $model = (new ObjectManager($this))
@@ -672,7 +669,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getIncludesDataProvider(): array
+    public static function getIncludesDataProvider(): array
     {
         return [
             [

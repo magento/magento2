@@ -1,9 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Test class for \Magento\Store\Model\Store\Service\StoreConfigManager
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Store\Test\Unit\Model\Service;
@@ -52,14 +50,14 @@ class StoreConfigManagerTest extends TestCase
     {
         $this->storeConfigFactoryMock = $this->getMockBuilder(StoreConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new StoreConfigManager(
             $this->storeCollectionFactoryMock,

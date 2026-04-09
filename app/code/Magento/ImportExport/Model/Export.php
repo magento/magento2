@@ -1,47 +1,52 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ImportExport\Model;
+
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\ImportExport\Model\Export\ConfigInterface;
+use Magento\ImportExport\Model\Export\Entity\Factory;
+use Magento\ImportExport\Model\Export\FileInfo;
+use Psr\Log\LoggerInterface;
 
 /**
  * Export model
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  * @deprecated 100.3.2
+ * @see \Magento\ImportExport\Api\ExportManagementInterface
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
-    const FILTER_ELEMENT_GROUP = 'export_filter';
+    public const FILTER_ELEMENT_GROUP = 'export_filter';
 
-    const FILTER_ELEMENT_SKIP = 'skip_attr';
+    public const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
-    const FIELDS_ENCLOSURE = 'fields_enclosure';
+    public const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * Filter fields types.
      */
-    const FILTER_TYPE_SELECT = 'select';
+    public const FILTER_TYPE_SELECT = 'select';
 
-    const FILTER_TYPE_MULTISELECT = 'multiselect';
+    public const FILTER_TYPE_MULTISELECT = 'multiselect';
 
-    const FILTER_TYPE_INPUT = 'input';
+    public const FILTER_TYPE_INPUT = 'input';
 
-    const FILTER_TYPE_DATE = 'date';
+    public const FILTER_TYPE_DATE = 'date';
 
-    const FILTER_TYPE_NUMBER = 'number';
+    public const FILTER_TYPE_NUMBER = 'number';
 
     /**
-     * Entity adapter.
-     *
      * @var \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_entityAdapter;
@@ -80,12 +85,29 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     ];
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig
-     * @param \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
+     * Internal marker returned in queue export flow to avoid loading full file content into memory.
+     */
+    private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
+
+    /**
+     * @param LoggerInterface $logger
+     * @param Filesystem $filesystem
+     * @param ConfigInterface $exportConfig
+     * @param Factory $entityFactory
      * @param \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac
      * @param array $data
+     * @param LocaleEmulatorInterface|null $localeEmulator
+     * @param FileInfo|null $fileInfo
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -93,12 +115,18 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Export\ConfigInterface $exportConfig,
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac,
-        array $data = []
+        array $data = [],
+        ?LocaleEmulatorInterface $localeEmulator = null,
+        ?FileInfo $fileInfo = null
     ) {
         $this->_exportConfig = $exportConfig;
         $this->_entityFactory = $entityFactory;
         $this->_exportAdapterFac = $exportAdapterFac;
         parent::__construct($logger, $filesystem, $data);
+        $this->localeEmulator = $localeEmulator ?? ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
+        $this->fileInfo = $fileInfo ?? ObjectManager::getInstance()->get(
+            FileInfo::class
+        );
     }
 
     /**
@@ -161,7 +189,16 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
 
             if (isset($fileFormats[$this->getFileFormat()])) {
                 try {
-                    $this->_writer = $this->_exportAdapterFac->create($fileFormats[$this->getFileFormat()]['model']);
+                    $arguments = [];
+                    $fileName = (string)$this->getData('file_name');
+                    if ($fileName !== '') {
+                        // Queue export flow: write to a temporary destination and publish atomically on success.
+                        $arguments['destination'] = $this->fileInfo->getInProgressFilePath($fileName);
+                    }
+                    $this->_writer = $this->_exportAdapterFac->create(
+                        $fileFormats[$this->getFileFormat()]['model'],
+                        $arguments
+                    );
                 } catch (\Exception $e) {
                     $this->_logger->critical($e);
                     throw new \Magento\Framework\Exception\LocalizedException(
@@ -191,12 +228,44 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      */
     public function export()
     {
+        return $this->localeEmulator->emulate(
+            $this->exportCallback(...),
+            $this->getData('locale') ?: null
+        );
+    }
+
+    /**
+     * Export data.
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function exportCallback()
+    {
         if (isset($this->_data[self::FILTER_ELEMENT_GROUP])) {
             $this->addLogComment(__('Begin export of %1', $this->getEntity()));
+            $fileName = (string)$this->getData('file_name');
+            $isQueueFlow = $fileName !== '';
+
             $result = $this->_getEntityAdapter()->setWriter($this->_getWriter())->export();
-            $countRows = substr_count($result, "\n");
-            if (!$countRows) {
+            $contentLength = strlen((string)$result);
+            if ($contentLength === 0) {
+                if ($isQueueFlow) {
+                    $directory = $this->_varDirectory;
+                    $filePath = $this->fileInfo->getInProgressFilePath($fileName);
+                    if ($directory->isFile($filePath)) {
+                        $directory->delete($filePath);
+                    }
+                }
                 throw new \Magento\Framework\Exception\LocalizedException(__('There is no data for the export.'));
+            }
+            if ($isQueueFlow) {
+                // Consumer already knows destination filename; returning a marker avoids huge memory copy.
+                return self::RESULT_WRITTEN_TO_FILE;
+            }
+            $countRows = substr_count((string)$result, "\n");
+            if (!$countRows && $contentLength > 0) {
+                $countRows = 1;
             }
             if ($result) {
                 $this->addLogComment([__('Exported %1 rows.', $countRows), __('The export is finished.')]);
@@ -225,11 +294,12 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
         if ($attribute->usesSource() || $attribute->getFilterOptions()) {
-            return 'multiselect' == $attribute->getFrontendInput() ?
+            return 'multiselect' === $attribute->getFrontendInput() ?
                 self::FILTER_TYPE_MULTISELECT : self::FILTER_TYPE_SELECT;
         }
 
@@ -245,6 +315,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             __('We can\'t determine the attribute filter type.')
         );
     }
+    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * Determine filter type for static attribute.
@@ -252,6 +323,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @static
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -277,6 +349,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         }
         return $type;
     }
+    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * MIME-type for 'Content-Type' header.

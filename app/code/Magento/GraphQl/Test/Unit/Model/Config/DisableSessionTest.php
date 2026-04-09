@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Test\Unit\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Config\DisableSession;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,20 +30,18 @@ class DisableSessionTest extends TestCase
     private $model;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     public function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->model = (new ObjectManager($this))->getObject(
             DisableSession::class,
             ['scopeConfig' => $this->scopeConfigMock]
         );
     }
 
-    /**
-     * @dataProvider disableSessionDataProvider
-     */
+    #[DataProvider('disableSessionDataProvider')]
     public function testisSessionDisabled($configValue, $expectedResult)
     {
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($configValue);
@@ -53,15 +52,15 @@ class DisableSessionTest extends TestCase
      * Data provider for session disabled config test.
      * @return array[]
      */
-    public function disableSessionDataProvider()
+    public static function disableSessionDataProvider()
     {
         return [
-            ['configValue' => '1', true],
-            ['configValue' => '0', false],
-            ['configValue' => '11', false],
-            ['configValue' => null, false],
-            ['configValue' => '', false],
-            ['configValue' => 'adfjsadf', false],
+            ['1', true],
+            ['0', false],
+            ['11', false],
+            [null, false],
+            ['', false],
+            ['adfjsadf', false],
         ];
     }
 }

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Utility;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CodeCheckTest extends \PHPUnit\Framework\TestCase
 {
@@ -19,9 +21,8 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $fileContent
-     * @param bool $isClassUsed
-     * @dataProvider isClassUsedDataProvider
-     */
+     * @param bool $isClassUsed     */
+    #[DataProvider('isClassUsedDataProvider')]
     public function testIsClassUsed($fileContent, $isClassUsed)
     {
         $this->assertEquals(
@@ -33,7 +34,7 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isClassUsedDataProvider()
+    public static function isClassUsedDataProvider()
     {
         return [
             [file_get_contents(__DIR__ . '/_files/create_new_instance.txt'), true],
@@ -50,8 +51,8 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $fileContent
      * @param bool $isDirectDescendant
-     * @dataProvider isDirectDescendantDataProvider
      */
+    #[DataProvider('isDirectDescendantDataProvider')]
     public function testIsDirectDescendant($fileContent, $isDirectDescendant)
     {
         $this->assertEquals(
@@ -63,7 +64,7 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isDirectDescendantDataProvider()
+    public static function isDirectDescendantDataProvider()
     {
         return [
             [file_get_contents(__DIR__ . '/_files/extends.txt'), true],

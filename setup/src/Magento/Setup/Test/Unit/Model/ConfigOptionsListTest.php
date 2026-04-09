@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,12 +13,14 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,6 +58,18 @@ class ConfigOptionsListTest extends TestCase
      */
     private $driverOptionsMock;
 
+    /**
+     * @var array
+     */
+    private $configOptionsListClasses = [
+        \Magento\Setup\Model\ConfigOptionsList\Session::class,
+        \Magento\Setup\Model\ConfigOptionsList\Cache::class,
+        \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
+        \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
+        \Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class,
+    ];
+
     protected function setUp(): void
     {
         $this->generator = $this->createMock(ConfigGenerator::class);
@@ -63,6 +77,16 @@ class ConfigOptionsListTest extends TestCase
         $this->dbValidator = $this->createMock(DbValidator::class);
         $this->encryptionKeyValidator = $this->createMock(KeyValidator::class);
         $this->driverOptionsMock = $this->createMock(DriverOptions::class);
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [];
+        foreach ($this->configOptionsListClasses as $className) {
+            $configOptionClassMock = $this->getMockBuilder($className)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $objects[] = [$className,$configOptionClassMock];
+        }
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->object = new ConfigOptionsList(
             $this->generator,
             $this->dbValidator,
@@ -200,8 +224,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param string $hosts
      * @param bool $expectedError
-     * @dataProvider validateCacheHostsDataProvider
      */
+    #[DataProvider('validateCacheHostsDataProvider')]
     public function testValidateCacheHosts($hosts, $expectedError)
     {
         $options = [
@@ -221,7 +245,7 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @return array
      */
-    public function validateCacheHostsDataProvider()
+    public static function validateCacheHostsDataProvider()
     {
         return [
             ['localhost', false],

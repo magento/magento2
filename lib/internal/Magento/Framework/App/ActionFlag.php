@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Request processing flag that allows to stop request dispatching in action controller from an observer
@@ -15,7 +17,7 @@ namespace Magento\Framework\App;
  * @api
  * @since 100.0.2
  */
-class ActionFlag
+class ActionFlag implements ResetAfterRequestInterface
 {
     /**
      * @var RequestInterface
@@ -38,37 +40,39 @@ class ActionFlag
     /**
      * Setting flag value
      *
-     * @param   string $action
-     * @param   string $flag
-     * @param   string $value
+     * @param string|null $action
+     * @param string|null $flag
+     * @param string $value
      * @return void
      */
     public function set($action, $flag, $value)
     {
         if ('' === $action) {
-            $action = $this->_request->getActionName();
+            $action = $this->_request->getActionName() ?? '';
         }
-        $this->_flags[$this->_getControllerKey()][$action][$flag] = $value;
+        $flagKey = $flag ?? '';
+        $this->_flags[$this->_getControllerKey()][$action][$flagKey] = $value;
     }
 
     /**
      * Retrieve flag value
      *
-     * @param   string $action
-     * @param   string $flag
-     * @return  bool
+     * @param string|null $action
+     * @param string|null $flag
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function get($action, $flag = '')
     {
         if ('' === $action) {
-            $action = $this->_request->getActionName();
+            $action = $this->_request->getActionName() ?? '';
         }
-        if ('' === $flag) {
+        $flagKey = $flag ?? '';
+        if ('' === $flagKey) {
             return $this->_flags[$this->_getControllerKey()] ?? [];
-        } elseif (isset($this->_flags[$this->_getControllerKey()][$action][$flag])) {
-            return $this->_flags[$this->_getControllerKey()][$action][$flag];
+        } elseif (isset($this->_flags[$this->_getControllerKey()][$action][$flagKey])) {
+            return $this->_flags[$this->_getControllerKey()][$action][$flagKey];
         } else {
             return false;
         }
@@ -82,5 +86,13 @@ class ActionFlag
     protected function _getControllerKey()
     {
         return $this->_request->getRouteName() . '_' . $this->_request->getControllerName();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_flags = [];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,10 +15,14 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class BaseUrlConfigPluginTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /**
      * @var SubscriptionUpdateHandler|MockObject
      */
@@ -45,10 +49,10 @@ class BaseUrlConfigPluginTest extends TestCase
     protected function setUp(): void
     {
         $this->subscriptionUpdateHandlerMock = $this->createMock(SubscriptionUpdateHandler::class);
-        $this->configValueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['isValueChanged', 'getPath', 'getScope', 'getOldValue'])
-            ->getMock();
+        $this->configValueMock = $this->createPartialMockWithReflection(
+            Value::class,
+            ['getPath', 'getScope', 'isValueChanged', 'getOldValue']
+        );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->plugin = $this->objectManagerHelper->getObject(
             BaseUrlConfigPlugin::class,
@@ -61,8 +65,8 @@ class BaseUrlConfigPluginTest extends TestCase
     /**
      * @param array $configValueData
      * @return void
-     * @dataProvider afterSavePluginIsNotApplicableDataProvider
      */
+    #[DataProvider('afterSavePluginIsNotApplicableDataProvider')]
     public function testAfterSavePluginIsNotApplicable(
         array $configValueData
     ) {
@@ -88,25 +92,25 @@ class BaseUrlConfigPluginTest extends TestCase
     /**
      * @return array
      */
-    public function afterSavePluginIsNotApplicableDataProvider()
+    public static function afterSavePluginIsNotApplicableDataProvider()
     {
         return [
             'Value has not been changed' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => false,
                     'path' => Store::XML_PATH_SECURE_BASE_URL,
                     'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
             ],
             'Unsecure URL has been changed' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => true,
                     'path' => Store::XML_PATH_UNSECURE_BASE_URL,
                     'scope' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT
                 ],
             ],
             'Secure URL has been changed not in the Default scope' => [
-                'Config Value Data' => [
+                'configValueData' => [
                     'isValueChanged' => true,
                     'path' => Store::XML_PATH_SECURE_BASE_URL,
                     'scope' => ScopeInterface::SCOPE_STORES

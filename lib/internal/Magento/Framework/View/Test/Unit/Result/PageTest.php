@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\View\Page\Config\RendererFactory;
 use Magento\Framework\View\Result\Page;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Result Page Test
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Page
      */
@@ -90,11 +92,10 @@ class PageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->layout = $this->getMockBuilder(Layout::class)
-            ->onlyMethods(['getUpdate'])
-            ->addMethods(['addHandle', 'isLayoutDefined'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->layout = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['getUpdate', 'addHandle', 'isLayoutDefined']
+        );
 
         $this->layoutFactory = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
@@ -131,7 +132,7 @@ class PageTest extends TestCase
             ]
         );
 
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $this->pageConfigRenderer = $this->getMockBuilder(Renderer::class)
             ->disableOriginalConstructor()
@@ -174,8 +175,11 @@ class PageTest extends TestCase
 
         $this->layoutMerge
             ->method('addHandle')
-            ->withConsecutive([$handleDefault], [$fullActionName])
-            ->willReturnOnConsecutiveCalls($this->layoutMerge, $this->layoutMerge);
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
         $this->layoutMerge
             ->method('isLayoutDefined')
             ->willReturn(false);
@@ -196,8 +200,11 @@ class PageTest extends TestCase
 
         $this->layoutMerge
             ->method('addHandle')
-            ->withConsecutive([$handleDefault], [$fullActionName])
-            ->willReturnOnConsecutiveCalls($this->layoutMerge, $this->layoutMerge);
+            ->willReturnCallback(function ($arg) use ($handleDefault, $fullActionName) {
+                if ($arg == $handleDefault || $arg == $fullActionName) {
+                    return $this->layoutMerge;
+                }
+            });
         $this->layoutMerge
             ->method('removeHandle')
             ->with($handleDefault)
@@ -259,7 +266,13 @@ class PageTest extends TestCase
 
         $this->entitySpecificHandlesListMock
             ->method('addHandle')
-            ->withConsecutive(['full_action_name_key_one_val_one'], ['full_action_name_key_two_val_two']);
+            ->willReturnCallback(
+                function ($arg) {
+                    if ($arg == 'full_action_name_key_one_val_one' || $arg == 'full_action_name_key_two_val_two') {
+                        return null;
+                    }
+                }
+            );
 
         $this->page->addPageLayoutHandles($parameters, $defaultHandle);
     }

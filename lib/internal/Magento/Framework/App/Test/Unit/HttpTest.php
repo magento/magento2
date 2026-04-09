@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Http as AppHttp;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\App\Request\PathInfo;
 use Magento\Framework\App\Request\PathInfoProcessorInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\Route\ConfigInterface\Proxy;
@@ -22,6 +23,7 @@ use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as HelperObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,22 +87,27 @@ class HttpTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new HelperObjectManager($this);
+        $objects = [
+            [
+                PathInfo::class,
+                $this->createMock(PathInfo::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
         $cookieReaderMock = $this->getMockBuilder(CookieReaderInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $routeConfigMock = $this->getMockBuilder(Proxy::class)
             ->disableOriginalConstructor()
             ->getMock();
         $pathInfoProcessorMock = $this->getMockBuilder(PathInfoProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanString'])
+            ->onlyMethods(['cleanString'])
             ->getMock();
-        $objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $objectManagerMock = $this->createStub(ObjectManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestHttp::class)
             ->setConstructorArgs(
                 [
@@ -111,27 +118,24 @@ class HttpTest extends TestCase
                     'objectManager' => $objectManagerMock
                 ]
             )
-            ->setMethods(['getFrontName', 'isHead'])
+            ->onlyMethods(['getFrontName', 'isHead'])
             ->getMock();
         $this->areaListMock = $this->getMockBuilder(AreaList::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCodeByFrontName'])
+            ->onlyMethods(['getCodeByFrontName'])
             ->getMock();
         $this->configLoaderMock = $this->getMockBuilder(ConfigLoader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load'])
+            ->onlyMethods(['load'])
             ->getMock();
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->responseMock = $this->createMock(ResponseHttp::class);
-        $this->frontControllerMock = $this->getMockBuilder(FrontControllerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->frontControllerMock = $this->createMock(FrontControllerInterface::class);
         $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
+            ->onlyMethods(['dispatch'])
             ->getMock();
-        $this->exceptionHandlerMock = $this->getMockForAbstractClass(ExceptionHandlerInterface::class);
+        $this->exceptionHandlerMock = $this->createMock(ExceptionHandlerInterface::class);
 
         $this->http = $this->objectManager->getObject(
             AppHttp::class,
@@ -207,10 +211,10 @@ class HttpTest extends TestCase
 
     /**
      * Test that HEAD requests lead to an empty body and a Content-Length header matching the original body size.
-     * @dataProvider dataProviderForTestLaunchHeadRequest
      * @param string $body
      * @param int $expectedLength
      */
+    #[DataProvider('dataProviderForTestLaunchHeadRequest')]
     public function testLaunchHeadRequest($body, $expectedLength)
     {
         $this->setUpLaunch();
@@ -243,7 +247,7 @@ class HttpTest extends TestCase
      * Different test content for responseMock with their expected lengths in bytes.
      * @return array
      */
-    public function dataProviderForTestLaunchHeadRequest(): array
+    public static function dataProviderForTestLaunchHeadRequest(): array
     {
         return [
             [

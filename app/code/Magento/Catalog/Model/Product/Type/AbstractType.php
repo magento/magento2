@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Type;
@@ -173,6 +173,11 @@ abstract class AbstractType
     protected $serializer;
 
     /**
+     * @var \Magento\Framework\Cache\FrontendInterface|null
+     */
+    private $cache;
+
+    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -184,6 +189,7 @@ abstract class AbstractType
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param UploaderFactory $uploaderFactory
+     * @param \Magento\Framework\Cache\FrontendInterface|null $cache
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -196,8 +202,9 @@ abstract class AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        UploaderFactory $uploaderFactory = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?UploaderFactory $uploaderFactory = null,
+        ?\Magento\Framework\Cache\FrontendInterface $cache = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -211,6 +218,17 @@ abstract class AbstractType
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->uploaderFactory = $uploaderFactory ?: ObjectManager::getInstance()->get(UploaderFactory::class);
+        $this->cache = $cache;
+    }
+
+    /**
+     * Get cache frontend instance
+     *
+     * @return \Magento\Framework\Cache\FrontendInterface|null
+     */
+    private function getCache()
+    {
+        return $this->cache;
     }
 
     /**
@@ -241,12 +259,13 @@ abstract class AbstractType
      *   group => array(ids)
      * )
      *
-     * @deplacated TODO: refactor to child relation manager
+     * @deprecated TODO: refactor to child relation manager
      *
      * @param int $parentId
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see Nothing
      */
     public function getChildrenIds($parentId, $required = true)
     {
@@ -708,17 +727,49 @@ abstract class AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($product)
     {
-        if ($product->dataHasChangedFor('type_id') && $product->getOrigData('type_id')) {
-            $oldTypeProduct = clone $product;
-            $oldTypeInstance = $this->_catalogProductType->factory(
-                $oldTypeProduct->setTypeId($product->getOrigData('type_id'))
-            );
-            $oldTypeProduct->setTypeInstance($oldTypeInstance);
-            $oldTypeInstance->deleteTypeSpecificData($oldTypeProduct);
+        // OPTIMIZATION: Batch cache operations for performance
+        // This batching covers Simple, Virtual, Downloadable, and all non-configurable product types
+        // Configurable products have their own batching implementation that wraps this call
+        $cache = $this->getCache();
+        $batchingStarted = false;
+
+        // Only start batching if cache is available and has beginBatch method
+        if ($cache !== null && method_exists($cache, 'beginBatch')) {
+            try {
+                $cache->beginBatch();
+                $batchingStarted = true;
+            } catch (\Exception $e) {
+                // If beginBatch fails, continue without batching
+                $batchingStarted = false;
+            }
         }
+
+        try {
+            if ($product->dataHasChangedFor('type_id') && $product->getOrigData('type_id')) {
+                $oldTypeProduct = clone $product;
+                $oldTypeInstance = $this->_catalogProductType->factory(
+                    $oldTypeProduct->setTypeId($product->getOrigData('type_id'))
+                );
+                $oldTypeProduct->setTypeInstance($oldTypeInstance);
+                $oldTypeInstance->deleteTypeSpecificData($oldTypeProduct);
+            }
+
+            // End batching if we started it
+            if ($batchingStarted && $cache !== null && method_exists($cache, 'endBatch')) {
+                $cache->endBatch();
+            }
+        } catch (\Exception $e) {
+            // Ensure batch mode is ended on error
+            if ($batchingStarted && $cache !== null && method_exists($cache, 'endBatch')) {
+                $cache->endBatch();
+            }
+            throw $e;
+        }
+
         return $this;
     }
 

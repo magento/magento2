@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
@@ -28,6 +31,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -38,6 +42,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TransparentTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var PayPalPayflowTransparent
      */
@@ -85,6 +90,14 @@ class TransparentTest extends TestCase
 
     protected function setUp(): void
     {
+        $helper = new ObjectManager($this);
+        $objects = [
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $helper->prepareObjectManager($objects);
         $this->initPayment();
 
         $this->subject = (new ObjectManagerHelper($this))
@@ -105,12 +118,14 @@ class TransparentTest extends TestCase
     /**
      * Check correct parent transaction ID for Payflow delayed capture.
      *
-     * @dataProvider captureCorrectIdDataProvider
      * @param string $parentTransactionId
+     * @param bool $createPaymentToken
      * @throws InvalidTransitionException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function testCaptureCorrectId(string $parentTransactionId)
+    #[DataProvider('captureCorrectIdDataProvider')]
+    public function testCaptureCorrectId(string $parentTransactionId, bool $createPaymentToken)
     {
         if (empty($parentTransactionId)) {
             $setParentTransactionIdCalls =  1;
@@ -122,18 +137,54 @@ class TransparentTest extends TestCase
             $getGatewayTokenCalls = 0;
         }
 
+        $this->payment->expects($this->any())
+            ->method('getAdditionalInformation')
+            ->willReturnCallback(function ($args) use ($createPaymentToken) {
+                static $callCount = 0;
+                if ($callCount == 0 && $args == 'result_code') {
+                    $callCount++;
+                    return 0;
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF && !$createPaymentToken) {
+                    $callCount++;
+                    return '';
+                } elseif ($callCount == 1 && $args == Payflowpro::PNREF && $createPaymentToken) {
+                    $callCount++;
+                    return 'ABCD';
+                } elseif ($callCount == 2 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($callCount == 3 && $args == Payflowpro::PNREF) {
+                    $callCount++;
+                    return Payflowpro::PNREF;
+                } elseif ($args == PayPalPayflowTransparent::CC_DETAILS && $createPaymentToken) {
+                    return json_encode([]);
+                }
+            });
+
         $gatewayToken = 'gateway_token';
-        $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
-        $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
-        $this->payment->expects($this->exactly($setAdditionalInformationCalls))->method('setAdditionalInformation')->with(Payflowpro::PNREF, $gatewayToken);
-        $this->payment->expects($this->exactly(4))->method('getAdditionalInformation')->withConsecutive(
-            ['result_code'],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-            [Payflowpro::PNREF],
-        )->willReturn(0, '', Payflowpro::PNREF, Payflowpro::PNREF);
-        $this->paymentExtensionAttributes->expects($this->once())->method('getVaultPaymentToken')->willReturn($this->paymentToken);
-        $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))->method('getGatewayToken')->willReturn($gatewayToken);
+        if ($createPaymentToken) {
+            $this->payment->expects($this->never())->method('setParentTransactionId');
+            $this->payment->expects($this->never())
+                ->method('setAdditionalInformation');
+            $this->paymentExtensionAttributes->expects($this->once())
+                ->method('getVaultPaymentToken')
+                ->willReturn(null);
+            $this->paymentToken->expects($this->never())
+                ->method('getGatewayToken')
+                ->willReturn($gatewayToken);
+        } else {
+            $this->payment->expects($this->once())->method('getParentTransactionId')->willReturn($parentTransactionId);
+            $this->payment->expects($this->exactly($setParentTransactionIdCalls))->method('setParentTransactionId');
+            $this->payment->expects($this->exactly($setAdditionalInformationCalls))
+                ->method('setAdditionalInformation')
+                ->with(Payflowpro::PNREF, $gatewayToken);
+            $this->paymentExtensionAttributes->expects($this->once())
+                ->method('getVaultPaymentToken')
+                ->willReturn($this->paymentToken);
+            $this->paymentToken->expects($this->exactly($getGatewayTokenCalls))
+                ->method('getGatewayToken')
+                ->willReturn($gatewayToken);
+        }
 
         $this->subject->capture($this->payment, 100);
     }
@@ -143,22 +194,24 @@ class TransparentTest extends TestCase
      *
      * @return array
      */
-    public function captureCorrectIdDataProvider(): array
+    public static function captureCorrectIdDataProvider(): array
     {
         return [
-            'No Transaction ID' => [''],
-            'With Transaction ID' => ['1'],
+            ['', false],
+            ['1', false],
+            ['', true],
+            ['1', true],
         ];
     }
 
     /**
      * Asserts that authorize request to Payflow gateway is valid.
      *
-     * @dataProvider validAuthorizeRequestDataProvider
      * @param DataObject $validAuthorizeRequest
      * @throws LocalizedException
      * @throws InvalidTransitionException
      */
+    #[DataProvider('validAuthorizeRequestDataProvider')]
     public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
     {
         $this->scopeConfig->method('getValue')
@@ -195,7 +248,7 @@ class TransparentTest extends TestCase
     /**
      * @return array
      */
-    public function validAuthorizeRequestDataProvider(): array
+    public static function validAuthorizeRequestDataProvider(): array
     {
         return [
             [
@@ -230,13 +283,22 @@ class TransparentTest extends TestCase
      */
     private function getPaymentConfigInterfaceFactory()
     {
-        $paymentConfigInterfaceFactory = $this->getMockBuilder(PaymentConfigInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentConfig = $this->getMockBuilder(PaymentConfigInterface::class)
-            ->setMethods(['setStoreId', 'setMethodInstance', 'setMethod', 'getBuildNotationCode'])
-            ->getMockForAbstractClass();
+        $paymentConfigInterfaceFactory = $this->createMock(
+            PaymentConfigInterfaceFactory::class
+        );
+        $this->paymentConfig = $this->createPartialMockWithReflection(
+            PaymentConfigInterface::class,
+            [
+                'setStoreId',
+                'setMethodInstance',
+                'setMethod',
+                'getBuildNotationCode',
+                'getPaymentAction',
+                'getValue',
+                'setMethodCode',
+                'setPathPattern'
+            ]
+        );
 
         $paymentConfigInterfaceFactory->method('create')->willReturn($this->paymentConfig);
 
@@ -248,16 +310,13 @@ class TransparentTest extends TestCase
      */
     private function getPaymentExtensionInterfaceFactory()
     {
-        $paymentExtensionInterfaceFactory = $this->getMockBuilder(PaymentExtensionInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(
-                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $paymentExtensionInterfaceFactory = $this->createMock(
+            PaymentExtensionInterfaceFactory::class
+        );
+        $orderPaymentExtension = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+        );
 
         $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
 
@@ -269,10 +328,8 @@ class TransparentTest extends TestCase
      */
     private function getStoreManager()
     {
-        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(StoreInterface::class);
 
         $storeManager->method('getStore')->willReturn($store);
 
@@ -284,9 +341,7 @@ class TransparentTest extends TestCase
      */
     private function getPayPalPayflowGateway()
     {
-        $this->payPalPayflowGateway = $this->getMockBuilder(PayPalPayflowGateway::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->payPalPayflowGateway = $this->createMock(PayPalPayflowGateway::class);
         $this->payPalPayflowGateway->method('postRequest')
             ->willReturn(new DataObject());
 
@@ -298,11 +353,8 @@ class TransparentTest extends TestCase
      */
     private function getPaymentTokenFactory()
     {
-        $paymentTokenInterfaceFactory = $this->getMockBuilder(PaymentTokenInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentToken = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
+        $paymentTokenInterfaceFactory = $this->createMock(PaymentTokenInterfaceFactory::class);
+        $this->paymentToken = $this->createMock(PaymentTokenInterface::class);
 
         $paymentTokenInterfaceFactory->method('create')->willReturn($this->paymentToken);
 
@@ -314,13 +366,10 @@ class TransparentTest extends TestCase
      */
     private function getPayPalCartFactory()
     {
-        $payPalCartFactory = $this->getMockBuilder(PayPalCartFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->payPalCart = $this->getMockBuilder(PayPalCart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $payPalCartFactory = $this->createMock(
+            PayPalCartFactory::class
+        );
+        $this->payPalCart = $this->createMock(PayPalCart::class);
 
         $payPalCartFactory->method('create')->willReturn($this->payPalCart);
 
@@ -332,8 +381,7 @@ class TransparentTest extends TestCase
      */
     private function getScopeConfig()
     {
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         return $this->scopeConfig;
     }
@@ -343,24 +391,46 @@ class TransparentTest extends TestCase
      */
     private function initPayment()
     {
-        $this->payment = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->order = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->paymentExtensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(
-                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
-            )
-            ->getMockForAbstractClass();
+        $this->payment = $this->createPartialMockWithReflection(
+            Payment::class,
+            [
+                'getIsTransactionApproved',
+                'setTransactionId',
+                'setIsTransactionClosed',
+                'getCcExpYear',
+                'getCcExpMonth',
+                'getExtensionAttributes',
+                'getOrder',
+                'authorize',
+                'canFetchTransactionInfo',
+                'getParentTransactionId',
+                'setParentTransactionId',
+                'setAdditionalInformation',
+                'getAdditionalInformation',
+                'setExtensionAttributes'
+            ]
+        );
+        $this->order = $this->createMock(Order::class);
+        $this->paymentExtensionAttributes = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+        );
         $this->payment->method('getOrder')->willReturn($this->order);
         $this->payment->method('setTransactionId')->willReturnSelf();
         $this->payment->method('setIsTransactionClosed')->willReturnSelf();
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
         $this->payment->method('getExtensionAttributes')->willReturn($this->paymentExtensionAttributes);
+        $this->payment->method('getIsTransactionApproved')->willReturn(true);
 
         return $this->payment;
+    }
+
+    public function testFetchTransactionInfo()
+    {
+        $this->payment->method('canFetchTransactionInfo')->willReturn(false);
+        $this->paymentConfig->method('getPaymentAction')->willReturn('authorize');
+        $this->payment->expects($this->never())->method('authorize');
+        $this->subject->fetchTransactionInfo($this->payment, '123');
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-70192"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create two Categories: CAT1 and CAT2 -->
@@ -111,6 +112,9 @@
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigurableProductToCart4">
             <argument name="product" value="$$createConfigProductCreateConfigurableProduct2$$"/>
             <argument name="productCount" value="4"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterConfigurationChange">
+                <argument name="indices" value=""/>
         </actionGroup>
         <!-- Discount  amount is applied -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToCart2"/>

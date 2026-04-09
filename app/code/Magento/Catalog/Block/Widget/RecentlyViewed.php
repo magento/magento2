@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Widget;
 
@@ -13,4 +13,5 @@ use Magento\Ui\Block\Wrapper;
  */
 class RecentlyViewed extends Wrapper implements \Magento\Widget\Block\BlockInterface
 {
+    protected const RENDER_TYPE = 'html';
 }

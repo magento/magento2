@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Model\ResourceModel\Group\GetCustomerGroupCodesByIds;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\InputException;
 use PHPUnit\Framework\TestCase;
 
 class TierPriceStorageTest extends TestCase
@@ -67,7 +68,7 @@ class TierPriceStorageTest extends TestCase
         $this->tierPriceValidator = $this->createMock(TierPriceValidator::class);
         $this->tierPriceFactory = $this->createMock(TierPriceFactory::class);
         $this->priceIndexProcessor = $this->createMock(PriceIndexerProcessor::class);
-        $this->productIdLocator = $this->getMockForAbstractClass(ProductIdLocatorInterface::class);
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
         $this->getCustomerGroupCodesByIds = $this->createMock(GetCustomerGroupCodesByIds::class);
 
         $this->tierPriceStorage = new TierPriceStorage(
@@ -136,17 +137,21 @@ class TierPriceStorageTest extends TestCase
             ->method('execute')
             ->with([1, 2])
             ->willReturn([1 => 'General', 2 => 'Wholesale']);
-        $price = $this->getMockBuilder(TierPriceInterface::class)
-            ->getMockForAbstractClass();
+        $price = $this->createMock(TierPriceInterface::class);
         $this->tierPriceFactory
             ->expects($this->exactly(3))
             ->method('create')
-            ->withConsecutive(
-                [$rawPricesData[0], 'simple'],
-                [$rawPricesData[1] + ['customer_group_code' => 'General'], 'virtual'],
-                [$rawPricesData[2] + ['customer_group_code' => 'Wholesale'], 'virtual'],
-            )
-            ->willReturn($price);
+            ->willReturnCallback(function (...$args) use ($rawPricesData, $price) {
+                static $index = 0;
+                $expectedArgs = [
+                    [$rawPricesData[0], 'simple'],
+                    [$rawPricesData[1] + ['customer_group_code' => 'General'], 'virtual'],
+                    [$rawPricesData[2] + ['customer_group_code' => 'Wholesale'], 'virtual']
+                ];
+                $returnValue = $price;
+                $index++;
+                return $args === $expectedArgs[$index - 1] ? $returnValue : null;
+            });
         $prices = $this->tierPriceStorage->get($skus);
         $this->assertNotEmpty($prices);
         $this->assertCount(3, $prices);
@@ -183,7 +188,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testUpdate()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $result = $this->createMock(PriceValidationResult::class);
         $result->expects($this->once())
             ->method('getFailedRowIds')
@@ -242,7 +247,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testReplace()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('virtual');
@@ -287,7 +292,7 @@ class TierPriceStorageTest extends TestCase
      */
     public function testDelete()
     {
-        $price = $this->getMockForAbstractClass(TierPriceInterface::class);
+        $price = $this->createMock(TierPriceInterface::class);
         $price->expects($this->atLeastOnce())
             ->method('getSku')
             ->willReturn('simple');
@@ -336,5 +341,49 @@ class TierPriceStorageTest extends TestCase
             ->with([2]);
 
         $this->assertEmpty($this->tierPriceStorage->delete([$price]));
+    }
+
+    /**
+     * Test delete method with null input - should throw InputException
+     */
+    public function testDeleteWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete(null);
+    }
+
+    /**
+     * Test delete method with non-array input - should throw InputException
+     */
+    public function testDeleteWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete('invalid_string');
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update('invalid_string');
     }
 }

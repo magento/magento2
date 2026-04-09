@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 
 use Magento\Framework\Profiler\Driver\Standard\Stat;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StatTest extends TestCase
 {
@@ -22,11 +23,10 @@ class StatTest extends TestCase
 
     /**
      * Test start and stop methods of \Magento\Framework\Profiler\Driver\Standard\Stat
-     *
-     * @dataProvider actionsDataProvider
-     * @param array $actions
+     *     * @param array $actions
      * @param array $expected
      */
+    #[DataProvider('actionsDataProvider')]
     public function testActions(array $actions, array $expected)
     {
         foreach ($actions as $actionData) {
@@ -50,7 +50,7 @@ class StatTest extends TestCase
      *
      * @return array
      */
-    public function actionsDataProvider()
+    public static function actionsDataProvider()
     {
         return [
             'Start only once' => [
@@ -177,11 +177,10 @@ class StatTest extends TestCase
 
     /**
      * Test getFilteredTimerIds for sorting
-     *
-     * @dataProvider timersSortingDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $expectedTimerIds
      */
+    #[DataProvider('timersSortingDataProvider')]
     public function testTimersSorting($timers, $expectedTimerIds)
     {
         foreach ($timers as $timerData) {
@@ -195,20 +194,20 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function timersSortingDataProvider()
+    public static function timersSortingDataProvider()
     {
         return [
             'Without sorting' => [
-                'actions' => [
+                'timers' => [
                     ['start', 'root'],
                     ['start', 'root->init'],
                     ['stop', 'root->init'],
                     ['stop', 'root'],
                 ],
-                'expected' => ['root', 'root->init'],
+                'expectedTimerIds' => ['root', 'root->init'],
             ],
             'Simple sorting' => [
-                'actions' => [
+                'timers' => [
                     ['start', 'root'],
                     ['start', 'root->di'],
                     ['stop', 'root->di'],
@@ -222,7 +221,7 @@ class StatTest extends TestCase
                     ['stop', 'root->dispatch'],
                     ['stop', 'root'],
                 ],
-                'expected' => [
+                'expectedTimerIds' => [
                     'root',
                     'root->di',
                     'root->init',
@@ -232,7 +231,7 @@ class StatTest extends TestCase
                 ],
             ],
             'Nested sorting' => [
-                'actions' => [
+                'timers' => [
                     ['start', 'root'],
                     ['start', 'root->init'],
                     ['start', 'root->system'],
@@ -246,7 +245,7 @@ class StatTest extends TestCase
                     ['stop', 'root->init'],
                     ['stop', 'root'],
                 ],
-                'expected' => [
+                'expectedTimerIds' => [
                     'root',
                     'root->init',
                     'root->init->init_config',
@@ -260,13 +259,12 @@ class StatTest extends TestCase
 
     /**
      * Test getFilteredTimerIds for filtering
-     *
-     * @dataProvider timersFilteringDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $thresholds
      * @param string $filterPattern
      * @param array $expectedTimerIds
      */
+    #[DataProvider('timersFilteringDataProvider')]
     public function testTimersFiltering($timers, $thresholds, $filterPattern, $expectedTimerIds)
     {
         foreach ($timers as $timerData) {
@@ -280,11 +278,11 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function timersFilteringDataProvider()
+    public static function timersFilteringDataProvider()
     {
         return [
             'Filtering by pattern' => [
-                'actions' => [
+                'timers' => [
                     ['start', 'root'],
                     ['start', 'root->init'],
                     ['stop', 'root->init'],
@@ -292,10 +290,10 @@ class StatTest extends TestCase
                 ],
                 'thresholds' => [],
                 'filterPattern' => '/^root$/',
-                'expected' => ['root'],
+                'expectedTimerIds' => ['root'],
             ],
             'Filtering by thresholds' => [
-                'actions' => [
+                'timers' => [
                     ['start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0],
                     ['start', 'root->init', 0],
                     ['start', 'root->init->init_cache', 'time' => 50, 'realMemory' => 1000],
@@ -309,18 +307,17 @@ class StatTest extends TestCase
                 ],
                 'filterPattern' => null,
                 // TIME >= 1000, REALMEM >= 20000
-                'expected' => ['root', 'root->init->init_cache'],
+                'expectedTimerIds' => ['root', 'root->init->init_cache'],
             ]
         ];
     }
 
     /**
      * Test positive cases of fetch method
-     *
-     * @dataProvider fetchDataProvider
-     * @param array $timers
+     *     * @param array $timers
      * @param array $expects
      */
+    #[DataProvider('fetchDataProvider')]
     public function testFetch($timers, $expects)
     {
         foreach ($timers as $timerData) {
@@ -341,11 +338,11 @@ class StatTest extends TestCase
     /**
      * @return array
      */
-    public function fetchDataProvider()
+    public static function fetchDataProvider()
     {
         return [
             [
-                'actions' => [
+                'timers' => [
                     ['start', 'root', 'time' => 0, 'realMemory' => 0, 'emallocMemory' => 0],
                     ['stop', 'root', 'time' => 1000, 'realMemory' => 500, 'emallocMemory' => 10],
                 ],
@@ -373,7 +370,7 @@ class StatTest extends TestCase
                 ],
             ],
             [
-                'actions' => [
+                'timers' => [
                     ['start', 'root', 'time' => 0],
                     ['stop', 'root', 'time' => 10],
                     ['start', 'root', 'time' => 20],
@@ -388,12 +385,12 @@ class StatTest extends TestCase
                 ]
             ],
             [
-                'actions' => [['start', 'root', 'time' => 0]],
+                'timers' => [['start', 'root', 'time' => 0]],
                 'expects' => [
                     [
                         'timerId' => 'root',
                         'key' => Stat::TIME,
-                        'expectedValue' => $this->greaterThan(microtime(true)),
+                        'expectedValue' => self::greaterThan(microtime(true)),
                     ],
                     [
                         'timerId' => 'root',

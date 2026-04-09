@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -10,7 +10,8 @@
 namespace Magento\Test\Annotation;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Fixture\Parser\AppIsolation;
+use Magento\TestFramework\Annotation\Parser\AppIsolation as AnnotationParser;
+use Magento\TestFramework\Fixture\Parser\AppIsolation as AttributeParser;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -28,14 +29,25 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        if (!class_exists(AttributeParser::class)) {
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Fixture/ParserInterface.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Fixture/AppIsolation.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Fixture/Parser/AppIsolation.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Helper/Bootstrap.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Application.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Annotation/AppIsolation.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Workaround/Override/Fixture/ResolverInterface.php';
+            require_once __DIR__ . '/../../../../../../Magento/TestFramework/Workaround/Override/Fixture/Resolver.php';
+        }
         /** @var ObjectManagerInterface|MockObject $objectManager */
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
+        // Create real parsers for both old-style annotations and new-style attributes
         $sharedInstances = [
-            AppIsolation::class => $this->createConfiguredMock(AppIsolation::class, ['parse' => []])
+            // New-style attribute parser (PHP 8+)
+            AttributeParser::class => new AttributeParser(),
+            // Old-style annotation parser (docblock comments)
+            AnnotationParser::class => new AnnotationParser()
         ];
         $objectManager->method('get')
             ->willReturnCallback(
@@ -96,7 +108,9 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
     public function testEndTestIsolationController()
     {
         /** @var $controllerTest \Magento\TestFramework\TestCase\AbstractController */
-        $controllerTest = $this->getMockForAbstractClass(\Magento\TestFramework\TestCase\AbstractController::class);
+        $controllerTest = $this->createMock(
+            \Magento\TestFramework\TestCase\AbstractController::class
+        );
         $this->_application->expects($this->once())->method('reinitialize');
         $this->_object->endTest($controllerTest);
     }

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
@@ -23,7 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculation implements TaxCalculationInterface
+class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterface
 {
     /**
      * Tax Details factory
@@ -80,15 +81,11 @@ class TaxCalculation implements TaxCalculationInterface
     private $parentToChildren;
 
     /**
-     * Tax Class Management
-     *
      * @var TaxClassManagementInterface
      */
     protected $taxClassManagement;
 
     /**
-     * Calculator Factory
-     *
      * @var CalculatorFactory
      */
     protected $calculatorFactory;
@@ -129,7 +126,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function calculateTax(
         \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
@@ -171,9 +168,10 @@ class TaxCalculation implements TaxCalculationInterface
         $processedItems = [];
         /** @var QuoteDetailsItemInterface $item */
         foreach ($this->keyedItems as $item) {
-            if (isset($this->parentToChildren[$item->getCode()])) {
+            $itemCode = $item->getCode() ?? '';
+            if (isset($this->parentToChildren[$itemCode])) {
                 $processedChildren = [];
-                foreach ($this->parentToChildren[$item->getCode()] as $child) {
+                foreach ($this->parentToChildren[$itemCode] as $child) {
                     $processedItem = $this->processItem($child, $calculator, $round);
                     $taxDetailsData = $this->aggregateItemData($taxDetailsData, $processedItem);
                     $processedItems[$processedItem->getCode()] = $processedItem;
@@ -186,7 +184,8 @@ class TaxCalculation implements TaxCalculationInterface
                 $processedItem = $this->processItem($item, $calculator, $round);
                 $taxDetailsData = $this->aggregateItemData($taxDetailsData, $processedItem);
             }
-            $processedItems[$processedItem->getCode()] = $processedItem;
+            $processedItemCode = $processedItem->getCode() ?? '';
+            $processedItems[$processedItemCode] = $processedItem;
         }
 
         $taxDetailsDataObject = $this->taxDetailsDataObjectFactory->create();
@@ -200,7 +199,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultCalculatedRate(
         $productTaxClassID,
@@ -211,7 +210,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCalculatedRate(
         $productTaxClassID,
@@ -260,9 +259,11 @@ class TaxCalculation implements TaxCalculationInterface
         $this->parentToChildren = [];
         foreach ($items as $item) {
             if ($item->getParentCode() === null) {
-                $this->keyedItems[$item->getCode()] = $item;
+                $itemCode = $item->getCode() ?? '';
+                $this->keyedItems[$itemCode] = $item;
             } else {
-                $this->parentToChildren[$item->getParentCode()][] = $item;
+                $parentCode = $item->getParentCode() ?? '';
+                $this->parentToChildren[$parentCode][] = $item;
             }
         }
     }
@@ -290,6 +291,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param TaxDetailsItemInterface[] $children
      * @param int $quantity
      * @return TaxDetailsItemInterface
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function calculateParent($children, $quantity)
     {
@@ -385,5 +387,14 @@ class TaxCalculation implements TaxCalculationInterface
             return $parentQuantity * $item->getQuantity();
         }
         return $item->getQuantity();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->keyedItems = null;
+        $this->parentToChildren = null;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,99 +11,130 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Test\Unit\Model;
 
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Magento\ImportExport\Model\Export\AbstractEntity;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory;
+use Magento\ImportExport\Model\LocaleEmulatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ExportTest extends TestCase
 {
     /**
-     * Extension for export file
-     *
-     * @var string
+     * @var ConfigInterface|MockObject
      */
-    protected $_exportFileExtension = 'csv';
-
-    /**
-     * @var MockObject
-     */
-    protected $_exportConfigMock;
+    private $exportConfigMock;
 
     /**
      * @var AbstractEntity|MockObject
      */
-    private $abstractMockEntity;
+    private $exportAbstractEntityMock;
 
     /**
-     * Return mock for \Magento\ImportExport\Model\Export class
-     *
-     * @return Export
+     * @var AbstractAdapter|MockObject
      */
-    protected function _getMageImportExportModelExportMock()
+    private $exportAdapterMock;
+
+    /**
+     * @var Export\Adapter\Factory|MockObject
+     */
+    private $exportAdapterFactoryMock;
+
+    /**
+     * @var Export
+     */
+    private $model;
+
+    /**
+     * @var string[]
+     */
+    private $entities = [
+        'entityA' => [
+            'model' => 'entityAClass'
+        ],
+        'entityB' => [
+            'model' => 'entityBClass'
+        ]
+    ];
+    /**
+     * @var string[]
+     */
+    private $fileFormats = [
+        'csv' => [
+            'model' => 'csvFormatClass'
+        ],
+        'xml' => [
+            'model' => 'xmlFormatClass'
+        ]
+    ];
+
+    /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulator;
+
+    /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->_exportConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        parent::setUp();
+        $this->exportConfigMock = $this->createMock(ConfigInterface::class);
+        $this->exportConfigMock->method('getEntities')
+            ->willReturn($this->entities);
+        $this->exportConfigMock->method('getFileFormats')
+            ->willReturn($this->fileFormats);
 
-        $this->abstractMockEntity = $this->getMockForAbstractClass(
+        $this->exportAbstractEntityMock = $this->createPartialMock(
             AbstractEntity::class,
-            [],
-            '',
-            false
+            ['export', 'getEntityTypeCode', 'exportItem', '_getHeaderColumns', '_getEntityCollection']
         );
 
-        /** @var $mockAdapterTest \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter */
-        $mockAdapterTest = $this->getMockForAbstractClass(
+        $this->exportAdapterMock = $this->createPartialMock(
             AbstractAdapter::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getFileExtension']
-        );
-        $mockAdapterTest->expects(
-            $this->any()
-        )->method(
-            'getFileExtension'
-        )->willReturn(
-            $this->_exportFileExtension
+            ['getFileExtension', 'writeRow']
         );
 
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->method('getDirectoryWrite')
+            ->willReturn($this->createMock(WriteInterface::class));
         $entityFactory = $this->createMock(Factory::class);
-        $exportAdapterFac = $this->createMock(\Magento\ImportExport\Model\Export\Adapter\Factory::class);
-        /** @var \Magento\ImportExport\Model\Export $mockModelExport */
-        $mockModelExport = $this->getMockBuilder(Export::class)
-            ->setMethods(['getEntityAdapter', '_getEntityAdapter', '_getWriter', 'setWriter'])
-            ->setConstructorArgs([$logger, $filesystem, $this->_exportConfigMock, $entityFactory, $exportAdapterFac])
-            ->getMock();
-        $mockModelExport->expects(
-            $this->any()
-        )->method(
-            'getEntityAdapter'
-        )->willReturn(
-            $this->abstractMockEntity
-        );
-        $mockModelExport->expects(
-            $this->any()
-        )->method(
-            '_getEntityAdapter'
-        )->willReturn(
-            $this->abstractMockEntity
-        );
-        $mockModelExport->method(
-            'setWriter'
-        )->willReturn(
-            $this->abstractMockEntity
-        );
-        $mockModelExport->expects($this->any())->method('_getWriter')->willReturn($mockAdapterTest);
+        $entityFactory->method('create')
+            ->willReturn($this->exportAbstractEntityMock);
+        $this->exportAdapterFactoryMock = $this->createMock(Export\Adapter\Factory::class);
+        $this->exportAdapterFactoryMock->method('create')
+            ->willReturn($this->exportAdapterMock);
+        $this->localeEmulator = $this->createMock(LocaleEmulatorInterface::class);
+        $fileIoMock = $this->createMock(File::class);
+        $fileIoMock->method('getPathInfo')
+            ->willReturnCallback(fn (string $fileName) => ['extension' => pathinfo($fileName, PATHINFO_EXTENSION)]);
+        $this->fileInfo = new FileInfo($this->exportConfigMock, $fileIoMock);
 
-        return $mockModelExport;
+        $this->model = new Export(
+            $logger,
+            $filesystem,
+            $this->exportConfigMock,
+            $entityFactory,
+            $this->exportAdapterFactoryMock,
+            [],
+            $this->localeEmulator,
+            $this->fileInfo
+        );
     }
 
     /**
@@ -114,17 +145,28 @@ class ExportTest extends TestCase
      */
     public function testExportDoesntTrimResult()
     {
-        $model = $this->_getMageImportExportModelExportMock();
-        $this->abstractMockEntity->method('export')
-            ->willReturn("export data  \n\n");
-        $model->setData([
+        $locale = 'fr_FR';
+        $this->localeEmulator->method('emulate')
+            ->with($this->callback(fn ($callback) => is_callable($callback)), $locale)
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $config = [
+            'entity' => 'entityA',
+            'file_format' => 'csv',
             Export::FILTER_ELEMENT_GROUP => [],
-            'entity' => 'catalog_product'
-        ]);
-        $model->export();
+            'locale' => $locale
+        ];
+        $this->model->setData($config);
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')
+            ->willReturn($config['entity']);
+        $this->exportAdapterMock->method('getFileExtension')
+            ->willReturn($config['file_format']);
+
+        $this->exportAbstractEntityMock->method('export')
+            ->willReturn("export data  \n\n");
+        $this->model->export();
         $this->assertStringContainsString(
             'Exported 2 rows',
-            var_export($model->getFormatedLogTrace(), true)
+            var_export($this->model->getFormatedLogTrace(), true)
         );
     }
 
@@ -133,16 +175,52 @@ class ExportTest extends TestCase
      */
     public function testGetFileNameWithAdapterFileName()
     {
-        $model = $this->_getMageImportExportModelExportMock();
         $basicFileName = 'test_file_name';
-        $model->getEntityAdapter()->setFileName($basicFileName);
+        $config = [
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+        ];
+        $this->model->setData($config);
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')
+            ->willReturn($config['entity']);
+        $this->exportAdapterMock->method('getFileExtension')
+            ->willReturn($config['file_format']);
+        $this->exportAbstractEntityMock->setFileName($basicFileName);
 
-        $fileName = $model->getFileName();
+        $fileName = $this->model->getFileName();
         $correctDateTime = $this->_getCorrectDateTime($fileName);
         $this->assertNotNull($correctDateTime);
 
-        $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $this->_exportFileExtension;
+        $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $config['file_format'];
         $this->assertEquals($correctFileName, $fileName);
+    }
+
+    public function testQueueFlowUsesTemporaryDestination(): void
+    {
+        $fileName = 'catalog_product_20260324_120000.csv';
+        $config = [
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+            'file_name' => $fileName,
+            Export::FILTER_ELEMENT_GROUP => [],
+        ];
+        $this->model->setData($config);
+        $this->localeEmulator->method('emulate')
+            ->willReturnCallback(fn (callable $callback) => $callback());
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')
+            ->willReturn($config['entity']);
+        $this->exportAbstractEntityMock->method('export')
+            ->willReturn('content');
+
+        $this->exportAdapterFactoryMock->expects(self::once())
+            ->method('create')
+            ->with(
+                'csvFormatClass',
+                ['destination' => $this->fileInfo->getInProgressFilePath($fileName)]
+            )
+            ->willReturn($this->exportAdapterMock);
+
+        self::assertSame('__RESULT_WRITTEN_TO_FILE__', $this->model->export());
     }
 
     /**
@@ -150,16 +228,22 @@ class ExportTest extends TestCase
      */
     public function testGetFileNameWithoutAdapterFileName()
     {
-        $model = $this->_getMageImportExportModelExportMock();
-        $model->getEntityAdapter()->setFileName(null);
-        $basicFileName = 'test_entity';
-        $model->setEntity($basicFileName);
+        $config = [
+            'entity' => 'entityA',
+            'file_format' => 'csv',
+        ];
+        $this->model->setData($config);
+        $this->exportAbstractEntityMock->method('getEntityTypeCode')
+            ->willReturn($config['entity']);
+        $this->exportAdapterMock->method('getFileExtension')
+            ->willReturn($config['file_format']);
+        $this->exportAbstractEntityMock->setFileName(null);
 
-        $fileName = $model->getFileName();
+        $fileName = $this->model->getFileName();
         $correctDateTime = $this->_getCorrectDateTime($fileName);
         $this->assertNotNull($correctDateTime);
 
-        $correctFileName = $basicFileName . '_' . $correctDateTime . '.' . $this->_exportFileExtension;
+        $correctFileName = $config['entity'] . '_' . $correctDateTime . '.' . $config['file_format'];
         $this->assertEquals($correctFileName, $fileName);
     }
 

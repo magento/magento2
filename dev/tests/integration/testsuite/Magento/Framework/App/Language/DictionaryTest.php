@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\Language;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DictionaryTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,9 +43,9 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $languageCode
      * @param array $expectation
-     * @dataProvider dictionaryDataProvider
      * @magentoComponentsDir Magento/Framework/App/Language/_files
      */
+    #[DataProvider('dictionaryDataProvider')]
     public function testDictionaryGetter($languageCode, $expectation)
     {
         $this->model = $this->objectManager->create(
@@ -55,28 +56,28 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectation, $result);
     }
 
-    public function dictionaryDataProvider()
+    public static function dictionaryDataProvider()
     {
         return [
             // First case with multiple inheritance, the obtained dictionary is en_AU
-            'a case with multiple inheritance' => $this->getDataMultipleInheritance(),
+            'a case with multiple inheritance' => self::getDataMultipleInheritance(),
             // Second case with inheritance of package with the same language code
-            'a case with inheritance similar language code' => $this->getDataInheritanceWitSimilarCode(),
+            'a case with inheritance similar language code' => self::getDataInheritanceWitSimilarCode(),
             // Third case with circular inheritance, when two packages depend on each other
-            'a case with circular inheritance' => $this->getDataCircularInheritance(),
+            'a case with circular inheritance' => self::getDataCircularInheritance(),
             // Fourth case with multiple inheritance from dev docs
-            'a case with multiple inheritance from dev docs' => $this->getDataMultipleInheritanceFromDevDocs()
+            'a case with multiple inheritance from dev docs' => self::getDataMultipleInheritanceFromDevDocs()
         ];
     }
 
     /**
      * @return array
      */
-    private function getDataMultipleInheritance()
+    private static function getDataMultipleInheritance()
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AU',
+            'languageCode' => 'en_AU',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -94,11 +95,11 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    private function getDataInheritanceWitSimilarCode()
+    private static function getDataInheritanceWitSimilarCode()
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'ru_RU',
+            'languageCode' => 'ru_RU',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -111,11 +112,11 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    private function getDataCircularInheritance()
+    private static function getDataCircularInheritance()
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AZ',
+            'languageCode' => 'en_AZ',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => '1.0',
@@ -150,11 +151,11 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getDataMultipleInheritanceFromDevDocs()
+    private static function getDataMultipleInheritanceFromDevDocs()
     {
         return [
             // Dictionary that will be requested
-            'language_code' => 'en_AK',
+            'languageCode' => 'en_AK',
             // Expected merged dictionary data
             'expectation' => [
                 'one' => 'en_us_package_one',

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -33,7 +34,9 @@
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteStore2">
                 <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -62,7 +65,9 @@
             <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStoreEN"/>
         </actionGroup>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Create simple product with categories created in create data -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>

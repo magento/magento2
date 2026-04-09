@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit\Generator;
 
@@ -14,6 +14,7 @@ use Laminas\Code\Generator\PropertyGenerator;
 use Laminas\Code\Generator\ValueGenerator;
 use Magento\Framework\Code\Generator\ClassGenerator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Framework\Code\Generator\ClassGenerator
@@ -316,11 +317,10 @@ class ClassGeneratorTest extends TestCase
         $this->_model->addPropertyFromGenerator($invalidProperty);
     }
 
-    /**
-     * @dataProvider providerNamespaces
-     * @param string $actualNamespace
+    /**     * @param string $actualNamespace
      * @param string $expectedNamespace
      */
+    #[DataProvider('providerNamespaces')]
     public function testNamespaceName($actualNamespace, $expectedNamespace)
     {
         $this->assertEquals(
@@ -334,7 +334,7 @@ class ClassGeneratorTest extends TestCase
      * DataProvider for testNamespaceName
      * @return array
      */
-    public function providerNamespaces()
+    public static function providerNamespaces()
     {
         return [
             ['Laminas', 'Laminas'],

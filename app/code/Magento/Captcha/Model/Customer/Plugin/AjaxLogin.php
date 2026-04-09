@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Captcha\Model\Customer\Plugin;
@@ -53,7 +53,7 @@ class AjaxLogin
         SessionManagerInterface $sessionManager,
         JsonFactory $resultJsonFactory,
         array $formIds,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;

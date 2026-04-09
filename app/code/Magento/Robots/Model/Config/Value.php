@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Robots\Model\Config;
@@ -63,9 +63,9 @@ class Value extends ConfigValue implements IdentityInterface
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()

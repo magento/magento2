@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Weee\Helper\Data;
 use Magento\Weee\Pricing\Adjustment;
 use Magento\Weee\Pricing\Render\TaxAdjustment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TaxAdjustmentTest extends TestCase
@@ -22,7 +23,7 @@ class TaxAdjustmentTest extends TestCase
     protected $model;
 
     /**
-     * Weee helper mock
+     * Mock weee helper
      *
      * @var \Magento\Weee\Helper\Data|MockObject
      */
@@ -55,9 +56,8 @@ class TaxAdjustmentTest extends TestCase
 
     /**
      * Test for method getDefaultExclusions
-     *
-     * @dataProvider getDefaultExclusionsDataProvider
      */
+    #[DataProvider('getDefaultExclusionsDataProvider')]
     public function testGetDefaultExclusions($weeeIsExcluded)
     {
         //setup
@@ -80,9 +80,10 @@ class TaxAdjustmentTest extends TestCase
 
     /**
      * Data provider for testGetDefaultExclusions()
+     *
      * @return array
      */
-    public function getDefaultExclusionsDataProvider()
+    public static function getDefaultExclusionsDataProvider()
     {
         return [
             'weee part of exclusions' => [true],

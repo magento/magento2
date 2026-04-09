@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting shipping methods on cart for guest
@@ -146,6 +147,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -153,9 +155,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      *
      * @param string $input
      * @param string $message
-     * @dataProvider dataProviderSetShippingMethodWithWrongParameters
      * @throws Exception
      */
+    #[DataProvider('dataProviderSetShippingMethodWithWrongParameters')]
     public function testSetShippingMethodWithWrongParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -164,7 +166,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   {$input}     
+   {$input}
   }) {
     cart {
       shipping_addresses {
@@ -184,7 +186,7 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderSetShippingMethodWithWrongParameters(): array
+    public static function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
             'shipping_methods_are_empty' => [
@@ -255,7 +257,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   cart_id: "{$maskedQuoteId}", 
+   cart_id: "{$maskedQuoteId}",
    shipping_methods: [
         {
             carrier_code: "flatrate"
@@ -317,7 +319,9 @@ QUERY;
     public function testSetShippingMethodOnAnEmptyCart()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The shipping method can\'t be set for an empty cart. Add an item to cart and try again.');
+        $this->expectExceptionMessage(
+            'The shipping method can\'t be set for an empty cart. Add an item to cart and try again.'
+        );
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $carrierCode = 'flatrate';
@@ -344,9 +348,9 @@ QUERY;
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"

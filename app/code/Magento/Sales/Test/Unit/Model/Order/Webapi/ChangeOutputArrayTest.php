@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn;
 use Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Sales\Model\Order\Webapi\ChangeOutputArray;
 
 /**
@@ -19,6 +20,7 @@ use Magento\Sales\Model\Order\Webapi\ChangeOutputArray;
  */
 class ChangeOutputArrayTest extends TestCase
 {
+
     /**
      * @var ChangeOutputArray
      */
@@ -41,9 +43,7 @@ class ChangeOutputArrayTest extends TestCase
         $this->changeOutputArray = new ChangeOutputArray($this->priceRendererMock, $this->defaultRendererMock);
     }
 
-    /**
-     * @dataProvider negativeTotals
-     */
+    #[DataProvider('negativeTotals')]
     public function testNoNegativeValue($totals, $expected)
     {
         $this->priceRendererMock->expects($this->once())
@@ -55,7 +55,7 @@ class ChangeOutputArrayTest extends TestCase
         $this->defaultRendererMock->expects($this->once())
             ->method('getTotalAmount')
             ->willReturn($totals['totalAmountIncTax']);
-        $dataObjectMock = $this->getMockForAbstractClass(OrderItemInterface::class);
+        $dataObjectMock = $this->createMock(OrderItemInterface::class);
         $dataObjectMock->expects($this->once())
             ->method('getBaseRowTotal')
             ->willReturn($totals['baseRowTotal']);
@@ -78,7 +78,7 @@ class ChangeOutputArrayTest extends TestCase
      * Data provider for testNoNegativeValue
      * @return array
      */
-    public function negativeTotals()
+    public static function negativeTotals()
     {
         return [
             [
@@ -91,6 +91,24 @@ class ChangeOutputArrayTest extends TestCase
                     'baseDiscountTaxCompensationAmount' => 1.1400,
                     'baseWeeeTaxAppliedAmount' => null,
                     'baseDiscountAmount' => 5.9000
+                ],
+                'expected' => [
+                    OrderItemInterface::ROW_TOTAL => 0,
+                    OrderItemInterface::BASE_ROW_TOTAL => 0,
+                    OrderItemInterface::ROW_TOTAL_INCL_TAX => 0,
+                    OrderItemInterface::BASE_ROW_TOTAL_INCL_TAX => 0
+                ]
+            ],
+            [
+                'totals' => [
+                    'totalAmount' => -2.83,
+                    'baseTotalAmount' => -2.83,
+                    'totalAmountIncTax' => 3.5527136788005E-15,
+                    'baseRowTotal' => 0.0000,
+                    'baseTaxAmount' => 0.0000,
+                    'baseDiscountTaxCompensationAmount' => 2.83,
+                    'baseWeeeTaxAppliedAmount' => null,
+                    'baseDiscountAmount' => 16.99
                 ],
                 'expected' => [
                     OrderItemInterface::ROW_TOTAL => 0,

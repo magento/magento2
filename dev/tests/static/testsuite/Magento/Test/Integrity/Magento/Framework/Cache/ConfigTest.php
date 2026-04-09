@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -9,6 +9,7 @@ namespace Magento\Test\Integrity\Magento\Framework\Cache;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -52,8 +53,8 @@ class ConfigTest extends TestCase
      *
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml(
         string $xmlString,
         array $expectedError
@@ -82,7 +83,7 @@ class ConfigTest extends TestCase
     /**
      * Data provider with invalid xml array according to cache.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider(): array
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider(): array
     {
         return include __DIR__ . '/_files/invalidCacheConfigXmlArray.php';
     }
