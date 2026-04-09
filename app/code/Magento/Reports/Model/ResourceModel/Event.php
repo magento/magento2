@@ -177,9 +177,16 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    /**
+     * Maximum number of batch iterations to prevent infinite loops
+     * when new events are inserted faster than they are cleaned up.
+     */
+    private const CLEAN_BATCH_LIMIT = 100;
+
     public function clean(\Magento\Reports\Model\Event $object)
     {
-        while (true) {
+        $iterations = 0;
+        while ($iterations < self::CLEAN_BATCH_LIMIT) {
             $select = $this->getConnection()->select()->from(
                 ['event_table' => $this->getMainTable()],
                 ['event_id']
@@ -197,6 +204,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $this->getConnection()->delete($this->getMainTable(), ['event_id IN(?)' => $eventIds]);
+            $iterations++;
         }
         return $this;
     }
