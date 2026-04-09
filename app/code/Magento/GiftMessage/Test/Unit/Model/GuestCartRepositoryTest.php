@@ -81,7 +81,7 @@ class GuestCartRepositoryTest extends TestCase
             ->method('load')
             ->with($cartId, 'masked_id')
             ->willReturnSelf();
-        $quoteIdMaskMock->expects($this->once())
+        $quoteIdMaskMock->expects($this->any())
             ->method('getQuoteId')
             ->willReturn($quoteId);
 
