@@ -1614,7 +1614,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     /**
      * Gets order item by given ID.
      *
-     * @param int $itemId
+     * @param int|null $itemId
      * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($itemId)
