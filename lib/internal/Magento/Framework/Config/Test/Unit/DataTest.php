@@ -271,7 +271,7 @@ class DataTest extends TestCase
     /**
      * Create a Data instance with compiled-file behavior controlled by test parameters.
      *
-     * Uses an anonymous subclass to override the compiled-file filesystem checks,
+     * Uses a test subclass to override the compiled-file filesystem checks,
      * since file_exists() and include() cannot be mocked in unit tests.
      */
     private function createCompiledDataConfig(
@@ -280,59 +280,14 @@ class DataTest extends TestCase
         ?array $compiledData,
         ?ConfigWriterInterface $configWriter = null
     ): Data {
-        $reader = $this->readerMock;
-        $cache = $this->cacheMock;
-        $serializer = $this->serializerMock;
-
-        return new class(
-            $reader,
-            $cache,
+        return new TestableCompiledData(
+            $this->readerMock,
+            $this->cacheMock,
             $cacheId,
-            $serializer,
+            $this->serializerMock,
             $compiledFileExists,
             $compiledData,
             $configWriter
-        ) extends Data {
-            private bool $compiledFileExists;
-            private ?array $compiledData;
-
-            /** @var string[] */
-            private array $removedKeys = [];
-
-            public function __construct(
-                ReaderInterface $reader,
-                CacheInterface $cache,
-                string $cacheId,
-                SerializerInterface $serializer,
-                bool $compiledFileExists,
-                ?array $compiledData,
-                ?ConfigWriterInterface $configWriter
-            ) {
-                $this->compiledFileExists = $compiledFileExists;
-                $this->compiledData = $compiledData;
-                parent::__construct($reader, $cache, $cacheId, $serializer, null, $configWriter);
-            }
-
-            protected function isCompiledConfigAvailable(string $key): bool
-            {
-                return $this->compiledFileExists;
-            }
-
-            protected function loadCompiledConfig(string $key): array
-            {
-                return $this->compiledData ?? [];
-            }
-
-            protected function removeCompiledConfig(string $key): void
-            {
-                $this->removedKeys[] = $key;
-            }
-
-            /** @return string[] */
-            public function getRemovedCompiledKeys(): array
-            {
-                return $this->removedKeys;
-            }
-        };
+        );
     }
 }

@@ -29,6 +29,7 @@ class Data extends \Magento\Framework\Config\Data\Scoped
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @param ConfigWriterInterface|null $configWriter
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
      */
     public function __construct(
         \Magento\Framework\Event\Config\Reader $reader,

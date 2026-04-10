@@ -372,47 +372,14 @@ class ScopedTest extends TestCase
         array $compiledScopes = [],
         ?ConfigWriterInterface $configWriter = null
     ): Scoped {
-        $reader = $this->_readerMock;
-        $configScope = $this->_configScopeMock;
-        $cache = $this->_cacheMock;
-        $serializer = $this->serializerMock;
-
-        return new class(
-            $reader,
-            $configScope,
-            $cache,
+        return new TestableCompiledScoped(
+            $this->_readerMock,
+            $this->_configScopeMock,
+            $this->_cacheMock,
             'tag',
-            $serializer,
+            $this->serializerMock,
             $compiledScopes,
             $configWriter
-        ) extends Scoped {
-            /**
-             * @var array<string, array>
-             */
-            private array $compiledScopes;
-
-            public function __construct(
-                ReaderInterface $reader,
-                ScopeInterface $configScope,
-                CacheInterface $cache,
-                string $cacheId,
-                SerializerInterface $serializer,
-                array $compiledScopes,
-                ?ConfigWriterInterface $configWriter
-            ) {
-                $this->compiledScopes = $compiledScopes;
-                parent::__construct($reader, $configScope, $cache, $cacheId, $serializer, $configWriter);
-            }
-
-            protected function isCompiledConfigAvailable(string $key): bool
-            {
-                return isset($this->compiledScopes[$key]);
-            }
-
-            protected function loadCompiledConfig(string $key): array
-            {
-                return $this->compiledScopes[$key] ?? [];
-            }
-        };
+        );
     }
 }
