@@ -59,6 +59,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Webapi\Model\Config">
+        <arguments>
+            <argument name="configWriter" xsi:type="object">Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem</argument>
+        </arguments>
+    </type>
     <type name="Magento\Webapi\Model\Config\Reader">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Webapi\Model\Config\Converter</argument>

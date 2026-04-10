@@ -9,6 +9,8 @@ namespace Magento\Webapi\Model;
 use Magento\Webapi\Model\Cache\Type\Webapi as WebapiCache;
 use Magento\Webapi\Model\Config\Reader;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigLoader\Compiled;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -49,20 +51,28 @@ class Config implements ConfigInterface
     private $serializer;
 
     /**
+     * @var ConfigWriterInterface|null
+     */
+    private $configWriter;
+
+    /**
      * Initialize dependencies.
      *
      * @param WebapiCache $cache
      * @param Reader $configReader
      * @param SerializerInterface|null $serializer
+     * @param ConfigWriterInterface|null $configWriter
      */
     public function __construct(
         WebapiCache $cache,
         Reader $configReader,
-        ?SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigWriterInterface $configWriter = null
     ) {
         $this->cache = $cache;
         $this->configReader = $configReader;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->configWriter = $configWriter;
     }
 
     /**
@@ -71,6 +81,11 @@ class Config implements ConfigInterface
     public function getServices()
     {
         if (null === $this->services) {
+            if ($this->configWriter && $this->isCompiledConfigAvailable(self::CACHE_ID)) {
+                $this->services = $this->loadCompiledConfig(self::CACHE_ID);
+                return $this->services;
+            }
+
             $services = $this->cache->load(self::CACHE_ID);
             if ($services && is_string($services)) {
                 $this->services = $this->serializer->unserialize($services);
@@ -78,7 +93,58 @@ class Config implements ConfigInterface
                 $this->services = $this->configReader->read();
                 $this->cache->save($this->serializer->serialize($this->services), self::CACHE_ID);
             }
+            $this->writeCompiledConfig(self::CACHE_ID, $this->services);
         }
         return $this->services;
+    }
+
+    /**
+     * Check whether compiled config file exists
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function isCompiledConfigAvailable(string $key): bool
+    {
+        return file_exists(Compiled::getFilePath($key));
+    }
+
+    /**
+     * Load compiled config from file
+     *
+     * @param string $key
+     * @return array
+     */
+    protected function loadCompiledConfig(string $key): array
+    {
+        return include Compiled::getFilePath($key);
+    }
+
+    /**
+     * Remove compiled config file
+     *
+     * @param string $key
+     * @return void
+     */
+    protected function removeCompiledConfig(string $key): void
+    {
+        $filePath = Compiled::getFilePath($key);
+        if ($this->configWriter !== null && file_exists($filePath)) {
+            @unlink($filePath);
+        }
+    }
+
+    /**
+     * Write compiled config to file
+     *
+     * @param string $key
+     * @param array $data
+     * @return void
+     */
+    private function writeCompiledConfig(string $key, array $data): void
+    {
+        if ($this->configWriter !== null) {
+            $this->configWriter->write($key, $data);
+        }
     }
 }
