@@ -7,6 +7,8 @@
 namespace Magento\Framework\Acl\AclResource;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigLoader\Compiled;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 class Provider implements ProviderInterface
@@ -42,18 +44,25 @@ class Provider implements ProviderInterface
     private $cacheKey;
 
     /**
+     * @var ConfigWriterInterface
+     */
+    private $configWriter;
+
+    /**
      * @param \Magento\Framework\Config\ReaderInterface $configReader
      * @param TreeBuilder $resourceTreeBuilder
      * @param \Magento\Framework\Acl\Data\CacheInterface $aclDataCache
      * @param Json $serializer
      * @param string $cacheKey
+     * @param ConfigWriterInterface|null $configWriter
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $configReader,
         TreeBuilder $resourceTreeBuilder,
         ?\Magento\Framework\Acl\Data\CacheInterface $aclDataCache = null,
         ?Json $serializer = null,
-        $cacheKey = self::ACL_RESOURCES_CACHE_KEY
+        $cacheKey = self::ACL_RESOURCES_CACHE_KEY,
+        ?ConfigWriterInterface $configWriter = null
     ) {
         $this->_configReader = $configReader;
         $this->_resourceTreeBuilder = $resourceTreeBuilder;
@@ -62,6 +71,7 @@ class Provider implements ProviderInterface
         );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheKey = $cacheKey;
+        $this->configWriter = $configWriter ?: ObjectManager::getInstance()->get(ConfigWriterInterface::class);
     }
 
     /**
@@ -69,16 +79,55 @@ class Provider implements ProviderInterface
      */
     public function getAclResources()
     {
+        if ($this->isCompiledConfigAvailable()) {
+            return $this->loadCompiledConfig();
+        }
+
         $tree = $this->aclDataCache->load($this->cacheKey);
         if ($tree) {
             return $this->serializer->unserialize($tree);
         }
+
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             $tree = $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
             $this->aclDataCache->save($this->serializer->serialize($tree), $this->cacheKey);
+            $this->configWriter->write($this->cacheKey, $tree);
             return $tree;
         }
         return [];
+    }
+
+    /**
+     * Check whether compiled config file exists
+     *
+     * @return bool
+     */
+    protected function isCompiledConfigAvailable(): bool
+    {
+        return file_exists(Compiled::getFilePath($this->cacheKey));
+    }
+
+    /**
+     * Load config from compiled PHP file
+     *
+     * @return array
+     */
+    protected function loadCompiledConfig(): array
+    {
+        return include Compiled::getFilePath($this->cacheKey);
+    }
+
+    /**
+     * Remove compiled config file
+     *
+     * @return void
+     */
+    protected function removeCompiledConfig(): void
+    {
+        $filePath = Compiled::getFilePath($this->cacheKey);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
     }
 }
