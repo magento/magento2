@@ -53,6 +53,7 @@
     <type name="Magento\Config\Model\Config\Structure\Data">
         <arguments>
             <argument name="cacheId" xsi:type="string">backend_system_configuration_structure</argument>
+            <argument name="configWriter" xsi:type="object">Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem</argument>
         </arguments>
     </type>
     <type name="Magento\Config\Model\Config\Structure\Element\Tab" shared="false">
