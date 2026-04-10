@@ -43,14 +43,10 @@ sub vcl_recv {
             return (synth(400, "X-Magento-Tags-Pattern or X-Pool header required"));
         }
         if (req.http.X-Magento-Tags-Pattern) {
-            if (!std.ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern)) {
-                return (synth(500, "Ban failed: " + std.ban_error()));
-            }
+          ban("obj.http.X-Magento-Tags ~ " + req.http.X-Magento-Tags-Pattern);
         }
         if (req.http.X-Pool) {
-            if (!std.ban("obj.http.X-Pool ~ " + req.http.X-Pool)) {
-                return (synth(500, "Ban failed: " + std.ban_error()));
-            }
+          ban("obj.http.X-Pool ~ " + req.http.X-Pool);
         }
         return (synth(200, "Purged"));
     }
