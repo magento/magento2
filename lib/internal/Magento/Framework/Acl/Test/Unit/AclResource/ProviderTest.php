@@ -75,41 +75,54 @@ class ProviderTest extends TestCase
         $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->configWriterMock = $this->getMockForAbstractClass(ConfigWriterInterface::class);
 
-        $this->_model = new Provider(
-            $this->_configReaderMock,
-            $this->_treeBuilderMock,
-            $this->aclDataCacheMock,
-            $this->serializerMock,
-            Provider::ACL_RESOURCES_CACHE_KEY,
-            $this->configWriterMock
-        );
+        $this->_model = $this->getMockBuilder(Provider::class)
+            ->setConstructorArgs([
+                $this->_configReaderMock,
+                $this->_treeBuilderMock,
+                $this->aclDataCacheMock,
+                $this->serializerMock,
+                Provider::ACL_RESOURCES_CACHE_KEY,
+                $this->configWriterMock,
+            ])
+            ->onlyMethods(['isCompiledConfigAvailable'])
+            ->getMock();
+
+        $this->_model->expects($this->any())
+            ->method('isCompiledConfigAvailable')
+            ->willReturn(false);
     }
 
     public function testGetIfAclResourcesExist()
     {
+        $expectedTree = [['id' => 'Magento_Backend::admin', 'children' => []]];
         $aclResourceConfig['config']['acl']['resources'] = ['ExpectedValue'];
         $this->_configReaderMock->expects($this->once())->method('read')->willReturn($aclResourceConfig);
-        $this->_treeBuilderMock->expects($this->once())->method('build')->willReturn('ExpectedResult');
+        $this->_treeBuilderMock->expects($this->once())->method('build')->willReturn($expectedTree);
         $this->aclDataCacheMock->expects($this->once())->method('save')->with(
-            json_encode('ExpectedResult'),
+            json_encode($expectedTree),
             Provider::ACL_RESOURCES_CACHE_KEY
         );
         $this->configWriterMock->expects($this->once())->method('write')->with(
             Provider::ACL_RESOURCES_CACHE_KEY,
-            'ExpectedResult'
+            $expectedTree
         );
-        $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
+        $this->assertEquals($expectedTree, $this->_model->getAclResources());
     }
 
     public function testGetIfAclResourcesExistInCache()
     {
+        $expectedTree = [['id' => 'Magento_Backend::admin', 'children' => []]];
         $this->_configReaderMock->expects($this->never())->method('read');
         $this->_treeBuilderMock->expects($this->never())->method('build');
         $this->aclDataCacheMock->expects($this->once())
             ->method('load')
             ->with(Provider::ACL_RESOURCES_CACHE_KEY)
-            ->willReturn(json_encode('ExpectedResult'));
-        $this->assertEquals('ExpectedResult', $this->_model->getAclResources());
+            ->willReturn(json_encode($expectedTree));
+        $this->configWriterMock->expects($this->once())->method('write')->with(
+            Provider::ACL_RESOURCES_CACHE_KEY,
+            $expectedTree
+        );
+        $this->assertEquals($expectedTree, $this->_model->getAclResources());
     }
 
     public function testGetIfAclResourcesEmpty()
@@ -176,6 +189,65 @@ class ProviderTest extends TestCase
         $this->_configReaderMock->expects($this->never())->method('read');
 
         $this->assertEquals($compiledTree, $model->getAclResources());
+    }
+
+    public function testCacheHitWritesCompiledConfig()
+    {
+        $expectedTree = [['id' => 'Magento_Backend::admin', 'children' => []]];
+
+        $model = $this->getMockBuilder(Provider::class)
+            ->setConstructorArgs([
+                $this->_configReaderMock,
+                $this->_treeBuilderMock,
+                $this->aclDataCacheMock,
+                $this->serializerMock,
+                Provider::ACL_RESOURCES_CACHE_KEY,
+                $this->configWriterMock,
+            ])
+            ->onlyMethods(['isCompiledConfigAvailable'])
+            ->getMock();
+
+        $model->expects($this->once())
+            ->method('isCompiledConfigAvailable')
+            ->willReturn(false);
+
+        $this->aclDataCacheMock->expects($this->once())
+            ->method('load')
+            ->with(Provider::ACL_RESOURCES_CACHE_KEY)
+            ->willReturn(json_encode($expectedTree));
+
+        $this->_configReaderMock->expects($this->never())->method('read');
+
+        $this->configWriterMock->expects($this->once())
+            ->method('write')
+            ->with(Provider::ACL_RESOURCES_CACHE_KEY, $expectedTree);
+
+        $this->assertEquals($expectedTree, $model->getAclResources());
+    }
+
+    public function testNoCompilationWithoutConfigWriter()
+    {
+        $expectedTree = [['id' => 'Magento_Backend::admin', 'children' => []]];
+        $aclResourceConfig['config']['acl']['resources'] = ['ExpectedValue'];
+
+        $model = new Provider(
+            $this->_configReaderMock,
+            $this->_treeBuilderMock,
+            $this->aclDataCacheMock,
+            $this->serializerMock,
+            Provider::ACL_RESOURCES_CACHE_KEY,
+            null
+        );
+
+        $this->_configReaderMock->expects($this->once())->method('read')->willReturn($aclResourceConfig);
+        $this->_treeBuilderMock->expects($this->once())->method('build')->willReturn($expectedTree);
+        $this->aclDataCacheMock->expects($this->once())->method('save')->with(
+            json_encode($expectedTree),
+            Provider::ACL_RESOURCES_CACHE_KEY
+        );
+        $this->configWriterMock->expects($this->never())->method('write');
+
+        $this->assertEquals($expectedTree, $model->getAclResources());
     }
 
     public function testCacheMissWritesCompiledConfig()

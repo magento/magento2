@@ -44,7 +44,7 @@ class Provider implements ProviderInterface
     private $cacheKey;
 
     /**
-     * @var ConfigWriterInterface
+     * @var ConfigWriterInterface|null
      */
     private $configWriter;
 
@@ -71,7 +71,7 @@ class Provider implements ProviderInterface
         );
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheKey = $cacheKey;
-        $this->configWriter = $configWriter ?: ObjectManager::getInstance()->get(ConfigWriterInterface::class);
+        $this->configWriter = $configWriter;
     }
 
     /**
@@ -79,23 +79,38 @@ class Provider implements ProviderInterface
      */
     public function getAclResources()
     {
-        if ($this->isCompiledConfigAvailable()) {
+        if ($this->configWriter && $this->isCompiledConfigAvailable()) {
             return $this->loadCompiledConfig();
         }
 
         $tree = $this->aclDataCache->load($this->cacheKey);
         if ($tree) {
-            return $this->serializer->unserialize($tree);
+            $result = $this->serializer->unserialize($tree);
+            $this->writeCompiledConfig($result);
+            return $result;
         }
 
         $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             $tree = $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
             $this->aclDataCache->save($this->serializer->serialize($tree), $this->cacheKey);
-            $this->configWriter->write($this->cacheKey, $tree);
+            $this->writeCompiledConfig($tree);
             return $tree;
         }
         return [];
+    }
+
+    /**
+     * Write compiled config to file
+     *
+     * @param mixed $data
+     * @return void
+     */
+    private function writeCompiledConfig($data): void
+    {
+        if ($this->configWriter !== null && is_array($data)) {
+            $this->configWriter->write($this->cacheKey, $data);
+        }
     }
 
     /**

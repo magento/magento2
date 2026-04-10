@@ -76,6 +76,7 @@
     <type name="Magento\Framework\Acl\AclResource\Provider">
         <arguments>
             <argument name="configReader" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Reader\Filesystem</argument>
+            <argument name="configWriter" xsi:type="object">Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\Builder">
