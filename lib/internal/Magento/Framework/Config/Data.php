@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigLoader\Compiled;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Represents loaded and cached configuration data, should be used to gain access to different types
@@ -71,6 +73,11 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $serializer;
 
     /**
+     * @var ConfigWriterInterface|null
+     */
+    private $configWriter;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -78,6 +85,7 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
      * @param array|null $cacheTags
+     * @param ConfigWriterInterface|null $configWriter
      */
     public function __construct(
         ReaderInterface $reader,
@@ -85,11 +93,13 @@ class Data implements \Magento\Framework\Config\DataInterface
         $cacheId,
         ?SerializerInterface $serializer = null,
         ?array $cacheTags = null,
+        ?ConfigWriterInterface $configWriter = null,
     ) {
         $this->reader = $reader;
         $this->cache = $cache;
         $this->cacheId = $cacheId;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->configWriter = $configWriter;
         if ($cacheTags) {
             $this->cacheTags = $cacheTags;
         }
@@ -103,6 +113,11 @@ class Data implements \Magento\Framework\Config\DataInterface
      */
     protected function initData()
     {
+        if ($this->configWriter && $this->isCompiledConfigAvailable($this->cacheId)) {
+            $this->merge($this->loadCompiledConfig($this->cacheId));
+            return;
+        }
+
         $data = $this->cache->load($this->cacheId);
         if (false === $data) {
             $data = $this->reader->read();
@@ -111,7 +126,33 @@ class Data implements \Magento\Framework\Config\DataInterface
             $data = $this->serializer->unserialize($data);
         }
 
+        if ($this->configWriter) {
+            $this->configWriter->write($this->cacheId, $data);
+        }
+
         $this->merge($data);
+    }
+
+    /**
+     * Check if a compiled PHP config file is available
+     *
+     * @param string $key
+     * @return bool
+     */
+    protected function isCompiledConfigAvailable(string $key): bool
+    {
+        return file_exists(Compiled::getFilePath($key));
+    }
+
+    /**
+     * Load configuration from a compiled PHP file
+     *
+     * @param string $key
+     * @return array
+     */
+    protected function loadCompiledConfig(string $key): array
+    {
+        return include Compiled::getFilePath($key);
     }
 
     /**
@@ -157,10 +198,28 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function reset()
     {
         $this->cache->remove($this->cacheId);
+        $this->removeCompiledConfig($this->cacheId);
         $this->_data = [];
         $configData = $this->reader->read();
         if ($configData) {
             $this->merge($configData);
+        }
+    }
+
+    /**
+     * Remove compiled PHP config file if it exists
+     *
+     * @param string $key
+     * @return void
+     */
+    protected function removeCompiledConfig(string $key): void
+    {
+        if (!$this->configWriter) {
+            return;
+        }
+        $compiledPath = Compiled::getFilePath($key);
+        if (file_exists($compiledPath)) {
+            @unlink($compiledPath);
         }
     }
 

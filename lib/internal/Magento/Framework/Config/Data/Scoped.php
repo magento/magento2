@@ -5,8 +5,9 @@
  */
 namespace Magento\Framework\Config\Data;
 
-use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * Provides scoped configuration
@@ -40,6 +41,11 @@ class Scoped extends \Magento\Framework\Config\Data
     private $serializer;
 
     /**
+     * @var ConfigWriterInterface|null
+     */
+    private $configWriter;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\ReaderInterface $reader
@@ -47,19 +53,22 @@ class Scoped extends \Magento\Framework\Config\Data
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param string $cacheId
      * @param SerializerInterface|null $serializer
+     * @param ConfigWriterInterface|null $configWriter
      */
     public function __construct(
         \Magento\Framework\Config\ReaderInterface $reader,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId,
-        ?SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigWriterInterface $configWriter = null
     ) {
         $this->_reader = $reader;
         $this->_configScope = $configScope;
         $this->_cache = $cache;
         $this->_cacheId = $cacheId;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->configWriter = $configWriter;
     }
 
     /**
@@ -89,17 +98,10 @@ class Scoped extends \Magento\Framework\Config\Data
             }
             foreach ($this->_scopePriorityScheme as $scopeCode) {
                 if (false == isset($this->_loadedScopes[$scopeCode])) {
-                    if ($scopeCode !== 'primary' && ($data = $this->_cache->load($scopeCode . '::' . $this->_cacheId))
-                    ) {
-                        $data = $this->serializer->unserialize($data);
+                    if ($scopeCode !== 'primary') {
+                        $data = $this->loadScopeData($scopeCode);
                     } else {
                         $data = $this->_reader->read($scopeCode);
-                        if ($scopeCode !== 'primary') {
-                            $this->_cache->save(
-                                $this->serializer->serialize($data),
-                                $scopeCode . '::' . $this->_cacheId
-                            );
-                        }
                     }
                     $this->merge($data);
                     $this->_loadedScopes[$scopeCode] = true;
@@ -109,5 +111,35 @@ class Scoped extends \Magento\Framework\Config\Data
                 }
             }
         }
+    }
+
+    /**
+     * Load data for a specific scope, using compiled file, cache backend, or reader
+     *
+     * @param string $scopeCode
+     * @return array
+     */
+    private function loadScopeData(string $scopeCode): array
+    {
+        $cacheKey = $scopeCode . '::' . $this->_cacheId;
+
+        if ($this->configWriter && $this->isCompiledConfigAvailable($cacheKey)) {
+            return $this->loadCompiledConfig($cacheKey);
+        }
+
+        $data = $this->_cache->load($cacheKey);
+
+        if ($data !== false) {
+            $data = $this->serializer->unserialize($data);
+        } else {
+            $data = $this->_reader->read($scopeCode);
+            $this->_cache->save($this->serializer->serialize($data), $cacheKey);
+        }
+
+        if ($this->configWriter) {
+            $this->configWriter->write($cacheKey, $data);
+        }
+
+        return $data;
     }
 }

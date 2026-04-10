@@ -41,10 +41,10 @@ class Filesystem implements ConfigWriterInterface
     {
         $this->initialize();
         $configuration = sprintf('<?php return %s;', var_export($config, true));
-        file_put_contents(
-            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php',
-            $configuration
-        );
+        $targetPath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php';
+        $tempPath = $targetPath . '.' . getmypid() . '.tmp';
+        file_put_contents($tempPath, $configuration);
+        rename($tempPath, $targetPath);
     }
 
     /**
