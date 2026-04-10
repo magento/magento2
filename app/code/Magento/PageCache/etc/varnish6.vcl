@@ -248,7 +248,7 @@ sub vcl_hit {
             return (deliver);
         } else {
             # Hit after TTL and grace expiration
-            return (restart);
+            return (miss);
         }
     } else {
         # server is not healthy, retrieve from cache
