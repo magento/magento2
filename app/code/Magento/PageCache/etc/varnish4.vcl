@@ -144,6 +144,7 @@ sub process_graphql_headers {
 sub vcl_backend_response {
 
     set beresp.grace = 3d;
+    set beresp.keep = 1d;
 
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
