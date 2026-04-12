@@ -22,6 +22,11 @@ class TelephoneTest extends TestCase
     use MockCreationTrait;
 
     /**
+     * Maximum allowed telephone length.
+     */
+    private const MAX_TELEPHONE_LENGTH = 255;
+
+    /**
      * @var Telephone
      */
     private Telephone $nameValidator;
@@ -111,6 +116,10 @@ class TelephoneTest extends TestCase
             [
                 'telephone' => '+43680/2149568',
                 'message' => 'slash should be allowed in telephone (e.g. +43680/2149568)'
+            ],
+            [
+                'telephone' => '1' . str_repeat('2', self::MAX_TELEPHONE_LENGTH - 1),
+                'message' => 'Telephone number up to 255 characters should be allowed'
             ]
         ];
     }
@@ -148,13 +157,45 @@ class TelephoneTest extends TestCase
                 'message' => 'Special character $ should not be allowed in telephone'
             ],
             [
-                'telephone' => '123456789012345678901',
-                'message' => 'Telephone number longer than 20 characters should not be allowed'
+                'telephone' => '1' . str_repeat('2', self::MAX_TELEPHONE_LENGTH),
+                'message' => 'Telephone number longer than 255 characters should not be allowed'
             ],
             [
                 'telephone' => '<' . 'script>alert("xss")<' . '/script>',
                 'message' => 'XSS attempt should not be allowed in telephone'
             ]
         ];
+    }
+
+    public function testLongTelephoneProducesLengthErrorMessage(): void
+    {
+        $this->addressMock->expects($this->once())
+            ->method('getTelephone')
+            ->willReturn('1' . str_repeat('2', self::MAX_TELEPHONE_LENGTH));
+
+        $isValid = $this->nameValidator->isValid($this->addressMock);
+
+        $this->assertFalse($isValid);
+        $messages = $this->nameValidator->getMessages();
+        $this->assertStringContainsString(
+            'phone number is too long',
+            (string)($messages[0]['telephone'] ?? '')
+        );
+    }
+
+    public function testInvalidCharsProduceCharsetErrorMessage(): void
+    {
+        $this->addressMock->expects($this->once())
+            ->method('getTelephone')
+            ->willReturn('123@456');
+
+        $isValid = $this->nameValidator->isValid($this->addressMock);
+
+        $this->assertFalse($isValid);
+        $messages = $this->nameValidator->getMessages();
+        $this->assertStringContainsString(
+            'Please use 0-9, +, -, (, ), ., / and space',
+            (string)($messages[0]['telephone'] ?? '')
+        );
     }
 }
