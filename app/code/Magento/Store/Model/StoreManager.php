@@ -74,7 +74,7 @@ class StoreManager implements
     protected $currentStoreId = null;
 
     /**
-     * Flag that shows that system has only one store view
+     * Flag that shows that system has only one store view; null is used as the cache sentinel.
      *
      * @var bool|null
      */
