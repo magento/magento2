@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -11,15 +11,24 @@ use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 use Magento\Csp\Model\SubresourceIntegrityRepository;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Csp\Model\SubresourceIntegrityFactory;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\MergeStrategy\FileExists;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateMergedAssetIntegrity
 {
+    /**
+     * @var SubresourceIntegrityRepositoryPool
+     */
+    private SubresourceIntegrityRepositoryPool $sourceIntegrityRepositoryPool;
+
     /**
      * @var SubresourceIntegrityRepository
      */
@@ -41,21 +50,37 @@ class GenerateMergedAssetIntegrity
     private Filesystem $filesystem;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var State
+     */
+    private State $appState;
+
+    /**
      * @param SubresourceIntegrityRepositoryPool $sourceIntegrityRepositoryPool
      * @param HashGenerator $hashGenerator
      * @param SubresourceIntegrityFactory $integrityFactory
      * @param Filesystem $filesystem
+     * @param LoggerInterface|null $logger
+     * @param State|null $state
      */
     public function __construct(
         SubresourceIntegrityRepositoryPool $sourceIntegrityRepositoryPool,
         HashGenerator $hashGenerator,
         SubresourceIntegrityFactory $integrityFactory,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ?LoggerInterface $logger = null,
+        ?State $state = null
     ) {
-        $this->sourceIntegrityRepository = $sourceIntegrityRepositoryPool->get(Area::AREA_FRONTEND);
         $this->hashGenerator = $hashGenerator;
         $this->integrityFactory = $integrityFactory;
         $this->filesystem = $filesystem;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->appState = $state ?? ObjectManager::getInstance()->get(State::class);
+        $this->sourceIntegrityRepositoryPool = $sourceIntegrityRepositoryPool;
     }
 
     /**
@@ -66,9 +91,7 @@ class GenerateMergedAssetIntegrity
      * @param array $assetsToMerge
      * @param LocalInterface $resultAsset
      * @return string|null
-     * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.EmptyCatchBlock)
      */
     public function afterMerge(
         FileExists $subject,
@@ -81,21 +104,34 @@ class GenerateMergedAssetIntegrity
         }
 
         $pubStaticDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        $integrity = $this->integrityFactory->create(
-            [
-                "data" => [
-                    'hash' => $this->hashGenerator->generate(
-                        $pubStaticDir->readFile($resultAsset->getPath())
-                    ),
-                    'path' => $resultAsset->getPath()
-                ]
-            ]
-        );
 
         try {
+            $integrity = $this->integrityFactory->create(
+                [
+                    "data" => [
+                        'hash' => $this->hashGenerator->generate(
+                            $pubStaticDir->readFile($resultAsset->getPath())
+                        ),
+                        'path' => $resultAsset->getPath()
+                    ]
+                ]
+            );
+
+            /**
+             * Resolved lazily via isset() — area code is unavailable during construction,
+             * and accessing an uninitialized typed property throws in PHP 8.
+             */
+            if (!isset($this->sourceIntegrityRepository)) {
+                $this->sourceIntegrityRepository = $this->sourceIntegrityRepositoryPool->get(
+                    $this->appState->getAreaCode()
+                );
+            }
             $this->sourceIntegrityRepository->save($integrity);
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception $e) {
+            $this->logger->warning(
+                'GenerateMergedAssetIntegrity: Failed to generate hash for merged file: '
+                . $e->getMessage()
+            );
         }
 
         return $result;

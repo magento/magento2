@@ -213,7 +213,19 @@ class CalculatorTest extends TestCase
         );
         $amount->setAdjustmentAmounts($amountData['adjustmentsAmounts']);
         $amount->setValue($amountData['amount']);
-        $amount->method('getValue')->willReturn($amountData['amount']);
+        $amount->method('getValue')->willReturnCallback(function ($exclude = null) use ($amountData) {
+            if ($exclude === null) {
+                return $amountData['amount'];
+            }
+            $exclude = is_array($exclude) ? $exclude : [$exclude];
+            $result = $amountData['amount'];
+            foreach ($exclude as $code) {
+                if (isset($amountData['adjustmentsAmounts'][$code])) {
+                    $result -= $amountData['adjustmentsAmounts'][$code];
+                }
+            }
+            return $result;
+        });
         $amount->method('getBaseAmount')->willReturn($amountData['amount']);
         $amount->method('getTotalAmount')->willReturn($amountData['amount']);
         $amount->method('getAdjustmentAmount')->willReturn(0);
@@ -255,7 +267,7 @@ class CalculatorTest extends TestCase
     protected function createSelectionMock($selectionData)
     {
         /** @var Product $selection */
-        $selection = $this->createPartialMockWithReflection(Product::class, ['getAmount', 'getQuantity']);
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getAmount', 'getQuantity', 'getValue']);
 
         // All items are saleable
         $selection->setIsSaleable(true);
@@ -267,6 +279,9 @@ class CalculatorTest extends TestCase
         $selection->method('getAmount')->willReturn($amountMock);
         $selection->setQuantity(1);
         $selection->method('getQuantity')->willReturn(1);
+        $amountData = $selectionData['amount'];
+        $excl = $amountData['amount'] - ($amountData['adjustmentsAmounts']['tax'] ?? 0);
+        $selection->method('getValue')->willReturn($excl);
 
         $innerProduct = $this->createMock(Product::class);
         $innerProduct->setSelectionCanChangeQty(false);
