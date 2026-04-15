@@ -267,7 +267,9 @@ class Session extends \Magento\Framework\Session\SessionManager
                         ? $this->_customer->getId()
                         : $this->_customerSession->getCustomerId();
 
-                    if ($quote->getData('customer_id') && (int)$quote->getData('customer_id') !== (int)$customerId) {
+                    if ($customerId && $quote->getData('customer_id') &&
+                        (int)$quote->getData('customer_id') !== (int)$customerId
+                    ) {
                         $quote = $this->quoteFactory->create();
                         $this->setQuoteId(null);
                     }

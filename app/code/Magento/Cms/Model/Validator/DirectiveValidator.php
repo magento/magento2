@@ -44,6 +44,7 @@ class DirectiveValidator
 
             if (isset($params['class'])) {
                 $class = trim((string)$params['class']);
+                $class = preg_replace('#\\\\+#', '\\', $class);
                 if (!preg_match('/^\\\\?[A-Za-z_][A-Za-z0-9_]*(\\\\[A-Za-z_][A-Za-z0-9_]*)*$/', $class)) {
                     return false;
                 }
@@ -58,7 +59,15 @@ class DirectiveValidator
 
             if (isset($params['template'])) {
                 $template = (string)$params['template'];
-                if (!preg_match('/^[A-Za-z0-9_]+(?:_[A-Za-z0-9_]+)*::[A-Za-z0-9_.\-\/]+$/', $template)) {
+                $isModuleTemplate = (bool) preg_match(
+                    '/^[A-Za-z0-9_]+(?:_[A-Za-z0-9_]+)*::[A-Za-z0-9_.\-\/]+$/',
+                    $template
+                );
+                $isBarePhtml = (bool) preg_match(
+                    '/^[A-Za-z0-9_.\-\/]+\.phtml$/',
+                    $template
+                );
+                if (!$isModuleTemplate && !$isBarePhtml) {
                     return false;
                 }
             }
