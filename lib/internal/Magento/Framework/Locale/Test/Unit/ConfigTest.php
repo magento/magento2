@@ -13,6 +13,9 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    /**
+     * @var array
+     */
     private static $allAllowedLocales = [
         'af_ZA', 'ar_DZ', 'ar_EG', 'ar_KW', 'ar_MA', 'ar_SA', 'az_Latn_AZ', 'be_BY', 'bg_BG', 'bn_BD',
         'bs_Latn_BA', 'ca_ES', 'cs_CZ', 'cy_GB', 'da_DK', 'de_AT', 'de_CH', 'de_DE', 'el_GR', 'en_AU',
@@ -25,6 +28,9 @@ class ConfigTest extends TestCase
         'lo_LA', 'es_VE', 'en_IE',
     ];
 
+    /**
+     * @var array
+     */
     private static $allAllowedCurrencies = [
         'AFN', 'ALL', 'AZN', 'DZD', 'AOA', 'ARS', 'AMD', 'AWG', 'AUD', 'BSD',
         'BHD', 'BDT', 'BBD', 'BYN', 'BZD', 'BMD', 'BTN', 'BOB', 'BAM', 'BWP',
@@ -46,29 +52,47 @@ class ConfigTest extends TestCase
         'TRL', 'XPF',
     ];
 
+    /**
+     * @var array
+     */
     private static $samplePresentLocales = [
         'en_US', 'lv_LV', 'pt_BR', 'it_IT', 'ar_EG', 'bg_BG', 'en_IE', 'es_ES',
         'en_AU', 'pt_PT', 'ru_RU', 'en_CA', 'vi_VN', 'ja_JP', 'en_GB', 'zh_CN',
         'zh_TW', 'fr_FR', 'ar_KW', 'pl_PL', 'ko_KR', 'sk_SK', 'el_GR', 'hi_IN',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAbsentLocales = [
         'aa_BB', 'foo_BAR', 'cc_DD',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAdditionalLocales = [
         'en_AA', 'es_ZZ',
     ];
 
+    /**
+     * @var array
+     */
     private static $samplePresentCurrencies = [
         'AUD', 'BBD', 'GBP', 'CAD', 'CZK', 'GQE', 'CNY', 'DJF', 'HKD', 'JPY', 'MYR',
         'MXN', 'NZD', 'PHP', 'SGD', 'CHF', 'TWD', 'USD', 'AED', 'ZWD', 'ROL', 'CHE',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAbsentCurrencies = [
         'ABC', 'DEF', 'GHI', 'ZZZ',
     ];
 
+    /**
+     * @var array
+     */
     private static $sampleAdditionalCurrencies = [
         'QED', 'PNP', 'EJN', 'MTO', 'EBY',
     ];
