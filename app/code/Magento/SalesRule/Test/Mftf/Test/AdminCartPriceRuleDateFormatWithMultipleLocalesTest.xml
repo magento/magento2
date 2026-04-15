@@ -40,8 +40,8 @@
         <actionGroup ref="SetAdminAccountActionGroup" stepKey="setLocaleToUS">
             <argument name="InterfaceLocaleByValue" value="en_US"/>
         </actionGroup>
-        <generateDate date="+1 day" format="n/j/Y" stepKey="startDateUS"/>
-        <generateDate date="+2 day" format="n/j/Y" stepKey="endDateUS"/>
+        <generateDate date="+1 day" format="m/j/Y" stepKey="startDateUS"/>
+        <generateDate date="+2 day" format="m/j/Y" stepKey="endDateUS"/>
         <!-- Step6: Navigate to cart price rules -->
         <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="openCartPriceRulesPageUS"/>
         <!-- Step7: Fill cart price rule main information -->

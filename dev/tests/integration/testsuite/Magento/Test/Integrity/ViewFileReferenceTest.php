@@ -21,6 +21,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -140,8 +141,8 @@ class ViewFileReferenceTest extends \PHPUnit\Framework\TestCase
      * @param string $modularCall
      * @param array $usages
      * @param null|string $area
-     * @dataProvider modularFallbackDataProvider
      */
+    #[DataProvider('modularFallbackDataProvider')]
     public function testModularFallback($modularCall, array $usages, $area)
     {
         list(, $file) = explode(\Magento\Framework\View\Asset\Repository::FILE_ID_SEPARATOR, $modularCall);

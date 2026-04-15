@@ -3,8 +3,11 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Decorator;
+
+use Magento\Framework\Cache\CacheConstants;
 
 /**
  * Cache frontend decorator that performs profiling of cache operations
@@ -62,7 +65,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function test($identifier)
     {
@@ -73,7 +76,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function load($identifier)
     {
@@ -84,9 +87,9 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * Enforce marking with a tag
+     * @inheritDoc
      *
-     * {@inheritdoc}
+     * Enforce marking with a tag
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -97,7 +100,7 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function remove($identifier)
     {
@@ -108,9 +111,9 @@ class Profiler extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
         \Magento\Framework\Profiler::start('cache_clean', $this->_getProfilerTags('clean'));
         $result = parent::clean($mode, $tags);

@@ -16,9 +16,11 @@ use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface;
 use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterfaceFactory;
 use Magento\Weee\Helper\Data;
+use Magento\Weee\Model\ProductRender\WeeeAdjustmentAttribute;
 use Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class WeeeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Weee */
     protected $model;
 
@@ -54,29 +58,25 @@ class WeeeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->weeeHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->getMockForAbstractClass();
+        $this->weeeHelperMock = $this->createMock(Data::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
-        $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->weeeAdjustmentAttributeFactory = $this->createPartialMock(
+            WeeeAdjustmentAttributeInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->extensionAttributes = $this->getMockBuilder(PriceInfoExtensionInterface::class)
-            ->addMethods(['setWeeeAttributes', 'setWeeeAdjustment'])
-            ->getMockForAbstractClass();
+        $this->extensionAttributes = $this->createPartialMockWithReflection(
+            PriceInfoExtensionInterface::class,
+            ['setWeeeAttributes', 'setWeeeAdjustment']
+        );
 
-        $this->priceInfoExtensionFactory = $this->getMockBuilder(PriceInfoExtensionInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->priceInfoExtensionFactory = $this->createPartialMock(
+            PriceInfoExtensionInterfaceFactory::class,
+            ['create']
+        );
 
-        $this->formattedPriceInfoBuilder = $this->getMockBuilder(FormattedPriceInfoBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->formattedPriceInfoBuilder = $this->createMock(FormattedPriceInfoBuilder::class);
 
         $this->model = new Weee(
             $this->weeeHelperMock,
@@ -92,26 +92,20 @@ class WeeeTest extends TestCase
      */
     public function testCollect()
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productRender = $this->getMockBuilder(ProductRenderInterface::class)
-            ->onlyMethods(['getPriceInfo', 'getStoreId'])
-            ->getMockForAbstractClass();
-        $weeAttribute  = $this->getMockBuilder(WeeeAdjustmentAttributeInterface::class)
-            ->addMethods(['getData'])
-            ->getMockForAbstractClass();
+        $productMock = $this->createMock(Product::class);
+        $productRender = $this->createMock(ProductRenderInterface::class);
+        $weeAttribute  = $this->createPartialMockWithReflection(
+            WeeeAdjustmentAttribute::class,
+            ['getData', 'setAttributeCode']
+        );
         $this->weeeAdjustmentAttributeFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($weeAttribute);
-        $priceInfo = $this->getMockBuilder(Base::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPrice'])
-            ->addMethods(['getExtensionAttributes', 'setExtensionAttributes'])
-            ->getMock();
-        $price = $this->getMockBuilder(FinalPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $priceInfo = $this->createPartialMockWithReflection(
+            Base::class,
+            ['getPrice', 'getExtensionAttributes', 'setExtensionAttributes']
+        );
+        $price = $this->createMock(FinalPrice::class);
         $weeAttribute->expects($this->once())
             ->method('setAttributeCode')
             ->with();
@@ -127,7 +121,7 @@ class WeeeTest extends TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

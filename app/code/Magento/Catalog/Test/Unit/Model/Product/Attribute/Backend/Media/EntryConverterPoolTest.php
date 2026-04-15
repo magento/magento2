@@ -19,14 +19,12 @@ use PHPUnit\Framework\TestCase;
 class EntryConverterPoolTest extends TestCase
 {
     /**
-     * @var MockObject
-     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
+     * @var ImageEntryConverter|MockObject
      */
     protected $imageMock;
 
     /**
-     * @var MockObject
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
+     * @var ExternalVideoEntryConverter|MockObject
      */
     protected $videoMock;
 
@@ -40,12 +38,12 @@ class EntryConverterPoolTest extends TestCase
         $this->imageMock =
             $this->createMock(ImageEntryConverter::class);
 
-        $this->imageMock->expects($this->any())->method('getMediaEntryType')->willReturn('image');
+        $this->imageMock->method('getMediaEntryType')->willReturn('image');
 
         $this->videoMock =
             $this->createMock(ExternalVideoEntryConverter::class);
 
-        $this->videoMock->expects($this->any())->method('getMediaEntryType')->willReturn('external-video');
+        $this->videoMock->method('getMediaEntryType')->willReturn('external-video');
 
         $this->dataObjectMock = $this->createMock(DataObject::class);
     }

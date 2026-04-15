@@ -15,10 +15,14 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Sales\Block\Order\Email\Items\DefaultItems;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DefaultItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|DefaultItems
      */
@@ -61,15 +65,12 @@ class DefaultItemsTest extends TestCase
             ->onlyMethods(['getBlock'])
             ->getMock();
 
-        $this->priceRenderBlock = $this->getMockBuilder(Template::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setItem'])
-            ->onlyMethods(['toHtml'])
-            ->getMock();
+        $this->priceRenderBlock = $this->createPartialMockWithReflection(
+            Template::class,
+            ['setItem', 'toHtml']
+        );
 
-        $this->itemMock = $this->getMockBuilder(OrderItem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemMock = $this->createMock(OrderItem::class);
 
         $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
@@ -94,8 +95,8 @@ class DefaultItemsTest extends TestCase
      * @param float $price
      * @param string $html
      * @param float $quantity
-     * @dataProvider getItemPriceDataProvider
-     * */
+     */
+    #[DataProvider('getItemPriceDataProvider')]
     public function testGetItemPrice($price, $html, $quantity)
     {
         $this->layoutMock->expects($this->once())

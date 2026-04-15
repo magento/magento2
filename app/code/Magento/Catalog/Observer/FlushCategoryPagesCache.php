@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Observer;
 
 use Magento\Catalog\Model\Category;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Event\Observer as Event;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\PageCache\Model\Cache\Type as PageCache;
@@ -53,7 +54,7 @@ class FlushCategoryPagesCache implements ObserverInterface
     public function execute(Event $event)
     {
         if ($this->cacheConfig->getType() == CacheConfig::BUILT_IN && $this->cacheConfig->isEnabled()) {
-            $this->pageCache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [Category::CACHE_TAG]);
+            $this->pageCache->clean(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, [Category::CACHE_TAG]);
         }
     }
 }

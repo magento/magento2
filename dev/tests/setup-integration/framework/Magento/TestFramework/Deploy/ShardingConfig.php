@@ -51,7 +51,6 @@ class ShardingConfig
                     'dbname' => $dbData['dbname'],
                     'model' => 'mysql4',
                     'engine' => 'innodb',
-                    'initStatements' => 'SET NAMES utf8;',
                     'active' => '1'
                 ];
                 $config['resource'][$connectionName] = [

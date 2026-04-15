@@ -18,9 +18,11 @@ use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
+use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Usps\Model\Carrier;
@@ -1242,5 +1244,113 @@ class ShipmentServiceTest extends TestCase
 
         $this->assertInstanceOf(DataObject::class, $result);
         $this->assertNotEmpty($result->getErrors());
+    }
+
+    /**
+     * Test getJsonQuotes with only weight_ounces computes decimal weight (8 oz = 0.5 lb)
+     */
+    public function testGetJsonQuotesWithWeightOuncesOnlyUsesComputedWeight(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_ounces' => 8
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.5, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * Test getJsonQuotes with weight_pounds = 0 and weight_ounces = 0 uses minimum 0.01
+     */
+    public function testGetJsonQuotesWithZeroWeightUsesMinimum(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_pounds' => 0,
+                'weight_ounces' => 0
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.01, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * Test getJsonQuotes with weight_pounds and weight_ounces uses combined decimal weight
+     */
+    public function testGetJsonQuotesWithValidWeightPounds(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            [
+                'weight_pounds' => 5,
+                'weight_ounces' => 8
+            ]
+        ]);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        // 5 lb 8 oz = 5.5 lb
+        $this->assertEquals(5.5, $capturedRequestParam['packageDescription']['weight']);
+    }
+
+    /**
+     * @param DataObject $requestMock
+     * @return mixed|null
+     * @throws LocalizedException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    private function getRequestParamHelper(DataObject $requestMock): mixed
+    {
+        $requestMock->setOrigCountryId('US');
+        $requestMock->setOrigPostal('90210');
+        $requestMock->setDestCountryId('US');
+        $requestMock->setDestPostal('10001');
+        $requestMock->setLength(12);
+        $requestMock->setHeight(10);
+        $requestMock->setWidth(8);
+        $requestMock->setContainer('RECTANGULAR');
+        $this->carrierModelMock->expects($this->once())
+            ->method('getRawRequest')
+            ->willReturn($requestMock);
+        $this->carrierModelMock->expects($this->any())
+            ->method('_isUSCountry')
+            ->willReturn(true);
+        $this->carrierModelMock->expects($this->once())
+            ->method('getOauthAccessRequest')
+            ->willReturn('test_access_token');
+        $this->carrierModelMock->expects($this->atLeastOnce())
+            ->method('getConfigData')
+            ->willReturnCallback(function ($key) {
+                $configMap = [
+                    'price_type' => 'RETAIL',
+                    'title' => 'USPS',
+                    'specificerrmsg' => 'No rates available'
+                ];
+                return $configMap[$key] ?? null;
+            });
+        $capturedRequestParam = null;
+        $this->carrierModelMock->expects($this->once())
+            ->method('getCachedQuotes')
+            ->willReturnCallback(function ($param) use (&$capturedRequestParam) {
+                $capturedRequestParam = json_decode($param, true);
+                return json_encode([]);
+            });
+        $resultMock = $this->createMock(Result::class);
+        $this->rateFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultMock);
+        $errorMock = $this->getMockBuilder(Error::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->rateErrorFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($errorMock);
+        $resultMock->expects($this->once())
+            ->method('append')
+            ->with($errorMock);
+        $this->shipmentService->getJsonQuotes();
+        $this->assertNotNull($capturedRequestParam);
+        return $capturedRequestParam;
     }
 }

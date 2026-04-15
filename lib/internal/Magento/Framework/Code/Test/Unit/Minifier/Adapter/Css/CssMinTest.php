@@ -18,7 +18,6 @@ class CssMinTest extends TestCase
             ->getMock();
         $cssMinAdapter = new CSSmin($cssMinMock);
         $property = new \ReflectionProperty(CSSmin::class, 'cssMinifier');
-        $property->setAccessible(true);
         $property->setValue($cssMinAdapter, $cssMinMock);
 
         $expectedResult = 'minified content';

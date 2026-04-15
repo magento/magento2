@@ -24,13 +24,15 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterface;
-use Magento\Quote\Test\Unit\Helper\QuoteTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerManagementTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CustomerManagement
      */
@@ -96,8 +98,8 @@ class CustomerManagementTest extends TestCase
         $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
         $this->customerAddressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->accountManagementMock = $this->createMock(AccountManagementInterface::class);
-        $this->quoteMock = $this->createPartialMock(
-            QuoteTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
             [
                 'getId',
                 'getCustomer',

@@ -13,7 +13,6 @@ use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -66,8 +65,8 @@ class ConfiguredPriceTest extends TestCase
 
         $this->priceInfo = $this->createMock(PriceInfoInterface::class);
 
-        $this->saleableItem = new ProductTestHelper();
-        $this->saleableItem->setPriceInfo($this->priceInfo);
+        $this->saleableItem = $this->createMock(Product::class);
+        $this->saleableItem->method('getPriceInfo')->willReturn($this->priceInfo);
 
         $this->calculator = $this->createMock(CalculatorInterface::class);
 
@@ -152,10 +151,12 @@ class ConfiguredPriceTest extends TestCase
             ->with($this->saleableItem)
             ->willReturn([$productOne, $productTwo]);
 
-        $this->saleableItem->setTypeInstance($groupedProduct);
-        $this->saleableItem->setStore($store);
-        $this->saleableItem->setCustomOption('associated_product_1', $customOptionOne);
-        $this->saleableItem->setCustomOption('associated_product_2', $customOptionTwo);
+        $this->saleableItem->method('getTypeInstance')->willReturn($groupedProduct);
+        $this->saleableItem->method('getStore')->willReturn($store);
+        $this->saleableItem->method('getCustomOption')->willReturnMap([
+            ['associated_product_1', $customOptionOne],
+            ['associated_product_2', $customOptionTwo]
+        ]);
 
         $item = $this->createMock(ItemInterface::class);
 

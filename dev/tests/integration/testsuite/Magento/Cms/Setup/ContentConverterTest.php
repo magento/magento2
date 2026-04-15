@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Setup;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /** @var \Magento\Cms\Setup\ContentConverter */
@@ -20,8 +22,8 @@ class ContentConverterTest extends \Magento\TestFramework\TestCase\AbstractContr
     /**
      * @param string $value
      * @param string $expected
-     * @dataProvider convertDataProvider
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($value, $expected)
     {
         $this->assertEquals($expected, $this->converter->convert($value));

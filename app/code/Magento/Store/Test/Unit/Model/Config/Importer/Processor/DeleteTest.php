@@ -109,8 +109,7 @@ class DeleteTest extends TestCase
         $this->dataDifferenceCalculatorMock = $this->getMockBuilder(DataDifferenceCalculator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->websiteRepositoryMock = $this->getMockBuilder(WebsiteRepository::class)
             ->disableOriginalConstructor()
             ->getMock();

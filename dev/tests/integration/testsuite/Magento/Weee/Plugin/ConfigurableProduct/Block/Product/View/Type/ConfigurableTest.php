@@ -89,6 +89,7 @@ class ConfigurableTest extends TestCase
             [
                 'attribute_code' => 'test_fpt_attr',
                 'frontend_input' => 'weee',
+                'backend_type' => null,
                 'frontend_label' => 'Test FPT'
             ],
             'weee_attr'

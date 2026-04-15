@@ -13,6 +13,7 @@ use Magento\Framework\Registry;
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class covers process manager execution test logic
@@ -23,11 +24,11 @@ use Psr\Log\LoggerInterface;
 class ProcessManagerTest extends TestCase
 {
     /**
-     * @dataProvider functionsWithErrorProvider
      * @param array $userFunctions
      * @param int $threadsCount
      * @return void
      */
+    #[DataProvider('functionsWithErrorProvider')]
     public function testFailureInChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
@@ -116,11 +117,11 @@ class ProcessManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider successFunctionsProvider
      * @param array $userFunctions
      * @param int $threadsCount
      * @return void
      */
+    #[DataProvider('successFunctionsProvider')]
     public function testSuccessChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
@@ -208,12 +209,12 @@ class ProcessManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider isMultiThreadsExecuteDataProvider
      * @param $threadsCount
      * @param $expectedResult
      * @return void
      * @throws \PHPUnit\Framework\MockObject\Exception
      */
+    #[DataProvider('isMultiThreadsExecuteDataProvider')]
     public function testIsMultiThreadsExecute($threadsCount, $expectedResult): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);

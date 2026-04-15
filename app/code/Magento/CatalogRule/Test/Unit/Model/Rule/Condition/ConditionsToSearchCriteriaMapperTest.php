@@ -19,7 +19,9 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Rule\Model\Condition\AbstractCondition;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConditionsToSearchCriteriaMapperTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ConditionsToSearchCriteriaMapper
      */
@@ -123,11 +127,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
     public function testMapCustomProductConditionToSearchCriteria()
     {
         // Create a mock that extends SimpleCondition (simulates custom condition class)
-        $customConditionMock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttribute', 'getOperator'])
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $customConditionMock = $this->createPartialMockWithReflection(
+            SimpleCondition::class,
+            ['getAttribute', 'getOperator', 'getValue']
+        );
 
         $customConditionMock->method('getAttribute')->willReturn('price');
         $customConditionMock->method('getOperator')->willReturn('>');
@@ -172,11 +175,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         $standardConditionMock = $this->createSimpleConditionMock('category_ids', '==', '2');
 
         // Custom condition (subclass of SimpleCondition)
-        $customConditionMock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttribute', 'getOperator'])
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $customConditionMock = $this->createPartialMockWithReflection(
+            SimpleCondition::class,
+            ['getAttribute', 'getOperator', 'getValue']
+        );
 
         $customConditionMock->method('getAttribute')->willReturn('price');
         $customConditionMock->method('getOperator')->willReturn('>');
@@ -222,11 +224,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('Undefined condition type');
 
-        // Create a mock that implements ConditionInterface but is neither SimpleCondition nor CombinedCondition
-        $invalidConditionMock = $this->getMockBuilder(\Magento\Rule\Model\Condition\AbstractCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getType'])
-            ->getMockForAbstractClass();
+        $invalidConditionMock = $this->createPartialMockWithReflection(
+            AbstractCondition::class,
+            ['getType']
+        );
         $invalidConditionMock->method('getType')->willReturn('SomeOtherConditionType');
 
         $combinedConditionMock = $this->createCombinedConditionMock([$invalidConditionMock], 'all');
@@ -266,9 +267,7 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
     public function testInstanceofCheckAcceptsSubclasses()
     {
         // Create a subclass of SimpleCondition
-        $subclassConditionMock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subclassConditionMock = $this->createMock(SimpleCondition::class);
 
         // Verify instanceof relationship
         $this->assertInstanceOf(
@@ -364,11 +363,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      */
     private function createSimpleConditionMock(string $attribute, string $operator, $value): MockObject
     {
-        $conditionMock = $this->getMockBuilder(SimpleCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAttribute', 'getOperator'])
-            ->onlyMethods(['getValue'])
-            ->getMock();
+        $conditionMock = $this->createPartialMockWithReflection(
+            SimpleCondition::class,
+            ['getAttribute', 'getOperator', 'getValue']
+        );
 
         // Stub the getter methods that are called by the mapper
         $conditionMock->method('getAttribute')->willReturn($attribute);
@@ -387,11 +385,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      */
     private function createCombinedConditionMock(array $conditions, string $aggregator): MockObject
     {
-        $combinedConditionMock = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $combinedConditionMock = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
 
         // Stub the getter methods that are called by the mapper
         $combinedConditionMock->method('getConditions')->willReturn($conditions);
@@ -408,9 +405,7 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      */
     private function createFilterMock(): MockObject
     {
-        return $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Filter::class);
     }
 
     /**
@@ -421,10 +416,10 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
      */
     private function createSearchCriteriaBuilderMock(SearchCriteria $searchCriteria): MockObject
     {
-        $builderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setFilterGroups', 'create'])
-            ->getMock();
+        $builderMock = $this->createPartialMock(
+            SearchCriteriaBuilder::class,
+            ['setFilterGroups', 'create']
+        );
 
         $builderMock->method('setFilterGroups')->willReturnSelf();
         $builderMock->method('create')->willReturn($searchCriteria);
@@ -441,31 +436,29 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
     {
         $conditionMock = $this->createSimpleConditionMock('sku', '==', 'test-sku');
         
-        // Create combined condition with getValue() returning false
-        $combinedConditionMock = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $combinedConditionMock = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         $combinedConditionMock->method('getConditions')->willReturn([$conditionMock]);
         $combinedConditionMock->method('getAggregator')->willReturn('all');
         $combinedConditionMock->method('getValue')->willReturn(false); // This triggers reverse logic
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConditionType', 'setConditionType'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(
+            Filter::class,
+            ['getConditionType', 'setConditionType']
+        );
         
         $filterMock->method('getConditionType')->willReturn('eq');
         $filterMock->expects($this->once())
             ->method('setConditionType')
             ->with('neq'); // Should be reversed from 'eq' to 'neq'
 
-        $filterGroupMock = $this->getMockBuilder(CombinedFilterGroup::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFilters'])
-            ->getMock();
+        $filterGroupMock = $this->createPartialMock(
+            CombinedFilterGroup::class,
+            ['getFilters']
+        );
         $filterGroupMock->method('getFilters')->willReturn([$filterMock]);
 
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
@@ -516,9 +509,7 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
             $conditionMock = $this->createSimpleConditionMock('sku', $ruleOp, 'test-value');
             $combinedConditionMock = $this->createCombinedConditionMock([$conditionMock], 'all');
 
-            $filterMock = $this->getMockBuilder(Filter::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $filterMock = $this->createMock(Filter::class);
 
             $filterGroupMock = $this->createMock(CombinedFilterGroup::class);
             $searchCriteriaMock = $this->createMock(SearchCriteria::class);
@@ -738,28 +729,27 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
 
         $conditionMock = $this->createSimpleConditionMock('sku', '==', 'test-sku');
         
-        $combinedConditionMock = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $combinedConditionMock = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         $combinedConditionMock->method('getConditions')->willReturn([$conditionMock]);
         $combinedConditionMock->method('getAggregator')->willReturn('all');
         $combinedConditionMock->method('getValue')->willReturn(false); // Triggers reverse logic
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConditionType', 'setConditionType'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(
+            Filter::class,
+            ['getConditionType', 'setConditionType']
+        );
         
         // Return an invalid operator that's not in the reversal map
         $filterMock->method('getConditionType')->willReturn('INVALID_SQL_OP');
 
-        $filterGroupMock = $this->getMockBuilder(CombinedFilterGroup::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFilters'])
-            ->getMock();
+        $filterGroupMock = $this->createPartialMock(
+            CombinedFilterGroup::class,
+            ['getFilters']
+        );
         $filterGroupMock->method('getFilters')->willReturn([$filterMock]);
 
         // The filterFactory needs to return the actual filter
@@ -797,30 +787,29 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         foreach ($reversalMappings as $original => $reversed) {
             $conditionMock = $this->createSimpleConditionMock('sku', '==', 'test-sku');
             
-            $combinedConditionMock = $this->getMockBuilder(CombinedCondition::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['getAggregator'])
-                ->onlyMethods(['getConditions', 'getValue'])
-                ->getMock();
+            $combinedConditionMock = $this->createPartialMockWithReflection(
+                CombinedCondition::class,
+                ['getAggregator', 'getConditions', 'getValue']
+            );
             
             $combinedConditionMock->method('getConditions')->willReturn([$conditionMock]);
             $combinedConditionMock->method('getAggregator')->willReturn('all');
             $combinedConditionMock->method('getValue')->willReturn(false);
 
-            $filterMock = $this->getMockBuilder(Filter::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['getConditionType', 'setConditionType'])
-                ->getMock();
+            $filterMock = $this->createPartialMock(
+                Filter::class,
+                ['getConditionType', 'setConditionType']
+            );
             
             $filterMock->method('getConditionType')->willReturn($original);
             $filterMock->expects($this->once())
                 ->method('setConditionType')
                 ->with($reversed);
 
-            $filterGroupMock = $this->getMockBuilder(CombinedFilterGroup::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['getFilters'])
-                ->getMock();
+            $filterGroupMock = $this->createPartialMock(
+                CombinedFilterGroup::class,
+                ['getFilters']
+            );
             $filterGroupMock->method('getFilters')->willReturn([$filterMock]);
 
             $searchCriteriaMock = $this->createMock(SearchCriteria::class);
@@ -856,45 +845,43 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
     public function testReverseSqlOperatorInNestedFilterGroup()
     {
         $innerCondition = $this->createSimpleConditionMock('price', '>', '50');
-        $innerCombined = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $innerCombined = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         $innerCombined->method('getConditions')->willReturn([$innerCondition]);
         $innerCombined->method('getAggregator')->willReturn('all');
         $innerCombined->method('getValue')->willReturn(true);
 
-        $outerCombined = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $outerCombined = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         $outerCombined->method('getConditions')->willReturn([$innerCombined]);
         $outerCombined->method('getAggregator')->willReturn('all');
         $outerCombined->method('getValue')->willReturn(false); // Triggers reverse logic
 
-        $innerFilterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getConditionType', 'setConditionType'])
-            ->getMock();
+        $innerFilterMock = $this->createPartialMock(
+            Filter::class,
+            ['getConditionType', 'setConditionType']
+        );
         $innerFilterMock->method('getConditionType')->willReturn('gt');
         $innerFilterMock->expects($this->once())
             ->method('setConditionType')
             ->with('lteq');
 
-        $innerFilterGroupMock = $this->getMockBuilder(CombinedFilterGroup::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFilters'])
-            ->getMock();
+        $innerFilterGroupMock = $this->createPartialMock(
+            CombinedFilterGroup::class,
+            ['getFilters']
+        );
         $innerFilterGroupMock->method('getFilters')->willReturn([$innerFilterMock]);
 
-        $outerFilterGroupMock = $this->getMockBuilder(CombinedFilterGroup::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getFilters'])
-            ->getMock();
+        $outerFilterGroupMock = $this->createPartialMock(
+            CombinedFilterGroup::class,
+            ['getFilters']
+        );
         $outerFilterGroupMock->method('getFilters')->willReturn([$innerFilterGroupMock]);
 
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
@@ -929,22 +916,20 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
         $validCondition = $this->createSimpleConditionMock('sku', '==', 'test-sku');
         
         // Create an empty combined condition that will return null
-        $emptyCombinedCondition = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $emptyCombinedCondition = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         $emptyCombinedCondition->method('getConditions')->willReturn([]); // Empty conditions
         $emptyCombinedCondition->method('getAggregator')->willReturn('all');
         $emptyCombinedCondition->method('getValue')->willReturn(true);
 
         // Main combined condition with both valid and empty conditions
-        $mainCombinedCondition = $this->getMockBuilder(CombinedCondition::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAggregator'])
-            ->onlyMethods(['getConditions', 'getValue'])
-            ->getMock();
+        $mainCombinedCondition = $this->createPartialMockWithReflection(
+            CombinedCondition::class,
+            ['getAggregator', 'getConditions', 'getValue']
+        );
         
         // Mix valid condition with empty combined condition
         $mainCombinedCondition->method('getConditions')->willReturn([

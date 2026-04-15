@@ -14,6 +14,7 @@ use Magento\Email\Controller\Adminhtml\Email\Template\Index;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\View;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Index
      */
@@ -100,17 +103,17 @@ class IndexTest extends TestCase
         $this->layoutMock = $this->getMockBuilder(Layout::class)->disableOriginalConstructor()
             ->onlyMethods(['getBlock'])
             ->getMock();
-        $this->menuBlockMock = $this->getMockBuilder(Menu::class)->disableOriginalConstructor()
-            ->onlyMethods(['getMenuModel'])
-            ->addMethods(['setActive', 'getParentItems'])
-            ->getMock();
+        $this->menuBlockMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['getMenuModel', 'setActive', 'getParentItems']
+        );
         $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)->disableOriginalConstructor()
             ->onlyMethods(['addLink'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)->disableOriginalConstructor()
-            ->onlyMethods(['getConfig'])
-            ->addMethods(['setActiveMenu', 'addBreadcrumb'])
-            ->getMock();
+        $this->resultPageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['getConfig', 'setActiveMenu', 'addBreadcrumb']
+        );
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -25,10 +25,10 @@ use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\Quote\Model\QuoteRepository;
 use Magento\Quote\Model\ResourceModel\Quote\Address as QuoteAddressResource;
 use Magento\Quote\Model\ShippingMethodManagement;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Api\Data\CartExtensionInterface;
-use Magento\Quote\Test\Unit\Helper\CartExtensionTestHelper;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
 use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
@@ -41,6 +41,7 @@ use Magento\Customer\Model\Session;
 #[CoversClass(\Magento\Quote\Model\ShippingMethodManagement::class)]
 class ShippingMethodManagementTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ShippingMethodManagement
      */
@@ -194,8 +195,8 @@ class ShippingMethodManagementTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'addressFactory', $this->addressFactory);
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'dataProcessor', $this->dataProcessor);
 
-        $this->extensionAttributesMock = $this->createPartialMock(
-            CartExtensionTestHelper::class,
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            CartExtensionInterface::class,
             ['getShippingAssignments']
         );
 

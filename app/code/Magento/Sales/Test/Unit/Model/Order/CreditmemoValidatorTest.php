@@ -11,12 +11,15 @@ use Magento\Sales\Model\Order\CreditmemoValidator;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for creditmemo factory class.
  */
 class CreditmemoValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CreditmemoValidator
      */
@@ -42,11 +45,10 @@ class CreditmemoValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getChildrenItems', 'isDummy', 'getId', 'getParentItemId'])
-            ->addMethods(['getHasChildren'])
-            ->getMock();
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getChildrenItems', 'isDummy', 'getId', 'getParentItemId', 'getHasChildren']
+        );
         $this->orderChildItemOneMock = $this->createPartialMock(
             Item::class,
             ['getQtyToRefund', 'getId']

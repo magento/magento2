@@ -17,11 +17,11 @@ use Magento\Bundle\Pricing\Price\BundleOptionPrice;
 use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Bundle\Pricing\Price\BundleSelectionPrice;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
 use Magento\Framework\Pricing\Adjustment\Calculator as PricingAdjustmentCalculator;
 use Magento\Framework\Pricing\Amount\AmountFactory;
-use Magento\Framework\Pricing\Test\Unit\Helper\AmountTestHelper;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -39,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CalculatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SaleableInterface
      */
@@ -86,8 +88,8 @@ class CalculatorTest extends TestCase
 
     protected function setUp(): void
     {
-        /** @var ProductTestHelper $saleableItem */
-        $this->saleableItem = new ProductTestHelper();
+        /** @var Product $saleableItem */
+        $this->saleableItem = $this->createMock(Product::class);
 
         $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
         $priceInfo = $this->createMock(Base::class);
@@ -204,9 +206,33 @@ class CalculatorTest extends TestCase
      */
     protected function createAmountMock($amountData)
     {
-        $amount = new AmountTestHelper();
+        $amount = $this->createPartialMockWithReflection(
+            AmountInterface::class,
+            ['setAdjustmentAmounts', 'setValue', 'getValue', 'getBaseAmount', 'getTotalAmount',
+             'getAdjustmentAmount', 'getAdjustmentAmounts', 'getTotalAdjustmentAmount', 'hasAdjustment', '__toString']
+        );
         $amount->setAdjustmentAmounts($amountData['adjustmentsAmounts']);
         $amount->setValue($amountData['amount']);
+        $amount->method('getValue')->willReturnCallback(function ($exclude = null) use ($amountData) {
+            if ($exclude === null) {
+                return $amountData['amount'];
+            }
+            $exclude = is_array($exclude) ? $exclude : [$exclude];
+            $result = $amountData['amount'];
+            foreach ($exclude as $code) {
+                if (isset($amountData['adjustmentsAmounts'][$code])) {
+                    $result -= $amountData['adjustmentsAmounts'][$code];
+                }
+            }
+            return $result;
+        });
+        $amount->method('getBaseAmount')->willReturn($amountData['amount']);
+        $amount->method('getTotalAmount')->willReturn($amountData['amount']);
+        $amount->method('getAdjustmentAmount')->willReturn(0);
+        $amount->method('getAdjustmentAmounts')->willReturn($amountData['adjustmentsAmounts']);
+        $amount->method('getTotalAdjustmentAmount')->willReturn(array_sum($amountData['adjustmentsAmounts']));
+        $amount->method('hasAdjustment')->willReturn(!empty($amountData['adjustmentsAmounts']));
+        $amount->method('__toString')->willReturn((string)$amountData['amount']);
         return $amount;
     }
 
@@ -240,8 +266,8 @@ class CalculatorTest extends TestCase
      */
     protected function createSelectionMock($selectionData)
     {
-        /** @var ProductTestHelper $selection */
-        $selection = new ProductTestHelper();
+        /** @var Product $selection */
+        $selection = $this->createPartialMockWithReflection(Product::class, ['getAmount', 'getQuantity', 'getValue']);
 
         // All items are saleable
         $selection->setIsSaleable(true);
@@ -250,9 +276,14 @@ class CalculatorTest extends TestCase
         }
         $amountMock = $this->createAmountMock($selectionData['amount']);
         $selection->setAmount($amountMock);
+        $selection->method('getAmount')->willReturn($amountMock);
         $selection->setQuantity(1);
+        $selection->method('getQuantity')->willReturn(1);
+        $amountData = $selectionData['amount'];
+        $excl = $amountData['amount'] - ($amountData['adjustmentsAmounts']['tax'] ?? 0);
+        $selection->method('getValue')->willReturn($excl);
 
-        $innerProduct = new ProductTestHelper();
+        $innerProduct = $this->createMock(Product::class);
         $innerProduct->setSelectionCanChangeQty(false);
         $selection->setProduct($innerProduct);
 

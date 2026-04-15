@@ -11,20 +11,21 @@ use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Test\Unit\Helper\HttpResponseJsonRepresentTestHelper;
 
 /**
  * Class used to execute test cases for update item quantity
  */
 class UpdateItemQtyTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var UpdateItemQty
      */
@@ -56,7 +57,7 @@ class UpdateItemQtyTest extends TestCase
     protected $requestMock;
 
     /**
-     * @var ResponseInterface|MockObject
+     * @var Http|MockObject
      */
     protected $responseMock;
 
@@ -75,7 +76,10 @@ class UpdateItemQtyTest extends TestCase
         $this->jsonHelperMock = $this->createMock(Data::class);
         $this->quantityProcessor = $this->createMock(RequestQuantityProcessor::class);
         $this->requestMock = $this->createMock(RequestInterface::class);
-        $this->responseMock = new HttpResponseJsonRepresentTestHelper();
+        $this->responseMock = $this->createPartialMockWithReflection(Http::class, ['representJson']);
+        $this->responseMock->method('representJson')->willReturnCallback(function ($json) {
+            return $json === 'json encoded' ? 'json represented' : $json;
+        });
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateItemQty = $this->objectManagerHelper->getObject(

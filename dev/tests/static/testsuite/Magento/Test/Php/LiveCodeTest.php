@@ -291,8 +291,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             $output = file_get_contents($reportFile);
         }
 
+        $successCode = class_exists(ExitCode::class) ? ExitCode::Success : 0;
         $this->assertEquals(
-            ExitCode::Success,
+            $successCode,
             $result,
             "PHP Code Mess has found error(s):" . PHP_EOL . $output
         );

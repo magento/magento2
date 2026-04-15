@@ -48,21 +48,13 @@ class CacheManagerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->translateResourceMock = $this->getMockBuilder(ResourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->translateResourceMock = $this->createMock(ResourceInterface::class);
 
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
-        $this->fileManagerMock = $this->getMockBuilder(FileManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileManagerMock = $this->createMock(FileManager::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(

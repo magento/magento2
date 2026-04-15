@@ -37,8 +37,8 @@ class ExceptionMessageFactoryPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->specificExceptionMessageFactoryMock = $this->getMockForAbstractClass(ExceptionMessageFactoryInterface::class);
-        $this->defaultExceptionMessageFactoryMock = $this->getMockForAbstractClass(ExceptionMessageFactoryInterface::class);
+        $this->specificExceptionMessageFactoryMock = $this->createMock(ExceptionMessageFactoryInterface::class);
+        $this->defaultExceptionMessageFactoryMock = $this->createMock(ExceptionMessageFactoryInterface::class);
 
         $this->exceptionMessageFactoryMapMock = [
             LocalizedException::class => $this->specificExceptionMessageFactoryMock

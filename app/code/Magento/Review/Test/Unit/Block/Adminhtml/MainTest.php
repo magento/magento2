@@ -16,6 +16,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Review\Block\Adminhtml\Main as MainBlock;
+use Magento\Backend\Block\Template\Context;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,11 +57,10 @@ class MainTest extends TestCase
      */
     public function testConstruct(): void
     {
-        $this->customerRepository = $this
-            ->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
         $this->customerViewHelper = $this->createMock(ViewHelper::class);
         $this->collectionFactory = $this->createMock(CollectionFactory::class);
-        $dummyCustomer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $dummyCustomer = $this->createMock(CustomerInterface::class);
 
         $this->customerRepository->expects($this->once())
             ->method('getById')
@@ -70,7 +70,7 @@ class MainTest extends TestCase
             ->method('getCustomerName')
             ->with($dummyCustomer)
             ->willReturn(new DataObject());
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->request
             ->method('getParam')
             ->willReturnCallback(function ($arg1, $arg2) {
@@ -81,14 +81,22 @@ class MainTest extends TestCase
                     return false;
                 }
             });
-        $productCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productCollection = $this->createMock(Collection::class);
         $this->collectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($productCollection);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
+
+        // Fix ObjectManager initialization issue using existing helper method
+        $objects = [
+            [
+                Context::class,
+                $this->createMock(Context::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
+
         $this->model = $objectManagerHelper->getObject(
             MainBlock::class,
             [

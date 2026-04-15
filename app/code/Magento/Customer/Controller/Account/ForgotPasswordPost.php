@@ -93,7 +93,6 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount im
                 );
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
-            $this->session->destroy(['send_expire_cookie']);
             $this->messageManager->addSuccessMessage($this->getSuccessMessage($email));
             return $resultRedirect->setPath('*/*/');
         } else {

@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Cron;
 
+use Magento\Framework\Cache\CacheConstants;
+
 /**
  * Backend event observer
  */
@@ -33,8 +35,8 @@ class CleanCache
     {
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($this->cacheFrontendPool as $cacheFrontend) {
-            // Magento cache frontend does not support the 'old' cleaning mode, that's why backend is used directly
-            $cacheFrontend->getBackend()->clean(\Zend_Cache::CLEANING_MODE_OLD);
+            // Clean old/expired cache entries - Symfony cache handles this automatically
+            $cacheFrontend->clean(CacheConstants::CLEANING_MODE_OLD);
         }
     }
 }

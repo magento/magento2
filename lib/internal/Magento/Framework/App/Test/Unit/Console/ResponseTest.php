@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\App\Console\Response;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ResponseTest extends TestCase
@@ -28,9 +29,8 @@ class ResponseTest extends TestCase
         $this->assertEquals(0, $this->model->sendResponse());
     }
 
-    /**
-     * @dataProvider setCodeProvider
-     */
+    /**     */
+    #[DataProvider('setCodeProvider')]
     public function testSetCode($code, $expectedCode)
     {
         $this->model->setCode($code);

@@ -6,21 +6,18 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-/**
- * Class Email
- *
- * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
- */
-class Email extends \Magento\Backend\App\Action
+class Email extends Action implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+    public const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
@@ -52,11 +49,20 @@ class Email extends \Magento\Backend\App\Action
             $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
             $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
             $shipment = $this->shipmentLoader->load();
+
             if ($shipment) {
-                $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
-                    ->notify($shipment);
-                $shipment->save();
-                $this->messageManager->addSuccess(__('You sent the shipment.'));
+                // Check if shipment emails are enabled
+                $isEnabled = (bool)$shipment->getStore()->getConfig('sales_email/shipment/enabled');
+                if (!$isEnabled) {
+                    $this->messageManager->addWarningMessage(
+                        __('Shipment emails are disabled for this store. No email was sent.')
+                    );
+                } else {
+                    $this->_objectManager->create(\Magento\Shipping\Model\ShipmentNotifier::class)
+                        ->notify($shipment);
+                    $shipment->save();
+                    $this->messageManager->addSuccess(__('You sent the shipment.'));
+                }
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
