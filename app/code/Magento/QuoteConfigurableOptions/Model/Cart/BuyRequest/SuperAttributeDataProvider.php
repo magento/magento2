@@ -32,6 +32,8 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 
     /**
      * @inheritdoc
+     *
+     * @throws LocalizedException
      */
     public function execute(CartItem $cartItem): array
     {
