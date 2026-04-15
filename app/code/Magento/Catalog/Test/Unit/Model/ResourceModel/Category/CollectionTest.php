@@ -178,13 +178,9 @@ class CollectionTest extends TestCase
         $websiteId = 1;
         $storeId = 1;
 
-        $category = $this->getMockBuilder(Category::class)
-            ->addMethods(['getIsAnchor'])
-            ->onlyMethods(['getId', 'setProductCount'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $category = $this->createPartialMock(Category::class, ['getId', 'setProductCount']);
         $category->method('getId')->willReturn($categoryId);
-        $category->method('getIsAnchor')->willReturn(false);
+        $category->setData('is_anchor', false);
         $category->expects($this->once())->method('setProductCount')->with(5);
 
         $items = [$categoryId => $category];
@@ -220,13 +216,12 @@ class CollectionTest extends TestCase
         $websiteId = 1;
         $storeId = 1;
 
-        $category = $this->getMockBuilder(Category::class)
-            ->addMethods(['getIsAnchor'])
-            ->onlyMethods(['getId', 'setProductCount', 'getAllChildren', 'getPath'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $category = $this->createPartialMock(
+            Category::class,
+            ['getId', 'setProductCount', 'getAllChildren', 'getPath']
+        );
         $category->method('getId')->willReturn($categoryId);
-        $category->method('getIsAnchor')->willReturn(true);
+        $category->setData('is_anchor', true);
         $category->method('getAllChildren')->willReturn('1');
         $category->method('getPath')->willReturn('1/2');
         $category->expects($this->once())->method('setProductCount')->with(3);
