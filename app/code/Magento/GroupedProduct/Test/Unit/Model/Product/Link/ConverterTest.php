@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Link;
 
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Model\Product;
 use Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for Converter
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConverterTest extends TestCase
 {
@@ -30,16 +28,11 @@ class ConverterTest extends TestCase
 
     public function testConvertUsesInitialQtyWhenAvailable(): void
     {
-        $product = $this->createPartialMock(
-            ProductTestHelper::class,
-            ['getTypeId', 'getSku', 'getQty', 'getPosition', 'getInitialQty']
-        );
+        $product = $this->createMock(Product::class);
 
         $product->method('getTypeId')->willReturn('simple');
         $product->method('getSku')->willReturn('sku-123');
         $product->method('getPosition')->willReturn(5);
-
-        // Qty override
         $product->method('getInitialQty')->willReturn(10);
         $product->method('getQty')->willReturn(2); // fallback should NOT be used
 
@@ -48,7 +41,6 @@ class ConverterTest extends TestCase
         $this->assertSame('simple', $result['type']);
         $this->assertSame('sku-123', $result['sku']);
         $this->assertSame(5, $result['position']);
-
         $this->assertSame(
             [
                 ['attribute_code' => 'qty', 'value' => 10]
@@ -59,10 +51,7 @@ class ConverterTest extends TestCase
 
     public function testConvertFallsBackToQtyIfInitialQtyIsNull(): void
     {
-        $product = $this->createPartialMock(
-            ProductTestHelper::class,
-            ['getTypeId', 'getSku', 'getQty', 'getPosition', 'getInitialQty']
-        );
+        $product = $this->createMock(Product::class);
 
         $product->method('getTypeId')->willReturn('simple');
         $product->method('getSku')->willReturn('sku-456');

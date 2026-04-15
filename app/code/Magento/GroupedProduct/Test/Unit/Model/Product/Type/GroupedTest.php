@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Model\Product\Type;
 
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Catalog\Model\Product as CatalogProduct;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -191,7 +191,7 @@ class GroupedTest extends TestCase
             ->willReturnCallback(function () use (&$savedValue) {
                 return $savedValue;
             });
-        $itemMock = $this->createMock(ProductTestHelper::class);
+        $itemMock = $this->createMock(CatalogProduct::class);
         $itemMock->expects($this->once())
             ->method('getQty')
             ->willReturn(10);
