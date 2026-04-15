@@ -102,6 +102,12 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         return $superAttributesData;
     }
 
+    /**
+     * Checks whether this provider is applicable for the current option
+     *
+     * @param array $optionData
+     * @return bool
+     */
     private function isProviderApplicable(array $optionData): bool
     {
         return ($optionData[0] ?? null) === self::OPTION_TYPE;
