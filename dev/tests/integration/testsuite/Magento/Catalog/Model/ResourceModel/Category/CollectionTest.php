@@ -15,7 +15,6 @@ use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureBeforeTransaction;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
@@ -178,9 +177,9 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     #[
         DbIsolation(true),
-        DataFixtureBeforeTransaction(WebsiteFixture::class, as: 'website2'),
-        DataFixtureBeforeTransaction(StoreGroupFixture::class, ['website_id' => '$website2.id$'], as: 'group2'),
-        DataFixtureBeforeTransaction(
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], as: 'group2'),
+        DataFixture(
             StoreFixture::class,
             ['website_id' => '$website2.id$', 'group_id' => '$group2.id$'],
             as: 'store2'
