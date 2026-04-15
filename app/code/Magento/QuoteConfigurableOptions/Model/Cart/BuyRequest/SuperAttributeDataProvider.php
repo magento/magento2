@@ -7,16 +7,37 @@ declare(strict_types=1);
 
 namespace Magento\QuoteConfigurableOptions\Model\Cart\BuyRequest;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 use Magento\Quote\Model\Cart\Data\CartItem;
 
 /**
  * DataProvider for building super attribute options in buy requests
+ *
+ * Supports two resolution strategies for configurable products:
+ *   1. Via selected_options (base64-encoded UIDs) — used by addProductsToCart with selected_options.
+ *   2. Via parent_sku fallback — used by addProductsToCart with parent_sku + child sku (GH-40598).
  */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     private const OPTION_TYPE = 'configurable';
+
+    /**
+     * @param ProductRepositoryInterface $productRepository
+     * @param OptionCollection $optionCollection
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(
+        private readonly ProductRepositoryInterface $productRepository,
+        private readonly OptionCollection $optionCollection,
+        private readonly MetadataPool $metadataPool,
+    ) {
+    }
 
     /**
      * @inheritdoc
@@ -25,8 +46,30 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(CartItem $cartItem): array
     {
+        $configurableProductData = $this->resolveFromSelectedOptions($cartItem);
+
+        // Fallback: if no configurable UIDs found in selected_options, try resolving via parent_sku
+        if (empty($configurableProductData) && $cartItem->getParentSku() !== null) {
+            $configurableProductData = $this->resolveFromParentSku(
+                $cartItem->getParentSku(),
+                $cartItem->getSku()
+            );
+        }
+
+        return ['super_attribute' => $configurableProductData];
+    }
+
+    /**
+     * Resolves super_attribute data from base64-encoded selected_options UIDs.
+     *
+     * @param CartItem $cartItem
+     * @return array
+     * @throws LocalizedException
+     */
+    private function resolveFromSelectedOptions(CartItem $cartItem): array
+    {
         $configurableProductData = [];
-        foreach ($cartItem->getSelectedOptions() as $optionData) {
+        foreach ($cartItem->getSelectedOptions() ?? [] as $optionData) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $optionData = \explode('/', base64_decode($optionData->getId()));
 
@@ -41,7 +84,54 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
             }
         }
 
-        return ['super_attribute' => $configurableProductData];
+        return $configurableProductData;
+    }
+
+    /**
+     * Resolves super_attribute data from parent_sku + child sku.
+     *
+     * Mirrors the logic from ConfigurableProductGraphQl\SuperAttributeDataProvider,
+     * enabling addProductsToCart to honour the documented parent_sku field.
+     *
+     * @param string $parentSku
+     * @param string $childSku
+     * @return array
+     * @throws LocalizedException
+     */
+    private function resolveFromParentSku(string $parentSku, string $childSku): array
+    {
+        try {
+            $parentProduct = $this->productRepository->get($parentSku);
+            $childProduct  = $this->productRepository->get($childSku);
+        } catch (NoSuchEntityException) {
+            throw new LocalizedException(__('Could not find a product with SKU "%1" or "%2".', $parentSku, $childSku));
+        }
+
+        $configurableLinks = $parentProduct->getExtensionAttributes()?->getConfigurableProductLinks() ?? [];
+        if (!in_array($childProduct->getId(), $configurableLinks, strict: true)) {
+            throw new LocalizedException(
+                __('The product "%1" is not a variant of "%2".', $childSku, $parentSku)
+            );
+        }
+
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $parentLinkId = (int) $parentProduct->getData($linkField);
+
+        $this->optionCollection->addProductId($parentLinkId);
+        $options = $this->optionCollection->getAttributesByProductId($parentLinkId);
+
+        $superAttributesData = [];
+        foreach ($options as $option) {
+            $code = $option['attribute_code'];
+            foreach ($option['values'] as $optionValue) {
+                if ($optionValue['value_index'] === $childProduct->getData($code)) {
+                    $superAttributesData[$option['attribute_id']] = $optionValue['value_index'];
+                    break;
+                }
+            }
+        }
+
+        return $superAttributesData;
     }
 
     /**
@@ -52,11 +142,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      */
     private function isProviderApplicable(array $optionData): bool
     {
-        if ($optionData[0] !== self::OPTION_TYPE) {
-            return false;
-        }
-
-        return true;
+        return ($optionData[0] ?? null) === self::OPTION_TYPE;
     }
 
     /**

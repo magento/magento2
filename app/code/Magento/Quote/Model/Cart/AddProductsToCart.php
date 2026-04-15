@@ -92,20 +92,24 @@ class AddProductsToCart
     public function addItemsToCart(Quote $cart, array $cartItems): array
     {
         $failedCartItems = [];
-        // add new cart items for preload
-        $skus = \array_map(
-            function ($item) {
-                return $item->getSku();
-            },
-            $cartItems
-        );
-        $this->productReader->loadProducts($skus, $cart->getStoreId());
+
+        // Collect all SKUs to pre-load: child SKUs + parent SKUs when present (GH-40598)
+        $skus = [];
+        foreach ($cartItems as $cartItem) {
+            $skus[] = $cartItem->getSku();
+            if ($cartItem->getParentSku() !== null) {
+                $skus[] = $cartItem->getParentSku();
+            }
+        }
+        $this->productReader->loadProducts(array_unique($skus), $cart->getStoreId());
+
         foreach ($cartItems as $cartItemPosition => $cartItem) {
-            $product = $this->productReader->getProductBySku($cartItem->getSku());
+            // Use the child product for stock quantity display, regardless of which product is added
+            $childProduct = $this->productReader->getProductBySku($cartItem->getSku());
             $stockItemQuantity = 0.0;
-            if ($product) {
+            if ($childProduct) {
                 $stockItem = $this->stockRegistry->getStockItem(
-                    $product->getId(),
+                    $childProduct->getId(),
                     $cart->getStore()->getWebsiteId()
                 );
                 $stockItemQuantity = $stockItem->getQty() - $stockItem->getMinQty();
@@ -146,13 +150,19 @@ class AddProductsToCart
             );
         }
 
-        $productBySku = $this->productReader->getProductBySku($sku);
+        /*
+         * GH-40598: When parent_sku is provided the buy request must be processed by the Configurable
+         * type instance (on the parent product), not by the Simple type instance (on the child).
+         * We therefore load/clone the parent product when available, falling back to the child SKU.
+         */
+        $resolvedSku = $cartItem->getParentSku() ?? $sku;
+        $productBySku = $this->productReader->getProductBySku($resolvedSku);
         $product = isset($productBySku) ? clone $productBySku : null;
 
         if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
             return [
                 $this->error->create(
-                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                    __('Could not find a product with SKU "%sku"', ['sku' => $resolvedSku])->render(),
                     $cartItemPosition,
                     $stockItemQuantity
                 )
