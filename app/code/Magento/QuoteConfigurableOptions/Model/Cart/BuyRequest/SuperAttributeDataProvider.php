@@ -37,20 +37,6 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(CartItem $cartItem): array
     {
-        $configurableProductData = $this->resolveFromSelectedOptions($cartItem);
-
-        if (empty($configurableProductData) && $cartItem->getParentSku() !== null) {
-            $configurableProductData = $this->resolveFromParentSku(
-                $cartItem->getParentSku(),
-                $cartItem->getSku()
-            );
-        }
-
-        return ['super_attribute' => $configurableProductData];
-    }
-
-    private function resolveFromSelectedOptions(CartItem $cartItem): array
-    {
         $configurableProductData = [];
         foreach ($cartItem->getSelectedOptions() ?? [] as $optionData) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -67,7 +53,14 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
             }
         }
 
-        return $configurableProductData;
+        if (empty($configurableProductData) && $cartItem->getParentSku() !== null) {
+            $configurableProductData = $this->resolveFromParentSku(
+                $cartItem->getParentSku(),
+                $cartItem->getSku()
+            );
+        }
+
+        return ['super_attribute' => $configurableProductData];
     }
 
     /**
