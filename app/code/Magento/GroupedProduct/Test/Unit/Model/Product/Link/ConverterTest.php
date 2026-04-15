@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Test\Unit\Model\Product\Link;
 
 use Magento\Catalog\Model\Product;
 use Magento\GroupedProduct\Model\Product\Link\ProductEntity\Converter;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,15 +27,15 @@ class ConverterTest extends TestCase
         $this->converter = new Converter();
     }
 
-    public function testConvertUsesInitialQtyWhenAvailable(): void
+    public function testConvertUsesLinkQtyWhenAvailable(): void
     {
         $product = $this->createMock(Product::class);
-
         $product->method('getTypeId')->willReturn('simple');
         $product->method('getSku')->willReturn('sku-123');
         $product->method('getPosition')->willReturn(5);
-        $product->method('getInitialQty')->willReturn(10);
-        $product->method('getQty')->willReturn(2); // fallback should NOT be used
+        $product->method('getData')
+            ->with(Grouped::GROUPED_LINK_QTY)
+            ->willReturn(10);
 
         $result = $this->converter->convert($product);
 
@@ -49,14 +50,15 @@ class ConverterTest extends TestCase
         );
     }
 
-    public function testConvertFallsBackToQtyIfInitialQtyIsNull(): void
+    public function testConvertFallsBackToQtyIfLinkQtyIsNull(): void
     {
         $product = $this->createMock(Product::class);
-
         $product->method('getTypeId')->willReturn('simple');
         $product->method('getSku')->willReturn('sku-456');
         $product->method('getPosition')->willReturn(7);
-        $product->method('getInitialQty')->willReturn(null);
+        $product->method('getData')
+            ->with(Grouped::GROUPED_LINK_QTY)
+            ->willReturn(null);
         $product->method('getQty')->willReturn(3);
 
         $result = $this->converter->convert($product);

@@ -174,7 +174,7 @@ class GroupedTest extends TestCase
      *
      * @return void
      */
-    public function testGetAssociatedProductsSetsInitialQty(): void
+    public function testGetAssociatedProductsSetsLinkQty(): void
     {
         $this->product->expects($this->atLeastOnce())
             ->method('hasData')
@@ -193,11 +193,12 @@ class GroupedTest extends TestCase
             });
         $itemMock = $this->createMock(CatalogProduct::class);
         $itemMock->expects($this->once())
-            ->method('getQty')
+            ->method('getData')
+            ->with('qty')
             ->willReturn(10);
         $itemMock->expects($this->once())
-            ->method('setInitialQty')
-            ->with(10);
+            ->method('setData')
+            ->with(Grouped::GROUPED_LINK_QTY, 10);
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->method('addAttributeToSelect')->willReturnSelf();
         $collectionMock->method('addFilterByRequiredOptions')->willReturnSelf();
