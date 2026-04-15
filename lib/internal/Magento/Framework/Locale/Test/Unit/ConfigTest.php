@@ -36,13 +36,14 @@ class ConfigTest extends TestCase
         'JMD', 'JPY', 'JOD', 'KZT', 'KES', 'KWD', 'KGS', 'LAK', 'LVL', 'LBP',
         'LSL', 'LRD', 'LYD', 'LTL', 'MOP', 'MKD', 'MGA', 'MWK', 'MYR', 'MVR',
         'LSM', 'MRO', 'MUR', 'MXN', 'MDL', 'MNT', 'MAD', 'MZN', 'MMK', 'NAD',
-        'NPR', 'ANG', 'YTL', 'NZD', 'NIC', 'NGN', 'KPW', 'NOK', 'OMR', 'PKR',
-        'PAB', 'PGK', 'PYG', 'PEN', 'PHP', 'PLN', 'QAR', 'RHD', 'RON', 'RUB',
-        'RWF', 'SHP', 'STD', 'SAR', 'RSD', 'SCR', 'SLL', 'SGD', 'SKK', 'SBD',
-        'SOS', 'ZAR', 'KRW', 'LKR', 'SDG', 'SRD', 'SZL', 'SEK', 'CHF', 'SYP',
-        'TWD', 'TJS', 'TZS', 'THB', 'TOP', 'TTD', 'TND', 'TMM', 'USD', 'UGX',
-        'UAH', 'AED', 'UYU', 'UZS', 'VUV', 'VEB', 'VEF', 'VND', 'CHE', 'CHW',
-        'XOF', 'WST', 'YER', 'ZMK', 'ZWD', 'TRY', 'AZM', 'ROL', 'TRL', 'XPF',
+        'NPR', 'ANG', 'XCG', 'YTL', 'NZD', 'NIC', 'NIO', 'NGN', 'KPW', 'NOK',
+        'OMR', 'PKR', 'PAB', 'PGK', 'PYG', 'PEN', 'PHP', 'PLN', 'QAR', 'RHD',
+        'RON', 'RUB', 'RWF', 'SHP', 'STD', 'SAR', 'RSD', 'SCR', 'SLL', 'SGD',
+        'SKK', 'SBD', 'SOS', 'ZAR', 'KRW', 'LKR', 'SDG', 'SRD', 'SZL', 'SEK',
+        'CHF', 'SYP', 'TWD', 'TJS', 'TZS', 'THB', 'TOP', 'TTD', 'TND', 'TMM',
+        'USD', 'UGX', 'UAH', 'AED', 'UYU', 'UZS', 'VUV', 'VEB', 'VED', 'VND',
+        'CHE', 'CHW', 'XOF', 'WST', 'YER', 'ZMK', 'ZWD', 'TRY', 'AZM', 'ROL',
+        'TRL', 'XPF',
     ];
 
     private static $samplePresentLocales = [
