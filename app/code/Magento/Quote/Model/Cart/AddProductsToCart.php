@@ -150,11 +150,6 @@ class AddProductsToCart
             );
         }
 
-        /*
-         * GH-40598: When parent_sku is provided the buy request must be processed by the Configurable
-         * type instance (on the parent product), not by the Simple type instance (on the child).
-         * We therefore load/clone the parent product when available, falling back to the child SKU.
-         */
         $resolvedSku = $cartItem->getParentSku() ?? $sku;
         $productBySku = $this->productReader->getProductBySku($resolvedSku);
         $product = isset($productBySku) ? clone $productBySku : null;
