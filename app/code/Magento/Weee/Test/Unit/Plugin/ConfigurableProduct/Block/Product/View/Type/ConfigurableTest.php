@@ -256,23 +256,12 @@ class ConfigurableTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $weeeAttributeMock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->addMethods(['getAmount', 'getAmountExclTax', 'getTaxAmount'])
-            ->getMock();
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(10.50);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getData')
-            ->with('name')
-            ->willReturn('FPT Tax');
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmountExclTax')
-            ->willReturn(10.00);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(0.50);
+        $weeeAttributeMock = new DataObject([
+            'amount' => 10.50,
+            'name' => 'FPT Tax',
+            'amount_excl_tax' => 10.00,
+            'tax_amount' => 0.50
+        ]);
 
         $this->jsonDecoderMock->expects($this->once())
             ->method('decode')
@@ -358,41 +347,19 @@ class ConfigurableTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $weeeAttribute1Mock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->addMethods(['getAmount', 'getAmountExclTax', 'getTaxAmount'])
-            ->getMock();
-        $weeeAttribute1Mock->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(10.50);
-        $weeeAttribute1Mock->expects($this->once())
-            ->method('getData')
-            ->with('name')
-            ->willReturn('FPT Tax 1');
-        $weeeAttribute1Mock->expects($this->once())
-            ->method('getAmountExclTax')
-            ->willReturn(10.00);
-        $weeeAttribute1Mock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(0.50);
+        $weeeAttribute1Mock = new DataObject([
+            'amount' => 10.50,
+            'name' => 'FPT Tax 1',
+            'amount_excl_tax' => 10.00,
+            'tax_amount' => 0.50
+        ]);
 
-        $weeeAttribute2Mock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->addMethods(['getAmount', 'getAmountExclTax', 'getTaxAmount'])
-            ->getMock();
-        $weeeAttribute2Mock->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(15.25);
-        $weeeAttribute2Mock->expects($this->once())
-            ->method('getData')
-            ->with('name')
-            ->willReturn('FPT Tax 2');
-        $weeeAttribute2Mock->expects($this->once())
-            ->method('getAmountExclTax')
-            ->willReturn(14.50);
-        $weeeAttribute2Mock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(0.75);
+        $weeeAttribute2Mock = new DataObject([
+            'amount' => 15.25,
+            'name' => 'FPT Tax 2',
+            'amount_excl_tax' => 14.50,
+            'tax_amount' => 0.75
+        ]);
 
         $this->jsonDecoderMock->expects($this->once())
             ->method('decode')
@@ -482,23 +449,12 @@ class ConfigurableTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $weeeAttributeMock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->addMethods(['getAmount', 'getAmountExclTax', 'getTaxAmount'])
-            ->getMock();
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(10.50);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getData')
-            ->with('name')
-            ->willReturn(null); // No name
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmountExclTax')
-            ->willReturn(10.00);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(0.50);
+        $weeeAttributeMock = new DataObject([
+            'amount' => 10.50,
+            'amount_excl_tax' => 10.00,
+            'tax_amount' => 0.50
+            // No 'name' key = getData('name') returns null
+        ]);
 
         $this->jsonDecoderMock->expects($this->once())
             ->method('decode')
@@ -583,23 +539,12 @@ class ConfigurableTest extends TestCase
             ->method('getId')
             ->willReturn(1);
 
-        $weeeAttributeMock = $this->getMockBuilder(DataObject::class)
-            ->onlyMethods(['getData'])
-            ->addMethods(['getAmount', 'getAmountExclTax', 'getTaxAmount'])
-            ->getMock();
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmount')
-            ->willReturn(234.567);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getData')
-            ->with('name')
-            ->willReturn('Euro Tax');
-        $weeeAttributeMock->expects($this->once())
-            ->method('getAmountExclTax')
-            ->willReturn(234.00);
-        $weeeAttributeMock->expects($this->once())
-            ->method('getTaxAmount')
-            ->willReturn(0.567);
+        $weeeAttributeMock = new DataObject([
+            'amount' => 234.567,
+            'name' => 'Euro Tax',
+            'amount_excl_tax' => 234.00,
+            'tax_amount' => 0.567
+        ]);
 
         $this->jsonDecoderMock->expects($this->once())
             ->method('decode')

@@ -20,12 +20,10 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_MODULES = 'module';
-    const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
+    public const INPUT_KEY_MODULES = 'module';
+    public const INPUT_KEY_CLEAR_STATIC_CONTENT = 'clear-static-content';
 
     /**
-     * Object manager
-     *
      * @var ObjectManagerInterface
      */
     protected $objectManager;
@@ -42,7 +40,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -75,7 +73,7 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
      * @param OutputInterface $output
      * @return void
      */
-    protected function cleanup(InputInterface $input, OutputInterface $output)
+    protected function cleanup(InputInterface $input, OutputInterface $output): void
     {
         /** @var \Magento\Framework\App\Cache $cache */
         $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);

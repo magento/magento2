@@ -27,8 +27,7 @@ class LabelTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->labelList = $this->getMockBuilder(ListInterface::class)
-            ->getMockForAbstractClass();
+        $this->labelList = $this->createMock(ListInterface::class);
 
         $this->model = new Label(
             $this->labelList

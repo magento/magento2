@@ -16,6 +16,7 @@ use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AlternativeTest extends TestCase
 {
@@ -41,7 +42,7 @@ class AlternativeTest extends TestCase
         $readFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->directory);
-        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
+        $this->rule = $this->createMock(RuleInterface::class);
         $rulePool = $this->createMock(RulePool::class);
         $rulePool->expects($this->any())
             ->method('getRule')
@@ -52,9 +53,8 @@ class AlternativeTest extends TestCase
 
     /**
      * @param array $alternativeExtensions
-     *
-     * @dataProvider constructorExceptionDataProvider
-     */
+     *     */
+    #[DataProvider('constructorExceptionDataProvider')]
     public function testConstructorException(array $alternativeExtensions)
     {
         $this->expectException('\InvalidArgumentException');
@@ -82,7 +82,7 @@ class AlternativeTest extends TestCase
         $requestedFile = 'file.css';
         $expected = 'some/dir/file.less';
 
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getFullPath')
             ->willReturn('magento_theme');

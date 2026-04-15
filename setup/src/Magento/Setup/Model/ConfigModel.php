@@ -77,7 +77,7 @@ class ConfigModel
         foreach ($optionCollection as $option) {
             $currentValue = $this->deploymentConfig->get($option->getConfigPath());
             if ($currentValue !== null) {
-                $option->setDefault();
+                $option->setDefault(null);
             }
         }
 

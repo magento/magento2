@@ -3,7 +3,11 @@
  * Copyright 2013 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Address;
+
+use Magento\Customer\Block\Address\Renderer\DefaultRenderer;
 
 use Magento\Framework\Config\Data as ConfigData;
 use Magento\Framework\DataObject;
@@ -15,11 +19,11 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config extends ConfigData
 {
-    const DEFAULT_ADDRESS_RENDERER = \Magento\Customer\Block\Address\Renderer\DefaultRenderer::class;
+    public const DEFAULT_ADDRESS_RENDERER = DefaultRenderer::class;
 
-    const XML_PATH_ADDRESS_TEMPLATE = 'customer/address_templates/';
+    public const XML_PATH_ADDRESS_TEMPLATE = 'customer/address_templates/';
 
-    const DEFAULT_ADDRESS_FORMAT = 'oneline';
+    public const DEFAULT_ADDRESS_FORMAT = 'oneline';
 
     /**
      * Customer address templates per store
@@ -116,7 +120,7 @@ class Config extends ConfigData
     public function getFormats()
     {
         $store = $this->getStore();
-        $storeId = $store->getId();
+        $storeId = $store->getId() ?? '';
 
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = [];

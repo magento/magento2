@@ -22,7 +22,7 @@ class CacheCleaner
     {
         $cachePool = self::getCachePool();
         foreach ($cacheTypes as $cacheType) {
-            $cachePool->get($cacheType)->getBackend()->clean();
+            $cachePool->get($cacheType)->clean();
         }
     }
 
@@ -33,7 +33,7 @@ class CacheCleaner
     {
         $cachePool = self::getCachePool();
         foreach ($cachePool as $cacheType) {
-            $cacheType->getBackend()->clean();
+            $cacheType->clean();
         }
     }
 

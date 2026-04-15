@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductPriceDisplayWithFPTAndTaxIncludingTest">
+        <annotations>
+            <features value="Weee"/>
+            <stories value="Tax price display with FPT enabled"/>
+            <title value="Configurable product price displays correctly including tax on storefront with FPT enabled"/>
+            <description value="Verify configurable product price with FPT and tax including display on storefront PDP"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-16000"/>
+            <group value="weee"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Admin login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 2: Tax configuration - Catalog prices excl. tax, Display product prices in catalog to incl. tax -->
+            <magentoCLI command="config:set {{CatalogPrices.path}} {{CatalogPrices.value}}" stepKey="setCatalogPricesExcludingTax"/>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalogIncludingTax.path}} {{DisplayProductPricesInCatalogIncludingTax.value}}" stepKey="setDisplayProductPricesIncludingTax"/>
+            <!-- Step 3: Enable FPT -->
+            <createData entity="WeeeConfigEnable" stepKey="enableFPT"/>
+            <!-- Step 4: Create 19% tax rate -->
+            <createData entity="USFullTaxRate19Percent" stepKey="createTaxRate19"/>
+            <!-- Create tax rule with default customer and product tax classes -->
+            <createData entity="DefaultTaxRuleWithCustomTaxRate" stepKey="createTaxRule">
+                <requiredEntity createDataKey="createTaxRate19"/>
+            </createData>
+            <!-- Create configurable product attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add attribute to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="addAttributeToDefaultSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Get attribute options -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create simple child products with $100 price -->
+            <createData entity="ApiSimpleOneHidden" stepKey="createSimpleProduct1">
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleOneHidden" stepKey="createSimpleProduct2">
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Create configurable product -->
+            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
+            <!-- Assign simple products to configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Reset tax configuration to defaults -->
+            <magentoCLI command="config:set {{CatalogPrices.path}} {{CatalogPrices.value}}" stepKey="resetCatalogPrices"/>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="resetDisplayProductPrices"/>
+            <!-- Disable FPT -->
+            <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
+            <!-- Delete tax rule and rate -->
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="createTaxRate19" stepKey="deleteTaxRate"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <!-- Delete attribute -->
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 5,6: Go to storefront and navigate to configurable product PDP -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <!-- Step 7: Verify price displays correctly as $119.00 (without selecting any option) -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="waitForPriceVisible"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="grabProductPrice"/>
+        <assertStringContainsString stepKey="assertPriceContains119">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">119.00</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

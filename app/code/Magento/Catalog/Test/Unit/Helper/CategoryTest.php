@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Helper\Category;
 use Magento\Catalog\Model\CategoryFactory;
@@ -72,21 +73,11 @@ class CategoryTest extends TestCase
     protected function setUp(): void
     {
         $this->mockContext();
-        $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryRepository = $this->getMockBuilder(CategoryRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoryFactory = $this->createMock(CategoryFactory::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->collectionFactory = $this->createMock(CollectionFactory::class);
+        $this->categoryRepository = $this->createMock(CategoryRepositoryInterface::class);
+        $this->escaper = $this->createMock(Escaper::class);
         $this->categoryHelper = new Category(
             $this->context,
             $this->categoryFactory,
@@ -103,17 +94,12 @@ class CategoryTest extends TestCase
      * @param mixed $params
      * @param string $categoryUrl
      * @param string $expectedCategoryUrl
-     *
-     * @dataProvider getData
      */
+    #[DataProvider('getData')]
     public function testGetCanonicalUrl(mixed $params, string $categoryUrl, string $expectedCategoryUrl): void
     {
-        $this->requestMock->expects($this->any())
-            ->method('getParams')
-            ->willReturn($params);
-        $this->escaper->expects($this->any())
-            ->method('escapeUrl')
-            ->willReturn($expectedCategoryUrl);
+        $this->requestMock->method('getParams')->willReturn($params);
+        $this->escaper->method('escapeUrl')->willReturn($expectedCategoryUrl);
         $actualCategoryUrl = $this->categoryHelper->getCanonicalUrl($categoryUrl);
         $this->assertEquals($actualCategoryUrl, $expectedCategoryUrl);
     }
@@ -151,14 +137,8 @@ class CategoryTest extends TestCase
      */
     private function mockContext(): void
     {
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->getMockForAbstractClass();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getRequest'])
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->requestMock);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->context = $this->createPartialMock(Context::class, ['getRequest']);
+        $this->context->method('getRequest')->willReturn($this->requestMock);
     }
 }

@@ -13,9 +13,12 @@ use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\Sales\Model\Order\Creditmemo\Total\Subtotal;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class SubtotalTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Subtotal
      */
@@ -50,52 +53,30 @@ class SubtotalTest extends TestCase
             Order::class,
             ['getBaseShippingDiscountAmount', 'getBaseShippingAmount', 'getShippingAmount']
         );
-        $this->orderItemMock = $this->getMockBuilder(Order::class)
-            ->addMethods(['isDummy', 'getQtyInvoiced', 'getQty', 'getQtyRefunded'])
-            ->onlyMethods(['getDiscountInvoiced', 'getBaseDiscountInvoiced', 'getDiscountRefunded'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoMock = $this->getMockBuilder(Creditmemo::class)
-            ->addMethods(['setBaseCost'])
-            ->onlyMethods(
-                [
-                    'getAllItems',
-                    'getOrder',
-                    'getBaseShippingAmount',
-                    'roundPrice',
-                    'setDiscountAmount',
-                    'setBaseDiscountAmount',
-                    'setSubtotal',
-                    'setBaseSubtotal',
-                    'setSubtotalInclTax',
-                    'setBaseSubtotalInclTax',
-                    'getGrandTotal',
-                    'setGrandTotal',
-                    'getBaseGrandTotal',
-                    'setBaseGrandTotal'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->creditmemoItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getHasChildren'])
-            ->onlyMethods(
-                [
-                    'getBaseCost',
-                    'getQty',
-                    'getOrderItem',
-                    'setDiscountAmount',
-                    'setBaseDiscountAmount',
-                    'isLast',
-                    'getRowTotalInclTax',
-                    'getBaseRowTotalInclTax',
-                    'getRowTotal',
-                    'getBaseRowTotal',
-                    'calcRowTotal'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'isDummy', 'getQtyInvoiced', 'getQty', 'getQtyRefunded', 'getDiscountInvoiced',
+                'getBaseDiscountInvoiced', 'getDiscountRefunded'
+            ]
+        );
+        $this->creditmemoMock = $this->createPartialMockWithReflection(
+            Creditmemo::class,
+            [
+                'setBaseCost', 'getAllItems', 'getOrder', 'getBaseShippingAmount', 'roundPrice',
+                'setDiscountAmount', 'setBaseDiscountAmount', 'setSubtotal', 'setBaseSubtotal',
+                'setSubtotalInclTax', 'setBaseSubtotalInclTax', 'getGrandTotal', 'setGrandTotal',
+                'getBaseGrandTotal', 'setBaseGrandTotal'
+            ]
+        );
+        $this->creditmemoItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getHasChildren', 'getBaseCost', 'getQty', 'getOrderItem', 'setDiscountAmount',
+                'setBaseDiscountAmount', 'isLast', 'getRowTotalInclTax', 'getBaseRowTotalInclTax',
+                'getRowTotal', 'getBaseRowTotal', 'calcRowTotal'
+            ]
+        );
         $this->total = new Subtotal();
     }
 

@@ -36,7 +36,7 @@ class WriterTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->resource = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->model = $this->objectManager->getObject(
             Writer::class,
             ['resource' => $this->resource]

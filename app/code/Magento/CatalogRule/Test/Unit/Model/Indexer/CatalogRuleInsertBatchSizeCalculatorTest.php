@@ -38,8 +38,8 @@ class CatalogRuleInsertBatchSizeCalculatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->batchSizeManagementMock = $this->getMockForAbstractClass(BatchSizeManagementInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->batchSizeManagementMock = $this->createMock(BatchSizeManagementInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
     }
 
     public function testGetInsertBatchSizeWithDefaultBatchSize(): void

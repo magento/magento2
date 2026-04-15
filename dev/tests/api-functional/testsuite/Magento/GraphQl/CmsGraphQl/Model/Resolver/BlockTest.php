@@ -10,13 +10,14 @@ namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
+use Magento\Cms\Test\Fixture\Block as BlockFixture;
 use Magento\CmsGraphQl\Model\Resolver\Blocks;
+use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store;
-use Magento\Cms\Test\Fixture\Block as BlockFixture;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -228,7 +229,7 @@ class BlockTest extends ResolverCacheAbstract
 
     /**
      * @throws LocalizedException
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     #[
         DataFixture(BlockFixture::class, as: 'block'),
@@ -408,7 +409,7 @@ QUERY;
      * @param string $cacheIdentityString
      * @param BlockInterface[] $blocks
      * @return void
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      */
     private function assertTagsByCacheIdentityAndBlocks(string $cacheIdentityString, array $blocks): void
     {

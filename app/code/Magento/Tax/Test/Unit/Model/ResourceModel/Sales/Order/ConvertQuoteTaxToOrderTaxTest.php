@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Model\ResourceModel\Sales\Order;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Model\Order;
@@ -15,11 +16,14 @@ use Magento\Sales\Model\Order\Tax\ItemFactory;
 use Magento\Tax\Model\ResourceModel\Sales\Order\ConvertQuoteTaxToOrderTax;
 use Magento\Tax\Model\Sales\Order\Tax;
 use Magento\Tax\Model\Sales\Order\TaxFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConvertQuoteTaxToOrderTaxTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const ORDERID = 123;
     private const ITEMID = 151;
     private const ORDER_ITEM_ID = 116;
@@ -74,22 +78,16 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      */
     protected function setupOrderMock(): MockObject
     {
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getExtensionAttributes',
-                    'getItemByQuoteItemId',
-                    'getEntityId'
-                ]
-            )
-            ->addMethods(
-                [
-                    'getAppliedTaxIsSaved',
-                    'setAppliedTaxIsSaved'
-                ]
-            )
-            ->getMock();
+        $orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'getExtensionAttributes',
+                'getItemByQuoteItemId',
+                'getEntityId',
+                'getAppliedTaxIsSaved',
+                'setAppliedTaxIsSaved'
+            ]
+        );
 
         return $orderMock;
     }
@@ -99,16 +97,38 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      */
     protected function setupExtensionAttributeMock(): MockObject
     {
-        $orderExtensionAttributeMock = $this->getMockBuilder(OrderExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(
-                [
-                    'getAppliedTaxes',
-                    'getConvertingFromQuote',
-                    'getItemAppliedTaxes'
-                ]
-            )
-            ->getMockForAbstractClass();
+        // Use createPartialMockWithReflection for extension interface with custom methods - PHPUnit 12 compatible
+        $orderExtensionAttributeMock = $this->createPartialMockWithReflection(
+            OrderExtensionInterface::class,
+            [
+                'getConvertingFromQuote',
+                'setConvertingFromQuote',
+                'getAppliedTaxes',
+                'setAppliedTaxes',
+                'getItemAppliedTaxes',
+                'setItemAppliedTaxes',
+                'getShippingAssignments',
+                'setShippingAssignments',
+                'getPaymentAdditionalInfo',
+                'setPaymentAdditionalInfo',
+                'getGiftCards',
+                'setGiftCards',
+                'getBaseGiftCardsAmount',
+                'setBaseGiftCardsAmount',
+                'getGiftCardsAmount',
+                'setGiftCardsAmount',
+                'getTaxes',
+                'setTaxes',
+                'getAdditionalItemizedTaxes',
+                'setAdditionalItemizedTaxes',
+                'getCustomerBalanceAmount',
+                'setCustomerBalanceAmount',
+                'getBaseCustomerBalanceAmount',
+                'setBaseCustomerBalanceAmount',
+                'getGiftMessage',
+                'setGiftMessage'
+            ]
+        );
 
         return $orderExtensionAttributeMock;
     }
@@ -123,10 +143,10 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
         $willReturnArgs = [];
 
         foreach ($expectedTaxes as $orderTaxId => $orderTaxData) {
-            $orderTaxMock = $this->getMockBuilder(Tax::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['setData', 'save'])
-                ->addMethods(['getTaxId'])->getMock();
+            $orderTaxMock = $this->createPartialMockWithReflection(
+                Tax::class,
+                ['getTaxId', 'setData', 'save']
+            );
             $orderTaxMock->expects($this->once())
                 ->method('setData')
                 ->with($orderTaxData)
@@ -181,8 +201,8 @@ class ConvertQuoteTaxToOrderTaxTest extends TestCase
      * @param int|null $itemId
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
         array $appliedTaxes,
         array $itemAppliedTaxes,

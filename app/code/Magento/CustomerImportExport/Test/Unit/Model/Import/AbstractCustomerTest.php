@@ -106,11 +106,9 @@ class AbstractCustomerTest extends AbstractImportTestCase
         $modelMock->setCustomerCollection($customerCollection);
 
         $property = new \ReflectionProperty($modelMock, '_websiteCodeToId');
-        $property->setAccessible(true);
         $property->setValue($modelMock, array_flip($this->_websites));
 
         $property = new \ReflectionProperty($modelMock, '_availableBehaviors');
-        $property->setAccessible(true);
         $property->setValue($modelMock, $this->_availableBehaviors);
 
         return $modelMock;
@@ -193,8 +191,6 @@ class AbstractCustomerTest extends AbstractImportTestCase
             AbstractCustomer::class,
             '_checkUniqueKey'
         );
-        $checkUniqueKey->setAccessible(true);
-
         if ($isValid) {
             $this->assertTrue($checkUniqueKey->invoke($this->_model, $rowData, 0));
         } else {
@@ -244,17 +240,13 @@ class AbstractCustomerTest extends AbstractImportTestCase
             AbstractCustomer::class,
             '_validatedRows'
         );
-        $validatedRows->setAccessible(true);
         $validatedRows->setValue($this->_model, []);
-        $validatedRows->setAccessible(false);
 
         // reset counter
         $entitiesCount = new \ReflectionProperty(
             AbstractCustomer::class,
             '_processedEntitiesCount'
         );
-        $entitiesCount->setAccessible(true);
         $entitiesCount->setValue($this->_model, 0);
-        $entitiesCount->setAccessible(false);
     }
 }

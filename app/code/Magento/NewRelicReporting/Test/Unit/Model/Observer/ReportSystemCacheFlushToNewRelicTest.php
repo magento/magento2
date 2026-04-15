@@ -15,10 +15,14 @@ use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Observer\ReportSystemCacheFlushToNewRelic;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportSystemCacheFlushToNewRelicTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportSystemCacheFlushToNewRelic
      */
@@ -55,10 +59,7 @@ class ReportSystemCacheFlushToNewRelicTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
-        $this->backendAuthSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUser'])
-            ->getMock();
+        $this->backendAuthSession = $this->createPartialMockWithReflection(Session::class, ['getUser']);
         $this->deploymentsFactory = $this->getMockBuilder(
             DeploymentsFactory::class
         )->disableOriginalConstructor()

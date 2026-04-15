@@ -14,14 +14,17 @@ use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Test\Unit\Helper\PriceInfoTestHelper;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base as BasePriceInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BundlePriceTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundlePrice
      */
@@ -67,27 +70,19 @@ class BundlePriceTest extends TestCase
         $productRender = $this->createMock(ProductRenderInterface::class);
         $amount = $this->createMock(AmountInterface::class);
         $minAmount = $this->createMock(AmountInterface::class);
-        // Use PriceInfoTestHelper - required for getPrice() method that doesn't exist in parent
-        $priceInfo = new PriceInfoTestHelper();
+        $basePriceInfo = $this->createMock(BasePriceInfo::class);
+        $basePriceInfo->method('getPrice')->willReturn($price);
+        $priceInfo = $this->createMock(PriceInfoInterface::class);
 
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn('bundle');
+        $productMock->method('getPriceInfo')->willReturn($basePriceInfo);
+        
         $productRender->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn($priceInfo);
 
-        // Set price info values directly using TestHelper setters
-        $priceInfo->setMaxPrice($amountValue);
-        $priceInfo->setMaxRegularPrice($amountValue);
-        $priceInfo->setMinimalPrice($minAmountValue);
-        $priceInfo->setMinimalRegularPrice($minAmountValue);
-        $priceInfo->setPrice($price);
-
-        $productMock->expects($this->exactly(4))
-            ->method('getPriceInfo')
-            ->willReturn($priceInfo);
-        $productMock->method('getPriceInfo')->willReturn($priceInfo);
         $price->expects($this->exactly(2))
             ->method('getMaximalPrice')
             ->willReturn($amount);

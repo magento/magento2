@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2025 Adobe.
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 -->
@@ -36,6 +36,8 @@
             </actionGroup>
             <click selector="{{AdminOrderStatusGridSection.unassign}}" stepKey="unassignOrderStatus"/>
             <waitForPageLoad stepKey="waitForGridLoad"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <waitForPageLoad stepKey="waitForGridLoadAfterClearingFilter"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

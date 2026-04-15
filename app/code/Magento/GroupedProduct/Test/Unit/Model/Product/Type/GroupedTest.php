@@ -20,6 +20,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\MediaStorage\Helper\File\Storage\Database;
@@ -35,6 +36,8 @@ use Psr\Log\LoggerInterface;
  */
 class GroupedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Grouped
      */
@@ -361,8 +364,8 @@ class GroupedTest extends TestCase
      */
     public function testGetAssociatedProductCollection(): void
     {
-        $link = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper::class,
+        $link = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product\Link::class,
             ['getProductCollection', 'setLinkTypeId']
         );
         $this->product->expects($this->once())->method('getLinkInstance')->willReturn($link);
@@ -392,7 +395,7 @@ class GroupedTest extends TestCase
     #[DataProvider('processBuyRequestDataProvider')]
     public function testProcessBuyRequest($superGroup, $result)
     {
-        $buyRequest = new \Magento\Framework\DataObject\Test\Unit\Helper\DataObjectTestHelper();
+        $buyRequest = new DataObject();
         $buyRequest->setSuperGroup($superGroup);
 
         $this->assertEquals($result, $this->_model->processBuyRequest($this->product, $buyRequest));
@@ -482,8 +485,8 @@ class GroupedTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($items));
 
-        $link = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductLinkTestHelper::class,
+        $link = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product\Link::class,
             ['getProductCollection', 'setLinkTypeId']
         );
         $link

@@ -19,8 +19,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_ALL = 'all';
-    const INPUT_KEY_FORCE = 'force';
+    public const INPUT_KEY_ALL = 'all';
+    public const INPUT_KEY_FORCE = 'force';
 
     /**
      * @var GeneratedFiles
@@ -33,7 +33,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     protected $deploymentConfig;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -54,7 +54,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function isModuleRequired()
     {
@@ -62,9 +62,9 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isEnable = $this->isEnable();
         if ($input->getOption(self::INPUT_KEY_ALL)) {
@@ -180,7 +180,8 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      * Get deployment config
      *
      * @return DeploymentConfig
-     * @deprecated 2.0.6
+     * @deprecated 2.0.6 Use dependency injection instead of this method for accessing DeploymentConfig
+     * @see DeploymentConfig Should be injected via constructor dependency injection
      */
     private function getDeploymentConfig()
     {
@@ -191,10 +192,11 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     }
 
     /**
-     * Get deployment config
+     * Get generated files service
      *
      * @return GeneratedFiles
-     * @deprecated 2.1.0
+     * @deprecated 2.1.0 Use dependency injection instead of this method for accessing GeneratedFiles
+     * @see GeneratedFiles Should be injected via constructor dependency injection
      */
     private function getGeneratedFiles()
     {

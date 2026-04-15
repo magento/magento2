@@ -14,6 +14,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Tax\Model\Config as TaxConfig;
 use Magento\Tax\Model\System\Message\NotificationInterface;
 use Magento\Tax\Model\System\Message\Notifications;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -57,10 +58,10 @@ class NotificationsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
         $this->taxConfigMock = $this->createMock(TaxConfig::class);
-        $this->notificationMock = $this->getMockForAbstractClass(NotificationInterface::class);
+        $this->notificationMock = $this->createMock(NotificationInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->notifications = (new ObjectManager($this))->getObject(
             Notifications::class,
@@ -74,13 +75,11 @@ class NotificationsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderIsDisplayed
-     */
+    #[DataProvider('dataProviderIsDisplayed')]
     public function testIsDisplayed(
-        $isNotificationDisplayed,
-        $expectedResult
-    ) {
+        bool $isNotificationDisplayed,
+        bool $expectedResult
+    ): void {
         $this->notificationMock->expects($this->once())->method('isDisplayed')->willReturn($isNotificationDisplayed);
         $this->assertEquals($expectedResult, $this->notifications->isDisplayed());
     }
@@ -88,7 +87,7 @@ class NotificationsTest extends TestCase
     /**
      * @return array
      */
-    public static function dataProviderIsDisplayed()
+    public static function dataProviderIsDisplayed(): array
     {
         return [
             [true, true],
@@ -101,7 +100,7 @@ class NotificationsTest extends TestCase
      *
      * @return void
      */
-    public function testGetText()
+    public function testGetText(): void
     {
         $url = 'http://info-url';
         $this->notificationMock->expects($this->once())->method('getText')->willReturn('Notification Text.');
@@ -125,7 +124,7 @@ class NotificationsTest extends TestCase
      *
      * @return void
      */
-    public function testGetInfoUrl()
+    public function testGetInfoUrl(): void
     {
         $url = 'http://info-url';
         $this->taxConfigMock->expects($this->once())->method('getInfoUrl')->willReturn($url);

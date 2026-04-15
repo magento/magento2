@@ -11,6 +11,7 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\RemoteStorage\Driver\Adapter\Cache\Generic;
 use Magento\RemoteStorage\Driver\Adapter\PathUtil;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -212,8 +213,8 @@ class GenericTest extends TestCase
     /**
      * @param string $input
      * @param array|null $expectedOutput
-     * @dataProvider metaDataProvider
      */
+    #[DataProvider('metaDataProvider')]
     public function testGetMetaData(string $input, ?array $expectedOutput): void
     {
         $cacheData = include __DIR__ . '/_files/CacheData.php';

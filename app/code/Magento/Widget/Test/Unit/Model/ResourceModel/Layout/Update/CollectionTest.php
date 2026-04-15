@@ -22,21 +22,21 @@ class CollectionTest extends AbstractTestCase
     /**
      * Retrieve layout update collection instance
      *
-     * @param Select $select
+     * @param  Select $select
      * @return Collection
      */
-    protected function _getCollection(Select $select)
+    protected function getCollection(Select $select)
     {
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
 
         return new Collection(
             $this->createMock(EntityFactory::class),
-            $this->getMockForAbstractClass(LoggerInterface::class),
-            $this->getMockForAbstractClass(FetchStrategyInterface::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(FetchStrategyInterface::class),
             $eventManager,
             $this->createPartialMock(DateTime::class, []),
             null,
-            $this->_getResource($select)
+            $this->getResource($select)
         );
     }
 
@@ -46,7 +46,7 @@ class CollectionTest extends AbstractTestCase
         $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('where')->with('link.theme_id = ?', $themeId);
 
-        $collection = $this->_getCollection($select);
+        $collection = $this->getCollection($select);
         $collection->addThemeFilter($themeId);
     }
 
@@ -56,7 +56,7 @@ class CollectionTest extends AbstractTestCase
         $select = $this->createMock(Select::class);
         $select->expects($this->once())->method('where')->with('link.store_id = ?', $storeId);
 
-        $collection = $this->_getCollection($select);
+        $collection = $this->getCollection($select);
         $collection->addStoreFilter($storeId);
     }
 
@@ -73,10 +73,10 @@ class CollectionTest extends AbstractTestCase
         )->with(
             ['link' => 'layout_link'],
             'link.layout_update_id = main_table.layout_update_id',
-            $this->isType('array')
+            $this->callback('is_array')
         );
 
-        $collection = $this->_getCollection($select);
+        $collection = $this->getCollection($select);
         $collection->addStoreFilter(1);
         $collection->addThemeFilter(1);
     }
@@ -95,7 +95,7 @@ class CollectionTest extends AbstractTestCase
         );
         $select->expects($this->once())->method('where')->with(self::TEST_WHERE_CONDITION);
 
-        $collection = $this->_getCollection($select);
+        $collection = $this->getCollection($select);
 
         /** @var MockObject $connection */
         $connection = $collection->getResource()->getConnection();

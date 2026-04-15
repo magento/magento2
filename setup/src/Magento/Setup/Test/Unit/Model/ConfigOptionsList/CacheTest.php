@@ -56,7 +56,7 @@ class CacheTest extends TestCase
             ->willReturn(Cache::CONFIG_VALUE_CACHE_REDIS);
 
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(19, $options);
+        $this->assertCount(21, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -88,51 +88,59 @@ class CacheTest extends TestCase
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('cache-backend-redis-use-lua', $options[7]->getName());
+        $this->assertEquals('cache-backend-redis-serializer', $options[7]->getName());
 
         $this->assertArrayHasKey(8, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[8]);
-        $this->assertEquals('cache-backend-redis-use-lua-on-gc', $options[8]->getName());
+        $this->assertEquals('cache-backend-redis-use-lua', $options[8]->getName());
 
         $this->assertArrayHasKey(9, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[9]);
-        $this->assertEquals('cache-backend-valkey-server', $options[9]->getName());
+        $this->assertEquals('cache-backend-redis-use-lua-on-gc', $options[9]->getName());
 
         $this->assertArrayHasKey(10, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[10]);
-        $this->assertEquals('cache-backend-valkey-db', $options[10]->getName());
+        $this->assertEquals('cache-backend-valkey-server', $options[10]->getName());
 
         $this->assertArrayHasKey(11, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[11]);
-        $this->assertEquals('cache-backend-valkey-port', $options[11]->getName());
+        $this->assertEquals('cache-backend-valkey-db', $options[11]->getName());
 
         $this->assertArrayHasKey(12, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[12]);
-        $this->assertEquals('cache-backend-valkey-password', $options[12]->getName());
+        $this->assertEquals('cache-backend-valkey-port', $options[12]->getName());
 
         $this->assertArrayHasKey(13, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[13]);
-        $this->assertEquals('cache-backend-valkey-compress-data', $options[13]->getName());
+        $this->assertEquals('cache-backend-valkey-password', $options[13]->getName());
 
         $this->assertArrayHasKey(14, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[14]);
-        $this->assertEquals('cache-backend-valkey-compression-lib', $options[14]->getName());
+        $this->assertEquals('cache-backend-valkey-compress-data', $options[14]->getName());
 
         $this->assertArrayHasKey(15, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[15]);
-        $this->assertEquals('cache-backend-valkey-use-lua', $options[15]->getName());
+        $this->assertEquals('cache-backend-valkey-compression-lib', $options[15]->getName());
 
         $this->assertArrayHasKey(16, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[16]);
-        $this->assertEquals('cache-backend-valkey-use-lua-on-gc', $options[16]->getName());
+        $this->assertEquals('cache-backend-valkey-serializer', $options[16]->getName());
 
         $this->assertArrayHasKey(17, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[17]);
-        $this->assertEquals('cache-id-prefix', $options[17]->getName());
+        $this->assertEquals('cache-backend-valkey-use-lua', $options[17]->getName());
 
         $this->assertArrayHasKey(18, $options);
-        $this->assertInstanceOf(FlagConfigOption::class, $options[18]);
-        $this->assertEquals('allow-parallel-generation', $options[18]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[18]);
+        $this->assertEquals('cache-backend-valkey-use-lua-on-gc', $options[18]->getName());
+
+        $this->assertArrayHasKey(19, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[19]);
+        $this->assertEquals('cache-id-prefix', $options[19]->getName());
+
+        $this->assertArrayHasKey(20, $options);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[20]);
+        $this->assertEquals('allow-parallel-generation', $options[20]->getName());
     }
 
     /**
@@ -147,7 +155,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
                             'server' => '127.0.0.1',
                             'port' => '6379',
@@ -156,7 +164,8 @@ class CacheTest extends TestCase
                             'compress_data' => '1',
                             'compression_lib' => '',
                             'use_lua' => '0',
-                            'use_lua_on_gc' => '1'
+                            'use_lua_on_gc' => '1',
+                            'serializer' => 'igbinary'
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -191,7 +200,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -200,7 +209,8 @@ class CacheTest extends TestCase
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                             'use_lua' => '0',
-                            'use_lua_on_gc' => '1'
+                            'use_lua_on_gc' => '1',
+                            'serializer' => 'igbinary'
                         ],
                     ]
                 ],
@@ -234,6 +244,9 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $this->expectedIdPrefix(),
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]
@@ -257,6 +270,9 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $explicitPrefix,
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]

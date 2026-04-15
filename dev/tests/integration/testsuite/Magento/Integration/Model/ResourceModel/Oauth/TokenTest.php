@@ -9,6 +9,7 @@ namespace Magento\Integration\Model\ResourceModel\Oauth;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Oauth\Helper\Oauth;
 use Magento\Integration\Model\Oauth\Token;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for @see \Magento\Integration\Model\ResourceModel\Oauth\Token
@@ -131,9 +132,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      * @param array $expectedRemovedTokenNumbers
      * @param array $expectedPreservedTokenNumbers
      *
-     * @dataProvider deleteExpiredTokenUsingObserverDataProvider
      * @covers \Magento\Integration\Cron\CleanExpiredTokens::execute
      */
+    #[DataProvider('deleteExpiredTokenUsingObserverDataProvider')]
     public function testDeleteExpiredTokenUsingObserver(
         $secondsAfterBaseCreatedTimestamp,
         $expectedRemovedTokenNumbers,
@@ -196,9 +197,9 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      * @param $expectedPreservedTokenNumbers
      *
      * @magentoDbIsolation enabled
-     * @dataProvider deleteExpiredTokensDataProvider
      * @covers \Magento\Integration\Model\ResourceModel\Oauth\Token::deleteExpiredTokens
      */
+    #[DataProvider('deleteExpiredTokensDataProvider')]
     public function testDeleteExpiredTokens(
         $secondsAfterBaseCreatedTimestamp,
         $tokenTypesToClean,

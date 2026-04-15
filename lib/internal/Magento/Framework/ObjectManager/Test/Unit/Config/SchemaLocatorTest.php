@@ -30,7 +30,6 @@ class SchemaLocatorTest extends TestCase
         $this->urnResolverMock = $this->createMock(UrnResolver::class);
         $this->model = new SchemaLocatorConfig($this->urnResolverMock);
         $property = new \ReflectionProperty($this->model, 'urnResolver');
-        $property->setAccessible(true);
         $property->setValue($this->model, $this->urnResolverMock);
     }
 

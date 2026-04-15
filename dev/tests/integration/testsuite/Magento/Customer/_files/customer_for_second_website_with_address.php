@@ -42,8 +42,6 @@ $customer->setWebsiteId($websiteId)
     ->setStoreId($store->getStoreId())
     ->setFirstname('John')
     ->setLastname('Smith')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
     ->setGender($gender);
 
 $accountManagment->createAccount($customer, 'Apassword1');

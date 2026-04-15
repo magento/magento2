@@ -48,7 +48,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileReader = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);
+        $this->fileReader = $this->createMock(\Magento\Framework\Filesystem\File\ReadInterface::class);
         $fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
         $fileReadFactory->method('create')->willReturn($this->fileReader);
         $random = $this->createMock(\Magento\Framework\Math\Random::class);

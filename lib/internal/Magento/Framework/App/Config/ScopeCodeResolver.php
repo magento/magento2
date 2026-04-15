@@ -40,7 +40,7 @@ class ScopeCodeResolver
      */
     public function resolve($scopeType, $scopeCode)
     {
-        if (isset($this->resolvedScopeCodes[$scopeType][$scopeCode])) {
+        if (isset($scopeCode, $this->resolvedScopeCodes[$scopeType][$scopeCode])) {
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
         }
 

@@ -6,12 +6,16 @@
 namespace Magento\Test\Integrity\Modular;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\FileResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * Primary DI configs from app/etc
      * @var array
@@ -61,8 +65,8 @@ class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $filePath
      * @param string $xml
      * @throws \Exception
-     * @dataProvider linearFilesProvider
      */
+    #[DataProvider('linearFilesProvider')]
     public function testDiConfigFileWithoutMerging($filePath, $xml)
     {
         /** @var \Magento\Framework\ObjectManager\Config\SchemaLocator $schemaLocator */
@@ -107,14 +111,17 @@ class DiConfigFilesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $files
-     * @dataProvider mixedFilesProvider
      */
+    #[DataProvider('mixedFilesProvider')]
     public function testMergedDiConfig(array $files)
     {
         $mapperMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Mapper\Dom::class);
-        $fileResolverMock = $this->getMockBuilder(\Magento\Framework\Config\FileResolverInterface::class)
-            ->addMethods(['read'])
-            ->getMockForAbstractClass();
+        
+        // Use MockCreationTrait to create a mock with both the interface method and a non-existent method
+        $fileResolverMock = $this->createPartialMockWithReflection(
+            FileResolverInterface::class,
+            ['get', 'read']
+        );
         $fileResolverMock->expects($this->any())->method('read')->willReturn($files);
         $validationStateMock = $this->createPartialMock(
             \Magento\Framework\Config\ValidationStateInterface::class,

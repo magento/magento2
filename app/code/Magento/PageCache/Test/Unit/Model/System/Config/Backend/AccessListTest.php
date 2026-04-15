@@ -11,6 +11,7 @@ namespace Magento\PageCache\Test\Unit\Model\System\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\System\Config\Backend\AccessList;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AccessListTest extends TestCase
@@ -26,7 +27,7 @@ class AccessListTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $configMock = $this->getMockForAbstractClass(
+        $configMock = $this->createMock(
             ScopeConfigInterface::class
         );
         $configMock->expects($this->any())
@@ -60,8 +61,8 @@ class AccessListTest extends TestCase
     /**
      * @param mixed $value
      * @param mixed $expectedValue
-     * @dataProvider getValidValues
      */
+    #[DataProvider('getValidValues')]
     public function testBeforeSave($value, $expectedValue)
     {
         $this->accessList->setValue($value);
@@ -85,8 +86,8 @@ class AccessListTest extends TestCase
 
     /**
      * @param mixed $value
-     * @dataProvider getInvalidValues
      */
+    #[DataProvider('getInvalidValues')]
     public function testBeforeSaveInvalid($value)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');

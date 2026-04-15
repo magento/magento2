@@ -37,7 +37,7 @@ class ReservedAttributeChecker implements ReservedAttributeCheckerInterface
     public function isReservedAttribute(AbstractAttribute $attribute): bool
     {
         $isReserved = false;
-        $entityTypeCode = $this->getAttributeEntityTypeCode($attribute);
+        $entityTypeCode = $this->getAttributeEntityTypeCode($attribute) ?? '';
         $validators = $this->validators[$entityTypeCode] ?? [];
         foreach ($validators as $validator) {
             $isReserved = $validator->isReservedAttribute($attribute);

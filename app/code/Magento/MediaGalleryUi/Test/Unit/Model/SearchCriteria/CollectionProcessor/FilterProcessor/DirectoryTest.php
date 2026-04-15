@@ -12,6 +12,7 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 use Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Directory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -55,9 +56,8 @@ class DirectoryTest extends TestCase
 
     /**
      * Test case-sensitive directory filtering
-     *
-     * @dataProvider caseSensitiveDirectoryDataProvider
      */
+    #[DataProvider('caseSensitiveDirectoryDataProvider')]
     public function testApplyWithCaseSensitiveDirectoryFiltering(
         string $directoryValue,
         string $expectedRegexPattern
@@ -139,7 +139,7 @@ class DirectoryTest extends TestCase
      *
      * @return array
      */
-    public function caseSensitiveDirectoryDataProvider(): array
+    public static function caseSensitiveDirectoryDataProvider(): array
     {
         return [
             'lowercase_directory' => [

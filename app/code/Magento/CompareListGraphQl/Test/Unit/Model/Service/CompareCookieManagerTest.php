@@ -57,9 +57,9 @@ class CompareCookieManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->cookieMetadataFactoryMock = $this->createMock(CookieMetadataFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->publicCookieMetadataMock = $this->createMock(PublicCookieMetadata::class);
 
         $this->compareCookieManager = new CompareCookieManager(

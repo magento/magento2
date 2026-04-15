@@ -22,6 +22,9 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Result\Layout as ResultLayout;
+use Magento\Framework\Session\Storage;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ShowUpdateResultTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var Context|MockObject */
     protected $context;
 
@@ -49,18 +53,18 @@ class ShowUpdateResultTest extends TestCase
      */
     protected function getSession()
     {
-        $session = $this->getMockBuilder(Session::class)
-            ->addMethods(['hasCompositeProductResult', 'getCompositeProductResult', 'unsCompositeProductResult'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $session->expects($this->once())
-            ->method('hasCompositeProductResult')
-            ->willReturn(true);
-        $session->expects($this->once())
-            ->method('unsCompositeProductResult');
-        $session->expects($this->atLeastOnce())
-            ->method('getCompositeProductResult')
-            ->willReturn(new DataObject());
+        $storage = $this->createMock(Storage::class);
+
+        $session = $this->createPartialMockWithReflection(Session::class, [
+            'hasCompositeProductResult',
+            'getCompositeProductResult',
+            'unsCompositeProductResult'
+        ]);
+
+        // Use reflection to set the storage property
+        $reflection = new \ReflectionClass($session);
+        $storageProperty = $reflection->getProperty('storage');
+        $storageProperty->setValue($session, $storage);
 
         return $session;
     }
@@ -73,16 +77,10 @@ class ShowUpdateResultTest extends TestCase
     protected function getContext()
     {
         $productActionMock = $this->createMock(Action::class);
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturn($productActionMock);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->method('get')->willReturn($productActionMock);
 
-        $eventManager = $this->getMockBuilder(Manager::class)
-            ->onlyMethods(['dispatch'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
+        $eventManager = $this->createPartialMock(Manager::class, ['dispatch']);
         $eventManager->expects($this->any())
             ->method('dispatch')
             ->willReturnSelf();
@@ -92,59 +90,23 @@ class ShowUpdateResultTest extends TestCase
             ['getParam', 'getPost', 'getFullActionName', 'getPostValue']
         );
 
-        $responseInterfaceMock = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $responseInterfaceMock = $this->createMock(ResponseInterface::class);
 
-        $managerInterfaceMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $managerInterfaceMock = $this->createMock(ManagerInterface::class);
         $this->session = $this->getSession();
         $actionFlagMock = $this->createMock(ActionFlag::class);
         $helperDataMock = $this->createMock(Data::class);
-        $this->context = $this->getMockBuilder(Context::class)
-            ->addMethods(['getTitle'])
-            ->onlyMethods(
-                [
-                    'getRequest',
-                    'getResponse',
-                    'getObjectManager',
-                    'getEventManager',
-                    'getMessageManager',
-                    'getSession',
-                    'getActionFlag',
-                    'getHelper',
-                    'getView',
-                    'getResultRedirectFactory'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->context->expects($this->any())
-            ->method('getEventManager')
-            ->willReturn($eventManager);
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($this->request);
-        $this->context->expects($this->any())
-            ->method('getResponse')
-            ->willReturn($responseInterfaceMock);
-        $this->context->expects($this->any())
-            ->method('getObjectManager')
-            ->willReturn($objectManagerMock);
+        $this->context->method('getEventManager')->willReturn($eventManager);
+        $this->context->method('getRequest')->willReturn($this->request);
+        $this->context->method('getResponse')->willReturn($responseInterfaceMock);
+        $this->context->method('getObjectManager')->willReturn($objectManagerMock);
 
-        $this->context->expects($this->any())
-            ->method('getMessageManager')
-            ->willReturn($managerInterfaceMock);
-        $this->context->expects($this->any())
-            ->method('getSession')
-            ->willReturn($this->session);
-        $this->context->expects($this->any())
-            ->method('getActionFlag')
-            ->willReturn($actionFlagMock);
-        $this->context->expects($this->any())
-            ->method('getHelper')
-            ->willReturn($helperDataMock);
+        $this->context->method('getMessageManager')->willReturn($managerInterfaceMock);
+        $this->context->method('getSession')->willReturn($this->session);
+        $this->context->method('getActionFlag')->willReturn($actionFlagMock);
+        $this->context->method('getHelper')->willReturn($helperDataMock);
 
         return $this->context;
     }
@@ -152,14 +114,32 @@ class ShowUpdateResultTest extends TestCase
     public function testExecute()
     {
         $productCompositeHelper = $this->createMock(Composite::class);
+        $layoutResult = $this->createMock(ResultLayout::class);
+        $compositeProductResult = new DataObject();
+
         $productCompositeHelper->expects($this->once())
-            ->method('renderUpdateResult');
+            ->method('renderUpdateResult')
+            ->with($compositeProductResult)
+            ->willReturn($layoutResult);
 
         $productBuilder = $this->createMock(Builder::class);
         $context = $this->getContext();
 
+        // Configure the session to return composite product result
+        $this->session->expects($this->once())
+            ->method('hasCompositeProductResult')
+            ->willReturn(true);
+        $this->session->expects($this->exactly(2))
+            ->method('getCompositeProductResult')
+            ->willReturn($compositeProductResult);
+        $this->session->expects($this->once())
+            ->method('unsCompositeProductResult');
+
         /** @var ShowUpdateResult $controller */
         $controller = new ShowUpdateResult($context, $productBuilder, $productCompositeHelper);
-        $controller->execute();
+        $result = $controller->execute();
+
+        // The controller should return the result from renderUpdateResult
+        $this->assertSame($layoutResult, $result);
     }
 }

@@ -60,8 +60,7 @@ class LinkTest extends TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl'])->disableOriginalConstructor()->getMockForAbstractClass();
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
         $urlBuilderMock->expects($this->any())
             ->method('getUrl')
             ->willReturn('http://site.com/link.html');

@@ -150,7 +150,7 @@ class XmlCatalogGenerateCommand extends Command
      *
      * @throws \InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $ideName = $input->getOption(self::IDE_OPTION);
 

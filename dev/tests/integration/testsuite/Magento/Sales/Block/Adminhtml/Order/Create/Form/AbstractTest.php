@@ -50,10 +50,10 @@ class AbstractTest extends TestCase
         ];
 
         /** @var $block AbstractForm */
-        $block = $this->getMockForAbstractClass(
-            AbstractForm::class,
-            $arguments
-        );
+        $block = $this->getMockBuilder(AbstractForm::class)
+            ->setConstructorArgs($arguments)
+            ->onlyMethods(['_prepareForm'])
+            ->getMock();
         $block->setLayout($objectManager->create(Layout::class));
 
         $method1 = new ReflectionMethod(

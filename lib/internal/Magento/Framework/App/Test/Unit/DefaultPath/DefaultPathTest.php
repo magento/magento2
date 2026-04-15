@@ -8,16 +8,14 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit\DefaultPath;
 
 use Magento\Framework\App\DefaultPath\DefaultPath;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DefaultPathTest extends TestCase
 {
-    /**
-     * @param array $parts
-     * @param string $code
-     * @param string $result
-     * @dataProvider dataProviderGetPart
+    /**     * @param string $result
      */
+    #[DataProvider('dataProviderGetPart')]
     public function testGetPart($parts, $code, $result)
     {
         $model = new DefaultPath($parts);

@@ -63,6 +63,9 @@ class CollectionTest extends TestCase
      */
     protected $selectMock;
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     protected function setUp(): void
     {
         $this->fetchStrategyMock = $this->createPartialMock(
@@ -73,22 +76,14 @@ class CollectionTest extends TestCase
             EntityFactory::class,
             ['create']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['getConnection', 'getMainTable', 'getTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->resourceMock = $this->createMock(AbstractDb::class);
         $this->connectionMock = $this->createPartialMock(
             Mysql::class,
             ['select', 'query']
         );
-        $selectRenderer = $this->getMockBuilder(SelectRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->onlyMethods(['from'])
-            ->setConstructorArgs(['adapter' => $this->connectionMock, 'selectRenderer' => $selectRenderer])
-            ->getMock();
+        $selectRenderer = $this->createMock(SelectRenderer::class);
+        $this->selectMock = $this->createPartialMock(Select::class, ['from']);
 
         $this->connectionMock->expects($this->once())
             ->method('select')

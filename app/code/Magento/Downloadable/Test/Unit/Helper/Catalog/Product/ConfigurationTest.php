@@ -15,6 +15,7 @@ use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigurationTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
@@ -65,8 +67,8 @@ class ConfigurationTest extends TestCase
 
     public function testGetLinksTitle()
     {
-        $product = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getLinksTitle']
         );
 
@@ -77,8 +79,8 @@ class ConfigurationTest extends TestCase
 
     public function testGetLinksTitleWithoutTitle()
     {
-        $product = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getLinksTitle']
         );
 
@@ -94,8 +96,8 @@ class ConfigurationTest extends TestCase
     public function testGetOptions()
     {
         $item = $this->createMock(ItemInterface::class);
-        $product = $this->createPartialMock(
-            \Magento\Catalog\Test\Unit\Helper\ProductTestHelper::class,
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
             ['__wakeup', 'getLinksTitle', 'getTypeInstance']
         );
         $option = $this->createMock(OptionInterface::class);

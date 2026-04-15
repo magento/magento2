@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
 use Magento\SalesRule\Model\Quote\ChildrenValidationLocator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,8 +57,8 @@ class ChildrenValidationLocatorTest extends TestCase
 
         $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getProduct', 'getQuote', 'getAddress', 'getOptionByCode'])
+            ->getMock();
 
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -73,12 +74,12 @@ class ChildrenValidationLocatorTest extends TestCase
     }
 
     /**
-     * @dataProvider productTypeDataProvider
      * @param string $type
      * @param bool $expected
      *
      * @return void
      */
+    #[DataProvider('productTypeDataProvider')]
     public function testIsChildrenValidationRequired(string $type, bool $expected): void
     {
         $this->quoteItemMock->expects($this->once())

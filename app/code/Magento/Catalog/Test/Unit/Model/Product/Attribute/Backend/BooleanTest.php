@@ -28,22 +28,14 @@ class BooleanTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeMock = $this->getMockForAbstractClass(
-            AbstractAttribute::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getName']
-        );
+        $this->attributeMock = $this->createMock(AbstractAttribute::class);
         $this->model = new BooleanBackend();
         $this->model->setAttribute($this->attributeMock);
     }
 
     public function testBeforeSave()
     {
-        $this->attributeMock->expects($this->any())->method('getName')->willReturn('attribute_name');
+        $this->attributeMock->method('getName')->willReturn('attribute_name');
         $object = new DataObject([
             'use_config_attribute_name' => true,
         ]);

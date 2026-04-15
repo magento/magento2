@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Multishipping\Block\Checkout\Address\Select;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -82,12 +83,12 @@ class SelectTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->multishippingMock =
             $this->createMock(Multishipping::class);
-        $this->addressMock = $this->getMockForAbstractClass(AddressInterface::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->addressMock = $this->createMock(AddressInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
         $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->searchCriteriaBuilderMock =
             $this->createMock(SearchCriteriaBuilder::class);
-        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
         $this->filterMock = $this->createMock(Filter::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->block = $this->objectManager->getObject(
@@ -104,8 +105,8 @@ class SelectTest extends TestCase
     /**
      * @param string $id
      * @param bool $expectedValue
-     * @dataProvider isDefaultAddressDataProvider
      */
+    #[DataProvider('isDefaultAddressDataProvider')]
     public function testIsAddressDefaultBilling($id, $expectedValue)
     {
         $this->addressMock->expects($this->once())->method('getId')->willReturn(1);
@@ -117,8 +118,8 @@ class SelectTest extends TestCase
     /**
      * @param string $id
      * @param bool $expectedValue
-     * @dataProvider isDefaultAddressDataProvider
      */
+    #[DataProvider('isDefaultAddressDataProvider')]
     public function testIsAddressDefaultShipping($id, $expectedValue)
     {
         $this->addressMock->expects($this->once())->method('getId')->willReturn(1);
@@ -140,7 +141,7 @@ class SelectTest extends TestCase
 
     public function testGetAddress()
     {
-        $searchResultMock = $this->getMockForAbstractClass(AddressSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();
@@ -188,7 +189,7 @@ class SelectTest extends TestCase
 
     public function testGetAddressWhenItNotExistInCustomer()
     {
-        $searchResultMock = $this->getMockForAbstractClass(AddressSearchResultsInterface::class);
+        $searchResultMock = $this->createMock(AddressSearchResultsInterface::class);
         $this->multishippingMock->expects($this->once())->method('getCustomer')->willReturn($this->customerMock);
         $this->customerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->filterBuilderMock->expects($this->once())->method('setField')->with('parent_id')->willReturnSelf();

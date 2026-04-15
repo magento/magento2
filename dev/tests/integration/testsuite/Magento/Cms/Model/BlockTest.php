@@ -13,6 +13,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -58,8 +59,8 @@ class BlockTest extends TestCase
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider blockGetByIdentifierDataProvider
      */
+    #[DataProvider('blockGetByIdentifierDataProvider')]
     public function testGetByIdentifier(array $blockData)
     {
         # Prepare and save the temporary block
@@ -79,8 +80,8 @@ class BlockTest extends TestCase
      * @throws \Exception
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoDbIsolation enabled
-     * @dataProvider blockGetByIdentifierDataProvider
      */
+    #[DataProvider('blockGetByIdentifierDataProvider')]
     public function testUpdateTime(array $blockData)
     {
         /**

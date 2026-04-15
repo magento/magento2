@@ -22,9 +22,7 @@ class VisibilityTest extends AbstractColumnTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
     }
 
     /**

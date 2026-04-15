@@ -44,6 +44,9 @@
         <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
+        <!-- Select default store view when multiple stores exist so order items (Add Products) section is rendered -->
+        <conditionalClick selector="{{AdminOrderFormStoreSelectorSection.defaultStoreViewButton}}" dependentSelector="{{AdminOrderFormStoreSelectorSection.storeSelectorContainer}}" visible="true" stepKey="selectDefaultStoreView"/>
+        <waitForPageLoad stepKey="waitForStoreSelection"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProduct">
             <argument name="product" value="$createProduct$"/>
             <argument name="productQty" value="2"/>

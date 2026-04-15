@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Test\Unit\Observer;
 
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\SalesRule\Model\Coupon;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddSalesRuleNameToOrderObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AddSalesRuleNameToOrderObserver|MockObject
      */
@@ -50,25 +53,20 @@ class AddSalesRuleNameToOrderObserverTest extends TestCase
 
     protected function initMocks()
     {
-        $this->couponMock = $this->getMockBuilder(Coupon::class)
-            ->addMethods(['updateCustomerCouponTimesUsed'])
-            ->onlyMethods(['save', 'load', 'getId', 'setTimesUsed', 'getTimesUsed', 'getRuleId', 'loadByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->couponMock = $this->createPartialMockWithReflection(
+            Coupon::class,
+            [
+                'updateCustomerCouponTimesUsed', 'save', 'load', 'getId',
+                'setTimesUsed', 'getTimesUsed', 'getRuleId', 'loadByCode'
+            ]
+        );
         $this->ruleFactory = $this->createPartialMock(RuleFactory::class, ['create']);
     }
 
     public function testAddSalesRuleNameToOrderWithoutCouponCode()
     {
-        $observer = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $order = $this->getMockBuilder(Order::class)
-            ->addMethods(['setCouponRuleName'])
-            ->onlyMethods(['getCouponCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->createPartialMockWithReflection(Observer::class, ['getOrder']);
+        $order = $this->createPartialMockWithReflection(Order::class, ['setCouponRuleName', 'getCouponCode']);
 
         $observer->expects($this->any())
             ->method('getOrder')
@@ -82,15 +80,8 @@ class AddSalesRuleNameToOrderObserverTest extends TestCase
 
     public function testAddSalesRuleNameToOrderWithoutRule()
     {
-        $observer = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $order = $this->getMockBuilder(Order::class)
-            ->addMethods(['setCouponRuleName'])
-            ->onlyMethods(['getCouponCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->createPartialMockWithReflection(Observer::class, ['getOrder']);
+        $order = $this->createPartialMockWithReflection(Order::class, ['setCouponRuleName', 'getCouponCode']);
         $couponCode = 'coupon code';
 
         $observer->expects($this->any())
@@ -108,20 +99,9 @@ class AddSalesRuleNameToOrderObserverTest extends TestCase
 
     public function testAddSalesRuleNameToOrder()
     {
-        $observer = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getOrder'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getName'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $order = $this->getMockBuilder(Order::class)
-            ->addMethods(['setCouponRuleName'])
-            ->onlyMethods(['getCouponCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observer = $this->createPartialMockWithReflection(Observer::class, ['getOrder']);
+        $rule = $this->createPartialMockWithReflection(Rule::class, ['getName', 'load']);
+        $order = $this->createPartialMockWithReflection(Order::class, ['setCouponRuleName', 'getCouponCode']);
         $couponCode = 'coupon code';
         $ruleId = 1;
 

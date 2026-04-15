@@ -3,8 +3,11 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Decorator;
+
+use Magento\Framework\Cache\CacheConstants;
 
 /**
  * Cache frontend decorator that limits the cleaning scope within a tag
@@ -42,9 +45,9 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
-     * Enforce marking with a tag
+     * @inheritDoc
      *
-     * {@inheritdoc}
+     * Enforce marking with a tag
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -53,22 +56,26 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     }
 
     /**
+     * @inheritDoc
+     *
      * Limit the cleaning scope within a tag
      *
-     * {@inheritdoc}
+     * This matches Zend cache implementation exactly
+     * (vendor/magento/framework/Cache/Frontend/Decorator/TagScope.php)
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
-        if ($mode == \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG) {
+        if ($mode == CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG) {
+            // Same as Zend: Loop through tags and clean each with scope
             $result = false;
             foreach ($tags as $tag) {
-                if (parent::clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$tag, $this->getTag()])) {
+                if (parent::clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [$tag, $this->getTag()])) {
                     $result = true;
                 }
             }
         } else {
-            if ($mode == \Zend_Cache::CLEANING_MODE_ALL) {
-                $mode = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
+            if ($mode == CacheConstants::CLEANING_MODE_ALL) {
+                $mode = CacheConstants::CLEANING_MODE_MATCHING_TAG;
                 $tags = [$this->getTag()];
             } else {
                 $tags[] = $this->getTag();
