@@ -16,22 +16,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 use Magento\Quote\Model\Cart\Data\CartItem;
 
-/**
- * DataProvider for building super attribute options in buy requests
- *
- * Supports two resolution strategies for configurable products:
- *   1. Via selected_options (base64-encoded UIDs) — used by addProductsToCart with selected_options.
- *   2. Via parent_sku fallback — used by addProductsToCart with parent_sku + child sku (GH-40598).
- */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     private const OPTION_TYPE = 'configurable';
 
-    /**
-     * @param ProductRepositoryInterface $productRepository
-     * @param OptionCollection $optionCollection
-     * @param MetadataPool $metadataPool
-     */
     public function __construct(
         private readonly ProductRepositoryInterface $productRepository,
         private readonly OptionCollection $optionCollection,
@@ -41,14 +29,11 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 
     /**
      * @inheritdoc
-     *
-     * @throws LocalizedException
      */
     public function execute(CartItem $cartItem): array
     {
         $configurableProductData = $this->resolveFromSelectedOptions($cartItem);
 
-        // Fallback: if no configurable UIDs found in selected_options, try resolving via parent_sku
         if (empty($configurableProductData) && $cartItem->getParentSku() !== null) {
             $configurableProductData = $this->resolveFromParentSku(
                 $cartItem->getParentSku(),
@@ -59,13 +44,6 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         return ['super_attribute' => $configurableProductData];
     }
 
-    /**
-     * Resolves super_attribute data from base64-encoded selected_options UIDs.
-     *
-     * @param CartItem $cartItem
-     * @return array
-     * @throws LocalizedException
-     */
     private function resolveFromSelectedOptions(CartItem $cartItem): array
     {
         $configurableProductData = [];
@@ -88,15 +66,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
     }
 
     /**
-     * Resolves super_attribute data from parent_sku + child sku.
-     *
-     * Mirrors the logic from ConfigurableProductGraphQl\SuperAttributeDataProvider,
-     * enabling addProductsToCart to honour the documented parent_sku field.
-     *
-     * @param string $parentSku
-     * @param string $childSku
-     * @return array
-     * @throws LocalizedException
+     * Resolves super_attribute from parent_sku + child sku (GH-40598 fallback).
      */
     private function resolveFromParentSku(string $parentSku, string $childSku): array
     {
@@ -134,29 +104,15 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         return $superAttributesData;
     }
 
-    /**
-     * Checks whether this provider is applicable for the current option
-     *
-     * @param array $optionData
-     * @return bool
-     */
     private function isProviderApplicable(array $optionData): bool
     {
         return ($optionData[0] ?? null) === self::OPTION_TYPE;
     }
 
-    /**
-     * Validates the provided options structure
-     *
-     * @param array $optionData
-     * @throws LocalizedException
-     */
     private function validateInput(array $optionData): void
     {
         if (count($optionData) !== 3) {
-            throw new LocalizedException(
-                __('Wrong format of the entered option data')
-            );
+            throw new LocalizedException(__('Wrong format of the entered option data'));
         }
     }
 }
