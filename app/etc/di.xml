@@ -1884,7 +1884,8 @@
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
                 <item name="MariaDB-(10.11)" xsi:type="string">^10\.11\.</item>
-                <item name="MariaDB-11.4" xsi:type="string">^11\.4\.</item>
+                <item name="MariaDB-(11.4-11.8)" xsi:type="string">^11\.[4|8]\.</item>
+                <item name="MariaDB-(12.2-12.3)" xsi:type="string">^12\.[2-3]\.</item>
             </argument>
         </arguments>
     </type>

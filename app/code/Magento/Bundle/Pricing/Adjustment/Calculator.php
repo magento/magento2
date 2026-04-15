@@ -18,8 +18,6 @@ use Magento\Framework\Pricing\Amount\AmountFactory;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\Store;
-use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
@@ -310,30 +308,39 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
         $fullAmount = 0.;
         $adjustments = [];
         $i = 0;
-
-        $amountList[$i]['amount'] = $this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude);
+        $amountList = [];
+        $baseAmount = $this->calculator->getAmount($basePriceValue, $bundleProduct, $exclude);
+        $amountList[$i]['amount'] = $baseAmount;
         $amountList[$i]['quantity'] = 1;
+        $amountList[$i]['priceValue'] = $baseAmount->getValue(['tax']);
 
         foreach ($selectionPriceList as $selectionPrice) {
             ++$i;
             if ($selectionPrice) {
                 $amountList[$i]['amount'] = $selectionPrice->getAmount();
-                // always honor the quantity given
                 $amountList[$i]['quantity'] = $selectionPrice->getQuantity();
+                $amountList[$i]['priceValue'] = $selectionPrice->getValue();
             }
         }
 
+        $excludeTaxTotal = 0.;
         foreach ($amountList as $amountInfo) {
             /** @var AmountInterface $itemAmount */
             $itemAmount = $amountInfo['amount'];
             $qty = $amountInfo['quantity'];
-            //We need to round the individual selection first
-            $fullAmount += ($this->priceCurrency->round($itemAmount->getValue()) * $qty);
+            $fullAmount += $this->priceCurrency->round($itemAmount->getValue()) * $qty;
+            $excludeTaxPerUnit = $amountInfo['priceValue'] ?? $itemAmount->getValue(['tax']);
+            $excludeTaxTotal += $this->priceCurrency->round($excludeTaxPerUnit) * $qty;
             foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                if ($code === 'tax') {
+                    continue;
+                }
                 $adjustment = $this->priceCurrency->round($adjustment) * $qty;
                 $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
             }
         }
+
+        $adjustments['tax'] = $fullAmount - $excludeTaxTotal;
         if (is_array($exclude) == false) {
             if ($exclude && isset($adjustments[$exclude])) {
                 $fullAmount -= $adjustments[$exclude];

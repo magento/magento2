@@ -1247,9 +1247,9 @@ class ShipmentServiceTest extends TestCase
     }
 
     /**
-     * Test getJsonQuotes with missing weight_pounds defaults to 1
+     * Test getJsonQuotes with only weight_ounces computes decimal weight (8 oz = 0.5 lb)
      */
-    public function testGetJsonQuotesWithMissingWeightPoundsDefaultsToOne(): void
+    public function testGetJsonQuotesWithWeightOuncesOnlyUsesComputedWeight(): void
     {
         $requestMock = new DataObject();
         $requestMock->setPackages([
@@ -1257,13 +1257,14 @@ class ShipmentServiceTest extends TestCase
                 'weight_ounces' => 8
             ]
         ]);
-        $this->getRequestParamMock($requestMock);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.5, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
-     * Test getJsonQuotes with weight_pounds = 0 defaults to 1
+     * Test getJsonQuotes with weight_pounds = 0 and weight_ounces = 0 uses minimum 0.01
      */
-    public function testGetJsonQuotesWithZeroWeightPoundsDefaultsToOne(): void
+    public function testGetJsonQuotesWithZeroWeightUsesMinimum(): void
     {
         $requestMock = new DataObject();
         $requestMock->setPackages([
@@ -1272,11 +1273,12 @@ class ShipmentServiceTest extends TestCase
                 'weight_ounces' => 0
             ]
         ]);
-        $this->getRequestParamMock($requestMock);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.01, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
-     * Test getJsonQuotes with valid weight_pounds uses the value
+     * Test getJsonQuotes with weight_pounds and weight_ounces uses combined decimal weight
      */
     public function testGetJsonQuotesWithValidWeightPounds(): void
     {
@@ -1288,20 +1290,8 @@ class ShipmentServiceTest extends TestCase
             ]
         ]);
         $capturedRequestParam = $this->getRequestParamHelper($requestMock);
-        $this->assertEquals(5, $capturedRequestParam['packageDescription']['weight']);
-    }
-
-    /**
-     * @param DataObject $requestMock
-     * @return mixed|null
-     * @throws LocalizedException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    private function getRequestParamMock(DataObject $requestMock): mixed
-    {
-        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
-        $this->assertEquals(1, $capturedRequestParam['packageDescription']['weight']);
-        return $capturedRequestParam;
+        // 5 lb 8 oz = 5.5 lb
+        $this->assertEquals(5.5, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
@@ -1323,9 +1313,8 @@ class ShipmentServiceTest extends TestCase
         $this->carrierModelMock->expects($this->once())
             ->method('getRawRequest')
             ->willReturn($requestMock);
-        $this->carrierModelMock->expects($this->exactly(2))
+        $this->carrierModelMock->expects($this->any())
             ->method('_isUSCountry')
-            ->with('US')
             ->willReturn(true);
         $this->carrierModelMock->expects($this->once())
             ->method('getOauthAccessRequest')

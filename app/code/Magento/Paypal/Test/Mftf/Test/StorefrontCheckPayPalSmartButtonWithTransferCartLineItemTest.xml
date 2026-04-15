@@ -21,15 +21,12 @@
         <before>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionAuthorization"/>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
-            <!-- New Customer -->
-            <createData entity="Simple_US_Customer" stepKey="createCustomer">
-                <field key="firstname">John1</field>
-                <field key="lastname">Doe1</field>
-            </createData>
-            <createData entity="SimpleProduct2" stepKey="simpleProduct">
-                <field key="price">1</field>
-            </createData>
+            <!--Go to Admin and create simple product-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateSimpleProductActionGroup" stepKey="createSimpleProduct">
+                <argument name="category" value="DefaultCategory"/>
+                <argument name="simpleProduct" value="SimpleProduct2"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
@@ -37,12 +34,15 @@
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="$$createCustomer$$"/>
+        <!--Create new customer in storefront-->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="createCustomerFromStorefront">
+            <argument name="Customer" value="Simple_US_Customer"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
-            <argument name="product" value="$simpleProduct$"/>
+        <!-- Open product page from storefront and add simple product to cart-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="productUrl" value="{{SimpleProduct2.urlKey}}"/>
         </actionGroup>
+        <actionGroup ref="StorefrontProductPageAddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart"/>
         <!--Go to cart page-->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
         <!-- Click on Paypal express checkout button-->
@@ -60,7 +60,6 @@
         <!-- I see order successful Page instead of Order Review Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <!--Go to Admin and check order information-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGrid">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
