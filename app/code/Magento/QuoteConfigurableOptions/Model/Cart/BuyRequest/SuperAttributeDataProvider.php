@@ -112,10 +112,18 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
         return ($optionData[0] ?? null) === self::OPTION_TYPE;
     }
 
+    /**
+     * Validates the provided options structure
+     *
+     * @param array $optionData
+     * @throws LocalizedException
+     */
     private function validateInput(array $optionData): void
     {
         if (count($optionData) !== 3) {
-            throw new LocalizedException(__('Wrong format of the entered option data'));
+            throw new LocalizedException(
+                __('Wrong format of the entered option data')
+            );
         }
     }
 }
