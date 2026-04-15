@@ -21,10 +21,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
     public const TYPE_CODE = 'grouped';
 
-    /**
-     * Data key used to snapshot the configured link qty before any MSI/observer mutation.
-     * Read by Converter::convert() to guarantee the original grouped-link qty is returned.
-     */
+    /** @var string Data key for the original link qty. */
     public const GROUPED_LINK_QTY = 'grouped_link_qty';
 
     /**
@@ -234,7 +231,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             );
 
             foreach ($collection as $item) {
-                // Snapshot the link qty before any plugin/observer can overwrite getQty().
                 $item->setData(self::GROUPED_LINK_QTY, $item->getData('qty'));
                 $associatedProducts[] = $item;
             }
