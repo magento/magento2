@@ -16,6 +16,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 use Magento\Quote\Model\Cart\Data\CartItem;
 
+/**
+ * DataProvider for building super attribute options in buy requests
+ */
 class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
 {
     private const OPTION_TYPE = 'configurable';
