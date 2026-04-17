@@ -94,7 +94,7 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
             ['getControllerAction']
         );
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->checkoutSessionMock = $this->createMock(CheckoutSession::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
