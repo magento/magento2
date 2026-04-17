@@ -115,10 +115,6 @@ class CityTest extends TestCase
                 'message' => 'Commas must be allowed in city names'
             ],
             [
-                'city' => 'LHR/London',
-                'message' => 'Forward slash must be allowed in city names'
-            ],
-            [
                 'city' => 'Zürich',
                 'message' => 'Diacritic ö must be allowed in city names'
             ],
@@ -179,6 +175,10 @@ class CityTest extends TestCase
             [
                 'rejectedChar' => '?',
                 'message' => 'Question mark must be rejected'
+            ],
+            [
+                'rejectedChar' => '/',
+                'message' => 'Forward slash must be rejected'
             ],
         ];
     }

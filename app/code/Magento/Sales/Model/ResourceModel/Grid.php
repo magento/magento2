@@ -58,6 +58,11 @@ class Grid extends AbstractGrid
     public const BATCH_SIZE = 100;
 
     /**
+     * Maximum reconciliation iterations per cron run.
+     */
+    private const MAX_REFRESH_ITERATIONS = 1000;
+
+    /**
      * @param Context $context
      * @param string $mainTableName
      * @param string $gridTableName
@@ -133,7 +138,9 @@ class Grid extends AbstractGrid
     public function refreshBySchedule()
     {
         $lastUpdatedAt = null;
-        while (true) {
+        $iteration = 0;
+        while ($iteration < self::MAX_REFRESH_ITERATIONS) {
+            $iteration++;
             $notSyncedIds = $this->notSyncedDataProvider->getIds($this->mainTableName, $this->gridTableName);
             if (empty($notSyncedIds)) {
                 break;
