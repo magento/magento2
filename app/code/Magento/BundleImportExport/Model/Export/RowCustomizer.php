@@ -169,6 +169,8 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
+        $this->bundleData = [];
+        $this->optionCollections = [];
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter(
             'entity_id',

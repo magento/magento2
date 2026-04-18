@@ -292,6 +292,25 @@ class CreateAddressTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     */
+    public function testExceptionMessageForTooLongTelephone(): void
+    {
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $addressData = array_replace(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::TELEPHONE => str_repeat('1', 256)]
+        );
+
+        try {
+            $this->createAddress((int)$customer->getId(), $addressData);
+            $this->fail('Expected InputException was not thrown.');
+        } catch (InputException $exception) {
+            $this->assertStringContainsString('phone number is too long', $exception->getMessage());
+        }
+    }
+
+    /**
      * Data provider for create address with wrong data.
      *
      * @return array
