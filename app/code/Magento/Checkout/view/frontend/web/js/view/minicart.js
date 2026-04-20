@@ -109,6 +109,14 @@ define([
                 customerData.reload(['cart'], false);
             }
 
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted) {
+                    addToCartCalls = 0;
+                    self.isLoading(false);
+                    self.closeMinicart();
+                }
+            });
+
             return this._super();
         },
         //jscs:enable requireCamelCaseOrUpperCaseIdentifiers

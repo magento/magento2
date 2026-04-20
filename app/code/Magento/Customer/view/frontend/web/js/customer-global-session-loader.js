@@ -22,6 +22,12 @@ define([
                     customerData.reload([], false);
                 }
             });
+
+            $(window).on('pageshow', function (event) {
+                if (event.originalEvent.persisted && !customer().firstname) {
+                    customerData.reload([], false);
+                }
+            });
         }
     };
 });
