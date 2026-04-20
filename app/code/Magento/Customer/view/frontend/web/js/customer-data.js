@@ -434,6 +434,41 @@ define([
     });
 
     /**
+     * Re-run section staleness checks when the page is restored from the BFCache so that
+     * the cart counter and other section-driven UI reflect any changes made while the page
+     * was cached (e.g. adding to cart on another page).
+     *
+     * Also compares the PHP-rendered login state (baked into the page at render time) with the
+     * current state in localStorage. If they differ the user logged in or out on another page
+     * while this one was cached, so a full reload is needed to get fresh server-rendered HTML.
+     */
+    $(window).on('pageshow', function (event) {
+        var backendLoggedIn, cacheStorage, customerSection, frontendLoggedIn;
+
+        if (event.originalEvent.persisted) {
+            customerData.init();
+
+            backendLoggedIn = Boolean(parseInt(options.isLoggedIn, 10) || 0);
+            frontendLoggedIn = false;
+
+            try {
+                cacheStorage = localStorage.getItem('mage-cache-storage');
+
+                if (cacheStorage) {
+                    customerSection = JSON.parse(cacheStorage).customer || null;
+                    frontendLoggedIn = Boolean(customerSection && customerSection.firstname);
+                }
+            } catch (e) {
+                // Ignore JSON parse errors
+            }
+
+            if (frontendLoggedIn !== backendLoggedIn) {
+                window.location.reload();
+            }
+        }
+    });
+
+    /**
      * Events listener
      */
     $(document).on('submit', function (event) {
