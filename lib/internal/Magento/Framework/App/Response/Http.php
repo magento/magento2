@@ -167,7 +167,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     public function setNoCacheHeaders()
     {
         $this->setHeader('pragma', 'no-cache', true);
-        $this->setHeader('cache-control', 'no-store, no-cache, must-revalidate, max-age=0', true);
+        $this->setHeader('cache-control', 'no-cache, must-revalidate, max-age=0', true);
         $this->setHeader('expires', $this->getExpirationHeader('-1 year'), true);
     }
 
