@@ -297,7 +297,7 @@ class HttpTest extends TestCase
     {
         $timestamp = 1000000;
         $pragma = 'no-cache';
-        $cacheControl = 'max-age=0, must-revalidate, no-cache, no-store';
+        $cacheControl = 'max-age=0, must-revalidate, no-cache';
         $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
 
         $this->dateTimeMock->expects($this->once())
