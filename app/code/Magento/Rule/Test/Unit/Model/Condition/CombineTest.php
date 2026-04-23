@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\ConditionFactory;
 use Magento\SalesRule\Model\Rule\Condition\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -43,20 +44,11 @@ class CombineTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->conditionFactoryMock = $this->getMockBuilder(ConditionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->conditionFactoryMock = $this->createMock(ConditionFactory::class);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->conditionObjectMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->conditionObjectMock = $this->createMock(Product::class);
 
         $this->combine = (new ObjectManagerHelper($this))->getObject(
             Combine::class,
@@ -68,14 +60,12 @@ class CombineTest extends TestCase
     }
 
     /**
-     *
      * @covers \Magento\Rule\Model\Condition\AbstractCondition::getValueName
-     *
-     * @dataProvider optionValuesData
      *
      * @param string|array $value
      * @param string $expectingData
      */
+    #[DataProvider('optionValuesData')]
     public function testGetValueName($value, $expectingData)
     {
         $this->combine
@@ -88,7 +78,7 @@ class CombineTest extends TestCase
     /**
      * @return array
      */
-    public function optionValuesData()
+    public static function optionValuesData()
     {
         return [
             ['option_key', 'option_value'],
@@ -140,12 +130,12 @@ class CombineTest extends TestCase
         $this->conditionObjectMock->expects($this->never())
             ->method('loadArray');
 
-        $this->conditionFactoryMock->expects($this->once())
+        $this->conditionFactoryMock->expects($this->never())
             ->method('create')
             ->with($array['conditions'][0]['type'])
             ->willThrowException(new \Exception('everything is fine, it is test'));
 
-        $this->loggerMock->expects($this->once())
+        $this->loggerMock->expects($this->never())
             ->method('critical')
             ->with();
 

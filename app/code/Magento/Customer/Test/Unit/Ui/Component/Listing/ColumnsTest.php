@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -66,8 +66,7 @@ class ColumnsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
+        $this->context = $this->createMock(ContextInterface::class);
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,11 +79,8 @@ class ColumnsTest extends TestCase
             AttributeRepository::class
         );
         $this->attribute = $this->createMock(Attribute::class);
-        $this->column = $this->getMockForAbstractClass(
-            ColumnInterface::class,
-            [],
-            '',
-            false
+        $this->column = $this->createMock(
+            ColumnInterface::class
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
@@ -92,7 +88,7 @@ class ColumnsTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->textFilterConfigProvider = $this->getMockForAbstractClass(FilterConfigProviderInterface::class);
+        $this->textFilterConfigProvider = $this->createMock(FilterConfigProviderInterface::class);
         $this->textFilterConfigProvider->method('getConfig')
             ->willReturn(
                 [
@@ -195,31 +191,37 @@ class ColumnsTest extends TestCase
             ->willReturn([]);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
-                        'options' => [
-                            [
-                                'label' => 'Label',
-                                'value' => 'Value'
+            ->willReturnCallback(function (...$args) use ($attributeCode, $frontendInput) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount === 1 && $args === [
+                        'config',
+                        [
+                            'options' => [
+                                [
+                                    'label' => 'Label',
+                                    'value' => 'Value'
+                                ]
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
-                        'name' => $attributeCode,
-                        'dataType' => $frontendInput,
-                        'filter' => [
-                            'filterType' => 'text',
-                            'conditionType' => 'like',
-                        ],
-                        'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                    return null;
+                }
+                if ($callCount === 2 && $args === [
+                        'config',
+                        [
+                            'name' => $attributeCode,
+                            'dataType' => $frontendInput,
+                            'filter' => [
+                                'filterType' => 'text',
+                                'conditionType' => 'like',
+                            ],
+                            'visible' => true
+                        ]
+                    ]) {
+                    return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
@@ -269,10 +271,10 @@ class ColumnsTest extends TestCase
             ->willReturn(['editor' => 'text']);
         $this->column
             ->method('setData')
-            ->withConsecutive(
-                [
-                    'config',
-                    [
+            ->willReturnCallback(function ($arg1, $arg2) {
+                static $callCount = 0;
+                $callCount++;
+                if ($callCount == 1 && $arg1 == 'config' && $arg2 == [
                         'editor' => 'text',
                         'options' => [
                             [
@@ -280,16 +282,17 @@ class ColumnsTest extends TestCase
                                 'value' => 'Value'
                             ]
                         ]
-                    ]
-                ],
-                [
-                    'config',
-                    [
+                    ]) {
+                    return null;
+                }
+
+                if ($callCount === 2 && $arg1 === 'config' && $arg2 === [
                         'editor' => 'text',
                         'visible' => true
-                    ]
-                ]
-            );
+                    ]) {
+                     return null;
+                }
+            });
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();

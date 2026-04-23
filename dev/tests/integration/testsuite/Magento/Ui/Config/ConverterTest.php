@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ui\Config;
 
@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConverterTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,12 +30,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         $this->fixturePath = realpath(__DIR__ . '/../_files/view/ui_component');
     }
 
-    /**
-     * @param string $componentName
-     * @return void
-     * @dataProvider getComponentNameDataProvider
-     */
-    public function testConvert($componentName)
+    #[DataProvider('getComponentNameDataProvider')]
+    public function testConvert($componentName): void
     {
         $expectedResult = $this->getExpectedResult($componentName);
 
@@ -56,7 +53,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function getComponentNameDataProvider()
+    public static function getComponentNameDataProvider(): array
     {
         return [
             ['action'],

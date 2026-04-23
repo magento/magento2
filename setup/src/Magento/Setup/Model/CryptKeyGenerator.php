@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -37,10 +37,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     public function generate()
     {
-        // md5() here is not for cryptographic use. It used for generate encryption key itself
-        // and do not encrypt any passwords
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        return md5($this->getRandomString());
+        return $this->getRandomString();
     }
 
     /**
@@ -51,6 +48,7 @@ class CryptKeyGenerator implements CryptKeyGeneratorInterface
      */
     private function getRandomString()
     {
-        return $this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
+        return ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX .
+            $this->random->getRandomBytes(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE);
     }
 }

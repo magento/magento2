@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Customer;
 
@@ -120,9 +120,9 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $allowToShowHiddenAttributes = true,
         array $meta = [],
         array $data = [],
-        CustomerFactory $customerFactory = null,
+        ?CustomerFactory $customerFactory = null,
         ?ContextInterface $context = null,
-        CustomerRepositoryInterface $customerRepository = null
+        ?CustomerRepositoryInterface $customerRepository = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $customerCollectionFactory->create();
@@ -178,7 +178,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         if (!empty($data)) {
             $customer = $this->customerFactory->create();
             $this->fileUploaderDataResolver->overrideFileUploaderData($customer, $data['customer']);
-            $customerId = $data['customer']['entity_id'] ?? null;
+            $customerId = $data['customer']['entity_id'] ?? '';
             $this->loadedData[$customerId] = $data;
             $this->session->unsCustomerFormData();
         }

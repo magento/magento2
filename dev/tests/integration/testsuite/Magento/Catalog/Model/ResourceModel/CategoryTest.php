@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -27,6 +27,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Indexer\Cron\UpdateMview;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -141,10 +142,10 @@ class CategoryTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/catalog_category_product_reindex_all.php
      * @magentoDataFixture Magento/Catalog/_files/catalog_product_category_reindex_all.php
      * @magentoDataFixture Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
-     * @dataProvider catalogProductChangesWithScheduledUpdateDataProvider
      * @param array $products
      * @return void
      */
+    #[DataProvider('catalogProductChangesWithScheduledUpdateDataProvider')]
     public function testCatalogProductChangesWithScheduledUpdate(array $products): void
     {
         // products are ordered by entity_id DESC because their positions are same and equal to 0
@@ -184,7 +185,7 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function catalogProductChangesWithScheduledUpdateDataProvider(): array
+    public static function catalogProductChangesWithScheduledUpdateDataProvider(): array
     {
         return [
             'change products position' => [
@@ -262,5 +263,69 @@ class CategoryTest extends TestCase
     {
         return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
             . self::BASE_TMP_PATH . DIRECTORY_SEPARATOR . $file;
+    }
+
+    /**
+     * Test _beforeSave children_count increment logic with category updates
+     * Scenario: When creating a NEW category (isObjectNew() = true), children_count should increment.
+     * When updating an EXISTING category (isObjectNew() = false), children_count should NOT increment.
+     * This prevents duplicate increments when scheduled updates are modified.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoDbIsolation disabled
+     * @return void
+     */
+    public function testBeforeSaveIncrementsChildrenCountOnlyForNewCategories(): void
+    {
+        $parentCategory = $this->categoryRepository->get(333);
+
+        // Get initial children count directly from DB
+        $connection = $this->categoryResource->getConnection();
+        $select = $connection->select()
+            ->from($this->categoryResource->getEntityTable(), ['children_count'])
+            ->where('entity_id = ?', 333);
+        $initialChildrenCount = (int)$connection->fetchOne($select);
+
+        // Step 1: Create NEW category with created_in = 1 (base version)
+        // This should increment children_count because isObjectNew() = true
+        $newCategory = $this->objectManager->create(CategoryModel::class);
+        $newCategory->setName('Test New Category');
+        $newCategory->setIsActive(true);
+        $newCategory->setPath($parentCategory->getPath());
+        $newCategory->setParentId($parentCategory->getId());
+        $newCategory->setData('created_in', 1); // Base version
+
+        $this->categoryResource->save($newCategory);
+        $categoryId = $newCategory->getId();
+
+        // Verify children_count was incremented after creating NEW category
+        $select = $connection->select()
+            ->from($this->categoryResource->getEntityTable(), ['children_count'])
+            ->where('entity_id = ?', 333);
+        $childrenCountAfterCreate = (int)$connection->fetchOne($select);
+
+        $this->assertEquals(
+            $initialChildrenCount + 1,
+            $childrenCountAfterCreate,
+            'Children count should increment when creating NEW category'
+        );
+
+        // Step 2: Update the EXISTING category (simulating a scheduled update modification)
+        // This should NOT increment children_count because isObjectNew() = false
+        $existingCategory = $this->categoryRepository->get($categoryId);
+        $existingCategory->setName('Updated Category Name');
+        $this->categoryResource->save($existingCategory);
+
+        // Verify children_count was NOT incremented after updating existing category
+        $select = $connection->select()
+            ->from($this->categoryResource->getEntityTable(), ['children_count'])
+            ->where('entity_id = ?', 333);
+        $childrenCountAfterUpdate = (int)$connection->fetchOne($select);
+
+        $this->assertEquals(
+            $childrenCountAfterCreate,
+            $childrenCountAfterUpdate,
+            'Children count should NOT increment when updating EXISTING category'
+        );
     }
 }

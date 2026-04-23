@@ -1,53 +1,48 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
+
+use Magento\Quote\Api\ErrorInterface;
 
 /**
  * Create instances of errors on adding products to cart. Identify error code based on the message
  */
 class AddProductsToCartError
 {
-    /**#@+
-     * Error message codes
-     */
-    private const ERROR_PRODUCT_NOT_FOUND = 'PRODUCT_NOT_FOUND';
-    private const ERROR_INSUFFICIENT_STOCK = 'INSUFFICIENT_STOCK';
-    private const ERROR_NOT_SALABLE = 'NOT_SALABLE';
     private const ERROR_UNDEFINED = 'UNDEFINED';
-    /**#@-*/
 
     /**
-     * List of error messages and codes.
+     * @param array $errorMessageCodesMapper
      */
-    private const MESSAGE_CODES = [
-        'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
-        'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
-        'Product that you are trying to add is not available.' => self::ERROR_NOT_SALABLE,
-        'This product is out of stock' => self::ERROR_INSUFFICIENT_STOCK,
-        'There are no source items' => self::ERROR_NOT_SALABLE,
-        'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
-        'The requested qty is not available' => self::ERROR_INSUFFICIENT_STOCK,
-    ];
+    public function __construct(
+        private readonly array $errorMessageCodesMapper
+    ) {
+    }
 
     /**
      * Returns an error object
      *
      * @param string $message
      * @param int $cartItemPosition
+     * @param float $stockItemQuantity
      * @return Data\Error
      */
-    public function create(string $message, int $cartItemPosition = 0): Data\Error
-    {
-        return new Data\Error(
+    public function create(
+        string $message,
+        int $cartItemPosition = 0,
+        float $stockItemQuantity = 0.0
+    ): ErrorInterface {
+
+        return new Data\InsufficientStockError(
             $message,
             $this->getErrorCode($message),
-            $cartItemPosition
+            $cartItemPosition,
+            $stockItemQuantity
         );
     }
 
@@ -59,7 +54,8 @@ class AddProductsToCartError
      */
     private function getErrorCode(string $message): string
     {
-        foreach (self::MESSAGE_CODES as $codeMessage => $code) {
+        $message = preg_replace('/\d+/', '%s', $message);
+        foreach ($this->errorMessageCodesMapper as $codeMessage => $code) {
             if (false !== stripos($message, $codeMessage)) {
                 return $code;
             }

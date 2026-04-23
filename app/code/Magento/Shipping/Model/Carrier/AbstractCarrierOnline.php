@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Model\Carrier;
@@ -318,7 +318,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
             return $this;
         }
 
-        $maxAllowedWeight = (double)$this->getConfigData('max_package_weight');
+        $maxAllowedWeight = (float)$this->getConfigData('max_package_weight');
         $errorMsg = '';
         $configErrorMsg = $this->getConfigData('specificerrmsg');
         $defaultErrorMsg = __('The shipping module is not available.');

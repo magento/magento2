@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model;
+
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Country model
@@ -16,7 +18,7 @@ namespace Magento\Directory\Model;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Country extends \Magento\Framework\Model\AbstractModel
+class Country extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -54,8 +56,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Directory\Model\Country\FormatFactory $formatFactory,
         \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -65,6 +67,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Country model constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -95,6 +99,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get region collection with loaded data
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getLoadedRegionCollection()
@@ -105,6 +111,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get region collection
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
@@ -115,6 +123,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Format address
+     *
      * @param \Magento\Framework\DataObject $address
      * @param bool $html
      * @return string
@@ -176,6 +186,14 @@ T: {{telephone}}";
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_format = [];
+    }
+
+    /**
      * Retrieve country format
      *
      * @param string $type
@@ -196,6 +214,7 @@ T: {{telephone}}";
     /**
      * Get country name
      *
+     * @param mixed $locale
      * @return string
      */
     public function getName($locale = null)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -14,9 +14,9 @@
         </annotations>
 
         <arguments>
-            <argument name="value" defaultValue="Not yet calculated" type="string"/>
+            <argument name="value" defaultValue="Selected shipping method is not available. Please select another shipping method for this order." type="string"/>
         </arguments>
-        <waitForElementVisible selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" time="30" stepKey="waitForShippingTotalToBeVisible"/>
+        <waitForElementVisible selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" stepKey="waitForShippingTotalToBeVisible"/>
         <see selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" userInput="{{value}}" stepKey="assertShippingTotalIsNotYetCalculated"/>
     </actionGroup>
 </actionGroups>

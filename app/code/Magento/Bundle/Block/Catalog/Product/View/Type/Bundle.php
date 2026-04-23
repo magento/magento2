@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
@@ -19,6 +19,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\FormatInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Stdlib\ArrayUtils;
 
 /**
@@ -28,7 +30,7 @@ use Magento\Framework\Stdlib\ArrayUtils;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends AbstractView
+class Bundle extends AbstractView implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -36,8 +38,6 @@ class Bundle extends AbstractView
     protected $options;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $catalogProduct;
@@ -73,6 +73,11 @@ class Bundle extends AbstractView
     private $optionsPosition = [];
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param Context $context
      * @param ArrayUtils $arrayUtils
      * @param \Magento\Catalog\Helper\Product $catalogProduct
@@ -81,6 +86,7 @@ class Bundle extends AbstractView
      * @param FormatInterface $localeFormat
      * @param array $data
      * @param CollectionProcessor|null $catalogRuleProcessor
+     * @param PriceCurrencyInterface|null $priceCurrency
      */
     public function __construct(
         Context $context,
@@ -90,7 +96,8 @@ class Bundle extends AbstractView
         EncoderInterface $jsonEncoder,
         FormatInterface $localeFormat,
         array $data = [],
-        ?CollectionProcessor $catalogRuleProcessor = null
+        ?CollectionProcessor $catalogRuleProcessor = null,
+        ?PriceCurrencyInterface $priceCurrency = null
     ) {
         $this->catalogProduct = $catalogProduct;
         $this->productPriceFactory = $productPrice;
@@ -103,6 +110,8 @@ class Bundle extends AbstractView
         );
         $this->catalogRuleProcessor = $catalogRuleProcessor ?? ObjectManager::getInstance()
                 ->get(CollectionProcessor::class);
+        $this->priceCurrency = $priceCurrency ?? ObjectManager::getInstance()
+            ->get(PriceCurrencyInterface::class);
     }
 
     /**
@@ -252,13 +261,13 @@ class Bundle extends AbstractView
             'optionId' => $selection->getId(),
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $oldPrice,
+                    'amount' => $this->priceCurrency->roundPrice($oldPrice),
                 ],
                 'basePrice' => [
-                    'amount' => $basePrice,
+                    'amount' => $this->priceCurrency->roundPrice($basePrice),
                 ],
                 'finalPrice' => [
-                    'amount' => $finalPrice,
+                    'amount' => $this->priceCurrency->roundPrice($finalPrice),
                 ],
             ],
             'priceType' => $selection->getSelectionPriceType(),
@@ -405,7 +414,7 @@ class Bundle extends AbstractView
      */
     private function processOptions(string $optionId, array $options, DataObject $preConfiguredValues)
     {
-        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/${optionId}") ?? [];
+        $preConfiguredQtys = $preConfiguredValues->getData("bundle_option_qty/{$optionId}") ?? [];
         $selections = $options[$optionId]['selections'];
         array_walk(
             $selections,
@@ -422,5 +431,14 @@ class Bundle extends AbstractView
         $options[$optionId]['selections'] = $selections;
 
         return $options;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->selectedOptions = [];
+        $this->optionsPosition = [];
     }
 }

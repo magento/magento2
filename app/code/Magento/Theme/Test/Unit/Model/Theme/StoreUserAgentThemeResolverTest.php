@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Model\Theme\StoreUserAgentThemeResolver;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,8 +50,8 @@ class StoreUserAgentThemeResolverTest extends TestCase
      *
      * @param array|null $config
      * @param array $expected
-     * @dataProvider getThemesDataProvider
      */
+    #[DataProvider('getThemesDataProvider')]
     public function testGetThemes(?array $config, array $expected): void
     {
         $store = $this->createMock(StoreInterface::class);
@@ -64,7 +65,7 @@ class StoreUserAgentThemeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getThemesDataProvider(): array
+    public static function getThemesDataProvider(): array
     {
         return [
             [

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Tax report resource model with aggregation by created at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 

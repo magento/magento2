@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Module\Test\Unit\Declaration\Converter;
 
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DomTest extends TestCase
 {
@@ -32,9 +33,8 @@ class DomTest extends TestCase
     }
 
     /**
-     * @param string $xmlString
-     * @dataProvider convertWithInvalidDomDataProvider
-     */
+     * @param string $xmlString     */
+    #[DataProvider('convertWithInvalidDomDataProvider')]
     public function testConvertWithInvalidDom($xmlString)
     {
         $this->expectException('Exception');
@@ -50,7 +50,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidDomDataProvider()
+    public static function convertWithInvalidDomDataProvider()
     {
         return [
             'Module node without "name" attribute' => ['<?xml version="1.0"?><config><module /></config>'],

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -18,6 +18,7 @@
             <testCaseId value="MC-16103"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create customer -->
@@ -30,9 +31,14 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
+            <!-- Clear customers filters -->
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+
             <!-- Admin logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 

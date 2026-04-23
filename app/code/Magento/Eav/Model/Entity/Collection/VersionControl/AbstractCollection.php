@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Entity\Collection\VersionControl;
 
@@ -48,7 +48,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
 

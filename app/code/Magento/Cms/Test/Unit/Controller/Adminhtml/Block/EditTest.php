@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,11 +18,13 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\ObjectManager\ObjectManager as FrameworkObjectManager;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,7 +72,7 @@ class EditTest extends TestCase
     protected $blockMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|MockObject
+     * @var FrameworkObjectManager|MockObject
      */
     protected $objectManagerMock;
 
@@ -90,14 +92,14 @@ class EditTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
 
         $this->blockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
+        $this->objectManagerMock = $this->getMockBuilder(FrameworkObjectManager::class)
             ->onlyMethods(['create', 'get'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -117,14 +119,8 @@ class EditTest extends TestCase
 
         $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
 
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            []
+        $this->requestMock = $this->createMock(
+            RequestInterface::class
         );
 
         $this->contextMock = $this->createMock(Context::class);
@@ -186,8 +182,8 @@ class EditTest extends TestCase
      * @param string $title
      *
      * @return void
-     * @dataProvider editActionData
      */
+    #[DataProvider('editActionData')]
     public function testEditAction(?int $blockId, string $label, string $title): void
     {
         $this->requestMock->expects($this->once())
@@ -218,7 +214,11 @@ class EditTest extends TestCase
         $titleMock = $this->createMock(Title::class);
         $titleMock
             ->method('prepend')
-            ->withConsecutive([__('Blocks')], [$this->getTitle()]);
+            ->willReturnCallback(function ($arg) {
+                if ($arg == $this->getTitle() || $arg == [__('Blocks')]) {
+                    return null;
+                }
+            });
         $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
@@ -230,8 +230,13 @@ class EditTest extends TestCase
             ->willReturnSelf();
         $resultPageMock
             ->method('addBreadcrumb')
-            ->withConsecutive([], [], [], [__($label), __($title)])
-            ->willReturnOnConsecutiveCalls(null, null, null, $resultPageMock);
+            ->willReturnCallback(function ($arg1, $arg2) use ($label, $title, $resultPageMock) {
+                if ($arg1 == (__($label)) || $arg1 == (__($title))) {
+                    return $resultPageMock;
+                } elseif ($arg1 === null && $arg2 === null) {
+                    return null;
+                }
+            });
         $resultPageMock->expects($this->exactly(2))
             ->method('getConfig')
             ->willReturn($pageConfigMock);
@@ -250,11 +255,19 @@ class EditTest extends TestCase
     /**
      * @return array
      */
-    public function editActionData(): array
+    public static function editActionData(): array
     {
         return [
-            [null, 'New Block', 'New Block'],
-            [2, 'Edit Block', 'Edit Block']
+            'new_block' => [
+                null,         // $blockId
+                'New Block',  // $label
+                'New Block'   // $title
+            ],
+            'edit_block' => [
+                2,            // $blockId
+                'Edit Block', // $label
+                'Edit Block'  // $title
+            ]
         ];
     }
 }

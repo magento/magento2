@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Integration\Model\Oauth\ConsumerFactory;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\Token\Provider;
 use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -23,6 +24,8 @@ use Psr\Log\LoggerInterface;
  */
 class ProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Provider */
     protected $tokenProvider;
 
@@ -49,68 +52,60 @@ class ProviderTest extends TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->consumerFactoryMock = $this->getMockBuilder(ConsumerFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->tokenFactoryMock = $this->getMockBuilder(TokenFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->consumerMock = $this->getMockBuilder(ConsumerInterface::class)
-            ->setMethods(
-                [
-                    'load',
-                    'loadByKey',
-                    'validate',
-                    'getId',
-                    'getKey',
-                    'getSecret',
-                    'getCallbackUrl',
-                    'getCreatedAt',
-                    'isValidForTokenExchange'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->consumerMock = $this->createPartialMockWithReflection(
+            ConsumerInterface::class,
+            [
+                'load',
+                'loadByKey',
+                'validate',
+                'getId',
+                'getKey',
+                'getSecret',
+                'getCallbackUrl',
+                'getCreatedAt',
+                'isValidForTokenExchange'
+            ]
+        );
 
-        $this->requestTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'load',
-                    'getId',
-                    'getConsumerId',
-                    'getType',
-                    'getSecret',
-                    'getToken',
-                    'getVerifier',
-                    'createRequestToken',
-                    'convertToAccess'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->requestTokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'getConsumerId',
+                'getType',
+                'getSecret',
+                'getToken',
+                'loadByConsumerIdAndUserType',
+                'load',
+                'getId',
+                'getVerifier',
+                'createRequestToken',
+                'convertToAccess'
+            ]
+        );
 
-        $this->accessTokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
-                [
-                    'getToken',
-                    'getSecret',
-                    'load',
-                    'getId',
-                    'getConsumerId',
-                    'getType',
-                    'getRevoked'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->accessTokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'load',
+                'getId',
+                'getToken',
+                'getSecret',
+                'getConsumerId',
+                'getType',
+                'getRevoked'
+            ]
+        );
 
         $this->tokenProvider = $objectManagerHelper->getObject(
             Provider::class,
@@ -176,17 +171,15 @@ class ProviderTest extends TestCase
         $tokenString = '12345678901234567890123456789012';
         $secret = 'secret';
 
-        $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'getId',
-                    'getType',
-                    'createRequestToken'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'getType',
+                'loadByConsumerIdAndUserType',
+                'getId',
+                'createRequestToken'
+            ]
+        );
 
         $tokenMock->expects($this->once())
             ->method('loadByConsumerIdAndUserType')
@@ -219,17 +212,15 @@ class ProviderTest extends TestCase
         $consumerId = 1;
         $tokenId = 1;
 
-        $tokenMock = $this->getMockBuilder(Token::class)
-            ->setMethods(
-                [
-                    'loadByConsumerIdAndUserType',
-                    'getId',
-                    'getType',
-                    'createRequestToken'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            [
+                'getType',
+                'loadByConsumerIdAndUserType',
+                'getId',
+                'createRequestToken'
+            ]
+        );
 
         $tokenMock->expects($this->once())
             ->method('loadByConsumerIdAndUserType')

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -105,7 +105,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Disable child product -->
         <comment userInput="Disable child product" stepKey="disableChildProduct"/>
@@ -129,7 +131,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProduct"/>
@@ -145,7 +147,7 @@
         <dontSee userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" stepKey="dontSeeOption1"/>
         <!-- Go to created customer page again -->
         <comment userInput="Go to created customer page again" stepKey="goToCreatedCustomerPageAgain"/>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderAgain">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderAgain">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickToAddProductAgain"/>
@@ -160,7 +162,7 @@
         <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
         <see userInput="There are no source items with the in stock status" stepKey="seeTheErrorMessageDisplayed"/>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addThirdChildProductToOrder">

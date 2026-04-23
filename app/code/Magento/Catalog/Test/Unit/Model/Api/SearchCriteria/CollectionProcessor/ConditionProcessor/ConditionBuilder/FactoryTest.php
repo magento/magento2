@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,35 +19,40 @@ use PHPUnit\Framework\TestCase;
 
 class FactoryTest extends TestCase
 {
+    /**
+     * @var ProductResource|MockObject
+     */
     private $productResourceMock;
 
+    /**
+     * @var EavConfig|MockObject
+     */
     private $eavConfigMock;
 
+    /**
+     * @var CustomConditionInterface|MockObject
+     */
     private $eavAttrConditionBuilderMock;
 
+    /**
+     * @var CustomConditionInterface|MockObject
+     */
     private $nativeAttrConditionBuilderMock;
 
+    /**
+     * @var Factory
+     */
     private $conditionBuilderFactory;
 
     protected function setUp(): void
     {
-        $this->productResourceMock = $this->getMockBuilder(ProductResource::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEntityTable'])
-            ->getMock();
+        $this->productResourceMock = $this->createPartialMock(ProductResource::class, ['getEntityTable']);
 
-        $this->eavConfigMock = $this->getMockBuilder(EavConfig::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAttribute'])
-            ->getMock();
+        $this->eavConfigMock = $this->createPartialMock(EavConfig::class, ['getAttribute']);
 
-        $this->eavAttrConditionBuilderMock = $this->getMockBuilder(CustomConditionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eavAttrConditionBuilderMock = $this->createMock(CustomConditionInterface::class);
 
-        $this->nativeAttrConditionBuilderMock = $this->getMockBuilder(CustomConditionInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->nativeAttrConditionBuilderMock = $this->createMock(CustomConditionInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
 
@@ -68,19 +73,13 @@ class FactoryTest extends TestCase
         $attributeTable = 'my-table';
         $productResourceTable = 'my-table';
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getField'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(Filter::class, ['getField']);
 
         $filterMock
             ->method('getField')
             ->willReturn($fieldName);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable'])
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getBackendTable']);
 
         $this->eavConfigMock
             ->method('getAttribute')
@@ -107,19 +106,13 @@ class FactoryTest extends TestCase
         $attributeTable = 'my-table';
         $productResourceTable = 'not-my-table';
 
-        $filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getField'])
-            ->getMock();
+        $filterMock = $this->createPartialMock(Filter::class, ['getField']);
 
         $filterMock
             ->method('getField')
             ->willReturn($fieldName);
 
-        $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable'])
-            ->getMock();
+        $attributeMock = $this->createPartialMock(Attribute::class, ['getBackendTable']);
 
         $this->eavConfigMock
             ->method('getAttribute')

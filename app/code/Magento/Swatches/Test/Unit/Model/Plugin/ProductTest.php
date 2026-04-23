@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,11 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProductTest extends TestCase
 {
-    /**
-     * @dataProvider dataRoles
-     */
+    #[DataProvider('dataRoles')]
     public function testAfterGetMediaAttributes($productType, $hasKey)
     {
         $objectManager = new ObjectManager($this);
@@ -46,7 +45,7 @@ class ProductTest extends TestCase
     /**
      * @return array
      */
-    public function dataRoles()
+    public static function dataRoles()
     {
         return [
             [

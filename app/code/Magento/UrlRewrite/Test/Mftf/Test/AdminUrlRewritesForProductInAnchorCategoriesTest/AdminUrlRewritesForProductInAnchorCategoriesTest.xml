@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,10 +17,14 @@
             <testCaseId value="MC-16568"/>
             <group value="urlRewrite"/>
         </annotations>
-
-        <!-- Preconditions-->
-        <!-- Create 3 categories -->
         <before>
+            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig"/>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!-- Create 3 categories -->
             <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
             <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory2">
                 <requiredEntity createDataKey="simpleSubCategory1"/>
@@ -32,11 +36,12 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="simpleSubCategory3"/>
             </createData>
-            <!-- Set the configuration for Generate "category/product" URL Rewrites-->
-            <comment userInput="Enable config to generate category/product URL Rewrites " stepKey="commentEnableConfig"/>
-            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
         </before>
         <after>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableCategoryProductRewrites"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

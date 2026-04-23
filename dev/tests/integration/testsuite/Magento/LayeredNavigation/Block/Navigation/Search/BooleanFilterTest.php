@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\LayeredNavigation\Block\Navigation\Search;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\LayeredNavigation\Block\Navigation\Category\BooleanFilterTest as CategoryBooleanFilterTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for custom boolean filter in navigation block on search page.
@@ -23,12 +24,12 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $attributeData
      * @param array $expectation
      * @return void
      */
+    #[DataProvider('getFiltersWithCustomAttributeDataProvider')]
     public function testGetFiltersWithCustomAttribute(
         array $products,
         array $attributeData,
@@ -40,7 +41,7 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
     /**
      * @return array
      */
-    public function getFiltersWithCustomAttributeDataProvider(): array
+    public static function getFiltersWithCustomAttributeDataProvider(): array
     {
         $dataProvider = parent::getFiltersWithCustomAttributeDataProvider();
 
@@ -48,17 +49,17 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
             $dataProvider,
             [
                 'not_used_in_navigation' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable_in_search' => 0,
                     ],
                 ],
                 'used_in_navigation_with_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable_in_search' => 1,
                     ],
                 ],
                 'used_in_navigation_without_results' => [
-                    'attribute_data' => [
+                    'attributeData' => [
                         'is_filterable' => 0,
                         'is_filterable_in_search' => 1,
                     ],
@@ -74,13 +75,13 @@ class BooleanFilterTest extends CategoryBooleanFilterTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
      * @param array $products
      * @param array $expectation
      * @param string $filterValue
      * @param int $productsCount
      * @return void
      */
+    #[DataProvider('getActiveFiltersWithCustomAttributeDataProvider')]
     public function testGetActiveFiltersWithCustomAttribute(
         array $products,
         array $expectation,

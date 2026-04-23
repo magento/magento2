@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Analytics\Model\EncodedContext;
 use Magento\Analytics\Model\EncodedContextFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CryptographerTest extends TestCase
@@ -51,9 +52,8 @@ class CryptographerTest extends TestCase
      * @var array
      */
     private $initializationVectors;
-
     /**
-     * @var
+     * @var string
      */
     private $source;
 
@@ -70,7 +70,7 @@ class CryptographerTest extends TestCase
         $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->encodedContextFactoryMock = $this->getMockBuilder(EncodedContextFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -169,9 +169,7 @@ class CryptographerTest extends TestCase
         $this->assertCount(2, array_unique($this->initializationVectors));
     }
 
-    /**
-     * @dataProvider encodeNotValidSourceDataProvider
-     */
+    #[DataProvider('encodeNotValidSourceDataProvider')]
     public function testEncodeNotValidSource($source)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -181,7 +179,7 @@ class CryptographerTest extends TestCase
     /**
      * @return array
      */
-    public function encodeNotValidSourceDataProvider()
+    public static function encodeNotValidSourceDataProvider()
     {
         return [
             'Array' => [[]],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ThemePackageListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registrar = $this->getMockForAbstractClass(
+        $this->registrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->factory = $this->createMock(ThemePackageFactory::class);
@@ -80,11 +80,15 @@ class ThemePackageListTest extends TestCase
         $themePackage = $this->createMock(ThemePackage::class);
         $this->factory->expects($this->exactly(2))
             ->method('create')
-            ->withConsecutive(
-                ['theme1', 'path1'],
-                ['theme2', 'path2']
-            )
-            ->willReturn($themePackage);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($themePackage) {
+                    if ($arg1 == 'theme1' && $arg2 == 'path1') {
+                        return $themePackage;
+                    } elseif ($arg1 == 'theme2' && $arg2 == 'path2') {
+                        return $themePackage;
+                    }
+                }
+            );
         $actual = $this->object->getThemes();
         $this->assertCount(2, $actual);
         foreach ($actual as $themePackage) {

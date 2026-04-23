@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -25,8 +25,6 @@ class IndexersStatesApplyFixture extends Fixture
         if (!isset($indexers["indexer"]) || empty($indexers["indexer"])) {
             return;
         }
-
-        $this->fixtureModel->resetObjectManager();
 
         /** @var $indexerRegistry \Magento\Framework\Indexer\IndexerRegistry */
         $indexerRegistry = $this->fixtureModel->getObjectManager()

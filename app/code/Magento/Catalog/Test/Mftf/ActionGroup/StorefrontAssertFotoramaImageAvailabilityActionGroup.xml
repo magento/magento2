@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,6 +12,7 @@
         <arguments>
             <argument name="fileName" type="string" defaultValue="magento-logo"/>
         </arguments>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeActiveImageDefault"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="waitForImageInFotorama"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(fileName)}}" stepKey="seeImageInFotorama"/>
     </actionGroup>
 </actionGroups>

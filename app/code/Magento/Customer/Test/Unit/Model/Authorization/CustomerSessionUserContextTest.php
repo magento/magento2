@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class CustomerSessionUserContextTest extends TestCase
 
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->getMock();
 
         $this->customerSessionUserContext = $this->objectManager->getObject(

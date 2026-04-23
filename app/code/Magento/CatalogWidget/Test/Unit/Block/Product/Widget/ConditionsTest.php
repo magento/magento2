@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\Element\Template\File\Resolver;
@@ -25,7 +26,10 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Framework\View\TemplateEnginePool;
 use Magento\Rule\Model\Condition\Combine;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Widget\Model\Widget\Instance;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,6 +39,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ConditionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -76,19 +82,14 @@ class ConditionsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->ruleMock = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->setMethods(['getWidgetValues'])
-            ->getMockForAbstractClass();
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->ruleMock = $this->createMock(Rule::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->blockMock = $this->createPartialMockWithReflection(
+            BlockInterface::class,
+            ['getWidgetValues', 'toHtml']
+        );
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($this->layoutMock);
@@ -112,6 +113,7 @@ class ConditionsTest extends TestCase
         $this->ruleMock->expects($this->never())
             ->method('loadPost');
 
+        $this->objectManagerHelper->prepareObjectManager();
         $this->objectManagerHelper->getObject(
             Conditions::class,
             [
@@ -130,9 +132,7 @@ class ConditionsTest extends TestCase
         $widgetParams = ['conditions' => 'some conditions'];
 
         /** @var Instance|MockObject $widgetMock */
-        $widgetMock = $this->getMockBuilder(Instance::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $widgetMock = $this->createMock(Instance::class);
         $widgetMock->expects($this->once())
             ->method('getWidgetParameters')
             ->willReturn($widgetParams);
@@ -195,25 +195,25 @@ class ConditionsTest extends TestCase
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws Exception
      */
-    public function testRender()
+    public function testRender(): void
     {
         $data = ['area' => 'backend'];
-        $abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getContainer'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $abstractElementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getContainer']
+        );
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $fieldsetMock = $this->createMock(Fieldset::class);
         $combineMock = $this->createMock(Combine::class);
         $resolverMock = $this->createMock(Resolver::class);
         $filesystemMock = $this->createPartialMock(Filesystem::class, ['getDirectoryRead']);
         $validatorMock = $this->createMock(Validator::class);
         $templateEnginePoolMock = $this->createMock(TemplateEnginePool::class);
-        $templateEngineMock = $this->getMockForAbstractClass(TemplateEngineInterface::class);
-        $directoryReadMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $templateEngineMock = $this->createMock(TemplateEngineInterface::class);
+        $directoryReadMock = $this->createMock(ReadInterface::class);
 
         $this->ruleMock->expects($this->once())->method('getConditions')->willReturn($combineMock);
         $combineMock->expects($this->once())->method('setJsFormObject')->willReturnSelf();
@@ -225,6 +225,10 @@ class ConditionsTest extends TestCase
         $templateEngineMock->expects($this->once())->method('render')->willReturn('html');
         $resolverMock->method('getTemplateFileName')->willReturn('');
 
+        $storeMock = $this->createMock(StoreInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+        $this->contextMock->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $this->widgetConditions = $this->objectManagerHelper->getObject(
             Conditions::class,
             [

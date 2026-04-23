@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Framework\Webapi\Backpressure\BackpressureRequestTypeExtractorInterf
 use Magento\Framework\Webapi\Backpressure\RestContext;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BackpressureContextFactoryTest extends TestCase
 {
@@ -74,7 +75,7 @@ class BackpressureContextFactoryTest extends TestCase
      *
      * @return array
      */
-    public function getIdentityCases(): array
+    public static function getIdentityCases(): array
     {
         return [
             'guest' => [
@@ -97,9 +98,8 @@ class BackpressureContextFactoryTest extends TestCase
      *
      * @param int $identityType
      * @param string $identity
-     * @return void
-     * @dataProvider getIdentityCases
-     */
+     * @return void     */
+    #[DataProvider('getIdentityCases')]
     public function testCreateForIdentity(int $identityType, string $identity): void
     {
         $this->requestTypeExtractor->method('extract')->willReturn($typeId = 'test');

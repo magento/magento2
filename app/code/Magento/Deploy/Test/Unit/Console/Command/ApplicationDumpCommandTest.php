@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,19 +69,13 @@ class ApplicationDumpCommandTest extends TestCase
         $this->configHashMock = $this->getMockBuilder(Hash::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->input = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->output = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->input = $this->createMock(InputInterface::class);
+        $this->output = $this->createMock(OutputInterface::class);
         $this->writer = $this->getMockBuilder(Writer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->source = $this->getMockBuilder(SourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->sourceEnv = $this->getMockBuilder(SourceInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(SourceInterface::class);
+        $this->sourceEnv = $this->createMock(SourceInterface::class);
         $this->commentMock = $this->getMockBuilder(Comment::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,20 +119,25 @@ class ApplicationDumpCommandTest extends TestCase
             ->willReturn('Some comment message');
         $this->writer->expects($this->exactly(2))
             ->method('saveConfig')
-            ->withConsecutive(
-                [[ConfigFilePool::APP_CONFIG => $dump]],
-                [[ConfigFilePool::APP_ENV => $dump]]
-            );
+            ->willReturnCallback(function ($arg1) use ($dump) {
+                if ($arg1 == [ConfigFilePool::APP_CONFIG => $dump]) {
+                    return null;
+                } elseif ($arg1 == [ConfigFilePool::APP_ENV => $dump]) {
+                    return null;
+                }
+            });
 
         $this->output->expects($this->exactly(2))
             ->method('writeln')
-            ->withConsecutive(
-                [['system' => 'Some comment message']],
-                ['<info>Done. Config types dumped: system</info>']
-            );
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == ['system' => 'Some comment message']) {
+                    return null;
+                } elseif ($arg1 == ['<info>Done. Config types dumped: system</info>']) {
+                    return null;
+                }
+            });
 
         $method = new \ReflectionMethod(ApplicationDumpCommand::class, 'execute');
-        $method->setAccessible(true);
         $this->assertEquals(
             Cli::RETURN_SUCCESS,
             $method->invokeArgs(

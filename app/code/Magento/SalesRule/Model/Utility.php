@@ -1,13 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
+use Magento\SalesRule\Model\Rule\CustomerFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Utility
 {
     /**
@@ -21,22 +30,22 @@ class Utility
     protected $_baseRoundingDeltas = [];
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory
+     * @var UsageFactory
      */
     protected $usageFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory
+     * @var CouponFactory
      */
     protected $couponFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\CustomerFactory
+     * @var CustomerFactory
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\Framework\DataObjectFactory
+     * @var DataObjectFactory
      */
     protected $objectFactory;
 
@@ -44,76 +53,52 @@ class Utility
      * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
+    /**
+     * @var ValidateCoupon
+     */
+    private $validateCoupon;
 
     /**
-     * @param \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory
+     * @param UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
-     * @param \Magento\Framework\DataObjectFactory $objectFactory
+     * @param DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
+     * @param ValidateCoupon|null $validateCoupon
      */
     public function __construct(
-        \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory $usageFactory,
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\Framework\DataObjectFactory $objectFactory,
-        PriceCurrencyInterface $priceCurrency
+        UsageFactory $usageFactory,
+        CouponFactory $couponFactory,
+        CustomerFactory $customerFactory,
+        DataObjectFactory $objectFactory,
+        PriceCurrencyInterface $priceCurrency,
+        ?ValidateCoupon $validateCoupon = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;
         $this->usageFactory = $usageFactory;
         $this->objectFactory = $objectFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
     }
 
     /**
      * Check if rule can be applied for specific address/quote/customer
      *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param Rule $rule
+     * @param Address $address
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function canProcessRule($rule, $address)
+    public function canProcessRule(Rule $rule, Address $address): bool
     {
         if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew()) {
             return $rule->getIsValidForAddress($address);
         }
 
-        /**
-         * check per coupon usage limit
-         */
-        if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
-            $couponCode = $address->getQuote()->getCouponCode();
-            if ($couponCode !== null && strlen($couponCode)) {
-                /** @var \Magento\SalesRule\Model\Coupon $coupon */
-                $coupon = $this->couponFactory->create();
-                $coupon->load($couponCode, 'code');
-                if ($coupon->getId()) {
-                    // check entire usage limit
-                    if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
-                        $rule->setIsValidForAddress($address, false);
-                        return false;
-                    }
-                    // check per customer usage limit
-                    $customerId = $address->getQuote()->getCustomerId();
-                    if ($customerId && $coupon->getUsagePerCustomer()) {
-                        $couponUsage = $this->objectFactory->create();
-                        $this->usageFactory->create()->loadByCustomerCoupon(
-                            $couponUsage,
-                            $customerId,
-                            $coupon->getId()
-                        );
-                        if ($couponUsage->getCouponId() &&
-                            $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
-                        ) {
-                            $rule->setIsValidForAddress($address, false);
-                            return false;
-                        }
-                    }
-                }
-            }
+        if (!$this->validateCoupon->execute($rule, $address, $address->getQuote()->getCouponCode())) {
+            return false;
         }
 
         /**
@@ -134,11 +119,23 @@ class Utility
         }
         $rule->afterLoad();
         /**
-         * quote does not meet rule's conditions
+         * When the rule has item-level actions (e.g. "Apply to SKU is not X"), address-level
+         * conditions (subtotal, total qty, weight) must be evaluated against eligible items
+         * only, so that excluded items do not count toward the condition threshold.
          */
-        if (!$rule->validate($address)) {
-            $rule->setIsValidForAddress($address, false);
-            return false;
+        $savedTotals = null;
+        if ($this->ruleHasItemRestrictions($rule) && $this->hasEligibleLineItemsForRule($rule, $address)) {
+            $savedTotals = $this->setEligibleItemsTotalsOnAddress($rule, $address);
+        }
+        try {
+            if (!$rule->validate($address)) {
+                $rule->setIsValidForAddress($address, false);
+                return false;
+            }
+        } finally {
+            if ($savedTotals !== null) {
+                $this->restoreAddressTotals($address, $savedTotals);
+            }
         }
         /**
          * passed all validations, remember to be valid
@@ -148,17 +145,126 @@ class Utility
     }
 
     /**
+     * Check if the rule has item-level action conditions (e.g. apply to specific SKUs)
+     *
+     * @param Rule $rule
+     * @return bool
+     */
+    private function ruleHasItemRestrictions(Rule $rule): bool
+    {
+        try {
+            $actions = $rule->getActions();
+        } catch (\Throwable $e) {
+            return false;
+        }
+        if (!$actions instanceof \Magento\Rule\Model\Condition\Combine) {
+            return false;
+        }
+        $conditions = $actions->getConditions();
+
+        return !empty($conditions) && is_array($conditions);
+    }
+
+    /**
+     * Whether at least one cart line item matches the rule's actions (eligible for the discount on items)
+     *
+     * @param Rule $rule
+     * @param Address $address
+     * @return bool
+     */
+    private function hasEligibleLineItemsForRule(Rule $rule, Address $address): bool
+    {
+        foreach ($address->getAllItems() as $item) {
+            if ($this->isItemEligibleForRuleTotals($item, $rule)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Compute totals for matching items, set them on the address, and return saved totals for later restoration
+     *
+     * @param Rule $rule
+     * @param Address $address
+     * @return array Saved address totals to restore after validation
+     */
+    private function setEligibleItemsTotalsOnAddress(Rule $rule, Address $address): array
+    {
+        $baseSubtotal = $baseSubtotalInclTax = $totalQty = $weight = 0;
+
+        foreach ($address->getAllItems() as $item) {
+            if (!$this->isItemEligibleForRuleTotals($item, $rule)) {
+                continue;
+            }
+            $baseSubtotal += (float) $item->getBaseRowTotal();
+            $baseSubtotalInclTax += (float) $item->getBaseRowTotalInclTax();
+            $totalQty += (float) $item->getQty();
+            $weight += (float) $item->getRowWeight();
+        }
+
+        $saved = [
+            'base_subtotal' => $address->getBaseSubtotal(),
+            'base_subtotal_with_discount' => $address->getBaseSubtotalWithDiscount(),
+            'base_subtotal_total_incl_tax' => $address->getBaseSubtotalTotalInclTax(),
+            'total_qty' => $address->getTotalQty(),
+            'weight' => $address->getWeight(),
+        ];
+
+        $address->setBaseSubtotal($baseSubtotal);
+        $address->setBaseSubtotalWithDiscount($baseSubtotal);
+        $address->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $address->setTotalQty($totalQty);
+        $address->setWeight($weight);
+
+        return $saved;
+    }
+
+    /**
+     * Whether the item counts toward rule condition totals (matches actions, no double-count)
+     *
+     * @param AbstractItem $item
+     * @param Rule $rule
+     * @return bool
+     */
+    private function isItemEligibleForRuleTotals(AbstractItem $item, Rule $rule): bool
+    {
+        if (($item->getParentItem() && $item->getParentItem()->getProductType() === 'configurable') ||
+            (($item->getHasChildren() || $item->getChildren()) && $item->isChildrenCalculated()) ||
+            ($item->getNoDiscount())) {
+            return false;
+        }
+
+        return $rule->getActions()->validate($item);
+    }
+
+    /**
+     * Restore address totals after rule condition validation
+     *
+     * @param Address $address
+     * @param array $savedTotals
+     * @return void
+     */
+    private function restoreAddressTotals(Address $address, array $savedTotals): void
+    {
+        $address->setBaseSubtotal($savedTotals['base_subtotal'] ?? 0);
+        $address->setBaseSubtotalWithDiscount($savedTotals['base_subtotal_with_discount'] ?? 0);
+        $address->setBaseSubtotalTotalInclTax($savedTotals['base_subtotal_total_incl_tax'] ?? 0);
+        $address->setTotalQty($savedTotals['total_qty'] ?? 0);
+        $address->setWeight($savedTotals['weight'] ?? 0);
+    }
+
+    /**
      * Set discount amount (found min)
      *
      * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param float $qty
      * @return void
      */
     public function minFix(
         \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Quote\Model\Quote\Item\AbstractItem $item,
-        $qty
+        \Magento\Quote\Model\Quote\Item\AbstractItem $item
     ) {
         $itemPrice = $this->getItemPrice($item);
         $baseItemPrice = $this->getItemBasePrice($item);
@@ -166,8 +272,9 @@ class Utility
         $itemDiscountAmount = $item->getDiscountAmount();
         $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
 
-        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $qty);
-        $baseDiscountAmount = min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $qty);
+        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $item->getQty());
+        $baseDiscountAmount =
+            min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $item->getQty());
 
         $discountData->setAmount($discountAmount);
         $discountData->setBaseAmount($baseDiscountAmount);
@@ -255,7 +362,7 @@ class Utility
      * Return discount item qty
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
+     * @param Rule $rule
      * @return int
      */
     public function getItemQty($item, $rule)

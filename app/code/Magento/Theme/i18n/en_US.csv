@@ -173,6 +173,7 @@ Header,Header
 Footer,Footer
 "This will be displayed just before the body closing tag.","This will be displayed just before the body closing tag."
 "Miscellaneous HTML","Miscellaneous HTML"
+"Use {YYYY} to insert the current year (updates on cache refresh).","Use {YYYY} to insert the current year (updates on cache refresh)."
 Copyright,Copyright
 "Default Robots","Default Robots"
 "Edit custom instruction of robots.txt File","Edit custom instruction of robots.txt File"
@@ -192,3 +193,4 @@ ID,ID
 View,View
 Action,Action
 "Display Report Bugs Link","Display Report Bugs Link"
+"Using Default Theme","Using Default Theme"

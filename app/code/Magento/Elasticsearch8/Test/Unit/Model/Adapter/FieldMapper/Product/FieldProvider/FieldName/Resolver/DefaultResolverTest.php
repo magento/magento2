@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 use Magento\Elasticsearch8\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD)
@@ -46,14 +47,8 @@ class DefaultResolverTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
-        $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['convert'])
-            ->getMockForAbstractClass();
-        $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getFieldType'])
-            ->getMockForAbstractClass();
+        $this->fieldTypeConverter = $this->createMock(FieldTypeConverterInterface::class);
+        $this->fieldTypeResolver = $this->createPartialMock(FieldTypeResolver::class, ['getFieldType']);
 
         $baseResolver = $objectManager->getObject(
             BaseDefaultResolver::class,
@@ -67,7 +62,6 @@ class DefaultResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getFieldNameProvider
      * @param $fieldType
      * @param $attributeCode
      * @param $frontendInput
@@ -76,6 +70,7 @@ class DefaultResolverTest extends TestCase
      * @param $expected
      * @return void
      */
+    #[DataProvider('getFieldNameProvider')]
     public function testGetFieldName(
         $fieldType,
         $attributeCode,
@@ -86,7 +81,7 @@ class DefaultResolverTest extends TestCase
     ) {
         $attributeMock = $this->getMockBuilder(AttributeAdapter::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getFrontendInput', 'isSortable'])
+            ->onlyMethods(['getAttributeCode', 'getFrontendInput', 'isSortable'])
             ->getMock();
         $this->fieldTypeConverter->expects($this->any())
             ->method('convert')
@@ -113,7 +108,7 @@ class DefaultResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getFieldNameProvider(): array
+    public static function getFieldNameProvider(): array
     {
         return [
             ['', 'code', '', false, [], 'code'],

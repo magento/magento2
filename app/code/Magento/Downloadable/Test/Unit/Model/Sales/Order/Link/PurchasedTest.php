@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Test\Unit\Model\Sales\Order\Link;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Downloadable\Model\Link\Purchased as PurchasedEntity;
 use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection;
 use Magento\Downloadable\Model\Sales\Order\Link\Purchased;
 use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order\Item;
+use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Downloadable\Model\Link\PurchasedFactory;
@@ -41,14 +43,8 @@ class PurchasedTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->linkPurchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->linkPurchasedItemCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->linkPurchasedFactory = $this->createPartialMock(PurchasedFactory::class, ['create']);
+        $this->linkPurchasedItemCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
 
         $this->model = new Purchased(
             $this->linkPurchasedFactory,
@@ -61,8 +57,9 @@ class PurchasedTest extends TestCase
      * @param int $expectedItemId
      * @param array $itemData
      * @param array $childItemData
-     * @dataProvider getLinkDataProvider
+     * @throws Exception
      */
+    #[DataProvider('getLinkDataProvider')]
     public function testGetLink(
         bool $hasChildItem,
         int $expectedItemId,
@@ -70,26 +67,16 @@ class PurchasedTest extends TestCase
         array $childItemData = []
     ): void {
         /** @var Item $orderItem */
-        $orderItem = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $orderItem = $this->createPartialMock(Item::class, []);
         $orderItem->addData($itemData);
         /** @var Item $childOrderItem */
-        $childOrderItem = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $childOrderItem = $this->createPartialMock(Item::class, []);
         $childOrderItem->addData($childItemData);
         if ($hasChildItem) {
             $orderItem->addChildItem($childOrderItem);
         }
-        $linkPurchased = $this->getMockBuilder(PurchasedEntity::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['load'])
-            ->getMock();
-        $itemCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addFieldToFilter'])
-            ->getMock();
+        $linkPurchased = $this->createPartialMock(PurchasedEntity::class, ['load']);
+        $itemCollection = $this->createPartialMock(Collection::class, ['addFieldToFilter']);
         $this->linkPurchasedFactory->method('create')
             ->willReturn($linkPurchased);
         $linkPurchased->method('load')
@@ -108,7 +95,7 @@ class PurchasedTest extends TestCase
     /**
      * @return array[]
      */
-    public function getLinkDataProvider(): array
+    public static function getLinkDataProvider(): array
     {
         return [
             [

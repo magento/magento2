@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class ExistingValidate
      * @throws FileSystemException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeIsValid(Subject $subject, $value, string $originalName = null)
+    public function beforeIsValid(Subject $subject, $value, ?string $originalName = null)
     {
         return [$this->tmpFileCopier->copy($value), $originalName];
     }

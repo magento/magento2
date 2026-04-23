@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test products query for configurable product options
@@ -16,10 +17,10 @@ class ConfigurableProductOptionsTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_two_attributes.php
-     * @dataProvider expectedResultDataProvider
      * @param $expectedOptions
      * @throws \Exception
      */
+    #[DataProvider('expectedResultDataProvider')]
     public function testQueryConfigurableProductLinks($expectedOptions)
     {
         $configurableProduct = 'configurable';
@@ -133,7 +134,7 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function expectedResultDataProvider()
+    public static function expectedResultDataProvider()
     {
         return [
             [

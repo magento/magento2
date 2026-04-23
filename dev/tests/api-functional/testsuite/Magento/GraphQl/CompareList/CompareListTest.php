@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,13 +84,13 @@ MUTATION;
     {
         $compareList = $this->createCompareList();
         $uid = $compareList['createCompareList']['uid'];
-        $this->assertEquals(0, $compareList['createCompareList']['item_count'],'Incorrect count');
+        $this->assertEquals(0, $compareList['createCompareList']['item_count'], 'Incorrect count');
         $this->uidAssertion($uid);
         $response = $this->addProductsToCompareList($uid);
         $resultUid = $response['addProductsToCompareList']['uid'];
         $this->uidAssertion($resultUid);
         $this->itemsAssertion($response['addProductsToCompareList']['items']);
-        $this->assertEquals(2, $response['addProductsToCompareList']['item_count'],'Incorrect count');
+        $this->assertEquals(2, $response['addProductsToCompareList']['item_count'], 'Incorrect count');
         $this->assertResponseFields(
             $response['addProductsToCompareList']['attributes'],
             [
@@ -194,20 +194,24 @@ MUTATION;
     }
 
     /**
-     * Assign compare list to customer
+     * Assign compare list to customer and verify products can be removed
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
     public function testAssignCompareListToCustomer()
     {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+
         $compareList = $this->createCompareList();
         $uid = $compareList['createCompareList']['uid'];
         $this->uidAssertion($uid);
+
         $addProducts = $this->addProductsToCompareList($uid);
         $this->itemsAssertion($addProducts['addProductsToCompareList']['items']);
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
+        $this->assertEquals(2, $addProducts['addProductsToCompareList']['item_count']);
+
         $customerQuery = <<<QUERY
 {
   customer {
@@ -239,6 +243,7 @@ mutation {
     result
     compare_list {
       uid
+      item_count
       items {
         uid
       }
@@ -253,6 +258,7 @@ MUTATION;
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
         $this->assertTrue($assignResponse['assignCompareListToCustomer']['result']);
+        $this->assertEquals(2, $assignResponse['assignCompareListToCustomer']['compare_list']['item_count']);
 
         $customerAssignedResponse = $this->graphQlQuery(
             $customerQuery,
@@ -260,10 +266,37 @@ MUTATION;
             '',
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
-
         $this->assertArrayHasKey('compare_list', $customerAssignedResponse['customer']);
         $this->uidAssertion($customerAssignedResponse['customer']['compare_list']['uid']);
         $this->itemsAssertion($customerAssignedResponse['customer']['compare_list']['items']);
+
+        $product = $this->productRepository->get(self::PRODUCT_SKU_1);
+        $removeFromCompareList = <<<MUTATION
+mutation{
+  removeProductsFromCompareList(input: {uid: "{$uid}", products: [{$product->getId()}]}) {
+    uid
+    item_count
+    items {
+        product {
+            sku
+        }
+    }
+  }
+}
+MUTATION;
+        $removeResponse = $this->graphQlMutation(
+            $removeFromCompareList,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        $this->assertEquals(1, $removeResponse['removeProductsFromCompareList']['item_count']);
+        $this->assertCount(1, $removeResponse['removeProductsFromCompareList']['items']);
+        $this->assertEquals(
+            self::PRODUCT_SKU_2,
+            $removeResponse['removeProductsFromCompareList']['items'][0]['product']['sku']
+        );
     }
 
     /**
@@ -290,7 +323,8 @@ mutation {
 }
 MUTATION;
 
-        $expectedExceptionsMessage = 'GraphQL response contains errors: This customer is not authorized to access this list';
+        $expectedExceptionsMessage = 'GraphQL response contains errors: ' .
+            'This customer is not authorized to access this list';
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage($expectedExceptionsMessage);
         //customer2 not allowed to assign compareList belonging to customer1
@@ -308,17 +342,17 @@ mutation{
   }
 }
 MUTATION;
-        $expectedExceptionsMessage = 'GraphQL response contains errors: This customer is not authorized to access this list';
+        $expectedExceptionsMessage = 'GraphQL response contains errors: ' .
+            'This customer is not authorized to access this list';
         $this->expectException(ResponseContainsErrorsException::class);
         $this->expectExceptionMessage($expectedExceptionsMessage);
         //customer1 not allowed to delete compareList belonging to customer2
         $this->graphQlMutation(
-            $assignCompareListToCustomer,
+            $deleteCompareList,
             [],
             '',
             $this->getCustomerAuthHeaders('customer@example.com', 'password')
         );
-
     }
 
     /**

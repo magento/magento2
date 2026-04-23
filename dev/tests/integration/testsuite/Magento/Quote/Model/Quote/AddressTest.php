@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote;
 
@@ -15,6 +15,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Indexer\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class to test Sales Quote address model functionality
@@ -107,8 +108,8 @@ class AddressTest extends TestCase
      * same_as_billing must be equal 0 if billing address is being saved
      *
      * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      */
+    #[DataProvider('unsetAddressIdDataProvider')]
     public function testSameAsBillingForBillingAddress($unsetId)
     {
         $this->_quote->setCustomer($this->_customer);
@@ -128,8 +129,8 @@ class AddressTest extends TestCase
      * same_as_billing must be equal 1 if customer is guest
      *
      * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      */
+    #[DataProvider('unsetAddressIdDataProvider')]
     public function testSameAsBillingWhenCustomerIsGuest($unsetId)
     {
         $shippingAddress = $this->_quote->getShippingAddress();
@@ -145,8 +146,8 @@ class AddressTest extends TestCase
      * same_as_billing must be equal 1 if quote address has no customer address
      *
      * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      */
+    #[DataProvider('unsetAddressIdDataProvider')]
     public function testSameAsBillingWhenQuoteAddressHasNoCustomerAddress($unsetId)
     {
         $this->_quote->setCustomer($this->_customer);
@@ -164,15 +165,15 @@ class AddressTest extends TestCase
      * same_as_billing must be equal 1 if customer registered and he has no default shipping address
      *
      * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('unsetAddressIdDataProvider')]
     public function testSameAsBillingWhenCustomerHasNoDefaultShippingAddress($unsetId)
     {
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create(AddressRepositoryInterface::class);
-        $this->_customer->setDefaultShipping(-1)
+        $this->_customer->setDefaultShipping(1)
             ->setAddresses(
                 [
                     $addressRepository->getById($this->_address->getId()),
@@ -191,9 +192,9 @@ class AddressTest extends TestCase
      * same_as_billing must be equal 1 if customer has the same billing and shipping address
      *
      * @param bool $unsetId
-     * @dataProvider unsetAddressIdDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('unsetAddressIdDataProvider')]
     public function testSameAsBillingWhenCustomerHasBillingSameShipping($unsetId)
     {
         $this->_quote->setCustomer($this->_customer);
@@ -211,7 +212,7 @@ class AddressTest extends TestCase
         /** @var AddressRepositoryInterface $addressRepository */
         $addressRepository = Bootstrap::getObjectManager()
             ->create(AddressRepositoryInterface::class);
-        $this->_customer->setDefaultShipping(2)
+        $this->_customer->setDefaultShipping(1)
             ->setAddresses([$addressRepository->getById($this->_address->getId())]);
         $this->_customer = $this->customerRepository->save($this->_customer);
         // we should save the customer data in order to be able to use it
@@ -243,7 +244,7 @@ class AddressTest extends TestCase
     /**
      * @return array
      */
-    public function unsetAddressIdDataProvider()
+    public static function unsetAddressIdDataProvider()
     {
         return [[true], [false]];
     }
@@ -360,8 +361,8 @@ class AddressTest extends TestCase
      * @param $expected
      * @covers \Magento\Quote\Model\Quote\Address::setAppliedTaxes()
      * @covers \Magento\Quote\Model\Quote\Address::getAppliedTaxes()
-     * @dataProvider appliedTaxesDataProvider
      */
+    #[DataProvider('appliedTaxesDataProvider')]
     public function testAppliedTaxes($taxes, $expected)
     {
         $this->_address->setAppliedTaxes($taxes);
@@ -373,7 +374,7 @@ class AddressTest extends TestCase
      *
      * @return array
      */
-    public function appliedTaxesDataProvider()
+    public static function appliedTaxesDataProvider()
     {
         return [
             ['test', 'test'],

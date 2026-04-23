@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Downloadable\Controller;
 
@@ -10,8 +10,6 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
  * Download controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Download extends \Magento\Framework\App\Action\Action
 {

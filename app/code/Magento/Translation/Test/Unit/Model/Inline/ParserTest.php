@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,36 +85,40 @@ class ParserTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->translateInlineMock =
-            $this->getMockForAbstractClass(InlineInterface::class);
-        $this->appCacheMock = $this->getMockForAbstractClass(TypeListInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $objects = [
+            [
+                \Magento\Framework\Translate\InlineInterface::class,
+                $this->createMock(\Magento\Framework\Translate\InlineInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
+        $this->translateInlineMock = $this->createMock(InlineInterface::class);
+        $this->appCacheMock = $this->createMock(TypeListInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
         $this->storeManagerMock->method('getStore')
             ->willReturn($this->storeMock);
         $this->resourceFactoryMock = $this->getMockBuilder(
             StringUtilsFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resourceMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->inputFilterMock = $this->getMockForAbstractClass(FilterInterface::class);
+        $this->inputFilterMock = $this->createMock(FilterInterface::class);
 
         $this->resourceFactoryMock->method('create')
             ->willReturn($this->resourceMock);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->appStateMock = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
         $this->model = $this->objectManager->getObject(
@@ -168,7 +172,6 @@ class ParserTest extends TestCase
         $escaper = new Escaper();
         $reflection = new \ReflectionClass($escaper);
         $reflectionProperty = $reflection->getProperty('escaper');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($escaper, new \Magento\Framework\ZendEscaper());
         return $escaper;
     }

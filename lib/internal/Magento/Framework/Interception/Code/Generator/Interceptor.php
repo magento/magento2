@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +92,7 @@ class Interceptor extends EntityAbstract
     protected function isInterceptedMethod(\ReflectionMethod $method)
     {
         return !($method->isConstructor() || $method->isFinal() || $method->isStatic() || $method->isDestructor()) &&
-            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone']);
+            !in_array($method->getName(), ['__sleep', '__wakeup', '__clone', '_resetState']);
     }
 
     /**

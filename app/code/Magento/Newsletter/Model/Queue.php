@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model;
 
@@ -148,11 +148,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
         \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory,
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezone = null,
-        LocalizedDateToUtcConverterInterface $utcConverter = null
+        ?TimezoneInterface $timezone = null,
+        ?LocalizedDateToUtcConverterInterface $utcConverter = null
     ) {
         parent::__construct(
             $context,
@@ -219,6 +219,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param int $count
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function sendPerSubscriber($count = 20)
     {
@@ -254,7 +255,11 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             ]
         );
 
-        /** @var \Magento\Newsletter\Model\Subscriber $item */
+        if ($this->getQueueStatus() != self::STATUS_SENDING && count($collection->getItems()) > 0) {
+            $this->startQueue();
+        }
+
+        /** @var Subscriber $item */
         foreach ($collection->getItems() as $item) {
             $transport = $this->_transportBuilder->setTemplateOptions(
                 ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $item->getStoreId()]
@@ -288,6 +293,19 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         if (count($collection->getItems()) < $count - 1 || count($collection->getItems()) == 0) {
             $this->_finishQueue();
         }
+        return $this;
+    }
+
+    /**
+     * Start queue: set status SENDING for queue
+     *
+     * @return $this
+     */
+    private function startQueue()
+    {
+        $this->setQueueStatus(self::STATUS_SENDING);
+        $this->save();
+
         return $this;
     }
 

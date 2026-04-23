@@ -1,55 +1,83 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 
+/**
+ * Product attribute fixture
+ *
+ * Usage examples:
+ *
+ * 1. Create an attribute with default data
+ * <pre>
+ *  #[
+ *      DataFixture(AttributeFixture::class, as: 'attribute')
+ *  ]
+ * </pre>
+ * 2. Create an attribute with custom data
+ * <pre>
+ *  #[
+ *      DataFixture(AttributeFixture::class, ['is_filterable' => true], 'attribute')
+ *  ]
+ * </pre>
+ */
 class Attribute implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'is_wysiwyg_enabled' => false,
-        'is_html_allowed_on_front' => true,
-        'used_for_sort_by' => false,
-        'is_filterable' => false,
-        'is_filterable_in_search' => false,
-        'is_used_in_grid' => true,
-        'is_visible_in_grid' => true,
-        'is_filterable_in_grid' => true,
-        'position' => 0,
-        'apply_to' => [],
-        'is_searchable' => '0',
-        'is_visible_in_advanced_search' => '0',
-        'is_comparable' => '0',
-        'is_used_for_promo_rules' => '0',
-        'is_visible_on_front' => '0',
-        'used_in_product_listing' => '0',
-        'is_visible' => true,
-        'scope' => 'store',
-        'attribute_code' => 'product_attribute%uniqid%',
-        'frontend_input' => 'text',
-        'entity_type_id' => '4',
-        'is_required' => false,
-        'options' => [],
-        'is_user_defined' => true,
+        ProductAttributeInterface::ATTRIBUTE_ID => null,
+        ProductAttributeInterface::ATTRIBUTE_CODE => 'product_attribute%uniqid%',
+        ProductAttributeInterface::ENTITY_TYPE_ID => '4',
+        ProductAttributeInterface::SCOPE => ProductAttributeInterface::SCOPE_GLOBAL_TEXT,
+        ProductAttributeInterface::IS_USER_DEFINED => true,
+        ProductAttributeInterface::IS_SEARCHABLE => false,
+        ProductAttributeInterface::IS_FILTERABLE => false,
+        ProductAttributeInterface::IS_FILTERABLE_IN_SEARCH => false,
+        ProductAttributeInterface::IS_FILTERABLE_IN_GRID => true,
+        ProductAttributeInterface::IS_VISIBLE => true,
+        ProductAttributeInterface::IS_VISIBLE_IN_GRID => true,
+        ProductAttributeInterface::IS_VISIBLE_IN_ADVANCED_SEARCH => false,
+        ProductAttributeInterface::IS_VISIBLE_ON_FRONT => false,
+        ProductAttributeInterface::IS_USED_IN_GRID => true,
+        ProductAttributeInterface::IS_COMPARABLE => false,
+        ProductAttributeInterface::IS_USED_FOR_PROMO_RULES => false,
+        ProductAttributeInterface::IS_REQUIRED => false,
+        ProductAttributeInterface::IS_UNIQUE => false,
+        ProductAttributeInterface::IS_WYSIWYG_ENABLED => false,
+        ProductAttributeInterface::IS_HTML_ALLOWED_ON_FRONT => true,
+        ProductAttributeInterface::USED_IN_PRODUCT_LISTING => false,
+        ProductAttributeInterface::USED_FOR_SORT_BY => false,
+        ProductAttributeInterface::POSITION => 0,
+        ProductAttributeInterface::APPLY_TO => [],
+        ProductAttributeInterface::OPTIONS => [],
+        ProductAttributeInterface::NOTE => null,
+        ProductAttributeInterface::BACKEND_TYPE => 'varchar',
+        ProductAttributeInterface::BACKEND_MODEL => null,
+        ProductAttributeInterface::FRONTEND_INPUT => 'text',
+        ProductAttributeInterface::FRONTEND_CLASS => null,
+        ProductAttributeInterface::SOURCE_MODEL => null,
+        ProductAttributeInterface::EXTENSION_ATTRIBUTES_KEY => [],
+        ProductAttributeInterface::CUSTOM_ATTRIBUTES => [],
+        ProductAttributeInterface::FRONTEND_LABELS => [],
         'default_frontend_label' => 'Product Attribute%uniqid%',
-        'frontend_labels' => [],
-        'backend_type' => 'varchar',
-        'is_unique' => '0',
-        'validation_rules' => []
-
+        'validation_rules' => [],
+        "default_value" => null,
     ];
 
     private const DEFAULT_ATTRIBUTE_SET_DATA = [
@@ -59,62 +87,59 @@ class Attribute implements RevertibleDataFixtureInterface
     ];
 
     /**
-     * @var ServiceFactory
-     */
-    private $serviceFactory;
-
-    /**
-     * @var ProcessorInterface
-     */
-    private $dataProcessor;
-
-    /**
-     * @var EavSetup
-     */
-    private $eavSetup;
-
-    /**
-     * @var ProductAttributeManagementInterface
-     */
-    private $productAttributeManagement;
-
-    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      * @param EavSetup $eavSetup
+     * @param ProductAttributeManagementInterface $productAttributeManagement
+     * @param ProductAttributeInterfaceFactory $attributeFactory
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param DataObjectHelper $dataObjectHelper
+     * @param DataMerger $dataMerger
      */
     public function __construct(
-        ServiceFactory $serviceFactory,
-        ProcessorInterface $dataProcessor,
-        EavSetup $eavSetup,
-        ProductAttributeManagementInterface $productAttributeManagement
+        private readonly ServiceFactory $serviceFactory,
+        private readonly ProcessorInterface $dataProcessor,
+        private readonly EavSetup $eavSetup,
+        private readonly ProductAttributeManagementInterface $productAttributeManagement,
+        private readonly ProductAttributeInterfaceFactory $attributeFactory,
+        private readonly ProductAttributeRepositoryInterface $productAttributeRepository,
+        private readonly DataObjectHelper $dataObjectHelper,
+        private readonly DataMerger $dataMerger
     ) {
-        $this->serviceFactory = $serviceFactory;
-        $this->dataProcessor = $dataProcessor;
-        $this->eavSetup = $eavSetup;
-        $this->productAttributeManagement = $productAttributeManagement;
     }
 
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as Attribute::DEFAULT_DATA.
+     *
+     * Additional fields:
+     *  - `_set_id`: int - attribute set ID to assign the attribute to
+     *  - `_group_id`: int - attribute group ID to assign the attribute to
+     *  - `_sort_order`: int - sort order within the attribute group
+     *
+     * @return DataObject|null
      */
     public function apply(array $data = []): ?DataObject
     {
-        $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
-
-        /**
-         * @var ProductAttributeInterface $attribute
-         */
-        $attribute = $service->execute(
-            [
-                'attribute' => $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
-            ]
-        );
-
+        $attributeData = array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA);
         $attributeSetData = $this->prepareAttributeSetData(
             array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA)
         );
+        
+        $attribute = $this->attributeFactory->create();
+        $attributeData = $this->prepareData($attributeData);
+
+        $this->dataObjectHelper->populateWithArray(
+            $attribute,
+            $attributeData,
+            ProductAttributeInterface::class
+        );
+        // Add data that are not part of the interface
+        $attribute->addData(array_diff_key($attributeData, self::DEFAULT_DATA));
+        if (isset($attributeData['scope'])) {
+            $attribute->setScope($attributeData['scope']);
+        }
+        $attribute = $this->productAttributeRepository->save($attribute);
 
         $this->productAttributeManagement->assign(
             $attributeSetData['_set_id'],
@@ -147,7 +172,8 @@ class Attribute implements RevertibleDataFixtureInterface
      */
     private function prepareData(array $data): array
     {
-        $data = array_merge(self::DEFAULT_DATA, $data);
+        $data = $this->dataMerger->merge(self::DEFAULT_DATA, $data, false);
+        $data['frontend_label'] ??= $data['default_frontend_label'];
 
         return $this->dataProcessor->process($this, $data);
     }

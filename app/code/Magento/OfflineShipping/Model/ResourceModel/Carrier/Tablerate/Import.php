@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate;
@@ -131,6 +131,7 @@ class Import
     public function getData(ReadInterface $file, $websiteId, $conditionShortName, $conditionFullName, $bunchSize = 5000)
     {
         $this->errors = [];
+        $this->uniqueHash = [];
 
         $headers = $this->getHeaders($file);
         /** @var ColumnResolver $columnResolver */

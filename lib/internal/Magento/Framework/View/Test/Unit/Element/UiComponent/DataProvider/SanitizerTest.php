@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\Sanitizer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test sanitizer for different kind of scenarios.
@@ -34,7 +35,7 @@ class SanitizerTest extends TestCase
      *
      * @return array
      */
-    public function getSanitizeDataSets(): array
+    public static function getSanitizeDataSets(): array
     {
         return [
             'simpleSet' => [
@@ -105,9 +106,8 @@ class SanitizerTest extends TestCase
      *
      * @param array $input
      * @param array $expectedOutput
-     * @return void
-     * @dataProvider getSanitizeDataSets
-     */
+     * @return void     */
+    #[DataProvider('getSanitizeDataSets')]
     public function testSanitize(array $input, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, $this->sanitizer->sanitize($input));
@@ -118,7 +118,7 @@ class SanitizerTest extends TestCase
      *
      * @return array
      */
-    public function getSanitizeComponentDataSets(): array
+    public static function getSanitizeComponentDataSets(): array
     {
         return [
             'simpleComponent' => [
@@ -175,9 +175,8 @@ class SanitizerTest extends TestCase
      *
      * @param array $input
      * @param array $expectedOutput
-     * @return void
-     * @dataProvider getSanitizeComponentDataSets
-     */
+     * @return void     */
+    #[DataProvider('getSanitizeComponentDataSets')]
     public function testSanitizeComponentMetadata(array $input, array $expectedOutput): void
     {
         $this->assertEquals($expectedOutput, $this->sanitizer->sanitizeComponentMetadata($input));

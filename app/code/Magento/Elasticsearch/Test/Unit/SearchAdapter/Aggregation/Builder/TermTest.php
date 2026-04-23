@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,9 +44,7 @@ class TermTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestBuckedInterface = $this->createMock(BucketInterface::class);
 
         $this->dataProviderContainer = $this->getMockBuilder(
             DataProviderInterface::class
@@ -55,7 +53,7 @@ class TermTest extends TestCase
             ->getMock();
 
         $this->bucket = $this->getMockBuilder(TermBucket::class)
-            ->setMethods(['getName'])
+            ->onlyMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMock();
 

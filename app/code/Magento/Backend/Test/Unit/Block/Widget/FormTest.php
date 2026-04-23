@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,21 @@ namespace Magento\Backend\Test\Unit\Block\Widget;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Form;
+use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
 use Magento\Framework\Data\Form as DataForm;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  Form */
     protected $model;
 
@@ -28,18 +36,35 @@ class FormTest extends TestCase
     /** @var  UrlInterface|MockObject */
     protected $urlBuilder;
 
+    /** @var Data */
+    protected $jsonHelperMock;
+
+    /** @var  ElementCreator */
+    protected $creatorStub;
+
+    /** @var ObjectManagerHelper */
+    private $objectManagerHelper;
+
     protected function setUp(): void
     {
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->prepareContext();
 
-        $this->dataForm = $this->getMockBuilder(\Magento\Framework\Data\Form::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'setParent',
-                'setBaseUrl',
-                'addCustomAttribute',
-            ])
-            ->getMock();
+        $this->dataForm = $this->createPartialMockWithReflection(
+            \Magento\Framework\Data\Form::class,
+            ['setParent', 'setBaseUrl', 'addCustomAttribute']
+        );
+
+        $this->jsonHelperMock = $this->createMock(Data::class);
+
+        /** @var ObjectManagerInterface|MockObject $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->expects($this->exactly(3))
+            ->method('get')
+            ->willReturn($this->jsonHelperMock);
+        ObjectManager::setInstance($objectManagerMock);
+
+        $this->creatorStub = $this->createMock(ElementCreator::class);
 
         $this->model = new Form(
             $this->context
@@ -48,12 +73,9 @@ class FormTest extends TestCase
 
     protected function prepareContext()
     {
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMock();
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilder);

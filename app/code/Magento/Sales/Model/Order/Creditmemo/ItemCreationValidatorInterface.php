@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
@@ -21,5 +21,5 @@ interface ItemCreationValidatorInterface
      * @param OrderInterface|null $context
      * @return ValidatorResultInterface
      */
-    public function validate(CreditmemoItemCreationInterface $item, array $validators, OrderInterface $context = null);
+    public function validate(CreditmemoItemCreationInterface $item, array $validators, ?OrderInterface $context = null);
 }

@@ -1,29 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Quote\Api\Data\TotalsItemInterface;
+use Magento\Rule\Model\Condition\Context;
+use Magento\SalesRule\Model\Rule\Condition\Product;
 
 /**
- * Subselect conditions for product.
+ * SubSelect conditions for product.
  */
-class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
+class Subselect extends Combine
 {
     /**
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param Context $context
+     * @param Product $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        Context $context,
+        Product $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);
-        $this->setType(\Magento\SalesRule\Model\Rule\Condition\Product\Subselect::class)->setValue(null);
+        $this->setType(Subselect::class)->setValue(null);
     }
 
     /**
@@ -70,7 +74,13 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      */
     public function loadAttributeOptions()
     {
-        $this->setAttributeOption(['qty' => __('total quantity'), 'base_row_total' => __('total amount')]);
+        $this->setAttributeOption(
+            [
+                'qty' => __('total quantity'),
+                'base_row_total' => __('total amount (excl. tax)'),
+                'base_row_total_incl_tax' => __('total amount (incl. tax)')
+            ]
+        );
         return $this;
     }
 
@@ -137,43 +147,94 @@ class Subselect extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     }
 
     /**
-     * Validate
+     * Validate subSelect conditions, base_row_total and attribute
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
-        if (!$this->getConditions()) {
-            return false;
-        }
+        $subSelectConditionsFlag = true;
         $attr = $this->getAttribute();
         $total = 0;
-        foreach ($model->getQuote()->getAllVisibleItems() as $item) {
-            $hasValidChild = false;
-            $useChildrenTotal = ($item->getProductType() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
-            $childrenAttrTotal = 0;
-            $children = $item->getChildren();
-            if (!empty($children)) {
-                foreach ($children as $child) {
-                    if (parent::validate($child)) {
-                        $hasValidChild = true;
-                        if ($useChildrenTotal) {
-                            $childrenAttrTotal += $child->getData($attr);
-                        }
+        $isMultiShipping = (bool) $model->getQuote()->getIsMultiShipping();
+        $items = $isMultiShipping ? $model->getAllItems() : $model->getQuote()->getAllVisibleItems();
+        foreach ($items as $item) {
+            if ($isMultiShipping) {
+                $subSelectConditionsFlag = $this->validateSubSelectConditions($item);
+            }
+            $total = $this->getBaseRowTotalForChildrenProduct($item, $attr, $total);
+            if ($subSelectConditionsFlag && $this->validateAttribute($total)) {
+                return true;
+            }
+        }
+        return $subSelectConditionsFlag && $this->validateAttribute($total);
+    }
+
+    /**
+     * Check subSelect conditions to verify if they are met
+     *
+     * @param mixed $item
+     * @return bool
+     */
+    private function validateSubSelectConditions(mixed $item): bool
+    {
+        $subSelectConditionsFlag = true;
+        $all = $this->getAggregator() === 'all';
+        $true = (bool)$this->getValue();
+        $conditions = $this->getConditions();
+        if (!empty($conditions)) {
+            foreach ($conditions as $cond) {
+                if ($item instanceof AbstractModel) {
+                    $validated = $cond->validate($item);
+                } else {
+                    $validated = $cond->validateByEntityId($item);
+                }
+                if ($all && $validated !== $true) {
+                    $subSelectConditionsFlag = false;
+                    break;
+                } elseif (!$all && $validated === $true) {
+                    continue;
+                }
+            }
+        }
+        return $subSelectConditionsFlag;
+    }
+
+    /**
+     * Get base row total for children product for bundle and configurable product
+     *
+     * @param mixed $item
+     * @param mixed $attr
+     * @param float $total
+     * @return float
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getBaseRowTotalForChildrenProduct(mixed $item, mixed $attr, float $total): float
+    {
+        $hasValidChild = false;
+        $useChildrenTotal = ($item->getProductType() == Type::TYPE_BUNDLE);
+        $childrenAttrTotal = 0;
+        $children = $item->getChildren();
+        if (!empty($children)) {
+            foreach ($children as $child) {
+                if (parent::validate($child)) {
+                    $hasValidChild = true;
+                    if ($useChildrenTotal) {
+                        $childrenAttrTotal += $child->getData($attr);
                     }
                 }
             }
-            if ($attr !== TotalsItemInterface::KEY_BASE_ROW_TOTAL) {
-                $childrenAttrTotal *= $item->getQty();
-            }
-            if ($hasValidChild || parent::validate($item)) {
-                $total += ($hasValidChild && $useChildrenTotal && $childrenAttrTotal > 0)
-                    ? $childrenAttrTotal
-                    : $item->getData($attr);
-            }
         }
-        return $this->validateAttribute($total);
+        if ($attr !== TotalsItemInterface::KEY_BASE_ROW_TOTAL) {
+            $childrenAttrTotal *= $item->getQty();
+        }
+        if ($hasValidChild || parent::validate($item)) {
+            $total += ($hasValidChild && $useChildrenTotal && $childrenAttrTotal > 0)
+                ? $childrenAttrTotal
+                : $item->getData($attr);
+        }
+        return $total;
     }
 }

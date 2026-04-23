@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
@@ -19,8 +23,16 @@ use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Fixture\ScopeFixture;
 
 /**
  * @magentoAppArea adminhtml
@@ -130,14 +142,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Test that Bundle options are updated correctly by import
      *
-     * @dataProvider valuesDataProvider
-     *
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @param array $expectedValues
      * @return void
      */
+    #[DataProvider('valuesDataProvider')]
     public function testBundleImportUpdateValues(array $expectedValues): void
     {
         // import data from CSV file
@@ -267,7 +278,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function valuesDataProvider(): array
+    public static function valuesDataProvider(): array
     {
         return [
             [
@@ -291,13 +302,13 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider
      * @param bool $isOption1Required
      * @param bool $isOption2Required
      * @param string $outOfStockImportFile
      * @param string $inStockImportFile
      * @throws NoSuchEntityException
      */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
     public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
         bool $isOption1Required,
         bool $isOption2Required,
@@ -344,22 +355,90 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @return array
      */
-    public function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
     {
         return [
             'all options are required' => [
                 true,
                 true,
-                'out-of-stock' => 'import_bundle_set_option1_products_out_of_stock.csv',
-                'in-stock' => 'import_bundle_set_option1_products_in_stock.csv'
+                'outOfStockImportFile' => 'import_bundle_set_option1_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
             ],
             'all options are optional' => [
                 false,
                 false,
-                'out-of-stock' => 'import_bundle_set_all_products_out_of_stock.csv',
-                'in-stock' => 'import_bundle_set_option1_products_in_stock.csv'
+                'outOfStockImportFile' => 'import_bundle_set_all_products_out_of_stock.csv',
+                'inStockImportFile' => 'import_bundle_set_option1_products_in_stock.csv'
             ]
         ];
+    }
+
+    #[
+        DbIsolation(false),
+        Config(\Magento\Catalog\Helper\Data::XML_PATH_PRICE_SCOPE, 1, ScopeInterface::SCOPE_STORE, 'default'),
+        DataFixture(ScopeFixture::class, as: 'global_scope'),
+        DataFixture(ScopeFixture::class, ['code' => 'default'], as: 'default_store'),
+        DataFixture(ProductFixture::class, ['sku' => 'bundle_child_1'], as: 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'bundle_child_2'], as: 'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], 'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 20, 'price_type' => 1], 'link2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$'], 'title' => 'opt1'], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link2$'], 'title' => 'opt2'], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['price' => 50,'price_type' => 1, '_options' => ['$opt1$','$opt2$']],
+            'bundle',
+            'global_scope',
+        ),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    [
+                        'sku' => '$bundle.sku$',
+                        'bundle_values' => 'name=opt1,type=select,required=1,sku=bundle_child_1,price=10.0000' .
+                            ',default=0,default_qty=1.0000,price_type=fixed,can_change_qty=0' .
+                            ',price_website_base=40.000000,price_type_website_base=percent' .
+                            '|name=opt2,type=select,required=1,sku=bundle_child_2,price=20.0000' .
+                            ',default=0,default_qty=1.0000,price_type=percent,can_change_qty=0' .
+                            ',price_website_base=50.000000,price_type_website_base=percent'
+                    ]
+                ]
+            ],
+            'importFile',
+        ),
+    ]
+    public function testImportWhenPriceScopeIsWebsite(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $pathToFile = $fixtures->get('importFile')->getAbsolutePath();
+        $sku = $fixtures->get('bundle')->getSku();
+        $store = $fixtures->get('default_store');
+        
+        // import data from CSV file
+        $errors = $this->doImport($pathToFile, Import::BEHAVIOR_APPEND);
+        $this->assertEquals(0, $errors->getErrorsCount());
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        
+        // verify selection prices in default scope
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, false, 0, true);
+        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(2, $options);
+        $this->assertEquals(10, $options[0]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(0, $options[0]->getProductLinks()[0]->getPriceType());
+        $this->assertEquals(20, $options[1]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[1]->getProductLinks()[0]->getPriceType());
+        
+        // verify selection prices in default store
+        $product = $productRepository->get($sku, false, $store->getId(), true);
+        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertCount(2, $options);
+        $this->assertEquals(40, $options[0]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[0]->getProductLinks()[0]->getPriceType());
+        $this->assertEquals(50, $options[1]->getProductLinks()[0]->getPrice());
+        $this->assertEquals(1, $options[1]->getProductLinks()[0]->getPriceType());
     }
 
     /**

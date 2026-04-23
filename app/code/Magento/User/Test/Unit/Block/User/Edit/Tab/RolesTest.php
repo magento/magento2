@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\User\Edit\Tab;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Block\User\Edit\Tab\Roles;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -32,17 +34,21 @@ class RolesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-
-        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->requestInterfaceMock = $this->createMock(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
         $this->model = $objectManagerHelper->getObject(
             Roles::class,
             [

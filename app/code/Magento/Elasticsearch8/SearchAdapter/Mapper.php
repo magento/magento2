@@ -1,31 +1,32 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Elasticsearch8\SearchAdapter;
 
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5Mapper;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as ElasticsearchMapper;
 
 /**
  * Elasticsearch8 mapper class
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @see this class will be responsible for ES8 only
  */
 class Mapper
 {
     /**
-     * @var Elasticsearch5Mapper
+     * @var ElasticsearchMapper
      */
-    private Elasticsearch5Mapper $mapper;
+    private ElasticsearchMapper $mapper;
 
     /**
      * Mapper constructor.
-     * @param Elasticsearch5Mapper $mapper
+     * @param ElasticsearchMapper $mapper
      */
-    public function __construct(Elasticsearch5Mapper $mapper)
+    public function __construct(ElasticsearchMapper $mapper)
     {
         $this->mapper = $mapper;
     }

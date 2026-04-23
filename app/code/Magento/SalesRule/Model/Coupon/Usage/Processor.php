@@ -1,58 +1,68 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon\Usage;
 
+use Exception;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\SalesRule\Api\CouponRepositoryInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 use Magento\SalesRule\Model\RuleFactory;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * Processor to update coupon usage
  */
 class Processor
 {
     /**
-     * @var RuleFactory
+     * @var string
      */
-    private $ruleFactory;
+    private const LOCK_NAME = 'coupon_code_';
 
     /**
-     * @var CustomerFactory
+     * @var string
      */
-    private $ruleCustomerFactory;
+    private const ERROR_MESSAGE = "coupon exceeds usage limit.";
 
     /**
-     * @var Coupon
+     * @var int
      */
-    private $coupon;
+    private const LOCK_TIMEOUT = 60;
 
     /**
-     * @var Usage
+     * @var LockManagerInterface
      */
-    private $couponUsage;
+    private LockManagerInterface $lockManager;
 
     /**
      * @param RuleFactory $ruleFactory
      * @param CustomerFactory $ruleCustomerFactory
-     * @param Coupon $coupon
      * @param Usage $couponUsage
+     * @param CouponRepositoryInterface $couponRepository
+     * @param SearchCriteriaBuilder $criteriaBuilder
+     * @param LockManagerInterface|null $lockManager
      */
     public function __construct(
-        RuleFactory $ruleFactory,
-        CustomerFactory $ruleCustomerFactory,
-        Coupon $coupon,
-        Usage $couponUsage
+        private readonly RuleFactory $ruleFactory,
+        private readonly CustomerFactory $ruleCustomerFactory,
+        private readonly Usage $couponUsage,
+        private readonly CouponRepositoryInterface $couponRepository,
+        private readonly SearchCriteriaBuilder $criteriaBuilder,
+        ?LockManagerInterface $lockManager = null
     ) {
-        $this->ruleFactory = $ruleFactory;
-        $this->ruleCustomerFactory = $ruleCustomerFactory;
-        $this->coupon = $coupon;
-        $this->couponUsage = $couponUsage;
+        $this->lockManager = $lockManager ?? ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
@@ -66,44 +76,86 @@ class Processor
             return;
         }
 
-        if (!empty($updateInfo->getCouponCode())) {
-            $this->updateCouponUsages($updateInfo);
-        }
-        $isIncrement = $updateInfo->isIncrement();
-        $customerId = $updateInfo->getCustomerId();
-        // use each rule (and apply to customer, if applicable)
-        foreach (array_unique($updateInfo->getAppliedRuleIds()) as $ruleId) {
-            if (!(int)$ruleId) {
-                continue;
-            }
-            $this->updateRuleUsages($isIncrement, (int)$ruleId);
-            if ($customerId) {
-                $this->updateCustomerRuleUsages($isIncrement, (int)$ruleId, $customerId);
-            }
-        }
+        $this->updateCouponUsages($updateInfo);
+        $this->updateRuleUsages($updateInfo);
+        $this->updateCustomerRulesUsages($updateInfo);
     }
 
     /**
      * Update the number of coupon usages
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @param UpdateInfo $updateInfo
+     * @throws CouldNotSaveException|LocalizedException
      */
-    private function updateCouponUsages(UpdateInfo $updateInfo): void
+    public function updateCouponUsages(UpdateInfo $updateInfo): void
+    {
+        $coupons = $this->retrieveCoupons($updateInfo);
+
+        if ($updateInfo->isCouponAlreadyApplied()) {
+            return;
+        }
+        $incrementedCouponIds = [];
+        foreach ($coupons as $coupon) {
+            $this->lockLoadedCoupon($coupon, $updateInfo, $incrementedCouponIds);
+            $incrementedCouponIds[] = $coupon->getId();
+        }
+    }
+
+    /**
+     * Lock loaded coupons
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param Coupon $coupon
+     * @param UpdateInfo $updateInfo
+     * @param array $incrementedCouponIds
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    private function lockLoadedCoupon(Coupon $coupon, UpdateInfo $updateInfo, array $incrementedCouponIds): void
     {
         $isIncrement = $updateInfo->isIncrement();
-        $this->coupon->load($updateInfo->getCouponCode(), 'code');
-        if ($this->coupon->getId()) {
-            if (!$updateInfo->isCouponAlreadyApplied()
-                && ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0)) {
-                $this->coupon->setTimesUsed($this->coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
-                $this->coupon->save();
+        // Lock name based on coupon id, rather than coupon code that may contain illegal symbols for file based lock
+        $lockName = self::LOCK_NAME . $coupon->getId();
+        if ($this->lockManager->lock($lockName, self::LOCK_TIMEOUT)) {
+            try {
+                $coupon = $this->couponRepository->getById($coupon->getId());
+
+                if ($updateInfo->isIncrement() && $coupon->getUsageLimit() &&
+                    $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
+
+                    if (!empty($incrementedCouponIds)) {
+                        $this->revertCouponTimesUsed($incrementedCouponIds);
+                    }
+                    throw new CouldNotSaveException(__('%1 %2', $coupon->getCode(), self::ERROR_MESSAGE));
+                }
+
+                if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {
+                    $coupon->setTimesUsed($coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
+                    $coupon->save();
+                }
+            } finally {
+                $this->lockManager->unlock($lockName);
             }
-            if ($updateInfo->getCustomerId()) {
-                $this->couponUsage->updateCustomerCouponTimesUsed(
-                    $updateInfo->getCustomerId(),
-                    $this->coupon->getId(),
-                    $isIncrement
-                );
+        }
+    }
+
+    /**
+     * Revert times_used of coupon if exception occurred for multiple applied coupon.
+     *
+     * @param array $incrementedCouponIds
+     * @return void
+     * @throws CouldNotSaveException|Exception
+     */
+    private function revertCouponTimesUsed(array $incrementedCouponIds): void
+    {
+        foreach ($incrementedCouponIds as $couponId) {
+            $coupon = $this->couponRepository->getById($couponId);
+            $coupon->setTimesUsed($coupon->getTimesUsed() - 1);
+            try {
+                $this->couponRepository->save($coupon);
+            } catch (Exception $e) {
+                throw new CouldNotSaveException(__('Error occurred when saving coupon: %1', $e->getMessage()));
             }
         }
     }
@@ -111,19 +163,51 @@ class Processor
     /**
      * Update the number of rule usages
      *
-     * @param bool $isIncrement
-     * @param int $ruleId
+     * @param UpdateInfo $updateInfo
      */
-    private function updateRuleUsages(bool $isIncrement, int $ruleId): void
+    public function updateRuleUsages(UpdateInfo $updateInfo): void
     {
-        $rule = $this->ruleFactory->create();
-        $rule->load($ruleId);
-        if ($rule->getId()) {
+        $isIncrement = $updateInfo->isIncrement();
+        foreach ($updateInfo->getAppliedRuleIds() as $ruleId) {
+            $rule = $this->ruleFactory->create();
+            $rule->load($ruleId);
+            if (!$rule->getId()) {
+                continue;
+            }
+
             $rule->loadCouponCode();
-            if ($isIncrement || $rule->getTimesUsed() > 0) {
+            if ((!$updateInfo->isCouponAlreadyApplied() && $isIncrement) || !$isIncrement) {
                 $rule->setTimesUsed($rule->getTimesUsed() + ($isIncrement ? 1 : -1));
                 $rule->save();
             }
+        }
+    }
+
+    /**
+     * Update the number of rules usages per customer
+     *
+     * @param UpdateInfo $updateInfo
+     */
+    public function updateCustomerRulesUsages(UpdateInfo $updateInfo): void
+    {
+        $customerId = $updateInfo->getCustomerId();
+        if (!$customerId) {
+            return;
+        }
+
+        $isIncrement = $updateInfo->isIncrement();
+        foreach ($updateInfo->getAppliedRuleIds() as $ruleId) {
+            $rule = $this->ruleFactory->create();
+            $rule->load($ruleId);
+            if (!$rule->getId()) {
+                continue;
+            }
+            $this->updateCustomerRuleUsages($isIncrement, $ruleId, $customerId);
+        }
+
+        $coupons = $this->retrieveCoupons($updateInfo);
+        foreach ($coupons as $coupon) {
+            $this->couponUsage->updateCustomerCouponTimesUsed($customerId, $coupon->getId(), $isIncrement);
         }
     }
 
@@ -133,7 +217,7 @@ class Processor
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
-     * @throws \Exception
+     * @throws Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {
@@ -150,5 +234,32 @@ class Processor
         if ($ruleCustomer->hasData()) {
             $ruleCustomer->save();
         }
+    }
+
+    /**
+     * Retrieve coupon from update info
+     *
+     * @param UpdateInfo $updateInfo
+     * @return Coupon[]
+     */
+    private function retrieveCoupons(UpdateInfo $updateInfo): array
+    {
+
+        if (!$updateInfo->getCouponCode() && empty($updateInfo->getCouponCodes())) {
+            return [];
+        }
+
+        $coupons = $updateInfo->getCouponCodes();
+        if ($updateInfo->getCouponCode() && !in_array($updateInfo->getCouponCode(), $coupons)) {
+            array_unshift($coupons, $updateInfo->getCouponCode());
+        }
+
+        return $this->couponRepository->getList(
+            $this->criteriaBuilder->addFilter(
+                'code',
+                $coupons,
+                'in'
+            )->create()
+        )->getItems();
     }
 }

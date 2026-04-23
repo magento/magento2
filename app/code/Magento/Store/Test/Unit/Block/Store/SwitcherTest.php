@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Store\Test\Unit\Block\Store;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Block\Store\Switcher;
 use Magento\Store\Model\Group;
@@ -21,6 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class SwitcherTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Switcher
      */
@@ -49,21 +52,15 @@ class SwitcherTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->storeGroupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->loadMocks();
         $this->model = $objectManager->getObject(
@@ -91,26 +88,24 @@ class SwitcherTest extends TestCase
 
     protected function loadMocks()
     {
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection', 'setLocaleCode'])
-            ->getMock();
+        $storeMock = $this->createPartialMockWithReflection(
+            Store::class,
+            ['getLocaleCode', 'setLocaleCode', 'isActive', 'getId', 'getGroupId', 'getCollection']
+        );
         $groupMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['getCollection', 'getId'])
             ->getMock();
         /** @var AbstractCollection|MockObject */
-        $storeCollectionMock =
-            $this->getMockBuilder(AbstractCollection::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['addWebsiteFilter', 'load'])
-                ->getMockForAbstractClass();
+        $storeCollectionMock = $this->createPartialMockWithReflection(
+            AbstractCollection::class,
+            ['addWebsiteFilter', 'load']
+        );
         /** @var AbstractCollection|MockObject */
-        $groupCollectionMock =
-            $this->getMockBuilder(AbstractCollection::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['addWebsiteFilter', 'load'])
-                ->getMockForAbstractClass();
+        $groupCollectionMock = $this->createPartialMockWithReflection(
+            AbstractCollection::class,
+            ['addWebsiteFilter', 'load']
+        );
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->storeFactoryMock->expects($this->any())->method('create')->willReturn($storeMock);
         $this->storeGroupFactoryMock->expects($this->any())->method('create')->willReturn($groupMock);

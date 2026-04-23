@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,9 +51,7 @@ class BundleTest extends TestCase
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->bundleConfigMock = $this->createMock(ConfigInterface::class);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -75,17 +73,10 @@ class BundleTest extends TestCase
         $this->minificationMock
             ->expects($this->any())
             ->method('addMinifiedSign')
-            ->withConsecutive(
-                ['onefile.js'],
-                ['onefile.js'],
-                ['path-to-theme/js/bundle/bundle0.js']
-            )
-            ->willReturnOnConsecutiveCalls(
-                'onefile.min.js',
-                'onefile.min.js',
-                'path-to-theme/js/bundle/bundle0.min.js'
-            );
-
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['onefile.js'] => 'onefile.min.js',
+                ['path-to-theme/js/bundle/bundle0.js'] => 'path-to-theme/js/bundle/bundle0.min.js'
+            });
         $contextMock = $this->getMockBuilder(FallbackContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,9 +97,7 @@ class BundleTest extends TestCase
             ->method('getPath')
             ->willReturn('path-to-theme');
 
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->setMethods(['getContentType', 'getContext'])
-            ->getMockForAbstractClass();
+        $assetMock = $this->createMock(LocalInterface::class);
         $assetMock->method('getContext')
             ->willReturn($contextMock);
         $assetMock->method('getContentType')
@@ -119,7 +108,7 @@ class BundleTest extends TestCase
             ->willReturn('');   // PHP 8.1 compatibility
 
         $writeMock = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $writeMock
             ->expects($this->once())
             ->method('delete')

@@ -1,17 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\GraphQl\Quote\GetQuoteItemIdByReservedQuoteIdAndSku;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**

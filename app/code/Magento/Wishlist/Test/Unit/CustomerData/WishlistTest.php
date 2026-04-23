@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,8 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Pricing\Render;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Block\Customer\Sidebar;
 use Magento\Wishlist\CustomerData\Wishlist;
 use Magento\Wishlist\CustomerData\Wishlist as WishlistModel;
@@ -23,6 +25,7 @@ use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Api\Data\WebsiteInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,25 +50,27 @@ class WishlistTest extends TestCase
     /** @var ImageBuilder|MockObject */
     private $itemResolver;
 
+    /** @var StoreManagerInterface|MockObject */
+    private $storeManagerMock;
+
+    /** @var WebsiteInterface|MockObject */
+    private $websiteMock;
+
+    /** @var StoreInterface|MockObject */
+    private $storeMock;
+
+    /** @var ImageFactory|MockObject */
+    private $imageHelperFactory;
+
     protected function setUp(): void
     {
-        $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sidebarMock = $this->getMockBuilder(Sidebar::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->viewMock = $this->getMockBuilder(ViewInterface::class)
-            ->getMockForAbstractClass();
+        $this->wishlistHelperMock = $this->createMock(Data::class);
+        $this->sidebarMock = $this->createMock(Sidebar::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
 
-        $this->catalogImageHelperMock = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $imageHelperFactory = $this->getMockBuilder(ImageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $imageHelperFactory->expects($this->any())
+        $this->catalogImageHelperMock = $this->createMock(Image::class);
+        $this->imageHelperFactory = $this->createPartialMock(ImageFactory::class, ['create']);
+        $this->imageHelperFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->catalogImageHelperMock);
 
@@ -73,12 +78,19 @@ class WishlistTest extends TestCase
             ItemResolverInterface::class
         );
 
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+
+        $this->websiteMock = $this->createMock(WebsiteInterface::class);
+
+        $this->storeMock = $this->createMock(StoreInterface::class);
+
         $this->model = new Wishlist(
             $this->wishlistHelperMock,
             $this->sidebarMock,
-            $imageHelperFactory,
+            $this->imageHelperFactory,
             $this->viewMock,
-            $this->itemResolver
+            $this->itemResolver,
+            $this->storeManagerMock
         );
     }
 
@@ -102,6 +114,22 @@ class WishlistTest extends TestCase
         $itemAddParams = ['add_params'];
         $itemRemoveParams = ['remove_params'];
 
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
         $result = [
             'counter' => __('1 item'),
             'items' => [
@@ -124,12 +152,12 @@ class WishlistTest extends TestCase
                     'delete_item_params' => $itemRemoveParams,
                 ],
             ],
+            'websiteId' => 1,
+            'storeId' => 1
         ];
 
         /** @var Item|MockObject $itemMock */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $items = [$itemMock];
 
         $this->wishlistHelperMock->expects($this->once())
@@ -140,9 +168,7 @@ class WishlistTest extends TestCase
             ->method('loadLayout');
 
         /** @var Collection|MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemCollectionMock = $this->createMock(Collection::class);
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getWishlistItemCollection')
@@ -168,9 +194,7 @@ class WishlistTest extends TestCase
             ->willReturn(new \ArrayIterator($items));
 
         /** @var Product|MockObject $productMock */
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $itemMock->expects($this->once())
             ->method('getProduct')
@@ -236,10 +260,7 @@ class WishlistTest extends TestCase
             ->willReturn($productIsVisible);
 
         /** @var AbstractType|MockObject $productTypeMock */
-        $productTypeMock = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['hasRequiredOptions'])
-            ->getMockForAbstractClass();
+        $productTypeMock = $this->createMock(AbstractType::class);
 
         $productMock->expects($this->once())
             ->method('getTypeInstance')
@@ -283,10 +304,24 @@ class WishlistTest extends TestCase
         $itemRemoveParams = ['remove_params'];
 
         /** @var Item|MockObject $itemMock */
-        $itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemMock = $this->createMock(Item::class);
         $items = [$itemMock, $itemMock];
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
 
         $result = [
             'counter' =>  __('%1 items', count($items)),
@@ -328,6 +363,8 @@ class WishlistTest extends TestCase
                     'delete_item_params' => $itemRemoveParams,
                 ],
             ],
+            'websiteId' => 1,
+            'storeId' => 1
         ];
 
         $this->wishlistHelperMock->expects($this->once())
@@ -338,9 +375,7 @@ class WishlistTest extends TestCase
             ->method('loadLayout');
 
         /** @var Collection|MockObject $itemCollectionMock */
-        $itemCollectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemCollectionMock = $this->createMock(Collection::class);
 
         $this->wishlistHelperMock->expects($this->once())
             ->method('getWishlistItemCollection')
@@ -366,9 +401,7 @@ class WishlistTest extends TestCase
             ->willReturn(new \ArrayIterator($items));
 
         /** @var Product|MockObject $productMock */
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createMock(Product::class);
 
         $itemMock->expects($this->exactly(2))
             ->method('getProduct')
@@ -435,10 +468,7 @@ class WishlistTest extends TestCase
             ->method('isVisibleInSiteVisibility');
 
         /** @var AbstractType|MockObject $productTypeMock */
-        $productTypeMock = $this->getMockBuilder(AbstractType::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['hasRequiredOptions'])
-            ->getMockForAbstractClass();
+        $productTypeMock = $this->createMock(AbstractType::class);
 
         $productMock->expects($this->exactly(2))
             ->method('getTypeInstance')
@@ -465,9 +495,27 @@ class WishlistTest extends TestCase
     {
         $items = [];
 
+        $this->storeManagerMock->expects($this->once())
+            ->method('getWebsite')
+            ->willReturn($this->websiteMock);
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+
+        $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+
+        $this->storeMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(null);
+
         $result = [
             'counter' =>  null,
             'items' => [],
+            'websiteId' =>null,
+            'storeId' => null
         ];
 
         $this->wishlistHelperMock->expects($this->once())

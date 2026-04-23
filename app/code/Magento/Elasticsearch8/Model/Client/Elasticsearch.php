@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Elasticsearch client
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @see this class will be responsible for ES8 only
  */
 class Elasticsearch implements ClientInterface
 {
@@ -58,7 +60,7 @@ class Elasticsearch implements ClientInterface
      */
     public function __construct(
         array $options = [],
-        $elasticsearchClient = null,
+        ?Client $elasticsearchClient = null,
         array $fieldsMappingPreprocessors = [],
         ?DynamicTemplatesProvider $dynamicTemplatesProvider = null
     ) {
@@ -87,12 +89,6 @@ class Elasticsearch implements ClientInterface
      */
     private function getElasticsearchClient(): ?Client /** @phpstan-ignore-line */
     {
-        // Intentionally added condition as there are BC changes from ES7 to ES8
-        // and by default ES7 is configured.
-        if (!class_exists(\Elastic\Elasticsearch\Client::class)) {
-            return null;
-        }
-
         $pid = getmypid();
         if (!isset($this->client[$pid])) {
             $config = $this->buildESConfig($this->clientOptions);
@@ -251,14 +247,11 @@ class Elasticsearch implements ClientInterface
      * Performs bulk query over Elasticsearch 8 index
      *
      * @param array $query
-     * @return void
+     * @return \Elastic\Elasticsearch\Response\Elasticsearch|\Http\Promise\Promise
      */
     public function bulkQuery(array $query)
     {
-        $elasticsearchClient = $this->getElasticsearchClient();
-        if ($elasticsearchClient) {
-            $elasticsearchClient->bulk($query);
-        }
+        return $this->getElasticsearchClient()->bulk($query);
     }
 
     /**
@@ -401,6 +394,7 @@ class Elasticsearch implements ClientInterface
         foreach ($this->fieldsMappingPreprocessors as $preprocessor) {
             $properties = $preprocessor->process($properties);
         }
+
         return $properties;
     }
 }

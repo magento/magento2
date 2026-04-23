@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnablePaylaterSection">
+        <element name="advisepaylaterBtn" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater-head" parameterized="true" />
+        <element name="payflowAdvisePaylaterBtn" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater-head" parameterized="true" />
+        <element name="expandHomePage" type="button" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage-head" parameterized="true"/>
+        <element name="display" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage_paylater_homepage_display" parameterized="true"/>
+        <element name="position" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage_paylater_homepage_position" parameterized="true"/>
+        <element name="styleLayout" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage_paylater_homepage_stylelayout" parameterized="true" />
+        <element name="ratio" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage_paylater_homepage_ratio" parameterized="true" />
+        <element name="color" type="input" selector="#payment_{{countryCode}}_paypal_group_all_in_one_payflow_advanced_required_settings_advanced_advertise_paylater_advanced_settings_paylater_homepage_paylater_homepage_color" parameterized="true" />
+        <element name="expandPayflowHomePage" type="button" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage-head" parameterized="true"/>
+        <element name="displayPayflow" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage_paylater_homepage_display" parameterized="true"/>
+        <element name="positionPayflow" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage_paylater_homepage_position" parameterized="true"/>
+        <element name="styleLayoutPayflow" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage_paylater_homepage_stylelayout" parameterized="true" />
+        <element name="ratioPayflow" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage_paylater_homepage_ratio" parameterized="true" />
+        <element name="colorPayflow" type="input" selector="#payment_{{countryCode}}_paypal_payment_gateways_paypal_payflowpro_with_express_checkout_paypal_payflow_required_paypal_payflow_advertise_paylater_paypal_payflow_settings_paylater_homepage_paylater_homepage_color" parameterized="true" />
+    </section>
+</sections>

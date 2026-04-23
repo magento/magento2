@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,9 +51,9 @@ class ReaderTest extends TestCase
     {
         $this->mapperMock = $this->createMock(Mapper::class);
 
-        $this->readerXmlMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerXmlMock = $this->createMock(ReaderInterface::class);
 
-        $this->readerDbMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerDbMock = $this->createMock(ReaderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

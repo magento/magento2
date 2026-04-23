@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Block\Html;
 
@@ -246,14 +246,17 @@ class Topmenu extends Template implements IdentityInterface
             }
 
             $html .= '<li ' . $this->_getRenderedMenuItemAttributes($child) . '>';
-            $html .= '<a href="' . $child->getUrl() . '" ' . $outermostClassCode . '><span>' . $this->escapeHtml(
-                $child->getName()
-            ) . '</span></a>' . $this->_addSubMenu(
-                $child,
-                $childLevel,
-                $childrenWrapClass,
-                $limit
-            ) . '</li>';
+            $html .= '<a href="' . $child->getUrl() . '" '
+                . $outermostClassCode
+                . 'role="menuitem"><span>'
+                . $this->escapeHtml(
+                    $child->getName()
+                ) . '</span></a>' . $this->_addSubMenu(
+                    $child,
+                    $childLevel,
+                    $childrenWrapClass,
+                    $limit
+                ) . '</li>';
             $counter++;
         }
 
@@ -288,7 +291,10 @@ class Topmenu extends Template implements IdentityInterface
      */
     protected function _getMenuItemAttributes(Node $item)
     {
-        return ['class' => implode(' ', $this->_getMenuItemClasses($item))];
+        return [
+            'class' => implode(' ', $this->_getMenuItemClasses($item)),
+            'role' => 'presentation'
+        ];
     }
 
     /**
@@ -310,12 +316,6 @@ class Topmenu extends Template implements IdentityInterface
 
         if ($item->getIsFirst()) {
             $classes[] = 'first';
-        }
-
-        if ($item->getIsActive()) {
-            $classes[] = 'active';
-        } elseif ($item->getHasActive()) {
-            $classes[] = 'has-active';
         }
 
         if ($item->getIsLast()) {

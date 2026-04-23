@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,6 @@ use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
  * Adminhtml dashboard sales statistics bar
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Sales extends Bar

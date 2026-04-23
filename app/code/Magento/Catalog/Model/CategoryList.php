@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -60,7 +60,7 @@ class CategoryList implements CategoryListInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CategorySearchResultsInterfaceFactory $categorySearchResultsFactory,
         CategoryRepositoryInterface $categoryRepository,
-        CollectionProcessorInterface $collectionProcessor = null
+        ?CollectionProcessorInterface $collectionProcessor = null
     ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
@@ -98,15 +98,18 @@ class CategoryList implements CategoryListInterface
      * Retrieve collection processor
      *
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
     {
+        // phpcs:disable
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
+                '\Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor'
             );
         }
+        // phpcs:enable
         return $this->collectionProcessor;
     }
 }

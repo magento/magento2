@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,13 @@ use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Create imageBlock from product and view.xml
@@ -49,24 +53,32 @@ class ImageFactory
     private $viewAssetPlaceholderFactory;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private ScopeConfigInterface $scopeConfig;
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $presentationConfig
      * @param AssetImageFactory $viewAssetImageFactory
      * @param PlaceholderFactory $viewAssetPlaceholderFactory
      * @param ParamsBuilder $imageParamsBuilder
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ConfigInterface $presentationConfig,
         AssetImageFactory $viewAssetImageFactory,
         PlaceholderFactory $viewAssetPlaceholderFactory,
-        ParamsBuilder $imageParamsBuilder
+        ParamsBuilder $imageParamsBuilder,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->objectManager = $objectManager;
         $this->presentationConfig = $presentationConfig;
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->viewAssetImageFactory = $viewAssetImageFactory;
         $this->imageParamsBuilder = $imageParamsBuilder;
+        $this->scopeConfig = $scopeConfig ?? ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -133,7 +145,7 @@ class ImageFactory
      * @param array|null $attributes
      * @return ImageBlock
      */
-    public function create(Product $product, string $imageId, array $attributes = null): ImageBlock
+    public function create(Product $product, string $imageId, ?array $attributes = null): ImageBlock
     {
         $viewImageConfig = $this->presentationConfig->getViewConfig()->getMediaAttributes(
             'Magento_Catalog',
@@ -164,7 +176,11 @@ class ImageFactory
         $data = [
             'data' => [
                 'template' => 'Magento_Catalog::product/image_with_borders.phtml',
-                'image_url' => $imageAsset->getUrl(),
+                'image_url' => $imageAsset->getUrl() .
+                    (
+                        $this->scopeConfig->isSetFlag(Store::XML_PATH_STORE_IN_URL) ?
+                        '?' . StoreManagerInterface::PARAM_NAME . '=' . $product->getStore()->getCode() : ''
+                    ),
                 'width' => $imageMiscParams['image_width'],
                 'height' => $imageMiscParams['image_height'],
                 'label' => $this->getLabel($product, $imageMiscParams['image_type'] ?? ''),

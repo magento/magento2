@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,8 +97,8 @@ class RepositoryTest extends TestCase
         $this->metadataMock = $this->createMock(EntityMetadata::class);
         $this->linkTypeProvider = $this->createMock(LinkTypeProvider::class);
         $this->linkResourceMock = $this->createMock(Link::class);
-        $this->hydratorPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
-        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
+        $this->hydratorPoolMock->method('getHydrator')->willReturn($this->hydratorMock);
+        $this->metadataPoolMock->method('getMetadata')->willReturn($this->metadataMock);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Repository::class,
@@ -131,8 +131,8 @@ class RepositoryTest extends TestCase
             ['product', false, null, false, $productMock],
             ['linkedProduct', false, null, false, $linkedProductMock],
         ]);
-        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('linkedProduct');
-        $entityMock->expects($this->once())->method('getSku')->willReturn('product');
+        $entityMock->method('getLinkedProductSku')->willReturn('linkedProduct');
+        $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
         $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
@@ -163,8 +163,8 @@ class RepositoryTest extends TestCase
             ['product', false, null, false, $productMock],
             ['linkedProduct', false, null, false, $linkedProductMock],
         ]);
-        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('linkedProduct');
-        $entityMock->expects($this->once())->method('getSku')->willReturn('product');
+        $entityMock->method('getLinkedProductSku')->willReturn('linkedProduct');
+        $entityMock->expects($this->exactly(2))->method('getSku')->willReturn('product');
         $entityMock->expects($this->exactly(1))->method('getLinkType')->willReturn('linkType');
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => $typeId]);
         $this->metadataPoolMock->expects($this->once())->method('getHydrator')->willReturn($this->hydratorMock);
@@ -182,10 +182,24 @@ class RepositoryTest extends TestCase
 
     public function testSaveWithoutLinkedProductSku()
     {
-        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('The linked product SKU is invalid. Verify the data and try again.');
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
-        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn('');
+        $entityMock->method('getSku')->willReturn('sku1');
+        $entityMock->method('getLinkedProductSku')->willReturn('');
+        $this->model->save($entityMock);
+    }
+
+    public function testSaveWithoutProductSku()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage(
+            'The parent product SKU is required for linking child products. '
+            . 'Please ensure the parent product SKU is provided and try again.'
+        );
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $entityMock->method('getSku')->willReturn('');
+        $entityMock->method('getLinkedProductSku')->willReturn('linkedProductSku');
         $this->model->save($entityMock);
     }
 
@@ -283,5 +297,17 @@ class RepositoryTest extends TestCase
         $this->linkTypeProvider->expects($this->once())->method('getLinkTypes')->willReturn(['linkType' => 1]);
 
         $this->model->delete($entityMock);
+    }
+
+    public function testSaveWithNullLinkedProductSku()
+    {
+        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectExceptionMessage('The linked product SKU is invalid. Verify the data and try again.');
+
+        $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
+        $entityMock->expects($this->any())->method('getSku')->willReturn('sku1');
+        $entityMock->expects($this->any())->method('getLinkedProductSku')->willReturn(null);
+
+        $this->model->save($entityMock);
     }
 }

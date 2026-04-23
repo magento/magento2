@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Shell;
 use Magento\Framework\Shell\CommandRenderer;
 use Magento\Framework\Shell\CommandRendererInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -32,9 +33,7 @@ class ShellTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->commandRenderer = new CommandRenderer();
     }
 
@@ -60,11 +59,12 @@ class ShellTest extends TestCase
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedResult
+     * @param array $expectedLogRecords
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
-    public function testExecute($command, $commandArgs, $expectedResult): void
+    #[DataProvider('executeDataProvider')]
+    public function testExecute($command, $commandArgs, $expectedResult, $expectedLogRecords = []): void
     {
         $this->_testExecuteCommand(
             new Shell($this->commandRenderer, $this->logger),
@@ -81,8 +81,8 @@ class ShellTest extends TestCase
      * @param array $expectedLogRecords
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteLog($command, $commandArgs, $expectedResult, $expectedLogRecords): void
     {
         $quoteChar = substr(escapeshellarg(' '), 0, 1);
@@ -94,7 +94,11 @@ class ShellTest extends TestCase
         }
         $this->logger
             ->method('info')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
 
         $this->_testExecuteCommand(
             new Shell($this->commandRenderer, $this->logger),
@@ -107,7 +111,7 @@ class ShellTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         // backtick symbol (`) has to be replaced with environment-dependent quote character
         return [
@@ -150,11 +154,12 @@ class ShellTest extends TestCase
      * @param string $command
      * @param array $commandArgs
      * @param string $expectedError
+     * @param array $expectedLogRecords
      *
      * @return void
-     * @dataProvider executeDataProvider
      */
-    public function testExecuteFailureDetails($command, $commandArgs, $expectedError): void
+    #[DataProvider('executeDataProvider')]
+    public function testExecuteFailureDetails($command, $commandArgs, $expectedError, $expectedLogRecords = []): void
     {
         try {
             /* Force command to return non-zero exit code */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,8 +28,8 @@ class DriverPoolTest extends TestCase
 
     public function testCustomDriver()
     {
-        $customOne = $this->getMockForAbstractClass(DriverInterface::class);
-        $customTwo = get_class($this->getMockForAbstractClass(DriverInterface::class));
+        $customOne = $this->createMock(DriverInterface::class);
+        $customTwo = get_class($this->createMock(DriverInterface::class));
         $object = new DriverPool(['customOne' => $customOne, 'customTwo' => $customTwo]);
         $this->assertSame($customOne, $object->getDriver('customOne'));
         $this->assertInstanceOf(DriverInterface::class, $object->getDriver('customOne'));

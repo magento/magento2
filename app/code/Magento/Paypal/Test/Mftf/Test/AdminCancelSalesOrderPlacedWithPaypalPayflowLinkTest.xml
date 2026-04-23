@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelSalesOrderPlacedWithPaypalPayflowLinkTest">
+        <annotations>
+            <features value="Payflow"/>
+            <stories value="Payment Payflow Link methods"/>
+            <title value="Cancel a Sales Order placed with PayPal Payflow Link"/>
+            <description value="Admin can cancel orders placed by customers using PayPal Payflow"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5429"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Simple product is created -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <!-- US Customer is created -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminEnablePayPalPayFlowLinkActionGroup" stepKey="ConfigPayPalPayFlowLink">
+                <argument name="credentials" value="SamplePaypalPaymentsFlowLinkConfig"/>
+            </actionGroup>
+            <!-- Precondition Step1: Order is placed within PayPal Payflow Link -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+            <!-- Add product to cart -->
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+            <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+            <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+            <!-- Click on PayPal payment radio button -->
+            <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="waitForPayPalRadioButton"/>
+            <click selector="{{CheckoutPaymentSection.PayPalPayflowLinkRadio}}" stepKey="selectPaypalPayment"/>
+            <checkOption selector="{{CheckoutPaymentSection.selectCheckboxforBilling}}" stepKey="selectCheckboxForBilling"/>
+            <waitForElementClickable selector="{{CheckoutPaymentSection.cntinuebtn}}" stepKey="waitToClickContinueButton"/>
+            <click selector="{{CheckoutPaymentSection.cntinuebtn}}" stepKey="submitContinueButton"/>
+            <actionGroup ref="StorefrontSwitchToPayPalPayflowActionGroup" stepKey="switchToPaypalPayflowIframe"/>
+            <actionGroup ref="StorefrontFillCreditCardDetailsActionGroup" stepKey="inputCreditCardNumberFillCreditCardDetails"/>
+            <waitForPageLoad stepKey="waitForOrderData"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
+            <!-- Logout from storefront -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--  Step1,2&3: Log in to Admin, Go to Sales > Orders & Open the Order from preconditions -->
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
+            <argument name="entityId" value="$orderId"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitPage"/>
+        <!-- Step 4&5: Click on Cancel button then OK Button-->
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
+        <!-- Step6: Observe the Data -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="Canceled"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderDetailsInformationSection.paymentInformationField(AdminMenuPaypalTransaction.dataUiId)}}" stepKey="waitForTransactionIDFieldToBeAppeared"/>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.paymentInformationField(AdminMenuPaypalTransaction.dataUiId)}}" stepKey="grabTransactionID"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderCommentsWithType(AdminMenuPaypalTransaction.orderData)}}" userInput="Canceled order online Amount: $15.00. Transaction ID: &quot;{$grabTransactionID}&quot;" stepKey="seeOrderHistoryNotesAfterCancelingOrder"/>
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasAuthorization">
+            <argument name="transactionType" value="authorization"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData(AdminMenuPaypalTransaction.status)}}" userInput="{{ImageUpload.shareable}}" stepKey="seeIfClosedHeaderIsSetAsYesForAuthorization"/>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.backButton}}" stepKey="waitForBackButtonToBeClicked"/>
+        <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackButton"/>
+        <actionGroup ref="AdminOpenTransactionsTabActionGroup" stepKey="openTransactionTypeHasVoid">
+            <argument name="transactionType" value="void"/>
+        </actionGroup>
+        <waitForText selector="{{AdminTransactionsGridSection.transactionData(AdminMenuPaypalTransaction.status)}}" userInput="{{ImageUpload.shareable}}" stepKey="seeIfClosedHeaderIsSetAsYesForVoid"/>
+    </test>
+</tests>

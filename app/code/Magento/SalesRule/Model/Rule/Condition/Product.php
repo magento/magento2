@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Condition;
 
 /**
  * Product rule condition data model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -25,7 +23,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attributes['quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
 
-        $attributes['parent::category_ids'] = __('Category (Parent only)');
+        $attributes['parent::category_ids'] = __('Category (Parent Only)');
         $attributes['children::category_ids'] = __('Category (Children Only)');
     }
 
@@ -67,15 +65,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attributes = [];
         foreach ($productAttributes as $attribute) {
             /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            if (!$attribute->isAllowedForRuleCondition()
-                || !$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
-            ) {
+            if (!$attribute->getDataUsingMethod($this->_isUsedForRuleProperty)
+                || !$attribute->isAllowedForRuleCondition()) {
                 continue;
             }
             $frontLabel = $attribute->getFrontendLabel();
             $attributes[$attribute->getAttributeCode()] = $frontLabel;
-            $attributes['parent::' . $attribute->getAttributeCode()] = $frontLabel . __('(Parent Only)');
-            $attributes['children::' . $attribute->getAttributeCode()] = $frontLabel . __('(Children Only)');
+            $attributes['parent::' . $attribute->getAttributeCode()] = __('%1 (Parent Only)', $frontLabel);
+            $attributes['children::' . $attribute->getAttributeCode()] = __('%1 (Children Only)', $frontLabel);
         }
 
         $this->_addSpecialAttributes($attributes);
@@ -173,12 +170,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $product = $this->productRepository->getById($model->getProductId());
         }
 
+        // For composite products (e.g., configurable), the parent item usually holds the price.
+        $priceContainerItem = $model->getParentItem() ?: $model;
         $product->setQuoteItemQty(
-            $model->getQty()
+            $priceContainerItem->getQty()
         )->setQuoteItemPrice(
-            $model->getPrice() // possible bug: need to use $model->getBasePrice()
+            $priceContainerItem->getPrice()
         )->setQuoteItemRowTotal(
-            $model->getBaseRowTotal()
+            $priceContainerItem->getBaseRowTotal()
         );
 
         $attrCode = $this->getAttribute();
@@ -194,7 +193,26 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             }
         }
 
-        return parent::validate($product);
+        /**
+         * \Magento\Rule\Model\Condition\AbstractCondition::validate() will attempt to reload the product
+         * if the attribute value is missing in the product. We need to ensure that logic is not executed
+         * because not only it is unnecessary as all attributes used in rules conditions are loaded into
+         * the product model, but it also causes performance issues.
+         * @see \Magento\Rule\Model\Condition\AbstractCondition::validate()
+         * @see \Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::afterLoadAttributes()
+         */
+        $hasAttribute = $product->hasData($attrCode);
+        // value is most likely null if $hasAttribute === false, but it could be provided from custom attributes
+        $value = $product->getData($attrCode);
+        if (!$hasAttribute) {
+            $product->setData($attrCode, $value);
+        }
+        $isValid = parent::validate($product);
+        if (!$hasAttribute && $value === null) {
+            $product->unsetData($attrCode);
+        }
+
+        return $isValid;
     }
 
     /**

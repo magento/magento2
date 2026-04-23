@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Model;
 
 use Laminas\Uri\UriFactory;
@@ -17,6 +19,7 @@ use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Url\ModifierInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
@@ -43,7 +46,8 @@ class Store extends AbstractExtensibleModel implements
     AppScopeInterface,
     UrlScopeInterface,
     IdentityInterface,
-    StoreInterface
+    StoreInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Store Id key name
@@ -380,13 +384,13 @@ class Store extends AbstractExtensibleModel implements
         $currencyInstalled,
         \Magento\Store\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $isCustomEntryPoint = false,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
-        \Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
-        ModifierInterface $urlModifier = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null,
+        ?\Magento\Store\Model\Validation\StoreValidator $modelValidator = null,
+        ?ModifierInterface $urlModifier = null
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_config = $config;
@@ -466,7 +470,6 @@ class Store extends AbstractExtensibleModel implements
     protected function _getSession()
     {
         if (!$this->_session->isSessionExists()) {
-            $this->_session->setName('store_' . $this->getCode());
             $this->_session->start();
         }
         return $this->_session;
@@ -761,8 +764,8 @@ class Store extends AbstractExtensibleModel implements
     public function isUseStoreInUrl()
     {
         return !($this->hasDisableStoreInUrl() && $this->getDisableStoreInUrl())
-            && !$this->getConfig(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
-            && $this->getConfig(self::XML_PATH_STORE_IN_URL);
+            && !$this->_config->isSetFlag(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)
+            && $this->_config->isSetFlag(self::XML_PATH_STORE_IN_URL);
     }
 
     /**
@@ -808,8 +811,16 @@ class Store extends AbstractExtensibleModel implements
             return true;
         }
 
-        $secureBaseUrl = $this->_config->getValue(self::XML_PATH_SECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
-        $secureFrontend = $this->_config->getValue(self::XML_PATH_SECURE_IN_FRONTEND, ScopeInterface::SCOPE_STORE);
+        $secureBaseUrl = $this->_config->getValue(
+            self::XML_PATH_SECURE_BASE_URL,
+            ScopeInterface::SCOPE_STORE,
+            $this->getId()
+        );
+        $secureFrontend = $this->_config->getValue(
+            self::XML_PATH_SECURE_IN_FRONTEND,
+            ScopeInterface::SCOPE_STORE,
+            $this->getId()
+        );
 
         if (!$secureBaseUrl || !$secureFrontend) {
             return false;
@@ -818,8 +829,8 @@ class Store extends AbstractExtensibleModel implements
         $uri = UriFactory::factory($secureBaseUrl);
         $port = $uri->getPort();
         $serverPort = $this->_request->getServer('SERVER_PORT');
-        $isSecure = $uri->getScheme() == 'https' && isset($serverPort) && $port == $serverPort;
-        return $isSecure;
+
+        return $uri->getScheme() === 'https' && $serverPort !== null && $port == $serverPort;
     }
 
     /*************************************************************************************
@@ -1282,6 +1293,7 @@ class Store extends AbstractExtensibleModel implements
      *
      * @return $this
      * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Exception
      */
     public function afterDelete()
     {
@@ -1294,7 +1306,7 @@ class Store extends AbstractExtensibleModel implements
         );
         parent::afterDelete();
         $this->_configCacheType->clean();
-
+        $this->pillPut->put();
         return $this;
     }
 
@@ -1364,6 +1376,17 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
+    }
+
+    /**
      * Return Store Path
      *
      * @return string
@@ -1408,5 +1431,29 @@ class Store extends AbstractExtensibleModel implements
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_baseUrlCache = [];
+        $this->_configCache = null;
+        $this->_configCacheBaseNodes = [];
+        $this->_dirCache = [];
+        $this->_urlCache = [];
+        $this->_baseUrlCache = [];
     }
 }

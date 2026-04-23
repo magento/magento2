@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ShipmentFormSection">
+        <element name="shippingAddress" type="textarea" selector="//*[@class='box box-billing-address']//address"/>
+        <element name="billingAddress" type="textarea" selector="//*[@class='box box-shipping-address']//address"/>
+    </section>
+</sections>

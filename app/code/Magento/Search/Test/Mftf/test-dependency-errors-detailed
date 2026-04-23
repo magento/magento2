@@ -1,0 +1,8 @@
+
+File "/var/www/html/app/code/Magento/Search/Test/Mftf/Test/UseLayeredNavigationToFilterProductsByOutOfStockOptionOfConfigurableProductTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminProductFormConfigurationsSection from module(s): magento/module-configurable-product
+	 AdminCreateProductConfigurationsPanel from module(s): magento/module-configurable-product, magento/module-inventory-configurable-product-admin-ui
+	 StorefrontLayeredNavigationSection from module(s): magento/module-layered-navigation
+	 AdminSelectAttributeInConfigurableAttributesGrid from module(s): magento/module-configurable-product

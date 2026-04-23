@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model;
 
@@ -140,11 +140,11 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Config\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        SettingChecker $settingChecker = null,
+        ?SettingChecker $settingChecker = null,
         array $data = [],
-        ScopeResolverPool $scopeResolverPool = null,
-        ScopeTypeNormalizer $scopeTypeNormalizer = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        ?ScopeResolverPool $scopeResolverPool = null,
+        ?ScopeTypeNormalizer $scopeTypeNormalizer = null,
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         parent::__construct($data);
         $this->_eventManager = $eventManager;
@@ -182,6 +182,10 @@ class Config extends \Magento\Framework\DataObject
             return $this;
         }
 
+        /**
+         * Reload config to make sure config data is consistent with the database at this point.
+         */
+        $this->_appConfig->reinit();
         $oldConfig = $this->_getConfig(true);
 
         /** @var \Magento\Framework\DB\Transaction $deleteTransaction */

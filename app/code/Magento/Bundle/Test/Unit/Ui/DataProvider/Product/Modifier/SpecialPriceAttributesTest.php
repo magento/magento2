@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Ui\DataProvider\Product\Modifier\SpecialPriceAttributes;
 use Magento\Directory\Model\Currency as DirectoryCurrency;
@@ -54,8 +55,8 @@ class SpecialPriceAttributesTest extends TestCase
      * @param array $input
      * @param array $output
      * @return void
-     * @dataProvider modifyDataProvider
      */
+    #[DataProvider('modifyDataProvider')]
     public function testModifyData(string $locale, array $input, array $output): void
     {
         $this->localResolver->method('getLocale')
@@ -72,7 +73,7 @@ class SpecialPriceAttributesTest extends TestCase
     /**
      * @return array
      */
-    public function modifyDataProvider(): array
+    public static function modifyDataProvider(): array
     {
         return [
             [

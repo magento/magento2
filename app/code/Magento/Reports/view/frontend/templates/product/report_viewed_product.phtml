@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+
+/** @var \Magento\Reports\Block\Product\ViewedProduct $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Reports/js/product-viewed": {
+                "product_id": "<?= $escaper->escapeJs($block->getProduct()->getId()) ?>"
+            }
+        }
+    }
+</script>

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Swatches\Model;
 
 use Magento\Catalog\Model\Product\Attribute\Save\AbstractAttributeTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -36,10 +37,10 @@ class AttributeTextSwatchTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Swatches/_files/product_text_swatch_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         parent::testUniqueAttribute($firstSku, $secondSku);
@@ -48,11 +49,11 @@ class AttributeTextSwatchTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function productProvider(): array
+    public static function productProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple2',
+                'productSku' => 'simple2',
             ],
         ];
     }
@@ -60,12 +61,12 @@ class AttributeTextSwatchTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueAttributeValueProvider(): array
+    public static function uniqueAttributeValueProvider(): array
     {
         return [
             [
-                'first_product_sku' => 'simple2',
-                'second_product_sku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

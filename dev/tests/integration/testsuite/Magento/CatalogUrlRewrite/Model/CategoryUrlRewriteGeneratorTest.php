@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogUrlRewrite\Model;
@@ -23,6 +23,7 @@ use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -211,8 +212,8 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
      * @throws CouldNotSaveException
      * @throws NoSuchEntityException
      * @throws Exception
-     * @dataProvider incorrectUrlRewritesDataProvider
      */
+    #[DataProvider('incorrectUrlRewritesDataProvider')]
     public function testGenerateUrlRewritesWithIncorrectUrlKey($urlKey)
     {
         $this->expectException(LocalizedException::class);
@@ -227,7 +228,7 @@ class CategoryUrlRewriteGeneratorTest extends TestCase
     /**
      * @return array
      */
-    public function incorrectUrlRewritesDataProvider()
+    public static function incorrectUrlRewritesDataProvider()
     {
         return [
             ['#'],

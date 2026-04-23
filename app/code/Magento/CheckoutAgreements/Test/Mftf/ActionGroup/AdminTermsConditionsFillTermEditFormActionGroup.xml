@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,6 +13,7 @@
             <argument name="term"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminNewTermFormSection.conditionName}}" stepKey="waitForConditionNameField" />
         <fillField selector="{{AdminNewTermFormSection.conditionName}}" userInput="{{term.name}}" stepKey="fillFieldConditionName"/>
         <selectOption selector="{{AdminNewTermFormSection.isActive}}" userInput="{{term.isActive}}" stepKey="selectOptionIsActive"/>
         <selectOption selector="{{AdminNewTermFormSection.isHtml}}" userInput="{{term.isHtml}}" stepKey="selectOptionIsHtml"/>

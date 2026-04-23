@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,8 +16,14 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\App\Console\Request as ConsoleRequest;
+use Magento\Framework\DataObject;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -31,7 +37,10 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -39,62 +48,74 @@ use PHPUnit\Framework\TestCase;
  */
 class CreateTest extends TestCase
 {
+    use MockCreationTrait;
+
     public const CUSTOMER_ID = 1;
 
     /**
      * @var Create
      */
-    private $adminOrderCreate;
+    private Create $adminOrderCreate;
 
     /**
      * @var CartRepositoryInterface|MockObject
      */
-    private $quoteRepository;
+    private CartRepositoryInterface $quoteRepository;
 
     /**
      * @var QuoteFactory|MockObject
      */
-    private $quoteFactory;
+    private QuoteFactory $quoteFactory;
 
     /**
      * @var SessionQuote|MockObject
      */
-    private $sessionQuote;
+    private SessionQuote $sessionQuote;
 
     /**
      * @var FormFactory|MockObject
      */
-    private $formFactory;
+    private FormFactory $formFactory;
 
     /**
      * @var CustomerInterfaceFactory|MockObject
      */
-    private $customerFactory;
+    private CustomerInterfaceFactory $customerFactory;
 
     /**
      * @var Updater|MockObject
      */
-    private $itemUpdater;
+    private Updater $itemUpdater;
 
     /**
      * @var Mapper|MockObject
      */
-    private $customerMapper;
+    private Mapper $customerMapper;
 
     /**
      * @var GroupRepositoryInterface|MockObject
      */
-    private $groupRepository;
+    private GroupRepositoryInterface $groupRepository;
 
     /**
      * @var DataObjectHelper|MockObject
      */
-    private $dataObjectHelper;
+    private DataObjectHelper $dataObjectHelper;
 
     /**
      * @var Order|MockObject
      */
-    private $orderMock;
+    private Order $orderMock;
+
+    /**
+     * @var ObjectManagerInterface|ObjectManagerInterface&MockObject|MockObject
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
+     * @var ManagerInterface|ManagerInterface&MockObject|MockObject
+     */
+    private ManagerInterface $messageManager;
 
     /**
      * @inheritdoc
@@ -107,54 +128,43 @@ class CreateTest extends TestCase
 
         $this->itemUpdater = $this->createMock(Updater::class);
 
-        $this->quoteRepository = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getForCustomer'])
-            ->getMockForAbstractClass();
+        $this->quoteRepository = $this->createMock(CartRepositoryInterface::class);
 
-        $this->sessionQuote = $this->getMockBuilder(SessionQuote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getQuote',
-                    'getStoreId',
-                    'getCustomerId',
-                    'setData',
-                    'setCurrencyId',
-                    'setCustomerId',
-                    'setStoreId',
-                    'setCustomerGroupId',
-                    'getData',
-                    'getStore',
-                    'getUseOldShippingMethod',
-                ]
-            )
-            ->getMock();
+        $this->sessionQuote = $this->createPartialMockWithReflection(
+            SessionQuote::class,
+            [
+                'getStoreId',
+                'getCustomerId',
+                'setData',
+                'setCurrencyId',
+                'setCustomerId',
+                'setStoreId',
+                'setCustomerGroupId',
+                'getUseOldShippingMethod',
+                'getQuote',
+                'getData',
+                'getStore'
+            ]
+        );
 
-        $storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
+        $storeMock = $this->createMock(StoreInterface::class);
         $this->sessionQuote->method('getStore')
             ->willReturn($storeMock);
 
         $this->customerMapper = $this->getMockBuilder(Mapper::class)
-            ->setMethods(['toFlatArray'])
+            ->onlyMethods(['toFlatArray'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
-        $this->dataObjectHelper = $this->getMockBuilder(DataObjectHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
+        $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
 
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'getEntityId',
                     'getId',
-                    'setReordered',
-                    'getReordered',
                     'getOrderCurrencyCode',
                     'getCustomerGroupId',
                     'getItemsCollection',
@@ -165,10 +175,14 @@ class CreateTest extends TestCase
             )
             ->getMock();
 
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             Create::class,
             [
+                '_objectManager' => $this->objectManager,
+                'messageManager' => $this->messageManager,
                 'quoteSession' => $this->sessionQuote,
                 'metadataFormFactory' => $this->formFactory,
                 'customerFactory' => $this->customerFactory,
@@ -182,6 +196,46 @@ class CreateTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception|LocalizedException
+     */
+    public function testInitFromOrderItemNoExceptionThrownOnAddProduct(): void
+    {
+        $orderItemId = $productId = 1;
+        $exceptionMessage = 'Exception message';
+
+        $buyRequest = $this->createMock(DataObject::class);
+
+        $orderItem = $this->createMock(OrderItem::class);
+        $orderItem->expects($this->once())->method('getId')->willReturn($orderItemId);
+        $orderItem->expects($this->once())->method('getProductId')->willReturn($productId);
+        $orderItem->expects($this->once())->method('getBuyRequest')->willReturn($buyRequest);
+        $orderItem->expects($this->once())->method('getProductOptions')->willReturn(null);
+
+        $product = $this->createMock(Product::class);
+        $product->expects($this->once())->method('setStoreId')->willReturnSelf();
+        $product->expects($this->once())->method('load')->willReturnSelf();
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $this->objectManager->expects($this->once())->method('create')->willReturn($product);
+
+        $exception = new LocalizedException(__($exceptionMessage));
+        $quote = $this->createMock(Quote::class);
+        $quote->expects($this->once())
+            ->method('addProduct')
+            ->with($product, $buyRequest)
+            ->willThrowException($exception);
+        $this->sessionQuote->method('getQuote')
+            ->willReturn($quote);
+
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(__($exceptionMessage))
+            ->willReturnSelf();
+
+        $this->adminOrderCreate->initFromOrderItem($orderItem);
+    }
+
     public function testSetAccountData()
     {
         $taxClassId = 1;
@@ -192,16 +246,23 @@ class CreateTest extends TestCase
         $attributeMocks = [];
 
         foreach ($attributes as $value) {
-            $attribute = $this->getMockForAbstractClass(AttributeMetadataInterface::class);
+            $attribute = $this->createMock(AttributeMetadataInterface::class);
             $attribute->method('getAttributeCode')
                 ->willReturn($value[0]);
 
             $attributeMocks[] = $attribute;
         }
 
-        $customerGroup = $this->getMockForAbstractClass(GroupInterface::class);
+        $customerGroup = $this->createMock(GroupInterface::class);
         $customerGroup->method('getTaxClassId')
             ->willReturn($taxClassId);
+        // Use concrete Request class with MockCreationTrait to add getPostValue method
+        $requestMock = $this->createPartialMockWithReflection(
+            ConsoleRequest::class,
+            ['getPostValue']
+        );
+        $requestMock->method('getPostValue')->willReturn(null);
+        
         $customerForm = $this->createMock(Form::class);
         $customerForm->method('getAttributes')
             ->willReturn([$attributeMocks[1]]);
@@ -211,12 +272,6 @@ class CreateTest extends TestCase
         $customerForm
             ->method('restoreData')
             ->willReturn(['group_id' => 1]);
-
-        $requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getPostValue'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $requestMock->expects($this->atLeastOnce())->method('getPostValue')->willReturn(null);
         $customerForm->method('prepareRequest')
             ->willReturn($requestMock);
 
@@ -328,18 +383,17 @@ class CreateTest extends TestCase
     public function testApplyCoupon()
     {
         $couponCode = '123';
-        $quote = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setCouponCode'])
-            ->onlyMethods(['getShippingAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['setCouponCode', 'getShippingAddress']
+        );
         $this->sessionQuote->method('getQuote')
             ->willReturn($quote);
 
-        $address = $this->getMockBuilder(Address::class)
-            ->addMethods(['setCollectShippingRates', 'setFreeShipping'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates', 'setFreeShipping']
+        );
         $quote->method('getShippingAddress')
             ->willReturn($address);
         $quote->method('setCouponCode')
@@ -400,18 +454,12 @@ class CreateTest extends TestCase
         $address->method('setCustomerAddressId')
             ->willReturnSelf();
 
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'setCustomerGroupId',
+        $quote = $this->createPartialMockWithReflection(Quote::class, array_merge(['setCustomerGroupId'], [
                     'getBillingAddress',
                     'getShippingAddress',
                     'isVirtual',
                     'collectTotals',
-                ]
-            )
-            ->getMock();
+                ]));
 
         $quote->method('getBillingAddress')
             ->willReturn($address);
@@ -440,15 +488,13 @@ class CreateTest extends TestCase
 
         $itemCollectionMock = $this->getMockBuilder(ItemCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getIterator'])
+            ->onlyMethods(['getIterator'])
             ->getMock();
         $itemCollectionMock->method('getIterator')
             ->willReturn($iterator);
 
         $this->orderMock->method('getItemsCollection')
             ->willReturn($itemCollectionMock);
-        $this->orderMock->method('getReordered')
-            ->willReturn(false);
         $this->orderMock->method('getShippingAddress')
             ->willReturn($address);
         $this->orderMock->method('getBillingAddress')
@@ -465,9 +511,9 @@ class CreateTest extends TestCase
     /**
      *  Test case for setShippingAsBilling
      *
-     * @dataProvider setShippingAsBillingDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('setShippingAsBillingDataProvider')]
     public function testSetShippingAsBilling(bool $flag, array $billingData, array $shippingData): void
     {
         $billingAddress = $this->createPartialMock(Address::class, ['getData']);
@@ -492,16 +538,10 @@ class CreateTest extends TestCase
             ->method('setSameAsBilling')
             ->with($flag)
             ->willReturnSelf();
-        $quote = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
+        $quote = $this->createPartialMockWithReflection(Quote::class, array_merge(['setRecollect'], [
                     'getBillingAddress',
-                    'getShippingAddress',
-                    'setRecollect'
-                ]
-            )
-            ->getMock();
+                    'getShippingAddress'
+                ]));
 
         $quote->expects($this->any())
             ->method('getBillingAddress')
@@ -523,7 +563,7 @@ class CreateTest extends TestCase
      *
      * @return array
      */
-    public function setShippingAsBillingDataProvider(): array
+    public static function setShippingAsBillingDataProvider(): array
     {
         return [
             'testcase when sameAsBillingFlag is false' => [
@@ -582,5 +622,94 @@ class CreateTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    public function testGetQuoteAssignsCustomerWhenCustomerIdPresent(): void
+    {
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['updateCustomerData', 'getCustomerId']
+        );
+
+        $quote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(self::CUSTOMER_ID);
+
+        $customerData = $this->getMockBuilder(CustomerInterface::class)
+            ->getMock();
+
+        $customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMock();
+        $customerRepository->expects($this->once())
+            ->method('getById')
+            ->with(self::CUSTOMER_ID)
+            ->willReturn($customerData);
+
+        $quote->expects($this->once())
+            ->method('updateCustomerData')
+            ->with($customerData);
+
+        $this->sessionQuote->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($quote);
+
+        $subject = $this->createAdminOrderCreateWithCustomerRepository($customerRepository);
+
+        $result = $subject->getQuote();
+
+        $this->assertSame($quote, $result);
+    }
+
+    public function testGetQuoteSkipsAssignWhenNoCustomerId(): void
+    {
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['updateCustomerData', 'getCustomerId']
+        );
+
+        $quote->expects($this->once())
+            ->method('getCustomerId')
+            ->willReturn(0);
+
+        $quote->expects($this->never())
+            ->method('updateCustomerData');
+
+        $customerRepository = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->getMock();
+        $customerRepository->expects($this->never())
+            ->method('getById');
+
+        $this->sessionQuote->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($quote);
+
+        $subject = $this->createAdminOrderCreateWithCustomerRepository($customerRepository);
+
+        $result = $subject->getQuote();
+
+        $this->assertSame($quote, $result);
+    }
+
+    private function createAdminOrderCreateWithCustomerRepository(
+        CustomerRepositoryInterface $customerRepository
+    ): Create {
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        return $objectManagerHelper->getObject(
+            Create::class,
+            [
+                '_objectManager' => $this->objectManager,
+                'messageManager' => $this->messageManager,
+                'quoteSession' => $this->sessionQuote,
+                'metadataFormFactory' => $this->formFactory,
+                'customerFactory' => $this->customerFactory,
+                'groupRepository' => $this->groupRepository,
+                'quoteItemUpdater' => $this->itemUpdater,
+                'customerMapper' => $this->customerMapper,
+                'dataObjectHelper' => $this->dataObjectHelper,
+                'quoteRepository' => $this->quoteRepository,
+                'quoteFactory' => $this->quoteFactory,
+                'customerRepository' => $customerRepository,
+            ]
+        );
     }
 }

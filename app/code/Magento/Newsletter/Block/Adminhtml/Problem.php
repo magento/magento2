@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Block\Adminhtml;
 
@@ -11,7 +11,6 @@ use Magento\Newsletter\Model\ResourceModel\Problem\Collection;
  * Newsletter problem block template.
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Problem extends \Magento\Backend\Block\Template

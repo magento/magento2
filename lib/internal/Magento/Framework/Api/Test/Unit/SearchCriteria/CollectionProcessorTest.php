@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,9 +13,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CollectionProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Return model
      *
@@ -48,6 +50,7 @@ class CollectionProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource'])
             ->getMock();
 
         $processorOneMock->expects($this->once())
@@ -65,14 +68,10 @@ class CollectionProcessorTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         /** @var CollectionProcessorInterface|MockObject $customFilterMock */
-        $processorOneMock = $this->getMockBuilder(CollectionProcessorInterface::class)
-            ->setMethods(['process'])
-            ->getMockForAbstractClass();
+        $processorOneMock = $this->createMock(CollectionProcessorInterface::class);
 
         /** @var \stdClass|MockObject $processorTwoMock */
-        $processorTwoMock = $this->getMockBuilder(\stdClass::class)
-            ->setMethods(['process'])
-            ->getMock();
+        $processorTwoMock = $this->createPartialMockWithReflection(\stdClass::class, ['process']);
 
         $processors = [$processorOneMock, $processorTwoMock];
 
@@ -85,6 +84,7 @@ class CollectionProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource'])
             ->getMock();
 
         $processorOneMock->expects($this->once())

@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\Test;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
 use Magento\CatalogInventory\Observer\ItemsForReindex;
@@ -95,10 +96,10 @@ class ReindexQuoteInventoryObserverTest extends TestCase
     /**
      * Test execute should re-index quote stock items.
      *
-     * @test
      *
      * @return void
      */
+    #[Test]
     public function execute(): void
     {
         $this->observedObject->expects($this->once())
@@ -116,15 +117,14 @@ class ReindexQuoteInventoryObserverTest extends TestCase
 
         $this->quoteItem->expects($this->exactly(6))
             ->method('getData')
-            ->withConsecutive(
-                ['product_id'],
-                ['product_id'],
-                ['children_items'],
-                ['product_id'],
-                ['product_id'],
-                ['product_id']
-            )->willReturnOnConsecutiveCalls(1, 1, [$this->quoteItem], 1, 1, 1);
-
+        ->willReturnCallback(fn($param) => match ([$param]) {
+                ['product_id']=> 1,
+                ['product_id'] => 1,
+                ['children_items']=> [$this->quoteItem],
+                ['product_id']=> 1,
+                ['product_id']=> 1,
+                ['product_id']=> 1,
+        });
         $this->stockIndexerProcessor->expects($this->once())
             ->method('reindexList')
             ->with([1 => 1]);
@@ -146,10 +146,10 @@ class ReindexQuoteInventoryObserverTest extends TestCase
     /**
      * Test execute should log error on exception.
      *
-     * @test
      *
      * @return void
      */
+    #[Test]
     public function executeShouldLogOnException(): void
     {
         $this->observedObject->expects($this->once())
@@ -167,11 +167,11 @@ class ReindexQuoteInventoryObserverTest extends TestCase
 
         $this->quoteItem->expects($this->exactly(3))
             ->method('getData')
-            ->withConsecutive(
-                ['product_id'],
-                ['product_id'],
-                ['children_items']
-            )->willReturnOnConsecutiveCalls(1, 1, []);
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['product_id']=> 1,
+                ['product_id'] => 1,
+                ['children_items']=> []
+            });
 
         $this->stockIndexerProcessor->expects($this->once())
             ->method('reindexList')

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
 
 /**
  * Term filter builder
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Term implements FilterInterface
 {
@@ -31,7 +33,7 @@ class Term implements FilterInterface
 
     /**
      * @var array
-     * @see \Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType::$integerTypeAttributes
+     * @see \Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Resolver\IntegerType::$integerTypeAttributes
      */
     private $integerTypeAttributes = ['category_ids'];
 

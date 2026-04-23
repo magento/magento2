@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\TestFramework\MessageQueue\PublisherConsumerController;
@@ -31,18 +32,21 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class AsyncScheduleTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const REST_RESOURCE_PATH = '/V1/products';
-    const ASYNC_RESOURCE_PATH = '/async/V1/products';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const SERVICE_NAME = 'catalogProductRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const REST_RESOURCE_PATH = '/V1/products';
+    public const ASYNC_RESOURCE_PATH = '/async/V1/products';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -104,9 +108,8 @@ class AsyncScheduleTest extends WebapiAbstract
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productCreationProvider
-     */
+    /** */
+    #[DataProvider('productCreationProvider')]
     public function testAsyncScheduleBulk($product)
     {
         $this->_markTestAsRestOnly();
@@ -174,9 +177,8 @@ class AsyncScheduleTest extends WebapiAbstract
 
     /**
      * @param string $sku
-     * @param string|null $storeCode
-     * @dataProvider productGetDataProvider
-     */
+     * @param string|null $storeCode */
+    #[DataProvider('productGetDataProvider')]
     public function testGETRequestToAsync($sku, $storeCode = null)
     {
         $this->expectException(\Exception::class);
@@ -202,11 +204,11 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productCreationProvider()
+    public static function productCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -235,7 +237,7 @@ class AsyncScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productGetDataProvider()
+    public static function productGetDataProvider()
     {
         return [
             ['psku-test-1', null],
@@ -248,7 +250,7 @@ class AsyncScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])

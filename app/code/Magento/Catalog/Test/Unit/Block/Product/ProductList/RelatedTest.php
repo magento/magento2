@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Block\Product\ProductList\Related;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -40,7 +41,6 @@ class RelatedTest extends TestCase
             Related::class,
             '_itemCollection'
         );
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(
@@ -50,28 +50,23 @@ class RelatedTest extends TestCase
     }
 
     /**
-     * @dataProvider canItemsAddToCartDataProvider
      * @param bool $isComposite
      * @param bool $isSaleable
      * @param bool $hasRequiredOptions
      * @param bool $canItemsAddToCart
      */
+    #[DataProvider('canItemsAddToCartDataProvider')]
     public function testCanItemsAddToCart($isComposite, $isSaleable, $hasRequiredOptions, $canItemsAddToCart)
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getRequiredOptions'])
-            ->onlyMethods(['isComposite', 'isSaleable'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product->expects($this->any())->method('isComposite')->willReturn($isComposite);
-        $product->expects($this->any())->method('isSaleable')->willReturn($isSaleable);
-        $product->expects($this->any())->method('getRequiredOptions')->willReturn($hasRequiredOptions);
+        $product = $this->createPartialMock(Product::class, ['isComposite', 'isSaleable']);
+        $product->method('isComposite')->willReturn($isComposite);
+        $product->method('isSaleable')->willReturn($isSaleable);
+        $product->setData('required_options', $hasRequiredOptions);
 
         $itemsCollection = new \ReflectionProperty(
             Related::class,
             '_itemCollection'
         );
-        $itemsCollection->setAccessible(true);
         $itemsCollection->setValue($this->block, [$product]);
 
         $this->assertEquals(
@@ -83,7 +78,7 @@ class RelatedTest extends TestCase
     /**
      * @return array
      */
-    public function canItemsAddToCartDataProvider()
+    public static function canItemsAddToCartDataProvider()
     {
         return [
             [false, true, false, true],

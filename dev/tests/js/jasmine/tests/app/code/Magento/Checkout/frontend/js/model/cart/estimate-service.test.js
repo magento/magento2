@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 /*jscs:disable jsDoc*/
@@ -41,6 +41,7 @@ define([
             },
             'Magento_Checkout/js/model/shipping-service': {
                 setShippingRates: function () {},
+                isLoading: ko.observable(),
                 getShippingRates: function () {
                     return ko.observable(rates);
                 }

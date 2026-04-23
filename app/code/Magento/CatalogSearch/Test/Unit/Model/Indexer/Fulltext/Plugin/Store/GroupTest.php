@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Store;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group as StoreGroupIndexerPlugin;
 use Magento\Framework\Indexer\IndexerInterface;
@@ -48,14 +49,13 @@ class GroupTest extends TestCase
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
         $this->subjectMock = $this->getMockBuilder(StoreGroupResourceModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeGroupMock = $this->getMockBuilder(StoreGroup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['dataHasChangedFor', 'isObjectNew'])
+            ->onlyMethods(['dataHasChangedFor', 'isObjectNew'])
             ->getMock();
 
         $this->plugin = new StoreGroupIndexerPlugin($this->indexerRegistryMock);
@@ -66,8 +66,8 @@ class GroupTest extends TestCase
      * @param bool $websiteChanged
      * @param int $invalidateCounter
      * @return void
-     * @dataProvider afterSaveDataProvider
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(bool $isObjectNew, bool $websiteChanged, int $invalidateCounter): void
     {
         $this->prepareIndexer($invalidateCounter);
@@ -90,7 +90,7 @@ class GroupTest extends TestCase
     /**
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             [false, false, 0],

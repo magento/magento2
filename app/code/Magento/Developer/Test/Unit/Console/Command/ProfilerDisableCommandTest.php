@@ -1,13 +1,14 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\ProfilerDisableCommand;
 use Magento\Framework\Filesystem\Io\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -29,8 +30,8 @@ class ProfilerDisableCommandTest extends TestCase
      *
      * @param bool $fileExists
      * @param string $expectedOutput
-     * @dataProvider commandDataProvider
      */
+    #[DataProvider('commandDataProvider')]
     public function testCommand(bool $fileExists, string $expectedOutput)
     {
         $this->filesystemMock
@@ -58,7 +59,7 @@ class ProfilerDisableCommandTest extends TestCase
      *
      * @return array
      */
-    public function commandDataProvider()
+    public static function commandDataProvider()
     {
         return [
             [true, 'Something went wrong while disabling the profiler.'],

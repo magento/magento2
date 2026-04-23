@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Import;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +23,7 @@ class CsvTest extends TestCase
     /**
      * @var string Destination file name
      */
-    private $destination = 'destinationFile';
+    private static $destination = 'destinationFile';
 
     /**
      * @var ObjectManagerInterface
@@ -40,12 +41,11 @@ class CsvTest extends TestCase
     /**
      * Test to destruct export adapter
      *
-     * @dataProvider destructDataProvider
-     *
      * @param string $destination
      * @param bool $shouldBeDeleted
      * @return void
      */
+    #[DataProvider('destructDataProvider')]
     public function testDestruct(string $destination, bool $shouldBeDeleted): void
     {
         $csv = $this->objectManager->create(Csv::class, [
@@ -74,11 +74,11 @@ class CsvTest extends TestCase
      *
      * @return array
      */
-    public function destructDataProvider(): array
+    public static function destructDataProvider(): array
     {
         return [
-            'temporary file' => [$this->destination, true],
-            'import history file' => [Import::IMPORT_HISTORY_DIR . $this->destination, false],
+            'temporary file' => [self::$destination, true],
+            'import history file' => [Import::IMPORT_HISTORY_DIR . self::$destination, false],
         ];
     }
 }

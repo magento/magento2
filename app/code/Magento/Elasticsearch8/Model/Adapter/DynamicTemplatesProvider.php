@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 /**
  * Elasticsearch dynamic templates provider.
+ * @deprecated Elasticsearch8 is no longer supported by Adobe
+ * @see this class will be responsible for ES8 only
  */
 class DynamicTemplatesProvider
 {

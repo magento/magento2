@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -15,6 +15,7 @@
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country France"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16675"/>
+            <group value="pr_exclude" />
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="France" stepKey="setMerchantCountry"/>

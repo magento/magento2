@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,7 +42,7 @@ class NullableTest extends TestCase
         /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNullable'])
+            ->onlyMethods(['isNullable'])
             ->getMock();
         $column->expects($this->any())
             ->method('isNullable')
@@ -61,7 +61,7 @@ class NullableTest extends TestCase
         /** @var BooleanColumnDto|MockObject $column */
         $column = $this->getMockBuilder(BooleanColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNullable'])
+            ->onlyMethods(['isNullable'])
             ->getMock();
         $column->expects($this->any())
             ->method('isNullable')
@@ -78,9 +78,7 @@ class NullableTest extends TestCase
     public function testToDefinitionNotNullableAware()
     {
         /** @var ElementInterface|MockObject $column */
-        $column = $this->getMockBuilder(ElementInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $column = $this->createMock(ElementInterface::class);
         $this->assertEquals(
             '',
             $this->nullable->toDefinition($column)

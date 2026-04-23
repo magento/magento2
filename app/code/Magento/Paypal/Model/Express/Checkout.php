@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -481,6 +481,7 @@ class Checkout
      */
     public function start($returnUrl, $cancelUrl, $button = null)
     {
+        $this->_quote->setPayment($this->_quote->getPayment());
         $this->_quote->collectTotals();
 
         if (!$this->_quote->getGrandTotal()) {
@@ -607,7 +608,7 @@ class Checkout
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function returnFromPaypal($token, string $payerIdentifier = null)
+    public function returnFromPaypal($token, ?string $payerIdentifier = null)
     {
         $this->_getApi()
             ->setToken($token)
@@ -981,7 +982,7 @@ class Checkout
 
         foreach ($address->getGroupedAllShippingRates() as $group) {
             foreach ($group as $rate) {
-                $amount = (double)$rate->getPrice();
+                $amount = (float)$rate->getPrice();
                 if ($rate->getErrorMessage()) {
                     continue;
                 }
@@ -1115,7 +1116,7 @@ class Checkout
      * @param \Magento\Quote\Model\Quote\Address|null $address
      * @return void
      */
-    private function setShippingOptions(PaypalCart $cart, Address $address = null)
+    private function setShippingOptions(PaypalCart $cart, ?Address $address = null)
     {
         // for included tax always disable line items (related to paypal amount rounding problem)
         $this->_getApi()->setIsLineItemsEnabled($this->_config->getValue(PaypalConfig::TRANSFER_CART_LINE_ITEMS));

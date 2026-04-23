@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,14 +9,15 @@ namespace Magento\Setup\Test\Unit\Model\Installer;
 
 use Magento\Setup\Model\Installer\Progress;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProgressTest extends TestCase
 {
     /**
      * @param int $total
      * @param int $current
-     * @dataProvider constructorExceptionInvalidTotalDataProvider
      */
+    #[DataProvider('constructorExceptionInvalidTotalDataProvider')]
     public function testConstructorExceptionInvalidTotal($total, $current)
     {
         $this->expectException('LogicException');
@@ -27,7 +28,7 @@ class ProgressTest extends TestCase
     /**
      * return array
      */
-    public function constructorExceptionInvalidTotalDataProvider()
+    public static function constructorExceptionInvalidTotalDataProvider()
     {
         return [[0,0], [0, 1], [[], 1]];
     }
@@ -76,8 +77,8 @@ class ProgressTest extends TestCase
     /**
      * @param int $total
      * @param int $current
-     * @dataProvider ratioDataProvider
      */
+    #[DataProvider('ratioDataProvider')]
     public function testRatio($total, $current)
     {
         $progress = new Progress($total, $current);
@@ -87,7 +88,7 @@ class ProgressTest extends TestCase
     /**
      * @return array
      */
-    public function ratioDataProvider()
+    public static function ratioDataProvider()
     {
         $data = [];
         for ($i = 10; $i <= 20; $i++) {

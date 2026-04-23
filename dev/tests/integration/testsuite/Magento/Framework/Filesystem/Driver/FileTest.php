@@ -1,9 +1,7 @@
 <?php
 /**
- * Test for \Magento\Framework\Filesystem\Driver\File
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +11,7 @@ use Magento\Framework\Exception\FileSystemException;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Framework\Filesystem\Driver\File
  * Verify File class
  */
 class FileTest extends TestCase
@@ -104,7 +103,7 @@ class FileTest extends TestCase
             'foo/bar/file_two.txt',
             'foo/file_three.txt',
         ];
-        $expected = array_map(['self', 'getTestPath'], $paths);
+        $expected = array_map([self::class, 'getTestPath'], $paths);
         $actual = $this->driver->readDirectoryRecursively($this->getTestPath('foo'));
         sort($actual);
         $this->assertEquals($expected, $actual);
@@ -172,6 +171,18 @@ class FileTest extends TestCase
     {
         $path = $this->absolutePath . 'foo/file_three.txt';
         $this->assertEquals(0, $this->driver->filePutContents($path, ''));
+    }
+
+    /**
+     * Delete a not existing file
+     *
+     * @return void
+     * @throws FileSystemException
+     */
+    public function testDeleteFileEdge(): void
+    {
+        $path = $this->absolutePath . 'foo/file_four.txt';
+        $this->assertEquals(true, $this->driver->deleteFile($path));
     }
 
     /**

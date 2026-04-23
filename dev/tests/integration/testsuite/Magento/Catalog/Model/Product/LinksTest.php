@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,7 +32,7 @@ class LinksTest extends TestCase
     ];
 
     /** @var array */
-    private $defaultDataFixture = [
+    private static $defaultDataFixture = [
         [
             'id' => '2',
             'sku' => 'custom-design-simple-product',
@@ -45,7 +46,7 @@ class LinksTest extends TestCase
     ];
 
     /** @var array */
-    private $existingProducts = [
+    private static $existingProducts = [
         [
             'id' => '10',
             'sku' => 'simple1',
@@ -90,7 +91,6 @@ class LinksTest extends TestCase
     /**
      * Test edit and remove simple related, up-sells, cross-sells products in an existing product
      *
-     * @dataProvider editDeleteRelatedUpSellCrossSellProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
@@ -98,6 +98,7 @@ class LinksTest extends TestCase
      * @param array $data
      * @return void
      */
+    #[DataProvider('editDeleteRelatedUpSellCrossSellProductsProvider')]
     public function testEditRemoveRelatedUpSellCrossSellProducts(array $data): void
     {
         /** @var ProductInterface|Product $product */
@@ -126,32 +127,32 @@ class LinksTest extends TestCase
      *
      * @return array
      */
-    public function editDeleteRelatedUpSellCrossSellProductsProvider(): array
+    public static function editDeleteRelatedUpSellCrossSellProductsProvider(): array
     {
         return [
             'update' => [
                 'data' => [
-                    'defaultLinks' => $this->defaultDataFixture,
-                    'productLinks' => $this->existingProducts,
+                    'defaultLinks' => self::$defaultDataFixture,
+                    'productLinks' => self::$existingProducts,
                 ],
             ],
             'delete' => [
                 'data' => [
-                    'defaultLinks' => $this->defaultDataFixture,
+                    'defaultLinks' => self::$defaultDataFixture,
                     'productLinks' => []
                 ],
             ],
             'same' => [
                 'data' => [
-                    'defaultLinks' => $this->existingProducts,
-                    'productLinks' => $this->existingProducts,
+                    'defaultLinks' => self::$existingProducts,
+                    'productLinks' => self::$existingProducts,
                 ],
             ],
             'change_position' => [
                 'data' => [
-                    'defaultLinks' => $this->existingProducts,
+                    'defaultLinks' => self::$existingProducts,
                     'productLinks' => array_replace_recursive(
-                        $this->existingProducts,
+                        self::$existingProducts,
                         [
                             ['position' => 4],
                             ['position' => 5],
@@ -162,9 +163,9 @@ class LinksTest extends TestCase
             ],
             'without_position' => [
                 'data' => [
-                    'defaultLinks' => $this->defaultDataFixture,
+                    'defaultLinks' => self::$defaultDataFixture,
                     'productLinks' => array_replace_recursive(
-                        $this->existingProducts,
+                        self::$existingProducts,
                         [
                             ['position' => null],
                             ['position' => null],
@@ -172,7 +173,7 @@ class LinksTest extends TestCase
                         ]
                     ),
                     'expectedProductLinks' => array_replace_recursive(
-                        $this->existingProducts,
+                        self::$existingProducts,
                         [
                             ['position' => 1],
                             ['position' => 2],

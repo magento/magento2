@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,6 +15,7 @@
             <title value="Product Review is Available in Customer's Account"/>
             <description value="Customer should be able see product review on My Product Reviews page in Customer account"/>
             <severity value="MINOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -30,16 +31,24 @@
             <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
             <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearNickNameReviewFilters"/>
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-                <argument name="customerEmail" value="CustomerEntityOne.email"/>
-            </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <!-- Delete all customers created during test execution using grid select all -->
+            <actionGroup ref="AdminDeleteAllCustomerActionGroup" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <!-- Click the Create an Account link again and fill fields for registration of another customer, set password and check the Remember Me checkbox  -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="signUpNewUser">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <!--Check customer name and last name in welcome message-->
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="customerCreatedSuccessMessageForJohnDoe"/>
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomer">
+            <argument name="customerFullName" value="{{CustomerEntityOne.fullname}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
             <argument name="productUrl" value="$$createProduct1.custom_attributes[url_key]$$"/>

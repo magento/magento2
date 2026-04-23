@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -112,8 +112,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $linkInitializer,
         \Magento\Catalog\Model\ProductLink\Management $linkManagement,
         \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
-        \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory = null,
         ?ProductLinkQuery $query = null
     ) {
         $this->productRepository = $productRepository;
@@ -133,8 +133,14 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
      */
     public function save(\Magento\Catalog\Api\Data\ProductLinkInterface $entity)
     {
-        if (!$entity->getLinkedProductSku()) {
-            throw new NoSuchEntityException(__('The linked product SKU is invalid. Verify the data and try again.'));
+        if (!$entity->getSku()) {
+            throw new CouldNotSaveException(__(
+                'The parent product SKU is required for linking child products. '
+                . 'Please ensure the parent product SKU is provided and try again.'
+            ));
+        }
+        if ($entity->getLinkedProductSku() === null || $entity->getLinkedProductSku() === '') {
+            throw new CouldNotSaveException(__('The linked product SKU is invalid. Verify the data and try again.'));
         }
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());

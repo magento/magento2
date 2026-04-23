@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,7 +21,9 @@ use Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definit
 use Magento\Framework\View\Element\UiComponent\Config\ReaderFactory;
 use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 use Magento\Ui\Model\Manager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -89,42 +91,32 @@ class ManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->componentConfigProvider = $this->getMockBuilder(
+        $this->componentConfigProvider = $this->createMock(
             \Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->domMerger = $this->getMockBuilder(
-            DomMergerInterface::class
-        )->getMockForAbstractClass();
-        $this->aggregatedFileCollector = $this->getMockBuilder(
+        );
+        $this->domMerger = $this->createMock(DomMergerInterface::class
+        );
+        $this->aggregatedFileCollector = $this->createMock(
             AggregatedFileCollector::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->aggregatedFileCollectorFactory = $this->getMockBuilder(
+        );
+        $this->aggregatedFileCollectorFactory = $this->createMock(
             AggregatedFileCollectorFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->arrayObjectFactory = $this->getMockBuilder(
+        );
+        $this->arrayObjectFactory = $this->createMock(
             ArrayObjectFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->arrayObjectFactory
             ->method('create')
             ->willReturn(new \ArrayObject([]));
-        $this->uiReader = $this->getMockBuilder(
-            UiReaderInterface::class
-        )->getMockForAbstractClass();
-        $this->readerFactory = $this->getMockBuilder(
+        $this->uiReader = $this->createMock(UiReaderInterface::class
+        );
+        $this->readerFactory = $this->createMock(
             ReaderFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->cacheConfig = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $this->argumentInterpreter = $this->getMockBuilder(InterpreterInterface::class)
-            ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(
-            SerializerInterface::class
-        )->getMockForAbstractClass();
+        );
+        $this->cacheConfig = $this->createMock(CacheInterface::class);
+        $this->argumentInterpreter = $this->createMock(InterpreterInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class
+        );
         $this->serializer->expects($this->any())
             ->method('serialize')
             ->willReturnCallback(
@@ -183,11 +175,10 @@ class ManagerTest extends TestCase
      * @return void
      * @dataProvider getComponentData()
      */
+    #[DataProvider('getComponentData')]
     public function testPrepareGetData($componentName, $componentData, $isCached, $readerData, $expectedResult): void
     {
-        $this->arrayObjectFactory = $this->getMockBuilder(ArrayObjectFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->arrayObjectFactory = $this->createMock(ArrayObjectFactory::class);
         $this->arrayObjectFactory
             ->method('create')
             ->willReturnOnConsecutiveCalls(new \ArrayObject([]), $componentData);
@@ -232,7 +223,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentData(): array
+    public static function getComponentData(): array
     {
         $cachedData = new \ArrayObject(
             [
@@ -325,6 +316,7 @@ class ManagerTest extends TestCase
      * @return void
      * @dataProvider getComponentDataProvider()
      */
+    #[DataProvider('getComponentDataProvider')]
     public function testCreateRawComponentData($componentName, $configData, $componentData, $needEvaluate): void
     {
         $this->componentConfigProvider->expects($this->any())
@@ -345,7 +337,7 @@ class ManagerTest extends TestCase
     /**
      * @return array
      */
-    public function getComponentDataProvider(): array
+    public static function getComponentDataProvider(): array
     {
         return [
             [

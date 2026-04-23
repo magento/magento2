@@ -1,12 +1,12 @@
 # Magento_Wishlist module
 
-The Magento_Wishlist module implements the Wishlist functionality.
+This module implements the Wishlist functionality.
 
 This module allows customers to create a list of products that they can add to their shopping cart to be purchased at a later date, or share with friends.
 
 ## Installation details
 
-Before installing this module, note that the Magento_Wishlist is dependent on the following modules:
+Before installing this module, note that this module is dependent on the following modules:
 
 - Magento_Captcha
 - Magento_Catalog
@@ -16,7 +16,7 @@ Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_WishlistAnalytics
 
-Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Structure
 
@@ -26,9 +26,9 @@ For information about a typical file structure of a module, see [Module file str
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Wishlist module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with this module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_Wishlist module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of this module.
 
 ### Events
 
@@ -85,12 +85,13 @@ This module introduces the following layouts and layout handles in the directori
     - `wishlist_index_index`
     - `wishlist_index_share`
     - `wishlist_shared_index.xml`
-    
+
 For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
-You can extend a customer form and widgets using the configuration files located in the directories 
+You can extend a customer form and widgets using the configuration files located in the directories
+
 - `view/base/ui_component`:
     - `customer_form`
 - `view/frontend/ui_component`:

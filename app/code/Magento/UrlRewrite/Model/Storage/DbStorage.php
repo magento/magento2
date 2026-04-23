@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\UrlRewrite\Model\Storage;
@@ -64,7 +64,7 @@ class DbStorage extends AbstractStorage
         UrlRewriteFactory $urlRewriteFactory,
         DataObjectHelper $dataObjectHelper,
         ResourceConnection $resource,
-        LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null,
         int $maxRetryCount = 5
     ) {
         $this->connection = $resource->getConnection();

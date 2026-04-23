@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,7 @@ namespace Magento\Framework\App\Test\Unit\Config\Initial;
 
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XsdTest extends TestCase
@@ -35,11 +35,9 @@ class XsdTest extends TestCase
         $this->xsdValidator = new XsdValidator();
     }
 
-    /**
-     * @param string $xmlString
-     * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidXmlDataProvider
+    /**     * @param array $expectedError
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
         $actualError = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
@@ -56,7 +54,7 @@ class XsdTest extends TestCase
     /**
      * Data provider with invalid xml array according to config.xsd
      */
-    public function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
+    public static function schemaCorrectlyIdentifiesInvalidXmlDataProvider()
     {
         return include __DIR__ . '/_files/invalidConfigXmlArray.php';
     }

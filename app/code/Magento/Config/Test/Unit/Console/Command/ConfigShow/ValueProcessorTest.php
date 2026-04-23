@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,8 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ValueProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ValueFactory|MockObject
      */
@@ -58,17 +62,13 @@ class ValueProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->valueFactoryMock = $this->getMockBuilder(ValueFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
-        $this->structureFactoryMock = $this->getMockBuilder(StructureFactory::class)->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->jsonSerializerMock = $this->getMockBuilder(JsonSerializer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->valueFactoryMock = $this->createMock(ValueFactory::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
+        $this->structureFactoryMock = $this->createPartialMock(
+            StructureFactory::class,
+            ['create']
+        );
+        $this->jsonSerializerMock = $this->createMock(JsonSerializer::class);
 
         $this->valueProcessor = new ValueProcessor(
             $this->scopeMock,
@@ -80,24 +80,24 @@ class ValueProcessorTest extends TestCase
 
     /**
      * @param bool $hasBackendModel
-     * @param InvokedCount $expectsGetBackendModel
-     * @param InvokedCount $expectsCreate
-     * @param InvokedCount $expectsGetValue
-     * @param InvokedCount $expectsSetPath
-     * @param InvokedCount $expectsSetScope
-     * @param InvokedCount $expectsSetScopeId
-     * @param InvokedCount $expectsSetValue
-     * @param InvokedCount $expectsAfterLoad
-     * @param InvokedCount $expectsSerialize
+     * @param string $expectsGetBackendModel
+     * @param string $expectsCreate
+     * @param string $expectsGetValue
+     * @param string $expectsSetPath
+     * @param string $expectsSetScope
+     * @param string $expectsSetScopeId
+     * @param string $expectsSetValue
+     * @param string $expectsAfterLoad
+     * @param string $expectsSerialize
      * @param string $expectsValue
      * @param string $className
      * @param string $value
      * @param string|array $processedValue
      *
      * @return void
-     * @dataProvider processDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess(
         $hasBackendModel,
         $expectsGetBackendModel,
@@ -114,32 +114,42 @@ class ValueProcessorTest extends TestCase
         $value,
         $processedValue
     ): void {
+        // Convert string matchers to actual matchers
+        $expectsGetBackendModel = $this->$expectsGetBackendModel();
+        $expectsCreate = $this->$expectsCreate();
+        $expectsGetValue = $this->$expectsGetValue();
+        $expectsSetPath = $this->$expectsSetPath();
+        $expectsSetScope = $this->$expectsSetScope();
+        $expectsSetScopeId = $this->$expectsSetScopeId();
+        $expectsSetValue = $this->$expectsSetValue();
+        $expectsAfterLoad = $this->$expectsAfterLoad();
+        $expectsSerialize = $this->$expectsSerialize();
         $scope = 'someScope';
         $scopeCode = 'someScopeCode';
         $path = 'some/config/path';
         $oldConfigScope = 'oldConfigScope';
-
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($oldConfigScope);
         $this->scopeMock
             ->method('setCurrentScope')
-            ->withConsecutive([Area::AREA_ADMINHTML], [$oldConfigScope]);
+            ->willReturnCallback(function ($scope) use ($oldConfigScope) {
+                if ($scope == Area::AREA_ADMINHTML || $scope == $oldConfigScope) {
+                    return null;
+                }
+            });
 
         /** @var Structure|MockObject $structureMock */
-        $structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $structureMock = $this->createMock(Structure::class);
         $this->structureFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($structureMock);
 
         /** @var Value|Encrypted|MockObject $valueMock */
-        $backendModelMock = $this->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->addMethods(['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue'])
-            ->onlyMethods(['afterLoad'])
-            ->getMock();
+        $backendModelMock = $this->createPartialMockWithReflection(
+            $className,
+            ['setPath', 'setScope', 'setScopeId', 'setValue', 'getValue', 'afterLoad']
+        );
         $backendModelMock->expects($expectsSetPath)
             ->method('setPath')
             ->with($path)
@@ -164,9 +174,7 @@ class ValueProcessorTest extends TestCase
             ->willReturn($processedValue);
 
         /** @var Field|MockObject $fieldMock */
-        $fieldMock = $this->getMockBuilder(Field::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $fieldMock = $this->createMock(Field::class);
         $fieldMock->expects($this->once())
             ->method('hasBackendModel')
             ->willReturn($hasBackendModel);
@@ -180,7 +188,6 @@ class ValueProcessorTest extends TestCase
             ->method('serialize')
             ->with($processedValue)
             ->willReturn($expectsValue);
-
         $structureMock->expects($this->once())
             ->method('getElementByConfigPath')
             ->with($path)
@@ -193,20 +200,20 @@ class ValueProcessorTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function processDataProvider(): array
+    public static function processDataProvider(): array
     {
         return [
             [
                 'hasBackendModel' => true,
-                'expectsGetBackendModel' => $this->once(),
-                'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->once(),
-                'expectsSetPath' => $this->once(),
-                'expectsSetScope' => $this->once(),
-                'expectsSetScopeId' => $this->once(),
-                'expectsSetValue' => $this->once(),
-                'expectsAfterLoad' => $this->once(),
-                'expectsSerialize' => $this->once(),
+                'expectsGetBackendModel' => 'once',
+                'expectsCreate' => 'never',
+                'expectsGetValue' => 'once',
+                'expectsSetPath' => 'once',
+                'expectsSetScope' => 'once',
+                'expectsSetScopeId' => 'once',
+                'expectsSetValue' => 'once',
+                'expectsAfterLoad' => 'once',
+                'expectsSerialize' => 'once',
                 'expectsValue' => '{value:someValue}',
                 'className' => Value::class,
                 'value' => '{value:someValue}',
@@ -214,15 +221,15 @@ class ValueProcessorTest extends TestCase
             ],
             [
                 'hasBackendModel' => true,
-                'expectsGetBackendModel' => $this->once(),
-                'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->once(),
-                'expectsSetPath' => $this->once(),
-                'expectsSetScope' => $this->once(),
-                'expectsSetScopeId' => $this->once(),
-                'expectsSetValue' => $this->once(),
-                'expectsAfterLoad' => $this->once(),
-                'expectsSerialize' => $this->never(),
+                'expectsGetBackendModel' => 'once',
+                'expectsCreate' => 'never',
+                'expectsGetValue' => 'once',
+                'expectsSetPath' => 'once',
+                'expectsSetScope' => 'once',
+                'expectsSetScopeId' => 'once',
+                'expectsSetValue' => 'once',
+                'expectsAfterLoad' => 'once',
+                'expectsSerialize' => 'never',
                 'expectsValue' => 'someValue',
                 'className' => Value::class,
                 'value' => 'someValue',
@@ -230,15 +237,15 @@ class ValueProcessorTest extends TestCase
             ],
             [
                 'hasBackendModel' => false,
-                'expectsGetBackendModel' => $this->never(),
-                'expectsCreate' => $this->once(),
-                'expectsGetValue' => $this->once(),
-                'expectsSetPath' => $this->once(),
-                'expectsSetScope' => $this->once(),
-                'expectsSetScopeId' => $this->once(),
-                'expectsSetValue' => $this->once(),
-                'expectsAfterLoad' => $this->once(),
-                'expectsSerialize' => $this->never(),
+                'expectsGetBackendModel' => 'never',
+                'expectsCreate' => 'once',
+                'expectsGetValue' => 'once',
+                'expectsSetPath' => 'once',
+                'expectsSetScope' => 'once',
+                'expectsSetScopeId' => 'once',
+                'expectsSetValue' => 'once',
+                'expectsAfterLoad' => 'once',
+                'expectsSerialize' => 'never',
                 'expectsValue' => 'someValue',
                 'className' => Value::class,
                 'value' => 'someValue',
@@ -246,15 +253,15 @@ class ValueProcessorTest extends TestCase
             ],
             [
                 'hasBackendModel' => true,
-                'expectsGetBackendModel' => $this->once(),
-                'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->never(),
-                'expectsSetPath' => $this->never(),
-                'expectsSetScope' => $this->never(),
-                'expectsSetScopeId' => $this->never(),
-                'expectsSetValue' => $this->never(),
-                'expectsAfterLoad' => $this->never(),
-                'expectsSerialize' => $this->never(),
+                'expectsGetBackendModel' => 'once',
+                'expectsCreate' => 'never',
+                'expectsGetValue' => 'never',
+                'expectsSetPath' => 'never',
+                'expectsSetScope' => 'never',
+                'expectsSetScopeId' => 'never',
+                'expectsSetValue' => 'never',
+                'expectsAfterLoad' => 'never',
+                'expectsSerialize' => 'never',
                 'expectsValue' => ValueProcessor::SAFE_PLACEHOLDER,
                 'className' => Encrypted::class,
                 'value' => 'someValue',
@@ -262,15 +269,15 @@ class ValueProcessorTest extends TestCase
             ],
             [
                 'hasBackendModel' => true,
-                'expectsGetBackendModel' => $this->once(),
-                'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->once(),
-                'expectsSetPath' => $this->once(),
-                'expectsSetScope' => $this->once(),
-                'expectsSetScopeId' => $this->once(),
-                'expectsSetValue' => $this->once(),
-                'expectsAfterLoad' => $this->once(),
-                'expectsSerialize' => $this->never(),
+                'expectsGetBackendModel' => 'once',
+                'expectsCreate' => 'never',
+                'expectsGetValue' => 'once',
+                'expectsSetPath' => 'once',
+                'expectsSetScope' => 'once',
+                'expectsSetScopeId' => 'once',
+                'expectsSetValue' => 'once',
+                'expectsAfterLoad' => 'once',
+                'expectsSerialize' => 'never',
                 'expectsValue' => null,
                 'className' => Value::class,
                 'value' => null,
@@ -278,15 +285,15 @@ class ValueProcessorTest extends TestCase
             ],
             [
                 'hasBackendModel' => true,
-                'expectsGetBackendModel' => $this->once(),
-                'expectsCreate' => $this->never(),
-                'expectsGetValue' => $this->never(),
-                'expectsSetPath' => $this->never(),
-                'expectsSetScope' => $this->never(),
-                'expectsSetScopeId' => $this->never(),
-                'expectsSetValue' => $this->never(),
-                'expectsAfterLoad' => $this->never(),
-                'expectsSerialize' => $this->never(),
+                'expectsGetBackendModel' => 'once',
+                'expectsCreate' => 'never',
+                'expectsGetValue' => 'never',
+                'expectsSetPath' => 'never',
+                'expectsSetScope' => 'never',
+                'expectsSetScopeId' => 'never',
+                'expectsSetValue' => 'never',
+                'expectsAfterLoad' => 'never',
+                'expectsSerialize' => 'never',
                 'expectsValue' => null,
                 'className' => Encrypted::class,
                 'value' => null,

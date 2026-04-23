@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Config\Reader;
 
@@ -37,7 +37,7 @@ class Env implements \Magento\Framework\Config\ReaderInterface
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        PublisherConverter $publisherConverter = null
+        ?PublisherConverter $publisherConverter = null
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->publisherConverter = $publisherConverter ?: ObjectManager::getInstance()->get(PublisherConverter::class);

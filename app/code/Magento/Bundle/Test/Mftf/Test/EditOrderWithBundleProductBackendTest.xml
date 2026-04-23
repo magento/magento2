@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -84,7 +84,8 @@
         </before>
         <after>
             <!--Remove default flat rate shipping method settings-->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCustomer2" stepKey="deleteCustomer2"/>
 
@@ -110,7 +111,7 @@
         <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="openBundleProductEditPage"/>
 
         <!--Create new customer order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <!--Add bundle product to order.-->
@@ -134,7 +135,7 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <wait time="2" stepKey="waitForPageLoad1"/>
         <!--Create new customer order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
             <argument name="customer" value="$createCustomer2$"/>
         </actionGroup>
         <!--Add bundle product to order.-->
@@ -154,6 +155,7 @@
         <wait time="2" stepKey="waitForPageLoad2" />
         <click selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="clickEditButton"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ok}}" stepKey="clickOk"/>
+        <waitForElementClickable selector="{{AdminOrderFormItemsSection.configure}}" stepKey="waitForItemConfigureButton"/>
         <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickTodropdown2"/>
         <click selector="{{AdminOrderFormConfigureProductSection.selectProductOption('3')}}" stepKey="clickToSelectOption2"/>

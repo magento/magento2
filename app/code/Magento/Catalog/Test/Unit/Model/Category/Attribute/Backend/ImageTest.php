@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category\Attribute\Backend\Image;
 use Magento\Catalog\Model\ImageUploader;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -72,50 +73,26 @@ class ImageTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->attribute = $this->getMockForAbstractClass(
-            AbstractAttribute::class,
-            [],
-            'TestAttribute',
-            false,
-            false,
-            true,
-            ['getName']
-        );
+        $this->attribute = $this->createMock(AbstractAttribute::class);
 
-        $this->logger = $this->getMockForAbstractClass(
-            LoggerInterface::class,
-            [],
-            'TestLogger',
-            false,
-            false,
-            true,
-            ['critical']
-        );
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->imageUploader = $this->createPartialMock(
             ImageUploader::class,
             ['moveFileFromTmp', 'getBasePath']
         );
 
-        $this->storeManagerInterfaceMock = $this->getMockBuilder(
-            StoreManagerInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerInterfaceMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->storeMock = $this->getMockBuilder(
-            Store::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
     }
 
     /**
      * @return array
      */
-    public function deletedValueDataProvider()
+    public static function deletedValueDataProvider()
     {
         return [
             [false],
@@ -124,10 +101,9 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @dataProvider deletedValueDataProvider
-     *
      * @param array $value
      */
+    #[DataProvider('deletedValueDataProvider')]
     public function testBeforeSaveValueDeletion($value)
     {
         $this->attribute->expects($this->once())
@@ -147,7 +123,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function invalidValueDataProvider()
+    public static function invalidValueDataProvider()
     {
         $closure = function () {
             return false;
@@ -163,10 +139,9 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidValueDataProvider
-     *
      * @param array $value
      */
+    #[DataProvider('invalidValueDataProvider')]
     public function testBeforeSaveValueInvalid($value)
     {
         $this->attribute->expects($this->once())
@@ -194,7 +169,7 @@ class ImageTest extends TestCase
             ->willReturn('test_attribute');
 
         $model = $this->setUpModelForTests();
-        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -258,7 +233,7 @@ class ImageTest extends TestCase
 
     private function setupObjectManagerForCheckImageExist($return)
     {
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $mockFileSystem = $this->createMock(Filesystem::class);
         $mockRead = $this->createMock(ReadInterface::class);
         $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
@@ -288,7 +263,7 @@ class ImageTest extends TestCase
         $model = $this->setUpModelForTests();
         $model->setAttribute($this->attribute);
 
-        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -375,7 +350,7 @@ class ImageTest extends TestCase
     /**
      * @return array
      */
-    public function attributeValueDataProvider()
+    public static function attributeValueDataProvider()
     {
         return [
             [[['name' => 'test1234.jpg']]],
@@ -386,11 +361,11 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @dataProvider attributeValueDataProvider
      *
      * @param array $value
      * @throws FileSystemException
      */
+    #[DataProvider('attributeValueDataProvider')]
     public function testBeforeSaveWithAdditionalData($value)
     {
         $this->attribute->method('getName')->willReturn('test_attribute_name');
@@ -411,11 +386,11 @@ class ImageTest extends TestCase
     }
 
     /**
-     * @dataProvider attributeValueDataProvider
      *
      * @param array $value
      * @throws FileSystemException
      */
+    #[DataProvider('attributeValueDataProvider')]
     public function testBeforeSaveWithoutAdditionalData($value)
     {
         $this->attribute->method('getName')->willReturn('test_attribute_name');
@@ -453,12 +428,12 @@ class ImageTest extends TestCase
             ->method('getName')
             ->willReturn('_additional_data_test_attribute');
 
-        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($mediaDirectoryMock);
-        $this->imageUploader->expects($this->any())->method('getBasePath')->willReturn('base/path');
+        $this->imageUploader->method('getBasePath')->willReturn('base/path');
         $mediaDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->with('base/path/test1234.jpg')

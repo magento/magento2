@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
@@ -30,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class EmulationTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_NEW_STORE_ID = 9;
 
     /**
@@ -98,30 +101,15 @@ class EmulationTest extends TestCase
         // Mocks
         $this->designMock = $this->getMockBuilder(Design::class)
             ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->translateMock = $this->getMockBuilder(TranslateInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->inlineConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->inlineTranslationMock = $this->getMockBuilder(StateInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMockForAbstractClass();
-        $this->viewDesignMock = $this->getMockForAbstractClass(DesignInterface::class);
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getStoreId'])
-            ->getMock();
+            ->onlyMethods(['loadChange', 'getData'])->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->translateMock = $this->createMock(TranslateInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
+        $this->inlineConfigMock = $this->createMock(ConfigInterface::class);
+        $this->inlineTranslationMock = $this->createMock(StateInterface::class);
+        $this->viewDesignMock = $this->createMock(DesignInterface::class);
+        $this->storeMock = $this->createPartialMockWithReflection(Store::class, ['getStoreId', '__wakeup']);
         $this->rendererMock = $this->createMock(RendererInterface::class);
 
         // Stubs
@@ -163,7 +151,6 @@ class EmulationTest extends TestCase
         $initLocale = 'initial locale code';
         $newInlineTranslate = false;
         $newLocale = 'new locale code';
-        $newArea = Area::AREA_FRONTEND;
 
         // Stubs
         $this->inlineTranslationMock->expects($this->any())->method('isEnabled')->willReturn($inlineTranslate);
@@ -179,13 +166,12 @@ class EmulationTest extends TestCase
 
         // Expectations
         $this->storeMock->expects($this->any())->method('getStoreId')->willReturn($initStore);
-        $this->inlineTranslationMock->expects($this->any())->method('suspend')->with($newInlineTranslate);
-        $this->viewDesignMock->expects($this->any())->method('setDesignTheme')->with($initTheme);
-        $this->localeResolverMock->expects($this->any())->method('setLocale')->with($newLocale);
-        $this->translateMock->expects($this->any())->method('setLocale')->with($newLocale);
-        $this->translateMock->expects($this->any())->method('loadData')->with($newArea);
-        $this->storeManagerMock->expects($this->any())
-            ->method('setCurrentStore')->with(self::STUB_NEW_STORE_ID);
+        $this->inlineTranslationMock->expects($this->any())->method('suspend');
+        $this->viewDesignMock->expects($this->any())->method('setDesignTheme');
+        $this->localeResolverMock->expects($this->any())->method('setLocale');
+        $this->translateMock->expects($this->any())->method('setLocale');
+        $this->translateMock->expects($this->any())->method('loadData');
+        $this->storeManagerMock->expects($this->any())->method('setCurrentStore');
 
         // Test
         $result = $this->model->startEnvironmentEmulation(

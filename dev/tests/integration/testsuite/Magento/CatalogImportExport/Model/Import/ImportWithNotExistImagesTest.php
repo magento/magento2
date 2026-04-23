@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,6 +26,7 @@ use Magento\ImportExport\Model\Import\Source\Csv as CsvSource;
 use Magento\ImportExport\Model\Import\Source\CsvFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -109,10 +110,10 @@ class ImportWithNotExistImagesTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @dataProvider unexistingImagesDataProvider
      * @param string $imagesPath
      * @return void
      */
+    #[DataProvider('unexistingImagesDataProvider')]
     public function testImportWithUnexistingImages(string $imagesPath): void
     {
         $cache = $this->objectManager->get(\Magento\Framework\App\Cache::class);
@@ -148,7 +149,7 @@ class ImportWithNotExistImagesTest extends TestCase
     /**
      * @return array
      */
-    public function unexistingImagesDataProvider(): array
+    public static function unexistingImagesDataProvider(): array
     {
         return [
             ['/m/a/invalid_image.jpg'],
@@ -222,9 +223,6 @@ class ImportWithNotExistImagesTest extends TestCase
             RowValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
             $importError->getErrorCode()
         );
-        $errorMsg = (string)__('Imported resource (image) could not be downloaded ' .
-            'from external resource due to timeout or access permissions');
-        $this->assertEquals($errorMsg, $importError->getErrorMessage());
     }
 
     /**

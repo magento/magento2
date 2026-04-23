@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
     <!--
-     /**
-     * Copyright © Magento, Inc. All rights reserved.
-     * See COPYING.txt for license details.
-     */
-    -->
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
+-->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -41,7 +41,9 @@
         <after>
             <!-- delete category,product -->
             <deleteData createDataKey="testProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <!--Delete all customers via API-->
+            <helper class="Magento\Customer\Test\Mftf\Helper\CustomerApiHelper" method="deleteAllCustomersApi" stepKey="deleteAllCustomersViaApi"/>
             <deleteData createDataKey="testCategory" stepKey="deleteSimpleCategory"/>
             <!-- Free Shipping disabled -->
             <magentoCLI command="config:set {{DisableFreeShippingConfigData.path}} {{DisableFreeShippingConfigData.value}}" stepKey="disableFreeShipping"/>
@@ -54,7 +56,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!--Open new order page from admin and add product-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$testProduct$$"/>
         </actionGroup>

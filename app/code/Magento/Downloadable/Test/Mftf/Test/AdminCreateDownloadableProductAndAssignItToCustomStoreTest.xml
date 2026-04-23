@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,7 +40,9 @@
 
             <!-- Delete store view -->
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCreatedStoreView"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -48,7 +50,9 @@
 
         <!-- Create store view -->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Create Downloadable product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>

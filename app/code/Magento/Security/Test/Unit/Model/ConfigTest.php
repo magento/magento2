@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\Config;
 use Magento\Security\Model\Config\Source\ResetMethod;
 use Magento\Security\Model\ConfigInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,7 +49,7 @@ class ConfigTest extends TestCase
             ['getValue', 'isSetFlag']
         );
 
-        $this->scopeMock =  $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -105,8 +106,8 @@ class ConfigTest extends TestCase
 
     /**
      * @param bool $isShared
-     * @dataProvider dataProviderBoolValues
      */
+    #[DataProvider('dataProviderBoolValues')]
     public function testIsAdminAccountSharingIsEnabled($isShared)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -121,7 +122,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBoolValues()
+    public static function dataProviderBoolValues()
     {
         return [[true], [false]];
     }
@@ -129,8 +130,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $resetMethod
      * @param int $scope
-     * @dataProvider dataProviderResetMethodValues
      */
+    #[DataProvider('dataProviderResetMethodValues')]
     public function testGetPasswordResetProtectionType($resetMethod, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -143,18 +144,15 @@ class ConfigTest extends TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType($scope));
+        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType());
     }
 
     /**
      * @return array
      */
-    public function dataProviderResetMethodValues()
+    public static function dataProviderResetMethodValues()
     {
-        $objectManager = new ObjectManager($this);
-        $resetMethodSource = $objectManager->getObject(
-            ResetMethod::class
-        );
+        $resetMethodSource = new ResetMethod();
 
         $optionKeys = array_keys($resetMethodSource->toArray());
         $data = [];
@@ -183,8 +181,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $limitNumber
      * @param int $scope
-     * @dataProvider dataProviderNumberValueWithScope
      */
+    #[DataProvider('dataProviderNumberValueWithScope')]
     public function testGetMaxNumberPasswordResetRequests($limitNumber, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -203,8 +201,8 @@ class ConfigTest extends TestCase
     /**
      * @param int $limitTime
      * @param int $scope
-     * @dataProvider dataProviderNumberValueWithScope
      */
+    #[DataProvider('dataProviderNumberValueWithScope')]
     public function testGetMinTimeBetweenPasswordResetRequests($limitTime, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -223,7 +221,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderNumberValueWithScope()
+    public static function dataProviderNumberValueWithScope()
     {
         return [
             [5, Area::AREA_ADMINHTML],

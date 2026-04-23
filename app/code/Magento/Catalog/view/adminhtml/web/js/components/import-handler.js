@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -67,7 +67,7 @@ define([
             }
 
             _.each(this.values, function (propertyValue, propertyName) {
-                string = string.replace('{{' + propertyName + '}}', propertyValue);
+                string = string.split('{{' + propertyName + '}}').join(propertyValue);
                 nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
             });
 

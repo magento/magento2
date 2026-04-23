@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class CreditmemoCommentSenderTest extends AbstractSenderTest
+class CreditmemoCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var CreditmemoCommentSender

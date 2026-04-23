@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -37,6 +37,6 @@
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForPaymentLoading"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

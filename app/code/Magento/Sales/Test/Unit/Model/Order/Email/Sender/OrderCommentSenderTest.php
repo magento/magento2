@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
-class OrderCommentSenderTest extends AbstractSenderTest
+class OrderCommentSenderTest extends AbstractSenderTestCase
 {
     /**
      * @var OrderCommentSender

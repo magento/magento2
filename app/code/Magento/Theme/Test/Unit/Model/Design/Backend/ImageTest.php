@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -85,7 +85,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
         if (count($methods)) {
-            $builder->setMethods($methods);
+            $builder->onlyMethods($methods);
         }
         return  $builder->getMock();
     }

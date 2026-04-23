@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -17,5 +17,6 @@
         <element name="actionRemove" type="button" selector="//a[@class='action remove']" />
         <element name="nowShoppingByAttribute" type="text" selector="//span[@class='filter-label' and contains(text(),'{{var}}')]" parameterized="true"/>
         <element name="nowShoppingByAttributeValue" type="text" selector="//span[@class='filter-value' and contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="layeredNavigationNthSwatch" type="block" selector="//a[@class='swatch-option-link-layered' and @aria-label='{{attribute_value}}']/div" parameterized="true"/>
     </section>
 </sections>

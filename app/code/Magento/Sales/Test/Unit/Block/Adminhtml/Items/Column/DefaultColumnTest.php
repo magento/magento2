@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,13 +31,11 @@ class DefaultColumnTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper->prepareObjectManager();
         $this->defaultColumn = $this->objectManagerHelper->getObject(
             DefaultColumn::class
         );
-        $this->itemMock = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRowTotal', 'getDiscountAmount', 'getBaseRowTotal', 'getBaseDiscountAmount'])
-            ->getMock();
+        $this->itemMock = $this->createMock(Item::class);
     }
 
     public function testGetTotalAmount()

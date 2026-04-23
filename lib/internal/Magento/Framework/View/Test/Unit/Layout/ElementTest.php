@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,12 @@ namespace Magento\Framework\View\Test\Unit\Layout;
 
 use Magento\Framework\View\Layout\Element;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementTest extends TestCase
 {
-    /**
-     * @dataProvider elementNameDataProvider
-     */
+    /**     */
+    #[DataProvider('elementNameDataProvider')]
     public function testGetElementName($xml, $name)
     {
         $model = new Element($xml);
@@ -27,7 +27,7 @@ class ElementTest extends TestCase
     /**
      * @return array
      */
-    public function elementNameDataProvider()
+    public static function elementNameDataProvider()
     {
         return [
             ['<block name="name" />', 'name'],
@@ -41,7 +41,7 @@ class ElementTest extends TestCase
     /**
      * @return array
      */
-    public function cacheableDataProvider()
+    public static function cacheableDataProvider()
     {
         return [
             ['<containter name="name" />', true],
@@ -56,9 +56,8 @@ class ElementTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider cacheableDataProvider
-     */
+    /**     */
+    #[DataProvider('cacheableDataProvider')]
     public function testIsCacheable($xml, $expected)
     {
         $model = new Element($xml);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection;
 
@@ -97,11 +97,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
-        \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItem = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer $tableMaintainer = null,
+        ?\Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItem = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -128,7 +128,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $metadataPool,
             $tableMaintainer
         );
-
         $this->stockItem = $stockItem
             ?? ObjectManager::getInstance()->get(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
     }
@@ -143,6 +142,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         parent::_construct();
         $this->setRowIdFieldName('selection_id');
         $this->_selectionTable = $this->getTable('catalog_product_bundle_selection');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->itemPrototype = null;
+        $this->catalogRuleProcessor = null;
+        $this->websiteScopePriceJoined = false;
     }
 
     /**
@@ -306,6 +316,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addPriceFilter($product, $searchMin, $useRegularPrice = false)
     {
         if ($product->getPriceType() == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC) {
+            if (!$this->getStoreId()) {
+                $this->setStoreId($this->_storeManager->getStore()->getId());
+            }
             $this->addPriceData();
             if ($useRegularPrice) {
                 $minimalPriceExpression = self::INDEX_TABLE_ALIAS . '.price';
@@ -355,8 +368,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Get Catalog Rule Processor.
      *
      * @return \Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor
-     *
-     * @deprecated 100.2.0
      */
     private function getCatalogRuleProcessor()
     {

@@ -2,8 +2,8 @@
 /**
  * Rollback for quote_with_payment_saved.php fixture.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */

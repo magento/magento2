@@ -1,25 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogRule\Model\Indexer\DynamicBatchSizeCalculator;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProduct;
 use Magento\CatalogRule\Model\Rule;
+use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ReindexRuleProductTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const ADMIN_WEBSITE_ID = 0;
 
     /**
@@ -53,6 +59,11 @@ class ReindexRuleProductTest extends TestCase
     private $ruleMock;
 
     /**
+     * @var DynamicBatchSizeCalculator|MockObject
+     */
+    private $batchSizeCalculatorMock;
+
+    /**
      * @var string
      */
     private $adminTimeZone;
@@ -69,17 +80,22 @@ class ReindexRuleProductTest extends TestCase
     {
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $activeTableSwitcherMock = $this->createMock(ActiveTableSwitcher::class);
-        $this->tableSwapperMock = $this->getMockForAbstractClass(IndexerTableSwapperInterface::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->tableSwapperMock = $this->createMock(IndexerTableSwapperInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->ruleMock = $this->createMock(Rule::class);
+        $this->batchSizeCalculatorMock = $this->createMock(DynamicBatchSizeCalculator::class);
+
+        $this->batchSizeCalculatorMock->method('getAttributeBatchSize')
+            ->willReturn(1000);
 
         $this->model = new ReindexRuleProduct(
             $this->resourceMock,
             $activeTableSwitcherMock,
             $this->tableSwapperMock,
             $this->localeDateMock,
-            true
+            true,
+            $this->batchSizeCalculatorMock
         );
 
         $this->adminTimeZone = 'America/Chicago';
@@ -178,12 +194,39 @@ class ReindexRuleProductTest extends TestCase
 
         $this->connectionMock
             ->method('insertMultiple')
-            ->withConsecutive(
-                ['catalogrule_product_replica', $batchRows],
-                ['catalogrule_product_replica', $rowsNotInBatch]
+            ->willReturnCallback(
+                function ($table, $rows) use ($batchRows, $rowsNotInBatch) {
+                    if ($table == 'catalogrule_product_replica' && $rows == $batchRows) {
+                        return 2;
+                    } elseif ($table == 'catalogrule_product_replica' && $rows == $rowsNotInBatch) {
+                        return 1;
+                    }
+                }
             );
 
         self::assertTrue($this->model->execute($this->ruleMock, 2, true));
+    }
+
+    public function testExecuteWithCustomBatchSize()
+    {
+        $websiteId = 3;
+        $productIds = [
+            4 => [$websiteId => 1],
+            5 => [$websiteId => 1],
+            6 => [$websiteId => 1]
+        ];
+
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
+
+        $this->connectionMock->expects($this->exactly(2))->method('insertMultiple');
+        self::assertTrue($this->model->execute($this->ruleMock, '2', true));
     }
 
     /**
@@ -191,17 +234,17 @@ class ReindexRuleProductTest extends TestCase
      * @param array $productIds
      * @param array $batchRows
      * @return void
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithExcludedWebsites(array $websitesIds, array $productIds, array $batchRows): void
     {
         $this->prepareResourceMock();
         $this->prepareRuleMock($websitesIds, $productIds, [10, 20]);
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesInterface::class)
-            ->addMethods(['getExtensionAttributes', 'getExcludeWebsiteIds'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ExtensionAttributesInterface::class,
+            ['getExtensionAttributes', 'getExcludeWebsiteIds']
+        );
         $this->ruleMock->expects(self::once())->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
         $extensionAttributes->expects(self::exactly(2))->method('getExcludeWebsiteIds')
@@ -226,7 +269,7 @@ class ReindexRuleProductTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function executeDataProvider(): array
+    public static function executeDataProvider(): array
     {
         return [
             [
@@ -440,8 +483,10 @@ class ReindexRuleProductTest extends TestCase
             ->willReturn($this->connectionMock);
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive(['catalogrule_product'], ['catalogrule_product_replica'])
-            ->willReturnOnConsecutiveCalls('catalogrule_product', 'catalogrule_product_replica');
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['catalogrule_product'] => 'catalogrule_product',
+                ['catalogrule_product_replica'] => 'catalogrule_product_replica'
+            });
     }
 
     /**

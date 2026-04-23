@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
+use Magento\CustomerImportExport\Model\Import\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -272,7 +272,7 @@ class Address extends AbstractCustomer
      * @param array $data
      * @param CountryWithWebsitesSource|null $countryWithWebsites
      * @param AddressStorage|null $addressStorage
-     * @param Processor $indexerProcessor
+     * @param Processor|null $indexerProcessor
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -365,7 +365,7 @@ class Address extends AbstractCustomer
         if ($attribute->getAttributeCode() === 'country_id') {
             //If we want to get available options for country field then we have to use alternative source
             // to get actual data for each website.
-            $options = $this->countryWithWebsites->getAllOptions();
+            $options = $this->countryWithWebsites->getCountiesPerWebsite();
             //Available country options now will be sorted by websites.
             $code = $attribute->getAttributeCode();
             $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];
@@ -634,7 +634,8 @@ class Address extends AbstractCustomer
 
                 $value = $rowData[$attributeAlias];
 
-                if ($rowData[$attributeAlias] === null || !strlen($rowData[$attributeAlias])) {
+                if ($rowData[$attributeAlias] === null
+                    || (is_string($rowData[$attributeAlias]) && !strlen($rowData[$attributeAlias]))) {
                     if ($attributeParams['is_required']) {
                         continue;
                     }
@@ -689,12 +690,12 @@ class Address extends AbstractCustomer
     /**
      * Process row data, based on attirbute type
      *
-     * @param string $rowAttributeData
+     * @param string|array $rowAttributeData
      * @param array $attributeParams
      * @return \DateTime|int|string
      * @throws \Exception
      */
-    protected function getValueByAttributeType(string $rowAttributeData, array $attributeParams)
+    protected function getValueByAttributeType($rowAttributeData, array $attributeParams)
     {
         $multiSeparator = $this->getMultipleValueSeparator();
         $value = $rowAttributeData;
@@ -709,8 +710,14 @@ class Address extends AbstractCustomer
                 break;
             case 'multiselect':
                 $ids = [];
-                foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
-                    $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                if (is_array($rowAttributeData)) {
+                    foreach ($rowAttributeData as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, mb_strtolower($subValue));
+                    }
+                } elseif (is_string($rowAttributeData)) {
+                    foreach (explode($multiSeparator, mb_strtolower($rowAttributeData)) as $subValue) {
+                        $ids[] = $this->getSelectAttrIdByValue($attributeParams, $subValue);
+                    }
                 }
                 $value = implode(',', $ids);
                 break;
@@ -880,7 +887,9 @@ class Address extends AbstractCustomer
 
                     if (in_array($attributeCode, $this->_ignoredAttributes)) {
                         continue;
-                    } elseif (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                    } elseif (isset($rowData[$attributeCode])
+                        && ((is_string($rowData[$attributeCode]) && strlen($rowData[$attributeCode]))
+                            || (is_array($rowData[$attributeCode]) && count($rowData[$attributeCode])))) {
                         $this->isAttributeValid(
                             $attributeCode,
                             $attributeParams,

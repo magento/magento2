@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Serialize\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MysqlTest extends TestCase
 {
@@ -34,16 +35,15 @@ class MysqlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->selectFactoryMock = $this->createMock(SelectFactory::class);
         $this->mysqlFactoryMock = $this->createMock(MysqlFactory::class);
     }
 
     /**
      * @param array $inputConfig
-     * @param array $expectedConfig
-     * @dataProvider constructorDataProvider
-     */
+     * @param array $expectedConfig     */
+    #[DataProvider('constructorDataProvider')]
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -58,12 +58,12 @@ class MysqlTest extends TestCase
     /**
      * @return array
      */
-    public function constructorDataProvider()
+    public static function constructorDataProvider()
     {
         return [
             'default values' => [
                 ['host' => 'localhost'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'custom values' => [
                 ['host' => 'localhost', 'initStatements' => 'init statement', 'type' => 'type', 'active' => true],
@@ -71,19 +71,19 @@ class MysqlTest extends TestCase
             ],
             'active string true' => [
                 ['host' => 'localhost', 'active' => 'true'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => true],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => true],
             ],
             'non-active string false' => [
                 ['host' => 'localhost', 'active' => 'false'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active string 0' => [
                 ['host' => 'localhost', 'active' => '0'],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
             'non-active bool false' => [
                 ['host' => 'localhost', 'active' => false],
-                ['host' => 'localhost', 'initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false],
+                ['host' => 'localhost', 'type' => 'pdo_mysql', 'active' => false],
             ],
         ];
     }
@@ -116,7 +116,7 @@ class MysqlTest extends TestCase
             $config,
             $this->mysqlFactoryMock
         );
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $this->assertNull($object->getConnection($loggerMock, $this->selectFactoryMock));
     }
 }

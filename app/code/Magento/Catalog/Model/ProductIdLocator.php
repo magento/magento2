@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Product ID locator provides all product IDs by SKUs.
  */
-class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterface
+class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterface, ResetAfterRequestInterface
 {
     /**
      * Limit values for array IDs by SKU.
@@ -125,5 +127,13 @@ class ProductIdLocator implements \Magento\Catalog\Model\ProductIdLocatorInterfa
         if (count($this->idsBySku) > $this->idsLimit) {
             $this->idsBySku = array_slice($this->idsBySku, $this->idsLimit * -1, null, true);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->idsBySku = [];
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCategoryDisplaySettingsActionGroup">
+        <annotations>
+            <description>Update Category Display settings</description>
+        </annotations>
+        <arguments>
+            <argument name="availableSortOptions" type="string"  defaultValue="Position"/>
+            <argument name="defaultSortingOption" type="string"  defaultValue="position"/>
+            <argument name="priceRange" type="string"  defaultValue="0"/>
+        </arguments>
+        <!--Select Display Setting and fill the options-->
+        <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
+        <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
+        <checkOption selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="[{{availableSortOptions}}]" stepKey="selectPrice"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" x="0" y="-80" stepKey="scrollToDefaultProductList"/>
+        <checkOption selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.defaultProductList}}" userInput="{{defaultSortingOption}}" stepKey="selectPosition"/>
+        <scrollTo selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" x="0" y="-80" stepKey="scrollToLayeredNavPrice"/>
+        <click selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceCheckBox}}" stepKey="enableLayeredNavigationPrice"/>
+        <fillField selector="{{CategoryDisplaySettingsSection.layeredNavigationPriceInput}}" userInput="{{priceRange}}" stepKey="fillThePrice"/>
+    </actionGroup>
+</actionGroups>
+

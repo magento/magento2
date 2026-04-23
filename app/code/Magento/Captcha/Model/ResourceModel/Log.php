@@ -1,30 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Captcha\Model\ResourceModel;
 
+use PhpDb\Sql\Expression;
+
 /**
  * Log Attempts resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Remote Address log type
      */
-    const TYPE_REMOTE_ADDRESS = 1;
+    public const TYPE_REMOTE_ADDRESS = 1;
 
     /**
      * Type User Login Name
      */
-    const TYPE_LOGIN = 2;
+    public const TYPE_LOGIN = 2;
 
     /**
-     * Core Date
-     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_coreDate;
@@ -79,7 +77,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Laminas\Db\Sql\Expression('count+1'), 'updated_at']
+                ['count' => new Expression('count+1'), 'updated_at']
             );
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
@@ -92,7 +90,7 @@ class Log extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     'count' => 1,
                     'updated_at' => $this->_coreDate->gmtDate()
                 ],
-                ['count' => new \Laminas\Db\Sql\Expression('count+1'), 'updated_at']
+                ['count' => new Expression('count+1'), 'updated_at']
             );
         }
         return $this;

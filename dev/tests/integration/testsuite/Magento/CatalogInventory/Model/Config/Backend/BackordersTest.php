@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -54,13 +55,13 @@ class BackordersTest extends TestCase
     }
 
     /**
-     * @dataProvider afterSaveDataProvider
      * @param int $value
      * @param int $currentValue
      * @param string $expectedIndexerStatus
      * @magentoDbIsolation disabled
      * @return void
      */
+    #[DataProvider('afterSaveDataProvider')]
     public function testAfterSave(int $value, int $currentValue, string $expectedIndexerStatus): void
     {
         $this->stockIndexerProcessor->reindexAll();
@@ -76,23 +77,23 @@ class BackordersTest extends TestCase
      *
      * @return array
      */
-    public function afterSaveDataProvider(): array
+    public static function afterSaveDataProvider(): array
     {
         return [
             'set_backorders' => [
                 'value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'current_value' => Stock::BACKORDERS_NO,
-                'expected_indexer_status' => StateInterface::STATUS_INVALID,
+                'currentValue' => Stock::BACKORDERS_NO,
+                'expectedIndexerStatus' => StateInterface::STATUS_INVALID,
             ],
             'unset_backorders' => [
                 'value' => Stock::BACKORDERS_NO,
-                'current_value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'expected_indexer_status' => StateInterface::STATUS_INVALID,
+                'currentValue' => Stock::BACKORDERS_YES_NONOTIFY,
+                'expectedIndexerStatus' => StateInterface::STATUS_INVALID,
             ],
             'same_backorders' => [
                 'value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'current_value' => Stock::BACKORDERS_YES_NONOTIFY,
-                'expected_indexer_status' => StateInterface::STATUS_VALID,
+                'currentValue' => Stock::BACKORDERS_YES_NONOTIFY,
+                'expectedIndexerStatus' => StateInterface::STATUS_VALID,
             ],
         ];
     }

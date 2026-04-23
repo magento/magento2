@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -42,7 +42,7 @@
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductSku">
-            <argument name="phrase" value="24 MB04"/>
+            <argument name="phrase" value="24 MB0"/>
         </actionGroup>
 
         <see userInput="4" selector="{{StorefrontCatalogSearchMainSection.productCount}}" stepKey="assertSearchResultCount"/>

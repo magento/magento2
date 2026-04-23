@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,6 +36,8 @@ class FilterEmulateTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->objectManagerHelper->prepareObjectManager();
+
         $this->appStateMock = $this->createMock(State::class);
 
         $this->filterEmulate = $this->objectManagerHelper->getObject(

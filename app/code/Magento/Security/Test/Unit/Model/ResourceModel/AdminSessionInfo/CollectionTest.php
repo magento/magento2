@@ -1,23 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\AdminSessionInfo;
 
-use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Security\Model\AdminSessionInfo;
+use Magento\Security\Model\ResourceModel\AdminSessionInfo as AdminSessionInfoResource;
 use Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
@@ -30,7 +26,7 @@ class CollectionTest extends TestCase
     /** @var DateTime */
     protected $dateTimeMock;
 
-    /** @var AbstractDb */
+    /** @var AdminSessionInfoResource */
     protected $resourceMock;
 
     /**
@@ -41,26 +37,15 @@ class CollectionTest extends TestCase
     {
         $this->dateTimeMock = $this->createMock(DateTime::class);
 
-        $entityFactory = $this->getMockForAbstractClass(EntityFactoryInterface::class);
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $fetchStrategy = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $select = $this->createMock(Select::class);
 
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createMock(Mysql::class);
         $connection->expects($this->any())->method('select')->willReturn($select);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                ['getConnection', 'getMainTable', 'getTable', 'deleteSessionsOlderThen', 'updateStatusByUserId']
-            )
-            ->getMockForAbstractClass();
+        $this->resourceMock = $this->createPartialMock(
+            AdminSessionInfoResource::class,
+            ['deleteSessionsOlderThen', 'updateStatusByUserId', 'getConnection', 'getMainTable', 'getTable']
+        );
 
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
@@ -69,23 +54,10 @@ class CollectionTest extends TestCase
         $this->resourceMock->expects($this->any())->method('getMainTable')->willReturn('table_test');
         $this->resourceMock->expects($this->any())->method('getTable')->willReturn('test');
 
-        $this->collectionMock = $this->getMockBuilder(
-            Collection::class
-        )
-            ->setMethods(['addFieldToFilter', 'getResource', 'getConnection'])
-            ->setConstructorArgs(
-                [
-                    $entityFactory,
-                    $logger,
-                    $fetchStrategy,
-                    $eventManager,
-                    'dateTime' => $this->dateTimeMock,
-                    $connection,
-                    $this->resourceMock
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionMock = $this->createPartialMock(
+            Collection::class,
+            ['addFieldToFilter', 'getResource', 'getConnection']
+        );
 
         $this->collectionMock->expects($this->any())
             ->method('getConnection')
@@ -93,7 +65,6 @@ class CollectionTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($this->collectionMock));
         $reflectionProperty = $reflection->getProperty('dateTime');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->collectionMock, $this->dateTimeMock);
 
         $this->collectionMock->expects($this->any())
@@ -112,12 +83,15 @@ class CollectionTest extends TestCase
 
         $this->collectionMock->expects($this->exactly(3))
             ->method('addFieldToFilter')
-            ->withConsecutive(
-                ['user_id', $userId],
-                ['status', $status],
-                ['id', ['neq' => $sessionIdToExclude]]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) use ($userId, $status, $sessionIdToExclude) {
+                if ($arg1 == 'user_id' && $arg2 == $userId) {
+                    return $this;
+                } elseif ($arg1 == 'status' && $arg2 == $status) {
+                    return $this;
+                } elseif ($arg1 == 'id' && $arg2 == ['neq' => $sessionIdToExclude]) {
+                    return $this;
+                }
+            });
 
         $this->assertEquals(
             $this->collectionMock,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,14 +33,12 @@ class SearchResultProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->searchCriteriaMock = $this->getMockBuilder(CriteriaInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->searchCriteriaMock = $this->createMock(CriteriaInterface::class);
 
         $this->searchResultCollectionMock = $this->getMockBuilder(AbstractSearchResult::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSearchCriteria', 'getItems', 'getItemId'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getSearchCriteria', 'getItems', 'getItemId', 'init'])
+            ->getMock();
         $this->searchResultCollectionMock->expects($this->any())
             ->method('getSearchCriteria')
             ->willReturn($this->searchCriteriaMock);

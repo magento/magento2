@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\ConfigurableProductSales\ViewModel\ItemRendererTypeResolver;
 use Magento\Framework\DataObject;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test configurable order item renderer type resolver
@@ -34,15 +35,18 @@ class ItemRendererTypeResolverTest extends TestCase
     /**
      * @param string|null $realProductType
      * @param string $expectedProductType
-     * @dataProvider resolveConfigurableOrderItemDataProvider
      */
+    #[DataProvider('resolveConfigurableOrderItemDataProvider')]
     public function testResolveConfigurableOrderItem(?string $realProductType, string $expectedProductType): void
     {
         $orderItem = $this->getOrderItemMock();
-        $orderItem->setProductType('configurable');
+        $orderItem->method('getProductType')->willReturn('configurable');
+
         $childOrderItem = $this->getOrderItemMock();
-        $childOrderItem->setProductOptions(['real_product_type' => $realProductType]);
-        $orderItem->addChildItem($childOrderItem);
+        $childOrderItem->method('getRealProductType')->willReturn($realProductType);
+
+        $orderItem->method('getChildrenItems')->willReturn([$childOrderItem]);
+
         $this->assertEquals($expectedProductType, $this->model->resolve($orderItem));
         $this->assertEquals($expectedProductType, $this->model->resolve(new DataObject(['order_item' => $orderItem])));
     }
@@ -50,7 +54,7 @@ class ItemRendererTypeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function resolveConfigurableOrderItemDataProvider(): array
+    public static function resolveConfigurableOrderItemDataProvider(): array
     {
         return [
             ['simple', 'simple'],
@@ -64,7 +68,7 @@ class ItemRendererTypeResolverTest extends TestCase
     public function testResolveSimpleOrderItem(): void
     {
         $orderItem = $this->getOrderItemMock();
-        $orderItem->setProductType('virtual');
+        $orderItem->method('getProductType')->willReturn('virtual');
         $this->assertEquals('virtual', $this->model->resolve($orderItem));
         $this->assertEquals('virtual', $this->model->resolve(new DataObject(['order_item' => $orderItem])));
     }
@@ -74,8 +78,6 @@ class ItemRendererTypeResolverTest extends TestCase
      */
     private function getOrderItemMock(): Item
     {
-        return $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        return $this->createMock(Item::class);
     }
 }

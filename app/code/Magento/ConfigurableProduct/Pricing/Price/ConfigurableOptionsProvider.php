@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -9,11 +9,12 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Provide configurable child products for price calculation
  */
-class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
+class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var Configurable
@@ -21,7 +22,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $configurable;
 
     /**
-     * @var ProductInterface[]
+     * @var ProductInterface[]|null
      */
     private $products;
 
@@ -55,5 +56,13 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
             );
         }
         return $this->products[$product->getId()];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->products = null;
     }
 }

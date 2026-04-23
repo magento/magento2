@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Annotation\TestCaseAnnotation;
+use Magento\TestFramework\Event\Magento;
 use Magento\TestFramework\Fixture\Parser\Config as ConfigFixtureParser;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -75,7 +76,7 @@ class ConfigFixture
      * @param string|null $scopeCode
      * @return mixed|null
      */
-    protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null)
+    protected function getScopeConfigValue(string $configPath, string $scopeType, ?string $scopeCode = null)
     {
         $result = null;
         if ($scopeCode !== false) {
@@ -189,7 +190,7 @@ class ConfigFixture
         $parts = preg_split('/\s+/', $configPathAndValue, 3);
         list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
         $originalValue = $this->_getConfigValue($configPath, $storeCode);
-        $this->storeConfigValues[$storeCode][$configPath] = $originalValue;
+        $this->storeConfigValues[$storeCode ?? ''][$configPath] = $originalValue;
         $this->_setConfigValue($configPath, $requiredValue, $storeCode);
     }
 
@@ -203,7 +204,7 @@ class ConfigFixture
      */
     protected function setWebsiteConfigValue(array $matches, $configPathAndValue): void
     {
-        $websiteCode = $matches[0] != 'current' ? $matches[0] : null;
+        $websiteCode = $matches[0] != 'current' ? $matches[0] : '';
         $parts = preg_split('/\s+/', $configPathAndValue, 3);
         list($configScope, $configPath, $requiredValue) = $parts + ['', '', ''];
         $originalValue = $this->getScopeConfigValue($configPath, ScopeInterface::SCOPE_WEBSITES, $websiteCode);
@@ -271,6 +272,16 @@ class ConfigFixture
      */
     public function startTest(TestCase $test)
     {
+        if ($eventObj = Magento::getCurrentEventObject()) {
+            $testData = $eventObj->test()->testData();
+
+            if ($testData->hasDataFromDataProvider()) {
+                $dataFromDataProvider = $testData->dataFromDataProvider();
+                $dataSetName = $dataFromDataProvider->dataSetName();
+                $test->setData($dataSetName, ['']);
+            }
+        }
+
         $this->_currentTest = $test;
         $this->_assignConfigData($test);
     }

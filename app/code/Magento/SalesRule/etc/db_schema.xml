@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -36,7 +36,7 @@
                 default="0" comment="Discount Step"/>
         <column xsi:type="smallint" name="apply_to_shipping" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Apply To Shipping"/>
-        <column xsi:type="int" name="times_used" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="times_used" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Times Used"/>
         <column xsi:type="smallint" name="is_rss" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Is Rss"/>

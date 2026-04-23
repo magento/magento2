@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,16 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RowCustomizerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManagerHelper
      */
@@ -64,50 +69,70 @@ class RowCustomizerTest extends TestCase
 
     /**
      * Set up
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getScope'])
-            ->getMockForAbstractClass();
+        $this->scopeResolver = $this->createPartialMock(
+            ScopeResolverInterface::class,
+            ['getScope', 'getScopes']
+        );
+        
+        // Mock StoreManager with Website and Store
+        $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
+        $websiteMock->method('getCode')->willReturn('base');
+        $websiteMock->method('getDefaultGroupId')->willReturn(1);
+        
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock->method('getId')->willReturn(1);
+        
+        $groupMock = $this->createMock(\Magento\Store\Model\Group::class);
+        $groupMock->method('getDefaultStoreId')->willReturn(1);
+        
+        $storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $storeManager->method('getWebsite')->willReturn($websiteMock);
+        $storeManager->method('getStore')->willReturn($storeMock);
+        $storeManager->method('getGroup')->willReturn($groupMock);
+        
         $this->rowCustomizerMock = $this->objectManagerHelper->getObject(
             RowCustomizer::class,
             [
                 'scopeResolver' => $this->scopeResolver,
+                'storeManager' => $storeManager,
             ]
         );
         $this->productResourceCollection = $this->createPartialMock(
             Collection::class,
             ['addAttributeToFilter', 'getIterator']
         );
-        $this->product = $this->getMockBuilder(Product::class)
-            ->addMethods([
-                'getPriceType',
-                'getShipmentType',
-                'getSkuType',
-                'getPriceView',
-                'getWeightType',
-                'getOptionsCollection',
-                'getSelectionsCollection'
-            ])
-            ->onlyMethods(['getEntityId', 'getSku', 'getStoreIds', 'getTypeInstance'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->product->method('getStoreIds')->willReturn([1]);
+        // Mock Product - mock methods to avoid resource dependencies
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getTypeInstance', 'getSku', 'getEntityId', 'getPriceType', 'getShipmentType',
+             'getSkuType', 'getPriceView', 'getWeightType', 'getWebsiteIds']
+        );
+        $this->product->method('getSku')->willReturn('test-sku');
         $this->product->method('getEntityId')->willReturn(1);
         $this->product->method('getPriceType')->willReturn(1);
         $this->product->method('getShipmentType')->willReturn(1);
         $this->product->method('getSkuType')->willReturn(1);
         $this->product->method('getPriceView')->willReturn(1);
         $this->product->method('getWeightType')->willReturn(1);
-        $this->product->method('getTypeInstance')->willReturnSelf();
+        $this->product->method('getWebsiteIds')->willReturn([1]);
+        $this->product->setStoreIds([1]);
+        $this->product->setEntityId(1);
+        $this->product->setPriceType(1);
+        $this->product->setShipmentType(1);
+        $this->product->setSkuType(1);
+        $this->product->setPriceView(1);
+        $this->product->setWeightType(1);
         $this->optionsCollection = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Option\Collection::class,
-            ['setOrder', 'getItems']
+            ['setOrder', 'getItems', 'getItemById', 'appendSelections', 'getIterator']
         );
-        $this->product->method('getOptionsCollection')->willReturn($this->optionsCollection);
+        $this->product->setOptionsCollection($this->optionsCollection);
         $this->optionsCollection->method('setOrder')->willReturnSelf();
         $this->option = $this->createPartialMock(
             Option::class,
@@ -118,37 +143,46 @@ class RowCustomizerTest extends TestCase
         $this->option->method('getTitle')->willReturn('title');
         $this->option->method('getType')->willReturn(1);
         $this->option->method('getRequired')->willReturn(1);
-        $this->optionsCollection->method('getItems')->willReturn(
-            new \ArrayIterator([$this->option])
+        $this->optionsCollection->method('getItems')->willReturn([$this->option]);
+        $this->optionsCollection->method('getItemById')->willReturn($this->option);
+        $this->optionsCollection->method('appendSelections')->willReturn([$this->option]);
+        $this->optionsCollection->method('getIterator')->willReturn(new \ArrayIterator([$this->option]));
+        // Mock selection product with magic method support
+        $this->selection = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getSku', 'getSelectionPriceValue', 'getSelectionQty', 'getSelectionPriceType',
+             'getSelectionCanChangeQty', 'getOptionId']
         );
-        $this->selection = $this->getMockBuilder(Product::class)
-            ->addMethods([
-                'getSelectionPriceValue',
-                'getIsDefault',
-                'getSelectionQty',
-                'getSelectionPriceType',
-                'getSelectionCanChangeQty'
-            ])
-            ->onlyMethods(['getSku'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->selection->method('getSku')->willReturn(1);
         $this->selection->method('getSelectionPriceValue')->willReturn(1);
         $this->selection->method('getSelectionQty')->willReturn(1);
         $this->selection->method('getSelectionPriceType')->willReturn(1);
         $this->selection->method('getSelectionCanChangeQty')->willReturn(1);
+        $this->selection->method('getOptionId')->willReturn(1);
         $this->selectionsCollection = $this->createPartialMock(
             \Magento\Bundle\Model\ResourceModel\Selection\Collection::class,
-            ['getIterator', 'addAttributeToSort']
+            ['getIterator', 'addAttributeToSort', 'getItems']
         );
         $this->selectionsCollection->method('getIterator')->willReturn(
             new \ArrayIterator([$this->selection])
         );
         $this->selectionsCollection->method('addAttributeToSort')->willReturnSelf();
-        $this->product->method('getSelectionsCollection')->willReturn(
-            $this->selectionsCollection
+        $this->selectionsCollection->method('getItems')->willReturn([$this->selection]);
+        $this->option->setData('selections', [$this->selection]);
+        $this->product->setSelectionsCollection($this->selectionsCollection);
+        
+        // Mock type instance - needed by production code
+        $typeInstance = $this->createPartialMock(
+            \Magento\Bundle\Model\Product\Type::class,
+            ['getOptionsCollection', 'getSelectionsCollection', 'getOptionsIds', 'setStoreFilter']
         );
-        $this->product->method('getSku')->willReturn(1);
+        $typeInstance->method('getOptionsCollection')->willReturn($this->optionsCollection);
+        $typeInstance->method('getSelectionsCollection')->willReturn($this->selectionsCollection);
+        $typeInstance->method('getOptionsIds')->willReturn([1]);
+        $typeInstance->method('setStoreFilter')->willReturnSelf();
+        $this->product->method('getTypeInstance')->willReturn($typeInstance);
+        
+        $this->product->setSku(1);
         $this->productResourceCollection->method('addAttributeToFilter')->willReturnSelf();
         $this->productResourceCollection->method('getIterator')->willReturn(
             new \ArrayIterator([$this->product])
@@ -160,8 +194,7 @@ class RowCustomizerTest extends TestCase
      */
     public function testPrepareData()
     {
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scope = $this->createMock(ScopeInterface::class);
         $this->scopeResolver->method('getScope')->willReturn($scope);
         $result = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
         $this->assertNotNull($result);
@@ -190,8 +223,7 @@ class RowCustomizerTest extends TestCase
      */
     public function testAddData()
     {
-        $scope = $this->getMockBuilder(ScopeInterface::class)
-            ->getMockForAbstractClass();
+        $scope = $this->createMock(ScopeInterface::class);
         $this->scopeResolver->method('getScope')->willReturn($scope);
         $preparedData = $this->rowCustomizerMock->prepareData($this->productResourceCollection, [1]);
         $attributes = 'attribute=1,sku_type=1,attribute2="Text",price_type=1,price_view=1,weight_type=1,'

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,7 +87,7 @@ class InvoiceSender extends Sender
         InvoiceResource $invoiceResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         ManagerInterface $eventManager,
-        Emulation $appEmulation = null
+        ?Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->paymentHelper = $paymentHelper;

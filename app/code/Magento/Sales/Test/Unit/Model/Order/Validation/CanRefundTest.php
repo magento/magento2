@@ -1,22 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Validation;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Validation\CanRefund;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CanRefundTest extends TestCase
 {
+
     /**
      * @var CanRefund|MockObject
      */
@@ -40,15 +43,19 @@ class CanRefundTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $objects = [
+            [
+                ScopeConfigInterface::class,
+                $this->createMock(ScopeConfigInterface::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+        $this->orderMock = $this->createPartialMock(
+            Order::class,
+            ['getStatus', 'getItems', 'getState', 'getTotalPaid', 'getTotalRefunded']
+        );
 
-        $this->orderMock = $this->getMockBuilder(OrderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'getItems'])
-            ->getMockForAbstractClass();
-
-        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('round')
@@ -60,9 +67,8 @@ class CanRefundTest extends TestCase
 
     /**
      * @param string $state
-     *
-     * @dataProvider canCreditmemoWrongStateDataProvider
      */
+    #[DataProvider('canCreditmemoWrongStateDataProvider')]
     public function testCanCreditmemoWrongState($state)
     {
         $this->orderMock->expects($this->any())
@@ -87,7 +93,7 @@ class CanRefundTest extends TestCase
      * Data provider for testCanCreditmemoWrongState
      * @return array
      */
-    public function canCreditmemoWrongStateDataProvider()
+    public static function canCreditmemoWrongStateDataProvider()
     {
         return [
             [Order::STATE_PAYMENT_REVIEW],

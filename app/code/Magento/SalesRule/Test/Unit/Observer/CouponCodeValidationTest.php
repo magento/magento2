@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,40 +9,50 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartSearchResultsInterface;
 use Magento\Quote\Model\Quote;
 use Magento\SalesRule\Api\Exception\CodeRequestLimitException;
 use Magento\SalesRule\Model\Spi\CodeLimitManagerInterface;
 use Magento\SalesRule\Observer\CouponCodeValidation;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CouponCodeValidationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CouponCodeValidation
      */
     private $couponCodeValidation;
 
     /**
-     * @var MockObject|CodeLimitManagerInterface
+     * @var MockObject&CodeLimitManagerInterface
      */
     private $codeLimitManagerMock;
 
     /**
-     * @var MockObject|CartRepositoryInterface
+     * @var MockObject&CartRepositoryInterface
      */
     private $cartRepositoryMock;
 
     /**
-     * @var MockObject|SearchCriteriaBuilder
+     * @var MockObject&SearchCriteriaBuilder
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var MockObject|Observer
+     * @var MockObject&SearchCriteriaBuilderFactory
+     */
+    private $searchCriteriaBuilderMockFactory;
+
+    /**
+     * @var MockObject&Observer
      */
     private $observerMock;
 
@@ -57,33 +67,41 @@ class CouponCodeValidationTest extends TestCase
     private $quoteMock;
 
     /**
+     * @var MockObject&CartSearchResultsInterface
+     */
+    private $searchResultsMock;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
     {
-        $this->codeLimitManagerMock = $this->getMockForAbstractClass(CodeLimitManagerInterface::class);
+        $this->codeLimitManagerMock = $this->createMock(CodeLimitManagerInterface::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->setMethods(['getItems'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $this->searchResultsMock = $this->createMock(CartSearchResultsInterface::class);
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->setMethods(['addFilter', 'create'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getCouponCode', 'setCouponCode'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['addFilter', 'create'])
             ->disableOriginalConstructor()
             ->getMock();
+        
+        $this->searchCriteriaBuilderMockFactory = $this->getMockBuilder(SearchCriteriaBuilderFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchCriteriaBuilderMockFactory->expects($this->any())->method('create')
+            ->willReturn($this->searchCriteriaBuilderMock);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCouponCode', 'setCouponCode', 'getId']
+        );
 
         $this->couponCodeValidation = new CouponCodeValidation(
             $this->codeLimitManagerMock,
             $this->cartRepositoryMock,
-            $this->searchCriteriaBuilderMock
+            $this->searchCriteriaBuilderMock,
+            $this->searchCriteriaBuilderMockFactory
         );
     }
 
@@ -100,8 +118,8 @@ class CouponCodeValidationTest extends TestCase
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
             ->willReturn($this->searchCriteriaMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(123);
-        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturnSelf();
-        $this->cartRepositoryMock->expects($this->any())->method('getItems')->willReturn([]);
+        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturn($this->searchResultsMock);
+        $this->searchResultsMock->expects($this->any())->method('getItems')->willReturn([]);
         $this->codeLimitManagerMock->expects($this->once())->method('checkRequest')->with($couponCode);
         $this->quoteMock->expects($this->never())->method('setCouponCode')->with('');
 
@@ -123,8 +141,8 @@ class CouponCodeValidationTest extends TestCase
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
             ->willReturn($this->searchCriteriaMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(123);
-        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturnSelf();
-        $this->cartRepositoryMock->expects($this->any())->method('getItems')
+        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturn($this->searchResultsMock);
+        $this->searchResultsMock->expects($this->any())->method('getItems')
             ->willReturn([new DataObject(['coupon_code' => $newCouponCode])]);
         $this->codeLimitManagerMock->expects($this->once())->method('checkRequest')->with($couponCode);
         $this->quoteMock->expects($this->never())->method('setCouponCode')->with('');
@@ -147,8 +165,8 @@ class CouponCodeValidationTest extends TestCase
         $this->searchCriteriaBuilderMock->expects($this->once())->method('create')
             ->willReturn($this->searchCriteriaMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(123);
-        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturnSelf();
-        $this->cartRepositoryMock->expects($this->any())->method('getItems')->willReturn([]);
+        $this->cartRepositoryMock->expects($this->any())->method('getList')->willReturn($this->searchResultsMock);
+        $this->searchResultsMock->expects($this->any())->method('getItems')->willReturn([]);
         $this->codeLimitManagerMock->expects($this->once())->method('checkRequest')->with($couponCode)
             ->willThrowException(
                 new CodeRequestLimitException(__('Too many coupon code requests, please try again later.'))

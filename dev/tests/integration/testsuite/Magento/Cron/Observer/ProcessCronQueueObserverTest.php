@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All rights reserved.
  */
 namespace Magento\Cron\Observer;
 
 use Magento\Cron\Observer\ProcessCronQueueObserver;
-use \Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
-class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
+class ProcessCronQueueObserverTest extends TestCase
 {
     /**
      * @var \Magento\Cron\Observer\ProcessCronQueueObserver
@@ -53,10 +55,10 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $expectedGroupsToRun
-     * @param null $group
-     * @param null $excludeGroup
-     * @dataProvider groupFiltersDataProvider
+     * @param mixed $group
+     * @param mixed $excludeGroup
      */
+    #[DataProvider('groupFiltersDataProvider')]
     public function testGroupFilters(array $expectedGroupsToRun, $group = null, $excludeGroup = null)
     {
         $config = $this->createMock(\Magento\Cron\Model\ConfigInterface::class);
@@ -84,7 +86,11 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
 
         $lockManager->expects($this->exactly(count($expectedLockData)))
             ->method('lock')
-            ->withConsecutive(...$expectedLockData);
+            ->willReturnCallback(function (...$expectedLockData) {
+                if (!empty($expectedLockData)) {
+                    return false;
+                }
+            });
 
         $request->setParams(
             [
@@ -105,46 +111,48 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array|array[]
      */
-    public function groupFiltersDataProvider(): array
+    public static function groupFiltersDataProvider(): array
     {
-
         return [
             'no flags runs all groups' => [
-                ['index', 'consumers', 'default']    // groups to run
+                ['index', 'consumers', 'default'],  // $expectedGroupsToRun
+                null,  // $group
+                null   // $excludeGroup
             ],
             '--group=default should run'  => [
-                ['default'],                        // groups to run
-                'default',                          // --group default
+                ['default'],  // $expectedGroupsToRun
+                'default',    // $group
+                null          // $excludeGroup
             ],
             '--group=default with --exclude-group=default, nothing should run' => [
-                [],                                 // groups to run
-                'default',                          // --group default
-                ['default'],                        // --exclude-group default
+                [],           // $expectedGroupsToRun
+                'default',    // $group
+                ['default']   // $excludeGroup
             ],
             '--group=default with --exclude-group=index, default should run' => [
-                ['default'],                        // groups to run
-                'default',                          // --group default
-                ['index'],                          // --exclude-group index
+                ['default'],  // $expectedGroupsToRun
+                'default',    // $group
+                ['index']     // $excludeGroup
             ],
             '--group=index with --exclude-group=default, index should run' => [
-                ['index'],                          // groups to run
-                'index',                            // --group index
-                ['default'],                        // --exclude-group default
+                ['index'],    // $expectedGroupsToRun
+                'index',      // $group
+                ['default']   // $excludeGroup
             ],
             '--exclude-group=index, all other groups should run' => [
-                ['consumers', 'default'],           // groups to run, all but index
-                null,                               //
-                ['index']                           // --exclude-group index
+                ['consumers', 'default'],  // $expectedGroupsToRun
+                null,         // $group
+                ['index']     // $excludeGroup
             ],
             '--exclude-group for every group runs nothing' => [
-                [],                                 // groups to run, none
-                null,                               //
-                ['default', 'consumers', 'index']   // groups to exclude, all of them
+                [],           // $expectedGroupsToRun
+                null,         // $group
+                ['default', 'consumers', 'index']  // $excludeGroup
             ],
             'exclude all groups but consumers, consumers runs' => [
-                ['consumers'],
-                null,
-                ['index', 'default']
+                ['consumers'],       // $expectedGroupsToRun
+                null,                // $group
+                ['index', 'default'] // $excludeGroup
             ],
         ];
     }

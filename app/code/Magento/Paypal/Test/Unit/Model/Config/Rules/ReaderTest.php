@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Paypal\Helper\Backend;
 use Magento\Paypal\Model\Config\Rules\Converter;
 use Magento\Paypal\Model\Config\Rules\Reader;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -53,16 +54,10 @@ class ReaderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->fileResolver = $this->getMockForAbstractClass(
-            FileResolverInterface::class
-        );
+        $this->fileResolver = $this->createMock(FileResolverInterface::class);
         $this->converter = $this->createMock(Converter::class);
-        $this->schemaLocator = $this->getMockForAbstractClass(
-            SchemaLocatorInterface::class
-        );
-        $this->validationState = $this->getMockForAbstractClass(
-            ValidationStateInterface::class
-        );
+        $this->schemaLocator = $this->createMock(SchemaLocatorInterface::class);
+        $this->validationState = $this->createMock(ValidationStateInterface::class);
         $this->helper = $this->createMock(Backend::class);
     }
 
@@ -72,8 +67,8 @@ class ReaderTest extends TestCase
      * @param string $expected
      *
      * @return void
-     * @dataProvider dataProviderReadExistingCountryConfig
      */
+    #[DataProvider('dataProviderReadExistingCountryConfig')]
     public function testReadExistingCountryConfig($countryCode, $xml, $expected): void
     {
         $this->helper->expects($this->once())
@@ -102,8 +97,8 @@ class ReaderTest extends TestCase
      * @param string $expected
      *
      * @return void
-     * @dataProvider dataProviderReadOtherCountryConfig
      */
+    #[DataProvider('dataProviderReadOtherCountryConfig')]
     public function testReadOtherCountryConfig($countryCode, $xml, $expected): void
     {
         $this->helper->expects($this->once())
@@ -112,8 +107,15 @@ class ReaderTest extends TestCase
 
         $this->fileResolver
             ->method('get')
-            ->withConsecutive([], [$expected])
-            ->willReturnOnConsecutiveCalls([], $xml);
+            ->willReturnCallback(
+                function ($arg1) use ($expected, $xml) {
+                    if ($arg1 == $expected) {
+                        return $xml;
+                    } else {
+                        return [];
+                    }
+                }
+            );
 
         $this->reader = new Reader(
             $this->fileResolver,
@@ -129,7 +131,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReadExistingCountryConfig(): array
+    public static function dataProviderReadExistingCountryConfig(): array
     {
         return [
             ['us', ['<payment/>'], 'adminhtml/rules/payment_us.xml'],
@@ -149,7 +151,7 @@ class ReaderTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderReadOtherCountryConfig(): array
+    public static function dataProviderReadOtherCountryConfig(): array
     {
         return [
             ['no', ['<payment/>'], 'adminhtml/rules/payment_other.xml']
