@@ -1,9 +1,7 @@
 <?php
 /**
- * Product Attribute Group mapper plugin. Adds Configurable product information
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
 

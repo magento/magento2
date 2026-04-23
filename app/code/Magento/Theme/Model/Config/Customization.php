@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Config;
 
@@ -135,7 +135,8 @@ class Customization
     {
         if (null === $store) {
             $assignedThemes = $this->getAssignedThemeCustomizations();
-            return isset($assignedThemes[$theme->getId()]);
+            $themeId = $theme->getId();
+            return $themeId !== null && isset($assignedThemes[$themeId]);
         }
         return $this->_isThemeAssignedToSpecificStore($theme, $store);
     }

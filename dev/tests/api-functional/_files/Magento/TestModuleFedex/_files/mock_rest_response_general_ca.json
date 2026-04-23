@@ -395,7 +395,7 @@
              }
           },
           {
-             "serviceType": "INTERNATIONAL_PRIORITY",
+             "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
              "serviceName": "International Priority",
              "packagingType": "YOUR_PACKAGING",
              "ratedShipmentDetails": [
@@ -480,7 +480,7 @@
              "signatureOptionType": "SERVICE_DEFAULT",
              "serviceDescription": {
                 "serviceId": "EP1000000141",
-                "serviceType": "INTERNATIONAL_PRIORITY",
+                "serviceType": "FEDEX_INTERNATIONAL_PRIORITY",
                 "names": [
                    {
                       "type": "long",

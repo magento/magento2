@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,12 +42,7 @@ class MinifyTemplatesTest extends TestCase
     {
         $this->filesUtils = $this->createPartialMock(Files::class, ['getPhtmlFiles']);
 
-        $this->htmlMinifier = $this->getMockForAbstractClass(
-            MinifierInterface::class,
-            ['minify'],
-            '',
-            false
-        );
+        $this->htmlMinifier = $this->createMock(MinifierInterface::class);
 
         $this->service = new MinifyTemplates(
             $this->filesUtils,

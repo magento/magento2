@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,9 +42,7 @@ class FactoryDecoratorTest extends TestCase
         require_once __DIR__ . '/../_files/logger_classes.php';
         $objectManager = new ObjectManager($this);
 
-        $this->objectManagerMock = $this->getMockBuilder(FactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(FactoryInterface::class);
 
         // Instantiate SUT
         $this->model = $objectManager->getObject(

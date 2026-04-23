@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRegisteredCustomerCheckoutUsingPayPalExpressCheckoutTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Registered Customers Paypal express checkout configuration"/>
+            <title value="Registered Customers uses Paypal Express Checkout configuration with valid credentials"/>
+            <description value="As a registered customer I want to be able to buy goods using PayPal express with Flat rate Shipping"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5246"/>
+            <group value="3rd_party_integration"/>
+            <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Precondition1: create Simple product -->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">10.00</field>
+            </createData>
+            <!-- Precondition2: create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- delete created data -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step1: Login to storefront as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step2: Add product to cart and got to checkout page -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <!-- Step3&4&5: Checkout with PayPal -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
+        <!-- Login to PayPal in-context and verify order total on PayPal page-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterPayment"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="waitForOrderNumberToBeGrabbed"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="{{CONST.successCheckoutEmailYouMessage}}" stepKey="seeSuccessMessage"/>
+        <!-- Step6&7: Open order and verify amounts -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openFirstOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeAdminOrderStatus">
+            <argument name="status" value="{{OrderState.processing}}"/>
+        </actionGroup>
+        <waitForText selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$15.00" stepKey="checkGrandTotal"/>
+        <actionGroup ref="AdminOpenOrderCommentsHistoryActionGroup" stepKey="clickOnCommentsHistory"/>
+        <waitForText selector="{{AdminOrderCommentsTabSection.orderComment}}" userInput="Authorized amount of $15.00." stepKey="seeOrderHistoryNotes"/>
+        <!--Open invoice tab and verify the invoice is present-->
+        <waitForElementClickable selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="waitForInvoicesTabToBeClickable"/>
+        <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickOrderInvoicesTab"/>
+        <waitForPageLoad stepKey="waitForInvoiceGridLoadingMask"/>
+        <waitForText selector="{{AdminOrderDetailsMainActionsSection.invoiceTabContent1}}" userInput="{{InvoiceTabErrorMessage.error_Message}}" stepKey="verifyThereIsNoInvoiceCreated"/>
+    </test>
+</tests>

@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright 2024 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 
@@ -153,6 +152,7 @@ class Save extends Attribute implements HttpPostActionInterface
             $data,
             $optionData
         );
+        $this->markAttributeOptionsAsDeleted($data);
 
         if ($data) {
             $setId = $this->getRequest()->getParam('set');
@@ -272,6 +272,16 @@ class Save extends Attribute implements HttpPostActionInterface
             if (array_key_exists('reset_is-default_option', $data) && $data['reset_is-default_option']) {
                 unset($data['reset_is-default_option']);
                 $data['default_value'] = null;
+            } elseif (isset($data['default'])) {
+                $defaultOptions = [];
+                foreach ((array)$data['default'] as $defaultValue) {
+                    if ((int)$defaultValue > 0) {
+                        $defaultOptions[] = $defaultValue;
+                    }
+                }
+                if (!empty($defaultOptions)) {
+                    $data['default_value'] = implode(",", $defaultOptions);
+                }
             }
 
             $model->addData($data);
@@ -364,6 +374,43 @@ class Save extends Attribute implements HttpPostActionInterface
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+    }
+
+    /**
+     * Ensures extra option_N entries (not present in attribute_options_*) are marked as deleted.
+     *
+     * @param array $data
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function markAttributeOptionsAsDeleted(array &$data): void
+    {
+        $rowsKey = null;
+
+        if (!empty($data['attribute_options_select']) && is_array($data['attribute_options_select'])) {
+            $rowsKey = 'attribute_options_select';
+        } elseif (!empty($data['attribute_options_multiselect']) && is_array($data['attribute_options_multiselect'])) {
+            $rowsKey = 'attribute_options_multiselect';
+        }
+
+        if (!$rowsKey ||
+            empty($data['option']) || !is_array($data['option']) ||
+            empty($data['option']['value']) || !is_array($data['option']['value'])
+        ) {
+            return;
+        }
+
+        $expectedCount = count($data[$rowsKey]);
+
+        foreach (array_keys($data['option']['value']) as $optKey) {
+            if (preg_match('/^option_(\d+)$/', (string)$optKey, $m)) {
+                $n = (int)$m[1];
+
+                if ($n >= $expectedCount) {
+                    $data['option']['delete'][$optKey] = 1;
+                }
+            }
+        }
     }
 
     /**

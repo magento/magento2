@@ -5,8 +5,9 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "php": "~8.3.0||~8.4.0||~8.5.0",
         "magento/framework": "*",
+        "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-import-export": "*",
         "magento/module-catalog-inventory": "*",

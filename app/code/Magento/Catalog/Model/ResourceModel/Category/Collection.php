@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
@@ -8,9 +8,20 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\ResourceModel\Helper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Validator\UniversalFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Category resource collection
@@ -22,6 +33,10 @@ use Magento\Store\Model\ScopeInterface;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection
 {
     private const BULK_PROCESSING_LIMIT = 400;
+
+    private const DEFAULT_READ_BATCH_SIZE = 500;
+
+    private const DEFAULT_WRITE_BATCH_SIZE = 2000;
 
     /**
      * Event prefix name
@@ -78,20 +93,32 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     private $catalogProductVisibility;
 
     /**
+     * @var int
+     */
+    private int $readBatchSize;
+
+    /**
+     * @var int
+     */
+    private int $writeBatchSize;
+
+    /**
      * Constructor
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param Config $eavConfig
+     * @param ResourceConnection $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Helper $resourceHelper
+     * @param UniversalFactory $universalFactory
+     * @param StoreManagerInterface $storeManager
+     * @param AdapterInterface|null $connection
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param Visibility|null $catalogProductVisibility
+     * @param int|null $readBatchSize
+     * @param int|null $writeBatchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -107,7 +134,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
-        ?Visibility $catalogProductVisibility = null
+        ?Visibility $catalogProductVisibility = null,
+        ?int $readBatchSize = null,
+        ?int $writeBatchSize = null
     ) {
         parent::__construct(
             $entityFactory,
@@ -126,6 +155,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             \Magento\Framework\App\ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->catalogProductVisibility = $catalogProductVisibility ?:
             \Magento\Framework\App\ObjectManager::getInstance()->get(Visibility::class);
+        $this->readBatchSize = $readBatchSize ?: self::DEFAULT_READ_BATCH_SIZE;
+        $this->writeBatchSize = $writeBatchSize ?: self::DEFAULT_WRITE_BATCH_SIZE;
     }
 
     /**
@@ -370,40 +401,96 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param array $categoryIds
      * @param int $websiteId
      * @return array
+     * @throws \Zend_Db_Exception
      */
     private function getCountFromCategoryTableBulk(
         array $categoryIds,
         int $websiteId
     ) : array {
-        $subSelect = clone $this->_conn->select();
-        $subSelect->from(['ce2' => $this->getTable('catalog_category_entity')], 'ce2.entity_id')
-            ->where("ce2.path LIKE CONCAT(ce.path, '/%') OR ce2.path = ce.path");
+        $connection = $this->_conn;
+        $tempTableName = 'temp_category_descendants_' . uniqid();
+        $tempTable = $connection->newTable($tempTableName)
+            ->addColumn(
+                'category_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Category ID'
+            )
+            ->addColumn(
+                'descendant_id',
+                Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Descendant ID'
+            )
+            ->addIndex(
+                $connection->getIndexName($tempTableName, ['category_id', 'descendant_id']),
+                ['category_id', 'descendant_id'],
+                ['type' => AdapterInterface::INDEX_TYPE_PRIMARY]
+            );
+        $connection->createTemporaryTable($tempTable);
 
-        $select = clone $this->_conn->select();
-        $select->from(
-            ['ce' => $this->getTable('catalog_category_entity')],
-            'ce.entity_id'
-        );
-        $joinCondition =  new \Zend_Db_Expr("cp.category_id IN ({$subSelect})");
-        $select->joinLeft(
-            ['cp' => $this->getProductTable()],
-            $joinCondition,
-            'COUNT(DISTINCT cp.product_id) AS product_count'
-        );
+        $categoryTable = $this->getTable('catalog_category_entity');
+        foreach (array_chunk($categoryIds, $this->readBatchSize) as $categoryIdsBatch) {
+            $rows = $connection->fetchAll(
+                $connection->select()
+                    ->from($categoryTable, ['entity_id', 'path'])
+                    ->where('entity_id IN (?)', $categoryIdsBatch)
+            );
+
+            $insertData = [];
+
+            foreach ($rows as $row) {
+                $descendantId = (int) $row['entity_id'];
+                $ancestorIds = array_filter(
+                    array_map('intval', explode('/', (string) $row['path']))
+                );
+
+                foreach ($ancestorIds as $ancestorId) {
+                    $insertData[] = [
+                        'category_id' => $ancestorId,
+                        'descendant_id' => $descendantId,
+                    ];
+
+                    if (count($insertData) >= $this->writeBatchSize) {
+                        $connection->insertMultiple($tempTableName, $insertData);
+                        $insertData = [];
+                    }
+                }
+            }
+
+            if ($insertData) {
+                $connection->insertMultiple($tempTableName, $insertData);
+            }
+        }
+
+        $select = $connection->select()
+            ->from(
+                ['t' => $tempTableName],
+                ['category_id' => 't.category_id']
+            )
+            ->joinLeft(
+                ['cp' => $this->getTable('catalog_category_product')],
+                'cp.category_id = t.descendant_id',
+                ['product_count' => 'COUNT(DISTINCT cp.product_id)']
+            );
         if ($websiteId) {
             $select->join(
                 ['w' => $this->getProductWebsiteTable()],
                 'cp.product_id = w.product_id',
                 []
-            )->where(
-                'w.website_id = ?',
-                $websiteId
-            );
+            )->where('w.website_id = ?', $websiteId);
         }
-        $select->where('ce.entity_id IN(?)', $categoryIds);
-        $select->group('ce.entity_id');
+        $select->group('t.category_id');
+        $result = $connection->fetchPairs($select);
+        $connection->dropTemporaryTable($tempTableName);
+        $counts = array_fill_keys($categoryIds, 0);
+        foreach ($result as $categoryId => $count) {
+            $counts[$categoryId] = (int)$count;
+        }
 
-        return $this->_conn->fetchPairs($select);
+        return $counts;
     }
 
     /**

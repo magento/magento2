@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image;
@@ -145,12 +146,12 @@ class MatrixTest extends TestCase
     }
 
     /**
-     * @dataProvider getVariationWizardDataProvider
      * @param string $wizardBlockName
      * @param string $wizardHtml
      * @throws Exception
      * @return void
      */
+    #[DataProvider('getVariationWizardDataProvider')]
     public function testGetVariationWizard($wizardBlockName, $wizardHtml): void
     {
         $initData = ['some-key' => 'some-value'];
@@ -161,13 +162,13 @@ class MatrixTest extends TestCase
             ]
         ];
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $wizardBlock = $this->createMock(StepsWizard::class);
         $layout->expects($this->any())->method('getChildName')->with(null, $wizardName)
             ->willReturn($wizardBlockName);
         $layout->expects($this->any())->method('getBlock')->with($wizardBlockName)->willReturn($wizardBlock);
         $wizardBlock->expects($this->any())->method('setInitData')->with($initData);
-        $wizardBlock->expects($this->any())->method('toHtml')->willReturn($wizardHtml);
+        $wizardBlock->method('toHtml')->willReturn($wizardHtml);
 
         $data = [
             'jsonHelper' => $this->createMock(JsonHelper::class),
@@ -213,12 +214,12 @@ class MatrixTest extends TestCase
             ->with('getAssociatedProductIds')
             ->willReturn([$productId]);
         $product->expects($this->any())->method('getData')->with('attribute_code')->willReturn('attribute_value');
-        $product->expects($this->any())->method('getId')->willReturn($productId);
-        $product->expects($this->any())->method('getSku')->willReturn('sku');
-        $product->expects($this->any())->method('getName')->willReturn('name');
-        $product->expects($this->any())->method('getPrice')->willReturn(100.00);
-        $product->expects($this->any())->method('getWeight')->willReturn(1);
-        $product->expects($this->any())->method('getStatus')->willReturn(1);
+        $product->method('getId')->willReturn($productId);
+        $product->method('getSku')->willReturn('sku');
+        $product->method('getName')->willReturn('name');
+        $product->method('getPrice')->willReturn(100.00);
+        $product->method('getWeight')->willReturn(1);
+        $product->method('getStatus')->willReturn(1);
         $store = $this->createMock(Store::class);
         $product->expects($this->once())->method('getStore')->willReturn($store);
 
@@ -229,16 +230,14 @@ class MatrixTest extends TestCase
             ->method('getById')
             ->with($productId)
             ->willReturn($product);
-        $this->locator->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($product);
+        $this->locator->method('getProduct')->willReturn($product);
         $attribute = $this->createMock(AbstractAttribute::class);
-        $attribute->expects($this->any())->method('getAttributeCode')->willReturn('attribute_code');
-        $attribute->expects($this->any())->method('getAttributeId')->willReturn('1');
+        $attribute->method('getAttributeCode')->willReturn('attribute_code');
+        $attribute->method('getAttributeId')->willReturn('1');
         $option = $this->createMock(AttributeOptionInterface::class);
-        $option->expects($this->any())->method('getValue')->willReturn('attribute_value');
-        $option->expects($this->any())->method('getLabel')->willReturn('attribute_label');
-        $attribute->expects($this->any())->method('getOptions')->willReturn([$option]);
+        $option->method('getValue')->willReturn('attribute_value');
+        $option->method('getLabel')->willReturn('attribute_label');
+        $attribute->method('getOptions')->willReturn([$option]);
         $this->_configurableType->expects($this->exactly(2))
             ->method('getUsedProductAttributes')
             ->with($product)
@@ -281,9 +280,7 @@ class MatrixTest extends TestCase
             ->with($product, 'product_thumbnail_image')
             ->willReturn($image);
         $request = $this->createMock(RequestInterface::class);
-        $this->context->expects($this->any())
-            ->method('getRequest')
-            ->willReturn($request);
+        $this->context->method('getRequest')->willReturn($request);
 
         $data = [
             'jsonHelper' => $this->createMock(JsonHelper::class),

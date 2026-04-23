@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2011 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
@@ -86,19 +86,20 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         }
 
         if ($items) {
-            $itemsArray[$item->getOrderItem()->getId()][$item->getOrderItemId()] = $item;
+            $itemsArray[(string)$item->getOrderItem()->getId()][(string)$item->getOrderItemId()] = $item;
             foreach ($items as $value) {
                 $parentItem = $value->getOrderItem()->getParentItem();
                 if ($parentItem) {
-                    $itemsArray[$parentItem->getId()][$value->getOrderItemId()] = $value;
+                    $itemsArray[(string)$parentItem->getId()][(string)$value->getOrderItemId()] = $value;
                 } else {
-                    $itemsArray[$value->getOrderItem()->getId()][$value->getOrderItemId()] = $value;
+                    $itemsArray[(string)$value->getOrderItem()->getId()][(string)$value->getOrderItemId()] = $value;
                 }
             }
         }
 
-        if (isset($itemsArray[$item->getOrderItem()->getId()])) {
-            return $itemsArray[$item->getOrderItem()->getId()];
+        $orderItemId = (string)$item->getOrderItem()->getId();
+        if (isset($itemsArray[$orderItemId])) {
+            return $itemsArray[$orderItemId];
         }
         return null;
     }

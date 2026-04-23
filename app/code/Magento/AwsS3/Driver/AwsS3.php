@@ -188,7 +188,9 @@ class AwsS3 implements RemoteDriverInterface
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
-            $this->createDirectoryRecursively($parentDir);
+            if (!$this->createDirectoryRecursively($parentDir)) {
+                return false;
+            }
         }
 
         if (!$this->isDirectory($path)) {
@@ -921,14 +923,18 @@ class AwsS3 implements RemoteDriverInterface
     }
 
     /**
-     * Removes slashes in path.
+     * Normalizes path for S3 operations by trimming slashes and removing '.' components.
      *
      * @param string $path
      * @return string
      */
     private function fixPath(string $path): string
     {
-        return trim($path, '/');
+        $parts = explode('/', trim($path, '/'));
+        $parts = array_values(array_filter($parts, static function (string $part): bool {
+            return $part !== '.' && $part !== '';
+        }));
+        return implode('/', $parts);
     }
 
     /**

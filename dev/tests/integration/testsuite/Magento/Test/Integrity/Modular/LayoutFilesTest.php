@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -30,8 +32,8 @@ class LayoutFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $area
      * @param string $layoutFile
-     * @dataProvider layoutArgumentsDataProvider
      */
+    #[DataProvider('layoutArgumentsDataProvider')]
     public function testLayoutArguments($area, $layoutFile)
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);

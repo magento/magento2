@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
+use Magento\Catalog\Model\Product\Option\ValueFactory;
 use Magento\Catalog\Block\Adminhtml\Product\Composite\Fieldset\Options as ProductOptions;
 use Magento\Catalog\Block\Product\View\Options;
 use Magento\Catalog\Model\CategoryFactory;
@@ -65,23 +66,15 @@ class OptionsTest extends TestCase
             ['layout' => $layout]
         );
 
-        $optValFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option\ValueFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $optValFactoryMock = $this->createPartialMock(ValueFactory::class, ['create']);
         $option = $this->_objectHelper->getObject(
             \Magento\Catalog\Model\Product\Option::class,
             ['resource' => $this->_optionResource, 'optionValueFactory' => $optValFactoryMock]
         );
-        $dateBlock = $this->getMockBuilder(ProductOptions::class)
-            ->addMethods(['setOption'])
-            ->onlyMethods(['setProduct'])
-            ->setConstructorArgs(['context' => $context, 'option' => $option])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dateBlock->expects($this->any())->method('setProduct')->willReturn($dateBlock);
+        $dateBlock = $this->createPartialMock(ProductOptions::class, ['toHtml']);
+        $dateBlock->method('toHtml')->willReturn('');
 
-        $layout->expects($this->any())->method('getChildName')->willReturn('date');
+        $layout->method('getChildName')->willReturn('date');
         $layout->expects($this->any())->method('getBlock')->with('date')->willReturn($dateBlock);
         $layout->expects($this->any())->method('renderElement')->with('date', false)->willReturn('html');
 
@@ -115,15 +108,7 @@ class OptionsTest extends TestCase
             ['resource' => $this->_optionResource]
         );
         $option->setType('date');
-        $dateBlock->expects(
-            $this->any()
-        )->method(
-            'setOption'
-        )->with(
-            $option
-        )->willReturn(
-            $dateBlock
-        );
+        // The anonymous class already implements setOption to return $this
         $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
     }
 }

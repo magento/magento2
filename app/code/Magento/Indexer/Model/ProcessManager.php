@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,7 +78,7 @@ class ProcessManager
      */
     public function execute($userFunctions)
     {
-        if ($this->threadsCount > 1 && $this->isCanBeParalleled() && !$this->isSetupMode() && PHP_SAPI == 'cli') {
+        if ($this->isMultiThreadsExecute()) {
             $this->multiThreadsExecute($userFunctions);
         } else {
             $this->simpleThreadExecute($userFunctions);
@@ -195,5 +195,15 @@ class ProcessManager
             }
             $threadNumber--;
         }
+    }
+
+    /**
+     * Check if the current process is multithreaded
+     *
+     * @return bool
+     */
+    public function isMultiThreadsExecute(): bool
+    {
+        return $this->threadsCount > 1 && $this->isCanBeParalleled() && !$this->isSetupMode() && PHP_SAPI == 'cli';
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\Driver\Http;
 use Magento\Framework\Filesystem\File\Read;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -81,8 +82,8 @@ class CsvTest extends TestCase
      * @param string $delimiter
      * @param string $enclosure
      * @param array $expectedColumns
-     * @dataProvider optionalArgsDataProvider
      */
+    #[DataProvider('optionalArgsDataProvider')]
     public function testOptionalArgs($delimiter, $enclosure, $expectedColumns)
     {
         $filePath = __DIR__ . '/_files/test.csv';

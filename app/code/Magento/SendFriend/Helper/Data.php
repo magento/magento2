@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SendFriend\Helper;
@@ -9,30 +9,28 @@ namespace Magento\SendFriend\Helper;
 /**
  * SendFriend Data Helper
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @api
  * @since 100.0.2
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    const XML_PATH_ENABLED = 'sendfriend/email/enabled';
+    public const XML_PATH_ENABLED = 'sendfriend/email/enabled';
 
-    const XML_PATH_ALLOW_FOR_GUEST = 'sendfriend/email/allow_guest';
+    public const XML_PATH_ALLOW_FOR_GUEST = 'sendfriend/email/allow_guest';
 
-    const XML_PATH_MAX_RECIPIENTS = 'sendfriend/email/max_recipients';
+    public const XML_PATH_MAX_RECIPIENTS = 'sendfriend/email/max_recipients';
 
-    const XML_PATH_MAX_PER_HOUR = 'sendfriend/email/max_per_hour';
+    public const XML_PATH_MAX_PER_HOUR = 'sendfriend/email/max_per_hour';
 
-    const XML_PATH_LIMIT_BY = 'sendfriend/email/check_by';
+    public const XML_PATH_LIMIT_BY = 'sendfriend/email/check_by';
 
-    const XML_PATH_EMAIL_TEMPLATE = 'sendfriend/email/template';
+    public const XML_PATH_EMAIL_TEMPLATE = 'sendfriend/email/template';
 
-    const COOKIE_NAME = 'stf';
+    public const COOKIE_NAME = 'stf';
 
-    const CHECK_IP = 1;
+    public const CHECK_IP = 1;
 
-    const CHECK_COOKIE = 0;
+    public const CHECK_COOKIE = 0;
 
     /**
      * Check is enabled Module

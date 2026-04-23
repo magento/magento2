@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Area as AppArea;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
@@ -33,10 +34,13 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery resolver cache
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
  */
 class MediaGalleryTest extends ResolverCacheAbstract
 {
@@ -123,13 +127,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $context = $this->objectManager->create(\Magento\Backend\App\Action\Context::class);
 
         // overwrite $context's messageManager
-        $messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
-            ->enableProxyingToOriginalMethods()
-            ->getMockForAbstractClass();
+        $messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
 
         $reflectionClass = new \ReflectionClass($context);
         $reflectionProperty = $reflectionClass->getProperty('messageManager');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($context, $messageManager);
 
         /** @var AdminProductSaveController $adminProductSaveController */
@@ -249,7 +250,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         );
 
         // change media gallery label and assert both cache entries are invalidated
-        $this->actionMechanismProvider()['update media label'][0]($product);
+        $this->actionMechanismProvider()['update media label'][0]($this, $product);
 
         $this->assertFalse(
             $this->graphQlResolverCache->test($cacheKeyInDefaultStoreView),
@@ -278,10 +279,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
-     * @dataProvider actionMechanismProvider
      * @param callable $actionMechanismCallable
      * @param bool $isInvalidationAction
      */
+    #[DataProvider('actionMechanismProvider')]
     public function testMediaGalleryForProductVideos(callable $actionMechanismCallable, bool $isInvalidationAction)
     {
         // Test simple product with media
@@ -308,7 +309,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertEquals($response, $response2);
 
         // change product media gallery data
-        $actionMechanismCallable($product);
+        $actionMechanismCallable($this, $product);
 
         if ($isInvalidationAction) {
             // assert that cache entry for simple product query is invalidated
@@ -337,7 +338,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function actionMechanismProvider(): array
+    public static function actionMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         $objectManager = Bootstrap::getObjectManager();
@@ -350,10 +351,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         return [
             'update non-gallery-related attribute via rest' => [
-                function (ProductInterface $product) {
+                function ($test, ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-                    $integration = $this->getOauthIntegration();
+                    $integration = $test->getOauthIntegration();
 
                     $serviceInfo = [
                         'rest' => [
@@ -362,7 +363,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                         ],
                     ];
 
-                    $this->_webApiCall(
+                    $test->_webApiCall(
                         $serviceInfo,
                         ['product' => ['name' => 'new name']],
                         'rest',
@@ -373,10 +374,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 false
             ],
             'update gallery-related attribute via rest' => [
-                function (ProductInterface $product) {
+                function ($test, ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-                    $integration = $this->getOauthIntegration();
+                    $integration = $test->getOauthIntegration();
 
                     $galleryEntry = $product->getMediaGalleryEntries()[0];
                     $galleryEntryId = $galleryEntry->getId();
@@ -406,7 +407,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                     // update label
                     $galleryEntryArray['label'] = 'new label';
 
-                    $this->_webApiCall(
+                    $test->_webApiCall(
                         $serviceInfo,
                         ['entry' => $galleryEntryArray],
                         'rest',
@@ -417,7 +418,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 true
             ],
             'add new media gallery entry' => [
-                function (ProductInterface $product) use ($galleryManagement, $objectManager) {
+                function ($test, ProductInterface $product) use ($galleryManagement, $objectManager) {
                     /** @var ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory */
                     $mediaGalleryEntryFactory = $objectManager->get(
                         ProductAttributeMediaGalleryEntryInterfaceFactory::class
@@ -446,7 +447,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 true
             ],
             'update media label' => [
-                function (ProductInterface $product) use ($galleryManagement) {
+                function ($test, ProductInterface $product) use ($galleryManagement) {
                     $mediaEntry = $product->getMediaGalleryEntries()[0];
                     $mediaEntry->setLabel('new_' . $mediaEntry->getLabel());
                     $galleryManagement->update($product->getSku(), $mediaEntry);
@@ -454,7 +455,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 true
             ],
             'update video description' => [
-                function (ProductInterface $product) use ($galleryManagement) {
+                function ($test, ProductInterface $product) use ($galleryManagement) {
                     $mediaEntry = $product->getMediaGalleryEntries()[0];
                     $mediaEntry
                         ->getExtensionAttributes()
@@ -466,21 +467,21 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 true
             ],
             'update product name' => [
-                function (ProductInterface $product) use ($productRepository) {
+                function ($test, ProductInterface $product) use ($productRepository) {
                     $product->setName('new name');
                     $productRepository->save($product);
                 },
                 false
             ],
             'remove media' => [
-                function (ProductInterface $product) use ($galleryManagement) {
+                function ($test, ProductInterface $product) use ($galleryManagement) {
                     $mediaEntry = $product->getMediaGalleryEntries()[0];
                     $galleryManagement->remove($product->getSku(), $mediaEntry->getId());
                 },
                 true
             ],
             'save product without change' => [
-                function (ProductInterface $product) use ($productRepository) {
+                function ($test, ProductInterface $product) use ($productRepository) {
                     $productRepository->save($product);
                 },
                 false
@@ -550,7 +551,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertMediaGalleryResolverCacheRecordExists($product);
 
         // update media gallery-related field and assert cache is invalidated
-        $this->actionMechanismProvider()['update media label'][0]($product);
+        $this->actionMechanismProvider()['update media label'][0]($this, $product);
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
 
         $this->assertCacheIdIsNotOrphanedInTagsForProduct($product);
@@ -586,7 +587,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
      *
      * @param ProductInterface $product
      * @return void
-     * @throws \Zend_Cache_Exception
+     * @throws CacheException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function assertCacheIdIsNotOrphanedInTagsForProduct(ProductInterface $product)
@@ -666,7 +667,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
     private function getCacheTagsUsedInMediaGalleryResolverCache(string $cacheKey): array
     {
         $metadatas = $this->graphQlResolverCache->getLowLevelFrontend()->getMetadatas($cacheKey);
-        return $metadatas['tags'];
+        if ($metadatas === false) {
+            return [];
+        }
+        return $metadatas['tags'] ?? [];
     }
 
     /**
@@ -738,7 +742,6 @@ QUERY;
     }
 
     /**
-     *
      * @return Integration
      * @throws \Magento\Framework\Exception\IntegrationException
      */

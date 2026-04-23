@@ -395,8 +395,12 @@ class RulesApplier
             ];
             /** @var RuleDiscount $itemDiscount */
             $ruleDiscount = $this->discountInterfaceFactory->create(['data' => $data]);
-            $this->discountAggregator[$item->getId()][$rule->getId()] = $ruleDiscount;
-            $item->getExtensionAttributes()->setDiscounts(array_values($this->discountAggregator[$item->getId()]));
+            // PHP 8.5 Compatibility: Check for null before using as array offset
+            $itemId = $item->getId();
+            if ($itemId !== null) {
+                $this->discountAggregator[$itemId][$rule->getId()] = $ruleDiscount;
+                $item->getExtensionAttributes()->setDiscounts(array_values($this->discountAggregator[$itemId]));
+            }
             $parentItem = $item->getParentItem();
             if ($parentItem && $parentItem->getExtensionAttributes()) {
                 $this->aggregateDiscountBreakdown($discountData, $parentItem, $rule, $address);

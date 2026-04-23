@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright 2023 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Exception;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Model\Store;
 
 class MediaGalleryValue
 {
@@ -27,7 +30,7 @@ class MediaGalleryValue
      *
      * @param int $entityId
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAllByEntityId(int $entityId): array
     {
@@ -41,11 +44,30 @@ class MediaGalleryValue
     }
 
     /**
+     * Returns value IDs by entity ID and store ID.
+     *
+     * @param int $entityId
+     * @param int $storeId
+     * @return array
+     */
+    public function getAllByEntityIdAndStoreId(int $entityId, int $storeId): array
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $connection = $this->galleryResource->getConnection();
+        $select = $connection->select()
+            ->from($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE))
+            ->where($metadata->getLinkField() . ' = ?', $entityId)
+            ->where('store_id = ?', $storeId);
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
      * Create or update media gallery value record.
      *
      * @param array $data
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveGalleryStoreValue(array $data): void
     {
@@ -64,6 +86,17 @@ class MediaGalleryValue
                 ]
             );
         } else {
+            if (isset($data['label'], $data['store_id'])
+                && $data['label'] === ''
+                && ((int)$data['store_id']) !== Store::DEFAULT_STORE_ID
+            ) {
+                /**
+                 * Ensures empty label is saved as is in store level and not converted to NULL
+                 * because NULL is treated as "use default value" in store scope.
+                 * @see \Magento\Framework\DB\Adapter\AdapterInterface::prepareColumnValue
+                 */
+                $data['label'] = new Expression($connection->quote($data['label']));
+            }
             $this->galleryResource->insertGalleryValueInStore($data);
         }
     }

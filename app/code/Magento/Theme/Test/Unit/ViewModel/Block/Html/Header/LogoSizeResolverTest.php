@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Theme\Test\Unit\ViewModel\Block\Html\Header;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\ViewModel\Block\Html\Header\LogoSizeResolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,8 +42,8 @@ class LogoSizeResolverTest extends TestCase
     /**
      * @param string|null $configValue
      * @param int|null $expectedValue
-     * @dataProvider configValueDataProvider
      */
+    #[DataProvider('configValueDataProvider')]
     public function testGetWidth(?string $configValue, ?int $expectedValue): void
     {
         $storeId = 1;
@@ -55,8 +56,8 @@ class LogoSizeResolverTest extends TestCase
     /**
      * @param string|null $configValue
      * @param int|null $expectedValue
-     * @dataProvider configValueDataProvider
      */
+    #[DataProvider('configValueDataProvider')]
     public function testGetHeight(?string $configValue, ?int $expectedValue): void
     {
         $storeId = 1;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,8 @@ class AuthorizationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_policyMock = $this->getMockForAbstractClass(PolicyInterface::class);
-        $roleLocatorMock = $this->getMockForAbstractClass(RoleLocatorInterface::class);
+        $this->_policyMock = $this->createMock(PolicyInterface::class);
+        $roleLocatorMock = $this->createMock(RoleLocatorInterface::class);
         $roleLocatorMock->expects($this->any())->method('getAclRoleId')->willReturn('U1');
         $this->_model = new Authorization($this->_policyMock, $roleLocatorMock);
     }

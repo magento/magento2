@@ -1,18 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as ProductAttributeCollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as AttributeOptionCollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\Store;
 
 /**
  * Import entity abstract product type model
@@ -27,6 +31,8 @@ use Magento\Framework\EntityManager\MetadataPool;
  */
 abstract class AbstractType
 {
+    private const NON_REQUIRED_ATTRIBUTES_EXISTING_PRODUCTS = [Product::COL_NAME];
+
     /**
      * @var array
      */
@@ -124,29 +130,29 @@ abstract class AbstractType
     protected $_type;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
+     * @var AttributeSetCollectionFactory
      */
     protected $_attrSetColFac;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
+     * @var ProductAttributeCollectionFactory
      */
     protected $_prodAttrColFac;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     * @var AdapterInterface
      */
     protected $connection;
 
     /**
      * Product metadata pool
      *
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      * @since 100.1.0
      */
     protected $metadataPool;
@@ -164,8 +170,8 @@ abstract class AbstractType
     /**
      * AbstractType constructor
      *
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param AttributeSetCollectionFactory $attrSetColFac
+     * @param ProductAttributeCollectionFactory $prodAttrColFac
      * @param ResourceConnection $resource
      * @param array $params
      * @param MetadataPool|null $metadataPool
@@ -173,9 +179,9 @@ abstract class AbstractType
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
-        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
-        \Magento\Framework\App\ResourceConnection $resource,
+        AttributeSetCollectionFactory $attrSetColFac,
+        ProductAttributeCollectionFactory $prodAttrColFac,
+        ResourceConnection $resource,
         array $params,
         ?MetadataPool $metadataPool = null,
         ?AttributeOptionCollectionFactory $attributeOptionCollectionFactory = null
@@ -260,18 +266,15 @@ abstract class AbstractType
     protected function _getProductAttributes($attrSetData)
     {
         if (is_array($attrSetData)) {
-            return $this->_attributes[$attrSetData[Product::COL_ATTR_SET]];
+            $setName = $attrSetData[Product::COL_ATTR_SET] ?? null;
+            return $setName !== null && isset($this->_attributes[$setName]) ? $this->_attributes[$setName] : [];
         } else {
-            return $this->_attributes[$attrSetData];
+            return isset($this->_attributes[$attrSetData]) ? $this->_attributes[$attrSetData] : [];
         }
     }
 
     /**
      * Initialize attributes parameters for all attributes' sets.
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @return $this
      */
@@ -288,50 +291,18 @@ abstract class AbstractType
                 'set.attribute_set_id = attr.attribute_set_id',
                 ['set.attribute_set_name']
             )->where(
-                $this->connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
+                $this->connection->quoteInto('attr.entity_type_id = ?', $entityId)
             )
         );
-        $absentKeys = [];
-        foreach ($entityAttributes as $attributeRow) {
-            if (!isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
-                if (!isset($absentKeys[$attributeRow['attribute_set_name']])) {
-                    $absentKeys[$attributeRow['attribute_set_name']] = [];
-                }
-                $absentKeys[$attributeRow['attribute_set_name']][] = $attributeRow['attribute_id'];
-            }
-        }
-        $addedAttributes = [];
-        foreach ($absentKeys as $attributeIds) {
-            $unknownAttributeIds = array_diff(
-                $attributeIds,
-                array_keys(self::$commonAttributesCache),
-                self::$invAttributesCache
-            );
-            if ($unknownAttributeIds) {
-                $addedAttributes[] = $this->attachAttributesByOnlyId($unknownAttributeIds);
-            }
-        }
-        if ($this->_forcedAttributesCodes) {
-            $addedAttributes[] = $this->attachAttributesByForcedCodes();
-        }
-        $addedAttributes = array_merge(...$addedAttributes);
-        $attributesToLoadFromTable = [];
-        foreach ($addedAttributes as $addedAttribute) {
-            if (isset($addedAttribute['options_use_table'])) {
-                $attributesToLoadFromTable[] = $addedAttribute['id'];
-                unset(self::$commonAttributesCache[$addedAttribute['id']]['options_use_table']);
-            }
-        }
-        foreach (array_chunk($attributesToLoadFromTable, 1000) as $attributesToLoadFromTableChunk) {
-            $collection = $this->attributeOptionCollectionFactory->create();
-            $collection->setAttributeFilter(['in' => $attributesToLoadFromTableChunk]);
-            $collection->setStoreFilter(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
-            foreach ($collection as $option) {
-                $attributeId = $option->getAttributeId();
-                $value = strtolower($option->getValue());
-                self::$commonAttributesCache[$attributeId]['options'][$value] = $option->getOptionId();
-            }
-        }
+
+        $attributeIds = array_unique(array_column($entityAttributes, 'attribute_id'));
+        $unknownAttributeIds = array_diff(
+            $attributeIds,
+            array_keys(self::$commonAttributesCache),
+            self::$invAttributesCache
+        );
+        $this->attachAttributes($unknownAttributeIds);
+
         foreach ($entityAttributes as $attributeRow) {
             if (isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
                 $attribute = self::$commonAttributesCache[$attributeRow['attribute_id']];
@@ -354,6 +325,7 @@ abstract class AbstractType
                 $this->_addAttributeParams($setName, $attribute, $attribute);
             }
         }
+
         return $this;
     }
 
@@ -364,104 +336,79 @@ abstract class AbstractType
      * @param array $attributeIds
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated use attachAttributesByOnlyId and attachAttributesByForcedCodes
-     * @see attachAttributesByOnlyId() and attachAttributesByForcedCodes()
+     * @deprecated
+     * @see self::attachAttributes
      */
     protected function attachAttributesById($attributeSetName, $attributeIds)
     {
-        foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
-            ['main_table.attribute_id', 'main_table.attribute_code'],
-            [['in' => $attributeIds], ['in' => $this->_forcedAttributesCodes]]
-        ) as $attribute) {
-            $this->attachAttribute($attribute);
-        }
+        $this->attachAttributes($attributeIds);
     }
 
     /**
-     * Attach Attributes By Id
+     * Attach attributes to self::$commonAttributesCache or self::$invAttributesCache
      *
-     * @param array $attributeIds
-     * @return array
+     * @param int[] $attributeIds
+     * @return void
      */
-    private function attachAttributesByOnlyId(array $attributeIds) : array
+    private function attachAttributes(array $attributeIds): void
     {
-        $addedAttributes = [];
-        foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
-            ['main_table.attribute_id'],
-            [['in' => $attributeIds]]
-        ) as $attribute) {
-            $cachedAttribute = $this->attachAttribute($attribute);
-            if (null !== $cachedAttribute) {
-                $addedAttributes[] = $cachedAttribute;
-            }
+        $attributes = $attributeIds ? $this->_prodAttrColFac->create()
+            ->addFieldToFilter(['main_table.attribute_id'], [['in' => $attributeIds]])
+            ->getItems() : [];
+        $attributes = array_filter($attributes, fn ($attribute) => $attribute->getIsVisible());
+        if ($this->_forcedAttributesCodes) {
+            $attributes += $this->_prodAttrColFac->create()
+                ->addFieldToFilter(['main_table.attribute_code'], [['in' => $this->_forcedAttributesCodes]])
+                ->getItems();
         }
-        return $addedAttributes;
-    }
 
-    /**
-     * Attach Attributes By _forcedAttributesCodes
-     *
-     * @return array
-     */
-    private function attachAttributesByForcedCodes() : array
-    {
-        $addedAttributes = [];
-        foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
-            ['main_table.attribute_code'],
-            [['in' => $this->_forcedAttributesCodes]]
-        ) as $attribute) {
-            $cachedAttribute = $this->attachAttribute($attribute);
-            if (null !== $cachedAttribute) {
-                $addedAttributes[] = $cachedAttribute;
-            }
-        }
-        return $addedAttributes;
-    }
+        $invAttributes = array_diff($attributeIds, array_keys($attributes));
+        self::$invAttributesCache = array_merge(self::$invAttributesCache, $invAttributes);
 
-    /**
-     * Attach Attribute to self::$commonAttributesCache or self::$invAttributesCache
-     *
-     * @param Attribute $attribute
-     * @return array|null
-     */
-    private function attachAttribute(Attribute $attribute)
-    {
-        $cachedAttribute = null;
-        $attributeCode = $attribute->getAttributeCode();
-        $attributeId = $attribute->getId();
-        if ($attribute->getIsVisible() || in_array($attributeCode, $this->_forcedAttributesCodes)) {
-            if (!isset(self::$commonAttributesCache[$attributeId])) {
-                $defaultValue = $attribute->getDefaultValue();
-                $cachedAttribute = [
-                    'id' => $attributeId,
-                    'code' => $attributeCode,
-                    'is_global' => $attribute->getIsGlobal(),
-                    'is_required' => $attribute->getIsRequired(),
-                    'is_unique' => $attribute->getIsUnique(),
-                    'frontend_label' => $attribute->getFrontendLabel(),
-                    'is_static' => $attribute->isStatic(),
-                    'apply_to' => $attribute->getApplyTo(),
-                    'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
-                    'default_value' => (is_string($defaultValue) && strlen($defaultValue)) ?
-                        $attribute->getDefaultValue() : null,
-                    'options' => [],
-                ];
-                $sourceModel = $attribute->getSourceModel();
-                if (Table::class === $sourceModel) {
-                    $cachedAttribute['options_use_table'] = true;
-                } else {
-                    $cachedAttribute['options'] = $this->_entityModel->getAttributeOptions(
-                        $attribute,
-                        $this->_indexValueAttributes
-                    );
-                }
-                self::$commonAttributesCache[$attributeId] = $cachedAttribute;
-                self::$attributeCodeToId[$attributeCode] = $attributeId;
+        $commonAttributes = $attributeCodeToId = $attributesToLoadFromTable = [];
+        foreach ($attributes as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $attributeId = $attribute->getId();
+            $defaultValue = $attribute->getDefaultValue();
+            $cachedAttribute = [
+                'id' => $attributeId,
+                'code' => $attributeCode,
+                'is_global' => $attribute->getIsGlobal(),
+                'is_required' => $attribute->getIsRequired(),
+                'is_unique' => $attribute->getIsUnique(),
+                'frontend_label' => $attribute->getFrontendLabel(),
+                'is_static' => $attribute->isStatic(),
+                'apply_to' => $attribute->getApplyTo(),
+                'type' => Import::getAttributeType($attribute),
+                'default_value' => is_string($defaultValue) && strlen($defaultValue) ? $defaultValue : null,
+                'options' => [],
+            ];
+            if (Table::class === $attribute->getSourceModel()) {
+                $attributesToLoadFromTable[] = $attributeId;
+            } else {
+                $cachedAttribute['options'] = $this->_entityModel->getAttributeOptions(
+                    $attribute,
+                    $this->_indexValueAttributes
+                );
             }
-        } else {
-            self::$invAttributesCache[] = $attributeId;
+            $commonAttributes[$attributeId ?? ''] = $cachedAttribute;
+            $attributeCodeToId[$attributeCode ?? ''] = $attributeId;
         }
-        return $cachedAttribute;
+
+        foreach (array_chunk($attributesToLoadFromTable, 1000) as $ids) {
+            $collection = $this->attributeOptionCollectionFactory->create();
+            $collection->setAttributeFilter(['in' => $ids]);
+            $collection->setStoreFilter(Store::DEFAULT_STORE_ID);
+            $options = $collection->getItems();
+            foreach ($options as $option) {
+                $attributeId = $option->getAttributeId();
+                $value = strtolower($option->getValue());
+                $commonAttributes[$attributeId]['options'][$value] = $option->getOptionId();
+            }
+        }
+
+        self::$commonAttributesCache += $commonAttributes;
+        self::$attributeCodeToId += $attributeCodeToId;
     }
 
     /**
@@ -581,7 +528,9 @@ abstract class AbstractType
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
                     if (Product::SCOPE_DEFAULT == $rowScope &&
-                        ($isNewProduct || array_key_exists($attrCode, $rowData))) {
+                        ($isNewProduct || !in_array($attrCode, self::NON_REQUIRED_ATTRIBUTES_EXISTING_PRODUCTS)) &&
+                        array_key_exists($attrCode, $rowData)
+                    ) {
                         $this->_entityModel->addRowError(
                             RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
@@ -684,15 +633,13 @@ abstract class AbstractType
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * @return MetadataPool
      * @since 100.1.0
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
-            // phpcs:ignore Magento2.PHP.AutogeneratedClassNotInConstructor
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }
