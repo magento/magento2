@@ -24,6 +24,8 @@
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
         </before>
         <after>
+            <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearUrlRewriteFilter"/>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createDefaultCMSBlock" stepKey="deleteDefaultCMSBlock"/>
