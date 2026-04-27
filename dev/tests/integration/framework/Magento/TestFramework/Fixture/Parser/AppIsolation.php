@@ -38,31 +38,29 @@ class AppIsolation implements ParserInterface
      */
     public function parse(TestCase $test, string $scope): array
     {
-        $fixtures = [];
-        try {
-            if ($scope === ParserInterface::SCOPE_CLASS) {
-                $reflection = new ReflectionClass($test);
-            } else {
-                // Check if name property is initialized before accessing
-                // The 'name' property is from PHPUnit\Framework\TestCase
-                $nameReflection = new ReflectionClass(TestCase::class);
-                $nameProperty = $nameReflection->getProperty('name');
-                
-                if (!$nameProperty->isInitialized($test)) {
-                    // Cannot parse method-level attributes without a test name
-                    return [];
-                }
-                
-                $reflection = new ReflectionMethod($test, $test->name());
+        $methodName = null;
+        if ($scope !== ParserInterface::SCOPE_CLASS) {
+            try {
+                $methodName = $test->name();
+            } catch (\Throwable $e) {
+                return [];
             }
+        }
+        try {
+            $reflection = $scope === ParserInterface::SCOPE_CLASS
+                ? new ReflectionClass($test)
+                : new ReflectionMethod($test, $methodName);
         } catch (ReflectionException $e) {
-            $context = $scope === ParserInterface::SCOPE_CLASS ? ' (class level)' : ' (method level)';
             throw new LocalizedException(
-                __('Unable to parse attributes for %1', get_class($test) . $context),
+                __(
+                    'Unable to parse attributes for %1',
+                    get_class($test) . ($scope === ParserInterface::SCOPE_CLASS ? ' (class level)' : ' (method level)')
+                ),
                 $e
             );
         }
 
+        $fixtures = [];
         $attributes = $reflection->getAttributes($this->attributeClass);
 
         foreach ($attributes as $attribute) {

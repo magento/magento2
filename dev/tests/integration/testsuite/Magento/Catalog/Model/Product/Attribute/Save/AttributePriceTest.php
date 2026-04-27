@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Save;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Eav\Model\Entity\Attribute\Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -27,9 +28,9 @@ class AttributePriceTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-29018');
@@ -49,10 +50,10 @@ class AttributePriceTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider productProvider
      * @param string $productSku
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         // product price attribute does not support default value

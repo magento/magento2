@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Csp\Model\SubresourceIntegrityRepository;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Asset\File;
@@ -22,6 +23,7 @@ use Magento\Csp\Plugin\GenerateMergedAssetIntegrity;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -49,6 +51,16 @@ class GenerateMergedAssetIntegrityTest extends TestCase
     private Filesystem $filesystem;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private LoggerInterface $logger;
+
+    /**
+     * @var State|MockObject
+     */
+    private State $appState;
+
+    /**
      * @return void
      * @throws Exception
      */
@@ -58,6 +70,9 @@ class GenerateMergedAssetIntegrityTest extends TestCase
         $this->hashGenerator = $this->createMock(HashGenerator::class);
         $this->integrityFactory = $this->createMock(SubresourceIntegrityFactory::class);
         $this->filesystem = $this->createMock(Filesystem::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->appState = $this->createMock(State::class);
+        $this->appState->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
     }
 
     /**
@@ -103,7 +118,9 @@ class GenerateMergedAssetIntegrityTest extends TestCase
             $this->sourceIntegrityRepository,
             $this->hashGenerator,
             $this->integrityFactory,
-            $this->filesystem
+            $this->filesystem,
+            $this->logger,
+            $this->appState
         );
         $actualResult = $plugin->afterMerge($subject, $result, $assetsToMerge, $resultAsset);
 
@@ -111,7 +128,7 @@ class GenerateMergedAssetIntegrityTest extends TestCase
     }
 
     /**
-     * Test that non-JS files are skipped
+     * Test that non-JS files are skipped.
      *
      * @return void
      * @throws Exception
@@ -128,17 +145,15 @@ class GenerateMergedAssetIntegrityTest extends TestCase
         $this->hashGenerator->expects($this->never())->method('generate');
         $this->integrityFactory->expects($this->never())->method('create');
 
-        $repository = $this->createMock(SubresourceIntegrityRepository::class);
-        $repository->expects($this->never())->method('save');
-        $this->sourceIntegrityRepository->expects($this->once())->method('get')
-            ->with(Area::AREA_FRONTEND)
-            ->willReturn($repository);
+        $this->sourceIntegrityRepository->expects($this->never())->method('get');
 
         $plugin = new GenerateMergedAssetIntegrity(
             $this->sourceIntegrityRepository,
             $this->hashGenerator,
             $this->integrityFactory,
-            $this->filesystem
+            $this->filesystem,
+            $this->logger,
+            $this->appState
         );
         $actualResult = $plugin->afterMerge($subject, $result, $assetsToMerge, $resultAsset);
 
@@ -146,7 +161,7 @@ class GenerateMergedAssetIntegrityTest extends TestCase
     }
 
     /**
-     * Test that exceptions during save are caught and suppressed
+     * Test that exceptions are suppressed.
      *
      * @return void
      * @throws Exception
@@ -190,11 +205,17 @@ class GenerateMergedAssetIntegrityTest extends TestCase
             ->with($integrity)
             ->willThrowException(new \Exception('Write failed'));
 
+        $this->logger->expects($this->once())
+            ->method('warning')
+            ->with($this->stringContains('GenerateMergedAssetIntegrity: Failed to generate hash'));
+
         $plugin = new GenerateMergedAssetIntegrity(
             $this->sourceIntegrityRepository,
             $this->hashGenerator,
             $this->integrityFactory,
-            $this->filesystem
+            $this->filesystem,
+            $this->logger,
+            $this->appState
         );
 
         $actualResult = $plugin->afterMerge($subject, $result, $assetsToMerge, $resultAsset);

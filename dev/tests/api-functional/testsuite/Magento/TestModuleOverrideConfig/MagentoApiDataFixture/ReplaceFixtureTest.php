@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoApiDataFixture;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class check that magentoApiDataFixtures can be replaced using override config
@@ -46,13 +47,11 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * Checks that fixture can be replaced in method and data set nodes
      *
-     * @dataProvider replacedFixturesProvider
-     *
      * @magentoApiDataFixture Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php
-     *
      * @param string $fixture
      * @return void
      */
+    #[DataProvider('replacedFixturesProvider')]
     public function testReplaceFixturesForMethod(string $fixture): void
     {
         $this->assertEquals(0, $this->fixtureCallStorage->getFixturesCount('fixture1_first_module.php'));
@@ -62,7 +61,7 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * @return array
      */
-    public function replacedFixturesProvider(): array
+    public static function replacedFixturesProvider(): array
     {
         return [
             'first_data_set' => [
@@ -77,13 +76,11 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     /**
      * Checks that replace config from last loaded file will be applied
      *
-     * @dataProvider dataProvider
-     *
      * @magentoApiDataFixture Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php
-     *
      * @param string $fixture
      * @return void
      */
+    #[DataProvider('dataProvider')]
     public function testReplaceFixtureViaThirdModule(string $fixture): void
     {
         $this->assertEquals(0, $this->fixtureCallStorage->getFixturesCount('fixture1_first_module.php'));

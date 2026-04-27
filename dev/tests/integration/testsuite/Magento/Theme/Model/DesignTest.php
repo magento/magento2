@@ -7,6 +7,7 @@ namespace Magento\Theme\Model;
 
 use Magento\Backend\Block\Widget\Grid\Serializer;
 use Magento\Framework\Serialize\SerializerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DesignTest extends \PHPUnit\Framework\TestCase
 {
@@ -156,8 +157,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Theme/_files/design_change_timezone.php
-     * @dataProvider loadChangeTimezoneDataProvider
      */
+    #[DataProvider('loadChangeTimezoneDataProvider')]
     public function testLoadChangeTimezone($storeCode, $storeTimezone, $storeUtcOffset)
     {
         if (date_default_timezone_get() != 'UTC') {
@@ -211,7 +212,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedDesign, $actualDesign);
     }
 
-    public static function loadChangeTimezoneDataProvider()
+    public static function loadChangeTimezoneDataProvider(): array
     {
         /**
          * Depending on the current UTC time, either UTC-12:00, or UTC+12:00 timezone points to the different date.

@@ -45,10 +45,10 @@ class AttributeMultiSelectTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         parent::testUniqueAttribute($firstSku, $secondSku);

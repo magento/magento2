@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\DB\Adapter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Depends;
+
 /**
  * @magentoDbIsolation disabled
  */
@@ -129,8 +132,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testDropColumn
      */
+    #[Depends('testDropColumn')]
     public function testDropColumnRemoveFromIndexes()
     {
         $this->_connection->dropColumn($this->_tableName, 'column1');
@@ -146,8 +149,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testDropColumn
      */
+    #[Depends('testDropColumn')]
     public function testDropColumnRemoveIndexDuplicate()
     {
         $this->_connection->dropColumn($this->_tableName, 'column2');
@@ -166,8 +169,8 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $columns
      * @param array $data
      * @param array $expected
-     * @dataProvider insertArrayDataProvider
      */
+    #[DataProvider('insertArrayDataProvider')]
     public function testInsertArray(array $columns, array $data, array $expected)
     {
         $this->_connection->insertArray($this->_tableName, $columns, $data);
@@ -220,9 +223,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->_connection->insertArray($this->_tableName, ['column1', 'column2'], [1, 2]);
     }
 
-    /**
-     * @dataProvider insertDataProvider
-     */
+    #[DataProvider('insertDataProvider')]
     public function testInsertMultiple($data)
     {
         $this->_connection->insertMultiple($this->_tableName, $data);
@@ -233,9 +234,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data, $result);
     }
 
-    /**
-     * @dataProvider insertDataProvider
-     */
+    #[DataProvider('insertDataProvider')]
     public function testInsertOnDuplicate($data)
     {
         $this->_connection->insertOnDuplicate($this->_tableName, $data);
@@ -246,9 +245,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($data, $result);
     }
 
-    /**
-     * @dataProvider insertDataProvider
-     */
+    #[DataProvider('insertDataProvider')]
     public function testInsertForce($data)
     {
         $this->assertEquals(1, $this->_connection->insertForce($this->_tableName, $data));

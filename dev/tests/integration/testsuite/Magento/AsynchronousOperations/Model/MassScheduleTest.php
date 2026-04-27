@@ -25,6 +25,7 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -103,9 +104,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider productDataProvider
      * @param ProductInterface[] $products
      */
+    #[DataProvider('productDataProvider')]
     public function testScheduleMass($products)
     {
         try {
@@ -126,9 +127,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider publisherExceptionDataProvider
      * @param \Exception $exception
      */
+    #[DataProvider('publisherExceptionDataProvider')]
     public function testScheduleMassWithExceptionDuringPublishing(\Exception $exception)
     {
         $products = [
@@ -245,9 +246,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider productExceptionDataProvider
      * @param ProductInterface[] $products
      */
+    #[DataProvider('productExceptionDataProvider')]
     public function testScheduleMassOneEntityFailure($products)
     {
         try {

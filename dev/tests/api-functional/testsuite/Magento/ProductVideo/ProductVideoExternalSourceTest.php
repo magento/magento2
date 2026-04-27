@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ProductVideo;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
@@ -102,9 +103,9 @@ class ProductVideoExternalSourceTest extends WebapiAbstract
     /**
      * Test create/ update product with external video media gallery entry
      *
-     * @dataProvider externalVideoDataProvider
      * @param array $mediaGalleryData
      */
+    #[DataProvider('externalVideoDataProvider')]
     public function testCreateWithExternalVideo(array $mediaGalleryData)
     {
         $simpleProductBaseData = $this->getSimpleProductData(

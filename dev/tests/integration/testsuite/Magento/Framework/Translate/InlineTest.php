@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Translate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -90,8 +92,8 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $originalText
      * @param string $expectedText
-     * @dataProvider processResponseBodyDataProvider
      */
+    #[DataProvider('processResponseBodyDataProvider')]
     public function testProcessResponseBody($originalText, $expectedText)
     {
         $actualText = $originalText;

@@ -8,6 +8,7 @@ namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Api\SortOrder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Integration test for \Magento\Customer\Model\ResourceModel\GroupRepository
@@ -45,8 +46,8 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $testGroup
-     * @dataProvider getGroupsDataProvider
      */
+    #[DataProvider('getGroupsDataProvider')]
     public function testGetGroup($testGroup)
     {
         $group = $this->groupRepository->getById($testGroup[GroupInterface::ID]);
@@ -196,9 +197,8 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param array $filters
      * @param array $filterGroup
      * @param array $expectedResult array of expected results indexed by ID
-     *
-     * @dataProvider searchGroupsDataProvider
      */
+    #[DataProvider('searchGroupsDataProvider')]
     public function testGetList($filters, $filterGroup, $expectedResult)
     {
         foreach ($filters as $filter) {
@@ -281,9 +281,8 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
      * @param string, $direction
      * @param string, $methodName
      * @param array $expectedResult
-     *
-     * @dataProvider sortOrderDataProvider
      */
+    #[DataProvider('sortOrderDataProvider')]
     public function testGetListSortOrder($field, $direction, $methodName, $expectedResult)
     {
         /** @var SortOrder $sortOrder */

@@ -89,8 +89,9 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends testSetInstanceFirstAllowed
      */
-    public function testGetInstanceAllowed(\Magento\TestFramework\Helper\Bootstrap $expectedInstance)
+    public function testGetInstanceAllowed(?\Magento\TestFramework\Helper\Bootstrap $expectedInstance = null)
     {
+        $expectedInstance = $expectedInstance ?? \Magento\TestFramework\Helper\Bootstrap::getInstance();
         $this->assertSame($expectedInstance, \Magento\TestFramework\Helper\Bootstrap::getInstance());
     }
 

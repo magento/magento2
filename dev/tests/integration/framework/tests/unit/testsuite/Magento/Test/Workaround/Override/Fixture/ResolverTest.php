@@ -59,7 +59,7 @@ class ResolverTest extends TestCase
         $mock->method('getComponentRegistrar')->willReturn(new ComponentRegistrar());
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setValue(Resolver::class, $mock);
+        $reflectionProperty->setValue(null, $mock);
 
         return $mock;
     }
