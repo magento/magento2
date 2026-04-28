@@ -10,6 +10,7 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\Category;
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleOptimizer\Model\Code;
 use Magento\GoogleOptimizer\Observer\Category\DeleteCategoryGoogleExperimentScriptObserver;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteCategoryGoogleExperimentScriptObserverTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /**
      * @var MockObject
      */
@@ -42,10 +45,10 @@ class DeleteCategoryGoogleExperimentScriptObserverTest extends TestCase
     {
         $this->_codeMock = $this->createMock(Code::class);
         $this->_category = $this->createMock(Category::class);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getCategory'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getCategory']
+        );
         $event->expects($this->once())->method('getCategory')->willReturn($this->_category);
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->willReturn($event);

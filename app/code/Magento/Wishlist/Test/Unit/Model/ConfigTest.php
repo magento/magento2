@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Magento\Catalog\Model\Attribute\Config as AttributeConfig;
+use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Wishlist\Model\Config;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,26 +27,20 @@ class ConfigTest extends TestCase
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config|MockObject
+     * @var CatalogConfig|MockObject
      */
     protected $_catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config|MockObject
+     * @var AttributeConfig|MockObject
      */
     protected $_attributeConfig;
 
     protected function setUp(): void
     {
-        $this->_scopeConfig = $this->getMockBuilder(
-            ScopeConfigInterface::class
-        )->getMock();
-        $this->_catalogConfig = $this->getMockBuilder(\Magento\Catalog\Model\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_attributeConfig = $this->getMockBuilder(\Magento\Catalog\Model\Attribute\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->_catalogConfig = $this->createMock(CatalogConfig::class);
+        $this->_attributeConfig = $this->createMock(AttributeConfig::class);
 
         $this->model = new Config($this->_scopeConfig, $this->_catalogConfig, $this->_attributeConfig);
     }

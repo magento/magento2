@@ -8,6 +8,7 @@ namespace Magento\Tax\Model;
 use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\TaxClass\Key;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDbIsolation enabled
@@ -96,8 +97,8 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoConfigFixture current_store tax/calculation/algorithm UNIT_BASE_CALCULATION
-     * @dataProvider calculateUnitBasedDataProvider
      */
+    #[DataProvider('calculateUnitBasedDataProvider')]
     public function testCalculateTaxUnitBased($quoteDetailsData, $expected)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -810,9 +811,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider calculateTaxTotalBasedDataProvider
      * @magentoConfigFixture current_store tax/calculation/algorithm TOTAL_BASE_CALCULATION
      */
+    #[DataProvider('calculateTaxTotalBasedDataProvider')]
     public function testCalculateTaxTotalBased($quoteDetailsData, $expectedTaxDetails, $storeId = null)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -1264,9 +1265,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider calculateTaxRowBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm ROW_BASE_CALCULATION
      */
+    #[DataProvider('calculateTaxRowBasedDataProvider')]
     public function testCalculateTaxRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -2365,9 +2366,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesRowBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm ROW_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesRowBasedDataProvider')]
     public function testMultiRulesRowBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -2402,9 +2403,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesTotalBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm TOTAL_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesTotalBasedDataProvider')]
     public function testMultiRulesTotalBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);
@@ -2449,9 +2450,9 @@ class TaxCalculationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @dataProvider multiRulesUnitBasedDataProvider
      * @magentoConfigFixture default_store tax/calculation/algorithm UNIT_BASE_CALCULATION
      */
+    #[DataProvider('multiRulesUnitBasedDataProvider')]
     public function testMultiRulesUnitBased($quoteDetailsData, $expectedTaxDetails)
     {
         $quoteDetailsData = $this->performTaxClassSubstitution($quoteDetailsData);

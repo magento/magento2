@@ -10,20 +10,27 @@ namespace Magento\CatalogRuleConfigurable\Model\Product\Type\Configurable;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\CatalogRuleConfigurable\Test\Fixture\ConfigurableProductWithPercentCatalogRule;
+use Magento\CatalogRuleConfigurable\Test\Fixture\DisableConfigurableParentAfterChildrenCatalogRules;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Price;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductWithCustomOptionAndSimpleTierPrice;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Provides tests for configurable product pricing with catalog rules.
  *
- * @magentoDbIsolation disabled
- * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AppArea('frontend')]
+#[DbIsolation(false)]
 class PriceTest extends TestCase
 {
     /**
@@ -64,10 +71,8 @@ class PriceTest extends TestCase
         $this->getPriceIndexDataByProductId = $this->objectManager->get(GetPriceIndexDataByProductId::class);
     }
 
-    /**
-     * @magentoDataFixture Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rule.php
-     * @return void
-     */
+    #[DataFixture(ConfigurableProductWithCustomOptionAndSimpleTierPrice::class)]
+    #[DataFixture(ConfigurableProductWithPercentCatalogRule::class)]
     public function testGetFinalPriceWithCustomOptionAndCatalogRule(): void
     {
         $indexPrices = [
@@ -96,10 +101,8 @@ class PriceTest extends TestCase
         $this->assertConfigurableProductPrice(20, 25, $indexPrices);
     }
 
-    /**
-     * @magentoDataFixture Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rules_for_children.php
-     * @return void
-     */
+    #[DataFixture(ConfigurableProductWithCustomOptionAndSimpleTierPrice::class)]
+    #[DataFixture(DisableConfigurableParentAfterChildrenCatalogRules::class)]
     public function testGetFinalPriceWithCustomOptionAndCatalogRulesForChildren(): void
     {
         $indexPrices = [
@@ -129,6 +132,46 @@ class PriceTest extends TestCase
     }
 
     /**
+     * Same per-SKU catalog rules as `configurable_product_with_percent_rules_for_children` (10% / 20%),
+     * with configurable parent disabled — child price index must still reflect each rule.
+     *
+     * @return void
+     */
+    #[DataFixture(ConfigurableProductWithCustomOptionAndSimpleTierPrice::class)]
+    #[DataFixture(
+        DisableConfigurableParentAfterChildrenCatalogRules::class,
+        [DisableConfigurableParentAfterChildrenCatalogRules::DISABLE_CONFIGURABLE_PARENT => true]
+    )]
+    public function testCatalogRulePercentConditionIsAppliedPerChildWithDisabledParent(): void
+    {
+        $firstChild = $this->productRepository->get('simple_10');
+        $secondChild = $this->productRepository->get('simple_20');
+        $this->assertSame('simple_10', $firstChild->getSku());
+        $this->assertSame('simple_20', $secondChild->getSku());
+
+        $indexPrices = [
+            'simple_10' => [
+                'price' => 10,
+                'final_price' => 9,
+                'min_price' => 9,
+                'max_price' => 9,
+                'tier_price' => null,
+            ],
+            'simple_20' => [
+                'price' => 20,
+                'final_price' => 15,
+                'min_price' => 15,
+                'max_price' => 15,
+                'tier_price' => 15,
+            ],
+        ];
+
+        foreach ($indexPrices as $sku => $prices) {
+            $this->assertIndexTableData($sku, $prices);
+        }
+    }
+
+    /**
      * Asserts configurable product prices.
      *
      * @param float $priceWithFirstSimple
@@ -149,9 +192,18 @@ class PriceTest extends TestCase
         $optionId = $configurable->getOptions()[0]->getId();
         $configurable->addCustomOption(AbstractType::OPTION_PREFIX . $optionId, 'text');
         $configurable->addCustomOption('option_ids', $optionId);
-        //First simple rule price + Option price
+        // First simple rule price + option price (explicit child so final price uses that SKU's rules)
+        $configurable->addCustomOption(
+            'simple_product',
+            (int) $this->productRepository->get('simple_10')->getId(),
+            $this->productRepository->get('simple_10')
+        );
         $this->assertFinalPrice($configurable, $priceWithFirstSimple);
-        $configurable->addCustomOption('simple_product', 20, $this->productRepository->get('simple_20'));
+        $configurable->addCustomOption(
+            'simple_product',
+            (int) $this->productRepository->get('simple_20')->getId(),
+            $this->productRepository->get('simple_20')
+        );
         //Second simple rule price + Option price
         $this->assertFinalPrice($configurable, $priceWithSecondSimple);
     }

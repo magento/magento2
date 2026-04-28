@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Adjustment;
 
-use Magento\Catalog\Test\Unit\Helper\ProductTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Option;
 use Magento\Bundle\Model\Product\Price;
@@ -32,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DefaultSelectionPriceListProviderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BundleSelectionFactory|MockObject
      */
@@ -105,7 +107,13 @@ class DefaultSelectionPriceListProviderTest extends TestCase
         $this->websiteRepository = $this->createMock(WebsiteRepositoryInterface::class);
 
         /** @var Product */
-        $this->product = new ProductTestHelper();
+        $this->product = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'setTypeInstance', 'getTypeInstance', 'setPriceType', 'getPriceType',
+                'setIsSalable', 'getIsSalable', 'isSalable'
+            ]
+        );
         $this->optionsCollection = $this->createMock(Collection::class);
         $this->typeInstance = $this->createMock(Type::class);
         $this->option = $this->createMock(Option::class);
@@ -130,8 +138,8 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->setTypeInstance($this->typeInstance);
-        $this->product->setPriceType(Price::PRICE_TYPE_FIXED);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
+        $this->product->method('getPriceType')->willReturn(Price::PRICE_TYPE_FIXED);
         $this->optionsCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->option]));
@@ -176,7 +184,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->setTypeInstance($this->typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
         $this->optionsCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->option]));
@@ -228,7 +236,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->method('getOptionsCollection')
             ->with($this->product)
             ->willReturn($this->optionsCollection);
-        $this->product->setTypeInstance($this->typeInstance);
+        $this->product->method('getTypeInstance')->willReturn($this->typeInstance);
         $this->selectionCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($this->createMock(Product::class));
@@ -240,7 +248,7 @@ class DefaultSelectionPriceListProviderTest extends TestCase
             ->with('has_stock_status_filter', true);
         $this->selectionCollection->expects($this->once())
             ->method('addQuantityFilter');
-        $this->product->setIsSalable(true);
+        $this->product->method('isSalable')->willReturn(true);
         $this->optionsCollection->expects($this->once())
             ->method('getSize')
             ->willReturn(1);

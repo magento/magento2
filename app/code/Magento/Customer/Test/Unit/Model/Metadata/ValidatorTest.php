@@ -13,11 +13,15 @@ use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Customer\Model\Metadata\Form\Text;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\DataObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class ValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Validator */
     protected $validator;
 
@@ -29,28 +33,25 @@ class ValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attrDataFactoryMock = $this->getMockBuilder(
+        $this->attrDataFactoryMock = $this->createMock(
             ElementFactory::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
 
         $this->validator = new Validator($this->attrDataFactoryMock);
     }
 
     public function testValidateDataWithNoDataModel()
     {
-        $attribute = $this->getMockBuilder(
+        $attribute = $this->createMock(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->attrDataFactoryMock->expects($this->never())->method('create');
         $this->assertTrue($this->validator->validateData([], [$attribute], 'ENTITY_TYPE'));
     }
 
     /**
-     * @param bool $isValid
-     * @dataProvider trueFalseDataProvider
-     */
+     * @param bool $isValid */
+    #[DataProvider('trueFalseDataProvider')]
     public function testValidateData($isValid)
     {
         $attribute = $this->getMockAttribute();
@@ -60,10 +61,9 @@ class ValidatorTest extends TestCase
 
     public function testIsValidWithNoModel()
     {
-        $attribute = $this->getMockBuilder(
+        $attribute = $this->createMock(
             AttributeMetadataInterface::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $this->attrDataFactoryMock->expects($this->never())->method('create');
         $this->validator->setAttributes([$attribute]);
         $this->validator->setEntityType('ENTITY_TYPE');
@@ -74,9 +74,8 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param bool $isValid
-     * @dataProvider trueFalseDataProvider
-     */
+     * @param bool $isValid */
+    #[DataProvider('trueFalseDataProvider')]
     public function testIsValid($isValid)
     {
         $data = ['something'];
@@ -103,11 +102,14 @@ class ValidatorTest extends TestCase
      */
     protected function getMockAttribute()
     {
-        $attribute = $this->getMockBuilder(AttributeMetadata::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getAttributeCode', 'getDataModel'])
-            ->getMock();
+        $attribute = $this->createPartialMockWithReflection(
+            AttributeMetadata::class,
+            [
+                '__wakeup',
+                'getAttributeCode',
+                'getDataModel'
+            ]
+        );
         $attribute->expects($this->any())->method('getAttributeCode')->willReturn('ATTR_CODE');
         $attribute->expects($this->any())->method('getDataModel')->willReturn('DATA_MODEL');
         return $attribute;
@@ -120,10 +122,9 @@ class ValidatorTest extends TestCase
      */
     protected function mockDataModel($isValid, AttributeMetadata $attribute)
     {
-        $dataModel = $this->getMockBuilder(
+        $dataModel = $this->createMock(
             Text::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        );
         $dataModel->expects($this->any())->method('validateValue')->willReturn($isValid);
         $this->attrDataFactoryMock->expects(
             $this->any()

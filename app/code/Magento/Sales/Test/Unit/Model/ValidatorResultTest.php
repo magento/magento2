@@ -24,8 +24,6 @@ class ValidatorResultTest extends TestCase
     private $validatorResult;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManager
      */
     private $objectManager;

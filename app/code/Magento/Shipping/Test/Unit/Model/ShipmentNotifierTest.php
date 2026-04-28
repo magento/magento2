@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Status\History;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 use Magento\Shipping\Model\ShipmentNotifier;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,6 +27,7 @@ use Psr\Log\LoggerInterface;
  */
 class ShipmentNotifierTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CollectionFactory|MockObject
      */
@@ -68,7 +70,7 @@ class ShipmentNotifierTest extends TestCase
             ShipmentSender::class,
             ['send']
         );
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->notifier = new ShipmentNotifier(
             $this->historyCollectionFactory,
             $this->loggerMock,
@@ -83,11 +85,10 @@ class ShipmentNotifierTest extends TestCase
      */
     public function testNotifySuccess(): void
     {
-        $historyCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsCustomerNotified'])
-            ->onlyMethods(['getUnnotifiedForInstance', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $historyCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsCustomerNotified', 'getUnnotifiedForInstance', 'save']
+        );
         $historyItem = $this->createPartialMock(
             History::class,
             ['setIsCustomerNotified', 'save', '__wakeUp']

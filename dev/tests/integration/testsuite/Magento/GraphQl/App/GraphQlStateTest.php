@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\GraphQl\App;
 
 use Magento\GraphQl\App\State\GraphQlStateDiff;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -55,7 +56,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
      * @param array $variables2  This is the second set of variables to be used in the second request
@@ -68,6 +68,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Exception
      */
+    #[DataProvider('queryDataProvider')]
     public function testState(
         string $query,
         array $variables,
@@ -95,7 +96,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
-     * @dataProvider cartQueryProvider
      * @param string $query
      * @param array $variables
      * @param array $variables2
@@ -104,6 +104,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @param string $expected
      * @return void
      */
+    #[DataProvider('cartQueryProvider')]
     public function testCartState(
         string $query,
         array $variables,
@@ -126,9 +127,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private static function queryDataProvider(): array
+    public static function queryDataProvider(): array
     {
         return [
             'Get Navigation Menu by category_id' => [

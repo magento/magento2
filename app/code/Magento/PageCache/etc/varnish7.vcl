@@ -27,6 +27,11 @@ sub vcl_recv {
         set req.hash_always_miss = true;
     }
 
+    # Sorting query string parameters
+    if (req.url ~ "\?.+&.+") {
+        set req.url = std.querysort(req.url);
+    }
+
     if (req.method == "PURGE") {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));

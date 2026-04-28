@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -58,9 +58,7 @@ class ListsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->mockConfig = $this->createMock(ConfigInterface::class);
         $this->mockConfig->method('getAllowedLocales')
             ->willReturn(array_keys($this->expectedLocales));
         $this->mockConfig->method('getAllowedCurrencies')

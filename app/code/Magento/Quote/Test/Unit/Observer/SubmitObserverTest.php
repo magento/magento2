@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Observer;
 
+use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Quote\Test\Unit\Helper\EventTestHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Observer\SubmitObserver;
@@ -28,6 +29,8 @@ use Psr\Log\LoggerInterface;
  */
 class SubmitObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SubmitObserver
      */
@@ -73,9 +76,12 @@ class SubmitObserverTest extends TestCase
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
-        $eventMock = new EventTestHelper();
-        $eventMock->setQuote($this->quoteMock);
-        $eventMock->setOrder($this->orderMock);
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['setQuote', 'getQuote', 'setOrder', 'getOrder']
+        );
+        $eventMock->method('getQuote')->willReturn($this->quoteMock);
+        $eventMock->method('getOrder')->willReturn($this->orderMock);
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observerMock->method('getEvent')->willReturn($eventMock);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);

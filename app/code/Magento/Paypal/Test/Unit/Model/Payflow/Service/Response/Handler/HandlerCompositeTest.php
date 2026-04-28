@@ -17,9 +17,7 @@ class HandlerCompositeTest extends TestCase
 {
     public function testConstructorSuccess()
     {
-        $handler = $this->getMockBuilder(
-            HandlerInterface::class
-        )->getMock();
+        $handler = $this->createMock(HandlerInterface::class);
 
         $result = new HandlerComposite(
             ['some_handler' => $handler]
@@ -41,15 +39,10 @@ class HandlerCompositeTest extends TestCase
 
     public function testHandle()
     {
-        $paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMock();
-        $responseMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paymentMock = $this->createMock(InfoInterface::class);
+        $responseMock = $this->createMock(DataObject::class);
 
-        $handler = $this->getMockBuilder(
-            HandlerInterface::class
-        )->getMock();
+        $handler = $this->createMock(HandlerInterface::class);
         $handler->expects($this->once())
             ->method('handle')
             ->with($paymentMock, $responseMock);

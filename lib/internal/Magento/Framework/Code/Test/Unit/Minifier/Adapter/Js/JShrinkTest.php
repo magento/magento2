@@ -6,6 +6,7 @@
 namespace Magento\Framework\Code\Test\Unit\Minifier\Adapter\Js;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\Minifier\Adapter\Js\JShrink;
 
 class JShrinkTest extends TestCase
@@ -14,9 +15,8 @@ class JShrinkTest extends TestCase
      * @param string $content
      * @param string $expected
      * @return void
-     * @throws \Exception
-     * @dataProvider minifyDataProvider
-     */
+     * @throws \Exception     */
+    #[DataProvider('minifyDataProvider')]
     public function testMinify(string $content, string $expected): void
     {
         $minifier = new JShrink();

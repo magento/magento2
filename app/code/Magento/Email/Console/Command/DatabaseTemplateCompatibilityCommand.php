@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2022 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -64,7 +64,7 @@ class DatabaseTemplateCompatibilityCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $collection = $this->templateCollection->create();
         $collection->load();

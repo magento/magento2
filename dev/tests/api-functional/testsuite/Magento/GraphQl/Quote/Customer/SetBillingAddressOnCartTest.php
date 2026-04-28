@@ -25,9 +25,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for set billing address on cart mutation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetBillingAddressOnCartTest extends GraphQlAbstract
 {
@@ -825,11 +828,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @dataProvider dataProviderSetWithoutRequiredParameters
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderSetWithoutRequiredParameters')]
     public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

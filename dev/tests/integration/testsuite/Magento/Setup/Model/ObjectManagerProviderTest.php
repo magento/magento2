@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Model;
@@ -33,14 +33,14 @@ class ObjectManagerProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->locator = $this->getMockForAbstractClass(ServiceLocatorInterface::class);
+        $this->locator = $this->createMock(ServiceLocatorInterface::class);
         $this->object = new ObjectManagerProvider($this->locator, new Bootstrap());
         $this->locator->expects($this->any())
             ->method('get')
             ->willReturnMap(
                 [
                     [InitParamListener::BOOTSTRAP_PARAM, []],
-                    [Application::class, $this->getMockForAbstractClass(Application::class)],
+                    [Application::class, $this->createMock(Application::class)],
                 ]
             );
     }

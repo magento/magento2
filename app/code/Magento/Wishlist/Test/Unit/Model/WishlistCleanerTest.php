@@ -54,9 +54,9 @@ class WishlistCleanerTest extends TestCase
         $productId = 1;
         $itemTable = 'table_item';
         $itemOptionTable = 'table_item_option';
-        $product = $this->getMockForAbstractClass(ProductInterface::class);
+        $product = $this->createMock(ProductInterface::class);
         $product->expects($this->once())->method('getId')->willReturn($productId);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $this->itemResourceModel->expects($this->once())->method('getConnection')->willReturn($connection);
         $this->itemResourceModel->expects($this->once())->method('getMainTable')->willReturn($itemTable);
         $this->itemOptionResourceModel->expects($this->once())->method('getMainTable')->willReturn($itemOptionTable);

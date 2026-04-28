@@ -145,7 +145,7 @@ class SourceThemeDeployCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $area = $input->getOption(self::AREA_OPTION);
         $locale = $input->getOption(self::LOCALE_OPTION);

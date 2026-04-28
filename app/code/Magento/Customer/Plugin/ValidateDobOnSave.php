@@ -14,7 +14,11 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Locale\ResolverInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ValidateDobOnSave
 {
     /**
@@ -28,15 +32,23 @@ class ValidateDobOnSave
     private $json;
 
     /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param EavConfig $eavConfig
      * @param JsonSerializer $json
+     * @param ResolverInterface $localeResolver
      */
     public function __construct(
         EavConfig $eavConfig,
-        JsonSerializer $json
+        JsonSerializer $json,
+        ResolverInterface $localeResolver
     ) {
         $this->eavConfig = $eavConfig;
         $this->json = $json;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -67,8 +79,9 @@ class ValidateDobOnSave
         }
 
         if ($dobDate) {
+            $normalizedDob = $dobDate->format(DateTime::DATE_PHP_FORMAT);
+            $customer->setDob($normalizedDob);
             $attr = $this->eavConfig->getAttribute('customer', 'dob');
-
             $rules = $attr->getData('validate_rules');
             if (is_string($rules) && $rules !== '') {
                 try {
@@ -127,9 +140,21 @@ class ValidateDobOnSave
             $seconds = ($intVal >= 10000000000) ? intdiv($intVal, 1000) : $intVal;
             return (new \DateTimeImmutable('@' . $seconds))->setTimezone(new \DateTimeZone('UTC'));
         }
+        $stringValue = (string)$value;
+        $locale = $this->localeResolver->getLocale();
+        $formatter = new \IntlDateFormatter(
+            $locale,
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE
+        );
+        $formatter->setPattern(DateTime::DATE_INTERNAL_FORMAT);
+        $timestamp = $formatter->parse($stringValue);
+        if ($timestamp !== false) {
+            return new \DateTimeImmutable('@' . $timestamp);
+        }
 
         try {
-            return new \DateTimeImmutable((string)$value);
+            return new \DateTimeImmutable($stringValue);
         } catch (\Exception $e) {
             return null;
         }

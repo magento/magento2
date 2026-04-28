@@ -22,9 +22,7 @@ class PostcodeTest extends TestCase
     {
         $countryUs = 'US';
         $countryUa = 'UK';
-        $helperMock = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createMock(Data::class);
 
         $helperMock->expects($this->any())
             ->method('isZipCodeOptional')

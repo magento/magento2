@@ -267,21 +267,29 @@
     <virtualType name="SalesOrderIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_order</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesInvoiceIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Invoice\Grid</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_invoice</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesShipmentIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">ShipmentGridAggregator</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_shipment</argument>
         </arguments>
     </virtualType>
     <virtualType name="SalesCreditmemoIndexGridAsyncInsert" type="Magento\Sales\Model\GridAsyncInsert">
         <arguments>
             <argument name="entityGrid" xsi:type="object">CreditmemoGridAggregator</argument>
+            <argument name="lockManager" xsi:type="object">Magento\Framework\Lock\LockManagerInterface</argument>
+            <argument name="lockName" xsi:type="string">grid_async_insert_sales_creditmemo</argument>
         </arguments>
     </virtualType>
 
@@ -773,6 +781,10 @@
                     <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
                     <item name="columnName" xsi:type="string">postcode</item>
                 </item>
+                <item name="country_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_shipping_address</item>
+                    <item name="columnName" xsi:type="string">country_id</item>
+                </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
         </arguments>
@@ -799,6 +811,10 @@
                 <item name="postcode" xsi:type="array">
                     <item name="tableAlias" xsi:type="string">sales_billing_address</item>
                     <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+                <item name="country_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">sales_billing_address</item>
+                    <item name="columnName" xsi:type="string">country_id</item>
                 </item>
             </argument>
             <argument name="separator" xsi:type="string">, </argument>
@@ -1068,5 +1084,10 @@
         <plugin name="Bundle" disabled="true" />
         <plugin name="GroupedProduct" disabled="true" />
         <plugin name="configurable" disabled="true" />
+    </type>
+    <type name="Magento\Sales\Cron\CleanExpiredQuotes">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">5000</argument>
+        </arguments>
     </type>
 </config>

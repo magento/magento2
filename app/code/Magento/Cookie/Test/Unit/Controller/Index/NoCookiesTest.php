@@ -53,26 +53,20 @@ class NoCookiesTest extends TestCase
      */
     private $viewMock;
 
-    const REDIRECT_URL = 'http://www.example.com/redirect';
-    const REDIRECT_PATH = '\a\path';
-    const REDIRECT_ARGUMENTS = '&arg1key=arg1value';
+    private const REDIRECT_URL = 'http://www.example.com/redirect';
+    private const REDIRECT_PATH = '\a\path';
+    private const REDIRECT_ARGUMENTS = '&arg1key=arg1value';
 
     /**
      * @inheritDoc
      */
-    protected function setup(): void
+    protected function setUp(): void
     {
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(HttpRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(HttpResponse::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->redirectResponseMock = $this->getMockBuilder(RedirectInterface::class)
-            ->getMock();
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->requestMock = $this->createMock(HttpRequest::class);
+        $this->responseMock = $this->createMock(HttpResponse::class);
+        $this->redirectResponseMock = $this->createMock(RedirectInterface::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->controller = $objectManager->getObject(

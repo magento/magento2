@@ -23,9 +23,9 @@ use Magento\Quote\Model\Quote\Address\Total;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\QuoteGraphQl\Model\Resolver\CartPrices;
 use GraphQL\Language\AST\OperationDefinitionNode;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
 
 /**
  * @see CartPrices
@@ -34,6 +34,7 @@ use Magento\Quote\Test\Unit\Helper\TotalTestHelper;
  */
 class CartPricesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CartPrices
      */
@@ -126,13 +127,9 @@ class CartPricesTest extends TestCase
             ->getMock();
         $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteCurrencyCode', 'getTriggerRecollect'])
-            ->onlyMethods(['isVirtual', 'getShippingAddress'])
-            ->getMock();
-        $this->totalMock = $this->createPartialMock(
-            TotalTestHelper::class,
+        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getQuoteCurrencyCode', 'getTriggerRecollect']);
+        $this->totalMock = $this->createPartialMockWithReflection(
+            Total::class,
             [
                 'getSubtotal',
                 'getSubtotalInclTax',

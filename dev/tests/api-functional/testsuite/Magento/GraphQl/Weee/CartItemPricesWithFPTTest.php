@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Weee;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
@@ -101,7 +102,6 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
      * @return void
      *
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @dataProvider cartItemFixedProductTaxDataProvider
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/Weee/_files/product_with_two_fpt.php
      * @magentoApiDataFixture Magento/GraphQl/Weee/_files/add_fpt_for_region_1.php
@@ -110,6 +110,7 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Weee/_files/add_simple_product_with_fpt_to_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      */
+    #[DataProvider('cartItemFixedProductTaxDataProvider')]
     public function testCartItemFixedProductTax(array $taxSettings, array $expectedFtps): void
     {
         $this->writeConfig($taxSettings);

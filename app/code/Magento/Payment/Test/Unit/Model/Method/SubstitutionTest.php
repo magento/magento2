@@ -32,9 +32,7 @@ class SubstitutionTest extends TestCase
 
     public function testGetTitle()
     {
-        $infoMock = $this->getMockBuilder(
-            Info::class
-        )->disableOriginalConstructor()->getMock();
+        $infoMock = $this->createMock(Info::class);
 
         $this->model->setInfoInstance($infoMock);
         $expectedResult = 'StringTitle';

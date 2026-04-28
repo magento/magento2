@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Catalog\Edit;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Catalog\Edit\Form
@@ -49,8 +51,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
      *
      * @covers \Magento\UrlRewrite\Block\Catalog\Edit\Form::_formPostInit
      *
-     * @dataProvider formPostInitDataProvider
-     *
      * @param array $productData
      * @param array $categoryData
      * @param string $action
@@ -59,6 +59,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store general/single_store_mode/enabled 1
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('formPostInitDataProvider')]
     public function testFormPostInitNew($productData, $categoryData, $action, $requestPath, $targetPath)
     {
         $args = [];
@@ -86,7 +87,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Test entity stores
      *
-     * @dataProvider getEntityStoresDataProvider
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      *
@@ -94,6 +94,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @param array $categoryData
      * @param array $expectedStores
      */
+    #[DataProvider('getEntityStoresDataProvider')]
     public function testGetEntityStores($productData, $categoryData, $expectedStores)
     {
         $args = [];
@@ -192,7 +193,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @return array
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function formPostInitDataProvider()
+    public static function formPostInitDataProvider(): array
     {
         return [
             [
@@ -229,7 +230,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @return array
      * phpcs:disable Magento2.Functions.StaticFunction
      */
-    public static function getEntityStoresDataProvider()
+    public static function getEntityStoresDataProvider(): array
     {
         return [
             [

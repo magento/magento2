@@ -180,7 +180,7 @@ class DiInfoCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $area = $input->getArgument(self::AREA_CODE) ?? Area::AREA_GLOBAL;
         if ($area !== Area::AREA_GLOBAL) {

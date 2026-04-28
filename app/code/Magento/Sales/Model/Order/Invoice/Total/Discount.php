@@ -44,8 +44,8 @@ class Discount extends AbstractTotal
                 continue;
             }
 
-            $orderItemDiscount = (double)$orderItem->getDiscountAmount();
-            $baseOrderItemDiscount = (double)$orderItem->getBaseDiscountAmount();
+            $orderItemDiscount = (float)$orderItem->getDiscountAmount();
+            $baseOrderItemDiscount = (float)$orderItem->getBaseDiscountAmount();
             $orderItemQty = $orderItem->getQtyOrdered();
 
             if ($orderItemDiscount && $orderItemQty) {

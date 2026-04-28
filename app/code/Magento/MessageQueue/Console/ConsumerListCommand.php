@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2018 Adobe
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Console;
@@ -40,7 +40,7 @@ class ConsumerListCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consumers = $this->getConsumers();
         $output->writeln($consumers);

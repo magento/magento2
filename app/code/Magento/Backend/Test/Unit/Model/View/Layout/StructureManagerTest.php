@@ -34,12 +34,8 @@ class StructureManagerTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->structureMock = $this->getMockBuilder(Structure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->structureMock = $this->createMock(Structure::class);
+        $this->scheduledStructureMock = $this->createMock(ScheduledStructure::class);
         $this->structureManager = $objectManager->getObject(StructureManager::class);
     }
 

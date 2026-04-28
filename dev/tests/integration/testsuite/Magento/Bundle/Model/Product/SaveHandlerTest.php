@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2018 Adobe
+ * Copyright 2017 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -36,12 +36,12 @@ class SaveHandlerTest extends TestCase
      * @var ProductRepositoryInterface
      */
     private $productRepository;
-    
+
     /**
      * @var Relation
      */
     private $productRelationResourceModel;
-    
+
     /**
      * @var DataFixtureStorage
      */
@@ -130,7 +130,7 @@ class SaveHandlerTest extends TestCase
         $extension->setBundleProductOptions($options);
         $bundleProduct->setExtensionAttributes($extension);
         $this->productRepository->save($bundleProduct);
-        
+
         // reload product and verify only one option is left and product is salable
         $bundleProduct = $this->productRepository->get($bundleSku, true, 0, true);
         $extension = $bundleProduct->getExtensionAttributes();
@@ -175,13 +175,13 @@ class SaveHandlerTest extends TestCase
         $extension->setBundleProductOptions([$options[0]]);
         $bundleProduct->setExtensionAttributes($extension);
         $this->productRepository->save($bundleProduct);
-        
+
         // Check that the original bundle product has only one option left
         $options = $this->getBundleOptions($bundleSku);
         $this->assertCount(1, $options);
         $this->assertCount(1, $options[0]->getProductLinks());
         $this->assertEquals($this->fixtures->get('p1')->getSku(), $options[0]->getProductLinks()[0]->getSku());
-        
+
         // Check that the duplicated bundle product still has both options
         $options = $this->getBundleOptions($duplicateBundleProduct->getSku());
         $this->assertCount(2, $options);

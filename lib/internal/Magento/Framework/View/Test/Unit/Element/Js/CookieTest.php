@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\Element\Template\File\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CookieTest extends TestCase
 {
@@ -79,9 +80,8 @@ class CookieTest extends TestCase
         $this->assertInstanceOf(Cookie::class, $this->model);
     }
 
-    /**
-     * @dataProvider domainDataProvider
-     */
+    /**     */
+    #[DataProvider('domainDataProvider')]
     public function testGetDomain($domain, $isIp, $expectedResult)
     {
         $this->sessionConfigMock->expects($this->once())

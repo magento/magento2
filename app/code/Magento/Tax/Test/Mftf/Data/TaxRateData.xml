@@ -213,4 +213,7 @@
         <data key="rate">20</data>
         <data key="zip_is_range">0</data>
     </entity>
+    <entity name="USFullTaxRate19Percent" extends="USFullTaxRate">
+        <data key="rate">19</data>
+    </entity>
 </entities>
