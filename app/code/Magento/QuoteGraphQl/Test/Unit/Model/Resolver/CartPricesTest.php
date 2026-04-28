@@ -105,7 +105,7 @@ class CartPricesTest extends TestCase
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->totalsFactoryMock = $this->createPartialMockWithReflection(
-            TotalsInterfaceFactory::class, 
+            TotalsInterfaceFactory::class,
             ['create']
         );
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
@@ -117,10 +117,10 @@ class CartPricesTest extends TestCase
         $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
         $this->contextMock = $this->createMock(Context::class);
         $this->quoteMock = $this->createPartialMockWithReflection(
-            Quote::class, 
+            Quote::class,
             [
-                'getQuoteCurrencyCode', 
-                'getTriggerRecollect', 
+                'getQuoteCurrencyCode',
+                'getTriggerRecollect',
                 'isVirtual',
                 'getShippingAddress'
             ]
