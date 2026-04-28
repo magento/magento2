@@ -46,11 +46,7 @@ class GraphQlSessionTest extends GraphQlAbstract
     }
 
     /**
-     * Test for checking if graphQL query sets session cookies
-     *
-     * Note: The reason why the first response doesn't have cookies, but the subsequent responses do is
-     * because Magento/Framework/App/PageCache/Kernel.php removes Set-Cookie headers when the response has a
-     * public Cache-Control.  This test asserts that behaviour.
+     * Test for checking if cacheable guest graphQL GET queries do not start customer sessions.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @magentoConfigFixture graphql/session/disable 0
@@ -71,15 +67,40 @@ class GraphQlSessionTest extends GraphQlAbstract
     }
 }
 QUERY;
-        // Using cURL feature of flushing cookies upon completion of request
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
         $this->assertEmpty($result['cookies']);
-        // perform secondary request after cookies have been flushed
+
         $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
-        // may have other cookies than session
-        $this->assertNotEmpty($result['cookies']);
-        $this->assertAnyCookieMatchesRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
         $this->assertCount(1, $result['body']['categoryList']);
+    }
+
+    /**
+     * Test for checking if cacheable guest graphQL GET store config queries do not start sessions.
+     *
+     * @magentoConfigFixture graphql/session/disable 0
+     */
+    public function testCheckSessionCookieWithGetStoreConfig(): void
+    {
+        $query = <<<QUERY
+{
+    storeConfig {
+        id
+        code
+        locale
+        base_currency_code
+        default_display_currency_code
+        timezone
+    }
+}
+QUERY;
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertSame('default', $result['body']['storeConfig']['code']);
+
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', [], true);
+        $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+        $this->assertSame('default', $result['body']['storeConfig']['code']);
     }
 
     /**

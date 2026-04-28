@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Authorization\Model\UserContextInterfaceFactory;
-use Magento\Customer\Model\Session;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -46,10 +44,6 @@ class AddUserInfoToContextTest extends TestCase
         $extensionAttributes = $returnedParameters->getExtensionAttributesData();
         $this->assertArrayHasKey('is_customer', $extensionAttributes);
         $this->assertTrue($extensionAttributes['is_customer']);
-
-        $session = $objectManager->get(Session::class);
-
-        $this->assertEquals($session->getCustomer()->getData(), $customer->getData());
-        $this->assertEquals($session->getCustomerGroupId(), $customer->getGroupId());
+        $this->assertEquals($customer->getData(), $service->getLoggedInCustomerData()?->getData());
     }
 }

@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor;
 
-use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -40,21 +42,29 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
     private $logger;
 
     /**
+     * @var Http
+     */
+    private $request;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param SessionManagerInterface $session
      * @param LoggerInterface $logger
+     * @param Http|null $request
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
         SessionManagerInterface $session,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ?Http $request = null
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
         $this->session = $session;
         $this->logger = $logger;
+        $this->request = $request ?? ObjectManager::getInstance()->get(Http::class);
     }
 
     /**
@@ -69,9 +79,12 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
             $currentStore = $this->storeManager->getStore();
             $defaultCode = $currentStore->getDefaultCurrency()->getCode();
             if (empty($headerValue)) {
+                $currencyCode = $this->request->isGet()
+                    ? $defaultCode
+                    : $currentStore->getCurrentCurrency()->getCode();
                 $this->httpContext->setValue(
                     HttpContext::CONTEXT_CURRENCY,
-                    $currentStore->getCurrentCurrency()->getCode(),
+                    $currencyCode,
                     $defaultCode
                 );
             } else {

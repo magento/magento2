@@ -51,6 +51,12 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var CustomerInterface|null
+     */
+    private ?CustomerInterface $loggedInCustomerData = null;
+
     /**
      * @param UserContextInterface $userContext
      * @param Session $session
@@ -79,6 +85,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
     public function _resetState(): void
     {
         $this->userContext = $this->userContextFromConstructor;
+        $this->loggedInCustomerData = null;
     }
 
     /**
@@ -94,15 +101,16 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
      */
     public function execute(ContextParametersInterface $contextParameters): ContextParametersInterface
     {
+        $this->loggedInCustomerData = null;
         $currentUserId = $this->userContext->getUserId();
         if (null !== $currentUserId) {
-            $currentUserId = (int)$currentUserId;
+            $currentUserId = (int) $currentUserId;
         }
         $contextParameters->setUserId($currentUserId);
 
         $currentUserType = $this->userContext->getUserType();
         if (null !== $currentUserType) {
-            $currentUserType = (int)$currentUserType;
+            $currentUserType = (int) $currentUserType;
         }
         $contextParameters->setUserType($currentUserType);
 
@@ -110,9 +118,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
         if ($isCustomer) {
-            $customer = $this->customerRepository->getById($currentUserId);
-            $this->session->setCustomerData($customer);
-            $this->session->setCustomerGroupId($customer->getGroupId());
+            $this->loggedInCustomerData = $this->customerRepository->getById($currentUserId);
         }
         return $contextParameters;
     }
@@ -120,10 +126,14 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
     /**
      * Get logged in customer data
      *
-     * @return CustomerInterface
+     * @return CustomerInterface|null
      */
     public function getLoggedInCustomerData(): ?CustomerInterface
     {
+        if ($this->loggedInCustomerData !== null) {
+            return $this->loggedInCustomerData;
+        }
+
         return $this->session->isLoggedIn() ? $this->session->getCustomerData() : null;
     }
 
@@ -142,7 +152,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
 
         if ($result && $this->configShare->isWebsiteScope()) {
             $customer = $this->customerRepository->getById($customerId);
-            return (int)$customer->getWebsiteId() === (int)$this->storeManager->getStore()->getWebsiteId();
+            return (int) $customer->getWebsiteId() === (int) $this->storeManager->getStore()->getWebsiteId();
         }
         return $result;
     }
