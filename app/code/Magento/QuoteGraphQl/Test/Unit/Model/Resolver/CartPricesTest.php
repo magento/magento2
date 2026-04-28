@@ -104,21 +104,18 @@ class CartPricesTest extends TestCase
     {
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
-        $this->totalsFactoryMock = $this->getMockBuilder(TotalsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->addMethods(
-                [
-                    'getSubtotal',
-                    'getSubtotalInclTax',
-                    'getGrandTotal',
-                    'getDiscountTaxCompensationAmount',
-                    'getDiscountAmount',
-                    'getDiscountDescription',
-                    'getAppliedTaxes'
-                ]
-            )
-            ->getMock();
+        $this->totalsFactoryMock = $this->createPartialMockWithReflection(
+            TotalsInterfaceFactory::class, 
+            [
+                'getSubtotal',
+                'getSubtotalInclTax',
+                'getGrandTotal',
+                'getDiscountTaxCompensationAmount',
+                'getDiscountAmount',
+                'getDiscountDescription',
+                'getAppliedTaxes'
+            ]
+        );
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->fieldMock = $this->createMock(Field::class);
         $this->resolveInfoMock = $this->getMockBuilder(ResolveInfo::class)
