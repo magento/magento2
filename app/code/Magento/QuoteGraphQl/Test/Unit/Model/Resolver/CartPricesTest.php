@@ -116,7 +116,15 @@ class CartPricesTest extends TestCase
             ->getMock();
         $this->resolveInfoMock->operation = new OperationDefinitionNode([]);
         $this->contextMock = $this->createMock(Context::class);
-        $this->quoteMock = $this->createPartialMockWithReflection(Quote::class, ['getQuoteCurrencyCode', 'getTriggerRecollect']);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class, 
+            [
+                'getQuoteCurrencyCode', 
+                'getTriggerRecollect', 
+                'isVirtual',
+                'getShippingAddress'
+            ]
+        );
         $this->totalMock = $this->createPartialMockWithReflection(
             Total::class,
             [
