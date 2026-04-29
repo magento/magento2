@@ -28,8 +28,7 @@ use Magento\Framework\View\Element\Template\Context;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Zend_Cache_Backend_BlackHole;
-use Zend_Cache_Core;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -108,13 +107,13 @@ class DobTest extends TestCase
      */
     protected function setUp(): void
     {
-        $zendCacheCore = new Zend_Cache_Core();
-        $zendCacheCore->setBackend(new Zend_Cache_Backend_BlackHole());
+        // Create a NullAdapter that does nothing (replacement for Zend_Cache_Backend_BlackHole)
+        $lowLevelFrontend = new NullAdapter();
 
         $frontendCache = $this->createMock(
             FrontendInterface::class
         );
-        $frontendCache->expects($this->any())->method('getLowLevelFrontend')->willReturn($zendCacheCore);
+        $frontendCache->expects($this->any())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
         $cache = $this->createMock(CacheInterface::class);
         $cache->expects($this->any())->method('getFrontend')->willReturn($frontendCache);
 
@@ -441,7 +440,6 @@ class DobTest extends TestCase
                 ->method('getValue')
                 ->willReturn(strtotime(self::MAX_DATE));
         }
-        
         return $validationRule;
     }
 

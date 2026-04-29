@@ -67,7 +67,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function isCaseSensitive($formId)
     {
-        return (boolean)$this->getCaptchaModel($formId)->isCaseSensitive();
+        return (bool)$this->getCaptchaModel($formId)->isCaseSensitive();
     }
 
     /**
@@ -116,7 +116,7 @@ class ConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface
      */
     protected function isRequired($formId)
     {
-        return (boolean)$this->getCaptchaModel($formId)->isRequired();
+        return (bool)$this->getCaptchaModel($formId)->isRequired();
     }
 
     /**

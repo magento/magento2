@@ -14,10 +14,14 @@ use Magento\ConfigurableProduct\Model\Product\ReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 
 #[CoversClass(\Magento\ConfigurableProduct\Model\Product\ReadHandler::class)]
 class ReadHandlerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ReadHandler
      */
@@ -70,7 +74,13 @@ class ReadHandlerTest extends TestCase
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $extensionAttributes = new \Magento\Catalog\Test\Unit\Helper\ProductExtensionTestHelper();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            [
+                'getConfigurableProductOptions', 'setConfigurableProductOptions',
+                'getConfigurableProductLinks', 'setConfigurableProductLinks'
+            ]
+        );
 
         $product->expects(static::once())
             ->method('getExtensionAttributes')

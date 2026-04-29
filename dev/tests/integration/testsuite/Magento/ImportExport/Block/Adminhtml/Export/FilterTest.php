@@ -26,8 +26,6 @@ class FilterTest extends \PHPUnit\Framework\TestCase
             \Magento\ImportExport\Block\Adminhtml\Export\Filter::class,
             '_getDateFromToHtmlWithValue'
         );
-        $method->setAccessible(true);
-
         $arguments = [
             'data' => [
                 'attribute_code' => 'date',

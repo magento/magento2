@@ -610,7 +610,6 @@ class DataProviderTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($dataProvider));
         $reflectionProperty = $reflection->getProperty('session');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dataProvider, $this->sessionMock);
 
         $this->sessionMock->expects($this->once())
@@ -731,7 +730,6 @@ class DataProviderTest extends TestCase
 
         $reflection = new \ReflectionClass(get_class($dataProvider));
         $reflectionProperty = $reflection->getProperty('session');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dataProvider, $this->sessionMock);
 
         $this->sessionMock->expects($this->once())

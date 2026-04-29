@@ -67,7 +67,7 @@ define([
             }
 
             _.each(this.values, function (propertyValue, propertyName) {
-                string = string.replace('{{' + propertyName + '}}', propertyValue);
+                string = string.split('{{' + propertyName + '}}').join(propertyValue);
                 nonEmptyValueFlag = nonEmptyValueFlag || !!propertyValue;
             });
 

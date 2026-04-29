@@ -29,6 +29,11 @@
             <!-- Set Billing Agreement value to Auto -->
             <magentoCLI command="config:set {{BillingAgreement.path}} {{BillingAgreement.value}}" stepKey="enableAutoBilling"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Disable conflicting PayPal methods first -->
+            <actionGroup ref="AdminDisableAllConflictingPayPalMethodsActionGroup" stepKey="disableConflictingPayPalMethods"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!-- Configure PayPal Express Checkout -->
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>

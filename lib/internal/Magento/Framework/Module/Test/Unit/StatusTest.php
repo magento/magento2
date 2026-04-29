@@ -16,6 +16,7 @@ use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Module\Status;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StatusTest extends TestCase
 {
@@ -206,9 +207,7 @@ class StatusTest extends TestCase
         $this->object->setIsEnabled(true, ['Module_Baz']);
     }
 
-    /**
-     * @dataProvider getModulesToChangeDataProvider
-     * @param bool $firstEnabled
+    /**     * @param bool $firstEnabled
      * @param bool $secondEnabled
      * @param bool $thirdEnabled
      * @param bool $isEnabled
@@ -216,6 +215,7 @@ class StatusTest extends TestCase
      *
      * @return void
      */
+    #[DataProvider('getModulesToChangeDataProvider')]
     public function testGetModulesToChange(
         $firstEnabled,
         $secondEnabled,

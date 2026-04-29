@@ -76,7 +76,6 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
         if ($resourceConnection) {
             $reflection = new \ReflectionClass($resourceConnection);
             $dataProperty = $reflection->getProperty('mappedTableNames');
-            $dataProperty->setAccessible(true);
             $dataProperty->setValue($resourceConnection, []);
         }
     }

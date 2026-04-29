@@ -38,9 +38,7 @@ class MessageControllerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->lockFactory = $this->getMockBuilder(LockInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])->getMock();
+        $this->lockFactory = $this->createMock(LockInterfaceFactory::class);
 
         $objectManager = new ObjectManager($this);
         $this->messageController = $objectManager->getObject(
@@ -63,8 +61,7 @@ class MessageControllerTest extends TestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage("Property 'message_id' not found in properties.");
         $this->lockFactory->expects($this->once())->method('create');
-        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableArgumentCloning()->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $envelope->expects($this->once())->method('getProperties')->willReturn($properties);
 
         $this->messageController->lock($envelope, $consumerName);

@@ -21,6 +21,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         Attribute::class,
         [
             'frontend_input' => 'multiselect',
+            'backend_type' => 'text',
             'is_filterable_in_search' => true,
             'position' => 6,
             'additional_data' =>

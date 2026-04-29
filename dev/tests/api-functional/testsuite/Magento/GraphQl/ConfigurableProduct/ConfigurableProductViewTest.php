@@ -490,14 +490,14 @@ QUERY;
         $configurableAttributeOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
         $configurableAttributeOptionsData = [];
         foreach ($configurableAttributeOptions as $option) {
-            $configurableAttributeOptionsData[$option->getId()] = $option->getData();
-            $configurableAttributeOptionsData[$option->getId()]['id'] = $option->getId();
-            $configurableAttributeOptionsData[$option->getId()]['attribute_code']
+            $configurableAttributeOptionsData[$option->getId() ?? ''] = $option->getData();
+            $configurableAttributeOptionsData[$option->getId() ?? '']['id'] = $option->getId();
+            $configurableAttributeOptionsData[$option->getId() ?? '']['attribute_code']
                 = $option->getProductAttribute()->getAttributeCode();
-            unset($configurableAttributeOptionsData[$option->getId()]['values']);
+            unset($configurableAttributeOptionsData[$option->getId() ?? '']['values']);
             foreach ($option->getValues() as $value) {
-                $configurableAttributeOptionsData[$option->getId()]['values'][$value->getId()] = $value->getData();
-                $configurableAttributeOptionsData[$option->getId()]['values'][$value->getId()]['label']
+                $configurableAttributeOptionsData[$option->getId() ?? '']['values'][$value->getId() ?? ''] = $value->getData();
+                $configurableAttributeOptionsData[$option->getId() ?? '']['values'][$value->getId() ?? '']['label']
                     = $value->getLabel();
             }
         }

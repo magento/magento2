@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\BackpressureLogger;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class BackpressureLoggerTest extends TestCase
@@ -85,8 +86,8 @@ class BackpressureLoggerTest extends TestCase
 
     /**
      * testCreateConfigCacheRedis
-     * @dataProvider dataProviderCreateConfigCacheRedis
      */
+    #[DataProvider('dataProviderCreateConfigCacheRedis')]
     public function testCreateConfigCacheRedis(
         array $options,
         array $deploymentConfigReturnMap,

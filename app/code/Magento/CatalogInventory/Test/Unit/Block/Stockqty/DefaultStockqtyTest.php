@@ -206,7 +206,6 @@ class DefaultStockqtyTest extends TestCase
     protected function setDataArrayValue($key, $value)
     {
         $property = new \ReflectionProperty($this->block, '_data');
-        $property->setAccessible(true);
         $dataArray = $property->getValue($this->block);
         $dataArray[$key] = $value;
         $property->setValue($this->block, $dataArray);

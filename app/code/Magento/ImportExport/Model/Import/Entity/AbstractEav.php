@@ -166,9 +166,10 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     {
         /** @var $attribute \Magento\Eav\Model\Attribute */
         foreach ($this->_attributeCollection as $attribute) {
-            $this->_attributes[$attribute->getAttributeCode()] = [
+            $attributeCode = $attribute->getAttributeCode() ?? '';
+            $this->_attributes[$attributeCode] = [
                 'id' => $attribute->getId(),
-                'code' => $attribute->getAttributeCode(),
+                'code' => $attributeCode,
                 'table' => $attribute->getBackend()->getTable(),
                 'is_required' => $attribute->getIsRequired(),
                 'is_static' => $attribute->isStatic(),
@@ -176,7 +177,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
                 'options' => $this->getAttributeOptions($attribute),
             ];
-            $this->validColumnNames[] = $attribute->getAttributeCode();
+            $this->validColumnNames[] = $attributeCode;
         }
         return $this;
     }

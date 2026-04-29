@@ -14,6 +14,7 @@ use Magento\Framework\Backup\Nomedia;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/_files/io.php';
@@ -78,7 +79,7 @@ class NomediaTest extends TestCase
         $this->_backupDbMock->expects($this->any())->method('create')->willReturn(true);
 
         $this->_filesystemMock = $this->createMock(Filesystem::class);
-        $dirMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $dirMock = $this->createMock(WriteInterface::class);
         $this->_filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->willReturn($dirMock);
@@ -97,8 +98,8 @@ class NomediaTest extends TestCase
 
     /**
      * @param string $action
-     * @dataProvider actionProvider
      */
+    #[DataProvider('actionProvider')]
     public function testAction($action)
     {
         $this->_backupFactoryMock->expects($this->once())->method('create');

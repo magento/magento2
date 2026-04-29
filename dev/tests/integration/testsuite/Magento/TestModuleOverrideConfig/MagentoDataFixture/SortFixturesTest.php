@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoDataFixture;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoConfigFixtures can be placed into certain place using override config
@@ -34,8 +35,6 @@ class SortFixturesTest extends AbstractOverridesTest
     /**
      * Checks that fixtures can be placed to specific place according to config
      *
-     * @dataProvider sortFixturesProvider
-     *
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php
      * @magentoDataFixture Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php
@@ -43,6 +42,7 @@ class SortFixturesTest extends AbstractOverridesTest
      * @param array $sortedFixtures
      * @return void
      */
+    #[DataProvider('sortFixturesProvider')]
     public function testSortFixtures(array $sortedFixtures): void
     {
         $this->assertEquals($sortedFixtures, $this->fixtureCallStorage->getStorage());

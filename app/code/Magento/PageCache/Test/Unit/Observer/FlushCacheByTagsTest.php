@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\PageCache\Test\Unit\Observer;
 
 use Magento\Framework\App\Cache\Tag\Resolver;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -94,7 +95,7 @@ class FlushCacheByTagsTest extends TestCase
 
             $this->fullPageCacheMock->expects($this->once())
                 ->method('clean')
-                ->with(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags);
+                ->with(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, $expectedTags);
         }
 
         $result = $this->model->execute($observerObject);

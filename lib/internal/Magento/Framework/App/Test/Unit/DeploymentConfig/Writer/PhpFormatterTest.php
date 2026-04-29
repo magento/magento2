@@ -8,16 +8,17 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit\DeploymentConfig\Writer;
 
 use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PhpFormatterTest extends TestCase
 {
     /**
-     * @dataProvider formatWithCommentDataProvider
      * @param string[] $data
      * @param string[] $comments
      * @param string $expectedResult
      */
+    #[DataProvider('formatWithCommentDataProvider')]
     public function testFormat($data, $comments, $expectedResult)
     {
         $formatter = new PhpFormatter();

@@ -9,6 +9,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Helper;
 
 use Magento\Framework\ObjectManager\Helper\SortItems as SortItemsHelper;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SortItemsTest extends TestCase
 {
@@ -25,9 +26,8 @@ class SortItemsTest extends TestCase
     /**
      * @param array $input
      * @param array $expected
-     *
-     * @dataProvider evaluateDataProvider
-     */
+     *     */
+    #[DataProvider('evaluateDataProvider')]
     public function testSortItems(array $input, array $expected): void
     {
         $actual = $this->_model->sortItems($input);

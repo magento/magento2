@@ -9,6 +9,7 @@ namespace Magento\Backend\Test\Unit\Cron;
 
 use Magento\Backend\Cron\CleanCache;
 use Magento\Framework\App\Cache\Frontend\Pool;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
@@ -18,26 +19,18 @@ class CleanCacheTest extends TestCase
 {
     public function testCleanCache()
     {
-        $cacheBackendMock = $this->createMock(Zend_Cache_Backend_Interface::class);
         $cacheFrontendMock = $this->createMock(FrontendInterface::class);
         $frontendPoolMock = $this->createMock(Pool::class);
 
-        $cacheBackendMock->expects(
+        // Expect clean to be called on the frontend with CLEANING_MODE_OLD
+        $cacheFrontendMock->expects(
             $this->once()
         )->method(
             'clean'
         )->with(
-            \Zend_Cache::CLEANING_MODE_OLD,
+            CacheConstants::CLEANING_MODE_OLD,
             []
-        );
-
-        $cacheFrontendMock->expects(
-            $this->once()
-        )->method(
-            'getBackend'
-        )->willReturn(
-            $cacheBackendMock
-        );
+        )->willReturn(true);
 
         $callCount = 0;
         $frontendPoolMock->expects(

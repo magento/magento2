@@ -24,9 +24,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for updating shopping cart items
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCartItemsTest extends GraphQlAbstract
 {
@@ -153,9 +156,14 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     *  Test and check update with not enough quantity exception
+     *  Test and check update with not enough quantity exception and successful update
+     *
+     * @param int $updateQuantity
+     * @param bool $expectError
+     * @param string|null $expectedErrorCode
      */
     #[
+        DataProvider('dataProviderUpdateCartItemQuantity'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(CustomerFixture::class, ['email' => 'customer@example.com'], as: 'customer'),
         DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'cart'),
@@ -166,42 +174,77 @@ class UpdateCartItemsTest extends GraphQlAbstract
         DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
     ]
-    public function testUpdateWithNotEnoughQuantityException()
-    {
+    public function testUpdateCartItemsWithDifferentQuantity(
+        int $updateQuantity,
+        bool $expectError,
+        ?string $expectedErrorCode = null
+    ) {
         $productSku = $this->fixtures->get('product')->getSku();
         $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
         $query = $this->getCartQuery($maskedQuoteId);
         $cartResponse = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
-
         $this->assertArrayHasKey('cart', $cartResponse);
         $this->assertArrayHasKey('itemsV2', $cartResponse['cart']);
         $items = $cartResponse['cart']['itemsV2']['items'];
         $itemId = $items[0]['uid'];
         $this->assertNotEmpty($itemId);
-
         $updateCartItemsMutation = $this->updateCartItemsMutation(
             $maskedQuoteId,
             $itemId,
-            1000
+            $updateQuantity
         );
-        $updatedCartResponse = $this->graphQlMutation($updateCartItemsMutation, [], '', $this->getHeaderMap());
-        $this->assertArrayHasKey('errors', $updatedCartResponse['updateCartItems']);
-
-        $responseError = $updatedCartResponse['updateCartItems']['errors'][0];
-
-        $this->assertEquals('INSUFFICIENT_STOCK', $responseError['code']);
-        $this->assertEquals(
-            "Could not update the product with SKU {$productSku}: Not enough items for sale",
-            $responseError['message']
+        $updatedCartResponse = $this->graphQlMutation(
+            $updateCartItemsMutation,
+            [],
+            '',
+            $this->getHeaderMap()
         );
+        if ($expectError) {
+            $this->assertArrayHasKey('errors', $updatedCartResponse['updateCartItems']);
+            $this->assertNotEmpty($updatedCartResponse['updateCartItems']['errors']);
+            $responseError = $updatedCartResponse['updateCartItems']['errors'][0];
+            $this->assertEquals($expectedErrorCode, $responseError['code']);
+            $this->assertStringContainsString(
+                "Could not update the product with SKU {$productSku}: Not enough items for sale",
+                $responseError['message']
+            );
+        } else {
+            $this->assertEmpty($updatedCartResponse['updateCartItems']['errors']);
+            $this->assertArrayHasKey('cart', $updatedCartResponse['updateCartItems']);
+            $this->assertArrayHasKey('itemsV2', $updatedCartResponse['updateCartItems']['cart']);
+            $updatedItems = $updatedCartResponse['updateCartItems']['cart']['itemsV2']['items'];
+            $this->assertNotEmpty($updatedItems);
+            $this->assertEquals($updateQuantity, $updatedItems[0]['quantity']);
+        }
     }
 
-        /**
-         * Generates GraphQl query for retrieving cart items prices [original_item_price & original_row_total]
-         *
-         * @param string $customer_cart_id
-         * @return string
-         */
+    /**
+     * Data provider for testUpdateWithNotEnoughQuantityException
+     *
+     * @return array
+     */
+    public static function dataProviderUpdateCartItemQuantity(): array
+    {
+        return [
+            'not_enough_quantity' => [
+                'updateQuantity' => 1000,
+                'expectError' => true,
+                'expectedErrorCode' => 'INSUFFICIENT_STOCK',
+            ],
+            'enough_quantity' => [
+                'updateQuantity' => 50,
+                'expectError' => false,
+                'expectedErrorCode' => null,
+            ],
+        ];
+    }
+
+    /**
+     * Generates GraphQl query for retrieving cart items prices [original_item_price & original_row_total]
+     *
+     * @param string $customer_cart_id
+     * @return string
+     */
     private function getCartQuery(string $customer_cart_id): string
     {
         return <<<QUERY
@@ -366,10 +409,10 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @param string $errorCode
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @throws NoSuchEntityException
      */
+    #[DataProvider('dataProviderUpdateWithMissedRequiredParameters')]
     public function testUpdateWithMissedItemRequiredParameters(string $input, string $message, string $errorCode)
     {
         $quote = $this->quoteFactory->create();

@@ -290,7 +290,7 @@
         <data key="is_unique">false</data>
         <data key="is_searchable">false</data>
         <data key="is_visible">true</data>
-        <data key="backend_type">text</data>
+        <data key="backend_type">varchar</data>
         <data key="is_wysiwyg_enabled">false</data>
         <data key="is_visible_in_advanced_search">false</data>
         <data key="is_visible_on_front">true</data>
@@ -307,15 +307,18 @@
     </entity>
     <entity name="textProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">text</data>
+        <data key="backend_type">varchar</data>
         <data key="default_value" unique="suffix">defaultValue</data>
         <data key="is_required_admin">No</data>
     </entity>
     <entity name="dateProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">date</data>
+        <data key="backend_type">datetime</data>
         <data key="is_required_admin">No</data>
     </entity>
     <entity name="DatetimeProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">datetime</data>
+        <data key="backend_type">datetime</data>
         <data key="is_required_admin">No</data>
     </entity>
     <entity name="priceProductAttribute" extends="productAttributeWysiwyg" type="ProductAttribute">
@@ -324,6 +327,7 @@
     </entity>
     <entity name="dropdownProductAttribute" extends="productAttributeLayered" type="ProductAttribute">
         <data key="frontend_input">select</data>
+        <data key="backend_type">int</data>
         <data key="frontend_input_admin">Dropdown</data>
         <data key="is_required_admin">No</data>
         <data key="option1_admin" unique="suffix">opt1Admin</data>
@@ -449,6 +453,7 @@
     </entity>
     <entity name="dateAttributeWithNoProductSortListing" extends="productAttributeWysiwyg" type="ProductAttribute">
         <data key="frontend_input">date</data>
+        <data key="backend_type">datetime</data>
         <data key="used_for_sort_by">false</data>
     </entity>
     <entity name="yesNoAttributeWithNoProductSortListing" extends="productYesNoAttribute" type="ProductAttribute">
@@ -493,4 +498,3 @@
         <data key="option3">3</data>
     </entity>
 </entities>
-

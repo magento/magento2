@@ -16,6 +16,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test sending wish list.
@@ -158,10 +159,10 @@ class SendTest extends AbstractController
     /**
      * Test that messages with template injection attempts are rejected.
      *
-     * @dataProvider invalidMessageContentDataProvider
      * @param string $maliciousMessage
      * @return void
      */
+    #[DataProvider('invalidMessageContentDataProvider')]
     public function testSendWishListWithInvalidMessageContent(string $maliciousMessage): void
     {
         $this->customerSession->setCustomerId(1);
