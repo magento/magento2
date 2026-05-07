@@ -12,3 +12,4 @@ Yes,Yes
 "The encryption key has been changed.","The encryption key has been changed."
 "This is your new encryption key: %1. Be sure to write it down and take good care of it!","This is your new encryption key: %1. Be sure to write it down and take good care of it!"
 "Manage Encryption Key","Manage Encryption Key"
+"Please Note: The encryption key change feature will only be supported via CLI commands in future releases and this page will be removed.","Please Note: The encryption key change feature will only be supported via CLI commands in future releases and this page will be removed."

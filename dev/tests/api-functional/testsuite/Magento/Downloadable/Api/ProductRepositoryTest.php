@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Downloadable\Api;
@@ -12,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Class ProductRepositoryTest for testing ProductRepository interface with Downloadable Product
@@ -51,6 +51,7 @@ class ProductRepositoryTest extends WebapiAbstract
     protected function tearDown(): void
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
+        DataFixtureStorageManager::getStorage()->flush();
         parent::tearDown();
 
         $objectManager = Bootstrap::getObjectManager();

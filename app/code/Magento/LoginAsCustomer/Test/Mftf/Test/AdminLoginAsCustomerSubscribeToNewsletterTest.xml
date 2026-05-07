@@ -17,6 +17,7 @@
                 value="Verify that Admin can subscribe to newsletter using Login as Customer functionality"/>
             <severity value="AVERAGE"/>
             <group value="login_as_customer"/>
+            <group value="newsletter"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"

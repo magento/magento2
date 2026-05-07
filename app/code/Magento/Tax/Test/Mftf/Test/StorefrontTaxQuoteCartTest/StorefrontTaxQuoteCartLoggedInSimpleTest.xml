@@ -19,6 +19,8 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
 
             <!-- Fill in rules to display tax in the cart -->
@@ -39,7 +41,10 @@
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <see userInput="You saved the tax rule." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessageForSavingRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Fill out form for a new user with address -->
             <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
@@ -63,11 +68,14 @@
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{Simple_US_Customer_NY.email}}"/>
+            </actionGroup>
 
             <!-- Go to the tax rate page -->
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
-            <!-- Delete the two tax rates that were created -->
+            <!-- Delete the two created tax rates -->
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
@@ -80,7 +88,8 @@
 
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
-
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
         </after>

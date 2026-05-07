@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,6 +69,8 @@ class QueryProcessor
         string $operationName = null
     ): array {
         if (!$this->exceptionFormatter->shouldShowDetail()) {
+            $this->queryComplexityLimiter->validateQueryLength($source);
+            $this->queryComplexityLimiter->validateAliasCount($source);
             $this->queryComplexityLimiter->validateFieldCount($source);
             $this->queryComplexityLimiter->execute();
         }

@@ -34,7 +34,9 @@
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
             <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
             <!-- Reindex invalidated indices -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -48,7 +50,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set catalog/frontend/flat_catalog_category 0 " stepKey="setFlatCatalogCategory"/>
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setIndexersMode"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAgain"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAgain">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!--Verify Category is not listed in navigation menu-->
         <amOnPage url="/{{CatNotIncludeInMenu.urlKey}}.html"  stepKey="openCategoryPage"/>

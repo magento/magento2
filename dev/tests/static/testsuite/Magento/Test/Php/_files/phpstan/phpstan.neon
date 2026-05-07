@@ -36,6 +36,8 @@ parameters:
         - '#Constant TESTS_MODULES_PATH not found.#'
         - '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
         - '#Constant T_[A-Z_]+ not found.#'
+        # Ignore missing PHPUnit 10+ attribute classes when running under PHPUnit 9
+        - '#Attribute class PHPUnit\\Framework\\Attributes\\[a-zA-Z]+ does not exist\.#'
 
 
 services:

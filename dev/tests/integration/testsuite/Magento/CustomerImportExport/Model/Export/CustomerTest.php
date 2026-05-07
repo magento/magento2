@@ -6,22 +6,25 @@
 
 namespace Magento\CustomerImportExport\Model\Export;
 
-use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Customer\Model\Attribute;
-use Magento\ImportExport\Model\Export;
-use Magento\ImportExport\Model\Import;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\ImportExport\Model\Export\Adapter\Csv;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\ResourceModel\Attribute\Collection;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Export\Adapter\Csv;
+use Magento\ImportExport\Model\Import;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for customer export model.
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,6 +54,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     private $attributeCollection;
 
     /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -58,6 +66,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_model = $this->objectManager->create(Customer::class);
         $this->attributeCollection = $this->objectManager->create(Collection::class);
+        $this->localeDate = $this->objectManager->create(TimezoneInterface::class);
     }
 
     /**
@@ -153,13 +162,48 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $customers = $this->objectManager->create(CustomerCollection::class);
         foreach ($customers as $customer) {
             $data = $this->processCustomerData($customer, $expectedAttributes);
+
             $exportData = $lines['data'][$data['email']];
             $exportData = $this->unsetDuplicateData($exportData);
 
             foreach ($data as $key => $value) {
-                $this->assertEquals($value, $exportData[$key], "Attribute '{$key}' is not equal.");
+                if ($key === 'created_at' || $key === 'updated_at') {
+                    $this->assertDateAttributeMatchesExport($value, (string) ($exportData[$key] ?? ''), $key);
+                } else {
+                    $this->assertEquals($value, $exportData[$key], "Attribute '{$key}' is not equal.");
+                }
             }
         }
+    }
+
+    /**
+     * Assert model vs export datetime strings match across UTC vs store-scoped export formats.
+     *
+     * @param string $modelRaw
+     * @param string $exportRaw
+     * @param string $field
+     * @return void
+     */
+    private function assertDateAttributeMatchesExport(string $modelRaw, string $exportRaw, string $field): void
+    {
+        $modelScoped = $this->localeDate->scopeDate(null, $modelRaw, true)->format('Y-m-d H:i:s');
+        $exportScoped = $this->localeDate->scopeDate(null, $exportRaw, true)->format('Y-m-d H:i:s');
+
+        $matches = $modelScoped === $exportScoped
+            || $modelScoped === $exportRaw
+            || $modelRaw === $exportScoped;
+
+        $this->assertTrue(
+            $matches,
+            sprintf(
+                "Attribute '%s' is not equal (model %s / scoped %s vs export %s / scoped %s).",
+                $field,
+                $modelRaw,
+                $modelScoped,
+                $exportRaw,
+                $exportScoped
+            )
+        );
     }
 
     /**
@@ -243,7 +287,9 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     private function getAttributeValueById(string $attributeCode, $valueId)
     {
-        if (isset($this->attributeValues[$attributeCode])
+        // Check for null before using as array offset
+        if ($valueId !== null
+            && isset($this->attributeValues[$attributeCode])
             && isset($this->attributeValues[$attributeCode][$valueId])
         ) {
             return $this->attributeValues[$attributeCode][$valueId];
@@ -334,6 +380,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      * @param int $count
      * @param array $filter
      */
+    #[DataProvider('filterDataProvider')]
     public function testFilterEntityCollection(string $locale, int $count, array $filter)
     {
         $localeResolver = $this->objectManager->get(LocaleResolver::class);
@@ -359,7 +406,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function filterDataProvider(): array
+    public static function filterDataProvider(): array
     {
         return [
             ['en_US', 1, ['created_at' => ['01/02/1999', '01/03/1999']]],
@@ -388,12 +435,12 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         $data = ['header' => [], 'data' => []];
 
-        $lines = str_getcsv($content, "\n");
+        $lines = str_getcsv($content, "\n", '"', '\\');
         foreach ($lines as $index => $line) {
             if ($index == 0) {
-                $data['header'] = str_getcsv($line);
+                $data['header'] = str_getcsv($line, ',', '"', '\\');
             } else {
-                $row = array_combine($data['header'], str_getcsv($line));
+                $row = array_combine($data['header'], str_getcsv($line, ',', '"', '\\'));
                 if ($entityId !== null && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {

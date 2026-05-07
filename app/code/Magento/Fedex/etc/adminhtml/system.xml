@@ -40,12 +40,14 @@
                 </field>
                 <field id="production_webservices_url" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Web-Services URL (Production)</label>
+                    <backend_model>Magento\Fedex\Model\Config\Backend\FedexUrl</backend_model>
                     <depends>
                         <field id="sandbox_mode">0</field>
                     </depends>
                 </field>
                 <field id="sandbox_webservices_url" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Web-Services URL (Sandbox)</label>
+                    <backend_model>Magento\Fedex\Model\Config\Backend\FedexUrl</backend_model>
                     <depends>
                         <field id="sandbox_mode">1</field>
                     </depends>

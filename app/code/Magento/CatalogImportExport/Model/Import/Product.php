@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogImportExport\Model\Import;
@@ -25,6 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -48,8 +49,14 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+
+    /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -766,6 +773,16 @@ class Product extends AbstractEntity
     private $stockItemProcessor;
 
     /**
+     * @var File|null
+     */
+    private ?File $fileDriver;
+
+    /**
+     * @var DomainValidator|null
+     */
+    private ?DomainValidator $domainValidator;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -815,6 +832,7 @@ class Product extends AbstractEntity
      * @param LinkProcessor|null $linkProcessor
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
+     * @param DomainValidator|null $domainValidator
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -870,7 +888,8 @@ class Product extends AbstractEntity
         StockProcessor $stockProcessor = null,
         LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
-        ?StockItemProcessorInterface $stockItemProcessor = null
+        ?StockItemProcessorInterface $stockItemProcessor = null,
+        ?DomainValidator $domainValidator = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -936,6 +955,10 @@ class Product extends AbstractEntity
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
             ->get(StockItemProcessorInterface::class);
+        $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
+            ->get(File::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()
+            ->get(DomainValidator::class);
     }
 
     /**
@@ -1624,6 +1647,12 @@ class Product extends AbstractEntity
                         // the bunch of products will pass for the event with url_key column.
                         $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
                     }
+
+                    if (!empty($rowData[self::COL_NAME])) {
+                        // remove null byte character
+                        $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
+                    }
+
                     $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
@@ -1660,7 +1689,7 @@ class Product extends AbstractEntity
                         $prevAttributeSet,
                         $attributes
                     );
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (Skip $skip) {
                     // Product is skipped.  Go on to the next one.
                 }
@@ -2080,9 +2109,20 @@ class Product extends AbstractEntity
      */
     private function getRemoteFileContent(string $filename): string
     {
-        // phpcs:disable Magento2.Functions.DiscouragedFunction
-        $content = file_get_contents($filename);
-        // phpcs:enable Magento2.Functions.DiscouragedFunction
+        try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            if (stripos($filename, self::FILTER_CHAIN) !== false) {
+                return '';
+            }
+
+            if (!$this->domainValidator->isValid($filename)) {
+                return '';
+            }
+
+            $content = $this->fileDriver->fileGetContents($filename);
+        } catch (\Exception $e) {
+            $content = false;
+        }
         return $content !== false ? $content : '';
     }
 

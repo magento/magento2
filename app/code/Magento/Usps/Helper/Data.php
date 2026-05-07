@@ -8,12 +8,12 @@ namespace Magento\Usps\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
- * Usps data helper
+ * USPS Allowed shipping methods
  */
 class Data extends AbstractHelper
 {
     /**
-     * Available shipping methods
+     * Shipping methods
      *
      * @var array
      */
@@ -36,6 +36,14 @@ class Data extends AbstractHelper
         'usps_INT_14', // First-Class Mail International Large Envelope
         'usps_INT_16', // Priority Mail International Small Flat Rate Box
         'usps_INT_20', // Priority Mail International Small Flat Rate Envelope
+        '1058',         // Ground Advantage™
+        '4058',         // Ground Advantage™ HAZMAT
+        '6058',         // Ground Advantage™ Parcel locker
+        '2058',         // Ground Advantage™ Hold for pickup
+        '4096',         // Ground Advantage™ Cubic HAZMAT
+        '1096',         // Ground Advantage™ Cubic
+        '2096',         // Ground Advantage™ Cubic Hold for pickup
+        '6096',         // Ground Advantage™ Cubic Parcel locker
     ];
 
     /**

@@ -19,13 +19,16 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
+use Magento\GraphQl\Model\GraphQl\RequestConfiguration;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
 
@@ -34,13 +37,16 @@ use Magento\GraphQl\Model\Query\Logger\LoggerPool;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
 {
     /**
      * @var \Magento\Framework\Webapi\Response
-     * @deprecated 100.3.2
+     * @deprecated 100.3.2 No longer used for GraphQL responses; output is built with JsonFactory and HttpResponse.
+     * @see \Magento\Framework\Controller\Result\JsonFactory
+     * @see \Magento\Framework\App\Response\Http
      */
     private $response;
 
@@ -66,7 +72,9 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
-     * @deprecated 100.3.3 $contextFactory is used for creating Context object
+     * @deprecated 100.3.3 Shared resolver context is obsolete; use ContextFactoryInterface to create
+     *    a fresh context per request.
+     * @see \Magento\GraphQl\Model\Query\ContextFactoryInterface::create()
      */
     private $resolverContext;
 
@@ -111,6 +119,15 @@ class GraphQl implements FrontControllerInterface
     private $areaList;
 
     /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @var int
+     */
+    private int $maxRequestBodySize;
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -125,7 +142,10 @@ class GraphQl implements FrontControllerInterface
      * @param LogData|null $logDataHelper
      * @param LoggerPool|null $loggerPool
      * @param AreaList|null $areaList
+     * @param QueryParser|null $queryParser
+     * @param RequestConfiguration|null $requestConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         Response $response,
@@ -141,7 +161,9 @@ class GraphQl implements FrontControllerInterface
         ContextFactoryInterface $contextFactory = null,
         LogData $logDataHelper = null,
         LoggerPool $loggerPool = null,
-        AreaList $areaList = null
+        AreaList $areaList = null,
+        QueryParser $queryParser = null,
+        ?RequestConfiguration $requestConfiguration = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -157,6 +179,10 @@ class GraphQl implements FrontControllerInterface
         $this->logDataHelper = $logDataHelper ?: ObjectManager::getInstance()->get(LogData::class);
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
         $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+        $requestConfiguration = $requestConfiguration
+            ?: ObjectManager::getInstance()->get(RequestConfiguration::class);
+        $this->maxRequestBodySize = $requestConfiguration->getMaxRequestBodySize();
     }
 
     /**
@@ -172,16 +198,20 @@ class GraphQl implements FrontControllerInterface
 
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
-        $data = $this->getDataFromRequest($request);
+        $data = [];
         $result = [];
 
         $schema = null;
         try {
+            $data = $this->getDataFromRequest($request);
+
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
 
             $query = $data['query'] ?? '';
             $variables = $data['variables'] ?? null;
+
+            $this->queryParser->parse($query);
 
             // We must extract queried field names to avoid instantiation of unnecessary fields in webonyx schema
             // Temporal coupling is required for performance optimization
@@ -221,17 +251,24 @@ class GraphQl implements FrontControllerInterface
      */
     private function getDataFromRequest(RequestInterface $request): array
     {
-        /** @var Http $request */
-        if ($request->isPost()) {
-            $data = $this->jsonSerializer->unserialize($request->getContent());
-        } elseif ($request->isGet()) {
-            $data = $request->getParams();
-            $data['variables'] = isset($data['variables']) ?
-                $this->jsonSerializer->unserialize($data['variables']) : null;
-            $data['variables'] = is_array($data['variables']) ?
-                $data['variables'] : null;
-        } else {
-            return [];
+        $data = [];
+        try {
+            /** @var Http $request */
+            if ($request->isPost() && $request->getContent()) {
+                $content = $request->getContent();
+                if ($this->maxRequestBodySize > 0 && strlen($content) > $this->maxRequestBodySize) {
+                    throw new GraphQlInputException(__('Request body is too large.'));
+                }
+                $data = $this->jsonSerializer->unserialize($request->getContent());
+            } elseif ($request->isGet()) {
+                $data = $request->getParams();
+                $data['variables'] = isset($data['variables']) ?
+                    $this->jsonSerializer->unserialize($data['variables']) : null;
+                $data['variables'] = is_array($data['variables']) ?
+                    $data['variables'] : null;
+            }
+        } catch (\InvalidArgumentException $e) {
+            throw new GraphQlInputException(__('Unable to parse the request.'), $e);
         }
 
         return $data;

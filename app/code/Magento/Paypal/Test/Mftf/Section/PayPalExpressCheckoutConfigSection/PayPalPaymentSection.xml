@@ -25,5 +25,6 @@
         <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
+        <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
     </section>
 </sections>

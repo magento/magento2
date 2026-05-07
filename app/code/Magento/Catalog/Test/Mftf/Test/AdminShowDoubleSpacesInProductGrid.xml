@@ -24,8 +24,10 @@
             <createData entity="ApiSimpleProductWithDoubleSpaces" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="cronRun"/>
-            <magentoCLI command="cron:run --group=index" stepKey="cronRunSecondTime"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="cronRun">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="cronRunSecondTime"/>
         </before>
 
         <after>

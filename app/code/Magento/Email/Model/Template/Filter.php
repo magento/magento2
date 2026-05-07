@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,12 +69,14 @@ class Filter extends Template
     /**
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
+     * @see Session ID's in URL
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
+     * @see Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
 
@@ -281,6 +283,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -404,6 +407,7 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -425,6 +429,10 @@ class Filter extends Template
                 continue;
             }
             $block->setDataUsingMethod($k, $v);
+        }
+
+        if (!$block->hasData('cache_key')) {
+            $block->setDataUsingMethod('cache_key', $block->getCacheKey());
         }
 
         if (isset($blockParameters['output'])) {
@@ -688,6 +696,7 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -707,6 +716,7 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -736,6 +746,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {

@@ -62,7 +62,7 @@ define([
 
         it('Check onShiftedValueChange function', function () {
             spyOn(moment, 'tz').and.callThrough();
-            model.onShiftedValueChange('2016-12-23 9:11 PM');
+            model.onShiftedValueChange('12/23/2016 9:11 PM');
             expect(moment.tz).toHaveBeenCalled();
         });
 

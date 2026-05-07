@@ -808,3 +808,6 @@ If set YES Email field will be required during Admin order creation for new Cust
 "This creditmemo no longer exists.","This creditmemo no longer exists."
 "Add to address book","Add to address book"
 "Logo for PDF Print-outs","Logo for PDF Print-outs"
+"User is not authorized to edit comment.","User is not authorized to edit comment."
+"Cannot edit comment.","Cannot edit comment."
+"Update Comment","Update Comment"

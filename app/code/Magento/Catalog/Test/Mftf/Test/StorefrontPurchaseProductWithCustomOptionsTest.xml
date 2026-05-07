@@ -93,18 +93,13 @@
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
-
-        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
-        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
-        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
-
+        <comment userInput="BIC Workaround" stepKey="waitForCartItemsClickable"/>
+        <comment userInput="BIC Workaround" stepKey="waitForCartItemsActive"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
         <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
-
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
-
         <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
-
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionField.title}}" stepKey="seeProductOptionFieldInput1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeProductOptionAreaInput1"/>
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{productWithOptions.file}}" stepKey="seeProductOptionFileInput1"/>

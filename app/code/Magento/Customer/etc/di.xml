@@ -585,4 +585,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <plugin name="anonymousAsyncCustomerRequest"
+                type="Magento\Customer\Plugin\AsyncRequestCustomerGroupAuthorization"
+        />
+    </type>
 </config>

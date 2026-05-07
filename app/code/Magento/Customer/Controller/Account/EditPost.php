@@ -233,11 +233,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== null) {
-                $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
-            }
-
             try {
                 // whether a customer enabled change email option
                 $isEmailChanged = $this->processChangeEmailRequest($customer);
@@ -452,44 +447,6 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         foreach ($customer->getAddresses() as $address) {
             $addressModel = $this->addressRegistry->retrieve($address->getId());
             $addressModel->setShouldIgnoreValidation(true);
-        }
-    }
-
-    /**
-     * Removes file attribute from customer entity and file from filesystem
-     *
-     * @param CustomerInterface $customerCandidateDataObject
-     * @param string $attributeToDelete
-     * @return void
-     * @throws FileSystemException
-     */
-    private function deleteCustomerFileAttribute(
-        CustomerInterface $customerCandidateDataObject,
-        string $attributeToDelete
-    ) : void {
-        if ($attributeToDelete !== '') {
-            if (strpos($attributeToDelete, ',') !== false) {
-                $attributes = explode(',', $attributeToDelete);
-            } else {
-                $attributes[] = $attributeToDelete;
-            }
-            foreach ($attributes as $attr) {
-                $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
-                if ($attributeValue!== null) {
-                    if ($attributeValue->getValue() !== '') {
-                        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-                        $fileName = $attributeValue->getValue();
-                        $path = $mediaDirectory->getAbsolutePath('customer' . $fileName);
-                        if ($fileName && $mediaDirectory->isFile($path)) {
-                            $mediaDirectory->delete($path);
-                        }
-                        $customerCandidateDataObject->setCustomAttribute(
-                            $attr,
-                            ''
-                        );
-                    }
-                }
-            }
         }
     }
 }

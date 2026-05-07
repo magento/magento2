@@ -21,6 +21,11 @@ use PHPUnit\Framework\TestCase;
 class WeeeTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var Weee
      */
     protected $model;
@@ -145,7 +150,12 @@ class WeeeTest extends TestCase
 
         //verify invoice data
         foreach ($expectedResults['invoice_data'] as $key => $value) {
-            $this->assertEquals($value, $this->invoice->getData($key), 'Invoice data field ' . $key . ' is incorrect');
+            $this->assertEqualsWithDelta(
+                $value,
+                $this->invoice->getData($key),
+                self::EPSILON,
+                'Invoice data field ' . $key . ' is incorrect'
+            );
         }
         //verify invoice item data
         foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
@@ -153,11 +163,17 @@ class WeeeTest extends TestCase
             foreach ($itemData as $key => $value) {
                 if ($key == 'tax_ratio') {
                     $taxRatio = json_decode($invoiceItem->getData($key), true);
-                    $this->assertEquals($value['weee'], $taxRatio['weee'], "Tax ratio is incorrect");
+                    $this->assertEqualsWithDelta(
+                        $value['weee'],
+                        $taxRatio['weee'],
+                        self::EPSILON,
+                        "Tax ratio is incorrect"
+                    );
                 } else {
-                    $this->assertEquals(
+                    $this->assertEqualsWithDelta(
                         $value,
                         $invoiceItem->getData($key),
+                        self::EPSILON,
                         'Invoice item field ' . $key . ' is incorrect'
                     );
                 }

@@ -3,30 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\ShipmentCommentInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class ShipmentAddCommentTest
+ * Class Shipment Comment Test
  */
 class ShipmentAddCommentTest extends WebapiAbstract
 {
     /**
      * Service read name
      */
-    const SERVICE_READ_NAME = 'salesShipmentCommentRepositoryV1';
+    public const SERVICE_READ_NAME = 'salesShipmentCommentRepositoryV1';
 
     /**
      * Service version
      */
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * Shipment increment id
      */
-    const SHIPMENT_INCREMENT_ID = '100000001';
+    public const SHIPMENT_INCREMENT_ID = '100000001';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -57,7 +59,7 @@ class ShipmentAddCommentTest extends WebapiAbstract
             ShipmentCommentInterface::CREATED_AT => null,
             ShipmentCommentInterface::PARENT_ID => $shipment->getId(),
             ShipmentCommentInterface::IS_VISIBLE_ON_FRONT => 1,
-            ShipmentCommentInterface::IS_CUSTOMER_NOTIFIED => 1,
+            ShipmentCommentInterface::IS_CUSTOMER_NOTIFIED => 1
         ];
 
         $requestData = ['entity' => $commentData];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -116,7 +116,11 @@ class Config
      */
     public function __destruct()
     {
-        $this->closeConnection();
+        try {
+            $this->closeConnection();
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+        }
     }
 
     /**
@@ -165,11 +169,19 @@ class Config
      */
     public function getChannel()
     {
-        if (!isset($this->connection) || !isset($this->channel)) {
+        if (!isset($this->connection)) {
             $this->connection = $this->createConnection();
-
+        }
+        if (!isset($this->channel)
+            || !$this->channel->getConnection()
+            || !$this->channel->getConnection()->isConnected()
+        ) {
+            if (!$this->connection->isConnected()) {
+                $this->connection->reconnect();
+            }
             $this->channel = $this->connection->channel();
         }
+
         return $this->channel;
     }
 
@@ -212,5 +224,15 @@ class Config
             $this->connection->close();
             unset($this->connection);
         }
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return string
+     */
+    public function getConnectionName(): string
+    {
+        return $this->connectionName;
     }
 }

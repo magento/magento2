@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -566,7 +566,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->with(
                     new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
                     [
-                        'cookies' => $_COOKIE,
+                        'cookies' => array_keys($_COOKIE),
                         'user-agent' => $userAgent
                     ]
                 );

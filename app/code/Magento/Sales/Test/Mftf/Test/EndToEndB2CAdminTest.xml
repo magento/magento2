@@ -31,13 +31,18 @@
         <!--Prerequisites-->
         <!--Create store view to ensure multiple store views-->
         <comment userInput="Create prerequisite store view" stepKey="createStoreViewComment" before="createStoreView"/>
-        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" before="navigateToNewOrderPage">
+            <argument name="customStore" value="customStore"/>
+        </actionGroup>
 
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment" before="navigateToNewOrderPage"/>
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
 
-        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminSelectStoreDuringOrderCreationActionGroup" stepKey="selectCustomStore" after="navigateToNewOrderPage">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="selectCustomStore"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder" after="scrollToTopOfOrderFormPage">
             <argument name="product" value="SimpleProduct"/>
@@ -289,6 +294,8 @@
         <!--Delete store view created as prerequisites-->
         <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-        <magentoCron groups="index" stepKey="reindex" after="deleteStoreView"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
+            <argument name="indices" value=""/>
+        </actionGroup>
     </test>
 </tests>

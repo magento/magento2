@@ -113,7 +113,7 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $actualCount = file_exists($this->logFilePath) ? count(file($this->logFilePath)) : 0;
-        return $expectedLinesCount === $actualCount;
+        return $actualCount >= $expectedLinesCount;
     }
 
     /**

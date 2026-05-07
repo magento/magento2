@@ -13,5 +13,6 @@
         <element name="smartButtonPayPalFrame" type="iframe" selector=".component-frame" timeout="10"/>
         <element name="PayPalPaymentRadio" type="radio" selector="input#paypal_express.radio" timeout="30"/>
         <element name="PayPalBtn" type="radio" selector=".paypal-button.paypal-button-number-0" timeout="30"/>
+        <element name="ContinuePayPalBtn" type="radio" selector="//span[text()='Continue to PayPal']"/>
     </section>
 </sections>

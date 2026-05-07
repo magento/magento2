@@ -342,6 +342,7 @@ class Uploader
      * @return void
      *
      * @deprecated 100.0.8
+     * @see Nothing
      */
     protected function chmod($file)
     {
@@ -385,6 +386,7 @@ class Uploader
      *
      * @deprecated
      * @return LoggerInterface
+     * @see Nothing
      */
     private function getLogger(): LoggerInterface
     {
@@ -721,6 +723,7 @@ class Uploader
      * @return void
      * @throws \InvalidArgumentException
      * @throws FileSystemException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function validateFileId(array $fileId): void
     {
@@ -728,7 +731,7 @@ class Uploader
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+            if (is_uploaded_file($tmpName) && preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
                 $allowedFolders = [
                     sys_get_temp_dir(),
                     $this->directoryList->getPath(DirectoryList::SYS_TMP),
@@ -831,6 +834,7 @@ class Uploader
      * @param string $fileName
      * @return string
      * @deprecated 101.0.4
+     * @see Nothing
      */
     public static function getDispretionPath($fileName)
     {
@@ -866,6 +870,7 @@ class Uploader
      *
      * @deprecated
      * @return DriverInterface
+     * @see Nothing
      */
     private function getFileDriver(): DriverInterface
     {

@@ -15,6 +15,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
  * The operation must be done in one transaction
  *
  * @api
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -50,7 +52,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $writer;
 
     /**
-     * Random
+     * Random Generator
      *
      * @var \Magento\Framework\Math\Random
      * @since 100.0.4
@@ -99,11 +101,14 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string|null $key
      * @return null|string
      * @throws \Exception
+     * @deprecated
+     * @see Extensible Data ReEncryption Mechanism Implemented
      */
     public function changeEncryptionKey($key = null)
     {
         // prepare new key, encryptor and new configuration segment
         if (!$this->writer->checkIfWritable()) {
+            //phpcs:ignore
             throw new \Exception(__('Deployment configuration file is not writable.'));
         }
 
@@ -138,6 +143,8 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather all encrypted system config values and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Data ReEncryption Mechanism Implemented
      */
     protected function _reEncryptSystemConfigurationValues()
     {
@@ -173,6 +180,8 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Data ReEncryption Mechanism Implemented
      */
     protected function _reEncryptCreditCardNumbers()
     {

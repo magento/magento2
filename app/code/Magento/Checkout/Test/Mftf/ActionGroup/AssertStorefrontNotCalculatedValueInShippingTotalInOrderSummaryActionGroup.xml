@@ -16,6 +16,7 @@
         <arguments>
             <argument name="value" defaultValue="Not yet calculated" type="string"/>
         </arguments>
+        <waitForPageLoad time="60" stepKey="waitForThePageToLoadInSixtySeconds"/>
         <waitForElementVisible selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" time="30" stepKey="waitForShippingTotalToBeVisible"/>
         <see selector="{{CheckoutOrderSummarySection.shippingTotalNotYetCalculated}}" userInput="{{value}}" stepKey="assertShippingTotalIsNotYetCalculated"/>
     </actionGroup>

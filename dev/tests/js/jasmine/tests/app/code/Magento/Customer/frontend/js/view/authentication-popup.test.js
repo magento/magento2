@@ -49,10 +49,11 @@ define(['squire'], function (Squire) {
         try {
             injector.clean();
             injector.remove();
-        } catch (e) {}
+        } catch (e) { // eslint-disable-line no-unused-vars
+        }
     });
 
-    describe('Magento_Customer/js/view/authentication-popup', function () {
+    describe('Magento_Customer/js/view/authentication-popup isActive method', function () {
         describe('"isActive" method', function () {
             it('Check for return value.', function () {
                 mocks['Magento_Customer/js/customer-data'].get.and.returnValue(function () {
@@ -63,7 +64,7 @@ define(['squire'], function (Squire) {
         });
     });
 
-    describe('Magento_Customer/js/view/authentication-popup', function () {
+    describe('Magento_Customer/js/view/authentication-popup setModalElement method', function () {
         describe('"setModalElement" method', function () {
             it('Check for return value.', function () {
                 expect(obj.setModalElement()).toBeUndefined();

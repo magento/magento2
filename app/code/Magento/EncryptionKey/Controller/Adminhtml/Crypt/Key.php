@@ -8,6 +8,9 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
 
 /**
  * Encryption key changer controller
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
+ * @phpcs:ignoreFile
  */
 abstract class Key extends \Magento\Backend\App\Action
 {

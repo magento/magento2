@@ -32,48 +32,50 @@ class Address extends AbstractEav
      * Names that begins with underscore is not an attribute.
      * This name convention is for to avoid interference with same attribute name.
      */
-    const COLUMN_EMAIL = '_email';
+    public const COLUMN_EMAIL = '_email';
 
-    const COLUMN_WEBSITE = '_website';
+    public const COLUMN_WEBSITE = '_website';
 
-    const COLUMN_ADDRESS_ID = '_entity_id';
+    public const COLUMN_ADDRESS_ID = '_entity_id';
 
     /**#@-*/
 
     /**
      * Country column name for index value
      */
-    const COLUMN_COUNTRY_ID = 'country_id';
+    public const COLUMN_COUNTRY_ID = 'country_id';
 
     /**
      * Name of region id column
      */
-    const COLUMN_REGION_ID = 'region_id';
+    public const COLUMN_REGION_ID = 'region_id';
 
     /**#@+
      * Particular columns that contains of customer default addresses
      */
-    const COLUMN_NAME_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_NAME_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_NAME_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_NAME_DEFAULT_SHIPPING = '_address_default_shipping_';
 
     /**#@-*/
 
     /**#@+
      * Attribute collection name
      */
-    const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
+    public const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Address\Attribute\Collection::class;
 
     /**#@-*/
 
     /**#@+
      * XML path to page size parameter
      */
-    const XML_PATH_PAGE_SIZE = 'export/customer_page_size/address';
+    public const XML_PATH_PAGE_SIZE = 'export/customer_page_size/address';
 
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var string[]
+     */
     protected $_permanentAttributes = [self::COLUMN_WEBSITE, self::COLUMN_EMAIL, self::COLUMN_ADDRESS_ID];
 
     /**
@@ -209,13 +211,16 @@ class Address extends AbstractEav
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _getHeaderColumns()
     {
+        $attributeCodes = $this->_getExportAttributeCodes();
+        sort($attributeCodes, SORT_STRING);
+
         return array_merge(
             $this->_permanentAttributes,
-            $this->_getExportAttributeCodes(),
+            $attributeCodes,
             array_keys(self::$_defaultAddressAttributeMapping)
         );
     }
@@ -326,11 +331,12 @@ class Address extends AbstractEav
             ['customer' => $this->_customerCollection->getTable('customer_entity')],
             ['entity_id', 'email', 'store_id', 'website_id', 'default_billing', 'default_shipping']
         )->where(
-            'customer.entity_id IN (?)', $selectIds
+            'customer.entity_id IN (?)',
+            $selectIds
         );
 
         if ($pageNum > 0) {
-           $select->limitPage($pageNum, $this->_pageSize);
+            $select->limitPage($pageNum, $this->_pageSize);
         }
 
         return $this->_customerCollection->getConnection()->fetchAssoc($select);

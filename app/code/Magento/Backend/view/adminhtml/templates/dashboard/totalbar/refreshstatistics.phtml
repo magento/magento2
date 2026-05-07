@@ -1,28 +1,37 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+use Magento\Backend\Block\Template;
+use Magento\Framework\Escaper;
+
 ?>
 <div class="page-actions">
     <div class="page-actions-inner">
         <div class="page-actions-buttons">
             <?= $block->getChildHtml() ?>
 
-            <form class="action-element"
-                  action="<?= $block->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
-                  method="post">
-                <input
-                    name="form_key"
-                    type="hidden"
-                    value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
-                <button
-                    class="action-primary"
-                    type="submit"
-                    title="<?= $block->escapeHtmlAttr(__('Reload Data')) ?>">
-                    <?= $block->escapeHtml(__('Reload Data')) ?>
-                </button>
-            </form>
+            <?php if ($block->getAuthorization()->isAllowed('Magento_Reports::statistics_refresh')): ?>
+                <form class="action-element"
+                      action="<?= $escaper->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
+                      method="post">
+                    <input
+                        name="form_key"
+                        type="hidden"
+                        value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>"/>
+                    <button
+                        class="action-primary"
+                        type="submit"
+                        title="<?= $escaper->escapeHtmlAttr(__('Reload Data')) ?>">
+                        <?= $escaper->escapeHtml(__('Reload Data')) ?>
+                    </button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 </div>

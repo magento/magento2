@@ -93,4 +93,28 @@
         <data key="path">tax/sales_display/full_summary</data>
         <data key="value">0</data>
     </entity>
+    <entity name="DisplaySubtotal">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplaySubtotal">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisplayShippingAmount">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplayShippingAmount">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="EnableOrderTotalWithoutTax">
+        <data key="path">tax/sales_display/grandtotal</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableOrderTotalWithoutTax">
+        <data key="path">tax/sales_display/grandtotal</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

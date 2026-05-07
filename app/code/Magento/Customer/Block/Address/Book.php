@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Address;
 
@@ -13,7 +13,6 @@ use Magento\Customer\Block\Address\Grid as AddressesGrid;
  * Customer address book block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Book extends \Magento\Framework\View\Element\Template
@@ -164,9 +163,11 @@ class Book extends \Magento\Framework\View\Element\Template
      */
     public function getAdditionalAddresses()
     {
+        $addresses = [];
         try {
             $addresses = $this->addressesGrid->getAdditionalAddresses();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $addresses = [];
         }
         return empty($addresses) ? false : $addresses;
     }
@@ -198,6 +199,7 @@ class Book extends \Magento\Framework\View\Element\Template
         try {
             $customer = $this->currentCustomer->getCustomer();
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $customer = null;
         }
         return $customer;
     }
@@ -227,7 +229,17 @@ class Book extends \Magento\Framework\View\Element\Template
     public function getAddressById($addressId)
     {
         try {
-            return $this->addressRepository->getById($addressId);
+            $customer = $this->getCustomer();
+            if ($customer === null) {
+                return null;
+            }
+
+            $address = $this->addressRepository->getById($addressId);
+            if ((int) $address->getCustomerId() === (int) $customer->getId()) {
+                return $address;
+            }
+
+            return null;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }

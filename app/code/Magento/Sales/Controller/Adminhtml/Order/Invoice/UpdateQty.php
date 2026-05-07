@@ -18,11 +18,19 @@ use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View as AbstractView;
 
 /**
- * Class UpdateQty
+ * Class UpdateQty to update invoice items qty
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateQty extends AbstractView implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
     /**
      * @var JsonFactory
      */

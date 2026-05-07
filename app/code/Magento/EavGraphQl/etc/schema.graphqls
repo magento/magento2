@@ -41,3 +41,13 @@ input AttributeInput @doc(description: "Defines the attribute characteristics to
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     entity_type: String @doc(description: "The type of entity that defines the attribute.")
 }
+
+input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
+    attribute_code: String! @doc(description: "The code of the attribute.")
+    value: String @doc(description: "The value assigned to the attribute.")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
+}
+
+input AttributeInputSelectedOption @doc(description: "Specifies selected option for a select or multiselect attribute value.") {
+    value: String! @doc(description: "The attribute option value.")
+}

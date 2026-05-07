@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -141,9 +141,77 @@ class InputParamsResolver
         } else {
             $inputData = $this->request->getRequestData();
         }
+        $inputData = $this->filterInputData($inputData);
+
         $this->validateParameters($serviceClassName, $serviceMethodName, array_keys($route->getParameters()));
 
         return $this->paramsOverrider->override($inputData, $route->getParameters());
+    }
+
+    /**
+     * Validates InputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputData(array $inputData): array
+    {
+        if ($inputData === [] || array_is_list($inputData)) {
+            return $this->filterInputListData($inputData);
+        }
+
+        return $this->filterAssociativeInputData($inputData);
+    }
+
+    /**
+     * Filter input data for list arrays by recursing nested arrays.
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputListData(array $inputData): array
+    {
+        foreach ($inputData as $key => $value) {
+            if (is_array($value)) {
+                $inputData[$key] = $this->filterInputData($value);
+            }
+        }
+        return $inputData;
+    }
+
+    /**
+     * Filter input data for associative arrays by removing normalized duplicates.
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterAssociativeInputData(array $inputData): array
+    {
+        $checkArr = [];
+        $result = null;
+
+        foreach ($inputData as $key => $value) {
+            $normalizedKey = is_string($key) ? strtolower(str_replace('_', '', $key)) : $key;
+            $processedValue = is_array($value) ? $this->filterInputData($value) : $value;
+
+            if (!isset($checkArr[$normalizedKey])) {
+                $checkArr[$normalizedKey] = true;
+                if ($result !== null) {
+                    $result[$key] = $processedValue;
+                } elseif ($processedValue !== $value) {
+                    $inputData[$key] = $processedValue;
+                }
+                continue;
+            }
+
+            if ($result === null) {
+                $result = $inputData;
+            }
+
+            unset($result[$key]);
+        }
+
+        return $result ?? $inputData;
     }
 
     /**

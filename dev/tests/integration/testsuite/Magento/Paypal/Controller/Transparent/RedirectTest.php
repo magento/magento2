@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Controller\Transparent;
 
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Tests PayPal transparent redirect controller.
@@ -86,7 +86,7 @@ class RedirectTest extends AbstractController
         libxml_use_internal_errors(true);
         if (!$document->loadHTML($response)) {
             throw new \InvalidArgumentException(
-                __('The response format was incorrect. Should be valid HTML')
+                (string)__('The response format was incorrect. Should be valid HTML')
             );
         }
         libxml_use_internal_errors(false);

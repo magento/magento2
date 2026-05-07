@@ -11,4 +11,11 @@
     <entity name="backendDataOne" type="backend">
         <data key="backendConfigName">data</data>
     </entity>
+    <entity name="WebdriverKey">
+        <data key="tabKey">[\Facebook\WebDriver\WebDriverKeys::TAB]</data>
+    </entity>
+    <entity name="productAttributeColour" type="productAttribute">
+        <data key="gold">gold</data>
+        <data key="black">black</data>
+    </entity>
 </entities>

@@ -3,30 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\CreditmemoCommentInterface as Comment;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
- * Class CreditmemoAddCommentTest
+ * Class Credit memo Comment Test
  */
 class CreditmemoAddCommentTest extends WebapiAbstract
 {
     /**
      * Service read name
      */
-    const SERVICE_READ_NAME = 'salesCreditmemoCommentRepositoryV1';
+    public const SERVICE_READ_NAME = 'salesCreditmemoCommentRepositoryV1';
 
     /**
      * Service version
      */
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * Creditmemo increment id
      */
-    const CREDITMEMO_INCREMENT_ID = '100000001';
+    public const CREDITMEMO_INCREMENT_ID = '100000001';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -61,7 +63,7 @@ class CreditmemoAddCommentTest extends WebapiAbstract
             Comment::CREATED_AT => null,
             Comment::PARENT_ID => $creditmemo->getId(),
             Comment::IS_VISIBLE_ON_FRONT => 1,
-            Comment::IS_CUSTOMER_NOTIFIED => 1,
+            Comment::IS_CUSTOMER_NOTIFIED => 1
         ];
 
         $requestData = ['entity' => $commentData];

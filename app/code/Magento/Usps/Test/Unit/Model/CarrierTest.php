@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Usps\Test\Unit\Model;
@@ -90,11 +91,13 @@ class CarrierTest extends TestCase
     private $config = [
         'carriers/usps/allowed_methods' => '0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,' .
             '34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,' .
-            'INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26',
+            'INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26,1058,4058,6058,2058,4096,' .
+            '1096,2096,6096',
         'carriers/usps/showmethod' => 1,
         'carriers/usps/debug' => 1,
         'carriers/usps/userid' => 'test',
         'carriers/usps/mode' => 0,
+        'carriers/usps/usps_type' => 'USPS_XML',
     ];
 
     /**
@@ -345,7 +348,7 @@ class CarrierTest extends TestCase
         $this->config = array_merge(
             $this->config,
             [
-                'carriers/usps/free_method' => 3
+                'carriers/usps/free_method' => 3,
             ]
         );
         $requestData = array_merge(

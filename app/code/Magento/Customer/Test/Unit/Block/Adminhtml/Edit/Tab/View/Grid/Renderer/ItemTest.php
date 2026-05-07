@@ -115,6 +115,7 @@ class ItemTest extends TestCase
      */
     public function optionHtmlProvider()
     {
+        //phpcs:disable
         return [
             [
                 2,
@@ -123,9 +124,9 @@ class ItemTest extends TestCase
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">
                                 <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                                 <dt>testLabel2</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                             </dl>
                         </xhtml>
 HTML
@@ -137,11 +138,11 @@ HTML
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">
                                 <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                             </dl>
                         </xhtml>
 HTML
             ],
-        ];
+        ];//phpcs:enable
     }
 }

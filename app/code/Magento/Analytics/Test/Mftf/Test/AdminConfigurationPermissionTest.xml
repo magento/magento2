@@ -35,7 +35,7 @@
         <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="clickFoundUsername"/>
         <waitForPageLoad time="30" stepKey="wait2"/>
         <seeInField selector="{{AdminEditUserSection.usernameTextField}}" userInput="$$noReportUser.username$$" stepKey="seeUsernameInField"/>
-        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="fillCurrentPassword"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
 
         <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRoleTab"/>

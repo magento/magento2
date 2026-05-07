@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Coupon;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
+use Magento\SalesRule\Model\Service\CouponUsagePublisher;
 
 /**
  * Updates the coupon usages
@@ -28,15 +31,24 @@ class UpdateCouponUsages
     private $updateInfoFactory;
 
     /**
+     * @var CouponUsagePublisher
+     */
+    private $couponUsagePublisher;
+
+    /**
      * @param CouponUsageProcessor $couponUsageProcessor
      * @param UpdateInfoFactory $updateInfoFactory
+     * @param ?CouponUsagePublisher $couponUsagePublisher
      */
     public function __construct(
         CouponUsageProcessor $couponUsageProcessor,
-        UpdateInfoFactory $updateInfoFactory
+        UpdateInfoFactory $updateInfoFactory,
+        ?CouponUsagePublisher $couponUsagePublisher = null
     ) {
         $this->couponUsageProcessor = $couponUsageProcessor;
         $this->updateInfoFactory = $updateInfoFactory;
+        $this->couponUsagePublisher = $couponUsagePublisher
+            ?? ObjectManager::getInstance()->get(CouponUsagePublisher::class);
     }
 
     /**
@@ -59,11 +71,13 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$subject->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        if ($subject->getOrigData('coupon_code') !== null) {
+        if ($subject->getOrigData('coupon_code') !== null && $subject->getStatus() !== Order::STATE_CANCELED) {
             $updateInfo->setCouponAlreadyApplied(true);
         }
 
-        $this->couponUsageProcessor->process($updateInfo);
+        $this->couponUsagePublisher->publish($updateInfo);
+        $this->couponUsageProcessor->updateCustomerRulesUsages($updateInfo);
+        $this->couponUsageProcessor->updateCouponUsages($updateInfo);
 
         return $subject;
     }

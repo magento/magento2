@@ -21,9 +21,11 @@
         <amOnPage stepKey="navigateToNewOrderPage" url="{{AdminOrderCreatePage.url}}"/>
         <click stepKey="chooseCustomer" selector="{{AdminOrdersGridSection.customerInOrdersSection(customer.firstname)}}"/>
         <waitForPageLoad stepKey="waitForStoresPageOpened"/>
-        <click stepKey="chooseStore" selector="{{AdminOrderStoreScopeTreeSection.storeForOrder(storeView.name)}}"/>
-        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementClickable stepKey="waitForStoreClickable" selector="{{AdminOrderStoreScopeTreeSection.storeOption(storeView.name)}}"/>
+        <selectOption selector="{{AdminOrderStoreScopeTreeSection.storeTree}}" userInput="{{storeView.name}}" stepKey="chooseStore"/>
         <waitForPageLoad stepKey="waitForStoreToAppear"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementClickable selector="{{OrdersGridSection.addProducts}}" stepKey="waitForAddProductsButton" />
         <click selector="{{OrdersGridSection.addProducts}}" stepKey="clickOnAddProducts"/>
         <waitForPageLoad stepKey="waitForProductsListForOrder"/>
         <click selector="{{AdminOrdersGridSection.productForOrder(product.sku)}}" stepKey="chooseTheProduct"/>
