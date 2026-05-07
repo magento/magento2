@@ -30,6 +30,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -55,6 +56,11 @@ class Product extends AbstractEntity
 {
     private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+
+    /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -776,6 +782,16 @@ class Product extends AbstractEntity
     private ?SkuStorage $skuStorage;
 
     /**
+     * @var File|null
+     */
+    private ?File $fileDriver;
+
+    /**
+     * @var DomainValidator|null
+     */
+    private ?DomainValidator $domainValidator;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -826,6 +842,7 @@ class Product extends AbstractEntity
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
      * @param SkuStorage|null $skuStorage
+     * @param DomainValidator|null $domainValidator
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -882,7 +899,8 @@ class Product extends AbstractEntity
         LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
-        ?SkuStorage $skuStorage = null
+        ?SkuStorage $skuStorage = null,
+        ?DomainValidator $domainValidator = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -950,6 +968,10 @@ class Product extends AbstractEntity
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
                 ->get(StockItemProcessorInterface::class);
+        $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
+            ->get(File::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()
+            ->get(DomainValidator::class);
     }
 
     /**
@@ -2118,7 +2140,15 @@ class Product extends AbstractEntity
     {
         try {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $content = file_get_contents($filename);
+            if (stripos($filename, self::FILTER_CHAIN) !== false) {
+                return '';
+            }
+
+            if (!$this->domainValidator->isValid($filename)) {
+                return '';
+            }
+
+            $content = $this->fileDriver->fileGetContents($filename);
         } catch (\Exception $e) {
             $content = false;
         }

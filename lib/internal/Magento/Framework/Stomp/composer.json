@@ -1,0 +1,27 @@
+{
+    "name": "magento/framework-stomp",
+    "description": "N/A",
+    "type": "magento2-library",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.3-p9",
+    "require": {
+        "magento/framework": "103.0.*",
+        "php": "~8.1.0||~8.2.0||~8.3.0",
+        "stomp-php/stomp-php": "^5.1"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Framework\\Stomp\\": ""
+        }
+    }
+}
+

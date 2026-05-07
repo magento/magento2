@@ -17,6 +17,7 @@
             <testCaseId value="AC-7106" />
             <group value="sales"/>
             <group value="async_operations" />
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

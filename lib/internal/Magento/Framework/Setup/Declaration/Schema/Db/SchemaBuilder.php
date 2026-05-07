@@ -1,14 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe.
+ * All rights reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
+use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\ReaderComposite;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
@@ -49,27 +51,49 @@ class SchemaBuilder
     private $tables;
 
     /**
+     * @var ReaderComposite
+     */
+    private $readerComposite;
+
+    /**
      * Constructor.
      *
      * @param ElementFactory $elementFactory
      * @param DbSchemaReaderInterface $dbSchemaReader
      * @param Sharding $sharding
+     * @param ReaderComposite $readerComposite
      */
     public function __construct(
         ElementFactory $elementFactory,
         DbSchemaReaderInterface $dbSchemaReader,
-        Sharding $sharding
+        Sharding $sharding,
+        ReaderComposite $readerComposite
     ) {
         $this->elementFactory = $elementFactory;
         $this->dbSchemaReader = $dbSchemaReader;
         $this->sharding = $sharding;
+        $this->readerComposite = $readerComposite;
     }
 
     /**
      * @inheritdoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function build(Schema $schema)
     {
+        $data = $this->readerComposite->read(FileResolverByModule::ALL_MODULES);
+        $tablesWithJsonTypeField = [];
+        if (isset($data['table'])) {
+            foreach ($data['table'] as $keyTable => $tableColumns) {
+                foreach ($tableColumns['column'] as $keyColumn => $columnData) {
+                    if ($columnData['type'] == 'json') {
+                        $tablesWithJsonTypeField[$keyTable] = $keyColumn;
+                    }
+                }
+            }
+        }
+
         foreach ($this->sharding->getResources() as $resource) {
             foreach ($this->dbSchemaReader->readTables($resource) as $tableName) {
                 $columns = [];
@@ -98,6 +122,10 @@ class SchemaBuilder
 
                 // Process columns
                 foreach ($columnsData as $columnData) {
+                    if (isset($tablesWithJsonTypeField[$tableName])
+                        && $tablesWithJsonTypeField[$tableName] === $columnData['name']) {
+                        $columnData['type'] = 'json';
+                    }
                     $columnData['table'] = $table;
                     $column = $this->elementFactory->create($columnData['type'], $columnData);
                     $columns[$column->getName()] = $column;

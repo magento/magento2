@@ -109,7 +109,7 @@ abstract class AbstractItemTest extends TestCase
             if (isset($option['option_type'])
                 && $option['option_type'] == ProductCustomOptionInterface::OPTION_GROUP_FILE) {
                 $value = explode(" ", $option['print_value']);
-                $options[$key]['xpath'] .= "/a[contains(text(), '{$value[0]}')]";
+                $options[$key]['xpath'] .= "[contains(text(), '{$value[0]}')]";
             } else {
                 $options[$key]['xpath'] .= "[contains(text(), '{$option['value']}')]";
             }

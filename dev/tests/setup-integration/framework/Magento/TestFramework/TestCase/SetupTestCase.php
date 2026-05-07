@@ -96,6 +96,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
 
     /**
      * Get db key to decide which file to use.
+     * 2.4-develop: isMysqlGte8029(), then isMariaDbEngine() + getMariaDbSuffixKey(), then strpos fallback.
      *
      * @return string
      */
@@ -106,20 +107,25 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         }
 
         $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
-        foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
-            if ($this->sqlVersionProvider->isMysqlGte8029()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
-                break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10427()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_4_27_VERSION];
-                break;
-            } elseif ($this->sqlVersionProvider->isMariaDBGte10611()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MARIA_DB_10_6_11_VERSION];
-                break;
-            } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
-                $this->dbKey = $suffix;
-                break;
+
+        try {
+            foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
+                if ($this->sqlVersionProvider->isMysqlGte8029()) {
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
+                    break;
+                }
+                if ($this->sqlVersionProvider->isMariaDbEngine()) {
+                    $suffixKey = $this->sqlVersionProvider->getMariaDbSuffixKey();
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey] ?? $this->dbKey;
+                    break;
+                }
+                if (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+                    $this->dbKey = $suffix;
+                    break;
+                }
             }
+        } catch (\Exception $e) {
+            $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
         }
 
         return $this->dbKey;

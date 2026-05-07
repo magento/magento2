@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <group value="customer"/>
             <group value="cloud"/>
+            <group value="newsletter"/>
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>

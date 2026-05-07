@@ -93,7 +93,8 @@ class StringBinary implements DbDefinitionProcessorInterface
             return $data;
         }
 
-        $isHex = preg_match('`^0x([a-f0-9]+)$`i', $data['default'] ?? '', $hexMatches);
+        $default = $data['default'] ?? '';
+        $isHex = preg_match('/^(?:0x|x)([a-f0-9]+)$/i', $default, $hexMatches);
 
         if ($this->isBinaryHex($matches['type'], (bool)$isHex)) {
             $data['default'] = hex2bin($hexMatches[1]);

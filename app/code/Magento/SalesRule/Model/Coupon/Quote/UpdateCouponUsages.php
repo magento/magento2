@@ -70,7 +70,8 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        $this->couponUsagePublisher->publish($updateInfo);
+        $this->processor->updateCouponUsages($updateInfo);
         $this->processor->updateCustomerRulesUsages($updateInfo);
+        $this->couponUsagePublisher->publish($updateInfo);
     }
 }

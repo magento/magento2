@@ -8,6 +8,8 @@ namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt;
 
 /**
  * Encryption key changer controller
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  */
 abstract class Key extends \Magento\Backend\App\Action
 {
@@ -16,5 +18,5 @@ abstract class Key extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_EncryptionKey::crypt_key';
+    public const ADMIN_RESOURCE = 'Magento_EncryptionKey::crypt_key';
 }

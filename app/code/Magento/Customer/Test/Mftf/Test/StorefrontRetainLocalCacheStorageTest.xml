@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="AC-3635"/>
             <group value="customer"/>
+            <group value="guest_checkout"/>
             <skip>
             <issueId value="ACQE-4352"/>
             </skip>

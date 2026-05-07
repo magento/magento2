@@ -11,6 +11,8 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
  * Encryption key change form block
  *
  * @api
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic

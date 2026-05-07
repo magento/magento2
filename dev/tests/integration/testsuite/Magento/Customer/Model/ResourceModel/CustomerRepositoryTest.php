@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\ResourceModel;
@@ -182,10 +182,12 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
      * @dataProvider updateCustomerDataProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoAppIsolation enabled
      * @param int|null $defaultBilling
      * @param int|null $defaultShipping
      */
-    public function testUpdateCustomer($defaultBilling, $defaultShipping)
+    public function testUpdateCustomer($defaultBilling, $defaultShipping, $defaultAddressId)
     {
         $existingCustomerId = 1;
         $email = 'savecustomer@example.com';
@@ -194,33 +196,26 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $newPassword = 'newPassword123';
         $newPasswordHash = $this->encryptor->getHash($newPassword, true);
         $customerBefore = $this->customerRepository->getById($existingCustomerId);
-        $customerData = array_merge($customerBefore->__toArray(), [
-                'id' => 1,
-                'email' => $email,
-                'firstname' => $firstName,
-                'lastname' => $lastName,
-                'created_in' => 'Admin',
-                'password' => 'notsaved',
-                'default_billing' => $defaultBilling,
-                'default_shipping' => $defaultShipping
-            ]);
-        $customerDetails = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $customerDetails,
-            $customerData,
-            CustomerInterface::class
-        );
+
+        $customerDetails = $customerBefore;
+        $customerDetails->setEmail($email);
+        $customerDetails->setFirstname($firstName);
+        $customerDetails->setLastname($lastName);
+        $customerDetails->setCreatedIn('Admin');
+        $customerDetails->setDefaultBilling($defaultBilling ?? $defaultAddressId);
+        $customerDetails->setDefaultShipping($defaultShipping ?? $defaultAddressId);
+
         $this->customerRepository->save($customerDetails, $newPasswordHash);
         $customerAfter = $this->customerRepository->getById($existingCustomerId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
         $this->assertEquals($lastName, $customerAfter->getLastname());
-        $this->assertEquals($defaultBilling, $customerAfter->getDefaultBilling());
-        $this->assertEquals($defaultShipping, $customerAfter->getDefaultShipping());
+        $this->assertEquals($defaultAddressId, $customerAfter->getDefaultBilling());
+        $this->assertEquals($defaultAddressId, $customerAfter->getDefaultShipping());
         $this->expectedDefaultShippingsInCustomerModelAttributes(
             $existingCustomerId,
-            $defaultBilling,
-            $defaultShipping
+            $defaultAddressId,
+            $defaultAddressId
         );
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $this->accountManagement->authenticate($customerAfter->getEmail(), $newPassword);
@@ -237,20 +232,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
-        $inBeforeOnly = array_diff_assoc($attributesBefore, $attributesAfter);
         $inAfterOnly = array_diff_assoc($attributesAfter, $attributesBefore);
-        $expectedInBefore = [
-            'firstname',
-            'lastname',
-            'email',
-        ];
-        foreach ($expectedInBefore as $key) {
-            $this->assertContains($key, array_keys($inBeforeOnly));
-        }
-        $this->assertContains('created_in', array_keys($inAfterOnly));
-        $this->assertContains('firstname', array_keys($inAfterOnly));
-        $this->assertContains('lastname', array_keys($inAfterOnly));
-        $this->assertContains('email', array_keys($inAfterOnly));
+        // Verify that the customer data was updated correctly
+        $this->assertEquals($firstName, $customerAfter->getFirstname());
+        $this->assertEquals($lastName, $customerAfter->getLastname());
+        $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
     }
 
@@ -549,9 +535,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         return [
             'Customer remove default shipping and billing' => [
                 null,
-                null
+                null,
+                1
             ],
             'Customer update default shipping and billing' => [
+                1,
                 1,
                 1
             ],

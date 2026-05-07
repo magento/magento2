@@ -50,6 +50,9 @@ class Table implements FactoryInterface
     private static array $defaultCharset = [
         '10.4.' => 'utf8',
         '10.6.' => 'utf8mb3',
+        '10.11.' => 'utf8mb3',
+        '11.4.' => 'utf8mb3',
+        '11.8.' => 'utf8mb3',
         'mysql_8_29' => 'utf8mb3',
         'default' => 'utf8'
     ];
@@ -60,6 +63,9 @@ class Table implements FactoryInterface
     private static array $defaultCollation = [
         '10.4.' => 'utf8_general_ci',
         '10.6.' => 'utf8mb3_general_ci',
+        '10.11.' => 'utf8mb3_general_ci',
+        '11.4.' => 'utf8mb3_general_ci',
+        '11.8.' => 'utf8mb3_general_ci',
         'mysql_8_29' => 'utf8mb3_general_ci',
         'default' => 'utf8_general_ci'
     ];

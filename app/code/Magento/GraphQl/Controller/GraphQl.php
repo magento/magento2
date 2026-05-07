@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
+use GraphQL\Error\SyntaxError;
+use GraphQL\Language\Source;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\App\FrontControllerInterface;
@@ -19,6 +21,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
 use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
@@ -29,12 +32,17 @@ use Magento\Framework\Webapi\Response;
 use Magento\GraphQl\Helper\Query\Logger\LogData;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQl\Model\Query\Logger\LoggerPool;
+use Magento\GraphQl\Model\GraphQl\RequestConfiguration;
 
 /**
  * Front controller for web API GraphQL area.
  *
+ * Default max POST body size is defined on {@see RequestConfiguration::DEFAULT_MAX_REQUEST_BODY_SIZE}.
+ *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
@@ -119,6 +127,11 @@ class GraphQl implements FrontControllerInterface
     private $queryParser;
 
     /**
+     * @var int
+     */
+    private int $maxRequestBodySize;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
@@ -134,6 +147,7 @@ class GraphQl implements FrontControllerInterface
      * @param LoggerPool|null $loggerPool
      * @param AreaList|null $areaList
      * @param QueryParser|null $queryParser
+     * @param RequestConfiguration|null $requestConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +165,8 @@ class GraphQl implements FrontControllerInterface
         LogData $logDataHelper = null,
         LoggerPool $loggerPool = null,
         AreaList $areaList = null,
-        QueryParser $queryParser = null
+        QueryParser $queryParser = null,
+        ?RequestConfiguration $requestConfiguration = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -168,6 +183,9 @@ class GraphQl implements FrontControllerInterface
         $this->loggerPool = $loggerPool ?: ObjectManager::getInstance()->get(LoggerPool::class);
         $this->areaList = $areaList ?: ObjectManager::getInstance()->get(AreaList::class);
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+        $requestConfiguration = $requestConfiguration
+            ?: ObjectManager::getInstance()->get(RequestConfiguration::class);
+        $this->maxRequestBodySize = $requestConfiguration->getMaxRequestBodySize();
     }
 
     /**
@@ -183,11 +201,12 @@ class GraphQl implements FrontControllerInterface
 
         $statusCode = 200;
         $jsonResult = $this->jsonFactory->create();
-        $data = $this->getDataFromRequest($request);
+        $data = [];
         $result = [];
 
         $schema = null;
         try {
+            $data = $this->getDataFromRequest($request);
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
             $query = $data['query'] ?? '';
@@ -233,8 +252,19 @@ class GraphQl implements FrontControllerInterface
     private function getDataFromRequest(RequestInterface $request): array
     {
         /** @var Http $request */
-        if ($request->isPost()) {
-            $data = $this->jsonSerializer->unserialize($request->getContent());
+        if ($request->isPost() && $request->getContent()) {
+            $content = $request->getContent();
+            if ($this->maxRequestBodySize > 0 && strlen($content) > $this->maxRequestBodySize) {
+                throw new GraphQlInputException(
+                    __('Request body is too large.')
+                );
+            }
+            try {
+                $data = $this->jsonSerializer->unserialize($content);
+            } catch (\InvalidArgumentException) {
+                $source = new Source($content);
+                throw new SyntaxError($source, 0, 'Unable to parse the request.');
+            }
         } elseif ($request->isGet()) {
             $data = $request->getParams();
             $data['variables'] = isset($data['variables']) ?

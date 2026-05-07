@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Amqp;
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use PhpAmqpLib\Channel\AMQPChannel;
 use PhpAmqpLib\Connection\AbstractConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Reads the Amqp config in the deployed environment configuration
@@ -18,7 +19,7 @@ use PhpAmqpLib\Connection\AbstractConnection;
  * @api
  * @since 103.0.0
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * Queue config key
@@ -224,5 +225,23 @@ class Config
             $this->connection->close();
             unset($this->connection);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->closeConnection();
+    }
+
+    /**
+     * Get connection name
+     *
+     * @return string
+     */
+    public function getConnectionName(): string
+    {
+        return $this->connectionName;
     }
 }

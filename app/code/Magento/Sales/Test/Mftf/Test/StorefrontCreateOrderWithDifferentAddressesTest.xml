@@ -14,6 +14,7 @@
             <severity value="MINOR"/>
             <group value="sales"/>
             <group value="cloud"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>

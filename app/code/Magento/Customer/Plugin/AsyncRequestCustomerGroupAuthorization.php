@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Plugin;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\AsynchronousOperations\Model\MassSchedule;
@@ -25,6 +24,13 @@ class AsyncRequestCustomerGroupAuthorization
      * @see _isAllowed()
      */
     public const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
+     * account create topic name
+     *
+     * @var string
+     */
+    private const TOPIC_NAME = 'async.magento.customer.api.accountmanagementinterface.createaccount.post';
 
     /**
      * @var AuthorizationInterface
@@ -60,6 +66,11 @@ class AsyncRequestCustomerGroupAuthorization
         string       $groupId = null,
         string       $userId = null
     ) {
+        // only apply the plugin on account create.
+        if ($topic !== self::TOPIC_NAME) {
+            return;
+        }
+
         foreach ($entitiesArray as $entityParams) {
             foreach ($entityParams as $entity) {
                 if ($entity instanceof CustomerInterface) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,12 +16,18 @@
             <argument name="product"/>
             <argument name="productCount" type="string"/>
         </arguments>
-
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButtonToClick"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontProductPageSection.messagesBlock}}" userInput="You added {{product.name}} to your shopping cart." stepKey="assertSuccessMessage"/>
         <seeLink stepKey="assertLinkToShoppingCart" url="{{_ENV.MAGENTO_BASE_URL}}checkout/cart/" userInput="shopping cart"/>
-        <waitForText userInput="{{productCount}}" selector="{{StorefrontMinicartSection.productCount}}" time="30" stepKey="assertProductCount"/>
+        <comment userInput="BIC workaround" stepKey="assertProductCount"/>
+        <waitForElementVisible selector="{{StorefrontMinicartSection.productCount}}" stepKey="waitForCounterElement"/>
+        <grabTextFrom selector="{{StorefrontMinicartSection.productCount}}" stepKey="grabCounterText"/>
+        <assertEquals stepKey="assertCounterText">
+            <expectedResult type="string">{{productCount}}</expectedResult>
+            <actualResult type="string">$grabCounterText</actualResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

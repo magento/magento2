@@ -1,9 +1,9 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Shipping\Model\Shipping;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -61,6 +61,8 @@ class LabelGenerator
     }
 
     /**
+     * Create shipping label for shipment
+     *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @param RequestInterface $request
      * @return void
@@ -76,7 +78,9 @@ class LabelGenerator
         $shipment->setPackages($request->getParam('packages'));
         $response = $this->labelFactory->create()->requestToShipment($shipment);
         if ($response->hasErrors()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__($response->getErrors()));
+            $errors = $response->getErrors();
+            $errorMessage = is_array($errors) ? implode('; ', $errors) : (string) $errors;
+            throw new \Magento\Framework\Exception\LocalizedException(__($errorMessage));
         }
         if (!$response->hasInfo()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Response info is not exist.'));
@@ -104,11 +108,12 @@ class LabelGenerator
     }
 
     /**
+     * Add tracking numbers to shipment
+     *
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @param array $trackingNumbers
      * @param string $carrierCode
      * @param string $carrierTitle
-     *
      * @return void
      */
     private function addTrackingNumbersToShipment(
@@ -161,6 +166,7 @@ class LabelGenerator
      *
      * @param string $imageString
      * @return \Zend_Pdf_Page|false
+     * @SuppressWarnings(PHPMD.ErrorControlOperator)
      */
     public function createPdfPageFromImageString($imageString)
     {
@@ -169,6 +175,7 @@ class LabelGenerator
             DirectoryList::TMP
         );
         $directory->create();
+        // phpcs:disable Magento2.Functions.DiscouragedFunction, Generic.PHP.NoSilencedErrors
         $image = @imagecreatefromstring($imageString);
         if (!$image) {
             return false;
@@ -189,6 +196,7 @@ class LabelGenerator
         if (is_resource($image)) {
             imagedestroy($image);
         }
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         return $page;
     }
 }

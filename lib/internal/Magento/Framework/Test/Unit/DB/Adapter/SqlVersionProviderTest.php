@@ -50,7 +50,8 @@ class SqlVersionProviderTest extends TestCase
     private $supportedVersionPatterns = [
         'MySQL-8' => '^8\.0\.',
         'MySQL-5.7' => '^5\.7\.',
-        'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.'
+        'MariaDB-(10.2-10.11)' => '^10\.([2-9]|10|11)\.',
+        'MariaDB-(11.4-11.8)' => '^11\.(4|8)\.'
     ];
 
     /**
@@ -94,7 +95,7 @@ class SqlVersionProviderTest extends TestCase
      */
     public function testSqlVersionProviderThrowsExceptionWhenNonSupportedEngineUsed(): void
     {
-        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.7.0-MariaDB-1:10.7.0+maria~bionic']);
+        $this->prepareSqlProviderAndMySQLAdapter(['version' => '10.12.0-MariaDB-1:10.12.0+maria~bionic']);
         $this->expectExceptionMessage('Current version of RDBMS is not supported.');
         $this->expectException(ConnectionException::class);
         $this->sqlVersionProvider->getSqlVersion();
@@ -106,6 +107,10 @@ class SqlVersionProviderTest extends TestCase
     public function executeDataProvider(): array
     {
         return [
+            'MariaDB-10.11' => [
+                ['version' => '10.11.11-MariaDB'],
+                '10.11.'
+            ],
             'MariaDB-10.6' => [
                 ['version' => '10.6.12-MariaDB'],
                 '10.6.'
@@ -125,6 +130,14 @@ class SqlVersionProviderTest extends TestCase
             'MySQL-8' => [
                 ['version' => '8.0.19'],
                 SqlVersionProvider::MYSQL_8_0_VERSION,
+            ],
+            'MariaDB-11.4' => [
+                ['version' => '11.4.2-MariaDB'],
+                SqlVersionProvider::MARIA_DB_11_4_VERSION,
+            ],
+            'MariaDB-11.8' => [
+                ['version' => '11.8.2-MariaDB'],
+                SqlVersionProvider::MARIA_DB_11_8_VERSION,
             ],
             'Percona' => [
                 ['version' => '5.7.29-32'],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
@@ -314,12 +314,15 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         /** @var ProductInterface $product */
         $product = $productRepository->get($sku, true, null, true);
-        $options = $product->getExtensionAttributes()->getBundleProductOptions();
+        $extension = $product->getExtensionAttributes();
+        $options = $extension->getBundleProductOptions();
         $options[0]->setRequired($isOption1Required);
         $options[1]->setRequired($isOption2Required);
-        $extension = $product->getExtensionAttributes();
         $extension->setBundleProductOptions($options);
+        $stockItem = $extension->getStockItem();
+        $stockItem->setUseConfigManageStock(1);
         $product->setExtensionAttributes($extension);
+        $product->setName(self::TEST_PRODUCT_NAME);
         $productRepository->save($product);
 
         $stockItem = $this->getStockItem((int) $product->getId());

@@ -7,10 +7,14 @@
 
 namespace Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+
 /**
  * Encryption Key Save Controller
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  */
-class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
+class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -58,6 +62,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             if (0 == $this->getRequest()->getPost('generate_random')) {
                 $key = $this->getRequest()->getPost('crypt_key');
                 if (empty($key)) {
+                    //phpcs:ignore
                     throw new \Exception(__('Please enter an encryption key.'));
                 }
                 $this->encryptor->validateKey($key);

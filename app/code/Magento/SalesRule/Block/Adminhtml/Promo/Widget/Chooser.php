@@ -106,7 +106,7 @@ class Chooser extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getRowClickCallback()
     {
-        $chooserJsObject = $this->getId();
+        $chooserJsObject = $this->_escaper->escapeJs($this->getId());
         $js = '
             function (grid, event) {
                 var trElement = Event.findElement(event, "tr");

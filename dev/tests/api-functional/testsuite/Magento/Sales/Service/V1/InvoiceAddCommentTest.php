@@ -3,25 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Service\V1;
 
 use Magento\Sales\Api\Data\InvoiceCommentInterface;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-/**
- * Class InvoiceAddCommentTest
- */
 class InvoiceAddCommentTest extends WebapiAbstract
 {
     /**
      * Service read name
      */
-    const SERVICE_READ_NAME = 'salesInvoiceCommentRepositoryV1';
+    public const SERVICE_READ_NAME = 'salesInvoiceCommentRepositoryV1';
 
     /**
      * Service version
      */
-    const SERVICE_VERSION = 'V1';
+    public const SERVICE_VERSION = 'V1';
 
     /**
      * Test invoice add comment service
@@ -41,7 +40,7 @@ class InvoiceAddCommentTest extends WebapiAbstract
             InvoiceCommentInterface::CREATED_AT => null,
             InvoiceCommentInterface::PARENT_ID => $invoice->getId(),
             InvoiceCommentInterface::IS_VISIBLE_ON_FRONT => 1,
-            InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED => 1,
+            InvoiceCommentInterface::IS_CUSTOMER_NOTIFIED => 1
         ];
 
         $requestData = ['entity' => $commentData];

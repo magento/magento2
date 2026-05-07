@@ -13,7 +13,9 @@
             <description>Clicks 'Customize and Add to Cart' on a Storefront Bundled Product page.</description>
         </annotations>
 
-        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
+        <waitForPageLoad stepKey="waitForBundleProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" time="90" stepKey="waitForCustomizeAndAddToCartButton"/>
+        <scrollTo selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="scrollToCustomizeButton"/>
         <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickOnCustomizeAndAddToCartButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

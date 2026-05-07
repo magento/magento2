@@ -216,7 +216,7 @@
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
         <!--Create category under Default Category-->
-        <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="clickDefaultCategory"/>
         <actionGroup ref="CheckCategoryNameIsRequiredFieldActionGroup" stepKey="checkCategoryNameIsRequired"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
@@ -232,7 +232,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
-                     selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
+                     selector2="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}"
                      stepKey="dragAndDropCategory"/>
         <waitForPageLoad time="30" stepKey="waitForMoveConfirmation"/>
         <see selector="{{AdminCategoryModalSection.title}}" userInput="Warning Message" stepKey="seeMoveConfirmationModal"/>
@@ -244,6 +244,9 @@
         <!--Admin deletes category-->
         <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToDeleteCategory"/>
+        <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="cleanSimpleSubCategory">
+            <argument name="categoryName" value="SimpleSubCategory"/>
+        </actionGroup>
         <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>
@@ -251,9 +254,6 @@
         <!--@TODO Move cleanup to "after" when MQE-830 is resolved-->
         <!--Clean up categories-->
         <comment userInput="Clean up categories" stepKey="cleanupCategoriesComment"/>
-        <actionGroup ref="DeleteCategoryActionGroup" stepKey="cleanSimpleSubCategory">
-            <argument name="categoryEntity" value="SimpleSubCategory"/>
-        </actionGroup>
         <!--Clean up products-->
         <comment userInput="Clean up simple product" stepKey="cleanUpSimpleProduct"/>
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">

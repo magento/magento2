@@ -415,13 +415,27 @@ class Session extends \Magento\Framework\Session\SessionManager
             }
             $this->_quote = $customerQuote;
         } else {
-            $this->getQuote()->getBillingAddress();
-            $this->getQuote()->getShippingAddress();
-            $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+            $quote = $this->getQuote();
+            $quote->getBillingAddress();
+            $quote->getShippingAddress();
+            $quote->setCustomer($this->_customerSession->getCustomerDataObject())
                 ->setCustomerIsGuest(0)
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals();
-            $this->quoteRepository->save($this->getQuote());
+            $this->quoteRepository->save($quote);
+
+            // Delete quote_id_mask when converting guest cart to customer cart
+            try {
+                $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'quote_id');
+                if ($quoteIdMask->getId()) {
+                    $quoteIdMask->delete();
+                }
+            } catch (\Exception $e) {
+                $this->logger->warning(
+                    'Failed to delete quote_id_mask during guest-to-customer conversion',
+                    ['quote_id' => $quote->getId(), 'exception' => $e->getMessage()]
+                );
+            }
         }
         return $this;
     }

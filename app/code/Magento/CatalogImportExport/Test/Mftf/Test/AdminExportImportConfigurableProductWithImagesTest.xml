@@ -205,6 +205,7 @@
         </actionGroup>
 
         <!-- Go to "Configurations" section: configurations exist and have images -->
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToConfigurationsSection"/>
         <seeNumberOfElements selector="{{AdminProductFormConfigurationsSection.currentVariationsRows}}" userInput="2" stepKey="seeNumberOfRows"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigFirstChildProduct.name$$" stepKey="seeFirstProductNameInField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigSecondChildProduct.name$$" stepKey="seeSecondProductNameInField"/>
@@ -212,8 +213,9 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="$$createConfigSecondChildProduct.sku$$" stepKey="seeSecondProductSkuInField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="$$createConfigFirstChildProduct.price$$" stepKey="seeFirstProductPriceInField"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="$$createConfigSecondChildProduct.price$$" stepKey="seeSecondProductPriceInField"/>
-        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(MagentoLogo.fileName)}}" stepKey="seeFirstProductImageInField"/>
-        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(TestImage.fileName)}}" stepKey="seeSecondProductImageInField"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariationsProductImage('1')}}" stepKey="waitForFirstVariationImage"/>
+        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(MagentoLogo.filename)}}" stepKey="seeFirstProductImageInField"/>
+        <seeElement selector="{{AdminProductFormConfigurationsSection.variationImageSource(TestImage.filename)}}" stepKey="seeSecondProductImageInField"/>
 
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>

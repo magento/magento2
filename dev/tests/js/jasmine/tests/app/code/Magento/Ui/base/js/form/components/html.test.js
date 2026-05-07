@@ -2,16 +2,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/* eslint-disable */
 define([
     'underscore',
     'uiRegistry',
+    'jquery',
     'Magento_Ui/js/form/components/html'
-], function (_, registry, Constr) {
+], function (_, registry, $, Constr) {
     'use strict';
 
     describe('Magento_Ui/js/form/components/html', function () {
+        var originalJQueryAjax;
 
+        beforeEach(function () {
+            // Store and ensure $.ajax exists
+            originalJQueryAjax = $.ajax;
+            if (!$.ajax) {
+                $.ajax = jasmine.createSpy('ajax').and.callFake(function(options) {
+                    //eslint-disable-line max-nested-callbacks, space-before-function-paren, no-unused-vars
+                    return {
+                        done: function() { return this; },
+                        fail: function() { return this; },
+                        always: function() { return this; }
+                    };
+                });
+            }
+        });
+
+        afterEach(function () {
+            // Restore original $.ajax
+            if (originalJQueryAjax) {
+                $.ajax = originalJQueryAjax;
+            } else if ($.ajax && $.ajax.isSpy) {
+                delete $.ajax;
+            }
+        });
+        //eslint-disable-line one-var, vars-on-top
         var obj = new Constr({
             provider: 'provName',
             name: '',

@@ -157,6 +157,7 @@
                 <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Directory\Model\Config\Source\WeightUnit</source_model>
+                    <backend_model>Magento\Directory\Model\Config\Backend\WeightUnit</backend_model>
                 </field>
             </group>
         </section>

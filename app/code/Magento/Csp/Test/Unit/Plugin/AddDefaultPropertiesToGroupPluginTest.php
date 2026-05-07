@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,12 +10,15 @@ namespace Magento\Csp\Test\Unit\Plugin;
 use Magento\Csp\Model\SubresourceIntegrity;
 use Magento\Csp\Model\SubresourceIntegrityRepository;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\App\State;
+use Magento\Framework\App\Request\Http;
+use Magento\Csp\Model\SubresourceIntegrity\SriEnabledActions;
 
 /**
  * Test for class Magento\Csp\Plugin\AddDefaultPropertiesToGroupPlugin
@@ -38,6 +41,16 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
      * @var MockObject
      */
     private MockObject $stateMock;
+
+    /**
+     * @var MockObject
+     */
+    private MockObject $httpMock;
+
+    /**
+     * @var MockObject
+     */
+    private MockObject $sriEnabledActionsMock;
 
     /**
      * @var AddDefaultPropertiesToGroupPlugin
@@ -64,9 +77,19 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getAreaCode'])
             ->getMock();
+        $this->httpMock = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getFullActionName'])
+            ->getMock();
+        $this->sriEnabledActionsMock = $this->getMockBuilder(SriEnabledActions::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isPaymentPageAction'])
+            ->getMock();
         $this->plugin = new AddDefaultPropertiesToGroupPlugin(
             $this->stateMock,
-            $this->integrityRepositoryPoolMock
+            $this->integrityRepositoryPoolMock,
+            $this->httpMock,
+            $this->sriEnabledActionsMock
         );
     }
 
@@ -74,9 +97,13 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
      * Test for plugin with Js assets
      *
      * @return void
+     * @throws LocalizedException
      */
     public function testBeforeGetFilteredProperties(): void
     {
+        $actionName = "sales_order_create_index";
+        $this->sriEnabledActionsMock->expects($this->once())->method('isPaymentPageAction')->willReturn(true);
+        $this->httpMock->expects($this->once())->method('getFullActionName')->willReturn($actionName);
         $integrityRepositoryMock = $this->getMockBuilder(SubresourceIntegrityRepository::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getByPath'])

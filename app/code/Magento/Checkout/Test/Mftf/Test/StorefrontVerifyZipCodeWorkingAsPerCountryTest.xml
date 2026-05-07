@@ -16,6 +16,7 @@
             <description value="Storefront Verify ZipCode Working As Per Country"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4016"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <!-- create category -->

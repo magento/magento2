@@ -10,10 +10,12 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Shipment;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Sales\Model\Order\Shipment\Comment\Validator;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Comment;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -52,6 +54,16 @@ class CommentTest extends TestCase
     protected $entitySnapshotMock;
 
     /**
+     * @var Select|MockObject
+     */
+    protected $selectMock;
+
+    /**
+     * @var OrderShipment|MockObject
+     */
+    private $orderShipment;
+    
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -60,6 +72,8 @@ class CommentTest extends TestCase
         $this->appResourceMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->validatorMock = $this->createMock(Validator::class);
+        $this->selectMock = $this->createMock(Select::class);
+        $this->orderShipment = $this->createMock(OrderShipment::class);
         $this->entitySnapshotMock = $this->createMock(
             Snapshot::class
         );
@@ -100,6 +114,33 @@ class CommentTest extends TestCase
      */
     public function testSave()
     {
+        $commentId = 1;
+        $output = [
+            'user_id' => 1,
+            'user_type' => 'demo',
+        ];
+
+        $this->commentModelMock->expects($this->any())->method('getId')->willReturn($commentId);
+        $this->commentModelMock->expects($this->any())->method('getShipment')->willReturn($this->orderShipment);
+        $this->orderShipment->expects($this->any())->method('getId')->willReturn($commentId);
+
+        $this->connectionMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
+
+        $this->selectMock->expects($this->any())
+            ->method('from')
+            ->willReturnSelf();
+
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+
+        $this->connectionMock->expects($this->any())
+            ->method('fetchRow')
+            ->with($this->selectMock)
+            ->willReturn($output);
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->commentModelMock)

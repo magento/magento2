@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 
 use Magento\CatalogImportExport\Model\Import\Uploader;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
@@ -79,6 +80,11 @@ class UploaderTest extends TestCase
      */
     private $targetDirectory;
 
+    /**
+     * @var DomainValidator|MockObject
+     */
+    private $domainValidator;
+
     protected function setUp(): void
     {
         $this->coreFileStorageDb = $this->getMockBuilder(Database::class)
@@ -128,6 +134,11 @@ class UploaderTest extends TestCase
         $this->targetDirectory->method('getDirectoryWrite')->willReturn($this->directoryMock);
         $this->targetDirectory->method('getDirectoryRead')->willReturn($this->directoryMock);
 
+        $this->domainValidator = $this->getMockBuilder(DomainValidator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])
+            ->getMock();
+
         $this->uploader = $this->getMockBuilder(Uploader::class)
             ->setConstructorArgs(
                 [
@@ -139,7 +150,8 @@ class UploaderTest extends TestCase
                     $this->readFactory,
                     null,
                     $this->random,
-                    $this->targetDirectory
+                    $this->targetDirectory,
+                    $this->domainValidator
                 ]
             )
             ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
@@ -159,6 +171,11 @@ class UploaderTest extends TestCase
         $tmpDir = 'var/tmp';
         $destDir = 'var/dest/dir';
         $this->uploader->method('getTmpDir')->willReturn($tmpDir);
+
+        // Mock domain validator to allow the URL
+        $this->domainValidator->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
 
         // Expected invocation to validate file extension
         $this->uploader->expects($this->exactly($checkAllowedExtension))->method('checkAllowedExtension')
@@ -288,12 +305,17 @@ class UploaderTest extends TestCase
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
         $driverMock = $this->getMockBuilder($expectedDriverPool)
             ->disableOriginalConstructor()
-            ->addMethods(['readAll'])
             ->onlyMethods(['isExists'])
             ->getMock();
         $driverMock->method('isExists')->willReturn(true);
-        $driverMock->method('readAll')->willReturn(null);
         $driverPool->method('getDriver')->willReturn($driverMock);
+
+        // Create a Read mock that will be returned by readFactory->create()
+        $readMock = $this->getMockBuilder(Read::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['readAll'])
+            ->getMock();
+        $readMock->method('readAll')->willReturn(null);
 
         $readFactory = $this->getMockBuilder(ReadFactory::class)
             ->setConstructorArgs(
@@ -306,7 +328,35 @@ class UploaderTest extends TestCase
 
         $readFactory->method('create')
             ->with($expectedHost, $expectedScheme)
-            ->willReturn($driverMock);
+            ->willReturn($readMock);
+
+        $domainValidatorMock = $this->getMockBuilder(DomainValidator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])
+            ->getMock();
+        $domainValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $directoryMock = $this->getMockBuilder(Write::class)
+            ->onlyMethods(['writeFile', 'getRelativePath', 'isWritable', 'getAbsolutePath'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDirectoryWrite'])
+            ->getMock();
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($directoryMock);
+
+        $targetDirectoryMock = $this->getMockBuilder(TargetDirectory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getDirectoryWrite', 'getDirectoryRead'])
+            ->getMock();
+        $targetDirectoryMock->method('getDirectoryWrite')->willReturn($directoryMock);
+        $targetDirectoryMock->method('getDirectoryRead')->willReturn($directoryMock);
 
         /** @var Uploader $uploaderMock */
         $uploaderMock = $this->getMockBuilder(Uploader::class)
@@ -316,17 +366,29 @@ class UploaderTest extends TestCase
                     $this->coreFileStorage,
                     $this->imageFactory,
                     $this->validator,
-                    $this->filesystem,
+                    $filesystemMock,
                     $readFactory,
                     null,
                     $this->random,
-                    $this->targetDirectory
+                    $targetDirectoryMock,
+                    $domainValidatorMock
                 ]
             )
+            ->onlyMethods(['_setUploadFile', 'save', 'getTmpDir', 'checkAllowedExtension'])
             ->getMock();
 
+        $this->random->method('getRandomString')->willReturn('test123');
+        $uploaderMock->method('getTmpDir')->willReturn('var/tmp');
+        $uploaderMock->method('checkAllowedExtension')->willReturn(true);
+        $directoryMock->method('isWritable')->willReturn(true);
+        $directoryMock->method('getRelativePath')->willReturn('var/tmp/test_file');
+        $directoryMock->method('writeFile')->willReturn(true);
+        $directoryMock->method('getAbsolutePath')->willReturn('var/dest/dir');
+        $uploaderMock->method('_setUploadFile')->willReturnSelf();
+        $uploaderMock->method('save')->willReturn(['name' => 'test', 'file' => 'var/dest/test']);
+
         $result = $uploaderMock->move($fileUrl);
-        $this->assertNull($result);
+        $this->assertNotNull($result);
     }
 
     /**

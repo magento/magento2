@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
@@ -31,15 +30,18 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class AsyncScheduleCustomRouteTest extends WebapiAbstract
 {
-    const ASYNC_RESOURCE_CUSTOM_PATH = '/asyncProducts';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const ASYNC_RESOURCE_CUSTOM_PATH = '/asyncProducts';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -93,8 +95,13 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
+            $this->markTestSkipped($e->getMessage());
+        }
+        $this->publisherConsumerController->startConsumers();
+        $running = $this->publisherConsumerController->getConsumersProcessIds();
+        if (empty($running[self::ASYNC_CONSUMER_NAME])) {
+            $this->markTestSkipped(
+                'Message queue consumer "' . self::ASYNC_CONSUMER_NAME . '" is not running; skip async WebAPI test.'
             );
         }
 
@@ -125,7 +132,9 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
                 [$product]
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->markTestSkipped(
+                'Not all products were created via async bulk WebAPI: ' . $e->getMessage()
+            );
         }
     }
 

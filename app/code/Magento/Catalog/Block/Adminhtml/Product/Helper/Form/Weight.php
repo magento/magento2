@@ -122,7 +122,7 @@ class Weight extends Text
         $html .= '<label class="admin__addon-suffix" for="' .
             $this->getHtmlId() .
             '"><span>' .
-            $this->directoryHelper->getWeightUnit() .
+            $this->_escaper->escapeHtml($this->directoryHelper->getWeightUnit()) .
             '</span></label></div>';
 
         if ($afterElementJs = $this->getAfterElementJs()) {

@@ -3,41 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Invoice\Comment;
 
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Sales\Model\Order\Invoice\Comment;
+use Magento\Framework\App\ObjectManager;
+use Magento\Sales\Helper\SalesEntityCommentValidator;
 
 /**
- * Class Validator
+ * Sales invoice comment validator
  */
 class Validator
 {
+    /**
+     * Sales entity comment validator
+     * @var SalesEntityCommentValidator
+     */
+    private SalesEntityCommentValidator $helperValidator;
+
     /**
      * Required field
      *
      * @var array
      */
     protected $required = [
-        'parent_id' => 'Parent Invoice Id',
         'comment' => 'Comment',
+        'parent_id' => 'Parent Invoice Id',
     ];
 
     /**
-     * Validate data
+     * @param SalesEntityCommentValidator|null $helperValidator
+     */
+    public function __construct(
+        SalesEntityCommentValidator $helperValidator = null
+    ) {
+        $this->helperValidator = $helperValidator ??
+            ObjectManager::getInstance()->get(SalesEntityCommentValidator::class);
+    }
+
+    /**
+     * Invoice comment validate data
      *
-     * @param \Magento\Sales\Model\Order\Invoice\Comment $comment
+     * @param Comment $comment
      * @return array
+     * @throws CouldNotSaveException
      */
     public function validate(Comment $comment)
     {
         $errors = [];
         $commentData = $comment->getData();
-        foreach ($this->required as $code => $label) {
+
+        if (!$this->helperValidator->isEditCommentAllowed($comment)) {
+            $errors['comment'] = sprintf('User is not authorized to edit comment.');
+        }
+
+        foreach ($this->required as $code => $itemLabel) {
             if (!$comment->hasData($code)) {
-                $errors[$code] = sprintf('"%s" is required. Enter and try again.', $label);
+                $errors[$code] = sprintf('"%s" is required. Enter and try again.', $itemLabel);
             } elseif (empty($commentData[$code])) {
-                $errors[$code] = sprintf('%s can not be empty', $label);
+                $errors[$code] = sprintf('%s can not be empty', $itemLabel);
             }
         }
 

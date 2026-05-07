@@ -15,6 +15,8 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 
 /**
  * Key Index action
+ * @deprecated
+ * @see Extensible Data ReEncryption Mechanism Implemented
  */
 class Index extends Key implements HttpGetActionInterface
 {

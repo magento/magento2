@@ -27,6 +27,8 @@ use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
+ * Test class for account controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountTest extends AbstractController

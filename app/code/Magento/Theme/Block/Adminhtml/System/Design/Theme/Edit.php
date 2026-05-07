@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,7 +16,7 @@ namespace Magento\Theme\Block\Adminhtml\System\Design\Theme;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */
@@ -75,7 +75,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
             if ($theme->isDeletable()) {
                 if ($theme->hasChildThemes()) {
-                    $message = __('Are you sure you want to delete this theme?');
+                    $message = $this->escapeJs(
+                        $this->escapeHtml(__('Are you sure you want to delete this theme?'))
+                    );
                     $onClick = sprintf(
                         "deleteConfirm('%s', '%s')",
                         $message,

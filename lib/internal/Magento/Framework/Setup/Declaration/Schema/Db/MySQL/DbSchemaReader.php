@@ -21,7 +21,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Table type in information_schema.TABLES which allows to identify only tables and ignore views
      */
-    const MYSQL_TABLE_TYPE = 'BASE TABLE';
+    public const MYSQL_TABLE_TYPE = 'BASE TABLE';
 
     /**
      * @var ResourceConnection
@@ -54,6 +54,16 @@ class DbSchemaReader implements DbSchemaReaderInterface
     {
         $adapter = $this->resourceConnection->getConnection($resource);
         $dbName = $this->resourceConnection->getSchemaName($resource);
+        $collationNameColumn = 'charset_applicability.collation_name';
+
+        if ($adapter->tableColumnExists(
+            'COLLATION_CHARACTER_SET_APPLICABILITY',
+            'FULL_COLLATION_NAME',
+            'information_schema'
+        )) {
+            $collationNameColumn = 'charset_applicability.full_collation_name';
+        }
+
         $stmt = $adapter->select()
             ->from(
                 ['i_tables' => 'information_schema.TABLES'],
@@ -65,13 +75,13 @@ class DbSchemaReader implements DbSchemaReaderInterface
             )
             ->joinInner(
                 ['charset_applicability' => 'information_schema.COLLATION_CHARACTER_SET_APPLICABILITY'],
-                'i_tables.table_collation = charset_applicability.collation_name',
+                'i_tables.table_collation = ' . $collationNameColumn,
                 [
                     'charset' => 'charset_applicability.CHARACTER_SET_NAME'
                 ]
             )
-            ->where('TABLE_SCHEMA = ?', $dbName)
-            ->where('TABLE_NAME = ?', $tableName);
+            ->where('i_tables.TABLE_SCHEMA = ?', $dbName)
+            ->where('i_tables.TABLE_NAME = ?', $tableName);
 
         return $adapter->fetchRow($stmt);
     }

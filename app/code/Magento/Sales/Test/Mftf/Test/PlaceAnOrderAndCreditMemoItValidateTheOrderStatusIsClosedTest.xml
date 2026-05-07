@@ -13,6 +13,7 @@
             <description value="Place an order and credit memo it, validate the order status is closed"/>
             <severity value="MINOR"/>
             <testCaseId value="AC-1577"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
