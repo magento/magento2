@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Widget\Model\Widget;
 
@@ -44,6 +44,7 @@ use Magento\Widget\Model\Widget;
  * @method int getThemeId()
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @since 100.0.2
  */
@@ -275,6 +276,9 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     if (!isset($pageGroupData['template'])) {
                         $pageGroupData['template'] = '';
                     }
+                    if (!empty($pageGroupData['template'])) {
+                        $this->validateTemplate($pageGroupData['template']);
+                    }
                     $tmpPageGroup = [
                         'page_id' => $pageGroupData['page_id'],
                         'group' => $pageGroup['page_group'],
@@ -319,6 +323,32 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->setData('page_group_ids', $pageGroupIds);
 
         return parent::beforeSave();
+    }
+
+    /**
+     * Validate for allowed template
+     *
+     * @param string $template
+     * @return void
+     * @throws LocalizedException
+     */
+    private function validateTemplate(string $template): void
+    {
+        $allowedTemplates = $this->getWidgetTemplates();
+
+        $isAllowed = false;
+        foreach ($allowedTemplates as $allowedTemplate) {
+            if (isset($allowedTemplate['value']) && $allowedTemplate['value'] === $template) {
+                $isAllowed = true;
+                break;
+            }
+        }
+
+        if (!$isAllowed) {
+            throw new LocalizedException(
+                __('The specified template "%1" is not allowed for this widget type.', $template)
+            );
+        }
     }
 
     /**

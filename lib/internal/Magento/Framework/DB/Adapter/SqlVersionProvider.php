@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,6 +42,8 @@ class SqlVersionProvider
     public const MYSQL_8_4_VERSION = '8.4.';
 
     public const MARIA_DB_11_4_VERSION = '11.4.';
+
+    public const MARIA_DB_11_8_VERSION = '11.8.';
 
     public const MARIA_DB = "mariadb";
 
@@ -166,13 +168,12 @@ class SqlVersionProvider
         $isMariaDB104 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_4_VERSION);
         $isMariaDB106 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_10_6_VERSION);
         $isMariaDB114 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_4_VERSION);
+        $isMariaDB118 = str_contains($sqlVersion, SqlVersionProvider::MARIA_DB_11_8_VERSION);
         $sqlExactVersion = $this->fetchSqlVersion(ResourceConnection::DEFAULT_CONNECTION);
         if (version_compare($sqlExactVersion, '10.4.27', '>=')) {
             if ($isMariaDB104) {
                 return SqlVersionProvider::MARIA_DB_10_4_27_VERSION;
-            } elseif ($isMariaDB106) {
-                return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
-            } elseif ($isMariaDB114) {
+            } elseif ($isMariaDB106 || $isMariaDB114 || $isMariaDB118) {
                 return SqlVersionProvider::MARIA_DB_10_6_11_VERSION;
             }
         }

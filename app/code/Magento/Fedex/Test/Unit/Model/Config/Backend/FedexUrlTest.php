@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -127,5 +127,29 @@ class FedexUrlTest extends TestCase
             ['http://fedex.com.foo.com/foo/bar?baz=bash&fizz=buzz'],
             ['http://foofedex.com/foo/bar?baz=bash&fizz=buzz'],
         ];
+    }
+
+    /**
+     * Test that invalid URLs throw validation exception
+     *
+     * @throws ValidatorException
+     */
+    public function testBeforeSaveWithInvalidUrl(): void
+    {
+        $invalidUrl = 'invalid-url';
+
+        // Mock the URL validator to return false for invalid URL
+        $this->url->expects($this->once())
+            ->method('isValid')
+            ->with($invalidUrl, ['http', 'https'])
+            ->willReturn(false);
+
+        $this->urlConfig->setValue($invalidUrl);
+
+        // Expect validation exception for invalid URL
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('Fedex API endpoint URL\'s must use fedex.com');
+
+        $this->urlConfig->beforeSave();
     }
 }

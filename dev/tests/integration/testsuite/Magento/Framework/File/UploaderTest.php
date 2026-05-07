@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -93,5 +93,18 @@ class UploaderTest extends TestCase
                 'new_magento.jpg',
             ]
         ];
+    }
+}
+
+/**
+ * Mocking of std function to test validation
+ *
+ * @param string $name
+ * @return bool
+ */
+if (!function_exists(__NAMESPACE__ . '\is_uploaded_file')) {
+    function is_uploaded_file($name)
+    {
+        return ($name == 'magento.jpg') ? false : true;
     }
 }

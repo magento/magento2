@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Publisher\Config\Xml;
 
@@ -46,6 +46,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $publisherConfig \DOMElement */
         foreach ($source->getElementsByTagName('publisher') as $publisherConfig) {
             $topic = $this->getAttributeValue($publisherConfig, 'topic');
+            $queueName = $this->getAttributeValue($publisherConfig, 'queue');
 
             $connections = [];
             /** @var \DOMNode $connectionConfig */
@@ -80,6 +81,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $isDisabled = $this->getAttributeValue($publisherConfig, 'disabled', false);
             $result[$topic] = [
                 'topic' => $topic,
+                'queue' => $queueName,
                 'disabled' => $this->booleanUtils->toBoolean($isDisabled),
                 'connections' => $connections,
 

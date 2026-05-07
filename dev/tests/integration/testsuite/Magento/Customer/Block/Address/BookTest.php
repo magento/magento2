@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Block\Address;
@@ -204,7 +204,110 @@ class BookTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetAddressById()
     {
-        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $this->_block->getAddressById(1));
-        $this->assertNull($this->_block->getAddressById(5));
+        $this->assertNull($this->_block->getAddressById(1), 'Should return null when no customer is logged in');
+
+        $this->assertNull(
+            $this->_block->getAddressById(999),
+            'Should return null for non-existent address when no customer'
+        );
+    }
+
+    /**
+     * Test getAddressById with mocked customer and created test data
+     * @return void
+     */
+    public function testGetAddressByIdWithMockedCustomer(): void
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $uniqueEmail = 'test_' . uniqid() . '@example.com';
+        $customer = $objectManager->create(\Magento\Customer\Model\Customer::class);
+        $customer->setWebsiteId(1)
+            ->setEmail($uniqueEmail)
+            ->setPassword('password')
+            ->setGroupId(1)
+            ->setStoreId(1)
+            ->setIsActive(1)
+            ->setFirstname('Test')
+            ->setLastname('Customer');
+        $customer->isObjectNew(true);
+        $customer->save();
+        $customerId = $customer->getId();
+
+        $address = $objectManager->create(\Magento\Customer\Model\Address::class);
+        $address->isObjectNew(true);
+        $address->setData([
+            'attribute_set_id' => 2,
+            'telephone' => '1234567890',
+            'postcode' => '12345',
+            'country_id' => 'US',
+            'city' => 'Test City',
+            'street' => ['123 Test Street'],
+            'lastname' => 'Customer',
+            'firstname' => 'Test',
+            'parent_id' => $customerId,
+            'region_id' => 1,
+        ])->setCustomerId($customerId);
+        $address->save();
+        $addressId = $address->getId();
+
+        $mockCustomer = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+            ->getMock();
+        $mockCustomer->method('getId')->willReturn($customerId);
+
+        $mockCurrentCustomer = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockCurrentCustomer->method('getCustomer')->willReturn($mockCustomer);
+
+        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
+        $block = $layout->createBlock(
+            \Magento\Customer\Block\Address\Book::class,
+            '',
+            ['currentCustomer' => $mockCurrentCustomer]
+        );
+
+        $retrievedAddress = $block->getAddressById($addressId);
+        $this->assertInstanceOf(\Magento\Customer\Api\Data\AddressInterface::class, $retrievedAddress);
+        $this->assertEquals($addressId, $retrievedAddress->getId());
+        $this->assertEquals($customerId, $retrievedAddress->getCustomerId());
+
+        $this->assertNull($block->getAddressById(999), 'Should return null for non-existent address');
+
+        $otherUniqueEmail = 'other_' . uniqid() . '@example.com';
+        $otherCustomer = $objectManager->create(\Magento\Customer\Model\Customer::class);
+        $otherCustomer->setWebsiteId(1)
+            ->setEmail($otherUniqueEmail)
+            ->setPassword('password')
+            ->setGroupId(1)
+            ->setStoreId(1)
+            ->setIsActive(1)
+            ->setFirstname('Other')
+            ->setLastname('Customer');
+        $otherCustomer->isObjectNew(true);
+        $otherCustomer->save();
+        $otherCustomerId = $otherCustomer->getId();
+
+        $otherAddress = $objectManager->create(\Magento\Customer\Model\Address::class);
+        $otherAddress->isObjectNew(true);
+        $otherAddress->setData([
+            'attribute_set_id' => 2,
+            'telephone' => '0987654321',
+            'postcode' => '54321',
+            'country_id' => 'US',
+            'city' => 'Other City',
+            'street' => ['456 Other Street'],
+            'lastname' => 'Customer',
+            'firstname' => 'Other',
+            'parent_id' => $otherCustomerId,
+            'region_id' => 1,
+        ])->setCustomerId($otherCustomerId);
+        $otherAddress->save();
+        $otherAddressId = $otherAddress->getId();
+
+        $this->assertNull(
+            $block->getAddressById($otherAddressId),
+            'Should return null for address belonging to different customer'
+        );
     }
 }

@@ -284,15 +284,11 @@ class EmailMessage extends Message implements EmailMessageInterface
      */
     public function getBodyText(): string
     {
-        return $this->symfonyMessage->getTextBody() ?? '';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBodyHtml(): string
-    {
-        return $this->symfonyMessage->getHtmlBody() ?? '';
+        $body = $this->symfonyMessage->getBody();
+        if ($body) {
+            return $body->bodyToString();
+        }
+        return '';
     }
 
     /**

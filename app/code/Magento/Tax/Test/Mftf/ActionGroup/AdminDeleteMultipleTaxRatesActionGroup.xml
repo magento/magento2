@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminDeleteMultipleTaxRatesActionGroup">
@@ -19,6 +20,8 @@
         <waitForElementVisible selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="waitForResetFilter"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="clickResetFilter"/>
         <waitForPageLoad stepKey="waitForGridReset"/>
+        <comment userInput="BIC workaround" stepKey="setTaxRateGridPageSizeTo200"/>
+        <comment userInput="BIC workaround" stepKey="waitAfterTaxRatePageSizeChange"/>
         <helper class="Magento\Tax\Test\Mftf\Helper\TaxHelpers" method="deleteAllSpecifiedTaxRuleRows" stepKey="deleteAllSpecifiedTaxRules">
             <argument name="rowsToDelete">{{rowsToDelete}}</argument>
             <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,14 +41,14 @@ class Output extends AbstractHelper
     protected $_templateProcessor = null;
 
     /**
-     * Catalog data
+     * Catalog data helper
      *
      * @var Data
      */
     protected $_catalogData = null;
 
     /**
-     * Eav config
+     * Eav config helper
      *
      * @var Config
      */
@@ -171,7 +171,7 @@ class Output extends AbstractHelper
             $attribute->getId() &&
             $attribute->getFrontendInput() !== 'media_image' &&
             (!$attribute->getIsHtmlAllowedOnFront() &&
-            !$attribute->getIsWysiwygEnabled())
+                !$attribute->getIsWysiwygEnabled())
         ) {
             if ($attribute->getFrontendInput() !== 'price') {
                 $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
@@ -213,7 +213,7 @@ class Output extends AbstractHelper
         if ($attribute &&
             $attribute->getFrontendInput() !== 'image' &&
             (!$attribute->getIsHtmlAllowedOnFront() &&
-            !$attribute->getIsWysiwygEnabled())
+                !$attribute->getIsWysiwygEnabled())
         ) {
             $attributeHtml = $this->_escaper->escapeHtml($attributeHtml);
         }
@@ -249,5 +249,89 @@ class Output extends AbstractHelper
             }
         }
         return $matches;
+    }
+
+    /**
+     * Process attribute string
+     *
+     * @param string $attributeString
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function processString(string $attributeString): string
+    {
+        if (empty($attributeString)) {
+            return '';
+        }
+
+        $trimmed = trim($attributeString);
+        $hasQuotesOrEquals = strpos($trimmed, '=') !== false
+            || strpos($trimmed, '"') !== false
+            || strpos($trimmed, "'") !== false;
+
+        if (!$hasQuotesOrEquals) {
+            $attrName = strtolower($trimmed);
+            if ($this->validatePattern($attrName)) {
+                return ' ' . $trimmed;
+            }
+            return ' ' . $this->_escaper->escapeHtmlAttr($attributeString);
+        }
+
+        if (!preg_match_all('/([a-z0-9_-]+)(?:=(["\'])([^"\']*)\2)?/i', $attributeString, $matches, PREG_SET_ORDER)) {
+            return ' ' . $this->_escaper->escapeHtmlAttr($attributeString);
+        }
+
+        foreach ($matches as $match) {
+            $attrName = strtolower(trim($match[1]));
+
+            if (!$this->validatePattern($attrName)) {
+                return ' ' . $this->_escaper->escapeHtmlAttr($attributeString);
+            }
+
+            if (isset($match[3]) && $this->validateContent($match[3])) {
+                return ' ' . $this->_escaper->escapeHtmlAttr($attributeString);
+            }
+        }
+
+        $parsed = preg_replace_callback(
+            '/(=["\'])([^"\']*)(["\'])/',
+            function ($m) {
+                return $m[1] . $this->_escaper->escapeHtmlAttr($m[2]) . $m[3];
+            },
+            $attributeString
+        );
+
+        return ' ' . $parsed;
+    }
+
+    /**
+     * Validate string pattern
+     *
+     * @param string $attrName
+     * @return bool
+     */
+    private function validatePattern(string $attrName): bool
+    {
+        if (strpos($attrName, 'data-') === 0) {
+            $suffix = substr($attrName, 5);
+            return preg_match('/^[a-z0-9_-]+$/', $suffix) === 1;
+        }
+
+        if (strpos($attrName, 'on') === 0 && strlen($attrName) > 2) {
+            return false;
+        }
+
+        return preg_match('/(script|eval|expression|import|binding)/i', $attrName) !== 1;
+    }
+
+    /**
+     * Validate string content
+     *
+     * @param string $attrValue
+     * @return bool
+     */
+    private function validateContent(string $attrValue): bool
+    {
+        return preg_match('/(javascript|data|vbscript)\s*:/i', $attrValue) === 1;
     }
 }

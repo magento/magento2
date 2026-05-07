@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,6 +23,7 @@
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{state}}" stepKey="selectState"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.postcode}}" stepKey="waitForPostCodeVisible"/>
         <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{postcode}}" stepKey="selectPostCode"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDiappear"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForGridLoaded"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
     </actionGroup>
 </actionGroups>

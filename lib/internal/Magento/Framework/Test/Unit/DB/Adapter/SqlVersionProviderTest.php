@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  * @noinspection PhpDeprecationInspection
  */
 declare(strict_types=1);
@@ -52,7 +52,7 @@ class SqlVersionProviderTest extends TestCase
         'MySQL-8.4' => '^8\.4\.',
         'MySQL-5.7' => '^5\.7\.',
         'MariaDB-(10.2-10.6)' => '^10\.[2-6]\.',
-        'MariaDB-11.4' => '^11\.4\.'
+        'MariaDB-(11.4-11.8)' => '^11\.[4|8]\.'
     ];
 
     /**
@@ -123,6 +123,10 @@ class SqlVersionProviderTest extends TestCase
             'MariaDB-11.4' => [
                 ['version' => '11.4.2-MariaDB'],
                 SqlVersionProvider::MARIA_DB_11_4_VERSION
+            ],
+            'MariaDB-11.8' => [
+                ['version' => '11.8.6-MariaDB'],
+                SqlVersionProvider::MARIA_DB_11_8_VERSION
             ],
             'MySQL-5.7' => [
                 ['version' => '5.7.29'],

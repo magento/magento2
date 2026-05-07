@@ -10,12 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ClickPlaceOrderActionGroup">
         <annotations>
-            <description>Clicks on the 'Place Order' button. Validates that the Success Message is present and correct.</description>
+            <description>Clicks on the 'Place Order' button. Waits for the success page title (no post-click waitForPageLoad: payment gateways can leave jQuery AJAX active while the loader is shown, which causes that wait to time out).</description>
         </annotations>
 
-        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForCheckout"/>
-        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrderWithoutTimeout}}" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.placeOrderWithoutTimeout}}" stepKey="clickPlaceOrder"/>
+        <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" time="120" stepKey="waitForLoadSuccessPage"/>
     </actionGroup>
 </actionGroups>

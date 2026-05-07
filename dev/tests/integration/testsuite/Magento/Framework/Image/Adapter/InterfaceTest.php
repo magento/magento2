@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Image\Adapter;
 
@@ -729,7 +729,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider testValidateUploadFileExceptionDataProvider
+     * @dataProvider executeValidateUploadFileExceptionDataProvider
      * @param string $fileName
      * @param string $expectedErrorMsg
      * @param bool $useFixture
@@ -752,7 +752,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function testValidateUploadFileExceptionDataProvider()
+    public static function executeValidateUploadFileExceptionDataProvider()
     {
         return [
             'image_notfound' => [

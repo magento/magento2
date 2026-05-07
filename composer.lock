@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc713685ade6309bb576551ed5114f82",
+    "content-hash": "eefdd85243f46900a96d3e56b308d347",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1199,23 +1199,23 @@
         },
         {
             "name": "duosecurity/duo_universal_php",
-            "version": "1.0.2",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/duosecurity/duo_universal_php.git",
-                "reference": "8734a47480d2d2f0539e8ee782675e052025d026"
+                "reference": "68e699c52d41f681df07dc0f98e2ba551bef2fd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/duosecurity/duo_universal_php/zipball/8734a47480d2d2f0539e8ee782675e052025d026",
-                "reference": "8734a47480d2d2f0539e8ee782675e052025d026",
+                "url": "https://api.github.com/repos/duosecurity/duo_universal_php/zipball/68e699c52d41f681df07dc0f98e2ba551bef2fd3",
+                "reference": "68e699c52d41f681df07dc0f98e2ba551bef2fd3",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "firebase/php-jwt": "^6.0",
-                "php": ">=7.3"
+                "firebase/php-jwt": "^6.0 || ^7.0",
+                "php": ">=7.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.0",
@@ -1228,14 +1228,17 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
             "description": "A PHP implementation of the Duo Universal SDK.",
             "homepage": "https://duo.com/",
             "support": {
                 "email": "support@duosecurity.com",
                 "issues": "https://github.com/duosecurity/duo_universal_php/issues",
-                "source": "https://github.com/duosecurity/duo_universal_php/tree/1.0.2"
+                "source": "https://github.com/duosecurity/duo_universal_php/tree/1.1.2"
             },
-            "time": "2023-01-13T18:47:58+00:00"
+            "time": "2026-02-04T19:44:44+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -2113,27 +2116,27 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.16.0",
+            "version": "4.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "1793e78dad4108b594084d05d1fb818b85b110af"
+                "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/1793e78dad4108b594084d05d1fb818b85b110af",
-                "reference": "1793e78dad4108b594084d05d1fb818b85b110af",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
+                "reference": "40d61e2899ec17c5d08bbc0a2d586b3ca17ab9bd",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
             },
             "require-dev": {
                 "doctrine/annotations": "^2.0.1",
                 "ext-phar": "*",
                 "laminas/laminas-coding-standard": "^3.0.0",
                 "laminas/laminas-stdlib": "^3.18.0",
-                "phpunit/phpunit": "^10.5.37",
+                "phpunit/phpunit": "^10.5.58",
                 "psalm/plugin-phpunit": "^0.19.0",
                 "vimeo/psalm": "^5.15.0"
             },
@@ -2172,7 +2175,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2024-11-20T13:15:13+00:00"
+            "time": "2025-11-01T09:38:14+00:00"
         },
         {
             "name": "laminas/laminas-config",
@@ -2951,85 +2954,6 @@
                 }
             ],
             "time": "2024-11-17T22:29:29+00:00"
-        },
-        {
-            "name": "laminas/laminas-mvc",
-            "version": "3.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laminas/laminas-mvc.git",
-                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-mvc/zipball/53ba28b7222d3a3b49747a26babef43d1b17fb6f",
-                "reference": "53ba28b7222d3a3b49747a26babef43d1b17fb6f",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "^1.2",
-                "laminas/laminas-eventmanager": "^3.4",
-                "laminas/laminas-http": "^2.15",
-                "laminas/laminas-modulemanager": "^2.16",
-                "laminas/laminas-router": "^3.11.1",
-                "laminas/laminas-servicemanager": "^3.20.0",
-                "laminas/laminas-stdlib": "^3.19",
-                "laminas/laminas-view": "^2.18.0",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
-            },
-            "conflict": {
-                "zendframework/zend-mvc": "*"
-            },
-            "require-dev": {
-                "laminas/laminas-coding-standard": "^2.5.0",
-                "laminas/laminas-json": "^3.6",
-                "phpunit/phpunit": "^10.5.38",
-                "webmozart/assert": "^1.11"
-            },
-            "suggest": {
-                "laminas/laminas-json": "(^2.6.1 || ^3.0) To auto-deserialize JSON body content in AbstractRestfulController extensions, when json_decode is unavailable",
-                "laminas/laminas-log": "^2.9.1  To provide log functionality via LogFilterManager, LogFormatterManager, and LogProcessorManager",
-                "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application",
-                "laminas/laminas-mvc-i18n": "laminas-mvc-i18n provides integration with laminas-i18n, including a translation bridge and translatable route segments",
-                "laminas/laminas-mvc-middleware": "To dispatch middleware in your laminas-mvc application",
-                "laminas/laminas-mvc-plugin-fileprg": "To provide Post/Redirect/Get functionality around forms that container file uploads",
-                "laminas/laminas-mvc-plugin-flashmessenger": "To provide flash messaging capabilities between requests",
-                "laminas/laminas-mvc-plugin-identity": "To access the authenticated identity (per laminas-authentication) in controllers",
-                "laminas/laminas-mvc-plugin-prg": "To provide Post/Redirect/Get functionality within controllers",
-                "laminas/laminas-paginator": "^2.7 To provide pagination functionality via PaginatorPluginManager",
-                "laminas/laminas-servicemanager-di": "laminas-servicemanager-di provides utilities for integrating laminas-di and laminas-servicemanager in your laminas-mvc application"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Mvc\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Laminas's event-driven MVC layer, including MVC Applications, Controllers, and Plugins",
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "laminas",
-                "mvc"
-            ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-mvc/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-mvc/issues",
-                "rss": "https://github.com/laminas/laminas-mvc/releases.atom",
-                "source": "https://github.com/laminas/laminas-mvc"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
-            "time": "2024-11-18T00:14:29+00:00"
         },
         {
             "name": "laminas/laminas-permissions-acl",
@@ -4423,6 +4347,80 @@
                 "source": "https://github.com/laminas/laminas-db"
             },
             "time": "2025-02-26T05:37:14+00:00"
+        },
+        {
+            "name": "magento/magento-zf-mvc",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-zf-mvc.git",
+                "reference": "724e3f32bfe4a5d3c8390400234c24e90d3353ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-zf-mvc/zipball/724e3f32bfe4a5d3c8390400234c24e90d3353ef",
+                "reference": "724e3f32bfe4a5d3c8390400234c24e90d3353ef",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-eventmanager": "^3.4",
+                "laminas/laminas-http": "^2.15",
+                "laminas/laminas-modulemanager": "^2.16",
+                "laminas/laminas-router": "^3.11.1",
+                "laminas/laminas-servicemanager": "^3.20.0",
+                "laminas/laminas-stdlib": "^3.19",
+                "laminas/laminas-view": "^2.18.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "conflict": {
+                "zendframework/zend-mvc": "*"
+            },
+            "replace": {
+                "laminas/laminas-mvc": "^3.8"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "^3.0.1",
+                "phpunit/phpunit": "^10.5.38",
+                "webmozart/assert": "^1.11"
+            },
+            "suggest": {
+                "laminas/laminas-log": "^2.9.1  To provide log functionality via LogFilterManager, LogFormatterManager, and LogProcessorManager",
+                "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application",
+                "laminas/laminas-mvc-i18n": "laminas-mvc-i18n provides integration with laminas-i18n, including a translation bridge and translatable route segments",
+                "laminas/laminas-mvc-middleware": "To dispatch middleware in your laminas-mvc application",
+                "laminas/laminas-mvc-plugin-fileprg": "To provide Post/Redirect/Get functionality around forms that container file uploads",
+                "laminas/laminas-mvc-plugin-flashmessenger": "To provide flash messaging capabilities between requests",
+                "laminas/laminas-mvc-plugin-identity": "To access the authenticated identity (per laminas-authentication) in controllers",
+                "laminas/laminas-mvc-plugin-prg": "To provide Post/Redirect/Get functionality within controllers",
+                "laminas/laminas-paginator": "^2.7 To provide pagination functionality via PaginatorPluginManager",
+                "laminas/laminas-servicemanager-di": "laminas-servicemanager-di provides utilities for integrating laminas-di and laminas-servicemanager in your laminas-mvc application"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Mvc\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Laminas's event-driven MVC layer, including MVC Applications, Controllers, and Plugins",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "laminas",
+                "mvc"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-mvc/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-mvc/issues",
+                "rss": "https://github.com/laminas/laminas-mvc/releases.atom",
+                "source": "https://github.com/laminas/laminas-mvc"
+            },
+            "time": "2026-01-30T09:20:48+00:00"
         },
         {
             "name": "magento/zend-cache",
@@ -7091,6 +7089,79 @@
                 }
             ],
             "time": "2025-01-03T09:35:48+00:00"
+        },
+        {
+            "name": "stomp-php/stomp-php",
+            "version": "5.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stomp-php/stomp-php.git",
+                "reference": "2c9573a54be486b6b8cbfe35e4e6f47779952297"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stomp-php/stomp-php/zipball/2c9573a54be486b6b8cbfe35e4e6f47779952297",
+                "reference": "2c9573a54be486b6b8cbfe35e4e6f47779952297",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Stomp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dejan Bosnanac",
+                    "email": "dejan@nighttale.net",
+                    "homepage": "http://www.nighttale.net"
+                },
+                {
+                    "name": "Sören Rohweder",
+                    "email": "s.rohweder@blage.net",
+                    "homepage": "http://www.monofone.de"
+                },
+                {
+                    "name": "Jens Radtke",
+                    "email": "swefl@fin-sn.de",
+                    "homepage": "http://www.fin-sn.de"
+                }
+            ],
+            "description": "stomp support for PHP",
+            "homepage": "http://github.com/stomp-php/stomp-php",
+            "keywords": [
+                "activeMQ",
+                "apollomq",
+                "jms",
+                "messaging",
+                "rabbitmq",
+                "stomp"
+            ],
+            "support": {
+                "issues": "https://github.com/stomp-php/stomp-php/issues",
+                "source": "https://github.com/stomp-php/stomp-php/tree/5.1.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jmglsn",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/staabm",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-05-21T11:30:43+00:00"
         },
         {
             "name": "symfony/config",
@@ -10327,6 +10398,83 @@
             "time": "2023-05-30T10:55:43+00:00"
         },
         {
+            "name": "allure-framework/allure-phpunit",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/allure-framework/allure-phpunit.git",
+                "reference": "be8b5efbea8f82a2439d9bb6eacdef8736180b60"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/be8b5efbea8f82a2439d9bb6eacdef8736180b60",
+                "reference": "be8b5efbea8f82a2439d9bb6eacdef8736180b60",
+                "shasum": ""
+            },
+            "require": {
+                "allure-framework/allure-php-commons": "^2.0",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
+                "phpunit/phpunit": "^10.0.5 || ^11 || ^12.0.1"
+            },
+            "conflict": {
+                "amphp/byte-stream": "<1.5.1",
+                "amphp/cache": "<2.0.1",
+                "amphp/dns": "<2.2.0",
+                "amphp/parser": "<1.1.1",
+                "amphp/process": "<2.0.3",
+                "amphp/socket": "<2.3.1",
+                "brianium/paratest": "<7.0.3",
+                "daverandom/libdns": "<2.1.0",
+                "ramsey/uuid": "<4.3.0",
+                "spatie/array-to-xml": "<3.3.0"
+            },
+            "require-dev": {
+                "brianium/paratest": "^7",
+                "psalm/plugin-phpunit": "^0.19.5",
+                "squizlabs/php_codesniffer": "^3.7.2",
+                "vimeo/psalm": "^6.10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Qameta\\Allure\\PHPUnit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ivan Krutov",
+                    "email": "vania-pooh@yandex-team.ru",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Edward Surov",
+                    "email": "zoohie@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Allure PHPUnit integration",
+            "homepage": "https://allurereport.org/",
+            "keywords": [
+                "allure",
+                "attachments",
+                "cases",
+                "phpunit",
+                "report",
+                "steps",
+                "testing"
+            ],
+            "support": {
+                "email": "allure@qameta.io",
+                "issues": "https://github.com/allure-framework/allure-phpunit/issues",
+                "source": "https://github.com/allure-framework/allure-phpunit"
+            },
+            "time": "2025-04-17T19:41:49+00:00"
+        },
+        {
             "name": "behat/gherkin",
             "version": "v4.12.0",
             "source": {
@@ -11485,77 +11633,6 @@
                 }
             ],
             "time": "2024-10-14T11:59:49+00:00"
-        },
-        {
-            "name": "magento/magento-allure-phpunit",
-            "version": "3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/magento/magento-allure-phpunit.git",
-                "reference": "5b98b1165f7c8a50e3118a2094ea171ba2039054"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-allure-phpunit/zipball/5b98b1165f7c8a50e3118a2094ea171ba2039054",
-                "reference": "5b98b1165f7c8a50e3118a2094ea171ba2039054",
-                "shasum": ""
-            },
-            "require": {
-                "allure-framework/allure-php-commons": "^2",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
-                "phpunit/phpunit": "^10"
-            },
-            "conflict": {
-                "amphp/byte-stream": "<1.5.1",
-                "brianium/paratest": "<7.0.3"
-            },
-            "replace": {
-                "allure-framework/allure-phpunit": "^3.0"
-            },
-            "require-dev": {
-                "brianium/paratest": "^7",
-                "psalm/plugin-phpunit": "^0.18.4",
-                "squizlabs/php_codesniffer": "^3.7.2",
-                "vimeo/psalm": "^5.15"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Qameta\\Allure\\PHPUnit\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Ivan Krutov",
-                    "email": "vania-pooh@yandex-team.ru",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Edward Surov",
-                    "email": "zoohie@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Allure PHPUnit integration",
-            "homepage": "https://allurereport.org/",
-            "keywords": [
-                "allure",
-                "attachments",
-                "cases",
-                "phpunit",
-                "report",
-                "steps",
-                "testing"
-            ],
-            "support": {
-                "email": "allure@qameta.io",
-                "source": "https://github.com/allure-framework/allure-phpunit"
-            },
-            "time": "2025-02-26T05:42:29+00:00"
         },
         {
             "name": "magento/magento-coding-standard",
@@ -14780,6 +14857,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "platform-dev": [],
+    "plugin-api-version": "2.2.0"
 }

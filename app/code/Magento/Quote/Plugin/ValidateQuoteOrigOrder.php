@@ -45,10 +45,10 @@ class ValidateQuoteOrigOrder
         CartRepositoryInterface $cartRepository,
         CartInterface $quote
     ): void {
-        if ($orderId = $quote->getOrigOrderId()) {
-            $order = $this->orderRepository->get($orderId);
+        if ($quote->getOrigOrderId() && $quote->getCustomerId()) {
+            $order = $this->orderRepository->get((int)$quote->getOrigOrderId());
             $orderCustomer = (int)$order->getCustomerId();
-            if ($quote->getCustomerId() !== $orderCustomer) {
+            if ((int)$quote->getCustomerId() !== $orderCustomer) {
                 throw new NoSuchEntityException(__('Please check input parameters.'));
             }
         }

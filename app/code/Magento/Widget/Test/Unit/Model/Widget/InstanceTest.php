@@ -414,12 +414,86 @@ class InstanceTest extends TestCase
     {
         $this->setLayoutHandles();
         $this->setSpecificEntitiesLayoutHandles();
+        $this->setWidgetConfigWithTemplates(['default']);
         $this->_model->setData('page_groups', $pageGroups);
 
         $actualResult = $this->_model->beforeSave();
         $actualPageGroups = $actualResult->getData('page_groups');
         $this->assertNotEmpty($actualPageGroups);
         $this->assertEquals($expectedData, $actualPageGroups[0]['layout_handle_updates']);
+    }
+
+    /**
+     * Test case for beforeSave method with invalid template throws exception
+     *
+     * @return void
+     */
+    public function testBeforeSaveWithInvalidTemplateThrowsException(): void
+    {
+        $this->setLayoutHandles();
+        $this->setSpecificEntitiesLayoutHandles();
+        $this->setWidgetConfigWithTemplates(['allowed_template']);
+
+        $pageGroups = [
+            [
+                'page_group' => 'anchor_categories',
+                'anchor_categories' => [
+                    'page_id' => '2',
+                    'layout_handle' => 'catalog_category_view_type_layered',
+                    'for' => 'all',
+                    'block' => 'page.bottom',
+                    'template' => 'invalid_template',
+                    'is_anchor_only' => 'Test',
+                    'entities' => '',
+                ],
+                'pages' => ['layout_handle' => ''],
+                'page_layouts' => ['layout_handle' => ''],
+            ]
+        ];
+
+        $this->_model->setData('page_groups', $pageGroups);
+
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The specified template "invalid_template" is not allowed for this widget type.');
+
+        $this->_model->beforeSave();
+    }
+
+    /**
+     * Test case for beforeSave method with valid template passes validation
+     *
+     * @return void
+     */
+    public function testBeforeSaveWithValidTemplatePassesValidation(): void
+    {
+        $this->setLayoutHandles();
+        $this->setSpecificEntitiesLayoutHandles();
+        $this->setWidgetConfigWithTemplates(['valid_template.phtml']);
+
+        $pageGroups = [
+            [
+                'page_group' => 'anchor_categories',
+                'anchor_categories' => [
+                    'page_id' => '2',
+                    'layout_handle' => 'catalog_category_view_type_layered',
+                    'for' => 'all',
+                    'block' => 'page.bottom',
+                    'template' => 'valid_template.phtml',
+                    'is_anchor_only' => 'Test',
+                    'entities' => '',
+                ],
+                'pages' => ['layout_handle' => ''],
+                'page_layouts' => ['layout_handle' => ''],
+            ]
+        ];
+
+        $this->_model->setData('page_groups', $pageGroups);
+
+        $actualResult = $this->_model->beforeSave();
+        $actualPageGroups = $actualResult->getData('page_groups');
+
+        $this->assertNotEmpty($actualPageGroups);
+        $this->assertEquals('valid_template.phtml', $actualPageGroups[0]['template']);
     }
 
     /**
@@ -468,6 +542,36 @@ class InstanceTest extends TestCase
         $reflection = new ReflectionProperty(Instance::class, '_specificEntitiesLayoutHandles');
         $reflection->setAccessible(true);
         $reflection->setValue($this->_model, $specificEntitiesLayoutHandles);
+    }
+
+    /**
+     * Set widget config with allowed templates
+     *
+     * @param array $templateValues
+     * @return void
+     */
+    private function setWidgetConfigWithTemplates(array $templateValues): void
+    {
+        $templates = [];
+        foreach ($templateValues as $templateValue) {
+            $templates[$templateValue] = [
+                'value' => $templateValue,
+                'label' => 'Template ' . $templateValue
+            ];
+        }
+
+        $widgetConfig = [
+            'name' => 'Test Widget',
+            'parameters' => [
+                'template' => [
+                    'values' => $templates
+                ]
+            ]
+        ];
+
+        $reflection = new ReflectionProperty(Instance::class, '_widgetConfigXml');
+        $reflection->setAccessible(true);
+        $reflection->setValue($this->_model, $widgetConfig);
     }
 
     /**

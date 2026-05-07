@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,6 +96,7 @@ class CarrierTest extends TestCase
         'carriers/usps/debug' => 1,
         'carriers/usps/userid' => 'test',
         'carriers/usps/mode' => 0,
+        'carriers/usps/usps_type' => 'USPS_XML',
     ];
 
     /**

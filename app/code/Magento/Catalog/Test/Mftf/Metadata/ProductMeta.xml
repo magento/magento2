@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -155,6 +155,12 @@
         <contentType>application/json</contentType>
     </operation>
     <operation name="GetProduct3" dataType="product3" type="get" auth="adminOauth" url="/V1/products/{sku}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+    <!-- Product List operation for bulk operations -->
+    <operation name="GetProductList" dataType="product_list" type="get" auth="adminOauth"
+        url="/V1/products?searchCriteria[pageSize]={pageSize}&amp;searchCriteria[currentPage]={currentPage}&amp;fields={fields}"
+        method="GET">
         <contentType>application/json</contentType>
     </operation>
 </operations>

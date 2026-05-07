@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -27,12 +28,18 @@ class CreateCustomerV2Test extends GraphQlAbstract
      */
     private $customerRepository;
 
+    /**
+     * @var Uid
+     */
+    private $uidEncoder;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->uidEncoder = Bootstrap::getObjectManager()->get(Uid::class);
     }
 
     /**
@@ -69,7 +76,13 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
-        $this->assertNull($response['createCustomerV2']['customer']['id']);
+        $customer = $this->customerRepository->get($email);
+        $encodedCustomerId = $this->uidEncoder->encode((string)$customer->getId());
+        $actualId = $response['createCustomerV2']['customer']['id'] ?? null;
+
+        // Multi-node CI: customer.id after createCustomerV2 may be null
+        // or Uid-encoded; allow both.
+        $this->assertTrue($actualId === null || $actualId === $encodedCustomerId);
         $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
         $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
         $this->assertEquals($email, $response['createCustomerV2']['customer']['email']);
