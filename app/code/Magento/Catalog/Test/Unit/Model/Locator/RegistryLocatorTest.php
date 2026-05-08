@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,13 +45,9 @@ class RegistryLocatorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->getMockForAbstractClass();
+        $this->registryMock = $this->createPartialMock(Registry::class, ['registry']);
+        $this->productMock = $this->createMock(ProductInterface::class);
+        $this->storeMock = $this->createMock(StoreInterface::class);
 
         $this->model = $this->objectManager->getObject(RegistryLocator::class, [
             'registry' => $this->registryMock,

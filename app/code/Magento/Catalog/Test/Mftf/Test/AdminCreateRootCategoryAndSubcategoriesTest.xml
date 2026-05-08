@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 
@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-46142"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <!--Delete all created data during the test execution and assign Default Root Category to Store-->
         <after>

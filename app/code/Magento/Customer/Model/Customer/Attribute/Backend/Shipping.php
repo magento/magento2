@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Backend;
 
 /**
  * Customer default shipping address backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
+     * Before save
+     *
      * @param \Magento\Framework\DataObject $object
      * @return void
      */
@@ -25,6 +25,8 @@ class Shipping extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     }
 
     /**
+     * After save
+     *
      * @param \Magento\Framework\DataObject $object
      * @return void
      */

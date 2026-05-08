@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Widget;
 
@@ -10,6 +10,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 
 /**
@@ -23,9 +24,9 @@ class Dob extends AbstractWidget
     /**
      * Constants for borders of date-type customer attributes
      */
-    const MIN_DATE_RANGE_KEY = 'date_range_min';
+    public const MIN_DATE_RANGE_KEY = 'date_range_min';
 
-    const MAX_DATE_RANGE_KEY = 'date_range_max';
+    public const MAX_DATE_RANGE_KEY = 'date_range_max';
 
     /**
      * @var array
@@ -171,6 +172,8 @@ class Dob extends AbstractWidget
     /**
      * Apply output filter to value
      *
+     * Normalizes date to display format with standard numerals to avoid localized numerals (e.g., Arabic)
+     *
      * @param string $value
      * @return string
      */
@@ -181,7 +184,7 @@ class Dob extends AbstractWidget
             $value = date('Y-m-d', $this->getTime());
             $value = $filter->outputFilter($value);
         }
-        return $value;
+        return $this->normalizedDobOutput($value);
     }
 
     /**
@@ -303,6 +306,7 @@ class Dob extends AbstractWidget
     public function getDateFormat()
     {
         $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
+        $dateFormat = $this->setTwoMonthPlaces($dateFormat);
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -409,19 +413,25 @@ class Dob extends AbstractWidget
         $localeData = (new DataBundle())->get($this->localeResolver->getLocale());
         $monthsData = $localeData['calendar']['gregorian']['monthNames'];
         $daysData = $localeData['calendar']['gregorian']['dayNames'];
-
+        $monthsFormat = $monthsData['format'];
+        $daysFormat = $daysData['format'];
+        $monthsAbbreviated = $monthsFormat['abbreviated'];
+        $monthsShort = $monthsAbbreviated ?? $monthsFormat['wide'];
+        $daysAbbreviated = $daysFormat['abbreviated'];
+        $daysShort = $daysAbbreviated ?? $daysFormat['wide'];
+        $daysShortFormat = $daysFormat['short'];
+        $daysMin = $daysShortFormat ?? $daysShort;
         return $this->encoder->encode(
             [
                 'closeText' => __('Done'),
                 'prevText' => __('Prev'),
                 'nextText' => __('Next'),
                 'currentText' => __('Today'),
-                'monthNames' => array_values(iterator_to_array($monthsData['format']['wide'])),
-                'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
-                'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
-                'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
-                'dayNamesMin' =>
-                 array_values(iterator_to_array(($daysData['format']['short']) ?: $daysData['format']['abbreviated'])),
+                'monthNames' => array_values(iterator_to_array($monthsFormat['wide'])),
+                'monthNamesShort' => array_values(iterator_to_array($monthsShort)),
+                'dayNames' => array_values(iterator_to_array($daysFormat['wide'])),
+                'dayNamesShort' => array_values(iterator_to_array($daysShort)),
+                'dayNamesMin' => array_values(iterator_to_array($daysMin)),
             ]
         );
     }
@@ -439,5 +449,47 @@ class Dob extends AbstractWidget
             'dd',
             $format
         );
+    }
+
+    /**
+     * Set 2 places for month value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoMonthPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!M)M(?!M)/',
+            'MM',
+            $format
+        );
+    }
+
+    /**
+     * Normalize the dob for a proper output on the frontend
+     *
+     * Converts localized date format (with potentially localized numerals like Arabic) to standard numerals
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    private function normalizedDobOutput(mixed $value): mixed
+    {
+        if (empty($value)) {
+            return $value;
+        }
+        $locale = $this->localeResolver->getLocale();
+        $dateFormat = $this->getDateFormat();
+        $dateTime = $this->_localeDate->date($value, $locale, false, false);
+        $formatter = new \IntlDateFormatter(
+            Resolver::DEFAULT_LOCALE,
+            \IntlDateFormatter::NONE,
+            \IntlDateFormatter::NONE,
+            $dateTime->getTimezone(),
+            null,
+            $dateFormat
+        );
+        return $formatter->format($dateTime);
     }
 }

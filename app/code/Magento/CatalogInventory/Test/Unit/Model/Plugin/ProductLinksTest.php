@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection;
 use Magento\CatalogInventory\Helper\Stock;
@@ -43,16 +44,14 @@ class ProductLinksTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider stockStatusDataProvider
-     */
+    #[DataProvider('stockStatusDataProvider')]
     public function testAfterGetProductCollectionShow($status, $callCount)
     {
         list($collectionMock, $subjectMock) = $this->buildMocks();
         $this->configMock->expects($this->once())->method('isShowOutOfStock')->willReturn($status);
         $this->stockHelperMock
             ->expects($this->exactly($callCount))
-            ->method('addInStockFilterToCollection')
+            ->method('addIsInStockFilterToCollection')
             ->with($collectionMock);
 
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
@@ -76,7 +75,7 @@ class ProductLinksTest extends TestCase
     /**
      * @return array
      */
-    public function stockStatusDataProvider()
+    public static function stockStatusDataProvider()
     {
         return [
             [0, 1],

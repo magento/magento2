@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
@@ -17,7 +17,7 @@ interface MutableDataInterface
      * @param  array $data
      * @return void
      */
-    public function setData(array $data);
+    public function setData(int|string $dataName, array $data);
 
     /**
      * Retrieve data injected dynamically in test case.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Package\Processor\PreProcessor;
@@ -60,6 +60,11 @@ class Less implements ProcessorInterface
     private $map = [];
 
     /**
+     * @var array
+     */
+    private $pFileCache = [];
+
+    /**
      * Less constructor
      *
      * @param FileNameResolver $fileNameResolver
@@ -95,7 +100,7 @@ class Less implements ProcessorInterface
                 if ($packageFile && $packageFile->getOrigPackage() === $package) {
                     continue;
                 }
-                $deployFileName = $this->fileNameResolver->resolve($file->getFileName());
+                $deployFileName = $this->fileNameResolver->resolve($file->getFileName() ?? '');
                 if ($deployFileName !== $file->getFileName()) {
                     if ($this->hasOverrides($file, $package)) {
                         $file = clone $file;
@@ -132,6 +137,7 @@ class Less implements ProcessorInterface
         $currentPackageFiles = array_merge($package->getFilesByType('less'), $package->getFilesByType('css'));
 
         foreach ($currentPackageFiles as $file) {
+            $this->pFileCache = [];
             if ($this->inParentFiles($file->getDeployedFileName(), $parentFile->getFileName(), $map)) {
                 return true;
             }
@@ -154,6 +160,10 @@ class Less implements ProcessorInterface
                 return true;
             } else {
                 foreach ($map[$parentFile] as $pFile) {
+                    if (in_array($pFile, $this->pFileCache)) {
+                        continue;
+                    }
+                    $this->pFileCache[] = $pFile;
                     if ($this->inParentFiles($fileName, $pFile, $map)) {
                         return true;
                     }

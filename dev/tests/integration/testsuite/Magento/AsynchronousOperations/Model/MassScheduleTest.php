@@ -6,8 +6,8 @@
  * Given current name generation logic both are going to be translated to BarSomeBazV1. This test checks such things
  * are not going to happen.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AsynchronousOperations\Model;
 
@@ -25,6 +25,7 @@ use Magento\TestFramework\MessageQueue\PreconditionFailedException;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -103,9 +104,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider productDataProvider
      * @param ProductInterface[] $products
      */
+    #[DataProvider('productDataProvider')]
     public function testScheduleMass($products)
     {
         try {
@@ -126,9 +127,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider publisherExceptionDataProvider
      * @param \Exception $exception
      */
+    #[DataProvider('publisherExceptionDataProvider')]
     public function testScheduleMassWithExceptionDuringPublishing(\Exception $exception)
     {
         $products = [
@@ -165,7 +166,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function publisherExceptionDataProvider(): array
+    public static function publisherExceptionDataProvider(): array
     {
         return [
             [new \InvalidArgumentException('Unknown publisher type async')],
@@ -245,9 +246,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider productExceptionDataProvider
      * @param ProductInterface[] $products
      */
+    #[DataProvider('productExceptionDataProvider')]
     public function testScheduleMassOneEntityFailure($products)
     {
         try {
@@ -297,7 +298,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    private function getProduct()
+    private static function getProduct()
     {
         /** @var $product \Magento\Catalog\Model\Product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -318,20 +319,20 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         return $product;
     }
 
-    public function productDataProvider()
+    public static function productDataProvider()
     {
         return [
             'single_product' => [
-                [['product' => $this->getProduct()]],
+                [['product' => self::getProduct()]],
             ],
             'multiple_products' => [
                 [
-                    ['product' => $this->getProduct()
+                    ['product' => self::getProduct()
                         ->setName('Simple Product 3')
                         ->setSku('unique-simple-product3')
                         ->setMetaTitle('meta title 3')
                     ],
-                    ['product' => $this->getProduct()
+                    ['product' => self::getProduct()
                         ->setName('Simple Product 2')
                         ->setSku('unique-simple-product2')
                         ->setMetaTitle('meta title 2')
@@ -341,16 +342,16 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function productExceptionDataProvider()
+    public static function productExceptionDataProvider()
     {
         return [
             'single_product' => [
-                [['product' => $this->getProduct()]],
+                [['product' => self::getProduct()]],
             ],
             'multiple_products' => [
                 [
-                    ['product' => $this->getProduct()],
-                    ['customer' => $this->getProduct()]
+                    ['product' => self::getProduct()],
+                    ['customer' => self::getProduct()]
                 ]
             ],
         ];

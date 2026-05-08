@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,10 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Edit;
 
 use Magento\Email\Block\Adminhtml\Template\Edit\Form;
 use Magento\Email\Model\Template;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +21,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Form */
     protected $form;
 
@@ -40,28 +42,30 @@ class FormTest extends TestCase
     {
         $this->variablesMock = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
-            ->setMethods(['toOptionArray'])
+            ->onlyMethods(['toOptionArray'])
             ->getMock();
         $this->variableFactoryMock = $this->getMockBuilder(VariableFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->variableMock = $this->getMockBuilder(Variable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVariablesOptionArray'])
+            ->onlyMethods(['getVariablesOptionArray'])
             ->getMock();
         $this->templateMock = $this->getMockBuilder(Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getVariablesOptionArray'])
+            ->onlyMethods(['getId', 'getVariablesOptionArray'])
             ->getMock();
-        $objectManager = new ObjectManager($this);
-        $this->form = $objectManager->getObject(
-            Form::class,
-            [
-                'variableFactory' => $this->variableFactoryMock,
-                'variables' => $this->variablesMock
-            ]
-        );
+
+        $this->form = $this->getMockBuilder(Form::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $this->addPropertyValue($this->form, [
+            '_variableFactory' => $this->variableFactoryMock,
+            '_variables' => $this->variablesMock,
+        ], Form::class);
     }
 
     /**

@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Model\Config\Backend\Show;
 
+use Magento\Config\App\Config\Source\ModularConfigSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer Show Customer Model
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.UnusedPrivateField)
  */
 class Customer extends \Magento\Framework\App\Config\Value
 {
+    public const XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY = 'customer/address/company_show';
+
     /**
      * @var \Magento\Eav\Model\Config
      */
@@ -29,6 +35,11 @@ class Customer extends \Magento\Framework\App\Config\Value
      * @var string
      */
     private $telephoneShowDefaultValue = 'req';
+
+    /**
+     * @var ModularConfigSource
+     */
+    private $configSource;
 
     /**
      * @var array
@@ -50,6 +61,8 @@ class Customer extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param ModularConfigSource|null $configSource
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -58,13 +71,15 @@ class Customer extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = [],
+        ?ModularConfigSource $configSource = null
     ) {
         $this->_eavConfig = $eavConfig;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
         $this->storeManager = $storeManager;
+        $this->configSource = $configSource ?: ObjectManager::getInstance()->get(ModularConfigSource::class);
     }
 
     /**
@@ -138,7 +153,8 @@ class Customer extends \Magento\Framework\App\Config\Value
                 $attributeObject->save();
             }
         } elseif ($this->getScope() == ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $valueConfig = $this->getValueConfig($this->telephoneShowDefaultValue);
+            $defaultValue = $this->configSource->get(ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $this->getPath());
+            $valueConfig = $this->getValueConfig($defaultValue === [] ? '' : $defaultValue);
             foreach ($this->_getAttributeObjects() as $attributeObject) {
                 $attributeObject->setData('is_required', $valueConfig['is_required']);
                 $attributeObject->setData('is_visible', $valueConfig['is_visible']);

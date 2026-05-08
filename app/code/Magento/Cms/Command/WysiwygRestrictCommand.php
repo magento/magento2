@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -58,7 +58,7 @@ class WysiwygRestrictCommand extends Command
     /**
      * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $restrictArg = mb_strtolower((string)$input->getArgument('restrict'));
         $restrict = $restrictArg === 'y' ? '1' : '0';

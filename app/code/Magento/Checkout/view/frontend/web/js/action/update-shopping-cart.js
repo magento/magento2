@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -154,7 +154,12 @@ define([
         onError: function (response) {
             var that = this,
                 elm,
+                responseData = [];
+
+            try {
                 responseData = JSON.parse(response['error_message']);
+            } catch (error) {
+            }
 
             if (response['error_message']) {
                 try {

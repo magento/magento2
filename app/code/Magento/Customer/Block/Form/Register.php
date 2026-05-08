@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Form;
 
@@ -69,8 +69,8 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
         array $data = [],
-        Config $newsLetterConfig = null,
-        Address $addressHelper = null
+        ?Config $newsLetterConfig = null,
+        ?Address $addressHelper = null
     ) {
         $data['addressHelper'] = $addressHelper ?: ObjectManager::getInstance()->get(Address::class);
         $data['directoryHelper'] = $directoryHelper;

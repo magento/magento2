@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,5 +47,20 @@
     </entity>
     <entity name="ShippingOriginPostcodeInheritValue" type="inheritPostcodeFlag">
         <data key="value">1</data>
+    </entity>
+    <entity name="CustomShippingPricesConfigData">
+        <data key="path">tax/calculation/shipping_includes_tax</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="ShippingPricesConfigData">
+        <data key="path">tax/calculation/shipping_includes_tax</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DisplayShippingAmountConfigData">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="AdminShippingSettingsOriginRegionConfigData">
+        <data key="path">shipping/origin/region_id</data>
     </entity>
 </entities>

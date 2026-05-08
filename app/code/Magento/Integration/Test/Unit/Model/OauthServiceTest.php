@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Integration\Test\Unit\Model;
@@ -18,6 +18,7 @@ use Magento\Integration\Model\Oauth\Token\Provider;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Model\OauthService;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,8 @@ use Psr\Log\LoggerInterface;
  */
 class OauthServiceTest extends TestCase
 {
+    use MockCreationTrait;
+
     public const VALUE_CONSUMER_ID = 1;
 
     public const VALUE_CONSUMER_KEY = 'asdfghjklaqwerfdtyuiomnbgfdhbsoi';
@@ -68,18 +71,16 @@ class OauthServiceTest extends TestCase
     {
         $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->_tokenProviderMock = $this->getMockBuilder(
             Provider::class
         )->disableOriginalConstructor()
             ->getMock();
-        $this->_tokenMock = $this->getMockBuilder(
-            Token::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['createVerifierToken', 'getType', '__wakeup', 'delete']
-            )->getMock();
+        $this->_tokenMock = $this->createPartialMockWithReflection(
+            Token::class,
+            ['createVerifierToken', '__wakeup', 'delete', 'getType']
+        );
 
         $this->_tokenFactoryMock = $this->createPartialMock(
             TokenFactory::class,
@@ -89,7 +90,7 @@ class OauthServiceTest extends TestCase
         $this->_consumerMock = $this->getMockBuilder(
             Consumer::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getData', 'getId', 'load', 'save', 'delete', '__wakeup']
             )->getMock();
         $this->_consumerData = [
@@ -110,19 +111,19 @@ class OauthServiceTest extends TestCase
         );
 
         $this->_service = new OauthService(
-            $this->getMockForAbstractClass(StoreManagerInterface::class),
+            $this->createMock(StoreManagerInterface::class),
             $this->_consumerFactory,
             $this->_tokenFactoryMock,
             $this->createMock(Data::class),
             $this->createMock(LaminasClient::class),
-            $this->getMockForAbstractClass(LoggerInterface::class),
+            $this->createMock(LoggerInterface::class),
             $this->createMock(Oauth::class),
             $this->_tokenProviderMock
         );
         $this->_emptyConsumerMock = $this->getMockBuilder(
             Integration::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getData', 'load', 'getId', 'save', 'delete', '__wakeup']
             )->getMock();
         $this->_emptyConsumerMock->expects($this->any())->method('getId')->willReturn(null);

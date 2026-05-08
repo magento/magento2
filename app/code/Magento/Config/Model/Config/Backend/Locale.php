@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -61,8 +61,8 @@ class Locale extends \Magento\Framework\App\Config\Value
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_configsFactory = $configsFactory;

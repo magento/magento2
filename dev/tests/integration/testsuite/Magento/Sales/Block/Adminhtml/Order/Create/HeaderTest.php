@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -28,8 +29,8 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      * @param int|null $storeId
      * @param string $expectedResult
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider toHtmlDataProvider
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($customerId, $storeId, $expectedResult)
     {
         /** @var \Magento\Backend\Model\Session\Quote $session */
@@ -39,7 +40,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $this->_block->toHtml());
     }
 
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider(): array
     {
         $customerIdFromFixture = 1;
         $defaultStoreView = 1;

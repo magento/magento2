@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
-use Laminas\Filter\File\Rename;
-use Laminas\File\Transfer\Exception\PhpEnvironmentException;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -92,7 +90,7 @@ class ValidatorFile extends Validator
         \Magento\Framework\File\Size $fileSize,
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\Framework\Validator\File\IsImage $isImageValidator,
-        Random $random = null
+        ?Random $random = null
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
@@ -126,7 +124,6 @@ class ValidatorFile extends Validator
      * @throws \Exception
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Validator\Exception
-     * @throws PhpEnvironmentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -183,8 +180,6 @@ class ValidatorFile extends Validator
             $dispersion = Uploader::getDispersionPath($fileName);
             $filePath = $dispersion . '/' . $fileName;
             $fileFullPath = $this->mediaDirectory->getAbsolutePath($this->quotePath . $filePath);
-
-            $upload->addFilter(new Rename(['target' => $fileFullPath, 'overwrite' => true]));
 
             if ($this->product !== null) {
                 $this->product->getTypeInstance()->addFileQueue(

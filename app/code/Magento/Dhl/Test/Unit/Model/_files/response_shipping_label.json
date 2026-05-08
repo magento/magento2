@@ -1,0 +1,18 @@
+{
+  "shipmentTrackingNumber": "1111111111",
+  "trackingUrl": "https://express.api.dhl.com/mydhlapi/test/shipments/1111111111/tracking",
+  "packages": [
+    {
+      "referenceNumber": 1,
+      "trackingNumber": "AB111111111111111111",
+      "trackingUrl": "https://express.api.dhl.com/mydhlapi/test/shipments/1111111111/tracking?pieceTrackingNumber=AB111111111111111111"
+    }
+  ],
+  "documents": [
+    {
+      "imageFormat": "PDF",
+      "content": "OutputImageContent",
+      "typeCode": "label"
+    }
+  ]
+}

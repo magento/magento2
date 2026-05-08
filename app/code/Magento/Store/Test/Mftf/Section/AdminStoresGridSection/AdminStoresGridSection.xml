@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -13,6 +13,7 @@
         <element name="storeFilterTextField" type="input" selector="#storeGrid_filter_store_title" timeout="90"/>
         <element name="searchButton" type="button" selector=".admin__data-grid-header button[title=Search]" timeout="30"/>
         <element name="resetButton" type="button" selector="button[title='Reset Filter']" timeout="30" deprecated="Use AdminDataGridHeaderSection.clearFilters instead"/>
+        <element name="resetFilterButton" type="button" selector="//button[@title='Reset Filter']" timeout="30" />
         <element name="websiteNameInFirstRow" type="text" selector="tr:nth-of-type(1) &gt; .col-website_title &gt; a"/>
         <element name="storeGrpNameInFirstRow" type="text" selector=".col-group_title&gt;a"/>
         <element name="storeNameInFirstRow" type="text" selector=".col-store_title&gt;a"/>
@@ -23,5 +24,6 @@
         <element name="websiteName" type="text" selector="//td[@class='a-left col-website_title  ']/a[contains(.,'{{websiteName}}')]" parameterized="true"/>
         <element name="gridCell" type="text" selector="//table[@class='data-grid']//tr[{{row}}]//td[count(//table[@class='data-grid']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
         <element name="storeViewLinkInNthRow" type="text" selector="tr:nth-of-type({{row}}) &gt; .col-store_title &gt; a" parameterized="true"/>
-     </section>
+        <element name="isDefaultUnCheckBox" type="checkbox" selector="//input[@id='is_default']"/>
+    </section>
 </sections>

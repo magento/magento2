@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,12 +12,15 @@ use Magento\Framework\Indexer\Handler\AttributeHandler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+
 
 /**
  * Unit test for Magento\Framework\Indexer\Handler\AttributeHandler.
  */
 class AttributeHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SourceProviderInterface|MockObject
      */
@@ -33,10 +36,17 @@ class AttributeHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->source = $this->getMockBuilder(SourceProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['joinAttribute'])
-            ->getMockForAbstractClass();
+        $this->source = $this->createPartialMockWithReflection(
+            SourceProviderInterface::class,
+            [
+                'joinAttribute',  // Custom method not in interface
+                'getMainTable',   // Interface methods
+                'getIdFieldName',
+                'addFieldToSelect',
+                'getSelect',
+                'addFieldToFilter'
+            ]
+        );
 
         $objectManager = new ObjectManager($this);
 

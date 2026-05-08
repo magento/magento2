@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <li id="payment" role="presentation" class="checkout-payment-method" data-bind="fadeVisible: isVisible">
@@ -16,15 +16,14 @@
             <!--/ko-->
         <!--/ko-->
         <form id="co-payment-form" class="form payments" novalidate="novalidate">
-            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
+            <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key">
             <fieldset class="fieldset">
                 <legend class="legend">
                     <span data-bind="i18n: 'Payment Information'"></span>
-                </legend><br />
+                </legend>
                 <!-- ko foreach: getRegion('place-order-captcha') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
-                <br />
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->

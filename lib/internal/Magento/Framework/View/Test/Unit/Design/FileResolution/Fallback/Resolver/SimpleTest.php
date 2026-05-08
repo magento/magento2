@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SimpleTest extends TestCase
 {
@@ -57,8 +58,7 @@ class SimpleTest extends TestCase
         $this->directoryMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->ruleMock = $this->getMockBuilder(RuleInterface::class)
-            ->getMockForAbstractClass();
+        $this->ruleMock = $this->createMock(RuleInterface::class);
         $this->rulePoolMock = $this->getMockBuilder(RulePool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -92,9 +92,8 @@ class SimpleTest extends TestCase
      * @param string $locale
      * @param string $module
      * @param array $expectedParams
-     *
-     * @dataProvider resolveDataProvider
-     */
+     *     */
+    #[DataProvider('resolveDataProvider')]
     public function testResolve($area, $themePath, $locale, $module, array $expectedParams)
     {
         $expectedPath = '/some/dir/file.ext';
@@ -121,7 +120,7 @@ class SimpleTest extends TestCase
     /**
      * @return array
      */
-    public function resolveDataProvider()
+    public static function resolveDataProvider()
     {
         return [
             'no area' => [
@@ -300,7 +299,7 @@ class SimpleTest extends TestCase
      */
     private function getMockForTheme($themePath)
     {
-        $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $theme = $this->createMock(ThemeInterface::class);
         $theme->expects($this->any())
             ->method('getThemePath')
             ->willReturn($themePath);

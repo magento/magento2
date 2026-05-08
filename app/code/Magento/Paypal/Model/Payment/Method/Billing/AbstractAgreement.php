@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Payment\Method\Billing;
 
@@ -69,8 +69,8 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Payment\Model\Method\Logger $logger,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_agreementFactory = $agreementFactory;
@@ -94,7 +94,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
      * @param \Magento\Paypal\Model\Quote|\Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if ($this->_isAvailable === null) {
             $this->_isAvailable = parent::isAvailable($quote) && $this->_isAvailable($quote);

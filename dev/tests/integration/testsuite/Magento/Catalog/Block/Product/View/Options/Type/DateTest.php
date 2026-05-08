@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -101,8 +102,8 @@ class DateTest extends TestCase
      * @param array $expected
      * @magentoAppArea frontend
      * @magentoConfigFixture current_store catalog/custom_options/year_range 2020,2030
-     * @dataProvider toHtmlWithDropDownDataProvider
      */
+    #[DataProvider('toHtmlWithDropDownDataProvider')]
     public function testToHtmlWithDropDown(array $data, array $expected): void
     {
         $this->prepareBlock($data);
@@ -116,8 +117,8 @@ class DateTest extends TestCase
      * @magentoAppArea frontend
      * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
      * @magentoConfigFixture current_store catalog/custom_options/year_range 2020,2030
-     * @dataProvider toHtmlWithCalendarDataProvider
      */
+    #[DataProvider('toHtmlWithCalendarDataProvider')]
     public function testToHtmlWithCalendar(array $data, array $expected, ?string $locale = null): void
     {
         if ($locale) {
@@ -208,7 +209,7 @@ HTML;
     /**
      * @return array
      */
-    public function toHtmlWithDropDownDataProvider(): array
+    public static function toHtmlWithDropDownDataProvider(): array
     {
         return [
             [
@@ -253,7 +254,7 @@ HTML;
     /**
      * @return array
      */
-    public function toHtmlWithCalendarDataProvider(): array
+    public static function toHtmlWithCalendarDataProvider(): array
     {
         return [
             [

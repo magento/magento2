@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model;
@@ -318,7 +318,7 @@ class Info
      * @param array|null $map
      * @return array|\Magento\Framework\DataObject
      */
-    public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, array $map = null)
+    public function &exportFromPayment(\Magento\Payment\Model\InfoInterface $payment, $to, ?array $map = null)
     {
         $fullMap = array_merge($this->_paymentMap, $this->_systemMap);
         \Magento\Framework\DataObject\Mapper::accumulateByMap(

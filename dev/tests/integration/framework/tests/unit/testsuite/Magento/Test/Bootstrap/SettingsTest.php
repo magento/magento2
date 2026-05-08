@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Test class for \Magento\TestFramework\Bootstrap\Settings.
  */
 namespace Magento\Test\Bootstrap;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\TestFramework\Bootstrap\Settings;
 
 class SettingsTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,27 +20,19 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var string
-     */
-    protected $_fixtureDir;
-
-    /**
-     * Define the fixture directory to be used in both data providers and tests
+     * Get fixture directory path
      *
-     * @param string|null $name
-     * @param array $data
-     * @param string $dataName
+     * @return string
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    private static function getFixtureDir(): string
     {
-        parent::__construct($name, $data, $dataName);
-        $this->_fixtureDir = realpath(__DIR__ . '/_files') . '/';
+        return realpath(__DIR__ . '/_files') . '/';
     }
 
     protected function setUp(): void
     {
-        $this->_object = new \Magento\TestFramework\Bootstrap\Settings(
-            $this->_fixtureDir,
+        $this->_object = new Settings(
+            self::getFixtureDir(),
             [
                 'item_label' => 'Item Label',
                 'number_of_items' => 42,
@@ -68,21 +63,21 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Base path \'non_existing_dir\' has to be an existing directory.');
 
-        new \Magento\TestFramework\Bootstrap\Settings('non_existing_dir', []);
+        new Settings('non_existing_dir', []);
     }
 
     /**
      * @param string $settingName
      * @param mixed $defaultValue
      * @param mixed $expectedResult
-     * @dataProvider getDataProvider
      */
+    #[DataProvider('getDataProvider')]
     public function testGet($settingName, $defaultValue, $expectedResult)
     {
         $this->assertSame($expectedResult, $this->_object->get($settingName, $defaultValue));
     }
 
-    public function getDataProvider()
+    public static function getDataProvider(): array
     {
         return [
             'string type' => ['item_label', null, 'Item Label'],
@@ -98,14 +93,14 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $settingName
      * @param bool $expectedResult
-     * @dataProvider getAsBooleanDataProvider
      */
+    #[DataProvider('getAsBooleanDataProvider')]
     public function testGetAsBoolean($settingName, $expectedResult)
     {
         $this->assertSame($expectedResult, $this->_object->getAsBoolean($settingName));
     }
 
-    public function getAsBooleanDataProvider()
+    public static function getAsBooleanDataProvider(): array
     {
         return [
             'non-enabled string' => ['item_label', false],
@@ -118,29 +113,29 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
      * @param string $settingName
      * @param mixed $defaultValue
      * @param string $expectedResult
-     * @dataProvider getAsFileDataProvider
      */
+    #[DataProvider('getAsFileDataProvider')]
     public function testGetAsFile($settingName, $defaultValue, $expectedResult)
     {
         $this->assertSame($expectedResult, $this->_object->getAsFile($settingName, $defaultValue));
     }
 
-    public function getAsFileDataProvider()
+    public static function getAsFileDataProvider(): array
     {
         return [
-            'existing file' => ['test_file', '', "{$this->_fixtureDir}metrics.php"],
-            'zero value setting' => ['zero_value', 'default_should_be_ignored', "{$this->_fixtureDir}0"],
+            'existing file' => ['test_file', '', self::getFixtureDir(). 'metrics.php'],
+            'zero value setting' => ['zero_value', 'default_should_be_ignored', self::getFixtureDir(). '0'],
             'empty default value' => ['non_existing_file', '', ''],
-            'zero default value' => ['non_existing_file', '0', "{$this->_fixtureDir}0"],
-            'default value' => ['non_existing_file', 'metrics.php', "{$this->_fixtureDir}metrics.php"]
+            'zero default value' => ['non_existing_file', '0', self::getFixtureDir(). '0'],
+            'default value' => ['non_existing_file', 'metrics.php', self::getFixtureDir(). 'metrics.php']
         ];
     }
 
     /**
      * @param string $settingName
      * @param string $expectedResult
-     * @dataProvider getAsMatchingPathsDataProvider
      */
+    #[DataProvider('getAsMatchingPathsDataProvider')]
     public function testGetAsMatchingPaths($settingName, $expectedResult)
     {
         $actualResult = $this->_object->getAsMatchingPaths($settingName);
@@ -150,31 +145,31 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
-    public function getAsMatchingPathsDataProvider()
+    public static function getAsMatchingPathsDataProvider(): array
     {
         return [
             'single pattern' => [
                 'all_xml_files',
-                ["{$this->_fixtureDir}1.xml", "{$this->_fixtureDir}2.xml"],
+                [self::getFixtureDir(). '1.xml', self::getFixtureDir(). '2.xml'],
             ],
             'pattern with braces' => [
                 'all_xml_or_one_php_file',
-                ["{$this->_fixtureDir}1.xml", "{$this->_fixtureDir}2.xml", "{$this->_fixtureDir}4.php"],
+                [self::getFixtureDir(). '1.xml', self::getFixtureDir(). '2.xml', self::getFixtureDir(). '4.php'],
             ],
             'multiple patterns' => [
                 'one_xml_or_any_php_file',
-                ["{$this->_fixtureDir}1.xml", "{$this->_fixtureDir}4.php"],
+                [self::getFixtureDir(). '1.xml', self::getFixtureDir(). '4.php'],
             ],
             'non-existing setting' => ['non_existing', []],
-            'setting with zero value' => ['zero_value', ["{$this->_fixtureDir}0"]]
+            'setting with zero value' => ['zero_value', [self::getFixtureDir(). '0']]
         ];
     }
 
     /**
      * @param string $settingName
      * @param mixed $expectedResult
-     * @dataProvider getAsConfigFileDataProvider
      */
+    #[DataProvider('getAsConfigFileDataProvider')]
     public function testGetAsConfigFile($settingName, $expectedResult)
     {
         $actualResult = $this->_object->getAsConfigFile($settingName);
@@ -184,20 +179,20 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedResult, $actualResult);
     }
 
-    public function getAsConfigFileDataProvider()
+    public static function getAsConfigFileDataProvider(): array
     {
         return [
-            'config file & dist file' => ['config_file_with_dist', "{$this->_fixtureDir}1.xml"],
-            'config file & no dist file' => ['config_file_no_dist', "{$this->_fixtureDir}2.xml"],
-            'no config file & dist file' => ['no_config_file_dist', "{$this->_fixtureDir}3.xml.dist"]
+            'config file & dist file' => ['config_file_with_dist', self::getFixtureDir(). '1.xml'],
+            'config file & no dist file' => ['config_file_no_dist', self::getFixtureDir(). '2.xml'],
+            'no config file & dist file' => ['no_config_file_dist', self::getFixtureDir(). '3.xml.dist']
         ];
     }
 
     /**
      * @param string $settingName
      * @param string $expectedExceptionMsg
-     * @dataProvider getAsConfigFileExceptionDataProvider
      */
+    #[DataProvider('getAsConfigFileExceptionDataProvider')]
     public function testGetAsConfigFileException($settingName, $expectedExceptionMsg)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -205,7 +200,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->_object->getAsConfigFile($settingName);
     }
 
-    public function getAsConfigFileExceptionDataProvider()
+    public static function getAsConfigFileExceptionDataProvider(): array
     {
         return [
             'non-existing setting' => [
@@ -214,7 +209,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
             ],
             'non-existing file' => [
                 'item_label',
-                __("Setting 'item_label' specifies the non-existing file '%1Item Label.dist'.", $this->_fixtureDir),
+                __("Setting 'item_label' specifies the non-existing file '%1Item Label.dist'.", self::getFixtureDir()),
             ]
         ];
     }

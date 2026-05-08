@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -124,6 +124,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store payment/purchaseorder/active 0
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php

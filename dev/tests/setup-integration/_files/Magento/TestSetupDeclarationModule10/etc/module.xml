@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magento_TestSetupDeclarationModule10" setup_version="0.0.1"/>
+    <sequence>
+        <module name="Magento_TestSetupDeclarationModule1"/>
+    </sequence>
+</config>

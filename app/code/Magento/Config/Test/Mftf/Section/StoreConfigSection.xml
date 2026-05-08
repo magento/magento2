@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,5 +16,7 @@
         <element name="Country" type="select" selector="#general_store_information_country_id"/>
         <element name="fillVATNumber" type="input" selector="#general_store_information_merchant_vat_number"/>
         <element name="validateVATNumber" type="button" selector="#general_store_information_validate_vat_number" timeout="30"/>
+        <element name="storeName" type="input" selector="#general_store_information_name"/>
+        <element name="storePhoneNumber" type="input" selector="#general_store_information_phone"/>
     </section>
 </sections>

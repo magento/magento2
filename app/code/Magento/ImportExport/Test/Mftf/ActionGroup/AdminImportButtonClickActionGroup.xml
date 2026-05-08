@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminImportButtonClickActionGroup">
+        <annotations>
+            <description>In the Admin Import page. Imports the provided File. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="importNoticeMessage" type="string" defaultValue=""/>
+            <argument name="importMessageType" type="string" defaultValue="success"/>
+            <argument name="importMessage" type="string" defaultValue="Import successfully done"/>
+        </arguments>
+        <waitForElementClickable selector="{{AdminImportMainSection.importButton}}" stepKey="waitForImportButtonElementClickable"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <waitForElementVisible selector="{{AdminImportValidationMessagesSection.notice}}" stepKey="waitForNoticeMessage"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{importNoticeMessage}}" stepKey="seeNoticeMessage"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.messageByType(importMessageType)}}" userInput="{{importMessage}}" stepKey="seeImportMessage"/>
+    </actionGroup>
+</actionGroups>
+

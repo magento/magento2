@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,14 +24,9 @@ class CreditCardValidationHandlerTest extends TestCase
             Info::PAYPAL_IAVS => 'X'
         ];
 
-        $paypalInfoManager = $this->getMockBuilder(Info::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $paymentMock = $this->getMockBuilder(InfoInterface::class)
-            ->getMock();
-        $responseMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $paypalInfoManager = $this->createMock(Info::class);
+        $paymentMock = $this->createMock(InfoInterface::class);
+        $responseMock = $this->createMock(DataObject::class);
 
         $responseMock->expects($this->exactly(count($expectedHandleResult)*2))
             ->method('getData')

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -80,11 +81,11 @@ class OrderRepositoryInterfaceTest extends WebapiAbstract
      * Check that order is updated successfuly via async webapi
      *
      * @magentoApiDataFixture Magento/Sales/_files/order.php
-     * @dataProvider saveDataProvider
      * @param array $data
      * @param bool $isBulk
      * @return void
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave(array $data, bool $isBulk = true): void
     {
         $this->_markTestAsRestOnly();
@@ -137,7 +138,7 @@ class OrderRepositoryInterfaceTest extends WebapiAbstract
      *
      * @return array
      */
-    public function saveDataProvider(): array
+    public static function saveDataProvider(): array
     {
         return [
             'update order in bulk mode' => [

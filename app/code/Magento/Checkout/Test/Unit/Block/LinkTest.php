@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,14 @@ namespace Magento\Checkout\Test\Unit\Block;
 
 use Magento\Checkout\Block\Link;
 use Magento\Checkout\Helper\Data;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LinkTest extends TestCase
 {
@@ -25,6 +28,18 @@ class LinkTest extends TestCase
     protected function setUp(): void
     {
         $this->_objectManagerHelper = new ObjectManager($this);
+
+        $objects = [
+            [
+                SecureHtmlRenderer::class,
+                $this->createMock(SecureHtmlRenderer::class)
+            ],
+            [
+                Random::class,
+                $this->createMock(Random::class)
+            ]
+        ];
+        $this->_objectManagerHelper->prepareObjectManager($objects);
     }
 
     public function testGetUrl()
@@ -32,7 +47,7 @@ class LinkTest extends TestCase
         $path = 'checkout';
         $url = 'http://example.com/';
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->with($path)->willReturn($url . $path);
 
         $context = $this->_objectManagerHelper->getObject(
@@ -44,21 +59,21 @@ class LinkTest extends TestCase
     }
 
     /**
-     * @dataProvider toHtmlDataProvider
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($canOnepageCheckout, $isOutputEnabled)
     {
         $helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['canOnepageCheckout', 'isModuleOutputEnabled']
             )->getMock();
 
         $moduleManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['isOutputEnabled']
             )->getMock();
 
@@ -67,7 +82,7 @@ class LinkTest extends TestCase
             Link::class,
             ['moduleManager' => $moduleManager, 'checkoutHelper' => $helper]
         );
-        $helper->expects($this->any())->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
+        $helper->method('canOnepageCheckout')->willReturn($canOnepageCheckout);
         $moduleManager->expects(
             $this->any()
         )->method(
@@ -83,7 +98,7 @@ class LinkTest extends TestCase
     /**
      * @return array
      */
-    public function toHtmlDataProvider()
+    public static function toHtmlDataProvider()
     {
         return [[false, true], [true, false], [false, false]];
     }

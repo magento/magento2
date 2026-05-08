@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Interception\Config;
 
@@ -103,8 +103,8 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
         \Magento\Framework\Interception\ObjectManager\ConfigInterface $omConfig,
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         $cacheId = 'interception',
-        SerializerInterface $serializer = null,
-        CacheManager $cacheManager = null
+        ?SerializerInterface $serializer = null,
+        ?CacheManager $cacheManager = null
     ) {
         $this->_omConfig = $omConfig;
         $this->_relations = $relations;

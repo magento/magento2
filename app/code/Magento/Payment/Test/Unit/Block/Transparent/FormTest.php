@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Payment\Model\Method\TransparentInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,13 +57,9 @@ class FormTest extends TestCase
     {
         $objectManagerHelper = new ObjectManager($this);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->setMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl'])
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
         $context = $objectManagerHelper->getObject(
             Context::class,
@@ -76,12 +73,10 @@ class FormTest extends TestCase
             ->getMock();
 
         $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
         $paymentConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -108,8 +103,8 @@ class FormTest extends TestCase
      * @param mixed $fieldValue
      * @param mixed $expected
      *
-     * @dataProvider getMethodConfigDataDataProvider
      */
+    #[DataProvider('getMethodConfigDataDataProvider')]
     public function testGetMethodConfigData($fieldName, $fieldValue, $expected)
     {
         $this->initializeMethodWithConfigMock([[$fieldName, null, $fieldValue]]);
@@ -148,7 +143,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getMethodConfigDataDataProvider()
+    public static function getMethodConfigDataDataProvider()
     {
         return [
             ['gateway_name', 'payment_gateway', 'payment_gateway'],
@@ -157,13 +152,13 @@ class FormTest extends TestCase
     }
 
     /**
-     * @dataProvider getCgiUrlDataProvider
      *
      * @param $sandboxFlag
      * @param $cgiUrlTestMode
      * @param $cgiUrl
      * @param $expectedUrl
      */
+    #[DataProvider('getCgiUrlDataProvider')]
     public function testGetCgiUrl($sandboxFlag, $cgiUrlTestMode, $cgiUrl, $expectedUrl)
     {
         $this->initializeMethodWithConfigMock(
@@ -189,7 +184,7 @@ class FormTest extends TestCase
      *
      * @return array
      */
-    public function getCgiUrlDataProvider()
+    public static function getCgiUrlDataProvider()
     {
         return [
             [
@@ -304,7 +299,7 @@ class FormTest extends TestCase
         $this->expectExceptionMessage((string)__('We cannot retrieve the transparent payment method model object.'));
 
         $methodMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->form->setMethod($methodMock);
         $this->form->getMethod();

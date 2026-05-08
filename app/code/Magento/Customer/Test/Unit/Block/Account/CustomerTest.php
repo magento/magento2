@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 use Magento\Customer\Block\Account\Customer;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +35,7 @@ class CustomerTest extends TestCase
     /**
      * @return array
      */
-    public function customerLoggedInDataProvider()
+    public static function customerLoggedInDataProvider()
     {
         return [
             [1, true],
@@ -44,9 +45,8 @@ class CustomerTest extends TestCase
 
     /**
      * @param $isLoggedIn
-     * @param $result
-     * @dataProvider customerLoggedInDataProvider
-     */
+     * @param $result */
+    #[DataProvider('customerLoggedInDataProvider')]
     public function testCustomerLoggedIn($isLoggedIn, $result)
     {
         $this->httpContext->expects($this->once())->method('getValue')

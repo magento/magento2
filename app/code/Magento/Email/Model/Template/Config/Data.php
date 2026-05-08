@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model\Template\Config;
 
@@ -24,7 +24,7 @@ class Data extends \Magento\Framework\Config\Data
         \Magento\Email\Model\Template\Config\Reader $reader,
         \Magento\Framework\Config\CacheInterface $cache,
         $cacheId = 'email_templates',
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }

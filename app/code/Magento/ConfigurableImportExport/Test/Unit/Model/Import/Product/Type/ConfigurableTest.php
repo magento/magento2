@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -18,6 +20,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -32,7 +35,9 @@ use ReflectionClass;
  */
 class ConfigurableTest extends AbstractImportTestCase
 {
-    /** @var ConfigurableImportExport\Model\Import\Product\Type\Configurable */
+    use MockCreationTrait;
+
+    /** @var Configurable */
     protected $configurable;
 
     /**
@@ -76,7 +81,7 @@ class ConfigurableTest extends AbstractImportTestCase
     protected $params;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|MockObject
+     * @var Product|MockObject
      */
     protected $_entityModel;
 
@@ -93,6 +98,11 @@ class ConfigurableTest extends AbstractImportTestCase
      * @var string
      */
     protected $productEntityLinkField = 'entity_id';
+
+    /**
+     * @var Product\SkuStorage|MockObject
+     */
+    private SkuStorage $skuStorage;
 
     /**
      * @inheritdoc
@@ -140,11 +150,7 @@ class ConfigurableTest extends AbstractImportTestCase
 
         $superAttributes = [];
         foreach ($this->_getSuperAttributes() as $superAttribute) {
-            $item = $this->getMockBuilder(AbstractAttribute::class)
-                ->onlyMethods(['isStatic'])
-                ->disableOriginalConstructor()
-                ->setConstructorArgs($superAttribute)
-                ->getMock();
+            $item = $this->createPartialMock(AbstractAttribute::class, ['isStatic']);
             $item->setData($superAttribute);
             $item->method('isStatic')
                 ->willReturn(false);
@@ -172,6 +178,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 'getAttributeOptions'
             ]
         );
+        $this->skuStorage = $this->createMock(SkuStorage::class);
         $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->params = [
@@ -179,21 +186,6 @@ class ConfigurableTest extends AbstractImportTestCase
             1 => 'configurable'
         ];
 
-        $this->_connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['joinLeft'])
-            ->onlyMethods(
-                [
-                    'select',
-                    'fetchAll',
-                    'fetchPairs',
-                    'insertOnDuplicate',
-                    'quoteIdentifier',
-                    'delete',
-                    'quoteInto'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->select = $this->createPartialMock(
             Select::class,
             [
@@ -203,17 +195,30 @@ class ConfigurableTest extends AbstractImportTestCase
                 'getConnection'
             ]
         );
+
+        $this->_connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            [
+                'setTestData', 'select', 'fetchAll', 'quoteInto', 'setQuoteIdentifierCallback',
+                'insert', 'insertOnDuplicate', 'delete'
+            ]
+        );
+        $this->_connection->setTestData('select', $this->select);
+        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
+        $this->_connection->expects($this->any())->method('fetchAll')->willReturn([]);
+        $this->_connection->expects($this->any())->method('quoteInto')->willReturn('query');
+        $this->_connection->expects($this->any())->method('insert')->willReturn(1);
+        $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturn(1);
+        $this->_connection->expects($this->any())->method('delete')->willReturn(1);
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
+
         $connectionMock = $this->createMock(Mysql::class);
         $connectionMock->expects($this->any())->method('quoteInto')->willReturn('query');
         $this->select->expects($this->any())->method('getConnection')->willReturn($connectionMock);
-        $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
-        $this->_connection->expects($this->any())->method('delete')->willReturnSelf();
-        $this->_connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->_connection->expects($this->any())->method('fetchAll')->willReturn([]);
+
+        // Anonymous class methods are already implemented above
 
         $this->resource = $this->createPartialMock(
             ResourceConnection::class,
@@ -249,12 +254,9 @@ class ConfigurableTest extends AbstractImportTestCase
             ['id' => 20, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1]
         ];
         foreach ($testProducts as $product) {
-            $item = $this->getMockBuilder(DataObject::class)
-                ->addMethods(['getAttributeSetId'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            $item = $this->createMock(DataObject::class);
             $item->setData($product);
-            $item->expects($this->any())->method('getAttributeSetId')->willReturn(4);
+            $item->setAttributeSetId(4);
 
             $products[] = $item;
         }
@@ -294,6 +296,9 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('getIdentifierField')
             ->willReturn($this->productEntityLinkField);
 
+        $productTypesConfig = $this->createMock(ConfigInterface::class);
+        $resourceHelper = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Helper::class);
+
         $this->configurable = $this->objectManagerHelper->getObject(
             Configurable::class,
             [
@@ -301,8 +306,11 @@ class ConfigurableTest extends AbstractImportTestCase
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
                 'resource' => $this->resource,
+                'productTypesConfig' => $productTypesConfig,
+                'resourceHelper' => $resourceHelper,
                 'productColFac' => $this->productCollectionFactory,
-                'metadataPool' => $metadataPoolMock
+                'metadataPool' => $metadataPoolMock,
+                'skuStorage' => $this->skuStorage
             ]
         );
     }
@@ -547,14 +555,20 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('getNewSku')
             ->willReturn($newSkus);
 
-        // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
-        $this->_connection
-            ->method('quoteIdentifier')
-            ->withConsecutive(['m.attribute_id'], ['o.attribute_id'])
-            ->willReturnOnConsecutiveCalls('a', 'b');
+        // Configure quoteIdentifier callback for the helper
+        $this->_connection->setQuoteIdentifierCallback(
+            function ($arg) {
+                if ($arg == 'm.attribute_id') {
+                    return 'a';
+                } elseif ($arg == 'o.attribute_id') {
+                    return 'b';
+                }
+                return $arg;
+            }
+        );
 
-        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
-        $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn(
+        // Configure helper data instead of using expects()
+        $this->_connection->setTestData('fetch_all_responses', [
             [
                 ['attribute_id' => 131, 'product_id' => 1, 'option_id' => 1, 'product_super_attribute_id' => 131],
 
@@ -576,9 +590,9 @@ class ConfigurableTest extends AbstractImportTestCase
                 ['attribute_id' => 132, 'product_id' => 3, 'option_id' => 3, 'product_super_attribute_id' => 132],
                 ['attribute_id' => 132, 'product_id' => 4, 'option_id' => 4, 'product_super_attribute_id' => 132],
                 ['attribute_id' => 132, 'product_id' => 5, 'option_id' => 5, 'product_super_attribute_id' => 132]
-            ]
-        );
-        $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn([]);
+            ],
+            [] // Second call returns empty array
+        ]);
 
         $bunch = $this->_getBunch();
         $this->_entityModel
@@ -588,13 +602,26 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('isRowAllowedToImport')
             ->willReturnCallback([$this, 'isRowAllowedToImport']);
 
-        $this->_entityModel->expects($this->any())->method('getOldSku')->willReturn([
+        $skuData = [
             'testsimpleold' => [
                 $this->productEntityLinkField => 10,
                 'type_id' => 'simple',
                 'attr_set_code' => 'Default'
             ],
-        ]);
+        ];
+        $this->_entityModel->expects($this->never())->method('getOldSku');
+
+        $this->skuStorage->expects($this->any())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return isset($skuData[$sku]);
+            });
+
+        $this->skuStorage->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return $skuData[$sku] ?? null;
+            });
 
         $this->_entityModel->expects($this->any())->method('getAttrSetIdToName')->willReturn([4 => 'Default']);
 
@@ -621,11 +648,11 @@ class ConfigurableTest extends AbstractImportTestCase
     /**
      * Verify is row valid method
      *
-     * @dataProvider getProductDataIsValidRow
      * @param array $productData
      *
      * @return void
      */
+    #[DataProvider('getProductDataIsValidRow')]
     public function testIsRowValid(array $productData): void
     {
         $bunch = $this->_getBunch();
@@ -657,7 +684,7 @@ class ConfigurableTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function getProductDataIsValidRow(): array
+    public static function getProductDataIsValidRow(): array
     {
         return [
             [
@@ -811,7 +838,6 @@ class ConfigurableTest extends AbstractImportTestCase
     {
         $reflection = new ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,7 +68,7 @@ class FactoryTest extends TestCase
     {
         $this->defaultTranslator = AbstractValidator::getDefaultTranslator();
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->validatorConfigMock = $this->createPartialMock(
             Config::class,
             ['createValidatorBuilder', 'createValidator']
@@ -77,8 +77,16 @@ class FactoryTest extends TestCase
         $this->fileIteratorMock = $this->createMock(FileIterator::class);
         $this->objectManagerMock
             ->method('create')
-            ->withConsecutive([Adapter::class], [Config::class, ['configFiles' => $this->fileIteratorMock]])
-            ->willReturnOnConsecutiveCalls($translateAdapterMock, $this->validatorConfigMock);
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($translateAdapterMock) {
+                    if ($arg1 == Adapter::class) {
+                        return $translateAdapterMock;
+                    } elseif ($arg1 == Config::class && $arg2 == ['configFiles' => $this->fileIteratorMock]) {
+                        return $this->validatorConfigMock;
+                    }
+                }
+            );
+
         $this->readerMock = $this->createPartialMock(
             Reader::class,
             ['getConfigurationFiles']

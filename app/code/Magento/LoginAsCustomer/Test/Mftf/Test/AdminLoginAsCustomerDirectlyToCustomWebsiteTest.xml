@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -46,16 +46,22 @@
                 <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="storeView" value="{{customStoreEN.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer_Assistance_Allowed.email"/>
             </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>

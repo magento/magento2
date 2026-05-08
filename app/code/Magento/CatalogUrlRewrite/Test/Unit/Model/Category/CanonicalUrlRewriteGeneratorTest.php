@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class CanonicalUrlRewriteGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
@@ -66,18 +66,16 @@ class CanonicalUrlRewriteGeneratorTest extends TestCase
         $storeId = 'store_id';
         $categoryId = 'category_id';
 
-        $this->category->expects($this->any())->method('getId')->willReturn($categoryId);
-        $this->categoryUrlPathGenerator->expects($this->any())->method('getUrlPathWithSuffix')
-            ->willReturn($requestPath);
-        $this->categoryUrlPathGenerator->expects($this->any())->method('getCanonicalUrlPath')
-            ->willReturn($targetPath);
+        $this->category->method('getId')->willReturn($categoryId);
+        $this->categoryUrlPathGenerator->method('getUrlPathWithSuffix')->willReturn($requestPath);
+        $this->categoryUrlPathGenerator->method('getCanonicalUrlPath')->willReturn($targetPath);
         $this->urlRewrite->expects($this->any())->method('setStoreId')->with($storeId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityId')->with($categoryId)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setEntityType')
             ->with(CategoryUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->with($requestPath)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->with($targetPath)->willReturnSelf();
-        $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn($this->urlRewrite);
+        $this->urlRewriteFactory->method('create')->willReturn($this->urlRewrite);
         $this->assertEquals(
             ['category.html_store_id' => $this->urlRewrite],
             $this->canonicalUrlRewriteGenerator->generate($storeId, $this->category)

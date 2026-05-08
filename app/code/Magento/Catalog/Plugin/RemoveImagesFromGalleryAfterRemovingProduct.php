@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -45,7 +45,6 @@ class RemoveImagesFromGalleryAfterRemovingProduct
      * @param callable $proceed
      * @param ProductInterface $product
      * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDelete(
         ProductRepositoryInterface $subject,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\MediaGallery\Model;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for IsPathExcludedInterface
@@ -34,8 +35,9 @@ class IsExcludedTest extends TestCase
      *
      * @param string $path
      * @param bool $isExcluded
-     * @dataProvider pathsProvider
+     *
      */
+    #[DataProvider('pathsProvider')]
     public function testExecute(string $path, bool $isExcluded): void
     {
         $this->assertEquals($isExcluded, $this->service->execute($path));
@@ -46,7 +48,7 @@ class IsExcludedTest extends TestCase
      *
      * @return array
      */
-    public function pathsProvider(): array
+    public static function pathsProvider(): array
     {
         return [
             ['theme', true],

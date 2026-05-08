@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cron\Model;
@@ -74,12 +74,12 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        TimezoneInterface $timezoneConverter = null,
-        DateTimeFactory $dateTimeFactory = null,
-        DeadlockRetrierInterface $retrier = null
+        ?TimezoneInterface $timezoneConverter = null,
+        ?DateTimeFactory $dateTimeFactory = null,
+        ?DeadlockRetrierInterface $retrier = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
@@ -215,7 +215,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             $to = $from;
         }
 
-        if ($from === false || $to === false) {
+        if ($from === false || $to === false || $mod == 0) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 

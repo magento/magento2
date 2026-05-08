@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
@@ -92,6 +92,13 @@ class CustomOptions extends AbstractModifier
      */
     public const IMPORT_OPTIONS_MODAL = 'import_options_modal';
     public const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
+    /**#@-*/
+
+    /**#@+
+     * Precision for price value
+     */
+    private const MAX_PRECISION = 6;
+    private const MIN_PRECISION = 2;
     /**#@-*/
 
     /**
@@ -188,10 +195,12 @@ class CustomOptions extends AbstractModifier
             }
         }
 
+        $productId = $this->locator->getProduct()->getId() ?? '';
+
         return array_replace_recursive(
             $data,
             [
-                $this->locator->getProduct()->getId() => [
+                $productId => [
                     static::DATA_SOURCE_DEFAULT => [
                         static::FIELD_ENABLE => 1,
                         static::GRID_OPTIONS_NAME => $options
@@ -214,7 +223,7 @@ class CustomOptions extends AbstractModifier
         $value = $this->arrayManager->get($path, $data);
 
         if (is_numeric($value)) {
-            $data = $this->arrayManager->replace($path, $data, $this->formatPrice($value));
+            $data = $this->arrayManager->replace($path, $data, $this->formatPriceValue($value));
         }
 
         return $data;
@@ -372,8 +381,8 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Option'),
                         'componentType' => DynamicRows::NAME,
-                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options',
-                        'template' => 'ui/dynamic-rows/templates/collapsible',
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options-per-page',
+                        'template' => 'Magento_Catalog/components/dynamic-rows-import-custom-options-per-page',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
                         'deleteValue' => '1',
@@ -387,6 +396,9 @@ class CustomOptions extends AbstractModifier
                             'insertData' => '${ $.provider }:${ $.dataProvider }',
                             '__disableTmpl' => ['insertData' => false],
                         ],
+                        'sizesConfig' => [
+                            'enabled' => true
+                        ]
                     ],
                 ],
             ],
@@ -1174,5 +1186,29 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
+    }
+
+    /**
+     * Format price value to have the same number of digits after delimiter as the original value
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private function formatPriceValue($value)
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        $stringVal = (string)(float)$value;
+        $dotIndex = strpos($stringVal, '.');
+        $decimals = $dotIndex === false ? 0 : strlen(substr($stringVal, $dotIndex + 1));
+
+        return number_format(
+            (float)$value,
+            max(self::MIN_PRECISION, min(self::MAX_PRECISION, $decimals)),
+            '.',
+            ''
+        );
     }
 }

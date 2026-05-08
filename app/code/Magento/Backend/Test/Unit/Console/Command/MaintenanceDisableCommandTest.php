@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\Console\Command\MaintenanceDisableCommand;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Backend\Model\Validator\IpValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -42,8 +43,8 @@ class MaintenanceDisableCommandTest extends TestCase
      * @param array $input
      * @param array $validatorMessages
      * @param string $expectedMessage
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $input, array $validatorMessages, $expectedMessage)
     {
         $return = isset($input['--ip']) ? ($input['--ip'] !== ['none'] ? $input['--ip'] : []) : [];
@@ -60,7 +61,7 @@ class MaintenanceDisableCommandTest extends TestCase
     /**
      * return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
@@ -89,10 +90,10 @@ class MaintenanceDisableCommandTest extends TestCase
     }
 
     /**
-     * @dataProvider isSetAddressInfoDataProvider
      * @param array $ip
      * @param bool $expected
      */
+    #[DataProvider('isSetAddressInfoDataProvider')]
     public function testIsSetAddressInfo($ip, $expected)
     {
         $this->maintenanceMode
@@ -106,7 +107,7 @@ class MaintenanceDisableCommandTest extends TestCase
     /**
      * return array
      */
-    public function isSetAddressInfoDataProvider()
+    public static function isSetAddressInfoDataProvider()
     {
         return [
             [

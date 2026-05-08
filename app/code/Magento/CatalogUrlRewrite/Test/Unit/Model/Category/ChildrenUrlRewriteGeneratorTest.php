@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class ChildrenUrlRewriteGeneratorTest extends TestCase
         $this->categoryUrlRewriteGeneratorFactory = $this->getMockBuilder(
             CategoryUrlRewriteGeneratorFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
+            ->onlyMethods(['create'])->getMock();
         $this->categoryUrlRewriteGenerator = $this->getMockBuilder(
             CategoryUrlRewriteGenerator::class
         )->disableOriginalConstructor()

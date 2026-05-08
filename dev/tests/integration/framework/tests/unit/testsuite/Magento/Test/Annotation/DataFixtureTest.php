@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,10 +20,14 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Fixture\LegacyDataFixturePathResolver;
+use Magento\TestFramework\Fixture\CallableDataFixture;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
+use Magento\TestFramework\Fixture\ImageFixture;
 use Magento\TestFramework\Fixture\LegacyDataFixture;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ScopeSwitcherInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +36,8 @@ use ReflectionException;
 
 /**
  * Test class for \Magento\TestFramework\Annotation\DataFixture.
+ * Uses real fixture class names (CallableDataFixture, ImageFixture, ScopeFixture) so
+ * DataFixtureFactory::create() sees class_exists() and the object manager mock returns our mocks.
  *
  * @magentoDataFixture sampleFixtureOne
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -79,19 +85,13 @@ class DataFixtureTest extends TestCase
             ->getMock();
         /** @var ObjectManagerInterface|MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->onlyMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create', 'configure'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
-        $this->fixture1 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture1')
-            ->getMockForAbstractClass();
-        $this->fixture2 = $this->getMockBuilder(RevertibleDataFixtureInterface::class)
-            ->setMockClassName('MockFixture2')
-            ->getMockForAbstractClass();
-        $this->fixture3 = $this->getMockBuilder(DataFixtureInterface::class)
-            ->setMockClassName('MockFixture3')
-            ->getMockForAbstractClass();
+        $this->fixture1 = $this->createMock(RevertibleDataFixtureInterface::class);
+        $this->fixture2 = $this->createMock(RevertibleDataFixtureInterface::class);
+        $this->fixture3 = $this->createMock(DataFixtureInterface::class);
 
         $this->fixtureStorage = new DataFixtureStorage();
         DataFixtureStorageManager::setStorage($this->fixtureStorage);
@@ -99,14 +99,19 @@ class DataFixtureTest extends TestCase
         $dataFixtureFactory = new DataFixtureFactory($objectManager);
         $annotationParser = new \Magento\TestFramework\Annotation\Parser\DataFixture('magentoDataFixture');
 
+        $dataFixtureSetup = new DataFixtureSetup(
+            new Registry(),
+            $dataFixtureFactory,
+            $this->createMock(ScopeSwitcherInterface::class)
+        );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
             \Magento\TestFramework\Annotation\Parser\DataFixture::class => $annotationParser,
             DataFixtureFactory::class => $dataFixtureFactory,
-            DataFixtureSetup::class => new DataFixtureSetup(new Registry(), $dataFixtureFactory),
-            'MockFixture1' => $this->fixture1,
-            'MockFixture2' => $this->fixture2,
-            'MockFixture3' => $this->fixture3,
+            DataFixtureSetup::class => $dataFixtureSetup,
+            CallableDataFixture::class => $this->fixture1,
+            ImageFixture::class => $this->fixture2,
+            ScopeFixture::class => $this->fixture3,
         ];
         $objectManager->expects($this->atLeastOnce())
             ->method('get')
@@ -119,10 +124,14 @@ class DataFixtureTest extends TestCase
             ->method('create')
             ->willReturnCallback(
                 function (string $type, array $arguments = []) use ($sharedInstances) {
+                    // Return test mocks only when fixture name was the class (no constructor args).
+                    if (isset($sharedInstances[$type]) && $arguments === []) {
+                        return $sharedInstances[$type];
+                    }
                     if ($type === LegacyDataFixture::class) {
                         array_unshift($arguments, new LegacyDataFixturePathResolver(new ComponentRegistrar()));
                     }
-                    return $sharedInstances[$type] ?? new $type(...array_values($arguments));
+                    return new $type(...array_values($arguments));
                 }
             );
         Bootstrap::setObjectManager($objectManager);
@@ -133,6 +142,22 @@ class DataFixtureTest extends TestCase
         }
 
         $this->createResolverMock();
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        $mockBuilder = $this->getMockBuilder($class);
+        $mockBuilder->setMockClassName($mockClassName);
+        return $mockBuilder->getMock();
     }
 
     /**
@@ -322,9 +347,9 @@ class DataFixtureTest extends TestCase
 
     #[
         DbIsolation(false),
-        DataFixture('MockFixture1'),
-        DataFixture('MockFixture2'),
-        DataFixture('MockFixture3'),
+        DataFixture(CallableDataFixture::class),
+        DataFixture(ImageFixture::class),
+        DataFixture(ScopeFixture::class),
     ]
     public function testFixtureClass(): void
     {
@@ -353,9 +378,9 @@ class DataFixtureTest extends TestCase
 
     #[
         DbIsolation(false),
-        DataFixture('MockFixture1', as: 'fixture1'),
-        DataFixture('MockFixture2', as: 'fixture2'),
-        DataFixture('MockFixture3', as: 'fixture3'),
+        DataFixture(CallableDataFixture::class, as: 'fixture1'),
+        DataFixture(ImageFixture::class, as: 'fixture2'),
+        DataFixture(ScopeFixture::class, as: 'fixture3'),
     ]
     public function testFixtureClassWithAlias(): void
     {
@@ -387,9 +412,9 @@ class DataFixtureTest extends TestCase
 
     #[
         DbIsolation(false),
-        DataFixture('MockFixture1', ['key1' => 'value1']),
-        DataFixture('MockFixture2', ['key2' => 'value2']),
-        DataFixture('MockFixture3', ['key3' => 'value3']),
+        DataFixture(CallableDataFixture::class, ['key1' => 'value1']),
+        DataFixture(ImageFixture::class, ['key2' => 'value2']),
+        DataFixture(ScopeFixture::class, ['key3' => 'value3']),
     ]
     public function testFixtureClassWithParameters(): void
     {
@@ -418,9 +443,9 @@ class DataFixtureTest extends TestCase
 
     #[
         DbIsolation(false),
-        DataFixture('MockFixture1', ['alias-key1' => 'alias-value1'], 'fixture1'),
-        DataFixture('MockFixture2', ['alias-key2' => 'alias-value2'], 'fixture2'),
-        DataFixture('MockFixture3', ['alias-key3' => 'alias-value3'], 'fixture3'),
+        DataFixture(CallableDataFixture::class, ['alias-key1' => 'alias-value1'], 'fixture1'),
+        DataFixture(ImageFixture::class, ['alias-key2' => 'alias-value2'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['alias-key3' => 'alias-value3'], 'fixture3'),
     ]
     public function testFixtureClassWithParametersAndAlias(): void
     {
@@ -452,9 +477,9 @@ class DataFixtureTest extends TestCase
 
     #[
         DbIsolation(false),
-        DataFixture('MockFixture1', ['p1' => 'param-value1'], 'fixture1'),
-        DataFixture('MockFixture2', ['p2' => '$fixture1.attr_1$'], 'fixture2'),
-        DataFixture('MockFixture3', ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture1$']], 'fixture3'),
+        DataFixture(CallableDataFixture::class, ['p1' => 'param-value1'], 'fixture1'),
+        DataFixture(ImageFixture::class, ['p2' => '$fixture1.attr_1$'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture1$']], 'fixture3'),
     ]
     public function testVariables(): void
     {
@@ -478,6 +503,49 @@ class DataFixtureTest extends TestCase
         $this->fixture1->expects($this->once())
             ->method('revert')
             ->with($fixture1);
+        $this->fixture2->expects($this->once())
+            ->method('revert')
+            ->with($fixture2);
+        $this->revertFixtures();
+    }
+
+    #[
+        DbIsolation(false),
+        DataFixture(CallableDataFixture::class, ['p1' => 'param-value1'], 'fixture1', count: 2),
+        DataFixture(ImageFixture::class, ['p2' => '$fixture12.attr_1$'], 'fixture2'),
+        DataFixture(ScopeFixture::class, ['p3' => '$fixture2.attr_3$', 'p4' => ['p5' => '$fixture11$']], 'fixture3'),
+    ]
+    public function testCount(): void
+    {
+        $fixture11 = new DataObject(['attr_1' => 'attr-value11', 'attr_2' => 'attr-value21']);
+        $fixture12 = new DataObject(['attr_1' => 'attr-value12', 'attr_2' => 'attr-value22']);
+        $fixture2 = new DataObject(['attr_3' => 1]);
+        $this->fixture1->expects($this->exactly(2))
+            ->method('apply')
+            ->with(['p1' => 'param-value1'])
+            ->willReturnOnConsecutiveCalls($fixture11, $fixture12);
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['p2' => 'attr-value12'])
+            ->willReturn($fixture2);
+        $this->fixture3->expects($this->once())
+            ->method('apply')
+            ->with(['p3' => 1, 'p4' => ['p5' => $fixture11]]);
+        $this->applyFixtures();
+        $this->assertSame($fixture11, $this->fixtureStorage->get('fixture11'));
+        $this->assertSame($fixture12, $this->fixtureStorage->get('fixture12'));
+        $this->assertSame($fixture2, $this->fixtureStorage->get('fixture2'));
+        $this->assertNull($this->fixtureStorage->get('fixture3'));
+        $this->fixture1->expects($this->exactly(2))
+            ->method('revert')
+            ->willReturnCallback(
+                function ($arg) use ($fixture12, $fixture11) {
+                    if ($arg == $fixture12 || $arg == $fixture11) {
+                        return null;
+                    }
+                }
+            );
+
         $this->fixture2->expects($this->once())
             ->method('revert')
             ->with($fixture2);
@@ -515,8 +583,7 @@ class DataFixtureTest extends TestCase
             ->getMock();
         $reflection = new \ReflectionClass(Resolver::class);
         $reflectionProperty = $reflection->getProperty('instance');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue(Resolver::class, $mock);
+        $reflectionProperty->setValue(null, $mock);
         $mock->method('applyDataFixtures')
             ->willReturnArgument(1);
     }

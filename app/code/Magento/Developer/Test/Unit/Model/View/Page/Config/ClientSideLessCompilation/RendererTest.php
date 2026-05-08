@@ -1,18 +1,20 @@
 <?php declare(strict_types=1);
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Test\Unit\Model\View\Page\Config\ClientSideLessCompilation;
 
 use Magento\Developer\Model\View\Page\Config\ClientSideLessCompilation\Renderer;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Asset\PropertyGroup;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,7 @@ class RendererTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -47,6 +50,18 @@ class RendererTest extends TestCase
             'pageConfig' => $pageConfigMock
         ];
 
+        $objectManager->prepareObjectManager(
+            [
+                [
+                    MsApplicationTileImage::class,
+                    $this->createMock(MsApplicationTileImage::class),
+                ],
+                [
+                    ScopeConfigInterface::class,
+                    $this->createMock(ScopeConfigInterface::class),
+                ]
+            ]
+        );
         $mocks = $objectManager->getConstructArguments(
             Renderer::class,
             $overriddenMocks
@@ -54,7 +69,7 @@ class RendererTest extends TestCase
         $this->model = $this->getMockBuilder(
             Renderer::class
         )
-            ->setMethods(['renderAssetGroup'])
+            ->onlyMethods(['renderAssetGroup'])
             ->setConstructorArgs($mocks)
             ->getMock();
     }

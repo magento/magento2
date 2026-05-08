@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block;
 
@@ -135,7 +135,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
             'web/default/cms_no_route',
             ScopeInterface::SCOPE_STORE
         );
-        $noRouteDelimiterPosition = strrpos($noRouteIdentifier, '|');
+        $noRouteDelimiterPosition = $noRouteIdentifier === null ? false : strrpos($noRouteIdentifier, '|');
         if ($noRouteDelimiterPosition) {
             $noRouteIdentifier = substr($noRouteIdentifier, 0, $noRouteDelimiterPosition);
         }

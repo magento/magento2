@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,14 +13,18 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\ResourceModel\Event;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class EventTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Event
      */
@@ -138,8 +142,8 @@ class EventTest extends TestCase
      * @param array|null $storeIdSelect
      *
      * @return void
-     * @dataProvider getApplyLogToCollectionDataProvider
      */
+    #[DataProvider('getApplyLogToCollectionDataProvider')]
     public function testApplyLogToCollection(?int $storeId, ?array $storeIdSelect): void
     {
         $derivedSelect = 'SELECT * FROM table';
@@ -163,11 +167,10 @@ class EventTest extends TestCase
             ->method('order')
             ->willReturnSelf();
 
-        $collectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->onlyMethods(['getResource', 'getIdFieldName', 'getSelect'])
-            ->addMethods(['getStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $collectionMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getResource', 'getIdFieldName', 'getSelect', 'getStoreId']
+        );
         $collectionMock
             ->expects($this->once())
             ->method('getResource')
@@ -231,7 +234,7 @@ class EventTest extends TestCase
     /**
      * @return array
      */
-    public function getApplyLogToCollectionDataProvider(): array
+    public static function getApplyLogToCollectionDataProvider(): array
     {
         return [
             ['storeId' => 1, 'storeIdSelect' => [1]],
@@ -247,15 +250,18 @@ class EventTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['where', 'limit', 'from', 'joinLeft'])
-            ->addMethods(['select', 'fetchCol'])
-            ->getMock();
+        $selectMock = $this->createPartialMockWithReflection(
+            Select::class,
+            ['where', 'limit', 'from', 'joinLeft', 'select', 'fetchCol']
+        );
 
+        $callCount = 0;
         $this->connectionMock
             ->method('fetchCol')
-            ->willReturnOnConsecutiveCalls(1);
+            ->willReturnCallback(function () use (&$callCount) {
+                return $callCount++ === 0 ? 1 : null;
+            });
+
         $this->connectionMock
             ->expects($this->any())
             ->method('delete');

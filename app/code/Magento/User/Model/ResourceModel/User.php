@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -73,9 +73,9 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connectionName = null,
-        CacheInterface $aclDataCache = null,
-        ObserverConfig $observerConfig = null,
-        EncryptorInterface $encryptor = null
+        ?CacheInterface $aclDataCache = null,
+        ?ObserverConfig $observerConfig = null,
+        ?EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
@@ -123,6 +123,9 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
             'lognum' => $user->getLognum() + 1,
         ];
+        
+        $user->setLogdate($data['logdate']);
+        $user->setLognum($data['lognum']);
 
         $condition = ['user_id = ?' => (int)$user->getUserId()];
 

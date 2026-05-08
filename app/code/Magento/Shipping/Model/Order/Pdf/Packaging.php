@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Model\Order\Pdf;
 
@@ -13,8 +13,6 @@ use Magento\Shipping\Helper\Carrier;
 class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
 {
     /**
-     * Carrier helper
-     *
      * @var \Magento\Shipping\Helper\Carrier
      */
     protected $_carrierHelper;
@@ -93,7 +91,7 @@ class Packaging extends \Magento\Sales\Model\Order\Pdf\AbstractPdf
     /**
      * Format pdf file
      *
-     * @param  null $shipment
+     * @param  void $shipment
      * @return \Zend_Pdf
      */
     public function getPdf($shipment = null)

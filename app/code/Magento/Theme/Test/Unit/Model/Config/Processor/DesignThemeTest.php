@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Model\Config\Processor\DesignTheme;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DesignThemeTest extends TestCase
 {
@@ -45,8 +46,7 @@ class DesignThemeTest extends TestCase
     protected function setUp(): void
     {
         $this->arrayManager = new ArrayManager();
-        $this->themeList = $this->getMockBuilder(ListInterface::class)
-            ->getMockForAbstractClass();
+        $this->themeList = $this->createMock(ListInterface::class);
         $this->prepareThemeMock();
 
         $this->designTheme = new DesignTheme($this->arrayManager, $this->themeList);
@@ -55,8 +55,8 @@ class DesignThemeTest extends TestCase
     /**
      * @param array $actualResult
      * @param array $expectedResult
-     * @dataProvider getDumpConfigDataProvider
      */
+    #[DataProvider('getDumpConfigDataProvider')]
     public function testProcess($actualResult, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->designTheme->process($actualResult));
@@ -71,8 +71,7 @@ class DesignThemeTest extends TestCase
     {
         $themesMap = [];
         foreach ($this->themes as $themeId => $themeFullPath) {
-            $themeMock = $this->getMockBuilder(ThemeInterface::class)
-                ->getMockForAbstractClass();
+            $themeMock = $this->createMock(ThemeInterface::class);
             $themeMock->expects(static::any())->method('getId')->willReturn($themeId);
 
             $themesMap[] = [$themeFullPath, $themeMock];
@@ -85,7 +84,7 @@ class DesignThemeTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getDumpConfigDataProvider()
+    public static function getDumpConfigDataProvider()
     {
         return [
             [
@@ -168,19 +167,19 @@ class DesignThemeTest extends TestCase
                         ],
                     ],
                 ],
+            ],
+            [
                 [
-                    [
-                        'websites' => [
-                            'base' => [
-                                'design' => ['theme' => ['theme_id' => '']],
-                            ],
+                    'websites' => [
+                        'base' => [
+                            'design' => ['theme' => ['theme_id' => '']],
                         ],
                     ],
-                    [
-                        'websites' => [
-                            'base' => [
-                                'design' => ['theme' => ['theme_id' => '']],
-                            ],
+                ],
+                [
+                    'websites' => [
+                        'base' => [
+                            'design' => ['theme' => ['theme_id' => '']],
                         ],
                     ],
                 ],

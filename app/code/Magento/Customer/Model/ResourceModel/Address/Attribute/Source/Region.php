@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Customer region attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Attribute\Source;
 
@@ -44,6 +42,8 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return new regions object
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected function _createRegionsCollection()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,6 +97,11 @@ class ImageResize
     private $storeManager;
 
     /**
+     * @var array[]
+     */
+    private array $paramsWebsitesMap;
+
+    /**
      * @param State $appState
      * @param MediaConfig $imageConfig
      * @param ProductImage $productImage
@@ -124,8 +129,8 @@ class ImageResize
         ThemeCustomizationConfig $themeCustomizationConfig,
         ThemeCollection $themeCollection,
         Filesystem $filesystem,
-        FileStorageDatabase $fileStorageDatabase = null,
-        StoreManagerInterface $storeManager = null
+        ?FileStorageDatabase $fileStorageDatabase = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->appState = $appState;
         $this->imageConfig = $imageConfig;
@@ -146,9 +151,10 @@ class ImageResize
      * Create resized images of different sizes from an original image.
      *
      * @param string $originalImageName
+     * @param bool $skipHiddenImages
      * @throws NotFoundException
      */
-    public function resizeFromImageName(string $originalImageName)
+    public function resizeFromImageName(string $originalImageName, bool $skipHiddenImages = false)
     {
         $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
         $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
@@ -162,7 +168,17 @@ class ImageResize
         if (!$this->mediaDirectory->isFile($originalImagePath)) {
             throw new NotFoundException(__('Cannot resize image "%1" - original image not found', $originalImagePath));
         }
-        foreach ($this->getViewImages($this->getThemesInUse()) as $viewImage) {
+
+        $viewImages = $this->getViewImages($this->getThemesInUse());
+        if ($skipHiddenImages) {
+            $websiteIds = $this->productImage->getRelatedWebsiteIds($originalImageName);
+            $viewImages = array_filter(
+                $viewImages,
+                fn (string $index) => array_intersect($websiteIds, $this->paramsWebsitesMap[$index]),
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+        foreach ($viewImages as $viewImage) {
             $this->resize($viewImage, $originalImagePath, $originalImageName);
         }
     }
@@ -175,7 +191,7 @@ class ImageResize
      * @return Generator
      * @throws NotFoundException
      */
-    public function resizeFromThemes(array $themes = null, bool $skipHiddenImages = false): Generator
+    public function resizeFromThemes(?array $themes = null, bool $skipHiddenImages = false): Generator
     {
         $count = $this->getCountProductImages($skipHiddenImages);
         if (!$count) {
@@ -189,6 +205,15 @@ class ImageResize
             $error = '';
             $originalImageName = $image['filepath'];
 
+            $websiteIds = isset($image['website_ids'])
+                ? array_map('intval', explode(',', $image['website_ids']))
+                : [];
+            $relevantViewImages = $skipHiddenImages ? array_filter(
+                $viewImages,
+                fn ($index) => array_intersect($this->paramsWebsitesMap[$index], $websiteIds),
+                ARRAY_FILTER_USE_KEY
+            ) : $viewImages;
+
             $mediastoragefilename = $this->imageConfig->getMediaPath($originalImageName);
             $originalImagePath = $this->mediaDirectory->getAbsolutePath($mediastoragefilename);
 
@@ -197,7 +222,7 @@ class ImageResize
             }
             if ($this->mediaDirectory->isFile($originalImagePath)) {
                 try {
-                    foreach ($viewImages as $viewImage) {
+                    foreach ($relevantViewImages as $viewImage) {
                         $this->resize($viewImage, $originalImagePath, $originalImageName);
                     }
                 } catch (\Exception $e) {
@@ -212,6 +237,8 @@ class ImageResize
     }
 
     /**
+     * Get count of product images.
+     *
      * @param bool $skipHiddenImages
      * @return int
      */
@@ -222,6 +249,8 @@ class ImageResize
     }
 
     /**
+     * Get product images.
+     *
      * @param bool $skipHiddenImages
      * @return Generator
      */
@@ -275,6 +304,8 @@ class ImageResize
                     $uniqIndex = $this->getUniqueImageIndex($data);
                     $data['id'] = $imageId;
                     $viewImages[$uniqIndex] = $data;
+                    $websiteId = (int) $store->getWebsiteId();
+                    $this->paramsWebsitesMap[$uniqIndex][$websiteId] = $websiteId;
                 }
             }
         }

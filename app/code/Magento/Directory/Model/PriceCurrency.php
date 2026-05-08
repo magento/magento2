@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe.
+ * All rights reserved.
  */
 namespace Magento\Directory\Model;
 
@@ -152,7 +152,10 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     public function round($price)
     {
-        return round((float) $price, 2);
+        return round(
+            floatval((string) $price), // To fix rounding error in PHP 8.4
+            2
+        );
     }
 
     /**
@@ -164,6 +167,9 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
     {
-        return round((float) $price, $precision);
+        return round(
+            floatval((string) $price), // To fix rounding error in PHP 8.4
+            $precision
+        );
     }
 }

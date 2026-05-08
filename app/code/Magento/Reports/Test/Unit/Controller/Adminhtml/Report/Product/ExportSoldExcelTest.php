@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Controller\Adminhtml\Report\Product\ExportSoldExcel;
-use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest;
+use Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class ExportSoldExcelTest extends AbstractControllerTest
+class ExportSoldExcelTest extends AbstractControllerTestCase
 {
     /**
      * @var ExportSoldExcel

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Helper;
 
@@ -9,8 +9,6 @@ use Magento\Store\Model\Store;
 
 /**
  * Sales module base helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {

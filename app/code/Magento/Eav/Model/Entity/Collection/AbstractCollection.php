@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Entity\Collection;
@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
@@ -155,7 +156,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -178,6 +179,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _construct()
     {
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_itemsById = [];
+        $this->_staticFields = [];
+        $this->_entity = null;
+        $this->_selectEntityTypes = [];
+        $this->_selectAttributes = [];
+        $this->_filterAttributes = [];
+        $this->_joinEntities = [];
+        $this->_joinAttributes = [];
+        $this->_joinFields = [];
+        parent::_resetState();
+        $this->_construct();
+        $this->setConnection($this->getEntity()->getConnection());
+        $this->_prepareStaticFields();
+        $this->_initSelect();
     }
 
     /**
@@ -1211,8 +1233,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     throw $e;
                 }
 
+                $attributeCode = $data = [];
+                $entityIdField = $entity->getEntityIdField();
+
                 foreach ($values as $value) {
-                    $this->_setItemAttributeValue($value);
+                    $entityId = $value[$entityIdField];
+                    $attributeId = $value['attribute_id'];
+                    if (!isset($attributeCode[$attributeId])) {
+                        $attributeCode[$attributeId] = array_search($attributeId, $this->_selectAttributes);
+                        if (!$attributeCode[$attributeId]) {
+                            $attribute = $this->_eavConfig->getAttribute(
+                                $this->getEntity()->getType(),
+                                $attributeId
+                            );
+                            $attributeCode[$attributeId] = $attribute->getAttributeCode();
+                        }
+                    }
+                    $data[$entityId][$attributeCode[$attributeId]] = $value['value'];
+                }
+
+                if ($data) {
+                    $this->_setItemAttributeValues($data);
                 }
             }
         }
@@ -1283,6 +1324,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * Parameter $valueInfo is _getLoadAttributesSelect fetch result row
      *
+     * @deprecated Batch process of attribute values is introduced to reduce time complexity.
+     * @see _setItemAttributeValues($entityAttributeMap) uses array union (+) to acheive O(n) complexity.
+     *
      * @param array $valueInfo
      * @return $this
      * @throws LocalizedException
@@ -1309,6 +1353,33 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $object->setData($attributeCode, $valueInfo['value']);
         }
 
+        return $this;
+    }
+
+    /**
+     * Initialize entity object property value
+     *
+     * Parameter $entityAttributeMap is [entity_id => [attribute_code => value, ...]]
+     *
+     * @param array $entityAttributeMap
+     * @return $this
+     * @throws LocalizedException
+     */
+    protected function _setItemAttributeValues(array $entityAttributeMap)
+    {
+        foreach ($entityAttributeMap as $entityId => $attributeValues) {
+            if (!isset($this->_itemsById[$entityId])) {
+                throw new LocalizedException(
+                    __('A header row is missing for an attribute. Verify the header row and try again.')
+                );
+            }
+            // _itemsById[$entityId] is always an array (typically with one element)
+            // foreach handles edge cases where multiple objects share the same entity ID
+            foreach ($this->_itemsById[$entityId] as $object) {
+                $object->setData($object->getData()+$attributeValues);
+            }
+
+        }
         return $this;
     }
 
@@ -1597,14 +1668,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _reset()
     {
         parent::_reset();
-
         $this->_selectEntityTypes = [];
         $this->_selectAttributes = [];
         $this->_filterAttributes = [];
         $this->_joinEntities = [];
         $this->_joinAttributes = [];
         $this->_joinFields = [];
-
         return $this;
     }
 

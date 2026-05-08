@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml\Filter;
@@ -9,7 +9,6 @@ namespace Magento\Reports\Block\Adminhtml\Filter;
 /**
  * Adminhtml report filter form
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
@@ -201,8 +200,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $data = $this->getFilterData()->getData();
         foreach ($data as $key => $value) {
-            if (is_array($value) && isset($value[0])) {
-                $data[$key] = explode(',', $value[0]);
+            if (is_array($value) && count($value) === 1) {
+                $data[$key] = explode(',', reset($value));
             }
         }
         $this->getForm()->addValues($data);

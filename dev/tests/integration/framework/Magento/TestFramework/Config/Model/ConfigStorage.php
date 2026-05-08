@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -119,5 +119,23 @@ class ConfigStorage
         }
 
         return $scope;
+    }
+
+    /**
+     * Delete configuration from db
+     *
+     * @param string $path
+     * @param string $scope
+     * @param string|null $scopeCode
+     * @return void
+     */
+    public function deleteConfigFromDb(
+        string $path,
+        string $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+        ?string $scopeCode = null
+    ) {
+        $scope = $this->normalizeScope($scope);
+        $scopeId = $this->getIdByScope($scope, $scopeCode);
+        $this->configResource->deleteConfig($path, $scope, $scopeId);
     }
 }

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog;
 
@@ -29,10 +28,10 @@ class NewConditionHtml extends CatalogAction implements HttpPostActionInterface,
             str_replace('-', '/', $this->getRequest()->getParam('type', ''))
         );
         $objectType = $types[0];
-        $reponseBody = '';
+        $responseBody = '';
 
         if (class_exists($objectType) && !in_array(ConditionInterface::class, class_implements($objectType))) {
-            $this->getResponse()->setBody($reponseBody);
+            $this->getResponse()->setBody($responseBody);
             return;
         }
 
@@ -49,9 +48,9 @@ class NewConditionHtml extends CatalogAction implements HttpPostActionInterface,
         if ($conditionModel instanceof AbstractCondition) {
             $conditionModel->setJsFormObject($this->getRequest()->getParam('form'));
             $conditionModel->setFormName($formNamespace);
-            $reponseBody = $conditionModel->asHtmlRecursive();
+            $responseBody = $conditionModel->asHtmlRecursive();
         }
 
-        $this->getResponse()->setBody($reponseBody);
+        $this->getResponse()->setBody($responseBody);
     }
 }

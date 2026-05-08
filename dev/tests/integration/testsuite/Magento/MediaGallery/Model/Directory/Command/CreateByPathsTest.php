@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
 use Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for CreateDirectoriesByPathsInterface
@@ -119,8 +119,8 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $paths
      * @throws CouldNotSaveException
-     * @dataProvider notAllowedPathsProvider
      */
+    #[DataProvider('notAllowedPathsProvider')]
     public function testCreateDirectoryWithRelativePath(array $paths): void
     {
         $this->expectException(CouldNotSaveException::class);
@@ -133,7 +133,7 @@ class CreateByPathsTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function notAllowedPathsProvider(): array
+    public static function notAllowedPathsProvider(): array
     {
         return [
             [

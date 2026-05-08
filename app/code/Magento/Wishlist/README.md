@@ -1,12 +1,12 @@
 # Magento_Wishlist module
 
-The Magento_Wishlist module implements the Wishlist functionality.
+This module implements the Wishlist functionality.
 
 This module allows customers to create a list of products that they can add to their shopping cart to be purchased at a later date, or share with friends.
 
 ## Installation details
 
-Before installing this module, note that the Magento_Wishlist is dependent on the following modules:
+Before installing this module, note that this module is dependent on the following modules:
 
 - Magento_Captcha
 - Magento_Catalog
@@ -16,19 +16,19 @@ Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_WishlistAnalytics
 
-Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Structure
 
 `Pricing/` - the directory that contain solutions for configurable and downloadable product price.
 
-For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_Wishlist module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with this module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Wishlist module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of this module.
 
 ### Events
 
@@ -56,7 +56,7 @@ The module dispatches the following events:
     - `product` is a product object (`\Magento\Catalog\Api\Data\ProductInterface` class).
     - `item` is an item object (`\Magento\Wishlist\Model\Item` class).
 
-For information about the event, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about the event, see [Events and observers](https://developer.adobe.com/commerce/php/development/components/events-and-observers/#events).
 
 ### Layouts
 
@@ -85,16 +85,17 @@ This module introduces the following layouts and layout handles in the directori
     - `wishlist_index_index`
     - `wishlist_index_share`
     - `wishlist_shared_index.xml`
-    
-For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+
+For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
-You can extend a customer form and widgets using the configuration files located in the directories 
+You can extend a customer form and widgets using the configuration files located in the directories
+
 - `view/base/ui_component`:
     - `customer_form`
 - `view/frontend/ui_component`:
     - `widget_recently_compared`
     - `widget_recently_viewed`
 
-For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).

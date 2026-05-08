@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Block\Widget\Grid;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -18,6 +20,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @see \Magento\Backend\Block\Widget\Grid
  */
 class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
@@ -1019,6 +1022,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         $stream = $this->_directory->openFile($file, 'w+');
 
         $stream->lock();
+        $stream->write(pack('CCC', 0xef, 0xbb, 0xbf));
         $stream->writeCsv($this->_getExportHeaders());
         $this->_exportIterateCollection('_exportCsvItem', [$stream]);
 
@@ -1064,10 +1068,11 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
             $data = [];
             foreach ($this->getColumns() as $column) {
                 if (!$column->getIsSystem()) {
+                    $exportField = (string)$column->getRowFieldExport($item);
                     $data[] = '"' . str_replace(
                         ['"', '\\'],
                         ['""', '\\\\'],
-                        $column->getRowFieldExport($item) ?: ''
+                        $exportField ?: ''
                     ) . '"';
                 }
             }
@@ -1151,7 +1156,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     {
         $this->_isExport = true;
         $this->_prepareGrid();
-
+        $this->getCollection()->setPageSize(0);
         $convert = new \Magento\Framework\Convert\Excel(
             $this->getCollection()->getIterator(),
             [$this, 'getRowRecord']

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -151,6 +151,37 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         $customizableOptions = $wishlistResponse['items_v2']['items'][0]['customizable_options'];
         $this->assertEquals($optionId, $customizableOptions[0]['customizable_option_uid']);
         $this->assertEquals($optionValue, $customizableOptions[0]['values'][0]['value']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_custom_option_dropdown.php
+     *
+     * @throws Exception
+     */
+    public function testShouldValidateCustomDropdownOptionValue(): void
+    {
+        $product = $this->getConfigurableProductInfo();
+        $qty = 2;
+        $childSku = $product['variants'][0]['product']['sku'];
+        $parentSku = $product['sku'];
+        $selectedOptions = array_column($product['variants'][0]['attributes'], 'uid');
+        $optionId = $product['options'][0]['uid'];
+        $customOptions = [$optionId => 'invalid-option-id'];
+        $additionalInput = $this->getSelectedOptionsQuery($selectedOptions)
+            . PHP_EOL
+            . $this->getCustomOptionsQuery($customOptions);
+
+        $query = $this->getQuery($parentSku, $childSku, $qty, $additionalInput);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeadersMap());
+
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertNotEmpty($response['addProductsToWishlist']['user_errors']);
+        $this->assertEquals(
+            'Some of the selected item options are not currently available.',
+            $response['addProductsToWishlist']['user_errors'][0]['message']
+        );
     }
 
     /**

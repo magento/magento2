@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Indexer\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks category products indexing
@@ -83,12 +84,11 @@ class CategoryIndexTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_parent_anchor.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider assignCategoriesDataProvider
-     *
      * @param string $categoryName
      * @param int $expectedItemsCount
      * @return void
      */
+    #[DataProvider('assignCategoriesDataProvider')]
     public function testProductAssignCategory(string $categoryName, int $expectedItemsCount): void
     {
         $product = $this->productRepository->get('simple2');
@@ -102,16 +102,16 @@ class CategoryIndexTest extends TestCase
     /**
      * @return array
      */
-    public function assignCategoriesDataProvider(): array
+    public static function assignCategoriesDataProvider(): array
     {
         return [
             'assign_to_category' => [
-                'category_name' => 'Parent category',
-                'expected_records_count' => 1,
+                'categoryName' => 'Parent category',
+                'expectedItemsCount' => 1,
             ],
             'assign_to_category_with_parent_anchor_category' => [
-                'category_name' => 'Child category',
-                'expected_records_count' => 2,
+                'categoryName' => 'Child category',
+                'expectedItemsCount' => 2,
             ],
         ];
     }
@@ -120,12 +120,11 @@ class CategoryIndexTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_parent_anchor.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider assignProductsDataProvider
-     *
      * @param string $categoryName
      * @param int $expectedCount
      * @return void
      */
+    #[DataProvider('assignProductsDataProvider')]
     public function testCategoryAssignProduct(string $categoryName, int $expectedCount): void
     {
         $product = $this->productRepository->get('simple2');
@@ -140,16 +139,16 @@ class CategoryIndexTest extends TestCase
     /**
      * @return array
      */
-    public function assignProductsDataProvider(): array
+    public static function assignProductsDataProvider(): array
     {
         return [
             'assign_product_to_category' => [
-                'category_name' => 'Parent category',
-                'expected_records_count' => 1,
+                'categoryName' => 'Parent category',
+                'expectedCount' => 1,
             ],
             'assign_product_to_category_with_parent_anchor_category' => [
-                'category_name' => 'Child category',
-                'expected_records_count' => 2,
+                'categoryName' => 'Child category',
+                'expectedCount' => 2,
             ],
         ];
     }

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Store\Model\Group as StoreGroupModel;
@@ -56,8 +57,8 @@ class StoreGroupTest extends TestCase
     /**
      * @param string $matcherMethod
      * @param int|null $storeId
-     * @dataProvider storeGroupDataProvider
      */
+    #[DataProvider('storeGroupDataProvider')]
     public function testAfterSave(string $matcherMethod, ?int $storeId): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
@@ -73,8 +74,8 @@ class StoreGroupTest extends TestCase
     /**
      * @param string $matcherMethod
      * @param bool $websiteChanged
-     * @dataProvider storeGroupWebsiteDataProvider
      */
+    #[DataProvider('storeGroupWebsiteDataProvider')]
     public function testAfterSaveChangedWebsite(string $matcherMethod, bool $websiteChanged): void
     {
         $this->processorMock->expects($this->{$matcherMethod}())->method('markIndexerAsInvalid');
@@ -93,7 +94,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupWebsiteDataProvider(): array
+    public static function storeGroupWebsiteDataProvider(): array
     {
         return [['once', true], ['never', false]];
     }
@@ -101,7 +102,7 @@ class StoreGroupTest extends TestCase
     /**
      * @return array
      */
-    public function storeGroupDataProvider(): array
+    public static function storeGroupDataProvider(): array
     {
         return [['once', null], ['never', 1]];
     }

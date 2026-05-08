@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Checkout\Model\Session;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Check the correct behavior of cross-sell products in the shopping cart
@@ -113,12 +114,12 @@ class CrosssellTest extends AbstractLinksTest
     /**
      * Test the display of cross-sell products in the block
      *
-     * @dataProvider displayLinkedProductsProvider
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @param array $data
      * @return void
      */
+    #[DataProvider('displayLinkedProductsProvider')]
     public function testDisplayCrosssellProducts(array $data): void
     {
         $this->updateProducts($data['updateProducts']);
@@ -174,7 +175,6 @@ class CrosssellTest extends AbstractLinksTest
      * Test the position and max count of cross-sell products in the block
      * when set last added product in checkout session
      *
-     * @dataProvider positionWithLastAddedProductProvider
      * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
@@ -183,6 +183,7 @@ class CrosssellTest extends AbstractLinksTest
      * @param array $expectedProductLinks
      * @return void
      */
+    #[DataProvider('positionWithLastAddedProductProvider')]
     public function testPositionCrosssellProductsWithLastAddedProduct(
         array $positionData,
         array $expectedProductLinks
@@ -210,7 +211,7 @@ class CrosssellTest extends AbstractLinksTest
      *
      * @return array
      */
-    public function positionWithLastAddedProductProvider(): array
+    public static function positionWithLastAddedProductProvider(): array
     {
         return [
             'less_four_linked_products_to_last_added_product' => [
@@ -257,13 +258,13 @@ class CrosssellTest extends AbstractLinksTest
     /**
      * Test the display of cross-sell products in the block on different websites
      *
-     * @dataProvider multipleWebsitesLinkedProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
      * @magentoDataFixture Magento/Sales/_files/quote_with_multiple_products.php
      * @magentoDataFixture Magento/Catalog/_files/products_list.php
      * @param array $data
      * @return void
      */
+    #[DataProvider('multipleWebsitesLinkedProductsProvider')]
     public function testMultipleWebsitesCrosssellProducts(array $data): void
     {
         $this->updateProducts($this->prepareProductsWebsiteIds());

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model;
 
@@ -138,8 +138,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         ProductCollectionFactory $productCollectionFactory,
         AdvancedFactory $advancedFactory,
         array $data = [],
-        ItemCollectionProviderInterface $collectionProvider = null,
-        ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
+        ?ItemCollectionProviderInterface $collectionProvider = null,
+        ?ProductCollectionPrepareStrategyProvider $productCollectionPrepareStrategyProvider = null
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;

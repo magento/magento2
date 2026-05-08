@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -88,7 +88,7 @@ class QuantityValidator implements ValidatorInterface
             }
         }
 
-        if ($entity->getGrandTotal() <= 0) {
+        if (!$entity->isValidGrandTotal()) {
             $messages[] = __('The credit memo\'s total must be positive.');
         } elseif ($totalQuantity < 0 && !$this->canRefundShipping($order)) {
             $messages[] = __('You can\'t create a creditmemo without products.');
@@ -262,8 +262,9 @@ class QuantityValidator implements ValidatorInterface
         if ($item->getQtyToRefund() < 0) {
             return false;
         }
-        if (isset($invoiceQtysRefundLimits[$item->getId()])) {
-            return $invoiceQtysRefundLimits[$item->getId()] > 0;
+        $itemId = $item->getId() ?? '';
+        if (isset($invoiceQtysRefundLimits[$itemId])) {
+            return $invoiceQtysRefundLimits[$itemId] > 0;
         }
         return true;
     }

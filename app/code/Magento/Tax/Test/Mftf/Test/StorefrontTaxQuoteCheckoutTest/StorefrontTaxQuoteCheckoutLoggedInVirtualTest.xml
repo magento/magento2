@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -30,17 +30,20 @@
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
             <!-- Add NY and CA tax rules -->
-            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addNYTaxRate">
                 <argument name="taxCode" value="SimpleTaxNY"/>
             </actionGroup>
 
-            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+            <actionGroup ref="AddNewTaxRateNoZipUIActionGroup" stepKey="addCATaxRate">
                 <argument name="taxCode" value="SimpleTaxCA"/>
             </actionGroup>
 
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <see userInput="You saved the tax rule." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessageForSavingRule"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct"/>
@@ -55,18 +58,13 @@
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
-                <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
-                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
-            </actionGroup>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <comment userInput="Preserve BiC" stepKey="deleteNYRate"/>
+            <comment userInput="Preserve BiC" stepKey="deleteCARate"/>
 
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer_NY.email}}"/>
             </actionGroup>

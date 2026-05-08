@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,12 +9,14 @@ declare(strict_types=1);
 namespace Magento\Swatches\Test\Unit\Block\Adminhtml\Attribute\Edit\Options;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TextTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MockObject|Text
      */
@@ -25,10 +27,15 @@ class TextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->model = $this->getMockBuilder(Text::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getReadOnly', 'canManageOptionDefaultOnly', 'getOptionValues'])
-            ->getMock();
+        $this->model = $this->createPartialMockWithReflection(
+            Text::class,
+            ['canManageOptionDefaultOnly', 'getOptionValues', 'isReadOnly', 'getReadOnly']
+        );
+        $this->model->method('canManageOptionDefaultOnly')->willReturn(false);
+        $this->model->method('getOptionValues')->willReturn([]);
+        $this->model->method('isReadOnly')->willReturn(false);
+        $this->model->method('getReadOnly')->willReturn(false);
+        $this->model->read_only = false;
     }
 
     /**
@@ -80,13 +87,21 @@ class TextTest extends TestCase
      */
     public function executeTest($testCase)
     {
-        $this->model->expects($this->any())->method('getReadOnly')
-            ->willReturn($testCase['dataSet']['read_only']);
-        $this->model->expects($this->any())->method('canManageOptionDefaultOnly')
-            ->willReturn($testCase['dataSet']['can_manage_option_default_only']);
-        $this->model->expects($this->any())->method('getOptionValues')->willReturn(
-            $testCase['dataSet']['option_values']
+        // Set read_only property directly
+        $this->model->read_only = $testCase['dataSet']['read_only'];
+
+        // Override methods for this test
+        $dataSet = $testCase['dataSet'];
+        $this->model = $this->createPartialMockWithReflection(
+            Text::class,
+            ['canManageOptionDefaultOnly', 'getOptionValues', 'isReadOnly', 'getReadOnly']
         );
+        $this->model->method('canManageOptionDefaultOnly')
+            ->willReturn($dataSet['can_manage_option_default_only'] ?? false);
+        $this->model->method('getOptionValues')->willReturn($dataSet['option_values'] ?? []);
+        $this->model->method('isReadOnly')->willReturn($dataSet['read_only'] ?? false);
+        $this->model->method('getReadOnly')->willReturn($dataSet['read_only'] ?? false);
+        $this->model->read_only = $dataSet['read_only'] ?? false;
 
         $this->assertEquals($testCase['expectedResult'], $this->model->getJsonConfig());
     }

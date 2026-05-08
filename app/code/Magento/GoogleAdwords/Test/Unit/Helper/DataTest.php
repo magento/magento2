@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GoogleAdwords\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAdwords\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -48,7 +49,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive(): array
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [true, 1234, true],
@@ -64,8 +65,8 @@ class DataTest extends TestCase
      * @param bool $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestIsActive
      */
+    #[DataProvider('dataProviderForTestIsActive')]
     public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
@@ -77,7 +78,11 @@ class DataTest extends TestCase
         )->willReturn(
             $isActive
         );
-        $this->_scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+        $this->_scopeConfigMock->method('getValue')->with(
+            $this->callback(function ($value) {
+                return is_string($value);
+            })
+        )->willReturnCallback(
             function () use ($returnConfigValue) {
                 return $returnConfigValue;
             }
@@ -108,7 +113,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConvertLanguage(): array
+    public static function dataProviderForTestConvertLanguage(): array
     {
         return [
             ['some-language', 'some-language'],
@@ -123,8 +128,8 @@ class DataTest extends TestCase
      * @param string $returnLanguage
      *
      * @return void
-     * @dataProvider dataProviderForTestConvertLanguage
      */
+    #[DataProvider('dataProviderForTestConvertLanguage')]
     public function testConvertLanguageCodeToLocaleCode(string $language, string $returnLanguage): void
     {
         $convertArray = ['zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans'];
@@ -155,8 +160,11 @@ class DataTest extends TestCase
         );
         $this->_scopeConfigMock
             ->method('getValue')
-            ->withConsecutive([Data::XML_PATH_CONVERSION_IMG_SRC, 'default'])
-            ->willReturnOnConsecutiveCalls($imgSrc);
+            ->willReturnCallback(function ($arg1, $arg2) use ($imgSrc) {
+                if ($arg1 == Data::XML_PATH_CONVERSION_IMG_SRC && $arg2 == 'default') {
+                    return $imgSrc;
+                }
+            });
         $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
     }
 
@@ -181,7 +189,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestStoreConfig(): array
+    public static function dataProviderForTestStoreConfig(): array
     {
         return [
             ['getConversionId', Data::XML_PATH_CONVERSION_ID, 123],
@@ -200,8 +208,8 @@ class DataTest extends TestCase
      * @param string $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestStoreConfig
      */
+    #[DataProvider('dataProviderForTestStoreConfig')]
     public function testGetStoreConfigValue($method, $xmlPath, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
@@ -278,7 +286,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConversionValueConstant(): array
+    public static function dataProviderForTestConversionValueConstant(): array
     {
         return [[1.4, 1.4], ['', Data::CONVERSION_VALUE_DEFAULT]];
     }
@@ -288,15 +296,17 @@ class DataTest extends TestCase
      * @param string $returnValue
      *
      * @return void
-     * @dataProvider dataProviderForTestConversionValueConstant
      */
+    #[DataProvider('dataProviderForTestConversionValueConstant')]
     public function testGetConversionValueConstant($conversionValueConst, $returnValue): void
     {
         $this->_registryMock->expects($this->never())->method('registry');
         $this->_scopeConfigMock
             ->method('getValue')
-            ->withConsecutive([Data::XML_PATH_CONVERSION_VALUE_TYPE], [Data::XML_PATH_CONVERSION_VALUE])
-            ->willReturnOnConsecutiveCalls(Data::CONVERSION_VALUE_TYPE_CONSTANT, $conversionValueConst);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::XML_PATH_CONVERSION_VALUE_TYPE] => Data::CONVERSION_VALUE_TYPE_CONSTANT,
+                [Data::XML_PATH_CONVERSION_VALUE] => $conversionValueConst
+            });
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
     }

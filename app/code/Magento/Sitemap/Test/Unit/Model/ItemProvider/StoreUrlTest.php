@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,10 +39,7 @@ class StoreUrlTest extends TestCase
      */
     private function getItemFactoryMock()
     {
-        $itemFactoryMock = $this->getMockBuilder(SitemapItemInterfaceFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $itemFactoryMock = $this->createPartialMock(SitemapItemInterfaceFactory::class, ['create']);
 
         $itemFactoryMock->expects($this->any())
             ->method('create')
@@ -60,7 +57,7 @@ class StoreUrlTest extends TestCase
      */
     private function getConfigReaderMock()
     {
-        $configReaderMock = $this->getMockForAbstractClass(ConfigReaderInterface::class);
+        $configReaderMock = $this->createMock(ConfigReaderInterface::class);
         $configReaderMock->expects($this->any())
             ->method('getPriority')
             ->willReturn('1.0');

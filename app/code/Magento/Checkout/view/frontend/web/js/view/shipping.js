@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -259,7 +259,8 @@ define([
         rates: shippingService.getShippingRates(),
         isLoading: shippingService.isLoading,
         isSelected: ko.computed(function () {
-            return quote.shippingMethod() ?
+            return checkoutData.getSelectedShippingRate() ? checkoutData.getSelectedShippingRate() :
+                quote.shippingMethod() ?
                 quote.shippingMethod()['carrier_code'] + '_' + quote.shippingMethod()['method_code'] :
                 null;
         }),

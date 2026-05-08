@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Setup;
@@ -115,11 +115,11 @@ class EavSetup
         Context $context,
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
-        Code $attributeCodeValidator = null,
-        AddOptionToAttribute $addAttributeOption = null,
-        ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
-        AttributeFactory $attributeFactory = null,
-        Config $eavConfig = null
+        ?Code $attributeCodeValidator = null,
+        ?AddOptionToAttribute $addAttributeOption = null,
+        ?ReservedAttributeCheckerInterface $reservedAttributeChecker = null,
+        ?AttributeFactory $attributeFactory = null,
+        ?Config $eavConfig = null
     ) {
         $this->cache = $cache;
         $this->attrGroupCollectionFactory = $attrGroupCollectionFactory;

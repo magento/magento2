@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,7 @@ use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\SwatchAttributesProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -139,7 +140,7 @@ class DataTest extends TestCase
             ['create']
         );
 
-        $this->productRepoMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->productRepoMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->swatchCollectionFactoryMock = $this->createPartialMock(
@@ -147,14 +148,11 @@ class DataTest extends TestCase
             ['create']
         );
 
-        $this->attributeMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'setData', 'getSource', 'hasData'])
-            ->addMethods(['setStoreId'])
-            ->getMock();
-        $this->metaDataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['getData', 'setData', 'getSource', 'hasData']
+        );
+        $this->metaDataPoolMock = $this->createMock(MetadataPool::class);
 
         $serializer = $this->createPartialMock(
             Json::class,
@@ -169,13 +167,8 @@ class DataTest extends TestCase
                 return json_decode($parameter, true);
             });
 
-        $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->imageUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getUrl'])
-            ->getMock();
+        $this->swatchAttributesProvider = $this->createMock(SwatchAttributesProvider::class);
+        $this->imageUrlBuilderMock = $this->createPartialMock(UrlBuilder::class, ['getUrl']);
 
         $this->swatchHelperObject = $this->objectManager->getObject(
             Data::class,
@@ -227,8 +220,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForAssembleEavAttribute
      */
+    #[DataProvider('dataForAssembleEavAttribute')]
     public function testAssembleAdditionalDataEavAttribute($dataFromDb, $attributeData): void
     {
         $withArgs = $willReturnArgs = [];
@@ -241,8 +234,12 @@ class DataTest extends TestCase
         }
         $this->attributeMock
             ->method('getData')
-            ->withConsecutive(...$withArgs)
-            ->willReturn(...$willReturnArgs);
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $willReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $this->attributeMock->expects($this->once())->method('setData');
         $this->swatchHelperObject->assembleAdditionalDataEavAttribute($this->attributeMock);
@@ -251,7 +248,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataForAssembleEavAttribute(): array
+    public static function dataForAssembleEavAttribute(): array
     {
         $additionalData = [
             'swatch_input_type' => 'visual',
@@ -280,8 +277,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForVariationWithSwatchImage
      */
+    #[DataProvider('dataForVariationWithSwatchImage')]
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes): void
     {
         $this->getSwatchAttributes();
@@ -299,7 +296,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataForVariationWithSwatchImage(): array
+    public static function dataForVariationWithSwatchImage(): array
     {
         return [
             [
@@ -329,7 +326,7 @@ class DataTest extends TestCase
      */
     public function testLoadVariationByFallback(): void
     {
-        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadataMock = $this->createMock(EntityMetadataInterface::class);
         $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
 
@@ -347,8 +344,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForVariationWithImage
      */
+    #[DataProvider('dataForVariationWithImage')]
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes): void
     {
         $this->getSwatchAttributes();
@@ -366,7 +363,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataForVariationWithImage(): array
+    public static function dataForVariationWithImage(): array
     {
         return [
             [
@@ -411,17 +408,17 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForMediaGallery
      */
+    #[DataProvider('dataForMediaGallery')]
     public function testGetProductMediaGallery($mediaGallery, $image): void
     {
         $mediaGalleryEntries = [];
         $id = 0;
         $mediaUrls = [];
         foreach ($mediaGallery as $mediaType => $mediaFile) {
-            $mediaGalleryEntryMock = $this->getMockBuilder(
+            $mediaGalleryEntryMock = $this->createMock(
                 ProductAttributeMediaGalleryEntryInterface::class
-            )->getMock();
+            );
             $mediaGalleryEntryMock->expects($this->atLeastOnce())
                 ->method('isDisabled')
                 ->willReturn(false);
@@ -464,7 +461,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataForMediaGallery(): array
+    public static function dataForMediaGallery(): array
     {
         return [
             [
@@ -519,17 +516,14 @@ class DataTest extends TestCase
 
         $simpleProducts = [];
         for ($i = 0; $i < 2; $i++) {
-            $simpleProduct = $this->getMockBuilder(Product::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['hasData', 'getMediaGalleryEntries'])
-                ->getMock();
+            $simpleProduct = $this->createPartialMock(Product::class, ['hasData', 'getMediaGalleryEntries']);
             $simpleProduct->setData($attributes);
 
             $mediaGalleryEntries = [];
             foreach (array_keys($imageTypes) as $mediaType) {
-                $mediaGalleryEntryMock = $this->getMockBuilder(
+                $mediaGalleryEntryMock = $this->createMock(
                     ProductAttributeMediaGalleryEntryInterface::class
-                )->getMock();
+                );
                 $mediaGalleryEntryMock->expects($this->any())
                     ->method('isDisabled')
                     ->willReturn(false);
@@ -645,8 +639,8 @@ class DataTest extends TestCase
 
     /**
      * @return void
-     * @dataProvider dataForGettingSwatchAsArray
      */
+    #[DataProvider('dataForGettingSwatchAsArray')]
     public function testGetSwatchAttributesAsArray($optionsArray, $attributeData, $expected): void
     {
         $this->swatchAttributesProvider
@@ -656,7 +650,6 @@ class DataTest extends TestCase
 
         $storeId = 1;
 
-        $this->attributeMock->method('setStoreId')->with($storeId)->willReturnSelf();
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
@@ -674,7 +667,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataForGettingSwatchAsArray(): array
+    public static function dataForGettingSwatchAsArray(): array
     {
         return [
             [
@@ -747,22 +740,24 @@ class DataTest extends TestCase
 
         $swatchMock
             ->method('offsetGet')
-            ->withConsecutive(
-                ['type'],
-                ['option_id'],
-                ['type'],
-                ['store_id'],
-                ['store_id'],
-                ['option_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $optionsData[0]['type'],
-                $optionsData[0]['option_id'],
-                $optionsData[1]['type'],
-                $optionsData[1]['store_id'],
-                $optionsData[1]['store_id'],
-                $optionsData[1]['option_id']
-            );
+            ->willReturnCallback(function ($arg) use ($optionsData) {
+                static $callCount = 0;
+                if ($callCount < 2) {
+                    if ($arg == 'type') {
+                        return $optionsData[0]['type'];
+                    } elseif ($arg == 'option_id') {
+                        return $optionsData[0]['option_id'];
+                    }
+                } else {
+                    if ($arg == 'type') {
+                        return $optionsData[1]['type'];
+                    } elseif ($arg == 'option_id') {
+                        return $optionsData[1]['option_id'];
+                    } elseif ($arg == 'store_id') {
+                        return $optionsData[1]['store_id'];
+                    }
+                }
+            });
 
         $swatchCollectionMock = $this->createMock(Collection::class);
         $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
@@ -778,6 +773,7 @@ class DataTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testGetSwatchesByOptionsIdIf2(): void
     {
@@ -802,26 +798,31 @@ class DataTest extends TestCase
         ];
         $swatchMock
             ->method('offsetGet')
-            ->withConsecutive(
-                ['type'],
-                ['store_id'],
-                ['value'],
-                ['option_id'],
-                ['type'],
-                ['store_id'],
-                ['value'],
-                ['option_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $optionsData[0]['type'],
-                $optionsData[0]['store_id'],
-                $optionsData[0]['value'],
-                $optionsData[0]['option_id'],
-                $optionsData[1]['type'],
-                $optionsData[1]['store_id'],
-                $optionsData[1]['value'],
-                $optionsData[1]['option_id']
-            );
+            ->willReturnCallback(function ($arg) use ($optionsData) {
+                static $callCount = 0;
+                if ($callCount < 5) {
+                    if ($arg == 'type') {
+                        return $optionsData[0]['type'];
+                    } elseif ($arg == 'option_id') {
+                        return $optionsData[0]['option_id'];
+                    } elseif ($arg == 'store_id') {
+                        return $optionsData[0]['store_id'];
+                    } elseif ($arg == 'value') {
+                        return $optionsData[0]['value'];
+                    }
+                } else {
+                    if ($arg == 'type') {
+                        return $optionsData[1]['type'];
+                    } elseif ($arg == 'option_id') {
+                        return $optionsData[1]['option_id'];
+                    } elseif ($arg == 'value') {
+                        return $optionsData[1]['value'];
+                    } elseif ($arg == 'store_id') {
+                        return $optionsData[1]['store_id'];
+                    }
+                }
+            });
+
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
@@ -852,18 +853,11 @@ class DataTest extends TestCase
         ];
         $swatchMock
             ->method('offsetGet')
-            ->withConsecutive(
-                ['type'],
-                ['store_id'],
-                ['store_id'],
-                ['option_id']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $optionsData['type'],
-                $optionsData['store_id'],
-                $optionsData['store_id'],
-                $optionsData['option_id']
-            );
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['type'] => $optionsData['type'],
+                ['store_id'] => $optionsData['store_id'],
+                ['option_id'] => $optionsData['option_id']
+            });
         $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 

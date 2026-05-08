@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,7 +82,7 @@ class PublisherTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
@@ -94,7 +94,7 @@ class PublisherTest extends TestCase
         $this->publisherConfig = $this
             ->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->responseQueueNameBuilder = $this
             ->getMockBuilder(ResponseQueueNameBuilder::class)
             ->disableOriginalConstructor()
@@ -102,7 +102,7 @@ class PublisherTest extends TestCase
         $this->messageIdGenerator = $this
             ->getMockBuilder(MessageIdGeneratorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->publisher = $objectManager->getObject(
@@ -137,9 +137,7 @@ class PublisherTest extends TestCase
         $this->messageValidator->expects($this->once())->method('validate')->with($topicName, $message);
         $this->messageEncoder->expects($this->once())
             ->method('encode')->with($topicName, $message)->willReturn($encodedMessage);
-        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $this->messageIdGenerator->expects($this->once())
             ->method('generate')->with($topicName)->willReturn($messageId);
         $this->envelopeFactory->expects($this->once())->method('create')->with(
@@ -152,13 +150,13 @@ class PublisherTest extends TestCase
         $publisher = $this
             ->getMockBuilder(PublisherConfigItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
         $connection = $this
             ->getMockBuilder(PublisherConnectionInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getName')->with()->willReturn($connectionName);
         $exchange = $this

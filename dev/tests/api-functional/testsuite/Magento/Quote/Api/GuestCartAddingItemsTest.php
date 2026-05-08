@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,7 +28,7 @@ class GuestCartAddingItemsTest extends WebapiAbstract
      * @var \Magento\TestFramework\ObjectManager
      */
     protected $objectManager;
-    
+
     /**
      * @var ProductResource|mixed
      */
@@ -58,7 +58,9 @@ class GuestCartAddingItemsTest extends WebapiAbstract
         foreach ($customOptionCollection as $option) {
             $customOptions [] = [
                 'option_id' => $option->getId(),
-                'option_value' => $option->getType() !== 'field' ? 1 : 'test'
+                'option_value' => $option->getType() !== 'field'
+                    ? current($option->getValues())->getOptionTypeId()
+                    : 'test'
             ];
         }
 
@@ -96,7 +98,9 @@ class GuestCartAddingItemsTest extends WebapiAbstract
         foreach ($customOptionCollection as $option) {
             $customOptions [] = [
                 'option_id' => $option->getId(),
-                'option_value' => $option->getType() != 'field' ? 2 : 'test2'
+                'option_value' => $option->getType() != 'field'
+                    ? current(array_reverse($option->getValues()))->getOptionTypeId()
+                    : 'test2'
             ];
         }
         $requestData = [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
@@ -9,10 +9,8 @@ use Magento\Framework\App\RequestInterface;
 
 /**
  * EAV Entity Attribute Multiply select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
+class Multiselect extends AbstractData
 {
     /**
      * Extract data from request and return value
@@ -40,7 +38,11 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
         if (is_array($value)) {
             $value = implode(',', $value);
         }
-        return parent::compactValue($value);
+        if ($value !== false) {
+            $this->getEntity()->setData($this->getAttribute()->getAttributeCode(), $value);
+        }
+
+        return $this;
     }
 
     /**
@@ -74,5 +76,77 @@ class Multiselect extends \Magento\Eav\Model\Attribute\Data\Select
         }
 
         return $output;
+    }
+
+    /**
+     * Validate the data
+     *
+     * @param array|string $value
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function validateValue($value)
+    {
+        $errors = [];
+        $attribute = $this->getAttribute();
+
+        if ($value === false) {
+            // try to load original value and validate it
+            $value = $this->getEntity()->getData($attribute->getAttributeCode());
+        }
+
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
+        }
+
+        if ($attribute->getIsRequired() && empty($value) && $value != '0') {
+            $label = __($attribute->getStoreLabel());
+            $errors[] = __('"%1" is a required value.', $label);
+        }
+
+        if (!empty($value) && $attribute->getSourceModel()) {
+            if (is_array($value)) {
+                $values = $value;
+            } else {
+                $values = preg_split('/[,\n\r]+/', (string) $value);
+            }
+            $values = array_map('trim', $values);
+            $errors = array_merge(
+                $errors,
+                $this->validateBySource($values)
+            );
+        }
+
+        return empty($errors) ? true : $errors;
+    }
+
+    /**
+     * Validate values using source
+     *
+     * @param array $values
+     * @return array
+     */
+    private function validateBySource(array $values): array
+    {
+        $errors = [];
+        foreach ($values as $value) {
+            if (!$this->getAttribute()->getSource()->getOptionText($value)) {
+                $errors[] = __(
+                    'Attribute %1 does not contain option with Id %2',
+                    $this->getAttribute()->getAttributeCode(),
+                    $value
+                );
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function restoreValue($value)
+    {
+        return $this->compactValue($value);
     }
 }

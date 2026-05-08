@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Related;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks cross-sell products data provider
@@ -18,8 +20,6 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Related;
 class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
 {
     /**
-     * @dataProvider productDataProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/products_crosssell.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      *
@@ -27,6 +27,7 @@ class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
      * @param float $price
      * @return void
      */
+    #[DataProvider('productDataProvider')]
     public function testGetData(string $storeCode, float $price): void
     {
         $this->prepareRequest('simple_with_cross', 'simple', $storeCode);
@@ -37,16 +38,16 @@ class CrossSellDataProviderTest extends AbstractRelationsDataProviderTest
     /**
      * @return array
      */
-    public function productDataProvider(): array
+    public static function productDataProvider(): array
     {
         return [
             'without_store_code' => [
-                'store_code' => 'default',
-                'product_price' => 20,
+                'storeCode' => 'default',
+                'price' => 20,
             ],
             'with_store_code' => [
-                'store_code' => 'fixture_second_store',
-                'product_price' => 10,
+                'storeCode' => 'fixture_second_store',
+                'price' => 10,
             ],
         ];
     }

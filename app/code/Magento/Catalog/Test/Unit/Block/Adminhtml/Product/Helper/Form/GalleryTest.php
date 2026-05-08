@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\Form;
@@ -49,22 +50,26 @@ class GalleryTest extends TestCase
      */
     private $dataPersistorMock;
 
+    /**
+     * @var DefaultValueProcessor|MockObject
+     */
+    private $defaultValueProcessorMock;
+
     protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
         $this->productMock = $this->createPartialMock(Product::class, ['getData']);
         $this->formMock = $this->createMock(Form::class);
-        $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
+        $this->dataPersistorMock = $this->createMock(DataPersistorInterface::class);
+        $this->defaultValueProcessorMock = $this->createMock(DefaultValueProcessor::class);
         $this->objectManager = new ObjectManager($this);
         $this->gallery = $this->objectManager->getObject(
             Gallery::class,
             [
                 'registry' => $this->registryMock,
                 'form' => $this->formMock,
-                'dataPersistor' => $this->dataPersistorMock
+                'dataPersistor' => $this->dataPersistorMock,
+                'defaultValueProcessor' => $this->defaultValueProcessorMock
             ]
         );
     }
@@ -85,6 +90,10 @@ class GalleryTest extends TestCase
                 ]
             ]
         ];
+        $this->defaultValueProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($this->productMock, $mediaGallery)
+            ->willReturnArgument(1);
         $this->registryMock->expects($this->once())->method('registry')->willReturn($this->productMock);
         $this->productMock->expects($this->once())->method('getData')->willReturn($mediaGallery);
 

@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\ResourceModel\Address\Grid;
 
@@ -76,7 +76,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         ResolverInterface $localeResolver,
         $model = Document::class,
         $connection = null,
-        AbstractDb $resource = null
+        ?AbstractDb $resource = null
     ) {
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
@@ -92,6 +92,15 @@ class Collection extends AbstractCollection implements SearchResultInterface
             $connection,
             $resource
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_idFieldName = 'entity_id';
     }
 
     /**
@@ -139,7 +148,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
     }
@@ -173,7 +182,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

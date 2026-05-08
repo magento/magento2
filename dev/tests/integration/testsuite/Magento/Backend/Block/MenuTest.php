@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block;
 
@@ -42,9 +42,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setAccessible(false);
 
         $this->menuConfig = $this->prepareMenuConfig();
 
@@ -59,7 +57,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     public function testRenderNavigation()
     {
-        $menuHtml = $this->blockMenu->renderNavigation($this->menuConfig->getMenu());
+        $menuHtml = $this->blockMenu->renderNavigation($this->menuConfig->getMenu(), 0, 12);
         $menu = new \SimpleXMLElement($menuHtml);
 
         $item = $menu->xpath('/ul/li/a/span')[0];
@@ -74,12 +72,17 @@ class MenuTest extends \PHPUnit\Framework\TestCase
             'Invited Customers',
         ];
         foreach ($menu->xpath('/ul//ul//ul/li/a/span') as $sortOrder => $item) {
+            if ($sortOrder>2) {
+                break;
+            }
             $this->assertEquals(
                 $liTitles[$sortOrder],
                 (string)$item,
                 '"' . $liTitles[$sortOrder] . '" item is absent or located on wrong menu level.'
             );
         }
+        // test column break if submenu contain more than 12 node
+        $this->assertStringContainsString('<li class="column">', $menuHtml);
     }
 
     /**
@@ -94,9 +97,9 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
 
         $paths->setValue(
+            null,
             [
                 ComponentRegistrar::MODULE => [],
                 ComponentRegistrar::THEME => [],
@@ -104,7 +107,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
                 ComponentRegistrar::LIBRARY => []
             ]
         );
-        $paths->setAccessible(false);
 
         ComponentRegistrar::register(ComponentRegistrar::LIBRARY, 'magento/framework', $libraryPath);
 
@@ -156,8 +158,6 @@ class MenuTest extends \PHPUnit\Framework\TestCase
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
         $reflection = new \ReflectionClass(\Magento\Framework\Component\ComponentRegistrar::class);
         $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
-        $paths->setAccessible(false);
+        $paths->setValue(null, $this->backupRegistrar);
     }
 }

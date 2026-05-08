@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -68,9 +68,7 @@ class ConfigTest extends TestCase
         $this->assetRepoMock = $this->getMockBuilder(Repository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlMock = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->urlMock = $this->createMock(UrlInterface::class);
         $this->assetRepoMock->expects($this->any())
             ->method('getUrl')
             ->willReturn($this->jsPluginSourceUrl);
@@ -80,17 +78,17 @@ class ConfigTest extends TestCase
 
         $this->storeVariablesMock = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->customVarsCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->customVarsCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
 
         $this->customVarsCollectionFactoryMock->expects($this->any())

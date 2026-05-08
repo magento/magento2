@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -57,6 +57,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete Tax Rule-->

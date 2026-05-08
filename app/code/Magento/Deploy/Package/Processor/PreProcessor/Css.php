@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Package\Processor\PreProcessor;
@@ -149,7 +149,12 @@ class Css implements ProcessorInterface
             $imports = [];
             $this->map[$fullPath] = [];
 
-            $content = $this->staticDir->readFile($this->minification->addMinifiedSign($fullPath));
+            $tmpFilename = $this->minification->addMinifiedSign($fullPath);
+            if ($this->staticDir->isReadable($tmpFilename)) {
+                $content = $this->staticDir->readFile($tmpFilename);
+            } else {
+                $content = '';
+            }
 
             $callback = function ($matchContent) use ($packagePath, $filePath, &$imports) {
                 if ($this->isLocal($matchContent['path'])) {

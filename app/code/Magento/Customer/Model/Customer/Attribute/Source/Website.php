@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Customer\Attribute\Source;
 
 /**
  * Customer website attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
 {
@@ -20,14 +18,16 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param \Magento\Store\Model\System\Store $store
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Store\Model\System\Store $store
     ) {
-        parent::__construct($attrOptionCollectionFactory, $attrOptionFactory);
+        parent::__construct($attrOptionCollectionFactory, $attrOptionFactory, $storeManager);
         $this->_store = $store;
     }
 
@@ -44,6 +44,8 @@ class Website extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     }
 
     /**
+     * Return option text
+     *
      * @param int|string $value
      * @return string|false
      */

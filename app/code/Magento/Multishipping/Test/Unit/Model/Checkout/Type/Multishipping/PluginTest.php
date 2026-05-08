@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,12 +15,16 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -58,29 +62,19 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(
-                [
-                    'getCheckoutState',
-                    'setCheckoutState',
-                    'getMultiShippingAddressesFlag',
-                    'setMultiShippingAddressesFlag'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quantityProcessorMock = $this->getMockBuilder(RequestQuantityProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->checkoutSessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getCheckoutState',
+                'setCheckoutState',
+                'getMultiShippingAddressesFlag',
+                'setMultiShippingAddressesFlag'
+            ]
+        );
+        $this->cartRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->localeMock = $this->createMock(ResolverInterface::class);
+        $this->quantityProcessorMock = $this->createMock(RequestQuantityProcessor::class);
         $this->cartMock = $this->createMock(Cart::class);
         $this->model = new Plugin(
             $this->checkoutSessionMock,
@@ -114,8 +108,9 @@ class PluginTest extends TestCase
      * @param float $itemInitialQuantity
      * @param array $params
      * @param bool $multipleShippingAddressesFlag
-     * @dataProvider getDataDataProvider
+     * @return void
      */
+    #[DataProvider('getDataDataProvider')]
     public function testAfterSave(
         float $itemInitialQuantity,
         array $params,
@@ -158,7 +153,7 @@ class PluginTest extends TestCase
     /**
      * @return array
      */
-    public function getDataDataProvider()
+    public static function getDataDataProvider(): array
     {
         return [
             'test with multi shipping addresses' => [10.0, ['qty' => '5'], true],

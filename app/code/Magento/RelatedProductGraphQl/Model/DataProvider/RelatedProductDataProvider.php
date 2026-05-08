@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,6 +118,9 @@ class RelatedProductDataProvider
         $collection = $link->getLinkCollection();
         $collection->addFieldToFilter('product_id', ['in' => array_keys($productsByActualIds)]);
         $collection->addLinkTypeIdFilter();
+        $collection->joinAttributes();
+        $collection->addOrder('product_id');
+        $collection->addOrder('position', 'asc');
 
         //Prepare map
         $map = [];

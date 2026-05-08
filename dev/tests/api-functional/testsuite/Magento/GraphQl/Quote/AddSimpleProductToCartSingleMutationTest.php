@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +11,20 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Add simple product with custom options to cart using the unified mutation for adding different product types
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 {
@@ -146,10 +152,9 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
      * @param string $sku
      * @param string $message
      *
-     * @dataProvider wrongSkuDataProvider
-     *
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
+    #[DataProvider('wrongSkuDataProvider')]
     public function testAddProductWithWrongSku(string $sku, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -187,7 +192,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
         self::assertEquals(
-            'The requested qty is not available',
+            'Not enough items for sale',
             $response['addProductsToCart']['user_errors'][0]['message']
         );
         self::assertEquals(100, $response['addProductsToCart']['cart']['total_quantity']);
@@ -197,11 +202,10 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
      * @param int $quantity
      * @param string $message
      *
-     * @dataProvider wrongQuantityDataProvider
-     *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
+    #[DataProvider('wrongQuantityDataProvider')]
     public function testAddProductWithWrongQuantity(int $quantity, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
@@ -219,18 +223,27 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @magentoApiDataFixture Magento/Checkout/_files/active_quote_not_default_website.php
-     * @dataProvider addProductNotAssignedToWebsiteDataProvider
-     * @param string $reservedOrderId
-     * @param string $sku
+     * @param string $cart
+     * @param string $product
      * @param array $headerMap
      */
-    public function testAddProductNotAssignedToWebsite(string $reservedOrderId, string $sku, array $headerMap)
+    #[DataProvider('addProductNotAssignedToWebsiteDataProvider')]
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1]], as: 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => ['$website2.id$']], as: 'product2'),
+        DataFixture(GuestCartFixture::class, as: 'cart1'),
+        DataFixture(GuestCartFixture::class, as: 'cart2', scope: 'store2'),
+    ]
+    public function testAddProductNotAssignedToWebsite(string $cart, string $product, array $headerMap)
     {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $sku = $this->fixtures->get($product)->getSku();
+        $cartId = (int) $this->fixtures->get($cart)->getId();
+        $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute($cartId);
         $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku);
+        $headerMap = array_map(fn ($store) => $this->fixtures->get($store)?->getCode() ?? $store, $headerMap);
         $response = $this->graphQlMutation($query, [], '', $headerMap);
         self::assertEmpty($response['addProductsToCart']['cart']['items']);
         self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
@@ -383,19 +396,19 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function addProductNotAssignedToWebsiteDataProvider(): array
+    public static function addProductNotAssignedToWebsiteDataProvider(): array
     {
         return [
-            ['test_order_1', 'simple-2', []],
-            ['test_order_1', 'simple-2', ['Store' => 'default']],
-            ['test_order_2', 'simple-1', ['Store' => 'fixture_second_store']],
+            ['cart1', 'product2', []],
+            ['cart1', 'product2', ['Store' => 'default']],
+            ['cart2', 'product1', ['Store' => 'store2']],
         ];
     }
 
     /**
      * @return array
      */
-    public function wrongSkuDataProvider(): array
+    public static function wrongSkuDataProvider(): array
     {
         return [
             'Non-existent SKU' => [
@@ -412,12 +425,12 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function wrongQuantityDataProvider(): array
+    public static function wrongQuantityDataProvider(): array
     {
         return [
             'More quantity than in stock' => [
                 101,
-                'The requested qty is not available'
+                'Not enough items for sale'
             ],
             'Quantity equals zero' => [
                 0,

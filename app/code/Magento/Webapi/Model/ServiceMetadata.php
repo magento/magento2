@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -106,7 +106,7 @@ class ServiceMetadata
         WebApiCache $cache,
         ClassReflector $classReflector,
         TypeProcessor $typeProcessor,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->config = $config;
         $this->cache = $cache;
@@ -201,7 +201,7 @@ class ServiceMetadata
     {
         $servicesConfig = $this->getServicesConfig();
         if (!isset($servicesConfig[$serviceName]) || !is_array($servicesConfig[$serviceName])) {
-            throw new RuntimeException(__('Requested service is not available: "%1"', $serviceName)->render());
+            throw new RuntimeException((string)__('Requested service is not available: "%1"', $serviceName)->render());
         }
         return $servicesConfig[$serviceName];
     }

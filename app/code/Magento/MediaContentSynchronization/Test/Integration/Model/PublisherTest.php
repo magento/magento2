@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -59,7 +59,6 @@ class PublisherTest extends TestCase
     }
 
     /**
-     * @dataProvider filesProvider
      * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
@@ -69,6 +68,7 @@ class PublisherTest extends TestCase
      * @throws IntegrationException
      * @throws LocalizedException
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filesProvider')]
     public function testExecute(array $contentIdentities): void
     {
         // publish message to the queue
@@ -102,7 +102,7 @@ class PublisherTest extends TestCase
      *
      * @return array
      */
-    public function filesProvider(): array
+    public static function filesProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,19 +23,19 @@ class Decimal extends AbstractBaseAttributeData
     public function __construct()
     {
         parent::__construct();
-        $this->defaultAttributePostData['is_filterable'] = '0';
-        $this->defaultAttributePostData['is_filterable_in_search'] = '0';
-        $this->defaultAttributePostData['used_for_sort_by'] = '0';
+        static::$defaultAttributePostData['is_filterable'] = '0';
+        static::$defaultAttributePostData['is_filterable_in_search'] = '0';
+        static::$defaultAttributePostData['used_for_sort_by'] = '0';
     }
 
     /**
      * @inheritdoc
      */
-    public function getAttributeData(): array
+    public static function getAttributeData(): array
     {
         $result = parent::getAttributeData();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
 
         return $result;
     }
@@ -43,11 +43,12 @@ class Decimal extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getAttributeDataWithCheckArray(): array
+    public static function getAttributeDataWithCheckArray(): array
     {
         $result = parent::getAttributeDataWithCheckArray();
-        unset($result["{$this->getFrontendInput()}_with_default_value"]);
-        unset($result["{$this->getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_default_value"]);
+        unset($result["{static::getFrontendInput()}_without_default_value"]);
+        unset($result["{static::getFrontendInput()}_with_store_view_scope"]);
 
         return $result;
     }
@@ -55,17 +56,17 @@ class Decimal extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    public function getUpdateProvider(): array
+    public static function getUpdateProvider(): array
     {
-        $frontendInput = $this->getFrontendInput();
+        $frontendInput = static::getFrontendInput();
         return array_replace_recursive(
             parent::getUpdateProvider(),
             [
                 "{$frontendInput}_other_attribute_code" => [
-                    'post_data' => [
+                    'postData' => [
                         'attribute_code' => 'text_attribute_update',
                     ],
-                    'expected_data' => [
+                    'expectedData' => [
                         'attribute_code' => 'decimal_attribute',
                     ],
                 ],
@@ -76,7 +77,7 @@ class Decimal extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getFrontendInput(): string
+    protected static function getFrontendInput(): string
     {
         return 'price';
     }
@@ -84,7 +85,7 @@ class Decimal extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdatePostData(): array
+    protected static function getUpdatePostData(): array
     {
         return [
             'frontend_label' => [
@@ -114,9 +115,9 @@ class Decimal extends AbstractBaseAttributeData
     /**
      * @inheritdoc
      */
-    protected function getUpdateExpectedData(): array
+    protected static function getUpdateExpectedData(): array
     {
-        $updatePostData = $this->getUpdatePostData();
+        $updatePostData = static::getUpdatePostData();
         return array_merge(
             $updatePostData,
             [

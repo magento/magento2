@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,6 +51,14 @@
     <entity name="CatalogInventoryManageStockDisable">
         <!-- Magento default value -->
         <data key="path">cataloginventory/item_options/manage_stock</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableInventoryCheckOnCartLoad">
+        <data key="path">cataloginventory/options/enable_inventory_check</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableInventoryCheckOnCartLoad">
+        <data key="path">cataloginventory/options/enable_inventory_check</data>
         <data key="value">0</data>
     </entity>
 </entities>

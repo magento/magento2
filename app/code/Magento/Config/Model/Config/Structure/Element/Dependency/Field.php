@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Model\Config\Structure\Element\Dependency;
-
-/**
- * @api
- * @since 100.0.2
- */
 
 /**
  * Class Field
  *
  * Fields are used to describe possible values for a type/interface.
+ *
+ * @api
+ * @since 100.0.2
  */
 class Field
 {

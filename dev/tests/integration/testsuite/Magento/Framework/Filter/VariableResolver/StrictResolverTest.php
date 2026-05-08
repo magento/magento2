@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\VariableResolverInterface;
 use PHPUnit\Framework\TestCase;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StrictResolverTest extends TestCase
 {
@@ -32,16 +34,35 @@ class StrictResolverTest extends TestCase
         $this->filter = $objectManager->get(Template::class);
     }
 
-    /**
-     * @dataProvider useCasesProvider
-     */
+    #[DataProvider('useCasesProvider')]
     public function testResolve($value, array $variables, $expected)
     {
+        if(str_contains($value, 'foo.email.getUrl'))
+        {
+            $variables['store'] = $variables['store']($this);
+            $variables['foo']['email'] = $variables['foo']['email']($this);
+        }
         $result = $this->variableResolver->resolve($value, $this->filter, $variables);
         self::assertSame($expected, $result);
     }
 
-    public function useCasesProvider()
+    private function getMockForStoreClass()
+    {
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        return $storeMock;
+    }
+
+    public function getMockForEmailTemplate($storeMock)
+    {
+        $mock = $storeMock($this);
+        $emailTemplate = $this->createMock(\Magento\Email\Model\Template::class);
+        $emailTemplate->method('getUrl')
+            ->with($mock, 'some path', ['_query' => ['id' => 'abc', 'token' => 'abc'], 'abc' => '1'])
+            ->willReturn('a url');
+        return $emailTemplate;
+    }
+
+    public static function useCasesProvider()
     {
         $classStub = new class {
             public function doThing()
@@ -65,11 +86,8 @@ class StrictResolverTest extends TestCase
         };
         $dataClassStub->setData('foo', 'bar');
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $emailTemplate = $this->createMock(\Magento\Email\Model\Template::class);
-        $emailTemplate->method('getUrl')
-            ->with($storeMock, 'some path', ['_query' => ['id' => 'abc', 'token' => 'abc'], 'abc' => '1'])
-            ->willReturn('a url');
+        $storeMock = static fn (self $testCase) => $testCase->getMockForStoreClass();
+        $emailTemplate = static fn (self $testCase) => $testCase->getMockForEmailTemplate($storeMock);;
 
         return [
             ['', [], null],

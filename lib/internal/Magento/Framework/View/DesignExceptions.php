@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View;
 
@@ -51,7 +51,7 @@ class DesignExceptions
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $exceptionConfigPath,
         $scopeType,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->exceptionConfigPath = $exceptionConfigPath;

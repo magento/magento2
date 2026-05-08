@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ScopedTest extends TestCase
 {
@@ -51,10 +52,10 @@ class ScopedTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->_readerMock = $this->getMockForAbstractClass(ReaderInterface::class);
-        $this->_configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
-        $this->_cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->_readerMock = $this->createMock(ReaderInterface::class);
+        $this->_configScopeMock = $this->createMock(ScopeInterface::class);
+        $this->_cacheMock = $this->createMock(CacheInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
 
         $this->_model = $this->objectManager->getObject(
             Scoped::class,
@@ -71,9 +72,8 @@ class ScopedTest extends TestCase
     /**
      * @param string $path
      * @param mixed $expectedValue
-     * @param string $default
-     * @dataProvider getConfigByPathDataProvider
-     */
+     * @param string $default     */
+    #[DataProvider('getConfigByPathDataProvider')]
     public function testGetConfigByPath($path, $expectedValue, $default)
     {
         $testData = [
@@ -95,7 +95,7 @@ class ScopedTest extends TestCase
     /**
      * @return array
      */
-    public function getConfigByPathDataProvider()
+    public static function getConfigByPathDataProvider()
     {
         return [
             ['key_1/key_1.1/key_1.1.1', 'value_1.1.1', 'error'],

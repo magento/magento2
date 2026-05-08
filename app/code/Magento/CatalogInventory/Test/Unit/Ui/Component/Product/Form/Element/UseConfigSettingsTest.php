@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Ui\Component\Product\Form\Element;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Ui\Component\Product\Form\Element\UseConfigSettings;
 use Magento\Framework\Data\ValueSourceInterface;
 use Magento\Framework\Serialize\JsonValidator;
@@ -47,7 +48,7 @@ class UseConfigSettingsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->serializerMock = $this->createMock(Json::class);
         $this->jsonValidatorMock = $this->getMockBuilder(JsonValidator::class)
             ->disableOriginalConstructor()
@@ -78,8 +79,8 @@ class UseConfigSettingsTest extends TestCase
      * @param string|int $sourceValue
      * @param int $serializedCalledNum
      * @param int $isValidCalledNum
-     * @dataProvider prepareSourceDataProvider
      */
+    #[DataProvider('prepareSourceDataProvider')]
     public function testPrepareSource(
         array $expectedResult,
         $sourceValue,
@@ -90,7 +91,7 @@ class UseConfigSettingsTest extends TestCase
         $processorMock->expects($this->atLeastOnce())->method('register');
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processorMock);
         /** @var ValueSourceInterface|MockObject $source */
-        $source = $this->getMockForAbstractClass(ValueSourceInterface::class);
+        $source = $this->createMock(ValueSourceInterface::class);
         $source->expects($this->once())
             ->method('getValue')
             ->with($expectedResult['keyInConfiguration'])
@@ -115,7 +116,7 @@ class UseConfigSettingsTest extends TestCase
     /**
      * @return array
      */
-    public function prepareSourceDataProvider()
+    public static function prepareSourceDataProvider()
     {
         return [
             'valid' => [
@@ -132,7 +133,7 @@ class UseConfigSettingsTest extends TestCase
                     'unserialized' => true
                 ],
                 'sourceValue' => '{"32000":3}',
-                'serialziedCalledNum' => 1,
+                'serializedCalledNum' => 1,
                 'isValidCalledNum' => 1
             ]
         ];

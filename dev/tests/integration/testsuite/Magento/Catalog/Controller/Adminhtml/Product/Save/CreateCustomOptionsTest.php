@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Base test cases for product custom options with type "field".
@@ -31,12 +32,11 @@ class CreateCustomOptionsTest extends AbstractBackendController
     /**
      * Test add to product custom option with type "field".
      *
-     * @dataProvider productWithNewOptionsDataProvider
-     *
      * @param array $productPostData
      *
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('productWithNewOptionsDataProvider')]
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {
         $this->getRequest()->setPostValue($productPostData);
@@ -71,7 +71,7 @@ class CreateCustomOptionsTest extends AbstractBackendController
      *
      * @return array
      */
-    public function productWithNewOptionsDataProvider(): array
+    public static function productWithNewOptionsDataProvider(): array
     {
         return [
             'required_options' => [
@@ -264,7 +264,6 @@ class CreateCustomOptionsTest extends AbstractBackendController
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

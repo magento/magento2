@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,7 +19,11 @@ use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\MediaGalleryRenditions\Model\Config;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateRenditionsTest extends TestCase
 {
     private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
@@ -103,14 +107,13 @@ class GenerateRenditionsTest extends TestCase
     }
 
     /**
-     * @dataProvider renditionsImageProvider
-     *
      * Test for generation of rendition images.
      *
      * @param string $path
      * @param string $renditionPath
      * @throws LocalizedException
      */
+    #[DataProvider('renditionsImageProvider')]
     public function testExecute(string $path, string $renditionPath): void
     {
         $this->copyImage($path);
@@ -146,9 +149,37 @@ class GenerateRenditionsTest extends TestCase
     }
 
     /**
+     * Test getImageFileNamePattern method returns correct regex pattern
+     */
+    public function testGetImageFileNamePattern(): void
+    {
+        $pattern = $this->generateRenditions->getImageFileNamePattern();
+        // Assert the pattern is the expected string
+        $this->assertEquals('#\.(jpg|jpeg|gif|png)$# i', $pattern);
+        // Test that the pattern correctly validates supported file types
+        $validExtensions = ['test.jpg', 'test.jpeg', 'test.gif', 'test.png', 'TEST.JPG', 'TEST.PNG'];
+        foreach ($validExtensions as $filename) {
+            $this->assertEquals(
+                1,
+                preg_match($pattern, $filename),
+                "Pattern should match valid image file: $filename"
+            );
+        }
+        // Test that the pattern correctly rejects unsupported file types
+        $invalidExtensions = ['test.txt', 'test.pdf', 'test.webp', 'test.bmp', 'test'];
+        foreach ($invalidExtensions as $filename) {
+            $this->assertEquals(
+                0,
+                preg_match($pattern, $filename),
+                "Pattern should not match invalid image file: $filename"
+            );
+        }
+    }
+
+    /**
      * @return array
      */
-    public function renditionsImageProvider(): array
+    public static function renditionsImageProvider(): array
     {
         return [
             'rendition_image_not_generated' => [

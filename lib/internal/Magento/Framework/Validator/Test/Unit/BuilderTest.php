@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Framework\Validator\UniversalFactory;
 use Magento\Framework\Validator\ValidatorInterface;
 use Magento\Framework\ValidatorFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  *
@@ -55,13 +56,14 @@ class BuilderTest extends TestCase
 
     /**
      * Test createValidator method
-     *
-     * @dataProvider createValidatorDataProvider
-     *
-     * @param array $constraints
-     * @param ValidatorInterface $expectedValidator
+     *     *
+     * @param array $constraint
+     * string $property
+     * int $min
+     * int $max
      */
-    public function testCreateValidator(array $constraints, $expectedValidator)
+    #[DataProvider('createValidatorDataProvider')]
+    public function testCreateValidator(array $constraints, string $property, int $min, int $max)
     {
         /** @var \Magento\Framework\Validator\Builder $builder */
         $builder = $this->_objectManager->getObject(
@@ -73,6 +75,21 @@ class BuilderTest extends TestCase
                 'constraints' => $constraints
             ]
         );
+        /** @var AbstractAdapter $translator */
+        $translator = $this->createMock(
+            AbstractAdapter::class
+        );
+        AbstractValidator::setDefaultTranslator($translator);
+
+        $expectedValidator = new Validator();
+        $expectedValidator->addValidator(
+            new Property(
+                new StringLength($min, $max),
+                $property,
+                $constraints[0]['alias']
+            )
+        );
+
         $actualValidator = $builder->createValidator();
         $this->assertEquals($expectedValidator, $actualValidator);
     }
@@ -82,107 +99,77 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function createValidatorDataProvider()
+    public static function createValidatorDataProvider()
     {
-        $result = [];
-
-        /** @var AbstractAdapter $translator */
-        $translator = $this->getMockBuilder(
-            AbstractAdapter::class
-        )->getMockForAbstractClass();
-        AbstractValidator::setDefaultTranslator($translator);
-
-        // Case 1. Check constructor with arguments
-        $actualConstraints = [
+        return [
             [
-                'alias' => 'name_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'arguments' => [
-                        'options' => ['min' => 1, 'max' => new Option(20)],
-                    ],
+                [
+                    [
+                        'alias' => 'name_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'arguments' => [
+                                'options' => ['min' => 1, 'max' => new Option(20)],
+                            ],
+                        ],
+                        'property' => 'name',
+                        'type' => 'property',
+                    ]
                 ],
-                'property' => 'name',
-                'type' => 'property',
-            ],
-        ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(1, 20),
                 'name',
-                'name_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        // Case 2. Check method calls
-        $actualConstraints = [
-            [
-                'alias' => 'description_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'methods' => [
-                        ['method' => 'setMin', 'arguments' => [10]],
-                        ['method' => 'setMax', 'arguments' => [1000]],
-                    ],
-                ],
-                'property' => 'description',
-                'type' => 'property',
+                1,
+                20
             ],
-        ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(10, 1000),
-                'description',
-                'description_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        // Case 3. Check callback on validator
-        $actualConstraints = [
             [
-                'alias' => 'sku_alias',
-                'class' => StringLength::class,
-                'options' => [
-                    'callback' => [
-                        new Callback(
-                            function ($validator) {
-                                $validator->setMin(20);
-                                $validator->setMax(100);
-                            }
-                        ), ], ],'property' => 'sku', 'type' => 'property', ], ];
-
-        $expectedValidator = new Validator();
-        $expectedValidator->addValidator(
-            new Property(
-                new StringLength(20, 100),
+                [
+                    [
+                        'alias' => 'description_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'methods' => [
+                                ['method' => 'setMin', 'arguments' => [10]],
+                                ['method' => 'setMax', 'arguments' => [1000]],
+                            ],
+                        ],
+                        'property' => 'description',
+                        'type' => 'property',
+                    ]
+                ],
+                'description',
+                10,
+                1000
+            ],
+            [
+                [
+                    [
+                        'alias' => 'sku_alias',
+                        'class' => StringLength::class,
+                        'options' => [
+                            'methods' => [
+                                ['method' => 'setMin', 'arguments' => [20]],
+                                ['method' => 'setMax', 'arguments' => [100]],
+                            ],
+                        ],
+                        'property' => 'sku',
+                        'type' => 'property',
+                    ]
+                ],
                 'sku',
-                'sku_alias'
-            )
-        );
-
-        $result[] = [$actualConstraints, $expectedValidator];
-
-        return $result;
+                20,
+                100
+            ]
+        ];
     }
 
     /**
      * Check addConfiguration logic
-     *
-     * @dataProvider configurationDataProvider
-     *
+     *     *
      * @param array $constraints
      * @param string $alias
      * @param array $configuration
      * @param array $expected
      */
+    #[DataProvider('configurationDataProvider')]
     public function testAddConfiguration($constraints, $alias, $configuration, $expected)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -198,14 +185,13 @@ class BuilderTest extends TestCase
 
     /**
      * Check addConfigurations logic
-     *
-     * @dataProvider configurationDataProvider
-     *
+     *     *
      * @param array $constraints
      * @param string $alias
      * @param array $configuration
      * @param array $expected
      */
+    #[DataProvider('configurationDataProvider')]
     public function testAddConfigurations($constraints, $alias, $configuration, $expected)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -226,7 +212,7 @@ class BuilderTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function configurationDataProvider()
+    public static function configurationDataProvider()
     {
         $callback = new Callback(
             [\Magento\Framework\Validator\Test\Unit\Test\Callback::class, 'getId']
@@ -271,20 +257,20 @@ class BuilderTest extends TestCase
                 [$emptyConstraint],
                 'current_alias',
                 $someMethod,
-                [$this->_getExpectedConstraints($emptyConstraint, 'methods', [$someMethod])],
+                [self::_getExpectedConstraints($emptyConstraint, 'methods', [$someMethod])],
             ],
             'constraint options initialized with callback' => [
                 [$emptyConstraint],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($emptyConstraint, 'callback', [$callback])],
+                [self::_getExpectedConstraints($emptyConstraint, 'callback', [$callback])],
             ],
             'constraint options initialized with arguments' => [
                 [$emptyConstraint],
                 'current_alias',
                 ['arguments' => ['some_argument' => 'some_value']],
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $emptyConstraint,
                         'arguments',
                         ['some_argument' => 'some_value']
@@ -296,7 +282,7 @@ class BuilderTest extends TestCase
                 'current_alias',
                 ['arguments' => ['some_argument' => 'some_value']],
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $configuredConstraint,
                         'arguments',
                         ['some_argument' => 'some_value']
@@ -307,14 +293,14 @@ class BuilderTest extends TestCase
                 [$constraintWithArgs],
                 'current_alias',
                 $methodWithArgs,
-                [$this->_getExpectedConstraints($constraintWithArgs, 'methods', [$methodWithArgs])],
+                [self::_getExpectedConstraints($constraintWithArgs, 'methods', [$methodWithArgs])],
             ],
             'method added' => [
                 [$configuredConstraint],
                 'current_alias',
                 $methodWithArgs,
                 [
-                    $this->_getExpectedConstraints(
+                    self::_getExpectedConstraints(
                         $configuredConstraint,
                         'methods',
                         [$someMethod, $methodWithArgs]
@@ -325,13 +311,13 @@ class BuilderTest extends TestCase
                 [$constraintWithArgs],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($constraintWithArgs, 'callback', [$callback])],
+                [self::_getExpectedConstraints($constraintWithArgs, 'callback', [$callback])],
             ],
             'callback added' => [
                 [$configuredConstraint],
                 'current_alias',
                 $callbackConfig,
-                [$this->_getExpectedConstraints($configuredConstraint, 'callback', [$callback, $callback])],
+                [self::_getExpectedConstraints($configuredConstraint, 'callback', [$callback, $callback])],
             ]
         ];
     }
@@ -344,7 +330,7 @@ class BuilderTest extends TestCase
      * @param mixed $optionValue
      * @return array
      */
-    protected function _getExpectedConstraints($constraint, $optionKey, $optionValue)
+    protected static function _getExpectedConstraints($constraint, $optionKey, $optionValue)
     {
         if (!is_array($constraint['options'])) {
             $constraint['options'] = [];
@@ -355,13 +341,12 @@ class BuilderTest extends TestCase
 
     /**
      * Check arguments validation passed into constructor
-     *
-     * @dataProvider invalidArgumentsDataProvider
-     *
+     *     *
      * @param array $options
      * @param string $exception
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidArgumentsDataProvider')]
     public function testConstructorConfigValidation(array $options, $exception, $exceptionMessage)
     {
         $this->expectException($exception);
@@ -377,13 +362,12 @@ class BuilderTest extends TestCase
 
     /**
      * Check arguments validation passed into configuration
-     *
-     * @dataProvider invalidArgumentsDataProvider
-     *
+     *     *
      * @param array $options
      * @param string $exception
      * @param string $exceptionMessage
      */
+    #[DataProvider('invalidArgumentsDataProvider')]
     public function testAddConfigurationConfigValidation(array $options, $exception, $exceptionMessage)
     {
         $this->expectException($exception);
@@ -405,7 +389,7 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function invalidArgumentsDataProvider()
+    public static function invalidArgumentsDataProvider()
     {
         return [
             'constructor invalid arguments' => [
@@ -455,12 +439,11 @@ class BuilderTest extends TestCase
 
     /**
      * Test invalid configuration formats
-     *
-     * @dataProvider invalidConfigurationFormatDataProvider
-     *
+     *     *
      *
      * @param mixed $configuration
      */
+    #[DataProvider('invalidConfigurationFormatDataProvider')]
     public function testAddConfigurationInvalidFormat($configuration)
     {
         $this->expectException('InvalidArgumentException');
@@ -481,7 +464,7 @@ class BuilderTest extends TestCase
      *
      * @return array
      */
-    public function invalidConfigurationFormatDataProvider()
+    public static function invalidConfigurationFormatDataProvider()
     {
         return [
             'configuration incorrect method call' => [

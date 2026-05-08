@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
 
 /**
- * Plugin to handle cache validation that can be done after each resolver
+ * Plugin to handle HTTP cache validation that can be done after each resolver
  */
 class Resolver
 {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,15 @@ use Magento\Customer\Model\Customer;
 use Magento\Customer\Observer\BeforeAddressSaveObserver;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Registry;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class BeforeAddressSaveObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var BeforeAddressSaveObserver
      */
@@ -65,12 +69,12 @@ class BeforeAddressSaveObserverTest extends TestCase
             ->method('getId')
             ->willReturn($customerAddressId);
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -94,9 +98,8 @@ class BeforeAddressSaveObserverTest extends TestCase
     /**
      * @param string $configAddressType
      * @param $isDefaultBilling
-     * @param $isDefaultShipping
-     * @dataProvider dataProviderBeforeAddressSaveWithoutCustomerAddressId
-     */
+     * @param $isDefaultShipping */
+    #[DataProvider('dataProviderBeforeAddressSaveWithoutCustomerAddressId')]
     public function testBeforeAddressSaveWithoutCustomerAddressId(
         $configAddressType,
         $isDefaultBilling,
@@ -104,10 +107,10 @@ class BeforeAddressSaveObserverTest extends TestCase
     ) {
         $customerAddressId = null;
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess'])
-            ->getMock();
+        $address = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Address::class,
+            ['getIsDefaultBilling', 'getIsDefaultShipping', 'setForceProcess', 'getId']
+        );
         $address->expects($this->once())
             ->method('getId')
             ->willReturn($customerAddressId);
@@ -122,12 +125,12 @@ class BeforeAddressSaveObserverTest extends TestCase
             ->with(true)
             ->willReturnSelf();
 
-        $observer = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
+        $observer = $this->createPartialMockWithReflection(
+            Observer::class,
+            [
                 'getCustomerAddress',
-            ])
-            ->getMock();
+            ]
+        );
         $observer->expects($this->once())
             ->method('getCustomerAddress')
             ->willReturn($address);
@@ -157,16 +160,16 @@ class BeforeAddressSaveObserverTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderBeforeAddressSaveWithoutCustomerAddressId()
+    public static function dataProviderBeforeAddressSaveWithoutCustomerAddressId()
     {
         return [
             [
-                'TaxCalculationAddressType' => AbstractAddress::TYPE_BILLING,
+                'configAddressType' => AbstractAddress::TYPE_BILLING,
                 'isDefaultBilling' => true,
                 'isDefaultShipping' => false,
             ],
             [
-                'TaxCalculationAddressType' => AbstractAddress::TYPE_SHIPPING,
+                'configAddressType' => AbstractAddress::TYPE_SHIPPING,
                 'isDefaultBilling' => false,
                 'isDefaultShipping' => true,
             ],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,13 +18,13 @@ class ExchangeInstallerTest extends TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->getMockForAbstractClass(BindingInstallerInterface::class);
+        $bindingInstaller = $this->createMock(BindingInstallerInterface::class);
         $model = new ExchangeInstaller($bindingInstaller);
         $channel = $this->createMock(AMQPChannel::class);
 
-        $binding = $this->getMockForAbstractClass(BindingInterface::class);
+        $binding = $this->createMock(BindingInterface::class);
 
-        $exchange = $this->getMockForAbstractClass(ExchangeConfigItemInterface::class);
+        $exchange = $this->createMock(ExchangeConfigItemInterface::class);
         $exchange->expects($this->exactly(2))->method('getName')->willReturn('magento');
         $exchange->expects($this->once())->method('getType')->willReturn('topic');
         $exchange->expects($this->once())->method('isDurable')->willReturn(true);

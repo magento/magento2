@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,7 +16,9 @@
             <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-32333"/>
-            <group value="pr_exclude"/>
+            <skip>
+                <issueId value="AC-15827"/>
+            </skip>
         </annotations>
         <before>
             <!--Login-->

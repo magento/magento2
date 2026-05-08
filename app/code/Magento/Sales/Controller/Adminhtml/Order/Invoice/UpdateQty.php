@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -18,11 +17,19 @@ use Magento\Sales\Model\Service\InvoiceService;
 use Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View as AbstractView;
 
 /**
- * Class UpdateQty
+ * Class UpdateQty to update invoice items qty
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateQty extends AbstractView implements HttpPostActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_Sales::invoice';
+
     /**
      * @var JsonFactory
      */

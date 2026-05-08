@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -23,6 +23,10 @@
                     <argument name="sort_order" xsi:type="string">30</argument>
                 </arguments>
                 <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" ifconfig="catalog/review/active">
+                    <arguments>
+                        <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
+                    </arguments>
+                    <container name="form.additional.review.info" as="form_additional_review_info"/>
                     <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before"/>
                 </block>
             </block>

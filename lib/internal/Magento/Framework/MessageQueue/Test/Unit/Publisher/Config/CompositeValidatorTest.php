@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,8 +34,8 @@ class CompositeValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->validatorOneMock = $this->getMockForAbstractClass(ValidatorInterface::class);
-        $this->validatorTwoMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->validatorOneMock = $this->createMock(ValidatorInterface::class);
+        $this->validatorTwoMock = $this->createMock(ValidatorInterface::class);
 
         $this->model = new CompositeValidator([$this->validatorOneMock, $this->validatorTwoMock]);
     }

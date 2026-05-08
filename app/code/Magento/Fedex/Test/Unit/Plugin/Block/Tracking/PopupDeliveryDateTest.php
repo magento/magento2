@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,8 @@ use Magento\Fedex\Plugin\Block\Tracking\PopupDeliveryDate;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Block\Tracking\Popup;
 use Magento\Shipping\Model\Tracking\Result\Status;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,9 +23,11 @@ use PHPUnit\Framework\TestCase;
  */
 class PopupDeliveryDateTest extends TestCase
 {
-    const STUB_CARRIER_CODE_NOT_FEDEX = 'not-fedex';
-    const STUB_DELIVERY_DATE = '2020-02-02';
-    const STUB_DELIVERY_TIME = '12:00';
+    use MockCreationTrait;
+
+    public const STUB_CARRIER_CODE_NOT_FEDEX = 'not-fedex';
+    public const STUB_DELIVERY_DATE = '2020-02-02';
+    public const STUB_DELIVERY_TIME = '12:00';
 
     /**
      * @var MockObject|PopupDeliveryDate
@@ -69,6 +73,30 @@ class PopupDeliveryDateTest extends TestCase
     }
 
     /**
+     * Test the method with Fedex carrier with timezone impact
+     */
+    #[DataProvider('getDates')]
+    public function testAfterFormatDeliveryDateTimeWithFedexCarrierWithTimezone(
+        $date,
+        $currentTimezone,
+        $convertedTimezone,
+        $expected
+    ) {
+        $this->trackingStatusMock->expects($this::once())
+            ->method('getCarrier')
+            ->willReturn(Carrier::CODE);
+
+        $date = new \DateTime($date, new \DateTimeZone($currentTimezone));
+        $date->setTimezone(new \DateTimeZone($convertedTimezone));
+        $this->subjectMock->expects($this->once())->method('formatDeliveryDate')
+        ->willReturn($date->format('Y-m-d'));
+
+        $result = $this->executeOriginalMethodWithTimezone();
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
      * Test the method with a different carrier
      */
     public function testAfterFormatDeliveryDateTimeWithOtherCarrier()
@@ -88,10 +116,7 @@ class PopupDeliveryDateTest extends TestCase
      */
     private function getStatusMock(): MockObject
     {
-        return $this->getMockBuilder(Status::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCarrier'])
-            ->getMock();
+        return $this->createPartialMockWithReflection(Status::class, ['getCarrier']);
     }
 
     /**
@@ -103,7 +128,7 @@ class PopupDeliveryDateTest extends TestCase
     {
         return $this->getMockBuilder(Popup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['formatDeliveryDate', 'getTrackingInfo'])
+            ->onlyMethods(['formatDeliveryDate', 'getTrackingInfo'])
             ->getMock();
     }
 
@@ -118,5 +143,41 @@ class PopupDeliveryDateTest extends TestCase
             self::STUB_DELIVERY_DATE,
             self::STUB_DELIVERY_TIME
         );
+    }
+
+    /**
+     * Run plugin's original method taking into account timezone
+     */
+    private function executeOriginalMethodWithTimezone()
+    {
+        return $this->plugin->afterFormatDeliveryDateTime(
+            $this->subjectMock,
+            'Test Result',
+            self::STUB_DELIVERY_DATE,
+            '00:00:00'
+        );
+    }
+
+    /**
+     * Data provider for testAfterFormatDeliveryDateTimeWithFedexCarrierWithTimezone
+     *
+     * @return array[]
+     */
+    public static function getDates(): array
+    {
+        return [
+            'same day' => [
+                'date' => '2024-01-07 06:00:00',
+                'currentTimezone' => 'US/Eastern',
+                'convertedTimezone' => 'America/Chicago',
+                'expected' => '2024-01-07'
+            ],
+            'previous day' => [
+                'date' => '2024-01-07 00:00:00',
+                'currentTimezone' => 'US/Eastern',
+                'convertedTimezone' => 'America/Chicago',
+                'expected' => '2024-01-06'
+            ]
+        ];
     }
 }

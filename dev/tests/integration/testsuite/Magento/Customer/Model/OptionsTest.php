@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,14 +50,13 @@ class OptionsTest extends TestCase
     /**
      * Test suffix and prefix options
      *
-     * @dataProvider optionsDataProvider
-     *
      * @param string $optionType
      * @param array $showOptionConfig
      * @param array $optionValuesConfig
      * @param array $expectedOptions
      * @return void
      */
+    #[DataProvider('optionsDataProvider')]
     public function testOptions(
         string $optionType,
         array $showOptionConfig,
@@ -97,7 +97,7 @@ class OptionsTest extends TestCase
      *
      * @return array
      */
-    public function optionsDataProvider(): array
+    public static function optionsDataProvider(): array
     {
         $optionPrefixName = 'prefix';
         $optionSuffixName = 'suffix';

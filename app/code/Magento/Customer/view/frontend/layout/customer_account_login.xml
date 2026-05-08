@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -16,7 +16,7 @@
                 <block class="Magento\Customer\Block\Form\Login" name="customer_form_login" template="Magento_Customer::form/login.phtml">
                     <container name="form.additional.info" as="form_additional_info"/>
                     <arguments>
-                        <argument name="login_button_view_model" xsi:type="object">Magento\Customer\ViewModel\LoginButton</argument>
+                        <argument name="button_lock_manager" xsi:type="object">Magento\Framework\View\Element\ButtonLockManager</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Customer\Block\Form\Login\Info" name="customer.new" template="Magento_Customer::newcustomer.phtml"/>

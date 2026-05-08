@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Bundle\Model\PrepareBundleLinks;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,12 +50,12 @@ class QuoteRecollectProcessorTest extends TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/quote_with_fixed_bundle_product.php
-     * @dataProvider getBundleOptionsDataProvider
      * @param array $optionsData
      * @param array $selectionsData
      * @param string $expectedTriggerRecollect
      * @return void
      */
+    #[DataProvider('getBundleOptionsDataProvider')]
     public function testMarkQuoteRecollectAfterChangeBundleOptions(
         array $optionsData,
         array $selectionsData,
@@ -70,7 +71,7 @@ class QuoteRecollectProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function getBundleOptionsDataProvider(): array
+    public static function getBundleOptionsDataProvider(): array
     {
         return [
             'product option changed' => [

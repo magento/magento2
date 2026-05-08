@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateShippingLabelForUSPSShippingMethodTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Create Shipping label For USPS Shipment"/>
+            <title value="Admin create shipping label for usps shipping method"/>
+            <description value="Verify admin able to create shipping label for usps shipping method with international address"/>
+            <testCaseId value="AC-14921"/>
+            <severity value="MAJOR"/>
+            <group value="3rd_party_integration"/>
+            <group value="EnableUSPSShippingForRestAPISuite"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <!-- Login admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Set Shipping settings origin data-->
+            <actionGroup ref="AdminSetShippingOriginConfigActionGroup" stepKey="setShippingOriginConfigurationData">
+                <argument name="country" value="{{US_Address_LI.country_id}}"/>
+                <argument name="state" value="{{US_Address_LI.state}}"/>
+                <argument name="postcode" value="{{US_Address_LI.postcode}}"/>
+            </actionGroup>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} '{{US_Address_LI.city}}'" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{US_Address_LI.street[0]}}'" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_LI.street[1]}}'" stepKey="setOriginStreetAddress2"/>
+            <!--Set StoreInformation configs data-->
+            <actionGroup ref="AdminSetStoreInformationConfigurationActionGroup" stepKey="setStoreInformationConfigData">
+                <argument name="telephone" value="{{US_Address_LI.telephone}}"/>
+                <argument name="country" value="{{US_Address_LI.country_id}}"/>
+                <argument name="state" value="{{US_Address_LI.state}}"/>
+                <argument name="city" value="{{US_Address_LI.city}}"/>
+                <argument name="postcode" value="{{US_Address_LI.postcode}}"/>
+                <argument name="street" value="{{US_Address_LI.street[0]}}"/>
+            </actionGroup>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_LI.street[1]}}'" stepKey="setStoreInformationStreetAddress"/>
+        </before>
+        <after>
+            <!--delete product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!--delete customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Reset shipping origin -->
+            <actionGroup ref="AdminResetShippingOriginConfigurationActionGroup" stepKey="ResetCaliforniaShippingOrigin"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="resetOriginStreetAddress2"/>
+            <!--Reset StoreInformation configs data-->
+            <actionGroup ref="AdminSetStoreInformationConfigurationActionGroup" stepKey="resetStoreInformationConfig">
+                <argument name="storeName" value=""/>
+                <argument name="storeHoursOfOperation" value=""/>
+                <argument name="vatNumber" value=""/>
+                <argument name="telephone" value=""/>
+                <argument name="country" value=""/>
+                <argument name="state" value=""/>
+                <argument name="city" value=""/>
+                <argument name="postcode" value=""/>
+                <argument name="street" value=""/>
+            </actionGroup>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} ''" stepKey="resetStoreInformationStreetAddress"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 1:Navigate to storefront -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$createCustomer$" />
+        </actionGroup>
+        <!-- Step 2:Add product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <!-- Step 3:Select International Address other than USA -->
+        <actionGroup ref="CustomerCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="address" value="Canada_Address"/>
+        </actionGroup>
+        <!-- Step 4:Select Any  USPS Shipping method  -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingUSPSShippingMethod">
+            <argument name="shippingMethodName" value="{{ShippingTypeUSPSConfigData.value}}"/>
+        </actionGroup>
+        <!-- Step 5:Place order  -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToPaymentStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="grabOrderNumber"/>
+        <!-- Step 6:Open created order in admin-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
+            <argument name="keyword" value="$grabOrderNumber"/>
+        </actionGroup>
+        <!-- Step 7:Sales >order>View -->
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!-- Step 8:Create shipping label-->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
+        <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
+        <!-- Step 9:Click on submit shipment -->
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <!-- Step 10:Select type>Add products to package> Select product > Add selected products to Package>Save -->
+        <actionGroup ref="AdminShipmentCreateShippingLabelActionGroup" stepKey="createPackage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

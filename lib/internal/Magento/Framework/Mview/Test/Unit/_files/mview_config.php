@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,7 +32,7 @@ return [
                     'processor' => \Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor::class
                 ],
             ],
-            'walker' => \Magento\Framework\Mview\View\ChangeLogBatchWalker::class
+            'walker' => \Magento\Framework\Mview\View\ChangelogBatchWalker::class
         ],
     ]
 ];

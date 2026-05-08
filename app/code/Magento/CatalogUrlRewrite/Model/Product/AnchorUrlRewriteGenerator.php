@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
@@ -68,7 +68,10 @@ class AnchorUrlRewriteGenerator
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
                     $anchorCategory = $this->categoryRepository->get($anchorCategoryId, $storeId);
-                    if ((int)$anchorCategory->getParentId() === Category::TREE_ROOT_ID) {
+                    if (in_array(
+                        (int)$anchorCategory->getParentId(),
+                        [Category::TREE_ROOT_ID, Category::ROOT_CATEGORY_ID]
+                    )) {
                         continue;
                     }
                     $urls[] = $this->urlRewriteFactory->create()

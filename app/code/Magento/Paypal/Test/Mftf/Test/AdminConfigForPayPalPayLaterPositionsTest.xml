@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigForPayPalPayLaterPositionsTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Configuration apply to PayPal pay later message on cart, product and home pages"/>
+            <description value="Verify configuration apply to PayPal pay later message on cart, product and home page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-5699"/>
+            <group value="paypal"/>
+            <group value="3rd_party_integration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!-- Create product -->
+            <createData entity="SimpleProduct3" stepKey="createProduct"/>
+            <!--Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
+            <!-- Step 1: Enable PayPal express checkout and pay later experience -->
+            <actionGroup ref="ConfigPayPalExpressCheckoutActionGroup" stepKey="configPayPalExpressCheckout"/>
+            <actionGroup ref="AdminEnablePayPalExpressCheckoutPayLaterActionGroup" stepKey="enablePayLater">
+                <argument name="countryCode" value="us"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveAdminConfigAfterEnablingPayLater"/>
+        </before>
+        <after>
+            <!-- Delete product, disable PayPal pay later, PayPal express checkout and logout from admin -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutPayLaterDisableActionGroup" stepKey="disablePayPalPayLater"/>
+            <actionGroup ref="AdminPayPalExpressCheckoutDisableActionGroup" stepKey="disableExpressCheckout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 4: Change cart position to near PayPal pay later checkout button -->
+        <actionGroup ref="AdminSetPayLaterPositionByCliActionGroup" stepKey="setCartPosition">
+            <argument name="page" value="cartpage"/>
+            <argument name="display" value="1"/>
+            <argument name="position" value="near_pp_button"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexing">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushTheCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCart">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <!-- Verify pay later appears on cart near checkout area -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage"/>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.payLaterNearCheckoutButton}}" stepKey="seePayLaterNearCheckoutButton"/>
+        <!-- Step 2: Enable cart page display for pay later and select header on position dropdown -->
+        <actionGroup ref="AdminSetPayLaterPositionByCliActionGroup" stepKey="setCartPositions"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="doTheReindexing">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="doTheCacheFlush">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Step 3: Go to cart and verify pay later display on top of cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="reOpenCartPage"/>
+        <scrollToTopOfPage stepKey="scrollTopCart"/>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.payLaterOnTopOfPage}}" stepKey="seePayLaterNearCartHeader"/>
+        <!-- Step 5: Configure product page position and verify pay later display below category menu button -->
+        <actionGroup ref="AdminSetPayLaterPositionByCliActionGroup" stepKey="setProductPositionCli">
+            <argument name="page" value="productpage"/>
+            <argument name="display" value="1"/>
+            <argument name="position" value="header"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="doReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="doCacheFlush">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageAgain">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.payLaterOnTopOfPage}}" stepKey="seePayLaterBelowCategory"/>
+        <!-- Configure home page display position and verify pay later display in home page -->
+        <actionGroup ref="AdminSetPayLaterPositionByCliActionGroup" stepKey="setHomePageDisplayPosition">
+            <argument name="page" value="homepage"/>
+            <argument name="display" value="1"/>
+            <argument name="position" value="header"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfHomePage"/>
+        <waitForElementVisible selector="{{PaymentsAdvancedConfigSection.payLaterOnTopOfPage}}" stepKey="seePayLaterInTheHomePage"/>
+    </test>
+</tests>

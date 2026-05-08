@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,12 +9,19 @@ namespace Magento\Store\Test\Fixture;
 
 use Magento\Framework\DataObject;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Fixture\Data\ProcessorInterface;
-use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\Store\Api\Data\StoreInterfaceFactory;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Db\Sequence;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
+use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
+/**
+ * Store Fixture
+ *
+ * This fixture may result in DDL operations that cannot be executed within a transaction.
+ * In case DB isolation is enabled, it is recommended to use "DataFixtureBeforeTransaction" instead of "DataFixture"
+ */
 class Store implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -45,21 +52,29 @@ class Store implements RevertibleDataFixtureInterface
     private $dataProcessor;
 
     /**
+     * @var Sequence
+     */
+    private $sequence;
+
+    /**
      * @param StoreInterfaceFactory $storeFactory
      * @param StoreResource $storeResource
      * @param StoreManagerInterface $storeManager
      * @param ProcessorInterface $dataProcessor
+     * @param Sequence $sequence
      */
     public function __construct(
         StoreInterfaceFactory $storeFactory,
         StoreResource $storeResource,
         StoreManagerInterface $storeManager,
-        ProcessorInterface $dataProcessor
+        ProcessorInterface $dataProcessor,
+        Sequence $sequence
     ) {
         $this->storeFactory = $storeFactory;
         $this->storeResource = $storeResource;
         $this->storeManager = $storeManager;
         $this->dataProcessor = $dataProcessor;
+        $this->sequence = $sequence;
     }
 
     /**
@@ -84,7 +99,7 @@ class Store implements RevertibleDataFixtureInterface
         $store->setData($this->prepareData($data));
         $this->storeResource->save($store);
         $this->storeManager->reinitStores();
-
+        $this->sequence->generate((int) $store->getId());
         return $store;
     }
 

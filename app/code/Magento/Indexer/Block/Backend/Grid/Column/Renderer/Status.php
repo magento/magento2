@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
@@ -32,6 +32,10 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
             case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                 $class = 'grid-severity-minor';
                 $text = __('Processing');
+                break;
+            case \Magento\Framework\Indexer\StateInterface::STATUS_SUSPENDED:
+                $class = 'grid-severity-minor';
+                $text = __('Suspended');
                 break;
         }
         return '<span class="' . $class . '"><span>' . $text . '</span></span>';

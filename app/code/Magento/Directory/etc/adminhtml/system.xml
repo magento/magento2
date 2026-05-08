@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -35,10 +35,23 @@
                 </field>
             </group>
             <group id="fixerio" translate="label" sortOrder="35" showInDefault="1">
-                <label>Fixer.io</label>
+                <label>Fixer.io (legacy)</label>
                 <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
                     <label>API Key</label>
                     <config_path>currency/fixerio/api_key</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment>Use this field if your API Key was generated at Fixer.io. If your key was generated via ApiLayer then use "Setting > General > Currency setup > Fixer Api via APILayer" configuration.</comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
+                    <label>Connection Timeout in Seconds</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                </field>
+            </group>
+            <group id="fixerio_apilayer" translate="label" sortOrder="35" showInDefault="1">
+                <label>Fixer Api (APILayer)</label>
+                <field id="api_key" translate="label" type="obscure" sortOrder="5" showInDefault="1">
+                    <label>API Key</label>
+                    <config_path>currency/fixerio_apilayer/api_key</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
                 <field id="timeout" translate="label" type="text" sortOrder="10" showInDefault="1">
@@ -144,6 +157,7 @@
                 <field id="weight_unit" translate="label" type="select" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Weight Unit</label>
                     <source_model>Magento\Directory\Model\Config\Source\WeightUnit</source_model>
+                    <backend_model>Magento\Directory\Model\Config\Backend\WeightUnit</backend_model>
                 </field>
             </group>
         </section>

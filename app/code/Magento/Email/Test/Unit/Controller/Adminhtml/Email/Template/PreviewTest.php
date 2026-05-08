@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,14 +76,14 @@ class PreviewTest extends TestCase
             ->getMock();
         $this->pageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfig'])
+            ->onlyMethods(['getConfig'])
             ->getMock();
         $this->pageConfigMock = $this->getMockBuilder(PageConfig::class)
-            ->setMethods(['getTitle'])
+            ->onlyMethods(['getTitle'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->setMethods(['prepend'])
+            ->onlyMethods(['prepend'])
             ->disableOriginalConstructor()
             ->getMock();
 

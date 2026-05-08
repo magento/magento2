@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
 
 use Magento\Framework\GetParameterClassTrait;
+use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * The class arguments reader
  */
-class ArgumentsReader
+class ArgumentsReader extends ParameterReflection
 {
     use GetParameterClassTrait;
 
@@ -27,12 +28,17 @@ class ArgumentsReader
     private $scalarTypesProvider;
 
     /**
+     * @var ParameterReflection
+     */
+    protected $parameterReflection;
+
+    /**
      * @param NamespaceResolver|null $namespaceResolver
      * @param ScalarTypesProvider|null $scalarTypesProvider
      */
     public function __construct(
-        NamespaceResolver $namespaceResolver = null,
-        ScalarTypesProvider $scalarTypesProvider = null
+        ?NamespaceResolver $namespaceResolver = null,
+        ?ScalarTypesProvider $scalarTypesProvider = null
     ) {
         $this->namespaceResolver = $namespaceResolver ?: new NamespaceResolver();
         $this->scalarTypesProvider = $scalarTypesProvider ?: new ScalarTypesProvider();
@@ -102,13 +108,14 @@ class ArgumentsReader
      */
     private function processType(\ReflectionClass $class, \Laminas\Code\Reflection\ParameterReflection $parameter)
     {
+        $this->parameterReflection = $parameter;
         $parameterClass = $this->getParameterClass($parameter);
 
         if ($parameterClass) {
             return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
         }
 
-        $type = $parameter->detectType();
+        $type = $this->detectType();
 
         /**
          * $type === null if it is unspecified
@@ -137,8 +144,9 @@ class ArgumentsReader
      * @param \ReflectionClass $class
      * @param array $classArguments
      * @return array|null
+     * @throws \ReflectionException
      */
-    public function getParentCall(\ReflectionClass $class, array $classArguments)
+    public function getParentCall(\ReflectionClass $class, array $classArguments): ?array
     {
         /** Skip native PHP types */
         if (!$class->getFileName()) {
@@ -146,7 +154,12 @@ class ArgumentsReader
         }
 
         $trimFunction = function (&$value) {
-            $value = trim($value, PHP_EOL . ' $');
+            $position = strpos($value, ':');
+            if ($position !== false) {
+                $value = trim(substr($value, 0, $position), PHP_EOL . ' ');
+            } else {
+                $value = trim($value, PHP_EOL . ' $');
+            }
         };
 
         $method = $class->getMethod('__construct');
@@ -158,10 +171,11 @@ class ArgumentsReader
         $content = implode('', array_slice($source, $start, $length));
         $pattern = '/parent::__construct\(([ ' .
             PHP_EOL .
-            ']*[$]{1}[a-zA-Z0-9_]*,)*[ ' .
+            ']*' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*[$][a-zA-Z0-9_]*,)*[ ' .
             PHP_EOL .
             ']*' .
-            '([$]{1}[a-zA-Z0-9_]*){1}[' .
+            '([a-zA-Z0-9_]+([ ' . PHP_EOL . '])*:([ ' . PHP_EOL . '])*)*([$][a-zA-Z0-9_]*)[' .
             PHP_EOL .
             ' ]*\);/';
 
@@ -176,6 +190,10 @@ class ArgumentsReader
 
         $arguments = substr(trim($arguments), 20, -2);
         $arguments = explode(',', $arguments);
+        $isNamedArgument = [];
+        foreach ($arguments as $argumentPosition => $argumentName) {
+            $isNamedArgument[$argumentPosition] = (bool)strpos($argumentName, ':');
+        }
         array_walk($arguments, $trimFunction);
 
         $output = [];
@@ -185,8 +203,10 @@ class ArgumentsReader
                 'name' => $argumentName,
                 'position' => $argumentPosition,
                 'type' => $type,
+                'isNamedArgument' => $isNamedArgument[$argumentPosition],
             ];
         }
+
         return $output;
     }
 
@@ -263,5 +283,63 @@ class ArgumentsReader
         }
 
         return $annotations;
+    }
+
+    /**
+     * ReflectionType does not have an isBuiltin() / getName() method
+     *
+     * @deprecated this method is unreliable, and should not be used: it will be removed in the next major release.
+     *             It may crash on parameters with union types, and will return relative types, instead of
+     *             FQN references
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @see reflectionnamedtype.isbuiltin.php
+     *
+     * @return mixed|string|void|null
+     */
+    public function detectType()
+    {
+        if (null !== ($type = $this->parameterReflection->getType())
+            && method_exists($type, 'isBuiltin') && $type->isBuiltin()
+        ) {
+            return $type->getName();
+        }
+
+        if (null !== $type && method_exists($type, 'getName') && $type->getName() === 'self') {
+            $declaringClass = $this->parameterReflection->getDeclaringClass();
+            // @codingStandardsIgnoreStart
+            assert($declaringClass !== null, 'A parameter called `self` can only exist on a class');
+            // @codingStandardsIgnoreEnd
+
+            return $declaringClass->getName();
+        }
+
+        if (($class = $this->parameterReflection->getClass()) instanceof \ReflectionClass) {
+            return $class->getName();
+        }
+
+        $docBlock = $this->parameterReflection->getDeclaringFunction()->getDocBlock();
+
+        if (! $docBlock instanceof \Laminas\Code\Reflection\DocBlockReflection) {
+            return null;
+        }
+
+        $params       = $docBlock->getTags('param');
+        $paramTag     = $params[$this->parameterReflection->getPosition()] ?? null;
+        $variableName = '$' . $this->parameterReflection->getName();
+
+        if ($paramTag && ('' === $paramTag->getVariableName() || $variableName === $paramTag->getVariableName())) {
+            return $paramTag->getTypes()[0] ?? '';
+        }
+
+        foreach ($params as $param) {
+            if ($param->getVariableName() === $variableName) {
+                return $param->getTypes()[0] ?? '';
+            }
+        }
+
+        return null;
     }
 }

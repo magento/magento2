@@ -1,14 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 
-use Magento\Catalog\Model\Product\Type\AbstractType;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Helper\Data as CatalogHelper;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Adminhtml sales order item renderer
@@ -19,7 +19,7 @@ use Magento\Catalog\Helper\Data as CatalogHelper;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
+     * Serializer interface instance.
      *
      * @var Json
      */
@@ -40,7 +40,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        Json $serializer = null,
+        ?Json $serializer = null,
         ?CatalogHelper $catalogHelper = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -86,19 +86,20 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         }
 
         if ($items) {
-            $itemsArray[$item->getOrderItem()->getId()][$item->getOrderItemId()] = $item;
+            $itemsArray[(string)$item->getOrderItem()->getId()][(string)$item->getOrderItemId()] = $item;
             foreach ($items as $value) {
                 $parentItem = $value->getOrderItem()->getParentItem();
                 if ($parentItem) {
-                    $itemsArray[$parentItem->getId()][$value->getOrderItemId()] = $value;
+                    $itemsArray[(string)$parentItem->getId()][(string)$value->getOrderItemId()] = $value;
                 } else {
-                    $itemsArray[$value->getOrderItem()->getId()][$value->getOrderItemId()] = $value;
+                    $itemsArray[(string)$value->getOrderItem()->getId()][(string)$value->getOrderItemId()] = $value;
                 }
             }
         }
 
-        if (isset($itemsArray[$item->getOrderItem()->getId()])) {
-            return $itemsArray[$item->getOrderItem()->getId()];
+        $orderItemId = (string)$item->getOrderItem()->getId();
+        if (isset($itemsArray[$orderItemId])) {
+            return $itemsArray[$orderItemId];
         }
         return null;
     }
@@ -248,7 +249,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result = sprintf('%d', $attributes['qty']) . ' x ' . $result;
+                $result = (float) $attributes['qty'] . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {

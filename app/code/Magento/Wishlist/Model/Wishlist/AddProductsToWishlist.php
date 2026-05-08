@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -118,7 +118,7 @@ class AddProductsToWishlist
                 throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
             }
             $options = $this->buyRequestBuilder->build($wishlistItem, (int) $product->getId());
-            $result = $wishlist->addNewItem($product, $options);
+            $result = $wishlist->addNewItem($product, $options, true);
 
             if (is_string($result)) {
                 $this->addError($result);
@@ -143,7 +143,7 @@ class AddProductsToWishlist
      *
      * @return void
      */
-    private function addError(string $message, string $code = null): void
+    private function addError(string $message, ?string $code = null): void
     {
         $this->errors[] = new Data\Error(
             $message,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -65,7 +65,7 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>

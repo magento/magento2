@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Simplexml;
 
@@ -11,6 +11,7 @@ namespace Magento\Framework\Simplexml;
  * @api
  * @since 100.0.2
  */
+#[\AllowDynamicProperties]
 class Config
 {
     /**
@@ -31,6 +32,7 @@ class Config
      * Xpath describing nodes in configuration that need to be extended
      *
      * @example <allResources extends="/config/modules//resource"/>
+     * @var string
      */
     protected $_xpathExtends = "//*[@extends]";
 

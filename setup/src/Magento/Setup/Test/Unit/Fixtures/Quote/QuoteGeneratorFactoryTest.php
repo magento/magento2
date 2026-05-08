@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,7 +36,7 @@ class QuoteGeneratorFactoryTest extends TestCase
     {
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager = new ObjectManager($this);
 
         $this->fixture = $objectManager->getObject(

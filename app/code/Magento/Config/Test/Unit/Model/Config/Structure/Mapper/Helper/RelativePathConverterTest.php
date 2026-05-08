@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper\Helper;
 
 use Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RelativePathConverterTest extends TestCase
@@ -35,10 +36,10 @@ class RelativePathConverterTest extends TestCase
     }
 
     /**
-     * @dataProvider convertWithInvalidArgumentsDataProvider
      * @param string $nodePath
      * @param string $relativePath
      */
+    #[DataProvider('convertWithInvalidArgumentsDataProvider')]
     public function testConvertWithInvalidArguments($nodePath, $relativePath)
     {
         $this->expectException('InvalidArgumentException');
@@ -47,11 +48,11 @@ class RelativePathConverterTest extends TestCase
     }
 
     /**
-     * @dataProvider convertDataProvider
      * @param string $nodePath
      * @param string $relativePath
      * @param string $result
      */
+    #[DataProvider('convertDataProvider')]
     public function testConvert($nodePath, $relativePath, $result)
     {
         $this->assertEquals($result, $this->_sut->convert($nodePath, $relativePath));
@@ -60,7 +61,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertWithInvalidArgumentsDataProvider()
+    public static function convertWithInvalidArgumentsDataProvider()
     {
         return [['', ''], ['some/node', ''], ['', 'some/node']];
     }
@@ -68,7 +69,7 @@ class RelativePathConverterTest extends TestCase
     /**
      * @return array
      */
-    public function convertDataProvider()
+    public static function convertDataProvider()
     {
         return [
             ['currentNode', 'relativeNode', 'relativeNode'],

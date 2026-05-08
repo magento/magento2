@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,5 +16,8 @@
         <element name="carriersFreeShippingSpecificErrMsg" type="input" selector="#carriers_freeshipping_specificerrmsg_inherit"/>
         <element name="carriersFreeShippingAllowSpecific" type="input" selector="#carriers_freeshipping_sallowspecific_inherit"/>
         <element name="carriersFreeShippingSpecificCountry" type="input" selector="#carriers_freeshipping_specificcountry"/>
+        <element name="carriersFreeShippingSectionHeadOpen" type="button" selector="#carriers_freeshipping-head.open"/>
+        <element name="carriersSelectFreeShippingActive" type="input" selector="#carriers_freeshipping_active"/>
+        <element name="carriersFreeShippingSelectAllowSpecific" type="input" selector="#carriers_freeshipping_sallowspecific"/>
     </section>
 </sections>

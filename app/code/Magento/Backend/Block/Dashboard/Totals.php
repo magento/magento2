@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Module\Manager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
 use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Adminhtml dashboard totals bar
@@ -32,18 +33,26 @@ class Totals extends Bar
     protected $_moduleManager;
 
     /**
+     * @var Period
+     */
+    private $period;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $collectionFactory
      * @param Manager $moduleManager
      * @param array $data
+     * @param Period|null $period
      */
     public function __construct(
         Context $context,
         CollectionFactory $collectionFactory,
         Manager $moduleManager,
-        array $data = []
+        array $data = [],
+        ?Period $period = null
     ) {
         $this->_moduleManager = $moduleManager;
+        $this->period = $period ?? ObjectManager::getInstance()->get(Period::class);
         parent::__construct($context, $collectionFactory, $data);
     }
 
@@ -63,7 +72,8 @@ class Totals extends Bar
         ) || $this->getRequest()->getParam(
             'group'
         );
-        $period = $this->getRequest()->getParam('period', Period::PERIOD_24_HOURS);
+        $firstPeriod = array_key_first($this->period->getDatePeriods());
+        $period = $this->getRequest()->getParam('period', $firstPeriod);
 
         /* @var $collection Collection */
         $collection = $this->_collectionFactory->create()->addCreateAtPeriodFilter(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model\Config\Backend;
 
@@ -23,7 +23,7 @@ class Enabled extends Value
     /**
      * Path to field subscription enabled into config structure.
      */
-    const XML_ENABLED_CONFIG_STRUCTURE_PATH = 'analytics/general/enabled';
+    public const XML_ENABLED_CONFIG_STRUCTURE_PATH = 'analytics/general/enabled';
 
     /**
      * Service for processing of activation/deactivation MBI subscription.
@@ -48,8 +48,8 @@ class Enabled extends Value
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         SubscriptionHandler $subscriptionHandler,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->subscriptionHandler = $subscriptionHandler;

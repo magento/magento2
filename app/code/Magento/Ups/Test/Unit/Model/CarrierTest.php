@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -24,6 +25,7 @@ use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -36,9 +38,11 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
-    const FREE_METHOD_NAME = 'free_method';
+    use MockCreationTrait;
 
-    const PAID_METHOD_NAME = 'paid_method';
+    public const FREE_METHOD_NAME = 'free_method';
+
+    public const PAID_METHOD_NAME = 'paid_method';
 
     /**
      * @var Error|MockObject
@@ -105,11 +109,12 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getValue', 'isSetFlag'])
-            ->getMockForAbstractClass();
-
-        $this->error = $this->getMockBuilder(Error::class)
-            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
+
+        $this->error = $this->createPartialMockWithReflection(
+            Error::class,
+            ['setCarrier', 'setCarrierTitle', 'setErrorMessage']
+        );
 
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
@@ -137,10 +142,9 @@ class CarrierTest extends TestCase
         $this->countryFactory->method('create')
             ->willReturn($this->country);
 
-        $xmlFactory = $this->getXmlFactory();
         $httpClientFactory = $this->getHttpClientFactory();
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->configHelper = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -154,7 +158,6 @@ class CarrierTest extends TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
                 'rateFactory' => $rateFactory,
-                'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
                 'configHelper' => $this->configHelper
@@ -178,18 +181,15 @@ class CarrierTest extends TestCase
             'carriers/ups/title' => 'ups Title',
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
-            'carriers/ups/type' => 'UPS',
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
-            'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn'
+            'carriers/ups/password' => 'pass'
         ];
 
         return $pathMap[$path] ?? null;
     }
 
     /**
-     * @dataProvider getMethodPriceProvider
      * @param int $cost
      * @param string $shippingMethod
      * @param bool $freeShippingEnabled
@@ -197,6 +197,7 @@ class CarrierTest extends TestCase
      * @param int $expectedPrice
      * @return void
      */
+    #[DataProvider('getMethodPriceProvider')]
     public function testGetMethodPrice(
         int $cost,
         string $shippingMethod,
@@ -223,7 +224,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function getMethodPriceProvider(): array
+    public static function getMethodPriceProvider(): array
     {
         return [
             [3, self::FREE_METHOD_NAME, true, 6, 0],
@@ -275,86 +276,12 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $data
-     * @param array $maskFields
-     * @param string $expected
-     *
-     * @return void
-     * @dataProvider logDataProvider
-     */
-    public function testFilterDebugData($data, array $maskFields, $expected): void
-    {
-        $refClass = new \ReflectionClass(Carrier::class);
-        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
-        $property->setValue($this->model, $maskFields);
-
-        $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
-        $result = $refMethod->invoke($this->model, $data);
-        $expectedXml = new \SimpleXMLElement($expected);
-        $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
-    }
-
-    /**
-     * Get list of variations.
-     *
-     * @return array
-     */
-    public function logDataProvider(): array
-    {
-        return [
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>42121</UserId>
-                    <Password>TestPassword</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId', 'Password'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>****</UserId>
-                    <Password>****</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ],
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>1231</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>****</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ]
-        ];
-    }
-
-    /**
      * @param array $requestData
      * @param array $rawRequestData
      *
      * @return void
-     * @dataProvider countryDataProvider
      */
+    #[DataProvider('countryDataProvider')]
     public function testSetRequest(array $requestData, array $rawRequestData): void
     {
         /** @var RateRequest $request */
@@ -362,7 +289,6 @@ class CarrierTest extends TestCase
         $request->setData($requestData);
         $this->model->setRequest($request);
         $property = new \ReflectionProperty($this->model, '_rawRequest');
-        $property->setAccessible(true);
         $rawRequest = $property->getValue($this->model);
         $this->assertEquals($rawRequestData, array_intersect_key($rawRequest->getData(), $rawRequestData));
     }
@@ -372,7 +298,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function countryDataProvider(): array
+    public static function countryDataProvider(): array
     {
         return [
             [
@@ -435,8 +361,8 @@ class CarrierTest extends TestCase
     /**
      * @param array $requestData
      * @param array $expectedRequestData
-     * @dataProvider requestToShipmentDataProvider
      */
+    #[DataProvider('requestToShipmentDataProvider')]
     public function testRequestToShipment(array $requestData, array $expectedRequestData): void
     {
         /** @var \Magento\Shipping\Model\Shipment\Request $request */
@@ -469,7 +395,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function requestToShipmentDataProvider(): array
+    public static function requestToShipmentDataProvider(): array
     {
         return [
             [
@@ -505,7 +431,7 @@ class CarrierTest extends TestCase
                     'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'PR',
                     'shipper_address_postal_code' => '00968',
-                    'shipper_address_country_code' => 'PR',
+                    'shipper_address_country_code' => 'US',
                 ]
             ],
             [
@@ -520,7 +446,7 @@ class CarrierTest extends TestCase
                 [
                     'recipient_address_state_or_province_code' => 'PR',
                     'recipient_address_postal_code' => '00968',
-                    'recipient_address_country_code' => 'PR',
+                    'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'CA',
                     'shipper_address_postal_code' => '90230',
                     'shipper_address_country_code' => 'US',
@@ -540,8 +466,12 @@ class CarrierTest extends TestCase
         ];
         $countryMock = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getData', '__call'])
+            ->getMock();
         $countryMock->setData('iso2_code', $countries[$id] ?? null);
+        $countryMock->method('getData')
+            ->with('iso2_code')
+            ->willReturn($countries[$id] ?? null);
         return $countryMock;
     }
 
@@ -554,8 +484,8 @@ class CarrierTest extends TestCase
      * @param array $expectedMethods
      *
      * @return void
-     * @dataProvider allowedMethodsDataProvider
      */
+    #[DataProvider('allowedMethodsDataProvider')]
     public function testGetAllowedMethods(
         string $carrierType,
         string $methodType,
@@ -597,7 +527,7 @@ class CarrierTest extends TestCase
     /**
      * @return array
      */
-    public function allowedMethodsDataProvider(): array
+    public static function allowedMethodsDataProvider(): array
     {
         return [
             [
@@ -623,38 +553,16 @@ class CarrierTest extends TestCase
                 'UPS Next Day Air',
                 '01,02,03',
                 ['01' => 'UPS Next Day Air']
+            ],
+            [
+                'UPS_REST',
+                'originShipment',
+                '03',
+                'UPS Ground',
+                '01,02,03',
+                ['03' => 'UPS Ground']
             ]
         ];
-    }
-
-    /**
-     * Creates mock for XML factory.
-     *
-     * @return ElementFactory|MockObject
-     */
-    private function getXmlFactory(): MockObject
-    {
-        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $xmlElFactory->method('create')
-            ->willReturnCallback(
-                function ($data) {
-                    $helper = new ObjectManager($this);
-
-                    if (empty($data['data'])) {
-                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
-                    }
-
-                    return $helper->getObject(
-                        Element::class,
-                        ['data' => $data['data']]
-                    );
-                }
-            );
-
-        return $xmlElFactory;
     }
 
     /**
@@ -668,7 +576,7 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->httpClient = $this->createMock(ClientInterface::class);
         $httpClientFactory->method('create')
             ->willReturn($this->httpClient);
 

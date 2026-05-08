@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,10 +16,14 @@ use Magento\NewRelicReporting\Model\Observer\ReportProductSaved;
 use Magento\NewRelicReporting\Model\System;
 use Magento\NewRelicReporting\Model\SystemFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ReportProductSavedTest extends TestCase
 {
+
+    use MockCreationTrait;
+    
     /**
      * @var ReportProductSaved
      */
@@ -54,11 +58,11 @@ class ReportProductSavedTest extends TestCase
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isNewRelicEnabled'])
+            ->onlyMethods(['isNewRelicEnabled'])
             ->getMock();
         $this->systemFactory = $this->getMockBuilder(SystemFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->systemModel = $this->getMockBuilder(System::class)
             ->disableOriginalConstructor()
@@ -111,16 +115,13 @@ class ReportProductSavedTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
         /** @var Product|MockObject $product */
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->isObjectNew(true);
@@ -157,16 +158,13 @@ class ReportProductSavedTest extends TestCase
         $this->config->expects($this->once())
             ->method('isNewRelicEnabled')
             ->willReturn(true);
-        $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getProduct']);
         $eventObserver->expects($this->once())
             ->method('getEvent')
             ->willReturn($event);
         /** @var Product|MockObject $product */
         $product = $this->getMockBuilder(Product::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->isObjectNew(false);

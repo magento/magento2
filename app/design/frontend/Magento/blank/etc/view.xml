@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
@@ -232,7 +232,7 @@
         <var name="breakpoints">
             <var name="mobile">
                 <var name="conditions">
-                    <var name="max-width">768px</var>
+                    <var name="max-width">767px</var>
                 </var>
                 <var name="options">
                     <var name="options">
@@ -261,6 +261,7 @@
     <exclude>
         <item type="file">Lib::chartjs/Chart.min.js</item>
         <item type="file">Lib::chartjs/chartjs-adapter-moment.js</item>
+        <item type="file">Lib::chartjs/es6-shim.min.js</item>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui.js</item>
         <item type="file">Lib::jquery/colorpicker/js/colorpicker.js</item>
@@ -286,11 +287,11 @@
         <item type="directory">Magento_Ui::templates/grid</item>
         <item type="directory">Magento_Ui::templates/dynamic-rows</item>
         <item type="directory">Magento_Swagger::swagger-ui</item>
-        <item type="directory">Lib::tiny_mce</item>
+        <item type="directory">Lib::hugerte</item>
         <item type="directory">Lib::varien</item>
         <item type="directory">Lib::jquery/editableMultiselect</item>
         <item type="directory">Lib::jquery/jstree</item>
-        <item type="directory">Lib::jquery/fileUploader</item>
+        <item type="directory">Lib::jquery/uppy</item>
         <item type="directory">Lib::css</item>
         <item type="directory">Lib::lib</item>
         <item type="directory">Lib::extjs</item>

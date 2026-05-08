@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -62,7 +62,9 @@
             <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openFirstProduct"/>
         <actionGroup ref="AssertAdminProductPriceUpdatedOnEditPageActionGroup" stepKey="waitForFirstProductToLoad">

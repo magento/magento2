@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\CatalogRule\Observer\RulePricesStorage;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -29,35 +30,29 @@ use PHPUnit\Framework\TestCase;
  */
 class ProcessAdminFinalPriceObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ProcessAdminFinalPriceObserver
      */
     private $observer;
 
     /**
-     * Store Manager mock
-     *
      * @var StoreManagerInterface
      */
     private $storeManagerMock;
 
     /**
-     * Locale Date mock
-     *
      * @var TimezoneInterface
      */
     private $localeDateMock;
 
     /**
-     * Resource Rule Factory mock
-     *
      * @var RuleFactory
      */
     private $resourceRuleFactoryMock;
 
     /**
-     * Rule Prices Storage mock
-     *
      * @var RulePricesStorage
      */
     private $rulePricesStorageMock;
@@ -74,31 +69,21 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->observerMock = $this
-            ->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventMock = $this
-            ->getMockBuilder(Event::class)
-            ->setMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->rulePricesStorageMock = $this->getMockBuilder(RulePricesStorage::class)
-            ->setMethods(['getWebsiteId', 'getRulePrice', 'getCustomerGroupId', 'setRulePrice'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->setMethods(['getStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->resourceRuleFactoryMock = $this->getMockBuilder(RuleFactory::class)
-            ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->setMethods(['scopeDate'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->observerMock = $this->createMock(Observer::class);
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getProduct']
+        );
+        $this->rulePricesStorageMock = $this->createPartialMockWithReflection(
+            RulePricesStorage::class,
+            ['getWebsiteId', 'getCustomerGroupId', 'getRulePrice', 'setRulePrice']
+        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->resourceRuleFactoryMock = $this->createPartialMock(
+            RuleFactory::class,
+            ['create']
+        );
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->observer = $objectManagerHelper->getObject(
             ProcessAdminFinalPriceObserver::class,
@@ -127,23 +112,21 @@ class ProcessAdminFinalPriceObserverTest extends TestCase
             ->method('getEvent')
             ->willReturn($this->eventMock);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->setMethods(
-                [
-                    'getStoreId',
-                    'getWebsiteId',
-                    'getId',
-                    'getData',
-                    'getCustomerGroupId',
-                    'setFinalPrice'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dateMock = $this->getMockBuilder(Date::class)
-            ->setMethods(['format'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            [
+                'getWebsiteId',
+                'getCustomerGroupId',
+                'getStoreId',
+                'getId',
+                'getData',
+                'setFinalPrice'
+            ]
+        );
+        $dateMock = $this->createPartialMockWithReflection(
+            Date::class,
+            ['format']
+        );
 
         $this->localeDateMock->expects($this->once())
             ->method('scopeDate')

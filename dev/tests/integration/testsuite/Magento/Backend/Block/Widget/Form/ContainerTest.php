@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Form;
 
@@ -20,7 +20,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         // Create block with blocking _prepateLayout(), which is used by block to instantly add 'form' child
         /** @var $block \Magento\Backend\Block\Widget\Form\Container */
         $block = $this->getMockBuilder(\Magento\Backend\Block\Widget\Form\Container::class)
-            ->setMethods(['_prepareLayout'])
+            ->onlyMethods(['_prepareLayout'])
             ->setConstructorArgs([$objectManager->create(\Magento\Backend\Block\Widget\Context::class)])
             ->getMock();
 

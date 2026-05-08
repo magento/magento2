@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Creditmemo;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -73,9 +75,9 @@ class CommentRepository implements CreditmemoCommentRepositoryInterface
         CreditmemoCommentInterfaceFactory $commentFactory,
         CreditmemoCommentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        CreditmemoCommentSender $creditmemoCommentSender = null,
-        CreditmemoRepositoryInterface $creditmemoRepository = null,
-        LoggerInterface $logger = null
+        ?CreditmemoCommentSender $creditmemoCommentSender = null,
+        ?CreditmemoRepositoryInterface $creditmemoRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;

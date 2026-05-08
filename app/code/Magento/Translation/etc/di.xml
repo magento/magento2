@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -63,13 +63,6 @@
     <type name="Magento\Framework\Phrase\Renderer\Translate">
         <arguments>
             <argument name="translator" xsi:type="object">Magento\Framework\Translate</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Translation\Model\Js">
-        <arguments>
-            <argument name="dataProviders" xsi:type="array">
-                <item name="default" xsi:type="object">Magento\Translation\Model\Js\DataProvider</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Translation\Model\Js\Config">
@@ -146,6 +139,13 @@
                     <item name="source" xsi:type="object">Magento\Translation\Model\Source\InitialTranslationSource</item>
                     <item name="namespace" xsi:type="const">Magento\Translation\App\Config\Type\Translation::CONFIG_TYPE</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Translate::config" xsi:type="object">Magento\Translation\App\Config\ReloadConfig</item>
             </argument>
         </arguments>
     </type>

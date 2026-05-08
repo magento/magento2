@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Data\Test\Unit\Criteria\Sample;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractCriteriaTest extends TestCase
 {
@@ -38,9 +39,8 @@ class AbstractCriteriaTest extends TestCase
      * @param string|null $alias
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderAddField
-     */
+     *     */
+    #[DataProvider('dataProviderAddField')]
     public function testAddField($field, $alias, array $result)
     {
         $this->criteria->addField($field, $alias);
@@ -56,11 +56,17 @@ class AbstractCriteriaTest extends TestCase
      * @param string $type
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderAddFilter
-     */
+     *     */
+    #[DataProvider('dataProviderAddFilter')]
     public function testAddFilter($name, $field, $condition, $type, array $result)
     {
+        $objectManager = new ObjectManager($this);
+        $result = [
+            'test-filter-name' => $objectManager->getObject(
+                DataObject::class,
+                ['data' => $result]
+            ),
+        ];
         $this->criteria->addFilter($name, $field, $condition, $type);
         $this->assertEquals($result, $this->criteria->toArray()[CriteriaInterface::PART_FILTERS]['list']);
     }
@@ -73,9 +79,8 @@ class AbstractCriteriaTest extends TestCase
      * @param bool $unShift
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderAddOrder
-     */
+     *     */
+    #[DataProvider('dataProviderAddOrder')]
     public function testAddOrder($field, $direction, $unShift, array $result)
     {
         $this->criteria->addOrder($field, $direction, $unShift);
@@ -89,9 +94,8 @@ class AbstractCriteriaTest extends TestCase
      * @param int $size
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderSetLimit
-     */
+     *     */
+    #[DataProvider('dataProviderSetLimit')]
     public function testSetLimit($offset, $size, array $result)
     {
         $this->criteria->setLimit($offset, $size);
@@ -106,9 +110,8 @@ class AbstractCriteriaTest extends TestCase
      * @param bool $isAlias Alias identifier
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderRemoveField
-     */
+     *     */
+    #[DataProvider('dataProviderRemoveField')]
     public function testRemoveField(array $actualField, $field, $isAlias, array $result)
     {
         list($name, $alias) = $actualField;
@@ -124,9 +127,8 @@ class AbstractCriteriaTest extends TestCase
      * @param array $actualField
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderRemoveAllFields
-     */
+     *     */
+    #[DataProvider('dataProviderRemoveAllFields')]
     public function testRemoveAllFields(array $actualField, array $result)
     {
         list($name, $alias) = $actualField;
@@ -143,9 +145,8 @@ class AbstractCriteriaTest extends TestCase
      * @param string $name
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderRemoveFilter
-     */
+     *     */
+    #[DataProvider('dataProviderRemoveFilter')]
     public function testRemoveFilter(array $actualField, $name, array $result)
     {
         list($filterName, $field, $condition, $type) = $actualField;
@@ -161,9 +162,8 @@ class AbstractCriteriaTest extends TestCase
      * @param array $actualField
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderRemoveAllFilters
-     */
+     *     */
+    #[DataProvider('dataProviderRemoveAllFilters')]
     public function testRemoveAllFilters(array $actualField, array $result)
     {
         list($filterName, $field, $condition, $type) = $actualField;
@@ -178,9 +178,8 @@ class AbstractCriteriaTest extends TestCase
      *
      * @param array $result
      * @return void
-     *
-     * @dataProvider dataProviderReset
-     */
+     *     */
+    #[DataProvider('dataProviderReset')]
     public function testReset(array $result)
     {
         $this->criteria->reset();
@@ -192,7 +191,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderReset()
+    public static function dataProviderReset()
     {
         return [
             [
@@ -219,11 +218,11 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveAllFilters()
+    public static function dataProviderRemoveAllFilters()
     {
         return [
             [
-                'actualResult' => [
+                'actualField' => [
                     'test-filter-name',
                     'test-field-name',
                     'test-condition',
@@ -239,11 +238,11 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveFilter()
+    public static function dataProviderRemoveFilter()
     {
         return [
             [
-                'actualResult' => [
+                'actualField' => [
                     'test-filter-name',
                     'test-field-name',
                     'test-condition',
@@ -260,7 +259,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveAllFields()
+    public static function dataProviderRemoveAllFields()
     {
         return [
             [
@@ -278,7 +277,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderRemoveField()
+    public static function dataProviderRemoveField()
     {
         return [
             [
@@ -316,7 +315,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderSetLimit()
+    public static function dataProviderSetLimit()
     {
         return [
             [
@@ -332,7 +331,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddOrder()
+    public static function dataProviderAddOrder()
     {
         return [
             [
@@ -368,9 +367,8 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddFilter()
+    public static function dataProviderAddFilter()
     {
-        $objectManager = new ObjectManager($this);
         return [
             [
                 'name' => 'test-filter-name',
@@ -378,17 +376,10 @@ class AbstractCriteriaTest extends TestCase
                 'condition' => 'test-condition',
                 'type' => 'test-type',
                 'result' => [
-                    'test-filter-name' => $objectManager->getObject(
-                        DataObject::class,
-                        [
-                            'data' => [
-                                'name' => 'test-filter-name',
-                                'field' => 'test-field-name',
-                                'condition' => 'test-condition',
-                                'type' => 'test-type',
-                            ]
-                        ]
-                    ),
+                    'name' => 'test-filter-name',
+                    'field' => 'test-field-name',
+                    'condition' => 'test-condition',
+                    'type' => 'test-type',
                 ],
             ]
         ];
@@ -399,7 +390,7 @@ class AbstractCriteriaTest extends TestCase
      *
      * @return array
      */
-    public function dataProviderAddField()
+    public static function dataProviderAddField()
     {
         return [
             [

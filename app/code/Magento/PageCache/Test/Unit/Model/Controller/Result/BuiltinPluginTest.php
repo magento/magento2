@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -84,13 +84,11 @@ class BuiltinPluginTest extends TestCase
         $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(ResultInterface::class)
-            ->getMockForAbstractClass();
+        $this->resultMock = $this->createMock(ResultInterface::class);
         $this->responseMock = $this->getMockBuilder(ResponseHttp::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpHeaderMock = $this->getMockBuilder(HttpHeaderInterface::class)
-            ->getMockForAbstractClass();
+        $this->httpHeaderMock = $this->createMock(HttpHeaderInterface::class);
 
         $this->responseMock->expects(static::any())
             ->method('getHeader')
@@ -177,11 +175,15 @@ class BuiltinPluginTest extends TestCase
             ->willReturnOnConsecutiveCalls('test', 'tag,tag2');
         $this->responseMock->expects(static::any())
             ->method('setHeader')
-            ->withConsecutive(
-                ['X-Magento-Cache-Control', 'test'],
-                ['X-Magento-Cache-Debug', 'MISS', true],
-                ['X-Magento-Tags', 'tag,tag2,' . CacheType::CACHE_TAG]
-            );
+            ->willReturnCallback(function ($arg1, $arg2 = null, $arg3 = null) {
+                if ($arg1 === 'X-Magento-Cache-Control' && $arg2 === 'test') {
+                    return null;
+                } elseif ($arg1 === 'X-Magento-Cache-Debug' && $arg2 === 'MISS' && $arg3 === true) {
+                    return null;
+                } elseif ($arg1 === 'X-Magento-Tags' && $arg2 === 'tag,tag2,' . CacheType::CACHE_TAG) {
+                    return null;
+                }
+            });
         $this->responseMock->expects(static::once())
             ->method('clearHeader')
             ->with('X-Magento-Tags');

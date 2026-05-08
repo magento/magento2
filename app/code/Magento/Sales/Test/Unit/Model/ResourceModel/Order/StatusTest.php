@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ResourceModel\Order\Status;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class StatusTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Status
      */
@@ -62,18 +65,22 @@ class StatusTest extends TestCase
         $tableName = 'sales_order_status_state';
         $this->resourceMock
             ->method('getTableName')
-            ->withConsecutive([], [$tableName])
-            ->willReturn(null, $tableName);
+            ->willReturnCallback(
+                function ($arg) use ($tableName) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg === $tableName) {
+                        return $tableName;
+                    }
+                }
+            );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn(
                 $this->connectionMock
             );
 
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->addMethods(['getConnectionName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->configMock = $this->createPartialMockWithReflection(Config::class, ['getConnectionName']);
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Status::class,

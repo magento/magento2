@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,10 +30,10 @@ class StockRegistryTest extends TestCase
     {
         $this->criteria = $this->getMockBuilder(StockItemCriteriaInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $criteriaFactory = $this->getMockBuilder(StockItemCriteriaInterfaceFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $criteriaFactory->expects($this->once())->method('create')->willReturn($this->criteria);

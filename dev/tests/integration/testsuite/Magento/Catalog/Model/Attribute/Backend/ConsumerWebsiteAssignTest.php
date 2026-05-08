@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -136,14 +137,13 @@ class ConsumerWebsiteAssignTest extends TestCase
     }
 
     /**
-     * @dataProvider errorProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/update_product_website_quene_data.php
      *
      * @param \Throwable $exception
      * @param int $code
      * @return void
      */
+    #[DataProvider('errorProvider')]
     public function testWithException(\Throwable $exception, int $code): void
     {
         $this->prepareMock($exception);
@@ -154,7 +154,7 @@ class ConsumerWebsiteAssignTest extends TestCase
     /**
      * @return array
      */
-    public function errorProvider(): array
+    public static function errorProvider(): array
     {
         return [
             'with_dead_lock_exception' => [

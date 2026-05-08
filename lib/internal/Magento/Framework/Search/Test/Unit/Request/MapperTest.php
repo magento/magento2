@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,13 +26,14 @@ use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MapperTest extends TestCase
 {
-    const ROOT_QUERY = 'someQuery';
+    private const ROOT_QUERY = 'someQuery';
 
     /**
      * @var ObjectManager
@@ -81,7 +82,7 @@ class MapperTest extends TestCase
     {
         $this->helper = new ObjectManager($this);
 
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->queryMatch = $this->getMockBuilder(MatchQuery::class)
             ->disableOriginalConstructor()
@@ -111,9 +112,8 @@ class MapperTest extends TestCase
     /**
      * @param $queries
      *
-     * @return void
-     * @dataProvider getQueryMatchProvider
-     */
+     * @return void     */
+    #[DataProvider('getQueryMatchProvider')]
     public function testGetQueryMatch($queries): void
     {
         $query = $queries[self::ROOT_QUERY];
@@ -229,36 +229,29 @@ class MapperTest extends TestCase
     /**
      * @param $queries
      *
-     * @return void
-     * @dataProvider getQueryFilterQueryReferenceProvider
-     */
+     * @return void     */
+    #[DataProvider('getQueryFilterQueryReferenceProvider')]
     public function testGetQueryFilterQueryReference($queries): void
     {
         $query = $queries['someQueryMatch'];
         $queryRoot = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    MatchQuery::class,
-                    [
-                        'name' => $query['name'],
-                        'value' => $query['value'],
-                        'boost' => 1,
-                        'matches' => 'someMatches'
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $queryRoot['name'],
-                        'boost' => $queryRoot['boost'] ?? 1,
-                        'reference' => $this->queryMatch,
-                        'referenceType' => Filter::REFERENCE_QUERY
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($query, $queryRoot) {
+
+                if ($arg1 == MatchQuery::class &&
+                        $arg2['name'] == $query['name'] &&
+                        $arg2['value'] == $query['value'] &&
+                        $arg2['boost'] == 1 &&
+                        $arg2['matches'] == 'someMatches') {
+                    return $this->queryMatch;
+                } elseif ($arg1 == Filter::class &&
+                        $arg2['name'] == $queryRoot['name'] &&
+                        $arg2['reference'] == $this->queryMatch &&
+                        $arg2['referenceType'] == Filter::REFERENCE_QUERY) {
+                    return $this->queryFilter;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -299,35 +292,29 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @param $queries
-     * @dataProvider getQueryBoolProvider
-     */
+     * @param $queries     */
+    #[DataProvider('getQueryBoolProvider')]
     public function testGetQueryBool($queries): void
     {
         $query = $queries['someQueryMatch'];
         $rootQueries = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    MatchQuery::class,
-                    [
-                        'name' => $query['name'],
-                        'value' => $query['value'],
-                        'boost' => 1,
-                        'matches' => 'someMatches'
-                    ]
-                ],
-                [
-                    BoolExpression::class,
-                    [
-                        'name' => $rootQueries['name'],
-                        'boost' => $rootQueries['boost'] ?? 1,
-                        'someClause' => ['someQueryMatch' => $this->queryMatch]
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->queryMatch, $this->queryBool);
+            ->willReturnCallback(function ($arg1, $arg2) use ($query, $rootQueries) {
+                if ($arg1 == MatchQuery::class &&
+                        $arg2['name'] == $query['name'] &&
+                        $arg2['value'] == $query['value'] &&
+                        $arg2['boost'] == 1 &&
+                        $arg2['matches'] == 'someMatches') {
+                    return $this->queryMatch;
+                }
+                if ($arg1 == BoolExpression::class &&
+                        $arg2['name'] == $rootQueries['name'] &&
+                        $arg2['boost'] == ($rootQueries['boost'] ?? 1) &&
+                        $arg2['someClause']['someQueryMatch'] == $this->queryMatch) {
+                    return $this->queryBool;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -418,26 +405,20 @@ class MapperTest extends TestCase
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    Term::class,
-                    [
-                        'name' => $filter['name'],
-                        'field' => $filter['field'],
-                        'value' => $filter['value']
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $query['name'],
-                        'boost' => 1,
-                        'reference' => $this->filterTerm,
-                        'referenceType' => Filter::REFERENCE_FILTER
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($filter, $query) {
+                if ($arg1 == Term::class &&
+                    $arg2['name'] == $filter['name'] &&
+                    $arg2['field'] == $filter['field'] &&
+                    $arg2['value'] == $filter['value']) {
+                    return $this->filterTerm;
+                } elseif ($arg1 == Filter::class &&
+                    $arg2['name'] == $query['name'] &&
+                    $arg2['boost'] == 1 &&
+                    $arg2['reference'] == $this->filterTerm &&
+                    $arg2['referenceType'] == Filter::REFERENCE_FILTER) {
+                    return $this->queryFilter;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -483,26 +464,20 @@ class MapperTest extends TestCase
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    Wildcard::class,
-                    [
-                        'name' => $filter['name'],
-                        'field' => $filter['field'],
-                        'value' => $filter['value']
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $query['name'],
-                        'boost' => 1,
-                        'reference' => $this->filterTerm,
-                        'referenceType' => Filter::REFERENCE_FILTER
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($filter, $query) {
+                if ($arg1 == Wildcard::class &&
+                    $arg2['name'] == $filter['name'] &&
+                    $arg2['field'] == $filter['field'] &&
+                    $arg2['value'] == $filter['value']) {
+                    return $this->filterTerm;
+                } elseif ($arg1 == Filter::class &&
+                    $arg2['name'] == $query['name'] &&
+                    $arg2['boost'] == 1 &&
+                    $arg2['reference'] == $this->filterTerm &&
+                    $arg2['referenceType'] == Filter::REFERENCE_FILTER) {
+                    return $this->queryFilter;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -549,27 +524,21 @@ class MapperTest extends TestCase
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    Range::class,
-                    [
-                        'name' => $filter['name'],
-                        'field' => $filter['field'],
-                        'from' => $filter['from'],
-                        'to' => $filter['to']
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $query['name'],
-                        'boost' => 1,
-                        'reference' => $this->filterRange,
-                        'referenceType' => Filter::REFERENCE_FILTER
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->filterRange, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($filter, $query) {
+                if ($arg1 == Range::class &&
+                    $arg2['name'] == $filter['name'] &&
+                    $arg2['field'] == $filter['field'] &&
+                    $arg2['from'] == $filter['from'] &&
+                    $arg2['to'] == $filter['to']) {
+                    return $this->filterRange;
+                } elseif ($arg1 == Filter::class &&
+                    $arg2['name'] == $query['name'] &&
+                    $arg2['boost'] == 1 &&
+                    $arg2['reference'] == $this->filterRange &&
+                    $arg2['referenceType'] == Filter::REFERENCE_FILTER) {
+                    return $this->queryFilter;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -627,32 +596,24 @@ class MapperTest extends TestCase
 
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    Term::class,
-                    [
-                        'name' => $someFilterTerm['name'],
-                        'field' => $someFilterTerm['field'],
-                        'value' => $someFilterTerm['value']
-                    ]
-                ],
-                [
-                    \Magento\Framework\Search\Request\Filter\BoolExpression::class,
-                    [
-                        'name' => $someFilter['name'],
-                        'someClause' => ['someFilterTerm' => $this->filterTerm]
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $query['name'],
-                        'boost' => 1,
-                        'reference' => $this->filterBool,
-                        'referenceType' => Filter::REFERENCE_FILTER
-                    ]
-                ]
-            )->willReturnOnConsecutiveCalls($this->filterTerm, $this->filterBool, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($someFilterTerm, $someFilter, $query) {
+                if ($arg1 == Term::class &&
+                    $arg2['name'] == $someFilterTerm['name'] &&
+                    $arg2['field'] == $someFilterTerm['field'] &&
+                    $arg2['value'] == $someFilterTerm['value']) {
+                    return $this->filterTerm;
+                } elseif ($arg1 == \Magento\Framework\Search\Request\Filter\BoolExpression::class &&
+                    $arg2['name'] == $someFilter['name'] &&
+                    $arg2['someClause']['someFilterTerm'] == $this->filterTerm) {
+                    return $this->filterBool;
+                } elseif ($arg1 == Filter::class &&
+                    $arg2['name'] == $query['name'] &&
+                    $arg2['boost'] == 1 &&
+                    $arg2['reference'] == $this->filterBool &&
+                    $arg2['referenceType'] == Filter::REFERENCE_FILTER) {
+                    return $this->queryFilter;
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -705,26 +666,21 @@ class MapperTest extends TestCase
         $query = $queries[self::ROOT_QUERY];
         $this->objectManager
             ->method('create')
-            ->withConsecutive(
-                [
-                    Term::class,
-                    [
-                        'name' => $filter['name'],
-                        'field' => $filter['field'],
-                        'value' => $filter['value']
-                    ]
-                ],
-                [
-                    Filter::class,
-                    [
-                        'name' => $query['name'],
-                        'boost' => 1,
-                        'reference' => $this->filterTerm,
-                        'referenceType' => Filter::REFERENCE_FILTER
-                    ]
-                ]
-            )
-            ->willReturnOnConsecutiveCalls($this->filterTerm, $this->queryFilter);
+            ->willReturnCallback(function ($arg1, $arg2) use ($filter, $query) {
+                if ($arg1 == Term::class &&
+                        $arg2['name'] == $filter['name'] &&
+                        $arg2['field'] == $filter['field'] &&
+                        $arg2['value'] == $filter['value']) {
+                    return $this->filterTerm;
+                } elseif ($arg1 == Filter::class &&
+                        $arg2['name'] == $query['name'] &&
+                        $arg2['boost'] == 1 &&
+                        $arg2['reference'] == $this->filterTerm &&
+                        $arg2['referenceType'] == Filter::REFERENCE_FILTER) {
+                    return $this->queryFilter;
+
+                }
+            });
 
         /** @var Mapper $mapper */
         $mapper = $this->helper->getObject(
@@ -859,7 +815,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryMatchProvider(): array
+    public static function getQueryMatchProvider(): array
     {
         return [
             [
@@ -889,7 +845,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryFilterQueryReferenceProvider(): array
+    public static function getQueryFilterQueryReferenceProvider(): array
     {
         return [
             [
@@ -939,7 +895,7 @@ class MapperTest extends TestCase
     /**
      * @return array
      */
-    public function getQueryBoolProvider(): array
+    public static function getQueryBoolProvider(): array
     {
         return [
             [

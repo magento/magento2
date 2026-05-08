@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JsonHexTagTest extends TestCase
 {
@@ -29,9 +30,8 @@ class JsonHexTagTest extends TestCase
 
     /**
      * @param string|int|float|bool|array|null $value
-     * @param string $expected
-     * @dataProvider serializeDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('serializeDataProvider')]
     public function testSerialize($value, $expected)
     {
         $this->assertEquals(
@@ -43,7 +43,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function serializeDataProvider()
+    public static function serializeDataProvider()
     {
         $dataObject = new DataObject(['something']);
         return [
@@ -61,9 +61,8 @@ class JsonHexTagTest extends TestCase
 
     /**
      * @param string $value
-     * @param string|int|float|bool|array|null $expected
-     * @dataProvider unserializeDataProvider
-     */
+     * @param string|int|float|bool|array|null $expected     */
+    #[DataProvider('unserializeDataProvider')]
     public function testUnserialize($value, $expected)
     {
         $this->assertEquals(
@@ -75,7 +74,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeDataProvider(): array
+    public static function unserializeDataProvider(): array
     {
         return [
             ['""', ''],
@@ -97,9 +96,8 @@ class JsonHexTagTest extends TestCase
         $this->json->serialize(STDOUT);
     }
 
-    /**
-     * @dataProvider unserializeExceptionDataProvider
-     */
+    /**     */
+    #[DataProvider('unserializeExceptionDataProvider')]
     public function testUnserializeException($value)
     {
         $this->expectException('InvalidArgumentException');
@@ -110,7 +108,7 @@ class JsonHexTagTest extends TestCase
     /**
      * @return array
      */
-    public function unserializeExceptionDataProvider(): array
+    public static function unserializeExceptionDataProvider(): array
     {
         return [
             [''],

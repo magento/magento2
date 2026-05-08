@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -65,7 +65,7 @@ class Url extends \Magento\Framework\DataObject
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         UrlFinderInterface $urlFinder,
         array $data = [],
-        ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($data);
         $this->urlFactory = $urlFactory;
@@ -114,7 +114,18 @@ class Url extends \Magento\Framework\DataObject
      */
     public function formatUrlKey($str)
     {
-        return $this->filter->translitUrl($str);
+        if ($this->scopeConfig->getValue(
+            \Magento\Catalog\Helper\Product::XML_PATH_APPLY_TRANSLITERATION_TO_URL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        )) {
+            return $this->filter->translitUrl($str);
+        } else {
+            $str = preg_replace('/\s+/', '-', $str);
+            $str = mb_strtolower($str);
+            $str = trim($str, '-');
+        }
+
+        return $str;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,6 +45,44 @@ class GiftMessageTest extends GraphQlAbstract
             self::assertArrayHasKey('to', $order['gift_message']);
             self::assertArrayHasKey('from', $order['gift_message']);
             self::assertArrayHasKey('message', $order['gift_message']);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_order 1
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GiftMessage/_files/customer/order_with_message.php
+     * @throws AuthenticationException
+     * @throws Exception
+     */
+    public function testGiftMessageForCustomerOrder()
+    {
+        $query = <<<QUERY
+query {
+  customer {
+   orders(filter:{number:{eq:"999999991"}}){
+    total_count
+    items
+    {
+      gift_message {
+        from
+        to
+        message
+      }
+     }
+   }
+ }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        foreach ($response['customer']['orders']['items'] as $order) {
+            self::assertArrayHasKey('gift_message', $order);
+            self::assertSame('Jane Roe', $order['gift_message']['to']);
+            self::assertSame('John Doe', $order['gift_message']['from']);
+            self::assertSame('Gift Message Text', $order['gift_message']['message']);
         }
     }
 

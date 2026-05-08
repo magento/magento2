@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Tax\Block\Item\Price\Renderer;
 use Magento\Tax\Plugin\Checkout\CustomerData\Cart;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

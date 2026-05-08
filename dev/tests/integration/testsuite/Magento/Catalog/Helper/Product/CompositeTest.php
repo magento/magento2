@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,11 +94,11 @@ class CompositeTest extends TestCase
     }
 
     /**
-     * @dataProvider renderConfigureResultExceptionProvider
      * @param array $data
      * @param string $expectedErrorMessage
      * @return void
      */
+    #[DataProvider('renderConfigureResultExceptionProvider')]
     public function testRenderConfigureResultException(array $data, string $expectedErrorMessage): void
     {
         /** @var DataObject $configureResult */
@@ -121,7 +122,7 @@ class CompositeTest extends TestCase
      *
      * @return array
      */
-    public function renderConfigureResultExceptionProvider(): array
+    public static function renderConfigureResultExceptionProvider(): array
     {
         return [
             'error_true' => [
@@ -129,14 +130,13 @@ class CompositeTest extends TestCase
                     'error' => true,
                     'message' => 'Test Message'
                 ],
-                'expected_error_message' => 'Test Message',
+                'expectedErrorMessage' => 'Test Message',
             ],
             'without_product' => [
                 'data' => [
                     'ok' => true,
                 ],
-                'expected_error_message' => 'The product that was requested doesn\'t exist.'
-                    . ' Verify the product and try again.',
+                'expectedErrorMessage' => 'The product with ID "" does not exist.',
             ],
         ];
     }

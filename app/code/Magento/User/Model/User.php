@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Model;
@@ -122,14 +122,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -151,7 +151,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var DeploymentConfig
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -193,11 +193,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         UserValidationRules $validationRules,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        DeploymentConfig $deploymentConfig = null,
+        ?Json $serializer = null,
+        ?DeploymentConfig $deploymentConfig = null,
         ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
@@ -481,7 +481,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @deprecated 100.1.0
-     * @see we don't recommend this approach anymore
+     * @see Self::sendNotificationEmailsIfRequired()
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -654,6 +654,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         if ($this->authenticate($username, $password)) {
             $this->getResource()->recordLogin($this);
+            $this->reload();
         }
         return $this;
     }

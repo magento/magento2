@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,7 +21,9 @@
         <before>
             <!-- Create a Website -->
             <createData entity="customWebsite" stepKey="createWebsite"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -40,7 +42,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCreatedWebsite">
                 <argument name="websiteName" value="$createWebsite.website[name]$"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>

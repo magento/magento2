@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Rule\Model\Condition\Sql;
@@ -69,7 +69,7 @@ class Builder
      */
     public function __construct(
         ExpressionFactory $expressionFactory,
-        AttributeRepositoryInterface $attributeRepository = null
+        ?AttributeRepositoryInterface $attributeRepository = null
     ) {
         $this->_expressionFactory = $expressionFactory;
         $this->attributeRepository = $attributeRepository ?:
@@ -144,6 +144,7 @@ class Builder
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getMappedSqlCondition(
         AbstractCondition $condition,
@@ -155,7 +156,7 @@ class Builder
         // If rule hasn't valid argument - prevent incorrect rule behavior.
         if (empty($argument)) {
             return $this->_expressionFactory->create(['expression' => '1 = -1']);
-        } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0) {
+        } elseif (preg_match('/[^a-z0-9\-_\.\`]/i', $argument) > 0 && !$argument instanceof \Zend_Db_Expr) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid field'));
         }
 
@@ -165,7 +166,6 @@ class Builder
             throw new \Magento\Framework\Exception\LocalizedException(__('Unknown condition operator'));
         }
 
-        $defaultValue = 0;
         //operator 'contains {}' is mapped to 'IN()' query that cannot work with substrings
         // adding mapping to 'LIKE %%'
         if ($condition->getInputType() === 'string'
@@ -173,10 +173,7 @@ class Builder
         ) {
             $sql = str_replace(
                 ':field',
-                (string) $this->_connection->getIfNullSql(
-                    $this->_connection->quoteIdentifier($argument),
-                    $defaultValue
-                ),
+                (string)$this->_connection->quoteIdentifier($argument),
                 $this->stringConditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
@@ -184,10 +181,7 @@ class Builder
         } else {
             $sql = str_replace(
                 ':field',
-                (string) $this->_connection->getIfNullSql(
-                    $this->_connection->quoteIdentifier($argument),
-                    $defaultValue
-                ),
+                (string)$this->_connection->quoteIdentifier($argument),
                 $this->_conditionOperatorMap[$conditionOperator]
             );
             $bindValue = $condition->getBindArgumentValue();
@@ -195,12 +189,15 @@ class Builder
         }
         // values for multiselect attributes can be saved in comma-separated format
         // below is a solution for matching such conditions with selected values
-        if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {
-            foreach ($bindValue as $item) {
-                $expression .= $this->_connection->quoteInto(
-                    " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
-                    $item
-                );
+        $attribute = $condition->getAttributeObject();
+        if ($attribute && $attribute->getFrontendInput() === 'multiselect') {
+            if (is_array($bindValue) && \in_array($conditionOperator, ['()', '{}'], true)) {
+                foreach ($bindValue as $item) {
+                    $expression .= $this->_connection->quoteInto(
+                        " OR (FIND_IN_SET (?, {$this->_connection->quoteIdentifier($argument)}) > 0)",
+                        $item
+                    );
+                }
             }
         }
         return $this->_expressionFactory->create(

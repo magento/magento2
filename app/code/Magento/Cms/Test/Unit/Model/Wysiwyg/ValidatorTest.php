@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Message\Factory as MessageFactory;
@@ -25,7 +26,7 @@ class ValidatorTest extends TestCase
      *
      * @return array
      */
-    public function getValidationCases(): array
+    public static function getValidationCases(): array
     {
         return [
             'invalid-exception' => [true, new ValidationException(__('Invalid html')), true, false],
@@ -41,8 +42,8 @@ class ValidatorTest extends TestCase
      * @param \Throwable|null $thrown
      * @param bool $exceptionThrown
      * @param bool $warned
-     * @dataProvider getValidationCases
      */
+    #[DataProvider('getValidationCases')]
     public function testValidate(bool $isFlagSet, ?\Throwable $thrown, bool $exceptionThrown, bool $warned): void
     {
         $actuallyWarned = false;
@@ -51,20 +52,20 @@ class ValidatorTest extends TestCase
         $messageFactoryMock->method('create')
             ->willReturnCallback(
                 function () {
-                    return $this->getMockForAbstractClass(MessageInterface::class);
+                    return $this->createMock(MessageInterface::class);
                 }
             );
-        $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $configMock = $this->createMock(ScopeConfigInterface::class);
         $configMock->method('isSetFlag')
             ->with(Validator::CONFIG_PATH_THROW_EXCEPTION)
             ->willReturn($isFlagSet);
 
-        $backendMock = $this->getMockForAbstractClass(WYSIWYGValidatorInterface::class);
+        $backendMock = $this->createMock(WYSIWYGValidatorInterface::class);
         if ($thrown) {
             $backendMock->method('validate')->willThrowException($thrown);
         }
 
-        $messagesMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $messagesMock = $this->createMock(ManagerInterface::class);
         $messagesMock->method('addUniqueMessages')
             ->willReturnCallback(
                 function () use (&$actuallyWarned): void {
@@ -72,7 +73,7 @@ class ValidatorTest extends TestCase
                 }
             );
 
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $validator = new Validator($backendMock, $messagesMock, $configMock, $loggerMock, $messageFactoryMock);
         try {

@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\Product\Visibility;
 
 // phpcs:disable Magento2.Classes.AbstractApi
 /**
@@ -24,8 +28,9 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
-abstract class AbstractAction
+abstract class AbstractAction implements ResetAfterRequestInterface
 {
     /**
      * Chunk size
@@ -44,7 +49,8 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated see getIndexTable
+     * @deprecated
+     * @see getIndexTable
      */
     public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
@@ -132,20 +138,27 @@ abstract class AbstractAction
     private $currentStore;
 
     /**
+     * @var Visibility
+     */
+    private $visibility;
+
+    /**
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
      * @param QueryGenerator $queryGenerator
      * @param MetadataPool|null $metadataPool
      * @param TableMaintainer|null $tableMaintainer
+     * @param Visibility|null $visibility
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $config,
-        QueryGenerator $queryGenerator = null,
-        MetadataPool $metadataPool = null,
-        TableMaintainer $tableMaintainer = null
+        ?QueryGenerator $queryGenerator = null,
+        ?MetadataPool $metadataPool = null,
+        ?TableMaintainer $tableMaintainer = null,
+        ?Visibility $visibility = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -154,6 +167,21 @@ abstract class AbstractAction
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->visibility = $visibility ?: ObjectManager::getInstance()->get(Visibility::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->nonAnchorSelects = [];
+        $this->anchorSelects = [];
+        $this->productsSelects = [];
+        $this->categoryPath = [];
+        $this->useTempTable = true;
+        $this->tempTreeIndexTableName = null;
+        $this->currentStore = null;
     }
 
     /**
@@ -286,19 +314,17 @@ abstract class AbstractAction
     protected function getNonAnchorCategoriesSelect(Store $store)
     {
         if (!isset($this->nonAnchorSelects[$store->getId()])) {
-            $statusAttributeId = $this->config->getAttribute(
-                Product::ENTITY,
-                'status'
-            )->getId();
-            $visibilityAttributeId = $this->config->getAttribute(
-                Product::ENTITY,
-                'visibility'
-            )->getId();
+            $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
+            $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
+            $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
 
             $rootPath = $this->getPathFromCategoryId($store->getRootCategoryId());
 
-            $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-            $linkField = $metadata->getLinkField();
+            $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
+            $productLinkField = $productMetadata->getLinkField();
+            $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+            $categoryLinkField = $categoryMetadata->getLinkField();
+
             $select = $this->connection->select()->from(
                 ['cc' => $this->getTable('catalog_category_entity')],
                 []
@@ -316,28 +342,37 @@ abstract class AbstractAction
                 []
             )->joinInner(
                 ['cpsd' => $this->getTable('catalog_product_entity_int')],
-                'cpsd.' . $linkField . ' = cpe.' . $linkField . ' AND cpsd.store_id = 0' .
-                ' AND cpsd.attribute_id = ' .
-                $statusAttributeId,
+                'cpsd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpsd.store_id = 0' .
+                ' AND cpsd.attribute_id = ' . $statusAttributeId,
                 []
             )->joinLeft(
                 ['cpss' => $this->getTable('catalog_product_entity_int')],
-                'cpss.' . $linkField . ' = cpe.' . $linkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
-                ' AND cpss.store_id = ' .
-                $store->getId(),
+                'cpss.' . $productLinkField . ' = cpe.' . $productLinkField .
+                ' AND cpss.attribute_id = cpsd.attribute_id AND cpss.store_id = ' . $store->getId(),
                 []
             )->joinInner(
                 ['cpvd' => $this->getTable('catalog_product_entity_int')],
-                'cpvd.' . $linkField . ' = cpe.' . $linkField . ' AND cpvd.store_id = 0' .
-                ' AND cpvd.attribute_id = ' .
-                $visibilityAttributeId,
+                'cpvd.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpvd.store_id = 0' .
+                ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
                 []
             )->joinLeft(
                 ['cpvs' => $this->getTable('catalog_product_entity_int')],
-                'cpvs.' . $linkField . ' = cpe.' . $linkField . ' AND cpvs.attribute_id = cpvd.attribute_id' .
-                ' AND cpvs.store_id = ' .
-                $store->getId(),
+                'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
+                ' AND cpvs.attribute_id = cpvd.attribute_id AND cpvs.store_id = ' . $store->getId(),
                 []
+            )->joinInner(
+                ['ccacd' => $this->getTable('catalog_category_entity_int')],
+                'ccacd.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+                ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+                []
+            )->joinLeft(
+                ['ccacs' => $this->getTable('catalog_category_entity_int')],
+                'ccacs.' . $categoryLinkField . ' = cc.' . $categoryLinkField .
+                ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' . $store->getId(),
+                []
+            )->where(
+                $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+                1
             )->where(
                 'cc.path LIKE ' . $this->connection->quote($rootPath . '/%')
             )->where(
@@ -348,11 +383,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->visibility->getVisibleInSiteIds()
             )->columns(
                 [
                     'category_id' => 'cc.entity_id',
@@ -508,10 +539,8 @@ abstract class AbstractAction
     protected function createAnchorSelect(Store $store)
     {
         $this->setCurrentStore($store);
-        $isAnchorAttributeId = $this->config->getAttribute(
-            \Magento\Catalog\Model\Category::ENTITY,
-            'is_anchor'
-        )->getId();
+        $isAnchorAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_anchor')->getId();
+        $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
         $statusAttributeId = $this->config->getAttribute(Product::ENTITY, 'status')->getId();
         $visibilityAttributeId = $this->config->getAttribute(Product::ENTITY, 'visibility')->getId();
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
@@ -520,7 +549,7 @@ abstract class AbstractAction
         $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
 
         $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
         $productLinkField = $productMetadata->getLinkField();
         $categoryLinkField = $categoryMetadata->getLinkField();
 
@@ -558,21 +587,18 @@ abstract class AbstractAction
             []
         )->joinLeft(
             ['cpss' => $this->getTable('catalog_product_entity_int')],
-            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField . ' AND cpss.attribute_id = cpsd.attribute_id' .
-            ' AND cpss.store_id = ' .
-            $store->getId(),
+            'cpss.' . $productLinkField . ' = cpe.' . $productLinkField .
+            ' AND cpss.attribute_id = cpsd.attribute_id AND cpss.store_id = ' . $store->getId(),
             []
         )->joinInner(
             ['cpvd' => $this->getTable('catalog_product_entity_int')],
             'cpvd.' . $productLinkField . ' = cpe. ' . $productLinkField . ' AND cpvd.store_id = 0' .
-            ' AND cpvd.attribute_id = ' .
-            $visibilityAttributeId,
+            ' AND cpvd.attribute_id = ' . $visibilityAttributeId,
             []
         )->joinLeft(
             ['cpvs' => $this->getTable('catalog_product_entity_int')],
             'cpvs.' . $productLinkField . ' = cpe.' . $productLinkField .
-            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' .
-            $store->getId(),
+            ' AND cpvs.attribute_id = cpvd.attribute_id ' . 'AND cpvs.store_id = ' . $store->getId(),
             []
         )->joinInner(
             ['ccad' => $this->getTable('catalog_category_entity_int')],
@@ -582,9 +608,21 @@ abstract class AbstractAction
         )->joinLeft(
             ['ccas' => $this->getTable('catalog_category_entity_int')],
             'ccas.' . $categoryLinkField . ' = cc.' . $categoryLinkField
-            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' .
-            $store->getId(),
+            . ' AND ccas.attribute_id = ccad.attribute_id AND ccas.store_id = ' . $store->getId(),
             []
+        )->joinInner(
+            ['ccacd' => $this->getTable('catalog_category_entity_int')],
+            'ccacd.' . $categoryLinkField . ' = cc.' . $categoryLinkField . ' AND ccacd.store_id = 0' .
+            ' AND ccacd.attribute_id = ' . $isActiveAttributeId,
+            []
+        )->joinLeft(
+            ['ccacs' => $this->getTable('catalog_category_entity_int')],
+            'ccacs.' . $categoryLinkField . ' = cc.' . $categoryLinkField
+            . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' . $store->getId(),
+            []
+        )->where(
+            $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
+            1
         )->where(
             'cpw.website_id = ?',
             $store->getWebsiteId()
@@ -593,11 +631,7 @@ abstract class AbstractAction
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         )->where(
             $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-            [
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-            ]
+            $this->visibility->getVisibleInSiteIds()
         )->where(
             $this->connection->getIfNullSql('ccas.value', 'ccad.value') . ' = ?',
             1
@@ -694,11 +728,8 @@ abstract class AbstractAction
      */
     protected function fillTempCategoryTreeIndex($temporaryName)
     {
-        $isActiveAttributeId = $this->config->getAttribute(
-            \Magento\Catalog\Model\Category::ENTITY,
-            'is_active'
-        )->getId();
-        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $isActiveAttributeId = $this->config->getAttribute(Category::ENTITY, 'is_active')->getId();
+        $categoryMetadata = $this->metadataPool->getMetadata(CategoryInterface::class);
         $categoryLinkField = $categoryMetadata->getLinkField();
         $selects = $this->prepareSelectsByRange(
             $this->connection->select()
@@ -841,11 +872,7 @@ abstract class AbstractAction
                 \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
             )->where(
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
-                [
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-                ]
+                $this->visibility->getVisibleInSiteIds()
             )->group(
                 'cp.entity_id'
             )->columns(

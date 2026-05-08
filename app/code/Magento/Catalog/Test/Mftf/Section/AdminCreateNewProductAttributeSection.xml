@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,8 +15,11 @@
         <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
         <element name="addValue" type="button" selector="//button[contains(@data-action,'add_new_row')]" timeout="30"/>
         <element name="defaultStoreView" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][1]')]" parameterized="true"/>
+        <element name="firstOptionStoreView" type="input" selector="//td[@class='col-option_0'][3]/input"/>
+        <element name="secondOptionStoreView" type="input" selector="//td[@class='col-option_1'][3]/input"/>
+        <element name="customStoreViewField" type="input" selector="input[value='{{fieldValue}}']" parameterized="true"/>
         <element name="adminOption" type="input" selector="//input[contains(@name,'option[value][option_{{row}}][0]')]" parameterized="true"/>
-        <element name="defaultRadioButton" type="radio" selector="//tr[{{row}}]//input[contains(@name,'default[]')]" parameterized="true"/>
+        <element name="defaultRadioButton" type="radio" selector="//tr[{{row}}]//input[contains(@name,'default[')]" parameterized="true"/>
         <element name="isRequired" type="checkbox" selector="//input[contains(@name,'is_required')]/..//label"/>
         <element name="advancedAttributeProperties" type="text" selector="//div[contains(@data-index,'advanced_fieldset')]"/>
         <element name="attributeCode" type="input" selector="//*[@class='admin__fieldset-wrapper-content admin__collapsible-content _show']//input[@name='attribute_code']"/>
@@ -36,5 +39,16 @@
         <element name="adminOptionTextSwatch" type="input" selector="input[name='optiontext[value][option_{{var}}][0]']" parameterized="true"/>
         <element name="defaultStoreViewTextSwatch" type="input" selector="input[name='swatchtext[value][option_{{var}}][1]']" parameterized="true"/>
         <element name="defaultStoreViewTextOption" type="input" selector="input[name='optiontext[value][option_{{var}}][1]']" parameterized="true"/>
+
+        <!-- Enable/disable Storefront Properties -->
+        <element name="isVisibleEnabled" type="select" selector="//select[contains(@id, 'is_visible') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="isVisibleDisabled" type="select" selector="//select[contains(@id, 'is_visible') and contains(@disabled, 'disabled')]"/>
+        <element name="sortOrderEnabled" type="input" selector="//input[contains(@id, 'sort_order') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="sortOrderDisabled" type="input" selector="//input[contains(@id, 'sort_order') and contains(@disabled, 'disabled')]"/>
+        <element name="usedInFormsEnabled" type="select" selector="//select[contains(@id, 'used_in_forms') and not(contains(@disabled, 'disabled'))]"/>
+        <element name="usedInFormsDisabled" type="select" selector="//select[contains(@id, 'used_in_forms') and contains(@disabled, 'disabled')]"/>
+        <element name="usedIsDefaultAdminDisabled" type="select" selector="//input[@name='option[value][][0]' and @disabled='disabled']"/>
+        <element name="usedIsDefaultStoreViewDisabled" type="select" selector="//input[@name='option[value][][1]' and @disabled='disabled']"/>
+        <element name="usedIsAttributeCodeDisabled" type="select" selector="//*[@id='attribute_code' and @disabled='disabled']"/>
     </section>
 </sections>
