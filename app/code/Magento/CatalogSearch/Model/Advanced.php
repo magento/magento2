@@ -409,7 +409,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         } elseif ($attribute->getFrontendInput() == 'select' || $attribute->getFrontendInput() == 'multiselect') {
             $value = $attribute->getSource()->getOptionText($value);
             if (is_array($value)) {
-                $value = $value['label'];
+                $value = $value['label'] ?? false;
             }
         } elseif ($attribute->getFrontendInput() == 'boolean') {
             if (is_numeric($value)) {
