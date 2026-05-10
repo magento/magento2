@@ -604,6 +604,9 @@
         <index referenceId="SALES_ORDER_ITEM_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <index referenceId="SALES_ORDER_ITEM_QUOTE_ITEM_ID" indexType="btree">
+            <column name="quote_item_id"/>
+        </index>
     </table>
     <table name="sales_order_payment" resource="sales" engine="innodb" comment="Sales Flat Order Payment">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"

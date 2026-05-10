@@ -7,12 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Download;
 
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Action\Context;
-use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory;
 
+/**
+ * Download Custom Option Controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
 {
     /**
@@ -39,18 +46,25 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
     private $serializer;
 
     /**
+     * @var CollectionFactory
+     */
+    private $itemCollectionFactory;
+
+    /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param \Magento\Sales\Model\Download $download
      * @param \Magento\Framework\Unserialize\Unserialize $unserialize
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param CollectionFactory $itemCollectionFactory
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
         \Magento\Sales\Model\Download $download,
         \Magento\Framework\Unserialize\Unserialize $unserialize,
-        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?CollectionFactory $itemCollectionFactory = null
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
@@ -58,6 +72,9 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         $this->unserialize = $unserialize;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Serialize\Serializer\Json::class
+        );
+        $this->itemCollectionFactory = $itemCollectionFactory ?: ObjectManager::getInstance()->get(
+            CollectionFactory::class
         );
     }
 
@@ -71,6 +88,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
     public function execute()
     {
         $quoteItemOptionId = $this->getRequest()->getParam('id');
+        $quoteItemId = $this->getRequest()->getParam('item');
+        $optionId = $this->getRequest()->getParam('option');
         /** @var $option \Magento\Quote\Model\Quote\Item\Option */
         $option = $this->_objectManager->create(
             \Magento\Quote\Model\Quote\Item\Option::class
@@ -79,9 +98,35 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         $resultForward = $this->resultForwardFactory->create();
 
         if (!$option->getId()) {
-            return $resultForward->forward('noroute');
+            $optionData = $this->getOptionFromSalesItem($quoteItemId, $optionId);
+        } else {
+            $optionData = $this->getOptionFromQuoteItem($option);
         }
 
+        if ($optionData) {
+            try {
+                $info = $this->serializer->unserialize($optionData);
+                if ($this->getRequest()->getParam('key') != $info['secret_key']) {
+                    return $resultForward->forward('noroute');
+                }
+                return $this->download->createResponse($info);
+            } catch (\Exception $e) {
+                return $resultForward->forward('noroute');
+            }
+        } else {
+            return $resultForward->forward('noroute');
+        }
+        $this->endExecute();
+    }
+
+    /**
+     * Get custom option data from quote item option
+     *
+     * @param \Magento\Quote\Model\Quote\Item\Option $option
+     * @return string|null
+     */
+    protected function getOptionFromQuoteItem($option)
+    {
         $optionId = null;
         if ($option->getCode() && strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
             $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
@@ -99,19 +144,37 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action implemen
         }
 
         if ($productOption->getId() && $productOption->getType() != 'file') {
-            return $resultForward->forward('noroute');
+            return null;
         }
+        return $option->getValue();
+    }
 
-        try {
-            $info = $this->serializer->unserialize($option->getValue());
-            if ($this->getRequest()->getParam('key') != $info['secret_key']) {
-                return $resultForward->forward('noroute');
-            }
-            return $this->download->createResponse($info);
-        } catch (\Exception $e) {
-            return $resultForward->forward('noroute');
+    /**
+     * Get custom option data from sales item
+     *
+     * @param string|null $quoteItemId
+     * @param string|null $optionId
+     * @return string|null
+     */
+    protected function getOptionFromSalesItem($quoteItemId, $optionId)
+    {
+        if (!$quoteItemId || !$optionId) {
+            return null;
         }
-        $this->endExecute();
+        $collection = $this->itemCollectionFactory->create();
+        $quoteItem = $collection->addFieldToFilter(OrderItemInterface::QUOTE_ITEM_ID, $quoteItemId)->getFirstItem();
+        if ($quoteItem && $quoteItem->getId()) {
+            try {
+                $options = $quoteItem->getProductOptionByCode('options');
+                $key = array_search($optionId, array_column($options, 'option_id'));
+                if ($key !== false && $options[$key]['option_value'] && $options[$key]['option_type'] == 'file') {
+                    return $options[$key]['option_value'];
+                }
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+        return null;
     }
 
     /**

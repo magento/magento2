@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Quote\Model\Quote\Item\Option;
 use Magento\Sales\Controller\Download\DownloadCustomOption;
 use Magento\Sales\Model\Download;
+use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -83,6 +84,11 @@ class DownloadCustomOptionTest extends TestCase
     protected $downloadMock;
 
     /**
+     * @var CollectionFactory|MockObject
+     */
+    protected $itemCollectionFactoryMock;
+
+    /**
      * @var DownloadCustomOption|MockObject
      */
     protected $objectMock;
@@ -107,6 +113,11 @@ class DownloadCustomOptionTest extends TestCase
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['serialize', 'unserialize'])
+            ->getMock();
+
+        $this->itemCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
             ->getMock();
 
         $requestMock = $this->getMockBuilder(Http::class)
@@ -160,7 +171,8 @@ class DownloadCustomOptionTest extends TestCase
                     'resultForwardFactory' => $resultForwardFactoryMock,
                     'download'             => $this->downloadMock,
                     'unserialize'          => $this->createMock(Unserialize::class),
-                    'serializer'           => $this->serializerMock
+                    'serializer'           => $this->serializerMock,
+                    'itemCollectionFactory' => $this->itemCollectionFactoryMock
                 ]
             )
             ->getMock();
