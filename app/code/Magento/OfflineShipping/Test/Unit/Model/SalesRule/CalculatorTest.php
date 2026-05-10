@@ -14,6 +14,7 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\OfflineShipping\Model\SalesRule\Calculator;
 use Magento\OfflineShipping\Model\SalesRule\Rule;
 use Magento\Quote\Model\Quote\Address;
@@ -194,18 +195,41 @@ class CalculatorTest extends TestCase
      */
     public function testProcessFreeShippingWithChildren()
     {
+        $shippingMethod = 'flatrate_flatrate';
         $addressMock = $this->createMock(Address::class);
-        $childItem = $this->createMock(Item::class);
+        $childItem = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'setFreeShipping',
+                'setFreeShippingMethod'
+            ]
+        );
         $item = $this->createPartialMockWithReflection(
             Item::class,
-            ['getAddress', '__wakeup', 'getHasChildren', 'isShipSeparately', 'setFreeShippingMethod', 'setFreeShipping']
+            [
+                'getAddress',
+                '__wakeup',
+                'getHasChildren',
+                'getChildren',
+                'isShipSeparately',
+                'setFreeShippingMethod',
+                'setFreeShipping'
+            ]
         );
 
-        $item->expects($this->once())->method('getHasChildren')->willReturn([$childItem]);
+        $addressMock->method('getShippingMethod')->willReturn($shippingMethod);
+
+        $item->expects($this->exactly(2))->method('getHasChildren')->willReturn(true);
+        $item->expects($this->exactly(2))->method('getChildren')->willReturn([$childItem]);
         $item->expects($this->exactly(2))->method('getAddress')->willReturn($addressMock);
-        $item->expects($this->once())->method('isShipSeparately')->willReturn(true);
-        $item->expects($this->exactly(2))->method('setFreeShipping');
-        $item->expects($this->once())->method('setFreeShippingMethod');
+        $item->expects($this->exactly(2))->method('isShipSeparately')->willReturn(true);
+        $item->expects(new MethodInvokedAtIndex(0))->method('setFreeShipping')->with(false);
+        $item->expects(new MethodInvokedAtIndex(1))->method('setFreeShipping')->with(true);
+        $item->expects($this->once())->method('setFreeShippingMethod')->with($shippingMethod);
+        
+        $childItem->expects(new MethodInvokedAtIndex(0))->method('setFreeShipping')->with(false);
+        $childItem->expects(new MethodInvokedAtIndex(1))->method('setFreeShipping')->with(true);
+        $childItem->expects($this->once())->method('setFreeShippingMethod')->with($shippingMethod);
 
         $actions = $this->createPartialMockWithReflection(\Magento\Rule\Model\Action\Collection::class, ['validate']);
         $actions->expects($this->once())->method('validate')->willReturn(true);
