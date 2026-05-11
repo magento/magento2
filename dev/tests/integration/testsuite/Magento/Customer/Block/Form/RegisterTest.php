@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Block\Form;
 
@@ -209,8 +209,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $code = 'customer_create_form_submit';
         $buttonLock = $this->getMockBuilder(\Magento\ReCaptchaUi\Model\ButtonLock::class)
             ->disableOriginalConstructor()
-            ->disableAutoload()
-            ->setMethods(['isDisabled', 'getCode'])
+            ->onlyMethods(['isDisabled', 'getCode'])
             ->getMock();
         $buttonLock->expects($this->any())->method('getCode')->willReturn($code);
         $buttonLock->expects($this->any())->method('isDisabled')->willReturn(false);

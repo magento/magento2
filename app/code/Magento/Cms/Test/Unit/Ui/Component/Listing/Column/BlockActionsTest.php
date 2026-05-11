@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class BlockActionsTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $context = $this->getMockForAbstractClass(ContextInterface::class);
+        $context = $this->createMock(ContextInterface::class);
 
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
@@ -52,11 +52,11 @@ class BlockActionsTest extends TestCase
             ->method('getProcessor')
             ->willReturn($processor);
 
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
-            ->setMethods(['escapeHtmlAttr'])
+            ->onlyMethods(['escapeHtmlAttr'])
             ->getMock();
 
         $this->blockActions = $objectManager->getObject(

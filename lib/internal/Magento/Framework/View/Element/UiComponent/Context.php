@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Element\UiComponent;
 
@@ -127,9 +127,9 @@ class Context implements ContextInterface
         UrlInterface $urlBuilder,
         Processor $processor,
         UiComponentFactory $uiComponentFactory,
-        DataProviderInterface $dataProvider = null,
+        ?DataProviderInterface $dataProvider = null,
         $namespace = null,
-        AuthorizationInterface $authorization = null,
+        ?AuthorizationInterface $authorization = null,
         ?Sanitizer $sanitizer = null
     ) {
         $this->namespace = $namespace;

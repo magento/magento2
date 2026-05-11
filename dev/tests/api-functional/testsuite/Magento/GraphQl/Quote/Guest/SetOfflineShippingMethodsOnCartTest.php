@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Quote\Guest;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting offline shipping methods on cart
@@ -46,8 +47,8 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodTitle
      * @param array $amount
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @dataProvider offlineShippingMethodDataProvider
      */
+    #[DataProvider('offlineShippingMethodDataProvider')]
     public function testSetOfflineShippingMethod(
         string $carrierCode,
         string $methodCode,
@@ -91,7 +92,7 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * @return array
      */
-    public function offlineShippingMethodDataProvider(): array
+    public static function offlineShippingMethodDataProvider(): array
     {
         return [
             'flatrate_flatrate' => [
@@ -131,9 +132,9 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"

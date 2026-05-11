@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,9 +10,9 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\MessageValidator;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @covers Magento\Framework\MessageQueue\MessageValidator
@@ -28,17 +28,10 @@ class MessageValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-
-        $this->model = $objectManager->getObject(MessageValidator::class);
         $this->communicationConfigMock = $this->getMockBuilder(CommunicationConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager->setBackwardCompatibleProperty(
-            $this->model,
-            'communicationConfig',
-            $this->communicationConfigMock
-        );
+        $this->model = new MessageValidator($this->communicationConfigMock);
     }
 
     public function testValidateInvalidTopic()
@@ -53,10 +46,7 @@ class MessageValidatorTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigDataObjectType()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
 
         $this->model->validate('customer.created', $object, true);
     }
@@ -66,10 +56,7 @@ class MessageValidatorTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigDataMethodType()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
 
         $this->model->validate('customer.created', [$object, 'password', 'redirect'], true);
     }
@@ -139,11 +126,21 @@ class MessageValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getQueueConfigRequestType
-     */
+    /**     */
+    #[DataProvider('getQueueConfigRequestType')]
     public function testInvalidMessageType($requestType, $message, $expectedResult = null)
     {
+        if (is_array($message)) {
+            foreach ($message as &$value) {
+                if (is_callable($value)) {
+                    $value = $value($this);
+                }
+            }
+        } else {
+            if (is_callable($message)) {
+                $message = $message($this);
+            }
+        }
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn($requestType);
         if ($expectedResult) {
             $this->expectException('InvalidArgumentException');
@@ -155,16 +152,10 @@ class MessageValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function getQueueConfigRequestType()
+    public static function getQueueConfigRequestType()
     {
-        $customerMock = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $customerMockTwo = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $customerMock = static fn (self $testCase) => $testCase->getCustomerInterfaceMock();
+        $customerMockTwo = static fn (self $testCase) => $testCase->getCustomerInterfaceMock();
 
         return [
             [
@@ -196,6 +187,14 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
                     CommunicationConfig::TOPIC_REQUEST => 'string[]'
                 ],
+                [10 => 'string1', 20 => 'string2'],
+                null
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
                 [],
                 null
             ],
@@ -206,6 +205,14 @@ class MessageValidatorTest extends TestCase
                 ],
                 'single string',
                 'Data in topic "topic" must be of type "string[]". "string" given.'
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'string[]'
+                ],
+                ['string1', 2],
+                'Data in topic "topic" must be of type "string". "int" given.'
             ],
             [
                 [
@@ -229,6 +236,14 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
                 ],
                 [$customerMock, $customerMockTwo],
+                null
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
+                [10 => $customerMock, 20 => $customerMockTwo],
                 null
             ],
             [
@@ -261,8 +276,21 @@ class MessageValidatorTest extends TestCase
                     CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
                 ],
                 [1=>23, 3=>545],
-                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface[]". '
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface".'
+            ],
+            [
+                [
+                    CommunicationConfig::TOPIC_REQUEST_TYPE => CommunicationConfig::TOPIC_REQUEST_TYPE_CLASS,
+                    CommunicationConfig::TOPIC_REQUEST => 'Magento\Customer\Api\Data\CustomerInterface[]'
+                ],
+                [$customerMock, 545],
+                'Data in topic "topic" must be of type "Magento\Customer\Api\Data\CustomerInterface".'
             ],
         ];
+    }
+
+    public function getCustomerInterfaceMock()
+    {
+        return $this->createMock(CustomerInterface::class);
     }
 }

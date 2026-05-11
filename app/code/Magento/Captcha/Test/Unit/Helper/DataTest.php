@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,8 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -91,7 +93,9 @@ class DataTest extends TestCase
                 $this->createMock(SessionManager::class),
                 $this->createMock(Data::class),
                 $this->createPartialMock(LogFactory::class, ['create']),
-                'user_create'
+                'user_create',
+                $this->createMock(Random::class),
+                $this->createMock(UserContextInterface::class)
             )
         );
 

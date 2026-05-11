@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ImportExport\Test\Unit\Model;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TranslateInterface;
 use Magento\ImportExport\Model\LocaleEmulator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class LocaleEmulatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var TranslateInterface|MockObject
      */
@@ -48,10 +51,10 @@ class LocaleEmulatorTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->translate = $this->getMockForAbstractClass(TranslateInterface::class);
-        $this->phraseRenderer = $this->getMockForAbstractClass(RendererInterface::class);
-        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
-        $this->defaultLocaleResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->translate = $this->createMock(TranslateInterface::class);
+        $this->phraseRenderer = $this->createMock(RendererInterface::class);
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
+        $this->defaultLocaleResolver = $this->createMock(ResolverInterface::class);
         $this->model = new LocaleEmulator(
             $this->translate,
             $this->phraseRenderer,
@@ -65,9 +68,7 @@ class LocaleEmulatorTest extends TestCase
         $initialLocale = 'en_US';
         $initialPhraseRenderer = Phrase::getRenderer();
         $locale = 'fr_FR';
-        $mock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['assertPhraseRenderer'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(\stdClass::class, ['assertPhraseRenderer']);
         $mock->expects($this->once())
             ->method('assertPhraseRenderer')
             ->willReturnCallback(
@@ -80,10 +81,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->assertPhraseRenderer(...), $locale);
@@ -95,9 +104,7 @@ class LocaleEmulatorTest extends TestCase
         $initialLocale = 'en_US';
         $initialPhraseRenderer = Phrase::getRenderer();
         $locale = 'fr_FR';
-        $mock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['assertPhraseRenderer'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(\stdClass::class, ['assertPhraseRenderer']);
         $mock->expects($this->once())
             ->method('assertPhraseRenderer')
             ->willReturnCallback(
@@ -111,10 +118,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->assertPhraseRenderer(...));
@@ -128,9 +143,7 @@ class LocaleEmulatorTest extends TestCase
         $initialLocale = 'en_US';
         $initialPhraseRenderer = Phrase::getRenderer();
         $locale = 'fr_FR';
-        $mock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['callbackThatThrowsException'])
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(\stdClass::class, ['callbackThatThrowsException']);
         $mock->expects($this->once())
             ->method('callbackThatThrowsException')
             ->willThrowException($exception);
@@ -142,10 +155,18 @@ class LocaleEmulatorTest extends TestCase
             ->willReturn($initialLocale);
         $this->localeResolver->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('setLocale')
-            ->withConsecutive([$locale], [$initialLocale]);
+            ->willReturnCallback(function ($arg1) use ($locale, $initialLocale) {
+                if ($arg1 == $locale || $arg1 == $initialLocale) {
+                    return null;
+                }
+            });
         $this->translate->expects($this->exactly(2))
             ->method('loadData');
         $this->model->emulate($mock->callbackThatThrowsException(...));

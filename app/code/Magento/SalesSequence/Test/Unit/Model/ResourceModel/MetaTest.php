@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\SalesSequence\Model\Meta as SequenceMeta;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\Profile;
 use Magento\SalesSequence\Model\ResourceModel\Meta;
@@ -35,7 +36,7 @@ class MetaTest extends TestCase
     private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta|MockObject
+     * @var SequenceMeta|MockObject
      */
     private $meta;
 
@@ -69,15 +70,7 @@ class MetaTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['query']
-        );
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->dbContext = $this->createMock(Context::class);
         $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
         $this->resourceProfile = $this->createPartialMock(
@@ -90,7 +83,7 @@ class MetaTest extends TestCase
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
         $this->select = $this->createMock(Select::class);
-        $this->meta = $this->createMock(\Magento\SalesSequence\Model\Meta::class);
+        $this->meta = $this->createMock(SequenceMeta::class);
         $this->profile = $this->createMock(Profile::class);
         $this->resource = new Meta(
             $this->dbContext,
@@ -123,8 +116,11 @@ class MetaTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['entity_type = :entity_type AND store_id = :store_id'])
-            ->willReturn($this->select);
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 === 'entity_type = :entity_type AND store_id = :store_id') {
+                    return $this->select;
+                }
+            });
         $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['entity_type' => $entityType, 'store_id' => $storeId])
@@ -133,8 +129,13 @@ class MetaTest extends TestCase
 
         $this->select
             ->method('from')
-            ->withConsecutive([$metaTableName, [$metaIdFieldName]], ['sequence_meta', '*', null])
-            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) use ($metaTableName, $metaIdFieldName) {
+                if ($arg1 == $metaTableName && $arg2 == [$metaIdFieldName]) {
+                    return $this->select;
+                } elseif ($arg1 == 'sequence_meta' && $arg2 == '*' && $arg3 === null) {
+                    return $this->select;
+                }
+            });
 
         // Check Save with Active Profile
         $this->connectionMock->expects($this->any())

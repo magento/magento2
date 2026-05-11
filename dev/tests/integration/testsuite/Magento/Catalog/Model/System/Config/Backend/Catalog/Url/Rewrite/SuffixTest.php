@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\Storage\DbStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -90,13 +91,12 @@ class SuffixTest extends TestCase
     }
 
     /**
-     * @dataProvider wrongValuesProvider
-     *
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
      * @param array $data
      * @return void
      */
+    #[DataProvider('wrongValuesProvider')]
     public function testSaveWithWrongData(array $data): void
     {
         $productId = (int)$this->productRepository->get('simple2')->getId();
@@ -115,7 +115,7 @@ class SuffixTest extends TestCase
     /**
      * @return array
      */
-    public function wrongValuesProvider(): array
+    public static function wrongValuesProvider(): array
     {
         return [
             'with_wrong_path' => [

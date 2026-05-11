@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Code\NameBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Backend\Block\System\Store\Edit;
@@ -26,9 +27,8 @@ class NameBuilderTest extends TestCase
     /**
      * @param array $parts
      * @param string $expected
-     *
-     * @dataProvider buildClassNameDataProvider
-     */
+     *     */
+    #[DataProvider('buildClassNameDataProvider')]
     public function testBuildClassName($parts, $expected)
     {
         $this->assertEquals($expected, $this->nameBuilder->buildClassName($parts));
@@ -37,7 +37,7 @@ class NameBuilderTest extends TestCase
     /**
      * @return array
      */
-    public function buildClassNameDataProvider()
+    public static function buildClassNameDataProvider()
     {
         return [
             [['Checkout', 'Controller', 'Index'], 'Checkout\Controller\Index'],

@@ -1,20 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Controller;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Config\Model\ResourceModel\Config as CoreConfig;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Math\Random;
@@ -24,6 +28,10 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -105,6 +113,32 @@ class ForgotPasswordPostTest extends AbstractController
         $this->dateTimeFactory = $this->objectManager->get(DateTimeFactory::class);
         $this->customerResource = $this->objectManager->get(CustomerResource::class);
         $this->random = $this->objectManager->get(Random::class);
+    }
+
+    /**
+     * Guest quote is preserved after submitting forgot password (session is not destroyed).
+     *
+     * @return void
+     */
+    #[
+        Config('customer/password/limit_password_reset_requests_method', 0, ScopeInterface::SCOPE_STORE),
+        Config('customer/captcha/enable', 0, ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testGuestQuotePreservedAfterForgotPasswordPost(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $checkoutSession = $this->objectManager->get(CheckoutSession::class);
+        $quoteBefore = $checkoutSession->getQuote();
+        $quoteIdBefore = $quoteBefore->getId();
+
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['email' => $customer->getEmail()]);
+        $this->dispatch('customer/account/forgotPasswordPost');
+
+        $this->assertRedirect($this->stringContains('customer/account/'));
+        $quoteAfter = $checkoutSession->getQuote();
+        $this->assertEquals($quoteIdBefore, $quoteAfter->getId());
     }
 
     /**
@@ -231,11 +265,11 @@ class ForgotPasswordPostTest extends AbstractController
             $this->dispatch('customer/account/forgotPasswordPost');
             $this->assertRedirect($this->stringContains('customer/account/'));
 
-            $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+            $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
 
             $this->assertStringContainsString(
                 'There was recently a request to change the password for your account',
-                $sendMessage
+                quoted_printable_decode($sendMessage)
             );
 
             $this->assertSessionMessages(
@@ -471,7 +505,9 @@ class ForgotPasswordPostTest extends AbstractController
         );
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = quoted_printable_decode(
+            $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString()
+        );
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage
@@ -489,7 +525,8 @@ class ForgotPasswordPostTest extends AbstractController
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    '//a[contains(@href, \'customer/account/createPassword/?id=%1$d&token=%2$s\')]',
+                    '//a[contains(@href, \'customer/account/createPassword/?email=%1$s&id=%2$d&token=%3$s\')]',
+                    urlencode($customerData->getEmail()),
                     $customerId,
                     $token
                 ),
@@ -528,7 +565,6 @@ class ForgotPasswordPostTest extends AbstractController
     /**
      * Test to enable password change frequency limit for customer
      *
-     * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -547,16 +583,16 @@ class ForgotPasswordPostTest extends AbstractController
         }
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
-            $sendMessage
+            quoted_printable_decode($sendMessage)
         );
 
         // Updating the limit to greater than 0
         $this->resourceConfig->saveConfig(
             'customer/password/min_time_between_password_reset_requests',
-            2,
+            1,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
             0
         );
@@ -577,18 +613,18 @@ class ForgotPasswordPostTest extends AbstractController
             MessageInterface::TYPE_ERROR
         );
 
-        // Wait for 2 minutes before resetting password
-        sleep(120);
+        // Wait for 1 minute before resetting password
+        sleep(60);
 
         // Clicking on the forgot password link
         $this->getRequest()->setPostValue('email', $email);
         $this->dispatch('customer/account/forgotPasswordPost');
 
         // Asserting mail received after forgot password
-        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->bodyToString();
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
-            $sendMessage
+            quoted_printable_decode($sendMessage)
         );
     }
 }

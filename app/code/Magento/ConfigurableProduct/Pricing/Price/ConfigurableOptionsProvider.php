@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
@@ -22,7 +22,7 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $configurable;
 
     /**
-     * @var ProductInterface[]
+     * @var ProductInterface[]|null
      */
     private $products;
 
@@ -63,6 +63,6 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
      */
     public function _resetState(): void
     {
-        $this->products = [];
+        $this->products = null;
     }
 }

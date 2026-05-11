@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\TestFramework\TestCase\AbstractController;
 use Laminas\Stdlib\Parameters;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases for catalog advanced search using search engine.
@@ -40,11 +41,11 @@ class ResultTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider searchStringDataProvider
      *
      * @param array $searchParams
      * @return void
      */
+    #[DataProvider('searchStringDataProvider')]
     public function testExecute(array $searchParams): void
     {
         if ('' !== $searchParams['test_searchable_attribute']) {
@@ -141,11 +142,11 @@ class ResultTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider searchParamsInArrayDataProvider
      *
      * @param array $searchParams
      * @return void
      */
+    #[DataProvider('searchParamsInArrayDataProvider')]
     public function testExecuteWithArrayInParam(array $searchParams): void
     {
         $this->getRequest()->setQuery(
@@ -171,12 +172,12 @@ class ResultTest extends AbstractController
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
-     * @dataProvider testDataForAttributesCombination
      *
      * @param array $searchParams
      * @param bool $isProductShown
      * @return void
      */
+    #[DataProvider('searchDataForAttributesCombination')]
     public function testExecuteForAttributesCombination(array $searchParams, bool $isProductShown): void
     {
         $this->getRequest()->setQuery(
@@ -206,7 +207,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function searchParamsInArrayDataProvider(): array
+    public static function searchParamsInArrayDataProvider(): array
     {
         return [
             'search_with_from_param_is_array' => [
@@ -277,7 +278,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function searchStringDataProvider(): array
+    public static function searchStringDataProvider(): array
     {
         return [
             'search_product_by_name' => [
@@ -381,7 +382,7 @@ class ResultTest extends AbstractController
      *
      * @return array
      */
-    public function testDataForAttributesCombination(): array
+    public static function searchDataForAttributesCombination(): array
     {
         return [
             'search_product_by_name_and_price' => [

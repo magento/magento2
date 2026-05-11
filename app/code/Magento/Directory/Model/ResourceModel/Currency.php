@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model\ResourceModel;
@@ -241,6 +241,6 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impl
      */
     public function _resetState(): void
     {
-        self::$_rateCache = [];
+        self::$_rateCache = null;
     }
 }

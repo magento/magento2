@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +22,7 @@ use Magento\Framework\Validator\RegexFactory;
 use Magento\PageCache\Controller\Block;
 use Magento\PageCache\Controller\Block\Esi;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -80,9 +80,7 @@ class EsiTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
-            LayoutCacheKeyInterface::class
-        );
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
 
         $contextMock =
             $this->getMockBuilder(Context::class)
@@ -102,12 +100,12 @@ class EsiTest extends TestCase
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
@@ -130,10 +128,10 @@ class EsiTest extends TestCase
     }
 
     /**
-     * @dataProvider executeDataProvider
      * @param string $blockClass
      * @param bool $shouldSetHeaders
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($blockClass, $shouldSetHeaders)
     {
         $block = 'block';
@@ -189,7 +187,7 @@ class EsiTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [StubBlock::class, true],

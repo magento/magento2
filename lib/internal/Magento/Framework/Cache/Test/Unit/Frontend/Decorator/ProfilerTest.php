@@ -1,18 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Profiler;
 use Magento\Framework\Profiler\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class ProfilerTest extends TestCase
 {
@@ -29,13 +33,13 @@ class ProfilerTest extends TestCase
     /**
      * @param string $method
      * @param array $params
-     * @param \Zend_Cache_Backend $cacheBackend
-     * @param \Zend_Cache_Core $cacheFrontend
+     * @param mixed $cacheBackend
+     * @param \Closure $cacheFrontend
      * @param string $expectedProfileId
      * @param array $expectedProfilerTags
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+    #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod(
         $method,
         $params,
@@ -45,37 +49,44 @@ class ProfilerTest extends TestCase
         $expectedProfilerTags,
         $expectedResult
     ) {
+        $cacheFrontend = $cacheFrontend($this);
         // Cache frontend setup
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
         $frontendMock->expects($this->any())->method('getBackend')->willReturn($cacheBackend);
 
         $frontendMock->expects($this->any())->method('getLowLevelFrontend')->willReturn($cacheFrontend);
 
         // Profiler setup
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->once())->method('start')->with($expectedProfileId, $expectedProfilerTags);
         $driver->expects($this->once())->method('stop')->with($expectedProfileId);
         Profiler::add($driver);
 
         // Test
-        $object = new \Magento\Framework\Cache\Frontend\Decorator\Profiler($frontendMock, ['Zend_Cache_Backend_']);
+        $object = new \Magento\Framework\Cache\Frontend\Decorator\Profiler($frontendMock, []);
         $helper = new ProxyTesting();
         $result = $helper->invokeWithExpectations($object, $frontendMock, $method, $params, $expectedResult);
         $this->assertSame($expectedResult, $result);
     }
 
-    /**
-     * @return array
-     */
-    public function proxyMethodDataProvider()
+    protected function getMockForZendCache()
     {
-        $backend = new \Zend_Cache_Backend_BlackHole();
-        $adaptee = $this->createMock(\Zend_Cache_Core::class);
+        $adaptee = $this->createMock(\Psr\Cache\CacheItemPoolInterface::class);
         $frontendFactory = function () use ($adaptee) {
             return $adaptee;
         };
-        $lowLevelFrontend = new Zend($frontendFactory);
+        $lowLevelFrontend = new Symfony($frontendFactory);
+        return $lowLevelFrontend;
+    }
+
+    /**
+     * @return array
+     */
+    public static function proxyMethodDataProvider()
+    {
+        $backend = new NullAdapter();
+        $lowLevelFrontend = static fn (self $testCase) => $testCase->getMockForZendCache();
 
         return [
             [
@@ -87,8 +98,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:test',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 111,
             ],
@@ -101,8 +112,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:load',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 '111'
             ],
@@ -115,8 +126,8 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:save',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ],
@@ -129,22 +140,22 @@ class ProfilerTest extends TestCase
                 [
                     'group' => 'cache',
                     'operation' => 'cache:remove',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ],
             [
                 'clean',
-                [\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']],
+                [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag']],
                 $backend,
                 $lowLevelFrontend,
                 'cache_clean',
                 [
                     'group' => 'cache',
                     'operation' => 'cache:clean',
-                    'frontend_type' => Zend::class,
-                    'backend_type' => 'BlackHole'
+                    'frontend_type' => Symfony::class,
+                    'backend_type' => NullAdapter::class
                 ],
                 true
             ]

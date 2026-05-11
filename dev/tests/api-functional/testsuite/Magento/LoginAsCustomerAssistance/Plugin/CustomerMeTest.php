@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,15 +18,16 @@ use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
 use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetLoginAsCustomerAssistanceAllowed;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Api test for @see \Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::afterSave.
  */
 class CustomerMeTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerCustomerRepositoryV1';
-    const RESOURCE_PATH = '/V1/customers/me';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'customerCustomerRepositoryV1';
+    public const RESOURCE_PATH = '/V1/customers/me';
 
     /**
      * @var DataObjectProcessor
@@ -70,12 +71,11 @@ class CustomerMeTest extends WebapiAbstract
      * Check that 'assistance_allowed' set as expected.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @dataProvider assistanceStatesDataProvider
-     *
      * @param int $state
      * @param bool $expected
      * @return void
      */
+    #[DataProvider('assistanceStatesDataProvider')]
     public function testUpdateSelf(int $state, bool $expected): void
     {
         $customerId = (int)$this->customerRepository->get('customer@example.com')->getId();
@@ -145,7 +145,7 @@ class CustomerMeTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function assistanceStatesDataProvider(): array
+    public static function assistanceStatesDataProvider(): array
     {
         return [
             'Assistance Allowed' => [IsAssistanceEnabledInterface::ALLOWED, true],

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Helper;
 
@@ -86,7 +86,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      * @var CustomerMetadataInterface
      *
      * @deprecated 101.0.0
-     * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     protected $_customerMetadataService;
 
@@ -211,7 +211,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      */
     public function getStreetLines($store = null)
     {
-        $websiteId = $this->_storeManager->getStore($store)->getWebsiteId();
+        $websiteId = $this->_storeManager->getStore($store)->getWebsiteId() ?? '';
         if (!isset($this->_streetLines[$websiteId])) {
             $attribute = $this->_addressMetadataService->getAttributeMetadata('street');
 
@@ -429,7 +429,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     public function _resetState(): void
     {
         $this->_config = [];
-        $this->_attributes = [];
+        $this->_attributes = null;
         $this->_streetLines = [];
     }
 }

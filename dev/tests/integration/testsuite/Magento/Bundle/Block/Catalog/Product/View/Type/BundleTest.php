@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -88,12 +89,11 @@ class BundleTest extends TestCase
     }
 
     /**
-     * @dataProvider isSalableForStockStatusProvider
-     *
      * @param bool $isSalable
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('isSalableForStockStatusProvider')]
     public function testStockStatusView(bool $isSalable, string $expectedValue): void
     {
         $product = $this->productRepository->get('bundle-product');
@@ -106,27 +106,26 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function isSalableForStockStatusProvider(): array
+    public static function isSalableForStockStatusProvider(): array
     {
         return [
             'is_salable' => [
-                'is_salable' => true,
-                'expected_value' => 'In stock',
+                'isSalable' => true,
+                'expectedValue' => 'In stock',
             ],
             'is_not_salable' => [
-                'is_salable' => false,
-                'expected_value' => 'Out of stock',
+                'isSalable' => false,
+                'expectedValue' => 'Out of stock',
             ],
         ];
     }
 
     /**
-     * @dataProvider isSalableForCustomizeButtonProvider
-     *
      * @param bool $isSalable
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('isSalableForCustomizeButtonProvider')]
     public function testCustomizeButton(bool $isSalable, string $expectedValue): void
     {
         $product = $this->productRepository->get('bundle-product');
@@ -139,16 +138,16 @@ class BundleTest extends TestCase
     /**
      * @return array
      */
-    public function isSalableForCustomizeButtonProvider(): array
+    public static function isSalableForCustomizeButtonProvider(): array
     {
         return [
             'is_salable' => [
-                'is_salable' => true,
-                'expected_value' => 'Customize and Add to Cart',
+                'isSalable' => true,
+                'expectedValue' => 'Customize and Add to Cart',
             ],
             'is_not_salable' => [
-                'is_salable' => false,
-                'expected_value' => '',
+                'isSalable' => false,
+                'expectedValue' => '',
             ],
         ];
     }

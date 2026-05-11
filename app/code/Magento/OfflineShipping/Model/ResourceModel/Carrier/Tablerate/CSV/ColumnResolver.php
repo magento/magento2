@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
@@ -22,7 +22,6 @@ class ColumnResolver
         self::COLUMN_COUNTRY => 0,
         self::COLUMN_REGION => 1,
         self::COLUMN_ZIP => 2,
-        self::COLUMN_WEIGHT => 3, // @phpstan-ignore-line
         self::COLUMN_WEIGHT_DESTINATION => 3,
         self::COLUMN_PRICE => 4,
     ];

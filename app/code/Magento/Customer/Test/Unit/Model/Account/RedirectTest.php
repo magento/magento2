@@ -1,10 +1,9 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Unit test for Magento\Customer\Test\Unit\Model\Account\Redirect
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Account;
 
@@ -25,14 +24,18 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\FrameworkMockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RedirectTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Redirect
      */
@@ -108,44 +111,41 @@ class RedirectTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getLastCustomerId',
-                    'isLoggedIn',
-                    'getId',
-                    'setLastCustomerId',
-                    'unsBeforeAuthUrl',
-                    'getBeforeAuthUrl',
-                    'setBeforeAuthUrl',
-                    'getAfterAuthUrl',
-                    'setAfterAuthUrl',
-                    'getBeforeRequestParams',
-                    'getBeforeModuleName',
-                    'getBeforeControllerName',
-                    'getBeforeAction',
-                ]
-            )
-            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->customerSession = $this->createPartialMockWithReflection(
+            Session::class,
+            [
+                'getLastCustomerId',
+                'setLastCustomerId',
+                'unsBeforeAuthUrl',
+                'getBeforeAuthUrl',
+                'getBeforeRequestParams',
+                'getAfterAuthUrl',
+                'getBeforeModuleName',
+                'getBeforeControllerName',
+                'getBeforeAction',
+                'isLoggedIn',
+                'getId',
+                'setBeforeAuthUrl',
+                'setAfterAuthUrl'
+            ]
+        );
 
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->store = $this->createMock(Store::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->urlDecoder = $this->getMockForAbstractClass(DecoderInterface::class);
-        $this->customerUrl = $this->getMockBuilder(\Magento\Customer\Model\Url::class)
-            ->setMethods(
-                [
-                    'DashboardUrl',
-                    'getAccountUrl',
-                    'getLoginUrl',
-                    'getLogoutUrl',
-                    'getDashboardUrl'
-                ]
-            )->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->url = $this->createMock(UrlInterface::class);
+        $this->urlDecoder = $this->createMock(DecoderInterface::class);
+        $this->customerUrl = $this->createPartialMockWithReflection(
+            \Magento\Customer\Model\Url::class,
+            [
+                'DashboardUrl',
+                'getAccountUrl',
+                'getLoginUrl',
+                'getLogoutUrl',
+                'getDashboardUrl'
+            ]
+        );
 
         $this->resultRedirect = $this->createMock(\Magento\Framework\Controller\Result\Redirect::class);
         $this->resultForward = $this->createMock(Forward::class);
@@ -185,9 +185,9 @@ class RedirectTest extends TestCase
      * @param string $dashboardUrl
      * @param bool $customerLoggedIn
      * @param bool $redirectToDashboard
-     * @dataProvider getRedirectDataProvider
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('getRedirectDataProvider')]
     public function testGetRedirect(
         $customerId,
         $lastCustomerId,
@@ -263,7 +263,7 @@ class RedirectTest extends TestCase
      *
      * @return array
      */
-    public function getRedirectDataProvider()
+    public static function getRedirectDataProvider()
     {
         /**
          * Customer ID
@@ -293,18 +293,18 @@ class RedirectTest extends TestCase
             [1, 2, 'referer', 'base', 'defined', '', 'account', 'login', 'logout', 'dashboard', true, true],
             // Logout, Without Redirect to Dashboard
             [
-                'customer_id' => 1,
-                'last_customer_id' => 2,
+                'customerId' => 1,
+                'lastCustomerId' => 2,
                 'referer' => 'http://base.com/customer/account/logoutSuccess/',
-                'base_url' => 'http://base.com/',
-                'before_auth_url' => 'http://base.com/',
-                'after_auth_url' => 'http://base.com/customer/account/',
-                'account_url' => 'account',
-                'login_url' => 'login',
-                'logout_url' => 'logout',
-                'dashboard_url' => 'dashboard',
-                'is_customer_logged_id_flag' => true,
-                'redirect_to_dashboard_flag' => false,
+                'baseUrl' => 'http://base.com/',
+                'beforeAuthUrl' => 'http://base.com/',
+                'afterAuthUrl' => 'http://base.com/customer/account/',
+                'accountUrl' => 'account',
+                'loginUrl' => 'login',
+                'logoutUrl' => 'logout',
+                'dashboardUrl' => 'dashboard',
+                'customerLoggedIn' => true,
+                'redirectToDashboard' => false,
             ],
         ];
     }
@@ -371,7 +371,7 @@ class RedirectTest extends TestCase
      */
     public function testSetRedirectCookie(): void
     {
-        $coockieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $coockieManagerMock = $this->createMock(CookieManagerInterface::class);
         $publicMetadataMock = $this->createMock(PublicCookieMetadata::class);
         $routeMock = 'route';
 
@@ -419,7 +419,7 @@ class RedirectTest extends TestCase
      */
     public function testClearRedirectCookie(): void
     {
-        $coockieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $coockieManagerMock = $this->createMock(CookieManagerInterface::class);
         $publicMetadataMock = $this->createMock(PublicCookieMetadata::class);
 
         $this->model->setCookieManager($coockieManagerMock);

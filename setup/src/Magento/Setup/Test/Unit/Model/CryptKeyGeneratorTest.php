@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,22 +40,9 @@ class CryptKeyGeneratorTest extends TestCase
     {
         $this->randomMock
             ->expects($this->once())
-            ->method('getRandomString')
+            ->method('getRandomBytes')
             ->willReturn('');
 
         $this->cryptKeyGenerator->generate();
-    }
-
-    public function testReturnsMd5OfRandomString()
-    {
-        $expected = 'fdb7594e77f1ad5fbb8e6c917b6012ce'; // == 'magento2'
-
-        $this->randomMock
-            ->method('getRandomString')
-            ->willReturn('magento2');
-
-        $actual = $this->cryptKeyGenerator->generate();
-
-        $this->assertEquals($expected, $actual);
     }
 }

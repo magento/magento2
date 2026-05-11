@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
@@ -33,18 +34,21 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class AsyncBulkScheduleTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const REST_RESOURCE_PATH = '/V1/products';
-    const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/products';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const SERVICE_NAME = 'catalogProductRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const REST_RESOURCE_PATH = '/V1/products';
+    public const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/products';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -106,9 +110,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productsArrayCreationProvider
-     */
+    /** */
+    #[DataProvider('productsArrayCreationProvider')]
     public function testAsyncScheduleBulkMultipleEntities($products)
     {
         $this->_markTestAsRestOnly();
@@ -139,9 +142,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @dataProvider productSingleCreationProvider
-     */
+    /** */
+    #[DataProvider('productSingleCreationProvider')]
     public function testAsyncScheduleBulkSingleEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -168,9 +170,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @dataProvider wrongProductCreationProvider
-     */
+    /** */
+    #[DataProvider('wrongProductCreationProvider')]
     public function testAsyncScheduleBulkWrongEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -184,7 +185,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $response = $this->saveProductAsync($products);
         } catch (\Exception $e) {
-            $this->assertEquals(500, $e->getCode());
+            $this->assertEquals(400, $e->getCode());
         }
         $this->assertNull($response);
         $this->assertEquals(0, $this->checkProductsCreation());
@@ -192,9 +193,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
     /**
      * @param string $sku
-     * @param string|null $storeCode
-     * @dataProvider productGetDataProvider
-     */
+     * @param string|null $storeCode */
+    #[DataProvider('productGetDataProvider')]
     public function testGETRequestToAsyncBulk($sku, $storeCode = null)
     {
         $this->expectException(\Exception::class);
@@ -260,11 +260,11 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productsArrayCreationProvider()
+    public static function productsArrayCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -294,11 +294,11 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productSingleCreationProvider()
+    public static function productSingleCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -322,18 +322,18 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function wrongProductCreationProvider()
+    public static function wrongProductCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
 
         $wrongProductBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getWrongProductStructureData(),
+                self::getWrongProductStructureData(),
                 $data
             );
         };
@@ -370,7 +370,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productGetDataProvider()
+    public static function productGetDataProvider()
     {
         return [
             ['psku-test-1', null],
@@ -383,7 +383,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
@@ -408,7 +408,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getWrongProductStructureData($productData = [])
+    private static function getWrongProductStructureData($productData = [])
     {
         return [
             ProductInterface::SKU => isset($productData[ProductInterface::SKU])

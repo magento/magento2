@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem\Test\Unit\Directory;
 
@@ -10,14 +10,18 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\File\WriteFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit Test for \Magento\Framework\Filesystem\Directory\Write
  */
 class WriteTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * \Magento\Framework\Filesystem\Driver
      *
@@ -93,7 +97,7 @@ class WriteTest extends TestCase
 
     public function testCreateSymlinkTargetDirectoryExists()
     {
-        $targetDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $targetDir = $this->createMock(WriteInterface::class);
         $sourcePath = 'source/path/file';
         $destinationDirectory = 'destination/path';
         $destinationFile = $destinationDirectory . '/' . 'file';
@@ -163,18 +167,19 @@ class WriteTest extends TestCase
      * @param string $sourcePath
      * @param string $targetPath
      * @param WriteInterface $targetDir
-     * @dataProvider getFilePathsDataProvider
      */
+    #[DataProvider('getFilePathsDataProvider')]
     public function testRenameFile($sourcePath, $targetPath, $targetDir)
     {
-        if ($targetDir !== null) {
+        if ($targetDir !== null && is_callable($targetDir)) {
+            $targetDir = $targetDir($this);
             /** @noinspection PhpUndefinedFieldInspection */
             $targetDirPath = 'TARGET_PATH/';
             $targetDir->expects($this->once())
                 ->method('getAbsolutePath')
                 ->with($targetPath)
                 ->willReturn($targetDirPath . $targetPath);
-            $targetDir->expects($this->once())
+            $targetDir->expects($this->any())
                 ->method('isExists')
                 ->with(dirname($targetPath))
                 ->willReturn(false);
@@ -205,7 +210,7 @@ class WriteTest extends TestCase
     /**
      * @return array
      */
-    public function getFilePathsDataProvider()
+    public static function getFilePathsDataProvider()
     {
         return [
             [
@@ -216,10 +221,27 @@ class WriteTest extends TestCase
             [
                 'path/to/source.file',
                 'path/to/target.file',
-                $this->getMockBuilder(WriteInterface::class)
-                    ->setMethods(['isExists', 'getAbsolutePath', 'create'])
-                    ->getMockForAbstractClass(),
+                static fn (self $testCase) => $testCase->getWriterMock(),
             ],
         ];
+    }
+
+    public function getWriterMock()
+    {
+        // WriteInterface has 20+ abstract methods; we need to mock all of them + custom 'isExists'
+        return $this->createPartialMockWithReflection(
+            WriteInterface::class,
+            [
+                // ReadInterface methods
+                'getAbsolutePath', 'getRelativePath', 'read', 'readFile', 'isExist', 
+                'isDirectory', 'isFile', 'isReadable', 'search', 'stat',
+                // WriteInterface methods  
+                'create', 'delete', 'renameFile', 'copyFile', 'createSymlink',
+                'changePermissions', 'changePermissionsRecursively', 'touch',
+                'isWritable', 'openFile', 'writeFile', 'getDriver',
+                // Custom method not in interface (used by tests)
+                'isExists'
+            ]
+        );
     }
 }

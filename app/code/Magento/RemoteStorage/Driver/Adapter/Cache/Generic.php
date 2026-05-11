@@ -1,20 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver\Adapter\Cache;
 
 use Magento\Framework\App\CacheInterface as MagentoCacheInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\RemoteStorage\Driver\Adapter\PathUtil;
 
 /**
  * Generic cache implementation for filesystem storage.
  */
-class Generic implements CacheInterface
+class Generic implements CacheInterface, ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -49,21 +50,40 @@ class Generic implements CacheInterface
     private $pathUtil;
 
     /**
+     * @var int|null
+     */
+    private ?int $cacheTTL = null;
+
+    /**
      * @param MagentoCacheInterface $cacheAdapter
      * @param SerializerInterface $serializer
      * @param PathUtil $pathUtil
      * @param string $prefix
+     * @param int $cacheTTL
      */
     public function __construct(
         MagentoCacheInterface $cacheAdapter,
         SerializerInterface $serializer,
         PathUtil $pathUtil,
-        $prefix = 'flysystem:'
+        $prefix = 'flysystem:',
+        int $cacheTTL = 0
     ) {
         $this->prefix = $prefix;
         $this->serializer = $serializer;
         $this->cacheAdapter = $cacheAdapter;
         $this->pathUtil = $pathUtil;
+        if ($cacheTTL > 0) {
+            $this->cacheTTL = $cacheTTL;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheData = [];
+        $this->cachePathPurgeQueue = [];
     }
 
     /**
@@ -87,7 +107,8 @@ class Generic implements CacheInterface
             $this->cacheAdapter->save(
                 $this->serializer->serialize([$path => $this->cacheData[$path]]),
                 $this->prefix . $path,
-                [self::CACHE_TAG]
+                [self::CACHE_TAG],
+                $this->cacheTTL
             );
         }
 
@@ -103,7 +124,8 @@ class Generic implements CacheInterface
         $this->cacheAdapter->save(
             $this->serializer->serialize([$path => $this->cacheData[$path]]),
             $this->prefix . $path,
-            [self::CACHE_TAG]
+            [self::CACHE_TAG],
+            $this->cacheTTL
         );
     }
 
@@ -140,7 +162,8 @@ class Generic implements CacheInterface
             $this->cacheAdapter->save(
                 $this->serializer->serialize([$newpath => $this->cacheData[$newpath]]),
                 $this->prefix . $newpath,
-                [self::CACHE_TAG]
+                [self::CACHE_TAG],
+                $this->cacheTTL
             );
             $this->purgeQueue();
         }

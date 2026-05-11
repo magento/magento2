@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Setup\Declaration\Schema\Dto\Columns;
 
@@ -52,9 +52,9 @@ class Timestamp extends Column implements
         Table $table,
         string $default,
         bool $nullable = true,
-        string $onUpdate = null,
-        string $comment = null,
-        string $onCreate = null
+        ?string $onUpdate = null,
+        ?string $comment = null,
+        ?string $onCreate = null
     ) {
         parent::__construct($name, $type, $table, $comment, $onCreate);
         $this->default = $default;

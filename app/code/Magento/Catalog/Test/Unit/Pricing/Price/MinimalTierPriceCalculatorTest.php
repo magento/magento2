@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,12 +53,12 @@ class MinimalTierPriceCalculatorTest extends TestCase
     protected function setUp(): void
     {
         $this->price = $this->createMock(TierPrice::class);
-        $this->priceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
-        $this->saleable = $this->getMockForAbstractClass(SaleableInterface::class);
+        $this->priceInfo = $this->createMock(PriceInfoInterface::class);
+        $this->saleable = $this->createMock(SaleableInterface::class);
 
         $this->objectManager = new ObjectManager($this);
 
-        $this->calculator = $this->getMockForAbstractClass(CalculatorInterface::class);
+        $this->calculator = $this->createMock(CalculatorInterface::class);
         $this->object = $this->objectManager->getObject(
             MinimalTierPriceCalculator::class,
             ['calculator' => $this->calculator]
@@ -73,10 +73,10 @@ class MinimalTierPriceCalculatorTest extends TestCase
         $minPrice = 5;
         $notMinPrice = 10;
 
-        $minAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $minAmount = $this->createMock(AmountInterface::class);
         $minAmount->expects($this->atLeastOnce())->method('getValue')->willReturn($minPrice);
 
-        $notMinAmount = $this->getMockForAbstractClass(AmountInterface::class);
+        $notMinAmount = $this->createMock(AmountInterface::class);
         $notMinAmount->expects($this->atLeastOnce())->method('getValue')->willReturn($notMinPrice);
 
         $tierPriceList = [
@@ -92,8 +92,10 @@ class MinimalTierPriceCalculatorTest extends TestCase
 
         $this->priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
-            ->withConsecutive([TierPrice::PRICE_CODE], [FinalPrice::PRICE_CODE])
-            ->willReturnOnConsecutiveCalls($this->price, $notMinAmount);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [TierPrice::PRICE_CODE] => $this->price,
+                [FinalPrice::PRICE_CODE] => $notMinAmount
+            });
 
         $this->saleable->expects($this->atLeastOnce())->method('getPriceInfo')->willReturn($this->priceInfo);
         return $minPrice;
@@ -109,7 +111,7 @@ class MinimalTierPriceCalculatorTest extends TestCase
     {
         $minPrice = $this->getValueTierPricesExistShouldReturnMinTierPrice();
 
-        $amount = $this->getMockForAbstractClass(AmountInterface::class);
+        $amount = $this->createMock(AmountInterface::class);
         $amount->method('getValue')->willReturn($minPrice);
 
         $this->assertEquals($amount, $this->object->getAmount($this->saleable));

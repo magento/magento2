@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,11 +12,15 @@ use Magento\Config\Model\ResourceModel\Config\Data\Collection;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LoaderTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Loader
      */
@@ -37,18 +41,22 @@ class LoaderTest extends TestCase
      */
     protected $collectionFactory;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $this->_configValueFactory = $this->getMockBuilder(ValueFactory::class)
-            ->addMethods(['getCollection'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(['getCollection'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->_configValueFactory = $this->createPartialMockWithReflection(
+            ValueFactory::class,
+            ['getCollection', 'create']
+        );
+        $this->collectionFactory = $this->createPartialMockWithReflection(
+            CollectionFactory::class,
+            ['getCollection', 'create']
+        );
         $this->_model = new Loader($this->_configValueFactory, $this->collectionFactory);
         $this->_configCollection = $this->createMock(Collection::class);
         $this->_configCollection->expects($this->once())->

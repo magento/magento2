@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Edit;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Edit\FormTest
@@ -144,10 +146,10 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test fields disabled status
-     * @dataProvider fieldsStateDataProvider
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store general/single_store_mode/enabled 0
      */
+    #[DataProvider('fieldsStateDataProvider')]
     public function testReadonlyFields($urlRewrite, $fields)
     {
         $form = $this->_getFormInstance(['url_rewrite' => $urlRewrite]);
@@ -159,7 +161,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for checking fields state
      */
-    public function fieldsStateDataProvider()
+    public static function fieldsStateDataProvider(): array
     {
         return [
             [

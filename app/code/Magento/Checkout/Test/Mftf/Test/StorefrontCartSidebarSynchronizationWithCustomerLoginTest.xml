@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartSidebarSynchronizationWithCustomerLoginTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Cart Sidebar Synchronization"/>
+            <title value="Cart Sidebar synchronization with Customer Data Lifetime through customer login/logout"/>
+            <description value="Verify that cart sidebar data is synchronized after customer logout/login when Customer Data Lifetime expires and product data changes in admin"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4849"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Precondition 1: Create simple product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="name">Apple</field>
+                <field key="price">10</field>
+            </createData>
+            <!-- Precondition 2: Create customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Precondition 3: Set Customer Data Lifetime to 2 minutes -->
+            <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setCustomerDataLifetime">
+                <argument name="minutes" value="2"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomerInCleanup"/>
+            <!-- Reset Customer Data Lifetime configuration to default -->
+            <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="resetCustomerDataLifetime"/>
+            <!-- Delete test data and Logout from Admin -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminInCleanup"/>
+        </after>
+        <!-- Step 1: Login to storefront and add product to cart -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+        </actionGroup>
+        <!-- Step 2: Reload product page several times to ensure caching -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage2"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage3"/>
+        <!-- Step 3: Open Cart Sidebar and verify initial values -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyInitialProductInMiniCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productPrice" value="$10.00"/>
+            <argument name="cartSubtotal" value="$10.00"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeMiniCart"/>
+        <!-- Step 4: Open new tab for Admin and change product details -->
+        <openNewTab stepKey="openAdminTab"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Change product name and price -->
+        <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="changeProductName">
+            <argument name="productName" value="Apple-X"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="changeProductPrice">
+            <argument name="price" value="20"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Step 5: Return to storefront, reload page and verify cached values -->
+        <switchToPreviousTab stepKey="switchToStorefrontTab"/>
+        <!-- Reload product page and open Cart Sidebar -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageAfterFirstAdminChange">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageAfterFirstAdminChange"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCartAfterProductChange"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCachedProductInMiniCart">
+            <argument name="productName" value="$createSimpleProduct.name$"/>
+            <argument name="productPrice" value="$10.00"/>
+            <argument name="cartSubtotal" value="$10.00"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeMiniCartAfterProductChange"/>
+        <!-- Step 6: Logout and login again to invalidate cache -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginBackToStorefront">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!-- Step 7: Verify cart shows updated values after login -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCartAfterLogin"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyUpdatedProductInMiniCartAfterLogin">
+            <argument name="productName" value="Apple-X"/>
+            <argument name="productPrice" value="$20.00"/>
+            <argument name="cartSubtotal" value="$20.00"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeMiniCartAfterLogin"/>
+        <!-- Step 8: Reload page several times to ensure caching -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterLogin1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterLogin2"/>
+        <!-- Step 9: Change product details again in admin -->
+        <switchToNextTab stepKey="switchToAdminTab"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPageAgain">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <!-- Change product name and price again -->
+        <actionGroup ref="AdminFillProductNameOnProductFormActionGroup" stepKey="changeProductNameAgain">
+            <argument name="productName" value="Apple-X-Y"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillProductPriceFieldAndPressEnterOnProductEditPageActionGroup" stepKey="changeProductPriceAgain">
+            <argument name="price" value="30"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAgain"/>
+        <!-- Step 10: Return to storefront and verify cached values -->
+        <switchToPreviousTab stepKey="switchToStorefrontTabAgain"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPageAfterSecondAdminChange">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadProductPageAfterSecondAdminChange"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCartAfterSecondChange"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyCachedProductAfterSecondChange">
+            <argument name="productName" value="Apple-X"/>
+            <argument name="productPrice" value="$20.00"/>
+            <argument name="cartSubtotal" value="$20.00"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeMiniCartAfterSecondChange"/>
+        <!-- Step 11: Wait for Customer Data Lifetime to expire -->
+        <wait time="120" stepKey="waitForCustomerDataLifetimeExpiration"/>
+        <!-- Step 12: Reload page and verify updated values -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterWait"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCartAfterWait"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="verifyFinalUpdatedProductInMiniCart">
+            <argument name="productName" value="Apple-X-Y"/>
+            <argument name="productPrice" value="$30.00"/>
+            <argument name="cartSubtotal" value="$30.00"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="closeCartSidebarFinal"/>
+    </test>
+</tests>

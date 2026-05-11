@@ -1,22 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backup\Model\Config\Source;
 
 /**
  * Backups types' source model for system configuration
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */
 class Type implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Backup data
-     *
      * @var \Magento\Backup\Helper\Data
      */
     protected $_backupData = null;
@@ -30,7 +27,7 @@ class Type implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function toOptionArray()
     {

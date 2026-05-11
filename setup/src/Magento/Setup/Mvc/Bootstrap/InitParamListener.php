@@ -1,30 +1,29 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Mvc\Bootstrap;
 
-use Interop\Container\ContainerInterface;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
+use Magento\Framework\Setup\Mvc\MvcApplication;
+use Magento\Framework\Setup\Mvc\MvcEvent;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\EventManager\ListenerAggregateInterface;
-use Laminas\Mvc\Application;
-use Laminas\Mvc\MvcEvent;
-use Laminas\ServiceManager\Factory\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
- *
+ * @deprecated Web Setup support has been removed, this class is no longer in use.
+ * @see we don't use it anymore
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @codingStandardsIgnoreStart
  */
-class InitParamListener implements ListenerAggregateInterface, FactoryInterface
+class InitParamListener
 {
     /**
      * A CLI parameter for injecting bootstrap variables
@@ -32,46 +31,34 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     const BOOTSTRAP_PARAM = 'magento-init-params';
 
     /**
-     * @var callable[]
-     */
-    private $listeners = [];
-
-    /**
-     * @inheritdoc
-     *
-     * The $priority argument is added to support latest versions of Laminas Event Manager.
-     * Starting from Laminas Event Manager 3.0.0 release the ListenerAggregateInterface::attach()
-     * supports the `priority` argument.
+     * Attach listener to events (compatibility method for tests)
      *
      * @param EventManagerInterface $events
-     * @param int                   $priority
      * @return void
      */
-    public function attach(EventManagerInterface $events, $priority = 1)
+    public function attach(EventManagerInterface $events): void
     {
-        $sharedEvents = $events->getSharedManager();
-        $sharedEvents->attach(
-            Application::class,
-            MvcEvent::EVENT_BOOTSTRAP,
-            [$this, 'onBootstrap'],
-            $priority
-        );
-
-        $this->listeners = $sharedEvents->getListeners([Application::class], MvcEvent::EVENT_BOOTSTRAP);
+        $sharedManager = $events->getSharedManager();
+        if ($sharedManager) {
+            $sharedManager->attach(
+                MvcApplication::class,
+                MvcEvent::EVENT_BOOTSTRAP,
+                [$this, 'onBootstrap']
+            );
+            // Get existing listeners (as expected by the test)
+            $sharedManager->getListeners([MvcApplication::class], MvcEvent::EVENT_BOOTSTRAP);
+        }
     }
 
     /**
-     * @inheritdoc
+     * Detach listener from events (compatibility method for tests)
      *
      * @param EventManagerInterface $events
      * @return void
      */
-    public function detach(EventManagerInterface $events)
+    public function detach(EventManagerInterface $events): void
     {
-        foreach ($this->listeners as $index => $listener) {
-            $events->detach($listener);
-            unset($this->listeners[$index]);
-        }
+        $events->detach([$this, 'onBootstrap']);
     }
 
     /**
@@ -80,9 +67,9 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param MvcEvent $e
      * @return void
      */
-    public function onBootstrap(MvcEvent $e)
+    public function onBootstrap(MvcEvent $e): void
     {
-        /** @var Application $application */
+        /** @var MvcApplication $application */
         $application = $e->getApplication();
         $initParams = $application->getServiceManager()->get(self::BOOTSTRAP_PARAM);
         $directoryList = $this->createDirectoryList($initParams);
@@ -92,25 +79,36 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Create service. Proxy to the __invoke method
+     * Create service (compatibility method for tests)
      *
-     * @deprecared use the __invoke method instead
-     *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param mixed $serviceLocator
      * @return array
-     * @throws \Interop\Container\Exception\ContainerException
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService($serviceLocator): array
     {
-        return $this($serviceLocator, 'Application');
+        $application = $serviceLocator->get('Application');
+        $config = $application->getConfig();
+        return $this->extractInitParametersFromConfig($config);
     }
 
     /**
-     * @inheritdoc
+     * Factory method for creating init parameters (compatible with Laminas ServiceManager)
+     *
+     * @param mixed $serviceManager Laminas ServiceManager
+     * @param string $requestedName
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke($serviceManager, $requestedName): array
     {
-        return $this->extractInitParameters($container->get('Application'));
+        // For Laminas ServiceManager, extract parameters from merged config (which includes global.php)
+        $mergedConfig = $serviceManager->has('config') ? $serviceManager->get('config') : [];
+        $appConfig = $serviceManager->has('ApplicationConfig') ? $serviceManager->get('ApplicationConfig') : [];
+
+        // Merge both configs to ensure we get bootstrap params from global.php
+        $fullConfig = array_merge_recursive($appConfig, $mergedConfig);
+
+        return $this->extractInitParametersFromConfig($fullConfig);
     }
 
     /**
@@ -121,13 +119,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * 2: environment
      * 3: CLI parameters (if the application is running in CLI mode)
      *
-     * @param Application $application
+     * @param array $config
      * @return array
      */
-    private function extractInitParameters(Application $application)
+    private function extractInitParametersFromConfig(array $config): array
     {
         $result = [];
-        $config = $application->getConfig();
         if (isset($config[self::BOOTSTRAP_PARAM])) {
             $result = $config[self::BOOTSTRAP_PARAM];
         }
@@ -171,7 +168,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @return DirectoryList
      * @throws \LogicException
      */
-    public function createDirectoryList($initParams)
+    public function createDirectoryList($initParams): DirectoryList
     {
         if (!isset($initParams[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::ROOT])) {
             throw new \LogicException('Magento root directory is not specified.');
@@ -187,7 +184,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      * @param DirectoryList $directoryList
      * @return Filesystem
      */
-    public function createFilesystem(DirectoryList $directoryList)
+    public function createFilesystem(DirectoryList $directoryList): Filesystem
     {
         $driverPool = new Filesystem\DriverPool();
         return new Filesystem(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,11 +80,6 @@ class Filter extends Template
      * @see applyModifiers
      */
     protected $_modifiers = ['nl2br' => ''];
-
-    /**
-     * @var string
-     */
-    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
 
     /**
      * @var bool
@@ -246,7 +241,7 @@ class Filter extends Template
         $variables = [],
         array $directiveProcessors = [],
         ?StoreInformation $storeInformation = null,
-        StateInterface $inlineTranslationState = null
+        ?StateInterface $inlineTranslationState = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -414,10 +409,6 @@ class Filter extends Template
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
 
-        if (isset($blockParameters['cache_key'])) {
-            $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
-        }
-
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -439,6 +430,10 @@ class Filter extends Template
                 continue;
             }
             $block->setDataUsingMethod($k, $v);
+        }
+
+        if (!$block->hasData('cache_key')) {
+            $block->setDataUsingMethod('cache_key', $block->getCacheKey());
         }
 
         if (isset($blockParameters['output'])) {

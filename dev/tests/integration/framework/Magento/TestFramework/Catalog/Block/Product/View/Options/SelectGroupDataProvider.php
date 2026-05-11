@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,7 +24,7 @@ class SelectGroupDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public static function getData(): array
     {
         return [
             'type_drop_down_required' => [

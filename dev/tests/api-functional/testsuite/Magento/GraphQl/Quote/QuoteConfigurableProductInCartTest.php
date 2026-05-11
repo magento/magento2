@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -123,6 +123,10 @@ query GetCartDetails($cartId: String!) {
                     value
                 }
             }
+            errors {
+                code
+                message
+            }
         }
     }
 }
@@ -149,5 +153,6 @@ QUERY;
             $response['cart']['items'][0]['product']['price_range']['maximum_price']['final_price']['value'],
             'Assert that maximum price equals to 0'
         );
+        $this->assertEquals('ITEM_QTY', $response['cart']['items'][0]['errors'][0]['code']);
     }
 }

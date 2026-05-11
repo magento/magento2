@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\Model\Validation;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\NotEmptyFactory;
 use Magento\Store\Model\Validation\StoreNameValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +35,7 @@ class StoreNameValidatorTest extends TestCase
     {
         $this->notEmptyValidatorFactoryMock = $this->getMockBuilder(NotEmptyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->notEmptyValidatorMock = $this->createMock(NotEmpty::class);
         $this->notEmptyValidatorFactoryMock->method('create')
@@ -44,11 +45,11 @@ class StoreNameValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider isValidDataProvider
      * @param string $value
      * @param bool $isValid
      * @param array $messages
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(string $value, bool $isValid, array $messages): void
     {
         $this->notEmptyValidatorMock->expects($this->once())
@@ -64,7 +65,7 @@ class StoreNameValidatorTest extends TestCase
         $this->assertEquals($messages, $this->model->getMessages());
     }
 
-    public function isValidDataProvider(): array
+    public static function isValidDataProvider(): array
     {
         return [
             'true' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,9 +28,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * GraphQl tests for @see \Magento\SalesGraphQl\Model\Resolver\CustomerOrders.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrdersTest extends GraphQlAbstract
 {
@@ -45,7 +48,7 @@ class CustomerOrdersTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws LocalizedException
      */
     protected function setUp(): void
@@ -143,7 +146,7 @@ class CustomerOrdersTest extends GraphQlAbstract
             $query,
             [],
             '',
-            $this->getCustomerHeaders($customerToken, null)
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
         $this->assertEquals(2, count($response['customer']['orders']['items']));
@@ -153,10 +156,58 @@ class CustomerOrdersTest extends GraphQlAbstract
             $query,
             [],
             '',
-            $this->getCustomerHeaders($customerToken, null)
+            $this->getCustomerHeaders($customerToken, $store2->getCode())
         );
 
-        $this->assertEquals(0, count($response['customer']['orders']['items']));
+        $this->assertEquals(1, count($response['customer']['orders']['items']));
+    }
+
+    /**
+     * Test graphql customer orders when customer doesn't have access to custom website in Multi-Store setup.
+     */
+    #[DataProvider('dataProviderScope')]
+    #[
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$' ]], as: 'product'),
+        DataFixture(
+            Customer::class,
+            [
+                'store_id' => '$store2.id$',
+                'website_id' => '$website2.id$',
+                'addresses' => [[]]
+            ],
+            as: 'customer'
+        )
+    ]
+    public function testGetCustomerOrdersCustomerHasNoAccess($scope)
+    {
+        $store2 = $this->fixtures->get('store2');
+        $customer = $this->fixtures->get('customer');
+        $currentEmail = $customer->getEmail();
+        $currentPassword = 'password';
+
+        $generateToken = $this->generateCustomerToken($currentEmail, $currentPassword);
+        $tokenResponse = $this->graphQlMutationWithResponseHeaders(
+            $generateToken,
+            [],
+            '',
+            ['Store' => $store2->getCode()]
+        );
+        $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
+
+        $query = $this->getCustomerOrdersQuery($scope);
+
+        $this->expectException(\Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+        $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerHeaders($customerToken, null)
+        );
     }
 
     /**
@@ -224,5 +275,20 @@ mutation {
     }
 }
 MUTATION;
+    }
+
+    /**
+     * Scopes Data provider
+     *
+     * @return array
+     */
+    public static function dataProviderScope()
+    {
+        return [
+            'store scope' => ['STORE'],
+            'website scope' => ['WEBSITE'],
+            'global scope' => ['GLOBAL'],
+            'no scope' => [null],
+        ];
     }
 }

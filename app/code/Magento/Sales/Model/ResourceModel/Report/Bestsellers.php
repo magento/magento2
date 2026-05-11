@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report;
 
@@ -130,6 +130,7 @@ class Bestsellers extends AbstractReport
             'product_name' => new \Zend_Db_Expr('MIN(product_name)'),
             'product_price' => new \Zend_Db_Expr('MIN(product_price)'),
             'qty_ordered' => new \Zend_Db_Expr('SUM(qty_ordered)'),
+            'period_month' => 'period_month'
         ];
 
         $select = $connection->select();
@@ -217,9 +218,14 @@ class Bestsellers extends AbstractReport
                 $to
             )
         );
-        $select = $connection->select();
-        $subSelect = $this->getRangeSubSelect($from, $to);
 
+        $subSelect = $this->getRangeSubSelect($from, $to);
+        if ($subSelect) {
+            $dataRange = $this->getRange($subSelect);
+            $whereCondition = $connection->prepareSqlCondition($periodExpr, ['in' => $dataRange]);
+        }
+
+        $select = $connection->select();
         $select->group([$periodExpr, 'source_table.store_id', 'order_item.product_id']);
 
         $columns = [
@@ -232,6 +238,7 @@ class Bestsellers extends AbstractReport
                 '* MIN(source_table.base_to_global_rate)'
             ),
             'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
+            'period_month' => 'DATE_SUB(' . $periodExpr . ', INTERVAL DAYOFMONTH(' . $periodExpr . ')-1 DAY)'
         ];
 
         $select->from(
@@ -250,7 +257,7 @@ class Bestsellers extends AbstractReport
             " WHERE store_id = " . $storeId .
             " AND state != '" . \Magento\Sales\Model\Order::STATE_CANCELED . "'" .
             ($subSelect !== null ?
-                " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) :
+                " AND " . $whereCondition :
                 '') . ")"
         )->where(
             'order_item.product_type NOT IN(?)',

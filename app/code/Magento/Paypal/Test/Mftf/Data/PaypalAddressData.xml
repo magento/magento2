@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="ShippingAddressUS">
+        <data key="shippingCustomerName">US cust1</data>
+        <data key="ShippingAddress">6161 W Centinela Avenue, Culver City, CA 90230</data>
+    </entity>
+</entities>

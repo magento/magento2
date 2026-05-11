@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Plugin\PaymentMethodProcess;
 use Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,9 +44,7 @@ class PaymentMethodProcessTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->tokensConfigProviderMock = $this->getMockBuilder(TokensConfigProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->tokensConfigProviderMock = $this->createMock(TokensConfigProvider::class);
 
         $this->subject = new PaymentMethodProcess($this->tokensConfigProviderMock);
     }
@@ -53,29 +52,24 @@ class PaymentMethodProcessTest extends TestCase
     /**
      * Test retrieve available payment methods
      *
-     * @param TokenUiComponentInterface|null $tokenInterface
+     * @param \Closure|null $tokenInterface
      * @param int $availableMethodsCount
-     * @dataProvider afterGetMethodsDataProvider
      */
+    #[DataProvider('afterGetMethodsDataProvider')]
     public function testAfterGetMethods($tokenInterface, $availableMethodsCount)
     {
-        $checkmoPaymentMethod = $this->getMockBuilder(PaymentMethodInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
-            ->getMockForAbstractClass();
+        if ($tokenInterface!=null) {
+            $tokenInterface = $tokenInterface($this);
+        }
+        $checkmoPaymentMethod = $this->createMock(PaymentMethodInterface::class);
         $checkmoPaymentMethod->expects($this->any())->method('getCode')
             ->willReturn(self::PAYMENT_METHOD_CHECKMO);
 
-        $payflowCCVaultTPaymentMethod = $this->getMockBuilder(VaultPaymentInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCode'])
-            ->getMockForAbstractClass();
+        $payflowCCVaultTPaymentMethod = $this->createMock(VaultPaymentInterface::class);
         $payflowCCVaultTPaymentMethod->expects($this->any())->method('getCode')
             ->willReturn(self::PAYMENT_METHOD_PAYFLOWPRO_CC_VAULT);
         $methods = [$checkmoPaymentMethod, $payflowCCVaultTPaymentMethod];
-        $containerMock = $this->getMockBuilder(Container::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerMock = $this->createMock(Container::class);
 
         $this->tokensConfigProviderMock->method('getTokensComponents')
             ->with(self::PAYMENT_METHOD_PAYFLOWPRO_CC_VAULT)
@@ -85,15 +79,18 @@ class PaymentMethodProcessTest extends TestCase
         $this->assertEquals($availableMethodsCount, count($result));
     }
 
+    protected function getMockForTokenUiComponent()
+    {
+        $tokenUiComponentInterface = $this->createMock(TokenUiComponentInterface::class);
+        return $tokenUiComponentInterface;
+    }
+
     /**
      * Data Provider
      */
-    public function afterGetMethodsDataProvider()
+    public static function afterGetMethodsDataProvider()
     {
-        $tokenUiComponentInterface = $this->getMockBuilder(TokenUiComponentInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $tokenUiComponentInterface = static fn (self $testCase) => $testCase->getMockForTokenUiComponent();
         return [
             [null, 1],
             [$tokenUiComponentInterface, 2],

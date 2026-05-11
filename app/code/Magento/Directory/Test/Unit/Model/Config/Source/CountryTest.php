@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Directory\Test\Unit\Model\Config\Source;
 use Magento\Directory\Model\Config\Source\Country;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CountryTest extends TestCase
@@ -36,11 +37,11 @@ class CountryTest extends TestCase
     }
 
     /**
-     * @dataProvider toOptionArrayDataProvider
      * @param boolean $isMultiselect
      * @param string|array $foregroundCountries
      * @param array $expectedResult
      */
+    #[DataProvider('toOptionArrayDataProvider')]
     public function testToOptionArray($isMultiselect, $foregroundCountries, $expectedResult)
     {
         $this->_collectionMock->expects($this->once())->method('loadData')->willReturnSelf();
@@ -59,7 +60,7 @@ class CountryTest extends TestCase
     /**
      * @return array
      */
-    public function toOptionArrayDataProvider()
+    public static function toOptionArrayDataProvider()
     {
         return [
             [true, 'US', []],

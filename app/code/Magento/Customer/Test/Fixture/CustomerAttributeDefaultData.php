@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ class CustomerAttributeDefaultData
         'default_frontend_label' => 'Attribute%uniqid%',
         'frontend_labels' => [],
         'frontend_input' => 'text',
+        'frontend_label' => null,
         'backend_type' => 'varchar',
         'is_required' => false,
         'is_user_defined' => true,

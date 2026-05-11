@@ -1,10 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Magento\Test\Integrity;
 
@@ -21,6 +21,10 @@ use ReflectionException;
  */
 class ParameterizedFixtureTest extends TestCase
 {
+    private const array MODULES_WITH_FIXTURES = [
+        'Magento\TestFramework\Fixture'
+    ];
+
     /**
      * Validates parameterized data fixtures location
      *
@@ -48,7 +52,7 @@ class ParameterizedFixtureTest extends TestCase
                     continue;
                 }
 
-                if (!$this->isFileLocatedInModuleDirectory($file)) {
+                if (!$this->isLocationValid($file, $classReflection->getNamespaceName())) {
                     $errors[]  = $errorMessage;
                 }
             }
@@ -60,18 +64,13 @@ class ParameterizedFixtureTest extends TestCase
 
     /**
      * @param string $file
+     * @param string $namespace
      * @return bool
      */
-    private function isFileLocatedInModuleDirectory(string $file): bool
+    private function isLocationValid(string $file, string $namespace): bool
     {
-        $componentRegistrar = new ComponentRegistrar();
-        $found = false;
-        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            if ($file === $moduleDir . '/Test/Fixture/' . basename($file)) {
-                $found = true;
-                break;
-            }
-        }
-        return $found;
+        return in_array($namespace, self::MODULES_WITH_FIXTURES)
+            || (str_ends_with(dirname($file), '/Test/Fixture')
+            && in_array(dirname($file, 3), (new ComponentRegistrar())->getPaths(ComponentRegistrar::MODULE)));
     }
 }

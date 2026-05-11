@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\GiftMessage\Model;
@@ -180,6 +179,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
      */
     public function _resetState(): void
     {
-        $this->orders = [];
+        $this->orders = null;
     }
 }

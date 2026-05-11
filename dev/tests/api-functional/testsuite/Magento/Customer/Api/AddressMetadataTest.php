@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Api;
 
 use Magento\Config\Model\ResourceModel\Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Customer\Model\Data\AttributeMetadata;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
@@ -49,9 +50,9 @@ class AddressMetadataTest extends WebapiAbstract
      *
      * @param string $attributeCode The attribute code of the requested metadata.
      * @param array $expectedMetadata Expected entity metadata for the attribute code.
-     * @dataProvider getAttributeMetadataDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('getAttributeMetadataDataProvider')]
     public function testGetAttributeMetadata($attributeCode, $configOptions, $expectedMetadata)
     {
         $this->initConfig($configOptions);
@@ -84,7 +85,7 @@ class AddressMetadataTest extends WebapiAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getAttributeMetadataDataProvider()
+    public static function getAttributeMetadataDataProvider()
     {
         return [
             Address::POSTCODE => [
@@ -250,9 +251,8 @@ class AddressMetadataTest extends WebapiAbstract
      * Test retrieval of attributes
      *
      * @param string $formCode Form code
-     * @param array $expectedMetadata The expected attribute metadata
-     * @dataProvider getAttributesDataProvider
-     */
+     * @param array $expectedMetadata The expected attribute metadata */
+    #[DataProvider('getAttributesDataProvider')]
     public function testGetAttributes($formCode, $expectedMetadata)
     {
         $serviceInfo = [
@@ -289,9 +289,9 @@ class AddressMetadataTest extends WebapiAbstract
      *
      * @return array
      */
-    public function getAttributesDataProvider()
+    public static function getAttributesDataProvider()
     {
-        $attributeMetadata = $this->getAttributeMetadataDataProvider();
+        $attributeMetadata = self::getAttributeMetadataDataProvider();
         return [
             [
                 'customer_address_edit',

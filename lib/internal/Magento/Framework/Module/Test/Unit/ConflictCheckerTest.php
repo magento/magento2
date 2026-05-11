@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,16 +12,16 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConflictCheckerTest extends TestCase
 {
-    /**
-     * @dataProvider checkConflictWhenEnableModuleDataProvider
-     * @param array $conflictReturnMap
+    /**     * @param array $conflictReturnMap
      * @param array $enabledModules
      * @param string $moduleName
      * @param array $expected
      */
+    #[DataProvider('checkConflictWhenEnableModuleDataProvider')]
     public function testCheckConflictsWhenEnableModules(
         $conflictReturnMap,
         $enabledModules,
@@ -50,7 +50,7 @@ class ConflictCheckerTest extends TestCase
     /**
      * @return array
      */
-    public function checkConflictWhenEnableModuleDataProvider()
+    public static function checkConflictWhenEnableModuleDataProvider()
     {
         return [
             [

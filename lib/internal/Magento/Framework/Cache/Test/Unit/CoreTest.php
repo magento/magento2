@@ -1,12 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 /**
  * \Magento\Framework\Cache\Core test case
+ *
+ * @deprecated Tests deprecated class Core
+ * @see \Magento\Framework\Cache\Core
+ * @group legacy
+ * @group disabled
  */
 namespace Magento\Framework\Cache\Test\Unit;
 
@@ -16,6 +21,8 @@ use Magento\Framework\Cache\Core;
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 use Zend_Cache_Exception;
 
@@ -39,9 +46,16 @@ class CoreTest extends TestCase
      */
     protected $_mockBackend;
 
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
     protected function setUp(): void
     {
-        $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
+        $this->markTestSkipped(
+            'Test skipped: Core is deprecated. Use Symfony cache adapter instead.'
+        );
     }
 
     protected function tearDown(): void
@@ -62,8 +76,8 @@ class CoreTest extends TestCase
     }
 
     /**
-     * @dataProvider setBackendExceptionProvider
      */
+     #[DataProvider('setBackendExceptionProvider')]
     public function testSetBackendException($decorators)
     {
         $this->expectException('Zend_Cache_Exception');
@@ -74,7 +88,7 @@ class CoreTest extends TestCase
     /**
      * @return array
      */
-    public function setBackendExceptionProvider()
+    public static function setBackendExceptionProvider()
     {
         return [
             'string' => ['string'],

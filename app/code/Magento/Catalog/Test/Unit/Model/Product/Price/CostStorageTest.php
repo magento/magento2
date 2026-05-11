@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,6 +22,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\InputException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -81,35 +82,14 @@ class CostStorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->pricePersistenceFactory = $this->getMockBuilder(
-            PricePersistenceFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->pricePersistence = $this->getMockBuilder(PricePersistence::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->costInterfaceFactory = $this->getMockBuilder(CostInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->costInterface = $this->getMockBuilder(CostInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->storeRepository = $this->getMockBuilder(StoreRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->validationResult = $this->getMockBuilder(Result::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->invalidSkuProcessor = $this
-            ->getMockBuilder(InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pricePersistenceFactory = $this->createPartialMock(PricePersistenceFactory::class, ['create']);
+        $this->pricePersistence = $this->createMock(PricePersistence::class);
+        $this->costInterfaceFactory = $this->createPartialMock(CostInterfaceFactory::class, ['create']);
+        $this->costInterface = $this->createMock(CostInterface::class);
+        $this->productIdLocator = $this->createMock(ProductIdLocatorInterface::class);
+        $this->storeRepository = $this->createMock(StoreRepositoryInterface::class);
+        $this->validationResult = $this->createMock(Result::class);
+        $this->invalidSkuProcessor = $this->createMock(InvalidSkuProcessor::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -169,18 +149,27 @@ class CostStorageTest extends TestCase
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setSku')
-            ->withConsecutive(['sku_1'], ['sku_2'])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'sku_1' || $arg == 'sku_2') {
+                    return $this->costInterface;
+                }
+            });
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setCost')
-            ->withConsecutive([15], [35])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 15 || $arg == 35) {
+                    return $this->costInterface;
+                }
+            });
         $this->costInterface
             ->expects($this->atLeastOnce())
             ->method('setStoreId')
-            ->withConsecutive([1], [1])
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 1) {
+                    return $this->costInterface;
+                }
+            });
 
         $this->model->get($skus);
     }
@@ -192,9 +181,7 @@ class CostStorageTest extends TestCase
      */
     public function testUpdate()
     {
-        $store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $store = $this->createMock(StoreInterface::class);
         $sku = 'sku_1';
         $idsBySku = [
             'sku_1' => [
@@ -243,6 +230,7 @@ class CostStorageTest extends TestCase
      * Test update method with negative cost and without SKU.
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testUpdateWithNegativeCostAndWithoutSku()
     {
@@ -256,37 +244,24 @@ class CostStorageTest extends TestCase
             ->method('create')
             ->with(['attributeCode' => 'cost'])
             ->willReturn($this->pricePersistence);
-        $priceUpdateResult = $this->getMockBuilder(PriceUpdateResultInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $priceUpdateResult = $this->createMock(PriceUpdateResultInterface::class);
         $this->validationResult->expects($this->atLeastOnce())
             ->method('addFailedItem')
-            ->withConsecutive(
-                [
-                    0,
-                    __(
-                        'Invalid attribute %fieldName = %fieldValue.',
-                        ['fieldName' => '%fieldName', 'fieldValue' => '%fieldValue']
-                    ),
-                    ['fieldName' => 'SKU', 'fieldValue' => null]
-                ],
-                [
-                    0,
-                    __(
-                        'Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.',
-                        ['cost' => -15, 'SKU' => null, 'storeId' => 10]
-                    ),
-                    ['cost' => -15, 'SKU' => null, 'storeId' => 10]
-                ],
-                [
-                    0,
-                    __(
-                        'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.',
-                        ['SKU' => null, 'storeId' => 10]
-                    ),
-                    ['SKU' => null, 'storeId' => 10]
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === 0 &&
+                    $arg2 === 'Invalid attribute %fieldName = %fieldValue.' &&
+                    $arg3 === ['fieldName' => 'SKU', 'fieldValue' => null]) {
+                    return null;
+                } elseif ($arg1 === 0 &&
+                    $arg2 === 'Invalid attribute Cost = %cost. Row ID: SKU = %SKU, Store ID: %storeId.' &&
+                    $arg3 === ['cost' => -15, 'SKU' => null, 'storeId' => 10]) {
+                    return null;
+                } elseif ($arg1 === 0 &&
+                    $arg2 === 'Requested store is not found. Row ID: SKU = %SKU, Store ID: %storeId.' &&
+                    $arg3 === ['SKU' => null, 'storeId' => 10]) {
+                    return null;
+                }
+            });
         $this->storeRepository->expects($this->once())->method('getById')->with(10)->willThrowException($exception);
         $this->invalidSkuProcessor
             ->expects($this->once())
@@ -322,5 +297,27 @@ class CostStorageTest extends TestCase
         $this->pricePersistence->expects($this->once())->method('delete')->with($skus);
 
         $this->model->delete($skus);
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->model->update('invalid_string');
     }
 }

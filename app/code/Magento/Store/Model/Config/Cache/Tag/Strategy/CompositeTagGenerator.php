@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class CompositeTagGenerator implements TagGeneratorInterface
      * @param TagGeneratorInterface[] $tagGenerators
      */
     public function __construct(
-        array $tagGenerators
+        array $tagGenerators = []
     ) {
         $this->tagGenerators = $tagGenerators;
     }

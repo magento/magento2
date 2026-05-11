@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorizationTest extends TestCase
 {
+
     /**
      * @var ObjectManager
      */
@@ -46,14 +47,12 @@ class AuthorizationTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
         $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->setMethods(['getUserType', 'getUserId'])
-            ->getMockForAbstractClass();
-        $this->subjectMock = $this->getMockBuilder(ResourceOrder::class)
-            ->disableOriginalConstructor()
+            ->onlyMethods(['getUserType', 'getUserId'])
             ->getMock();
+        $this->subjectMock = $this->createMock(ResourceOrder::class);
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerId', 'getId'])
+            ->onlyMethods(['getCustomerId', 'getId'])
             ->getMock();
         $this->plugin = $this->objectManager->getObject(
             Authorization::class,

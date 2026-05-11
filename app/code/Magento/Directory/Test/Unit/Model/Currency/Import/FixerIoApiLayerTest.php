@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,14 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\LaminasClient;
 use Magento\Framework\HTTP\LaminasClientFactory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FixerIoApiLayerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FixerIoApiLayer
      */
@@ -46,16 +49,13 @@ class FixerIoApiLayerTest extends TestCase
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
 
         $this->model = new FixerIoApiLayer($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
     }
@@ -75,11 +75,15 @@ class FixerIoApiLayerTest extends TestCase
             . "https://api.apilayer.com for UAH.";
 
         $this->scopeConfig->method('getValue')
-            ->withConsecutive(
-                ['currency/fixerio_apilayer/api_key', 'store'],
-                ['currency/fixerio_apilayer/timeout', 'store']
-            )
-            ->willReturnOnConsecutiveCalls('api_key', 100);
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'currency/fixerio_apilayer/api_key' && $arg2 == 'store') {
+                        return 'api_key';
+                    } elseif ($arg1 == 'currency/fixerio_apilayer/timeout' && $arg2 == 'store') {
+                        return 100;
+                    }
+                }
+            );
 
         /** @var Currency|MockObject $currency */
         $currency = $this->getMockBuilder(Currency::class)
@@ -90,10 +94,10 @@ class FixerIoApiLayerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var DataObject|MockObject $currencyMock */
-        $httpResponse = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getBody'])
-            ->getMock();
+        $httpResponse = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getBody']
+        );
 
         $this->currencyFactory->method('create')
             ->willReturn($currency);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Session\StorageInterface;
+use Magento\Framework\Session\Storage;
+use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for CustomerNotification plugin
@@ -29,6 +32,8 @@ use Magento\Framework\Session\StorageInterface;
  */
 class CustomerNotificationTest extends TestCase
 {
+    use MockCreationTrait;
+
     private const STUB_CUSTOMER_ID = 1;
 
     /**
@@ -81,13 +86,12 @@ class CustomerNotificationTest extends TestCase
         $this->sessionMock = $this->createMock(Session::class);
         $this->sessionMock->method('getCustomerId')->willReturn(self::STUB_CUSTOMER_ID);
 
-        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
-        $this->requestMock = $this->getMockBuilder(RequestStubInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->actionMock = $this->createMock(ActionInterface::class);
+        $this->requestMock = $this->createMock(RequestHttp::class);
         $this->requestMock->method('isPost')->willReturn(true);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->appStateMock = $this->createMock(State::class);
         $this->appStateMock->method('getAreaCode')->willReturn(Area::AREA_FRONTEND);
@@ -98,11 +102,10 @@ class CustomerNotificationTest extends TestCase
             ->with(NotificationStorage::UPDATE_CUSTOMER_SESSION, self::STUB_CUSTOMER_ID)
             ->willReturn(true);
 
-        $this->storage = $this
-            ->getMockBuilder(StorageInterface::class)
-            ->addMethods(['getData', 'setData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storage = $this->createPartialMock(
+            Storage::class,
+            ['getData', 'setData', 'init', 'getNamespace']
+        );
 
         $this->plugin = new CustomerNotification(
             $this->sessionMock,
@@ -120,7 +123,7 @@ class CustomerNotificationTest extends TestCase
         $customerGroupId = 1;
         $testSessionId = [uniqid()];
 
-        $customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customerMock = $this->createMock(CustomerInterface::class);
         $customerMock->method('getGroupId')->willReturn($customerGroupId);
         $customerMock->method('getId')->willReturn(self::STUB_CUSTOMER_ID);
 
@@ -150,6 +153,19 @@ class CustomerNotificationTest extends TestCase
             ->willThrowException(new NoSuchEntityException());
         $this->loggerMock->expects($this->once())
             ->method('error');
+
+        $this->plugin->beforeExecute($this->actionMock);
+    }
+
+    public function testBeforeExecuteForLogoutRequest()
+    {
+        $this->requestMock->method('getRouteName')->willReturn('customer');
+        $this->requestMock->method('getControllerName')->willReturn('account');
+        $this->requestMock->method('getActionName')->willReturn('logout');
+
+        $this->sessionMock->expects($this->never())->method('regenerateId');
+        $this->sessionMock->expects($this->never())->method('setCustomerData');
+        $this->sessionMock->expects($this->never())->method('setCustomerGroupId');
 
         $this->plugin->beforeExecute($this->actionMock);
     }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyGiftsCardsAndCouponCodesInWidgetIsShownOnOrderReviewPageForPayflowLinkTest">
+        <annotations>
+            <features value="Payments"/>
+            <stories value="Payflow Link"/>
+            <title value="Apply gift cards and promo codes widget are shown on Order review page for Payflow Link"/>
+            <description value="As a guest, apply coupon and gift card while placing an order through paypal payflow Link"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4378"/>
+        </annotations>
+        <before>
+            <!--Create simple product-->
+            <createData entity="simpleProductWithoutCategory" stepKey="createProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!--Create a customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!--Login to admin site-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create cart price rule and coupon-->
+            <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
+                <argument name="ruleName" value="CatPriceRule"/>
+                <argument name="couponCode" value="CatPriceRule.coupon_code"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete created product-->
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <!--Delete created cart price rule-->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
+            <!--Delete created customer-->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!--Logout from admin site-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontAddSimpleProductWithQtyActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!--Go to shopping cart-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.checkoutWithPaypal}}" stepKey="waitForPayPalBtn"/>
+        <click selector="{{CheckoutPaymentSection.checkoutWithPaypal}}" stepKey="clickPayPalBtn"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.reviewOrder}}" stepKey="waitForReviewOrderButtonToBeClickable"/>
+        <click selector="{{CheckoutPaymentSection.reviewOrder}}" stepKey="clickReviewOrderButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </test>
+</tests>

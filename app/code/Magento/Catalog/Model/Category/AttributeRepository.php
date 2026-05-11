@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
+use Magento\Framework\App\State\ReloadProcessorInterface;
 
-class AttributeRepository implements CategoryAttributeRepositoryInterface
+class AttributeRepository implements CategoryAttributeRepositoryInterface, ReloadProcessorInterface
 {
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
@@ -30,7 +31,7 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
     private $eavConfig;
 
     /**
-     * @var array
+     * @var array|null
      */
     private $metadataCache;
 
@@ -81,7 +82,8 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
      */
     public function getCustomAttributesMetadata($dataObjectClassName = null)
     {
-        if (!isset($this->metadataCache[$dataObjectClassName])) {
+        $cacheKey = $dataObjectClassName ?? '';
+        if (!isset($this->metadataCache[$cacheKey])) {
             $defaultAttributeSetId = $this->eavConfig
                 ->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)
                 ->getDefaultAttributeSetId();
@@ -93,9 +95,19 @@ class AttributeRepository implements CategoryAttributeRepositoryInterface
                         ->create(),
                 ]
             );
-            $this->metadataCache[$dataObjectClassName] = $this->getList($searchCriteria->create())
+            $this->metadataCache[$cacheKey] = $this->getList($searchCriteria->create())
                 ->getItems();
         }
-        return $this->metadataCache[$dataObjectClassName];
+        return $this->metadataCache[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function reloadState(): void
+    {
+        $this->filterBuilder->_resetState();
+        $this->searchCriteriaBuilder->_resetState();
+        $this->metadataCache = null;
     }
 }

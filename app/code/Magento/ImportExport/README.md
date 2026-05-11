@@ -5,26 +5,26 @@ It can be disabled and in such case all dependent import/export functionality (p
 
 ## Installation
 
-The Magento_ImportExport module creates the following tables in the database:
+This module creates the following tables in the database:
 
 - `importexport_importdata`
 - `import_history`
 
 All database schema changes made by this module are rolled back when the module gets disabled and setup:upgrade command is run.
 
-For information about a module installation in Magento 2, see [Enable or disable modules](https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/tutorials/manage-modules.html).
+For information about a module installation, see [Enable or disable modules](https://experienceleague.adobe.com/en/docs/commerce-operations/installation-guide/tutorials/manage-modules).
 
 ## Structure
 
 `Files/` - the directory that contains sample import files.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
 
 ## Extensibility
 
-Extension developers can interact with the Magento_ImportExport module. For more information about the Magento extension mechanism, see [Magento plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
+Extension developers can interact with the Magento_ImportExport module. For more information about the extension mechanism, see [Plugins](https://developer.adobe.com/commerce/php/development/components/plugins/).
 
-[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_ImportExport module.
+[The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_ImportExport module.
 
 ### Layouts
 
@@ -39,7 +39,7 @@ This module introduces the following layout handles in the `view/frontend/layout
 - `adminhtml_import_start`
 - `adminhtml_import_validate`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
+For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
 
 ### UI components
 
@@ -47,7 +47,7 @@ You can extend an export updates using the configuration files located in the `v
 
 - `export_grid`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
+For information about a UI component, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
 
 ### Public APIs
 
@@ -60,28 +60,28 @@ For information about a UI component in Magento 2, see [Overview of UI component
 - `\Magento\ImportExport\Api\ExportManagementInterface`
     - Executing actual export and returns export data
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
+For information about a public API, see [Public interfaces & APIs](https://developer.adobe.com/commerce/php/development/components/api-concepts/).
 
 ## Additional information
 
-#### Message Queue Consumer
+### Message Queue Consumer
 
 - `exportProcessor` - consumer to run export process
 
-[Learn how to manage Message Queues](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/message-queues/manage-message-queues.html).
+[Learn how to manage Message Queues](https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/message-queues/manage-message-queues).
 
-#### Create custom import entity
+### Create custom import entity
 
 1. Declare the new import entity in `etc/import.xml`
 2. Create an import model
 
-#### Create custom export entity
+### Create custom export entity
 
 1. Declare the new import entity in `etc/export.xml`
 2. Create an export model
 
-You can get more information about import/export processes in magento at the articles:
+You can get more information about import/export processes at the following articles:
 
 - [Create custom import entity](https://developer.adobe.com/commerce/php/tutorials/backend/create-custom-import-entity/)
-- [Import](https://docs.magento.com/user-guide/system/data-import.html)
-- [Export](https://docs.magento.com/user-guide/system/data-export.html)
+- [Import](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/data-transfer/import/data-import)
+- [Export](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/data-transfer/data-export)

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\MessageQueue\MessageProcessorLoader;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for MessageProcessorLoader.
@@ -45,11 +46,11 @@ class MessageProcessorLoaderTest extends TestCase
         $this->mergedMessageProcessor = $this
             ->getMockBuilder(MessageProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->defaultMessageProcessor = $this
             ->getMockBuilder(MessageProcessorInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->messageProcessorLoader = $objectManagerHelper->getObject(
@@ -64,11 +65,14 @@ class MessageProcessorLoaderTest extends TestCase
     /**
      * Test for load().
      *
-     * @param $message
-     * @dataProvider loadDataProvider
-     */
+     * @param $message     */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($message)
     {
+        if (is_callable($message)) {
+            $message = $message($this);
+        }
+
         $messageTopic = 'topic';
         $messages = [
             $messageTopic => [$message]
@@ -85,18 +89,22 @@ class MessageProcessorLoaderTest extends TestCase
      *
      * @return array
      */
-    public function loadDataProvider()
+    public static function loadDataProvider()
     {
-        $mergedMessage = $this->getMockBuilder(MergedMessageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $mergedMessage = static fn (self $testCase) => $testCase->getMergedMessageInterfaceMock();
+        $message = static fn (self $testCase) => $testCase->getEnvelopeInterfaceMock();
 
         return [
             [$mergedMessage],
             [$message]
         ];
+    }
+
+    public function getMergedMessageInterfaceMock() {
+        return $this->createMock(MergedMessageInterface::class);
+    }
+
+    public function getEnvelopeInterfaceMock() {
+        return $this->createMock(EnvelopeInterface::class);
     }
 }

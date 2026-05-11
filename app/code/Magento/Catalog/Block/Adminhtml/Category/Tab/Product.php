@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Product in category grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
@@ -19,6 +17,7 @@ use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
 
@@ -45,6 +44,11 @@ class Product extends Extended
     private $visibility;
 
     /**
+     * @var ProductCollectionFactory|mixed
+     */
+    private ProductCollectionFactory $productCollectionFactory;
+
+    /**
      * @param Context $context
      * @param Data $backendHelper
      * @param ProductFactory $productFactory
@@ -52,6 +56,7 @@ class Product extends Extended
      * @param array $data
      * @param Visibility|null $visibility
      * @param Status|null $status
+     * @param ProductCollectionFactory|null $productCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -59,13 +64,17 @@ class Product extends Extended
         ProductFactory $productFactory,
         Registry $coreRegistry,
         array $data = [],
-        Visibility $visibility = null,
-        Status $status = null
+        ?Visibility $visibility = null,
+        ?Status $status = null,
+        ?ProductCollectionFactory $productCollectionFactory = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->visibility = $visibility ?: ObjectManager::getInstance()->get(Visibility::class);
         $this->status = $status ?: ObjectManager::getInstance()->get(Status::class);
+        $this->productCollectionFactory = $productCollectionFactory ?: ObjectManager::getInstance()->get(
+            ProductCollectionFactory::class
+        );
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -127,17 +136,22 @@ class Product extends Extended
         if ($this->getCategory()->getId()) {
             $this->setDefaultFilter(['in_category' => 1]);
         }
-        $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
-            'name'
-        )->addAttributeToSelect(
-            'sku'
-        )->addAttributeToSelect(
-            'visibility'
-        )->addAttributeToSelect(
-            'status'
-        )->addAttributeToSelect(
-            'price'
-        )->joinField(
+        $collection = $this->productCollectionFactory->create();
+        $storeId = (int)$this->getRequest()->getParam('store', 0);
+        if ($storeId > 0) {
+            $collection->addStoreFilter($storeId);
+        }
+        $collection->addAttributeToSelect(
+            [
+                'name',
+                'sku',
+                'visibility',
+                'status',
+                'price'
+            ],
+            'left'
+        );
+        $collection->joinField(
             'position',
             'catalog_category_product',
             'position',
@@ -145,11 +159,7 @@ class Product extends Extended
             'category_id=' . (int)$this->getRequest()->getParam('id', 0),
             'left'
         );
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
-        $collection->setStoreId($storeId);
-        if ($storeId > 0) {
-            $collection->addStoreFilter($storeId);
-        }
+        $collection->getSelect()->group('e.entity_id');
         $this->setCollection($collection);
 
         if ($this->getCategory()->getProductsReadonly()) {
@@ -157,6 +167,7 @@ class Product extends Extended
             if (empty($productIds)) {
                 $productIds = 0;
             }
+
             $this->getCollection()->addFieldToFilter('entity_id', ['in' => $productIds]);
         }
 
@@ -183,6 +194,7 @@ class Product extends Extended
                 ]
             );
         }
+
         $this->addColumn(
             'entity_id',
             [
@@ -264,6 +276,7 @@ class Product extends Extended
             $products = $this->getCategory()->getProductsPosition();
             return array_keys($products);
         }
+
         return $products;
     }
 }

@@ -1,23 +1,30 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Filter\DirectiveProcessor\DependDirective;
+use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
+use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
+use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Template Filter test.
  */
 class TemplateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Template
      */
@@ -38,9 +45,28 @@ class TemplateTest extends TestCase
      */
     protected $filteringDepthMeter;
 
+    /**
+     * @var array
+     */
+    private $listClasses = [
+        DependDirective::class,
+        IfDirective::class,
+        TemplateDirective::class,
+        LegacyDirective::class
+    ];
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
+        $objects = [];
+        foreach ($this->listClasses as $className) {
+            $classMock = $this->getMockBuilder($className)
+                ->disableOriginalConstructor()
+                ->onlyMethods([])
+                ->getMock();
+            $objects[] = [$className,$classMock];
+        }
+        $objectManager->prepareObjectManager($objects);
 
         $this->store = $objectManager->getObject(Store::class);
 
@@ -81,9 +107,10 @@ class TemplateTest extends TestCase
             ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
-            ->getMock();
+        $callbackObject = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['afterFilterCallbackMethod']
+        );
 
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')
@@ -113,9 +140,10 @@ class TemplateTest extends TestCase
             ->willReturn(1);
 
         // Build arbitrary object to pass into the addAfterFilterCallback method
-        $callbackObject = $this->getMockBuilder('stdObject')
-            ->setMethods(['afterFilterCallbackMethod'])
-            ->getMock();
+        $callbackObject = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['afterFilterCallbackMethod']
+        );
 
         $callbackObject->expects($this->once())
             ->method('afterFilterCallbackMethod')

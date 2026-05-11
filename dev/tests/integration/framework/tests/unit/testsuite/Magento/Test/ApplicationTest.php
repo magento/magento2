@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Test;
@@ -20,6 +20,7 @@ use Magento\TestFramework\Application;
 use Magento\TestFramework\Helper\Bootstrap as TestFrameworkBootstrap;
 use Magento\TestFramework\Db\Mysql;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for \Magento\TestFramework\Application.
@@ -57,6 +58,26 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     private $appMode;
 
     /**
+     * @var \Magento\TestFramework\ObjectManagerFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $factoryMock;
+
+    /**
+     * @var \Magento\TestFramework\ObjectManagerFactory
+     */
+    private $_factory;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer\Collection | \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $collectionMock;
+
+    /**
+     * @var \Magento\TestFramework\ObjectManager | \PHPUnit\Framework\MockObject\MockObject
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -78,6 +99,19 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             $this->appMode,
             $this->autoloadWrapper
         );
+
+        $this->factoryMock = $this->getMockBuilder(\Magento\TestFramework\ObjectManagerFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create', 'restore'])
+            ->getMock();
+
+        $this->collectionMock = $this->getMockBuilder(\Magento\Indexer\Model\Indexer\Collection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManager = $this->getMockBuilder(\Magento\TestFramework\ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -112,8 +146,8 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      * @param string|null $postInstallSetupCommandsFilePath
      * @param array $expectedShellExecutionCalls
      * @param bool $isExceptionExpected
-     * @dataProvider installDataProvider
      */
+    #[DataProvider('installDataProvider')]
     public function testInstall(
         string $installConfigFilePath,
         string $globalConfigFilePath,
@@ -136,12 +170,16 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         );
 
         // bypass db dump logic
+        $reflectionProperty = new \ReflectionProperty($subject, '_factory');
+        $reflectionProperty->setValue($subject, $this->factoryMock);
+        $this->_factory = $this->factoryMock;
         $dbMock = $this->getMockBuilder(Mysql::class)->disableOriginalConstructor()->getMock();
 
         $reflectionSubject = new ReflectionClass($subject);
         $dbProperty = $reflectionSubject->getProperty('_db');
-        $dbProperty->setAccessible(true);
         $dbProperty->setValue($subject, $dbMock);
+        $property = $reflectionSubject->getProperty('canLoadArea');
+        $property->setValue($subject, false);
 
         $dbMock
             ->expects($this->any())
@@ -150,7 +188,6 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 false,
                 true
             );
-
         $withArgs = [];
         // Add expected shell execution calls
         foreach ($expectedShellExecutionCalls as $expectedShellExecutionArguments) {
@@ -168,7 +205,26 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         }
         $this->shell
             ->method('execute')
-            ->withConsecutive(...$withArgs);
+            ->willReturnCallback(function (...$withArgs) {
+                if (!empty($withArgs)) {
+                    return null;
+                }
+            });
+
+        $this->objectManager->expects($this->any())
+            ->method('configure')
+            ->willReturnSelf();
+        TestFrameworkBootstrap::setObjectManager($this->objectManager);
+
+        $this->_factory->expects($this->any())
+            ->method('restore')
+            ->willReturn($this->objectManager);
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [\Magento\Indexer\Model\Indexer\Collection::class] => $this->collectionMock,
+                default => ''
+            });
 
         $subject->install(false);
     }
@@ -178,7 +234,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function installDataProvider()
+    public static function installDataProvider()
     {
         $installShellCommandExpectation = [
             PHP_BINARY . ' -f %s setup:install -vvv ' .
@@ -193,7 +249,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                 '',
                 '0',
                 '0',
-                $this->getInitParamsQuery(sys_get_temp_dir()),
+                self::getInitParamsQuery(sys_get_temp_dir()),
                 true
             ]
         ];
@@ -223,7 +279,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                             'magento_replica',
                             'root',
                             'secret',
-                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                            self::getInitParamsQuery(sys_get_temp_dir()),
                         ]
                     ]
                 ]
@@ -243,7 +299,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
                             'bar',
                             'baz',
                             'qux',
-                            $this->getInitParamsQuery(sys_get_temp_dir()),
+                            self::getInitParamsQuery(sys_get_temp_dir()),
                         ]
                     ]
                 ]
@@ -262,11 +318,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test \Magento\TestFramework\Application will correctly load specified areas.
-     *
-     * @dataProvider partialLoadAreaDataProvider
      * @param string $areaCode
      * @return void
      */
+    #[DataProvider('partialLoadAreaDataProvider')]
     public function testPartialLoadArea(string $areaCode)
     {
         $configScope = $this->getMockBuilder(Scope::class)
@@ -302,7 +357,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager->expects($this->once())
             ->method('configure')
             ->with($this->identicalTo([]));
@@ -324,23 +379,23 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function partialLoadAreaDataProvider()
+    public static function partialLoadAreaDataProvider()
     {
         return [
             [
-                'area_code' => Area::AREA_GLOBAL,
+                'areaCode' => Area::AREA_GLOBAL,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_REST,
+                'areaCode' => Area::AREA_WEBAPI_REST,
             ],
             [
-                'area_code' => Area::AREA_WEBAPI_SOAP,
+                'areaCode' => Area::AREA_WEBAPI_SOAP,
             ],
             [
-                'area_code' => Area::AREA_CRONTAB,
+                'areaCode' => Area::AREA_CRONTAB,
             ],
             [
-                'area_code' => Area::AREA_GRAPHQL,
+                'areaCode' => Area::AREA_GRAPHQL,
             ],
         ];
     }
@@ -351,7 +406,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      * @param string $dir The base application directory
      * @return string
      */
-    private function getInitParamsQuery(string $dir)
+    private static function getInitParamsQuery(string $dir)
     {
         return str_replace(
             '%s',

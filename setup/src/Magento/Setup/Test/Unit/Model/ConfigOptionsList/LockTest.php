@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Lock as LockConfigOptionsList;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LockTest extends TestCase
@@ -70,8 +71,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider createConfigDataProvider
      */
+    #[DataProvider('createConfigDataProvider')]
     public function testCreateConfig(array $options, array $expectedResult)
     {
         $this->deploymentConfigMock->expects($this->any())
@@ -87,7 +88,7 @@ class LockTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function createConfigDataProvider(): array
+    public static function createConfigDataProvider(): array
     {
         return [
             'Check default values' => [
@@ -197,8 +198,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider updateConfigDataProvider
      */
+    #[DataProvider('updateConfigDataProvider')]
     public function testUpdateConfig(array $options, array $expectedResult)
     {
         $valueMap = [
@@ -219,7 +220,7 @@ class LockTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function updateConfigDataProvider(): array
+    public static function updateConfigDataProvider(): array
     {
         return [
             'Check existent value for lock-db-prefix is not erased with no parameter specified' => [
@@ -293,8 +294,8 @@ class LockTest extends TestCase
     /**
      * @param array $options
      * @param array $expectedResult
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $options, array $expectedResult)
     {
         $this->deploymentConfigMock->expects($this->any())
@@ -309,7 +310,7 @@ class LockTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider(): array
+    public static function validateDataProvider(): array
     {
         return [
             'Wrong lock provider' => [

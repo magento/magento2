@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -29,6 +29,7 @@ use Magento\Framework\View\Result\LayoutFactory;
 use Magento\Newsletter\Model\Subscriber;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
@@ -37,6 +38,9 @@ use PHPUnit\Framework\TestCase;
  */
 class NewsletterTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * Request mock instance
      *
@@ -133,7 +137,7 @@ class NewsletterTest extends TestCase
 
         $this->_response = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setRedirect', 'getHeader', '__wakeup'])
+            ->onlyMethods(['setRedirect', 'getHeader', '__wakeup'])
             ->getMock();
 
         $this->_response->expects(
@@ -149,7 +153,7 @@ class NewsletterTest extends TestCase
         $this->_objectManager = $this->getMockBuilder(
             ObjectManager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['get', 'create']
             )->getMock();
         $frontControllerMock = $this->getMockBuilder(
@@ -161,50 +165,47 @@ class NewsletterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_session = $this->getMockBuilder(
-            Session::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['setIsUrlNotice', '__wakeup']
-            )->getMock();
+        $this->_session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice', '__wakeup']
+        );
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
         $this->_helper = $this->getMockBuilder(
             Data::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['getUrl']
             )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
             Manager::class
         )->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 ['addSuccess', 'addMessage', 'addException']
             )->getMock();
+
+        $addContextArgs = [
+            'getTranslator',
+            'getFrontController',
+            'getLayoutFactory',
+            'getTitle'
+        ];
 
         $contextArgs = [
             'getHelper',
             'getSession',
             'getAuthorization',
-            'getTranslator',
             'getObjectManager',
-            'getFrontController',
             'getActionFlag',
             'getMessageManager',
-            'getLayoutFactory',
             'getEventManager',
             'getRequest',
             'getResponse',
-            'getTitle',
             'getView'
         ];
-        $contextMock = $this->getMockBuilder(
-            Context::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                $contextArgs
-            )->getMock();
+        $allMethods = array_merge($contextArgs, $addContextArgs);
+        $contextMock = $this->createPartialMockWithReflection(Context::class, $allMethods);
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects(
@@ -236,9 +237,7 @@ class NewsletterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
-        $this->viewInterfaceMock =  $this->getMockBuilder(ViewInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->viewInterfaceMock =  $this->createMock(ViewInterface::class);
 
         $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->willReturnSelf();
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);

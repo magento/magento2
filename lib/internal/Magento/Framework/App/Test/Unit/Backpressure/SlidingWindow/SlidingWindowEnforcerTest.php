@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -21,6 +21,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -132,7 +133,7 @@ class SlidingWindowEnforcerTest extends TestCase
      *
      * @return array
      */
-    public function getSlidingCases(): array
+    public static function getSlidingCases(): array
     {
         return [
             'prev-lt-50%' => [999, false],
@@ -141,16 +142,9 @@ class SlidingWindowEnforcerTest extends TestCase
         ];
     }
 
-    /**
-     * Verify that sliding window algo works.
-     *
-     * @param int $prevCounter
-     * @param bool $expectException
-     * @return void
-     * @throws FileSystemException
-     * @throws RuntimeException
-     * @dataProvider getSlidingCases
+    /**     * @throws RuntimeException
      */
+    #[DataProvider('getSlidingCases')]
     public function testEnforcingSlided(int $prevCounter, bool $expectException): void
     {
         $limitPeriod = 60;

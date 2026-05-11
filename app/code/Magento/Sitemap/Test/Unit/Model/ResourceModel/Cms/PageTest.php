@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -70,22 +70,14 @@ class PageTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceConnection::class);
         $this->context = $objectManager->getObject(
             Context::class,
             ['resource' => $this->resource]
         );
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityManager = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->getUtilityPageIdentifiers = $this->getMockBuilder(GetUtilityPageIdentifiers::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->entityManager = $this->createMock(EntityManager::class);
+        $this->getUtilityPageIdentifiers = $this->createMock(GetUtilityPageIdentifiers::class);
         $this->model = $objectManager->getObject(
             Page::class,
             [
@@ -120,10 +112,7 @@ class PageTest extends TestCase
         $expectedPage->setUrl($url);
         $expectedPage->setUpdatedAt($updatedAt);
 
-        $query = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['fetch'])
-            ->getMockForAbstractClass();
+        $query = $this->createMock(\Zend_Db_Statement_Interface::class);
         $query->expects($this->exactly(2))
             ->method('fetch')
             ->willReturnOnConsecutiveCalls(
@@ -135,9 +124,7 @@ class PageTest extends TestCase
                 false
             );
 
-        $select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $select = $this->createMock(Select::class);
         $select->expects($this->once())
             ->method('from')
             ->with(
@@ -153,19 +140,9 @@ class PageTest extends TestCase
             )->willReturnSelf();
         $select->expects($this->exactly(3))
             ->method('where')
-            ->withConsecutive(
-                [$this->identicalTo('main_table.is_active = 1')],
-                [
-                    $this->identicalTo('main_table.identifier NOT IN (?)'),
-                    $this->identicalTo(array_values($pageIdentifiers))
-                ],
-                [$this->identicalTo('store_table.store_id IN(?)'), $this->identicalTo([0, $storeId])]
-            )->willReturnSelf();
+            ->willReturnCallback($this->getWhereCallbackForSelect($pageIdentifiers, $storeId, $select));
 
-        $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())
             ->method('select')
             ->willReturn($select);
@@ -174,10 +151,7 @@ class PageTest extends TestCase
             ->with($this->identicalTo($select))
             ->willReturn($query);
 
-        $entityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->setMethods(['getLinkField', 'getEntityConnection'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $entityMetadata = $this->createMock(EntityMetadataInterface::class);
         $entityMetadata->expects($this->once())
             ->method('getLinkField')
             ->willReturn($linkField);
@@ -191,13 +165,13 @@ class PageTest extends TestCase
 
         $this->resource->expects($this->exactly(2))
             ->method('getTableName')
-            ->withConsecutive(
-                [$this->identicalTo('cms_page'), $this->identicalTo('default')],
-                [$this->identicalTo('cms_page_store'), $this->identicalTo('default')]
-            )->willReturnOnConsecutiveCalls(
-                'cms_page',
-                'cms_page_store'
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'cms_page' && $arg2 == 'default') {
+                    return 'cms_page';
+                } elseif ($arg1 == 'cms_page_store' && $arg2 == 'default') {
+                    return 'cms_page_store';
+                }
+            });
 
         $this->metadataPool->expects($this->exactly(3))
             ->method('getMetadata')
@@ -207,5 +181,26 @@ class PageTest extends TestCase
         $result = $this->model->getCollection($storeId);
         $resultPage = array_shift($result);
         $this->assertEquals($expectedPage, $resultPage);
+    }
+
+    /**
+     * Get callback for select where method.
+     *
+     * @param array<string, string> $pageIdentifiers
+     * @param int $storeId
+     * @param MockObject $select
+     * @return callable
+     */
+    private function getWhereCallbackForSelect(array $pageIdentifiers, int $storeId, MockObject $select): callable
+    {
+        return function ($arg1, $arg2 = null) use ($pageIdentifiers, $storeId, $select) {
+            if ($arg1 == 'main_table.is_active = 1') {
+                return $select;
+            } elseif ($arg1 == 'main_table.identifier NOT IN (?)' && $arg2 == array_values($pageIdentifiers)) {
+                return $select;
+            } elseif ($arg1 == 'store_table.store_id IN(?)' && $arg2 == [0, $storeId]) {
+                return $select;
+            }
+        };
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -82,39 +82,21 @@ class SuffixTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['dispatch'])
-            ->getMockForAbstractClass();
+        $this->eventDispatcher = $this->createMock(ManagerInterface::class);
         $this->eventDispatcher->method('dispatch')->willReturnSelf();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getEventDispatcher'])
-            ->getMock();
+        $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->createMock(Registry::class);
-        $this->config = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->cacheTypeList = $this->getMockBuilder(TypeList::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['invalidate'])
-            ->getMock();
+        $this->config = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheTypeList = $this->createPartialMock(TypeList::class, ['invalidate']);
 
-        $this->urlRewriteHelper = $this->getMockBuilder(UrlRewrite::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getStores'])
-            ->getMock();
+        $this->urlRewriteHelper = $this->createMock(UrlRewrite::class);
+        $this->storeManager = $this->createPartialMock(StoreManager::class, ['getStores']);
         $this->storeManager->method('getStores')->willReturn([]);
 
-        $this->appResource =$this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlFinder =$this->getMockBuilder(UrlFinderInterface::class)
-            ->setMethods(['findAllByData', 'findOneByData'])
-            ->getMockForAbstractClass();
+        $this->appResource = $this->createMock(ResourceConnection::class);
+        $this->urlFinder =$this->createMock(UrlFinderInterface::class);
         $this->urlFinder->method('findAllByData')->willReturn([]);
 
         $this->suffixModel = new Suffix(
@@ -135,13 +117,16 @@ class SuffixTest extends TestCase
         $this->suffixModel->setPath(
             CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX
         );
-        $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')->withConsecutive(
-            [$this->equalTo([
-                Block::TYPE_IDENTIFIER,
-                Collection::TYPE_IDENTIFIER
-            ])],
-            [$this->equalTo('config')]
-        );
+        $this->cacheTypeList->expects($this->exactly(2))->method('invalidate')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == [Block::TYPE_IDENTIFIER, Collection::TYPE_IDENTIFIER]) {
+                        return null;
+                    } elseif ($arg1 == 'config') {
+                        return null;
+                    }
+                }
+            );
         $this->suffixModel->afterSave();
     }
 

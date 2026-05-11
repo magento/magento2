@@ -1,19 +1,50 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images;
 
 /**
  * @method \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images getModel
  */
-class ImagesTest extends AbstractModifierTest
+class ImagesTest extends AbstractModifierTestCase
 {
+    /**
+     * @var DefaultValueProcessor|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $defaultValueProcessorMock;
+
+    /**
+     * @var ScopeOverriddenValue|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $scopeOverriddenValueMock;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        
+        $this->defaultValueProcessorMock = $this->createMock(DefaultValueProcessor::class);
+        $this->scopeOverriddenValueMock = $this->createMock(ScopeOverriddenValue::class);
+        
+        // Mock defaultValueProcessor to return the input data unchanged
+        $this->defaultValueProcessorMock->method('process')
+            ->willReturnArgument(1);
+        
+        // Mock scopeOverriddenValue to return false (value not overridden)
+        $this->scopeOverriddenValueMock->method('containsValue')
+            ->willReturn(false);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -21,12 +52,14 @@ class ImagesTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(Images::class, [
             'locator' => $this->locatorMock,
+            'defaultValueProcessor' => $this->defaultValueProcessorMock,
+            'scopeOverriddenValue' => $this->scopeOverriddenValueMock,
         ]);
     }
 
     public function testModifyData()
     {
-        $this->productMock->expects($this->once())->method('getId')->willReturn(2051);
+        $this->productMock->setId(2051);
         $actualResult = $this->getModel()->modifyData($this->getSampleData());
         $this->assertSame("", $actualResult[2051]['product']['media_gallery']['images'][0]['label']);
     }

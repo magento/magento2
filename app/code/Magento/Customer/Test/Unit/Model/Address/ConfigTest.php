@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,10 +47,10 @@ class ConfigTest extends TestCase
         $cacheId = 'cache_id';
         $objectManagerHelper = new ObjectManager($this);
         $this->storeMock = $this->createMock(Store::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $readerMock = $this->createMock(Reader::class);
-        $cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $cacheMock = $this->createMock(CacheInterface::class);
         $storeManagerMock = $this->createMock(StoreManager::class);
         $storeManagerMock->expects(
             $this->once()
@@ -83,7 +83,7 @@ class ConfigTest extends TestCase
                 $cacheId
             );
 
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn(json_encode($fixtureConfigData));
         $serializerMock->method('unserialize')

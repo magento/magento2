@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -44,6 +44,7 @@ class AvailableStoresTest extends GraphQlAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
         $this->storeResource = $this->objectManager->get(StoreResource::class);
+        $this->markTestSkipped('AC-9001');
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -57,7 +58,7 @@ class InvoiceRepositoryTest extends TestCase
             InvoiceSearchResultInterfaceFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
@@ -76,9 +77,7 @@ class InvoiceRepositoryTest extends TestCase
     {
         $id = 1;
 
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $entity->expects($this->once())
             ->method('load')
             ->with($id)
@@ -107,9 +106,7 @@ class InvoiceRepositoryTest extends TestCase
         $this->expectExceptionMessage('The entity that was requested doesn\'t exist. Verify the entity and try again.');
         $id = 1;
 
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $entity->expects($this->once())
             ->method('load')
             ->with($id)
@@ -127,9 +124,7 @@ class InvoiceRepositoryTest extends TestCase
 
     public function testCreate()
     {
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $this->invoiceMetadata->expects($this->once())
             ->method('getNewInstance')
             ->willReturn($entity);
@@ -138,12 +133,8 @@ class InvoiceRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $collection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $collection = $this->createMock(Collection::class);
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
             ->with($searchCriteria, $collection);
@@ -156,16 +147,12 @@ class InvoiceRepositoryTest extends TestCase
 
     public function testDelete()
     {
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $entity->expects($this->once())
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mapper = $this->createMock(InvoiceResource::class);
         $mapper->expects($this->once())
             ->method('delete')
             ->with($entity);
@@ -181,9 +168,7 @@ class InvoiceRepositoryTest extends TestCase
     {
         $id = 1;
 
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $entity->expects($this->once())
             ->method('load')
             ->with($id)
@@ -196,9 +181,7 @@ class InvoiceRepositoryTest extends TestCase
             ->method('getNewInstance')
             ->willReturn($entity);
 
-        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mapper = $this->createMock(InvoiceResource::class);
         $mapper->expects($this->once())
             ->method('delete')
             ->with($entity);
@@ -212,16 +195,12 @@ class InvoiceRepositoryTest extends TestCase
 
     public function testSave()
     {
-        $entity = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $entity = $this->createMock(Invoice::class);
         $entity->expects($this->any())
             ->method('getEntityId')
             ->willReturn(1);
 
-        $mapper = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mapper = $this->createMock(InvoiceResource::class);
         $mapper->expects($this->once())
             ->method('save')
             ->with($entity);

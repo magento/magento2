@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,15 +14,21 @@ use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Url;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Category.
@@ -58,7 +64,13 @@ class CategoryTest extends TestCase
     private $categoryRepository;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $dataFixtureStorage;
+
+    /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function setUp(): void
     {
@@ -69,6 +81,7 @@ class CategoryTest extends TestCase
         $this->_model = $this->objectManager->create(Category::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
+        $this->dataFixtureStorage = DataFixtureStorageManager::getStorage();
     }
 
     public function testGetUrlInstance(): void
@@ -404,9 +417,9 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * @dataProvider categoryFieldsProvider
      * @param array $data
      */
+    #[DataProvider('categoryFieldsProvider')]
     public function testCategoryCreateWithDifferentFields(array $data): void
     {
         $requiredData = [
@@ -447,19 +460,21 @@ class CategoryTest extends TestCase
     /**
      * @return array
      */
-    public function categoryFieldsProvider(): array
+    public static function categoryFieldsProvider(): array
     {
         return [
-            [
-                'enable_fields' => [
+            'enable_fields' => [
+                'data' => [
                     'is_active' => '1',
                     'include_in_menu' => '1',
-                ],
-                'disable_fields' => [
+                ]
+            ],
+            'disable_fields' => [
+                'data' => [
                     'is_active' => '0',
                     'include_in_menu' => '0',
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
@@ -508,5 +523,22 @@ class CategoryTest extends TestCase
         $collection->addNameToResult()->load();
 
         return $collection->getItemByColumnValue('name', $categoryName);
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException|\Exception
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
+    public function testGetUrlAfterUpdate()
+    {
+        $category = $this->dataFixtureStorage->get('category');
+        $category->setUrlKey('new-url');
+        $category->setSaveRewritesHistory(true);
+        $this->categoryResource->save($category);
+
+        $this->assertStringEndsWith('new-url.html', $category->getUrl());
     }
 }

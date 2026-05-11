@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Price;
@@ -37,6 +37,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     /**
      * @var Session
      * @deprecated 102.0.0
+     * @see Updated deprecation doc annotations
      */
     protected $customerSession;
 
@@ -91,7 +92,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
         GroupManagementInterface $groupManagement,
-        CustomerGroupRetrieverInterface $customerGroupRetriever = null,
+        ?CustomerGroupRetrieverInterface $customerGroupRetriever = null,
         ?ScopeConfigInterface $scopeConfig = null
     ) {
         $quantity = (float)$quantity ? $quantity : 1;

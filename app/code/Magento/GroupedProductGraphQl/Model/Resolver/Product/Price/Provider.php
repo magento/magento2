@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
     /**
      * Cache product prices so only fetch once
      *
-     * @var AmountInterface[]
+     * @var AmountInterface[]|null
      */
     private $minimalProductAmounts;
 
@@ -100,6 +100,6 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->minimalProductAmounts = [];
+        $this->minimalProductAmounts = null;
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_order_confirm_cancel" resource="default" engine="innodb" comment="Save the confirmation key to cancel guest order">
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
+                comment="Order ID"/>
+        <column xsi:type="varchar" name="confirmation_key" nullable="false" length="32"
+                comment="Random key"/>
+        <column xsi:type="varchar" name="reason" nullable="false"
+                comment="Cancellation reason"/>
+        <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="created at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="order_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SALES_ORDER_CONFIRM_CANCEL_ORDER_ID_SALES_ORDER_ENTITY_ID"
+                    table="sales_order_confirm_cancel" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id" onDelete="CASCADE" />
+    </table>
+</schema>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test is category fields
@@ -79,8 +80,8 @@ class CategorySpecificFieldsTest extends GraphQlAbstract
      * @param array $categoryFields
      * @return void
      * @throws \Exception
-     * @dataProvider categoryFieldsDataProvider
      */
+    #[DataProvider('categoryFieldsDataProvider')]
     public function testSpecificCategoryFields(int $categoryId, array $categoryFields): void
     {
         $query = <<<QUERY
@@ -114,12 +115,12 @@ QUERY;
      *
      * @return array[][]
      */
-    public function categoryFieldsDataProvider(): array
+    public static function categoryFieldsDataProvider(): array
     {
         return [
             [
-                'category_id' => 10,
-                'category_fields' => [
+                'categoryId' => 10,
+                'categoryFields' => [
                     'id' => 10,
                     'include_in_menu' => 0,
                     'name' => 'Category_en',

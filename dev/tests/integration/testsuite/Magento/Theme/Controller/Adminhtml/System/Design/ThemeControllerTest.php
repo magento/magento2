@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
@@ -63,7 +63,7 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
             $output = $this->getResponse()->getBody();
             if (!in_array('imagick', get_loaded_extensions()) || $this->imageAdapter == 'GD2') {
                 $this->assertStringContainsString(
-                    '{"error":"File validation failed."',
+                    '{"error":"File validation failed. Check Image Processing Settings in the Store Configuration."',
                     $output
                 );
             } else {

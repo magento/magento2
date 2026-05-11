@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\QuoteGraphQl\Model\Resolver\PlaceOrder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BackpressureTest extends TestCase
 {
@@ -57,7 +58,7 @@ class BackpressureTest extends TestCase
      *
      * @return array
      */
-    public function getConfiguredCases(): array
+    public static function getConfiguredCases(): array
     {
         return [
             'guest' => [
@@ -83,12 +84,12 @@ class BackpressureTest extends TestCase
      * @param string $resolver
      * @param int $expectedLimit
      * @return void
-     * @dataProvider getConfiguredCases
      * @magentoConfigFixture current_store sales/backpressure/enabled 1
      * @magentoConfigFixture current_store sales/backpressure/limit 100
      * @magentoConfigFixture current_store sales/backpressure/guest_limit 50
      * @magentoConfigFixture current_store sales/backpressure/period 60
      */
+    #[DataProvider('getConfiguredCases')]
     public function testConfigured(
         int $identityType,
         string $identity,

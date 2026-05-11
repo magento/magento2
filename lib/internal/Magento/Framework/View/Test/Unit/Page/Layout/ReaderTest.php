@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,20 +67,20 @@ class ReaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->processorInterface = $this->getMockForAbstractClass(ProcessorInterface::class);
-        $this->themeInterface = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->processorInterface = $this->createMock(ProcessorInterface::class);
+        $this->themeInterface = $this->createMock(ThemeInterface::class);
         $this->processorFactory = $this->createPartialMock(
             ProcessorFactory::class,
             ['create']
         );
-        $this->themeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->themeResolver = $this->createMock(ResolverInterface::class);
         $this->pageLayoutFileSource = $this->getMockBuilder(CollectorInterface::class)
             ->getMock();
         $this->readerPool = $this->getMockBuilder(ReaderPool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->readerContext = $this->getMockBuilder(Context::class)
-            ->setMethods(['getScheduledStructure'])
+            ->onlyMethods(['getScheduledStructure'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = (new ObjectManager($this))

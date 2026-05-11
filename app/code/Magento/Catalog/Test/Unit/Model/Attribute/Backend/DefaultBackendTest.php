@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\AbstractModel;
 use Magento\Catalog\Model\Attribute\Backend\DefaultBackend;
 use Magento\Framework\DataObject;
@@ -25,7 +26,7 @@ class DefaultBackendTest extends TestCase
      *
      * @return array
      */
-    public function getAttributeConfigurations(): array
+    public static function getAttributeConfigurations(): array
     {
         return [
             'basic-attribute' => [true, false, true, 'basic', 'value', false, true, false],
@@ -49,8 +50,8 @@ class DefaultBackendTest extends TestCase
      * @param bool $isChanged
      * @param bool $isHtmlAttribute
      * @param bool $exceptionThrown
-     * @dataProvider getAttributeConfigurations
      */
+    #[DataProvider('getAttributeConfigurations')]
     public function testValidate(
         bool $isBasic,
         bool $isValidated,
@@ -65,13 +66,11 @@ class DefaultBackendTest extends TestCase
             $attributeMock = $this->createMock(BasicAttribute::class);
         } else {
             $attributeMock = $this->createMock(Attribute::class);
-            $attributeMock->expects($this->any())
-                ->method('getIsHtmlAllowedOnFront')
-                ->willReturn($isHtmlAttribute);
+            $attributeMock->method('getIsHtmlAllowedOnFront')->willReturn($isHtmlAttribute);
         }
-        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($code);
+        $attributeMock->method('getAttributeCode')->willReturn($code);
 
-        $validatorMock = $this->getMockForAbstractClass(WYSIWYGValidatorInterface::class);
+        $validatorMock = $this->createMock(WYSIWYGValidatorInterface::class);
         if (!$isValidated) {
             $validatorMock->expects($this->any())
                 ->method('validate')
@@ -82,9 +81,7 @@ class DefaultBackendTest extends TestCase
 
         if ($isCatalogEntity) {
             $objectMock = $this->createMock(AbstractModel::class);
-            $objectMock->expects($this->any())
-                ->method('getOrigData')
-                ->willReturn($isChanged ? $value .'-OLD' : $value);
+            $objectMock->method('getOrigData')->willReturn($isChanged ? $value .'-OLD' : $value);
         } else {
             $objectMock = $this->createMock(DataObject::class);
         }

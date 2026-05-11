@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -71,14 +72,8 @@ class DefaultProcessorTest extends TestCase
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->configPathResolverMock = $this->createMock(ConfigPathResolver::class);
-        $this->resourceModelMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['save'])
-            ->getMockForAbstractClass();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResource'])
-            ->getMock();
+        $this->resourceModelMock = $this->createPartialMock(AbstractDb::class, ['save', '_construct']);
+        $this->valueMock = $this->createPartialMock(Value::class, ['getResource']);
         $this->preparedValueFactoryMock = $this->createMock(PreparedValueFactory::class);
         $this->configFactory = $this->createMock(ConfigFactory::class);
 
@@ -97,8 +92,8 @@ class DefaultProcessorTest extends TestCase
      * @param string $value
      * @param string $scope
      * @param string|null $scopeCode
-     * @dataProvider processDataProvider
      */
+    #[DataProvider('processDataProvider')]
     public function testProcess($path, $value, $scope, $scopeCode)
     {
         $this->configMockForProcessTest($path, $scope, $scopeCode);
@@ -121,7 +116,7 @@ class DefaultProcessorTest extends TestCase
     /**
      * @return array
      */
-    public function processDataProvider()
+    public static function processDataProvider()
     {
         return [
             ['test/test/test', 'value', ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null],

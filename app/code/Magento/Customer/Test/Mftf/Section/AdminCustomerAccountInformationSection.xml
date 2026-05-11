@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,6 +11,8 @@
     <section name="AdminCustomerAccountInformationSection">
         <element name="accountInformationTab" type="button" selector="#tab_customer" timeout="30"/>
         <element name="statusInactive" type="button" selector=".admin__actions-switch-label"/>
+        <element name="statusInactiveCheck" type="button" selector="//div/input[@class='admin__actions-switch-checkbox' and @name='customer[extension_attributes][assistance_allowed]' and @value='2']"/>
+        <element name="statusInactiveNew" type="button" selector="//div/input[@class='admin__actions-switch-checkbox' and @name='customer[extension_attributes][assistance_allowed]']/..//child::label"/>
         <element name="accountInformationTitle" type="text" selector=".admin__page-nav-title"/>
         <element name="accountInformationButton" type="text" selector="//a/span[text()='Account Information']"/>
         <element name="addressesButton" type="select" selector="//a//span[contains(text(), 'Addresses')]"/>

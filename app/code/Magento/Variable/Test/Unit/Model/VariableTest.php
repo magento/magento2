@@ -1,24 +1,25 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Variable\Test\Unit\Model;
 
 use Magento\Framework\Escaper;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class VariableTest extends TestCase implements TestProvidesServiceInterface
+class VariableTest extends TestCase
 {
     /**
      * @var  \Magento\Variable\Model\Variable
@@ -68,6 +69,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
         $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->getServicesForObjMap();
         $this->model = $this->objectManager->getObject(
             \Magento\Variable\Model\Variable::class,
             [
@@ -81,14 +83,21 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * Replace Object Manager/Object Mapping
+     * @return void
      */
-    public function getServiceForObjectManager(string $type) : ?object
+    public function getServicesForObjMap()
     {
-        if (Collection::class == $type) {
-            return $this->resourceCollectionMock;
-        }
-        return null;
+        $value = $this->resourceCollectionMock;
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock->method('create')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+        $objectManagerMock->method('get')->willReturnCallback(function () use ($value){
+            return $value;
+        });
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testGetValueHtml()
@@ -125,6 +134,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @dataProvider validateMissingInfoDataProvider
      */
+    #[DataProvider('validateMissingInfoDataProvider')]
     public function testValidateMissingInfo($code, $name)
     {
         $this->model->setCode($code)->setName($name);
@@ -134,6 +144,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($variableArray, $objectId, $expectedResult)
     {
         $code = 'variable_code';
@@ -194,7 +205,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $variable = [
             'variable_id' => 'matching_id',
@@ -209,7 +220,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
     /**
      * @return array
      */
-    public function validateMissingInfoDataProvider()
+    public static function validateMissingInfoDataProvider()
     {
         return [
             'Missing code' => ['', 'some-name'],
@@ -226,6 +237,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
      * @param bool $exceptionThrown
      * @dataProvider getWysiwygValidationCases
      */
+    #[DataProvider('getWysiwygValidationCases')]
     public function testBeforeSave(string $value, bool $isChanged, bool $isValidated, bool $exceptionThrown): void
     {
         $actuallyThrown = false;
@@ -260,7 +272,7 @@ class VariableTest extends TestCase implements TestProvidesServiceInterface
      *
      * @return array
      */
-    public function getWysiwygValidationCases(): array
+    public static function getWysiwygValidationCases(): array
     {
         return [
             'changed-html-value-without-exception' => ['<b>Test Html</b>',true,true,false],

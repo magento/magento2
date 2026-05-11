@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -117,9 +118,9 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
-     * @dataProvider updateData
      * @param array $data
      */
+    #[DataProvider('updateData')]
     public function testUpdate(array $data)
     {
         $serviceInfo = [
@@ -191,13 +192,13 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test delete method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider deleteData
      * @param array $data
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
      */
+    #[DataProvider('deleteData')]
     public function testDelete(array $data)
     {
         /** @var ProductRepositoryInterface $productRepository */
@@ -238,7 +239,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      *
      * @return array
      */
-    public function updateData(): array
+    public static function updateData(): array
     {
         $fromDate = '2037-01-19 03:14:07';
         $toDate = '2038-01-19 03:14:07';
@@ -272,7 +273,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      *
      * @return array
      */
-    public function deleteData(): array
+    public static function deleteData(): array
     {
         $fromDate = '1970-01-01 00:00:01';
         $toDate = '2038-01-19 03:14:07';

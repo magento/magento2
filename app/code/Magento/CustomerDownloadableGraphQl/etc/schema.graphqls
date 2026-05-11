@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2019 Adobe
+# All Rights Reserved.
 
 type Query {
     customerDownloadableProducts: CustomerDownloadableProducts @resolver(class: "Magento\\CustomerDownloadableGraphQl\\Model\\Resolver\\CustomerDownloadableProducts") @doc(description: "Return a list of downloadable products the customer has purchased.") @cache(cacheable: false)

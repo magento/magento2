@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Model\ResourceModel;
 
@@ -131,7 +131,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param null|array $predefinedStoreIds
      * @return array
      */
-    public function getCurrentStoreIds(array $predefinedStoreIds = null)
+    public function getCurrentStoreIds(?array $predefinedStoreIds = null)
     {
         $stores = [];
         // get all or specified stores

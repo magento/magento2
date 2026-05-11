@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model;
 
@@ -14,6 +14,7 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,7 +43,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         }
 
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
-            ->addMethods([])
             ->setConstructorArgs(
                 [
                     $this->objectManager->get(\Magento\Framework\Model\Context::class),
@@ -60,6 +60,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                     $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
                 ]
             )
+            ->onlyMethods([])
             ->getMock();
 
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
@@ -137,8 +138,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateFallbackDataProvider
      */
+    #[DataProvider('templateFallbackDataProvider')]
     public function testTemplateFallback($area, $templateId, $expectedOutput, $mockThemeFallback = false)
     {
         $this->mockModel();
@@ -157,7 +158,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateFallbackDataProvider()
+    public static function templateFallbackDataProvider()
     {
         return [
             'Template from module - admin' => [
@@ -206,7 +207,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateDirectiveDataProvider
      *
      * @param string $area
      * @param int $templateType
@@ -216,6 +216,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @param string $storeConfigPath
      * @param bool $mockAdminTheme
      */
+    #[DataProvider('templateDirectiveDataProvider')]
     public function testTemplateDirective(
         $area,
         $templateType,
@@ -261,7 +262,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateDirectiveDataProvider()
+    public static function templateDirectiveDataProvider()
     {
         return [
             'Template from module folder - adminhtml' => [
@@ -439,13 +440,13 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateStylesVariableDataProvider
      *
      * @param string $area
      * @param string $expectedOutput
      * @param array $unexpectedOutputs
      * @param array $templateForDatabase
      */
+    #[DataProvider('templateStylesVariableDataProvider')]
     public function testTemplateStylesVariable($area, $expectedOutput, $unexpectedOutputs, $templateForDatabase = [])
     {
         if (count($templateForDatabase)) {
@@ -461,14 +462,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         } else {
             // <!--@styles @--> parsing only via the loadDefault method. Since email template files won't contain
             // @styles comments by default, it is necessary to mock an object to return testable contents
-            $themeDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
-                ->disableOriginalConstructor()
-                ->setMethods(
-                    [
-                        'readFile',
-                    ]
-                )
-                ->getMockForAbstractClass();
+            $themeDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
             $themeDirectory->expects($this->once())
                 ->method('readFile')
@@ -476,7 +470,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getDirectoryRead'])
+                ->onlyMethods(['getDirectoryRead'])
                 ->getMock();
 
             $filesystem->expects($this->once())
@@ -501,7 +495,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateStylesVariableDataProvider()
+    public static function templateStylesVariableDataProvider()
     {
         return [
             'Styles from <!--@styles @--> comment - adminhtml' => [
@@ -714,8 +708,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $config
-     * @dataProvider setDesignConfigExceptionDataProvider
      */
+    #[DataProvider('setDesignConfigExceptionDataProvider')]
     public function testSetDesignConfigException($config)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -725,7 +719,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->setDesignConfig($config);
     }
 
-    public function setDesignConfigExceptionDataProvider()
+    public static function setDesignConfigExceptionDataProvider()
     {
         $storeId = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()
@@ -757,7 +751,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testGetTypeNonExistentType()
     {
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Email template \'foo\' is not defined.');
+        $this->expectExceptionMessage('Email template is not defined.');
 
         $this->mockModel();
         $this->model->setId('foo');

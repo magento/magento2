@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -49,7 +49,7 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->urlRewrite = $this->getMockBuilder(UrlRewrite::class)
@@ -119,23 +119,23 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
         $category = $this->createMock(Category::class);
         $category->expects($this->any())->method('getId')->willReturn($categoryIds);
         $category->expects($this->any())->method('getAnchorsAbove')->willReturn($categoryIds);
-        $category->expects($this->any())->method('getParentId')->will(
-            $this->onConsecutiveCalls(
-                $categoryIds[0],
-                $categoryIds[1],
-                $categoryIds[2],
-                $categoryIds[3]
-            )
+        $parentIdCallCount = 0;
+        $category->expects($this->any())->method('getParentId')->willReturnCallback(
+            function () use ($categoryIds, &$parentIdCallCount) {
+                $result = $categoryIds[$parentIdCallCount % count($categoryIds)];
+                $parentIdCallCount++;
+                return $result;
+            }
         );
         $this->categoryRepositoryInterface
             ->expects($this->any())
             ->method('get')
-            ->withConsecutive(
-                [$categoryIds[0], $storeId],
-                [$categoryIds[1], $storeId],
-                [$categoryIds[2], $storeId]
-            )
-            ->willReturn($category);
+            ->willReturnCallback(function ($categoryIds, $storeId) use ($category) {
+                if ($categoryIds[0] || $categoryIds[1] || $categoryIds[2] && $storeId) {
+                    return $category;
+                }
+            });
+
         $this->categoryRegistry->expects($this->any())->method('getList')
             ->willReturn([$category]);
         $this->urlRewrite->expects($this->any())->method('setStoreId')
@@ -146,13 +146,14 @@ class AnchorUrlRewriteGeneratorTest extends TestCase
             ->with(ProductUrlRewriteGenerator::ENTITY_TYPE)->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setRequestPath')->willReturnSelf();
         $this->urlRewrite->expects($this->any())->method('setTargetPath')->willReturnSelf();
+        $metadataCallCount = 0;
         $this->urlRewrite->expects($this->any())->method('setMetadata')
-            ->will(
-                $this->onConsecutiveCalls(
-                    $urls[0],
-                    $urls[1],
-                    $urls[2]
-                )
+            ->willReturnCallback(
+                function () use ($urls, &$metadataCallCount) {
+                    $result = $urls[$metadataCallCount % count($urls)];
+                    $metadataCallCount++;
+                    return $result;
+                }
             );
         $this->urlRewriteFactory->expects($this->any())->method('create')->willReturn(
             $this->urlRewrite

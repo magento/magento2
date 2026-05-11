@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,11 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -26,12 +28,14 @@ use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractBlockTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var AbstractBlock
      */
@@ -87,20 +91,17 @@ class AbstractBlockTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
-        $this->eventManagerMock = $this->getMockForAbstractClass(EventManagerInterface::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->cacheStateMock = $this->getMockForAbstractClass(CacheStateInterface::class);
+        $this->eventManagerMock = $this->createMock(EventManagerInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->cacheStateMock = $this->createMock(CacheStateInterface::class);
         $this->lockQuery = $this->getMockBuilder(LockGuardedCacheLoader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['lockedLoadData'])
-            ->getMockForAbstractClass();
-        $this->sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
-        $this->sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
+            ->onlyMethods(['lockedLoadData'])
+            ->getMock();
+        $this->sidResolverMock = $this->createMock(SidResolverInterface::class);
+        $this->sessionMock = $this->createMock(SessionManagerInterface::class);
         $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -127,13 +128,13 @@ class AbstractBlockTest extends TestCase
             ->method('getLockGuardedCacheLoader')
             ->willReturn($this->lockQuery);
 
-        $this->block = $this->getMockForAbstractClass(
-            AbstractBlock::class,
-            [
-                'context' => $contextMock,
-                'data' => []
-            ]
-        );
+        $this->block = $this->getMockBuilder(AbstractBlock::class)
+            ->setConstructorArgs([
+                $contextMock,
+                []
+            ])
+            ->onlyMethods([])
+            ->getMock();
         $this->deploymentConfig = $this->createPartialMock(
             DeploymentConfig::class,
             ['get']
@@ -143,9 +144,8 @@ class AbstractBlockTest extends TestCase
     /**
      * @param string $expectedResult
      * @param string $nameInLayout
-     * @param array $methodArguments
-     * @dataProvider getUiIdDataProvider
-     */
+     * @param array $methodArguments     */
+    #[DataProvider('getUiIdDataProvider')]
     public function testGetUiId($expectedResult, $nameInLayout, $methodArguments)
     {
         $this->escaperMock->expects($this->once())
@@ -162,7 +162,7 @@ class AbstractBlockTest extends TestCase
     /**
      * @return array
      */
-    public function getUiIdDataProvider()
+    public static function getUiIdDataProvider()
     {
         return [
             [' data-ui-id="" ', null, []],
@@ -208,16 +208,17 @@ class AbstractBlockTest extends TestCase
                 ]
             );
 
-        $configManager = $this->getMockForAbstractClass(ConfigInterface::class);
+        $configManager = $this->createMock(ConfigInterface::class);
         $configManager->expects($this->exactly(2))->method('getViewConfig')->willReturn($config);
 
         /** @var AbstractBlock|MockObject $block */
         $params = ['viewConfig' => $configManager];
         $helper = new ObjectManager($this);
-        $block = $this->getMockForAbstractClass(
-            AbstractBlock::class,
-            $helper->getConstructArguments(AbstractBlock::class, $params)
-        );
+        $constructorArgs = $helper->getConstructArguments(AbstractBlock::class, $params);
+        $block = $this->getMockBuilder(AbstractBlock::class)
+            ->setConstructorArgs($constructorArgs)
+            ->onlyMethods([])
+            ->getMock();
         $block->setData('module_name', 'Magento_Theme');
 
         $this->assertEquals('one', $block->getVar('v1'));
@@ -239,7 +240,21 @@ class AbstractBlockTest extends TestCase
     {
         $cacheKey = 'testKey';
         $this->block->setData('cache_key', $cacheKey);
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CUSTOM_CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+    }
+
+    /**
+     * Test for invalid cacheKey name
+     * @return void
+     * @throws RuntimeException
+     */
+    public function testGetCacheKeyFail(): void
+    {
+        $cacheKey = "test&''Key";
+        $this->block->setData('cache_key', $cacheKey);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage((string)__('Please enter cache key with only alphanumeric or hash string.'));
+        $this->block->getCacheKey();
     }
 
     /**
@@ -288,9 +303,8 @@ class AbstractBlockTest extends TestCase
      * @param string|bool $dataFromCache
      * @param InvokedCount $expectsDispatchEvent
      * @param string $expectedResult
-     * @return void
-     * @dataProvider getCacheLifetimeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getCacheLifetimeDataProvider')]
     public function testGetCacheLifetimeViaToHtml(
         $cacheLifetime,
         $dataFromCache,
@@ -303,7 +317,10 @@ class AbstractBlockTest extends TestCase
         $this->block->setData('module_name', $moduleName);
         $this->block->setData('cache_lifetime', $cacheLifetime);
 
-        $this->eventManagerMock->expects($expectsDispatchEvent)
+        $expects = is_string($expectsDispatchEvent)
+            ? $this->createInvocationMatcher($expectsDispatchEvent)
+            : $expectsDispatchEvent;
+        $this->eventManagerMock->expects($expects)
             ->method('dispatch');
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -330,37 +347,37 @@ class AbstractBlockTest extends TestCase
     /**
      * @return array
      */
-    public function getCacheLifetimeDataProvider()
+    public static function getCacheLifetimeDataProvider()
     {
         return [
             [
                 'cacheLifetime' => null,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => 'exactly_2',
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => false,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => 'exactly_2',
                 'expectedResult' => '',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => 'exactly_2',
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => '120string',
                 'dataFromCache' => 'dataFromCache',
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => 'exactly_2',
                 'expectedResult' => 'dataFromCache',
             ],
             [
                 'cacheLifetime' => 120,
                 'dataFromCache' => false,
-                'expectsDispatchEvent' => $this->exactly(2),
+                'expectsDispatchEvent' => 'exactly_2',
                 'expectedResult' => '',
             ],
         ];

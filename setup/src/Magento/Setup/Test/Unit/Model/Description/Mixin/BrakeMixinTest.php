@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Model\Description\Mixin;
 
 use Magento\Setup\Model\Description\Mixin\BrakeMixin;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BrakeMixinTest extends TestCase
 {
@@ -23,8 +24,8 @@ class BrakeMixinTest extends TestCase
     }
 
     /**
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testApply($subject, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->mixin->apply($subject));
@@ -33,7 +34,7 @@ class BrakeMixinTest extends TestCase
     /**
      * @return array
      */
-    public function getTestData()
+    public static function getTestData()
     {
         return [
             ['', ''],

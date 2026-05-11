@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,6 +11,7 @@ namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Decorator;
 use Magento\Developer\Model\TemplateEngine\Decorator\DebugHints;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\TemplateEngineInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\DataObject;
 use Magento\Framework\Math\Random;
@@ -20,14 +21,12 @@ class DebugHintsTest extends TestCase
 {
     /**
      * @param bool $showBlockHints
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($showBlockHints)
     {
-        $subject = $this->getMockForAbstractClass(TemplateEngineInterface::class);
-        $block = $this->getMockBuilder(BlockInterface::class)
-            ->setMockClassName('TestBlock')
-            ->getMockForAbstractClass();
+        $subject = $this->createMock(TemplateEngineInterface::class);
+        $block = $this->createMock(BlockInterface::class);
         $subject->expects(
             $this->once()
         )->method(
@@ -70,7 +69,7 @@ class DebugHintsTest extends TestCase
     /**
      * @return array
      */
-    public function renderDataProvider()
+    public static function renderDataProvider()
     {
         return ['block hints disabled' => [false], 'block hints enabled' => [true]];
     }

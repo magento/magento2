@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Payment\Model\Method\Specification\Factory;
 use Magento\Payment\Model\Method\SpecificationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CompositeTest extends TestCase
 {
@@ -45,13 +46,14 @@ class CompositeTest extends TestCase
     }
 
     /**
+     * Test composite
+     *
      * @param bool $firstSpecificationResult
      * @param bool $secondSpecificationResult
      * @param bool $compositeResult
-     *
      * @return void
-     * @dataProvider compositeDataProvider
      */
+    #[DataProvider('compositeDataProvider')]
     public function testComposite(
         bool $firstSpecificationResult,
         bool $secondSpecificationResult,
@@ -59,7 +61,7 @@ class CompositeTest extends TestCase
     ): void {
         $method = 'method-name';
 
-        $specificationFirst = $this->getMockForAbstractClass(SpecificationInterface::class);
+        $specificationFirst = $this->createMock(SpecificationInterface::class);
         $specificationFirst->expects(
             $this->once()
         )->method(
@@ -70,7 +72,7 @@ class CompositeTest extends TestCase
             $firstSpecificationResult
         );
 
-        $specificationSecond = $this->getMockForAbstractClass(SpecificationInterface::class);
+        $specificationSecond = $this->createMock(SpecificationInterface::class);
         $specificationSecond->expects(
             $this->any()
         )->method(
@@ -83,8 +85,10 @@ class CompositeTest extends TestCase
 
         $this->factoryMock
             ->method('create')
-            ->withConsecutive(['SpecificationFirst'], ['SpecificationSecond'])
-            ->willReturnOnConsecutiveCalls($specificationFirst, $specificationSecond);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['SpecificationFirst'] =>  $specificationFirst,
+                ['SpecificationSecond'] => $specificationSecond
+            });
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);
 
@@ -98,7 +102,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function compositeDataProvider(): array
+    public static function compositeDataProvider(): array
     {
         return [
             [true, true, true],

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
@@ -57,6 +57,11 @@
                     <label>Enable Clear Shopping Cart</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="cart_merge_preference" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Cart Merge Preference</label>
+                    <source_model>Magento\Checkout\Model\Config\Source\CartMergePreference</source_model>
+                    <comment>Select how cart item quantities should be merged</comment>
+                </field>
             </group>
             <group id="cart_link" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1">
                 <label>My Cart Link</label>
@@ -104,6 +109,18 @@
                     <label>Send Payment Failed Email Copy Method</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
                 </field>
+            </group>
+        </section>
+        <section id="csp">
+            <group id="mode">
+                <group id="storefront_checkout_index_index" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Storefront > One Page Checkout</label>
+                    <field id="report_uri" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Report URI</label>
+                        <comment>If empty, Default Report URI for storefront will be used.</comment>
+                        <validate>validate-url</validate>
+                    </field>
+                </group>
             </group>
         </section>
     </system>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -67,7 +68,7 @@ class LoadTest extends TestCase
         $this->contextMock = $this->createMock(Context::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->sectionIdentifierMock = $this->createMock(Identifier::class);
-        $this->sectionPoolMock = $this->getMockForAbstractClass(SectionPoolInterface::class);
+        $this->sectionPoolMock = $this->createMock(SectionPoolInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->httpRequestMock = $this->createMock(HttpRequest::class);
         $this->resultJsonMock = $this->createMock(Json::class);
@@ -89,9 +90,8 @@ class LoadTest extends TestCase
      * @param string $sectionNames
      * @param bool $forceNewSectionTimestamp
      * @param string[] $sectionNamesAsArray
-     * @param bool $forceNewTimestamp
-     * @dataProvider executeDataProvider
-     */
+     * @param bool $forceNewTimestamp */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($sectionNames, $forceNewSectionTimestamp, $sectionNamesAsArray, $forceNewTimestamp)
     {
         $this->resultJsonFactoryMock->expects($this->once())
@@ -99,15 +99,20 @@ class LoadTest extends TestCase
             ->willReturn($this->resultJsonMock);
         $this->resultJsonMock->expects($this->exactly(2))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'],
-                ['Pragma', 'no-cache']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === 'Cache-Control' && $arg2 === 'max-age=0, must-revalidate, no-cache, no-store') {
+                    return null;
+                } elseif ($arg1 === 'Pragma' && $arg2 === 'no-cache') {
+                    return null;
+                }
+            });
 
         $this->httpRequestMock->expects($this->exactly(2))
             ->method('getParam')
-            ->withConsecutive(['sections'], ['force_new_section_timestamp'])
-            ->willReturnOnConsecutiveCalls($sectionNames, $forceNewSectionTimestamp);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['sections'] => $sectionNames,
+                ['force_new_section_timestamp'] => $forceNewSectionTimestamp
+            });
 
         $this->sectionPoolMock->expects($this->once())
             ->method('getSectionsData')
@@ -131,7 +136,7 @@ class LoadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             [
@@ -162,10 +167,13 @@ class LoadTest extends TestCase
             ->willReturn($this->resultJsonMock);
         $this->resultJsonMock->expects($this->exactly(2))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Cache-Control', 'max-age=0, must-revalidate, no-cache, no-store'],
-                ['Pragma', 'no-cache']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === 'Cache-Control' && $arg2 === 'max-age=0, must-revalidate, no-cache, no-store') {
+                    return null;
+                } elseif ($arg1 === 'Pragma' && $arg2 === 'no-cache') {
+                    return null;
+                }
+            });
 
         $this->httpRequestMock->expects($this->once())
             ->method('getParam')

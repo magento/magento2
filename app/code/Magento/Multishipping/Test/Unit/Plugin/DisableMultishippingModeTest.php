@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,9 +9,11 @@ namespace Magento\Multishipping\Test\Unit\Plugin;
 
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Checkout\Model\Cart;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Multishipping\Model\DisableMultishipping as DisableMultishippingModel;
 use Magento\Multishipping\Plugin\DisableMultishippingMode;
-use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,13 +22,15 @@ use PHPUnit\Framework\TestCase;
  */
 class DisableMultishippingModeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Cart|MockObject
      */
     private $cartMock;
 
     /**
-     * @var CartInterface|MockObject
+     * @var Quote|MockObject
      */
     private $quoteMock;
 
@@ -47,10 +50,10 @@ class DisableMultishippingModeTest extends TestCase
     protected function setUp(): void
     {
         $this->cartMock = $this->createMock(Cart::class);
-        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
-            ->addMethods(['setTotalsCollectedFlag', 'getTotalsCollectedFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['setTotalsCollectedFlag', 'getTotalsCollectedFlag']
+        );
         $this->cartMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
@@ -66,8 +69,8 @@ class DisableMultishippingModeTest extends TestCase
      *
      * @param bool $totalsCollectedBefore
      * @return void
-     * @dataProvider pluginWithChangedMultishippingModeDataProvider
      */
+    #[DataProvider('pluginWithChangedMultishippingModeDataProvider')]
     public function testPluginWithChangedMultishippingMode(bool $totalsCollectedBefore): void
     {
         $subject = $this->createMock(Index::class);
@@ -92,7 +95,7 @@ class DisableMultishippingModeTest extends TestCase
      *
      * @return array
      */
-    public function pluginWithChangedMultishippingModeDataProvider(): array
+    public static function pluginWithChangedMultishippingModeDataProvider(): array
     {
         return [
             'check_when_totals_are_collected' => [true],

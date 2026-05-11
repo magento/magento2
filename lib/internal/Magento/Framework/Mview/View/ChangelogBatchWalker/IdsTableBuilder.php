@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Mview\View\ChangelogBatchWalker;
@@ -50,7 +50,6 @@ class IdsTableBuilder implements IdsTableBuilderInterface
             ['unsigned' => true, 'nullable' => false],
             'Entity ID'
         );
-        $table->setOption('type', 'memory');
         $table->addIndex(
             self::INDEX_NAME_UNIQUE,
             [

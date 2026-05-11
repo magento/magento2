@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,12 +45,8 @@ class CustomerGroupConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->configMock = $this->createMock(Config::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->customerGroupConfig = $this->objectManagerHelper->getObject(
@@ -69,9 +65,7 @@ class CustomerGroupConfigTest extends TestCase
     {
         $customerGroupId = 1;
 
-        $customerGroupMock = $this->getMockBuilder(GroupInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $customerGroupMock = $this->createMock(GroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('getById')->willReturn($customerGroupMock);
         $this->configMock->expects($this->once())->method('setDataByPath')
             ->with(GroupManagement::XML_PATH_DEFAULT_ID, $customerGroupId)->willReturnSelf();

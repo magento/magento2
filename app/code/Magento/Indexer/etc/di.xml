@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -58,6 +58,7 @@
                 <item name="info" xsi:type="object">Magento\Indexer\Console\Command\IndexerInfoCommand</item>
                 <item name="reindex" xsi:type="object">Magento\Indexer\Console\Command\IndexerReindexCommand</item>
                 <item name="set-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetModeCommand</item>
+                <item name="set-status" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetStatusCommand</item>
                 <item name="show-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowModeCommand</item>
                 <item name="status" xsi:type="object">Magento\Indexer\Console\Command\IndexerStatusCommand</item>
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
@@ -77,5 +78,8 @@
     </type>
     <type name="Magento\Framework\Indexer\CacheContext">
         <plugin name="defer_cache_cleaning" type="Magento\Indexer\Model\Indexer\DeferCacheCleaning" />
+    </type>
+    <type name="Magento\Framework\Mview\ViewInterface">
+        <plugin name="skip_suspended_indexer_mview_update" type="Magento\Indexer\Plugin\Mview\ViewUpdatePlugin" sortOrder="10"/>
     </type>
 </config>

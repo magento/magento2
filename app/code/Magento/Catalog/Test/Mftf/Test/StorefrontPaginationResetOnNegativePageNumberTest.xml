@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaginationResetOnNegativePageNumberTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product grid"/>
+            <title value="Pagination should reset on storefront when negative page number requested"/>
+            <description value="Pagination should reset on storefront when negative page number requested"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value=""/>
+            <useCaseId value=""/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteProductTwo"/>
+        </after>
+        <!-- Go to category page with `-1` as a Page Number -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}?p=-1" stepKey="goToStorefrontCreatedCategoryPage"/>
+        <!-- Validate that "no products found" error message is not present -->
+        <actionGroup ref="StorefrontDontSeeNoProductsFoundActionGroup" stepKey="dontSeeNoProdsFoundMessage"/>
+        <!-- Verify the products are visible on the Category Page -->
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductOneOnGrid">
+            <argument name="productName" value="$$createSimpleProductOne.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProductTwoOnGrid">
+            <argument name="productName" value="$$createSimpleProductTwo.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,22 +1,24 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Sales\Model\Order\Create\ValidateCoupon;
 
 /**
  * Adminhtml sales orders creation process controller
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.AllPurposeAction)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class Create extends \Magento\Backend\App\Action
 {
@@ -24,6 +26,14 @@ abstract class Create extends \Magento\Backend\App\Action
      * Indicates how to process post data
      */
     private const ACTION_SAVE = 'save';
+    /**
+     * Controller name for edit actions
+     */
+    private const CONTROLLER_NAME_ORDER_EDIT = 'order_edit';
+    /**
+     * Controller name for loadblock actions
+     */
+    private const CONTROLLER_NAME_LOADBLOCK = 'loadblock';
     /**
      * @var \Magento\Framework\Escaper
      */
@@ -40,25 +50,32 @@ abstract class Create extends \Magento\Backend\App\Action
     protected $resultForwardFactory;
 
     /**
+     * @var ValidateCoupon
+     */
+    private $validateCoupon;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ValidateCoupon|null $validateCoupon
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Framework\Escaper $escaper,
         PageFactory $resultPageFactory,
-        ForwardFactory $resultForwardFactory
+        ForwardFactory $resultForwardFactory,
+        ?ValidateCoupon $validateCoupon = null
     ) {
         parent::__construct($context);
         $productHelper->setSkipSaleableCheck(true);
         $this->escaper = $escaper;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
     }
 
     /**
@@ -151,6 +168,7 @@ abstract class Create extends \Magento\Backend\App\Action
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    // phpcs:disable Generic.Metrics.NestingLevel
     protected function _processActionData($action = null)
     {
         $eventData = [
@@ -178,12 +196,13 @@ abstract class Create extends \Magento\Backend\App\Action
          */
         $this->_getOrderCreateModel()->getBillingAddress();
 
+        $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()?->getShippingMethod();
+
         /**
          * Flag for using billing address for shipping
          */
         if (!$this->_getOrderCreateModel()->getQuote()->isVirtual()) {
             $syncFlag = $this->getRequest()->getPost('shipping_as_billing');
-            $shippingMethod = $this->_getOrderCreateModel()->getShippingAddress()->getShippingMethod();
             if ($syncFlag === null
             && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
@@ -235,7 +254,62 @@ abstract class Create extends \Magento\Backend\App\Action
         ) {
             $items = $this->getRequest()->getPost('item');
             $items = $this->_processFiles($items);
-            $this->_getOrderCreateModel()->addProducts($items);
+            /**
+             * Filter out products that are already in the quote with required options
+             * when the current bulk payload does not contain any options for them.
+             * This avoids accidental re-adding of previously configured products with qty=1.
+             */
+            if (is_array($items)) {
+                $filtered = [];
+                foreach ($items as $productId => $config) {
+                    $config = is_array($config) ? $config : [];
+                    $hasOptionsInConfig = false;
+                    if (isset($config['options']) && is_array($config['options'])) {
+                        $opts = $config['options'];
+                        unset($opts['files_prefix']);
+                        $opts = array_filter(
+                            $opts,
+                            function ($v) {
+                                if (is_array($v)) {
+                                    return !empty($v);
+                                }
+
+                                return $v !== '' && $v !== null;
+                            }
+                        );
+                        $hasOptionsInConfig = !empty($opts);
+                    }
+                    if ($this->_getQuote()->hasProductId((int)$productId) && !$hasOptionsInConfig) {
+                        try {
+                            /** @var \Magento\Catalog\Model\Product $product */
+                            $product = $this
+                                ->_objectManager
+                                ->create(\Magento\Catalog\Model\Product::class)
+                                ->load($productId);
+                            if ($product->getId() && $product->getHasOptions()) {
+                                $hasRequired = false;
+                                foreach ($product->getOptions() as $option) {
+                                    if ($option->getIsRequire()) {
+                                        $hasRequired = true;
+                                        break;
+                                    }
+                                }
+                                if ($hasRequired) {
+                                    continue;
+                                }
+                            }
+                        //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+                        } catch (\Throwable $e) {
+                            // Intentionally swallow any exception during pre-check to allow normal add flow.
+                        }
+                    }
+                    $filtered[$productId] = $config;
+                }
+                $items = $filtered;
+            }
+            if (!empty($items)) {
+                $this->_getOrderCreateModel()->addProducts($items);
+            }
         }
 
         /**
@@ -276,6 +350,7 @@ abstract class Create extends \Magento\Backend\App\Action
         $eventData = [
             'order_create_model' => $this->_getOrderCreateModel(),
             'request' => $this->getRequest()->getPostValue(),
+            'shipping_method' => $shippingMethod
         ];
 
         $this->_eventManager->dispatch('adminhtml_sales_order_create_process_data', $eventData);
@@ -312,41 +387,7 @@ abstract class Create extends \Magento\Backend\App\Action
         }
 
         $data = $this->getRequest()->getPost('order');
-        $couponCode = '';
-        if (isset($data) && isset($data['coupon']['code'])) {
-            $couponCode = trim($data['coupon']['code']);
-        }
-
-        if (!empty($couponCode)) {
-            $isApplyDiscount = false;
-            foreach ($this->_getQuote()->getAllItems() as $item) {
-                if (!$item->getNoDiscount()) {
-                    $isApplyDiscount = true;
-                    break;
-                }
-            }
-            if (!$isApplyDiscount) {
-                $this->messageManager->addErrorMessage(
-                    __(
-                        '"%1" coupon code was not applied. Do not apply discount is selected for item(s)',
-                        $this->escaper->escapeHtml($couponCode)
-                    )
-                );
-            } else {
-                if ($this->_getQuote()->getCouponCode() !== $couponCode) {
-                    $this->messageManager->addErrorMessage(
-                        __(
-                            'The "%1" coupon code isn\'t valid. Verify the code and try again.',
-                            $this->escaper->escapeHtml($couponCode)
-                        )
-                    );
-                } else {
-                    $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
-                }
-            }
-        } elseif (isset($data['coupon']['code']) && empty($couponCode)) {
-            $this->messageManager->addSuccessMessage(__('The coupon code has been removed.'));
-        }
+        $this->validateCoupon->execute($this->_getQuote(), $data);
 
         return $this;
     }
@@ -401,10 +442,8 @@ abstract class Create extends \Magento\Backend\App\Action
      */
     protected function _getAclResource()
     {
-        $action = strtolower($this->getRequest()->getActionName() ?? '');
-        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
-            $action = 'reorder';
-        }
+        $action = $this->getAclResourceAction();
+
         switch ($action) {
             case 'index':
             case 'save':
@@ -416,10 +455,37 @@ abstract class Create extends \Magento\Backend\App\Action
             case 'cancel':
                 $aclResource = 'Magento_Sales::cancel';
                 break;
+            case 'actions_edit':
+                $aclResource = 'Magento_Sales::actions_edit';
+                break;
+            case 'actions_sidebar':
+                $aclResource = 'Magento_Customer::customer';
+                break;
             default:
                 $aclResource = 'Magento_Sales::actions';
                 break;
         }
         return $aclResource;
+    }
+
+    /**
+     * Get acl resource action
+     *
+     * @return string
+     */
+    private function getAclResourceAction(): string
+    {
+        $action = strtolower($this->getRequest()->getActionName() ?? '');
+
+        if (in_array($action, ['index', 'save', 'cancel']) && $this->_getSession()->getReordered()) {
+            $action = 'reorder';
+        }
+        if (strtolower($this->getRequest()->getControllerName() ?? '') === self::CONTROLLER_NAME_ORDER_EDIT) {
+            $action = 'actions_edit';
+        }
+        if ($action == self::CONTROLLER_NAME_LOADBLOCK && $this->getRequest()->getPost('sidebar')) {
+            $action = 'actions_sidebar';
+        }
+        return $action;
     }
 }

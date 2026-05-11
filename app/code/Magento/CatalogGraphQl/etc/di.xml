@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -23,6 +23,14 @@
                 <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
                 <item name="productSortDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\SortAttributeReader</item>
                 <item name="productFilterDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\FilterAttributeReader</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Framework\GraphQl\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: Because of DynamicAttributeReaders, this cache needs to be cleaned when attributes change-->
+                <item name="EAV" xsi:type="string">EAV</item>
             </argument>
         </arguments>
     </virtualType>
@@ -93,9 +101,17 @@
             </argument>
         </arguments>
     </type>
-
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+    </type>
+    <type name="Magento\Framework\Search\Request\Config">
+        <arguments>
+            <argument name="cacheTags" xsi:type="array">
+                <!-- Note: We have to add EAV to the cache tags because productAttributesDynamicFields uses EAV -->
+                <item name="EAV" xsi:type="string">EAV</item>
+            </argument>
+        </arguments>
+        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
     </type>
 
     <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
@@ -131,6 +147,14 @@
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">
                     Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\TagsStrategy
                 </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder">
+        <arguments>
+            <argument name="partialSearchAnalyzers" xsi:type="array">
+                <item name="name" xsi:type="string">prefix_search</item>
             </argument>
         </arguments>
     </type>

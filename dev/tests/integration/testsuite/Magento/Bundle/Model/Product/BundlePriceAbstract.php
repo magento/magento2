@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\Product;
@@ -55,7 +55,7 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
      * Get test cases
      * @return array
      */
-    abstract public function getTestCases();
+    abstract static public function getTestCases();
 
     /**
      * @param array $strategyModifiers

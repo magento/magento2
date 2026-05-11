@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Fixtures;
@@ -54,9 +54,9 @@ class CouponCodesFixture extends Fixture
      */
     public function __construct(
         FixtureModel $fixtureModel,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory = null,
-        \Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null,
-        CouponCollectionFactory $couponCollectionFactory = null
+        ?\Magento\SalesRule\Model\RuleFactory $ruleFactory = null,
+        ?\Magento\SalesRule\Model\CouponFactory $couponCodeFactory = null,
+        ?CouponCollectionFactory $couponCollectionFactory = null
     ) {
         parent::__construct($fixtureModel);
         $this->ruleFactory = $ruleFactory ?: $this->fixtureModel->getObjectManager()
@@ -74,7 +74,6 @@ class CouponCodesFixture extends Fixture
      */
     public function execute()
     {
-        $this->fixtureModel->resetObjectManager();
         $requestedCouponsCount = (int) $this->fixtureModel->getValue('coupon_codes', 0);
         $existedCouponsCount = $this->couponCollectionFactory->create()->getSize();
         $this->couponCodesCount = max(0, $requestedCouponsCount - $existedCouponsCount);

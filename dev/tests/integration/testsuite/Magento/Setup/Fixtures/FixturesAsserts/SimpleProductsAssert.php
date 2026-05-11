@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Fixtures\FixturesAsserts;
 
@@ -13,13 +13,17 @@ use Magento\Setup\Fixtures\SimpleProductsFixture;
  * Class performs assertion that generated simple products are valid
  * after running setup:performance:generate-fixtures command
  */
-#[\AllowDynamicProperties]
 class SimpleProductsAssert
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface
+     */
+    private $optionRepository;
 
     /**
      * @var \Magento\Setup\Fixtures\FixturesAsserts\ProductAssert

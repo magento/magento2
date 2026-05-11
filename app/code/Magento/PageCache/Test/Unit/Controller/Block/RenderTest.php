@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -85,12 +84,8 @@ class RenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->layoutProcessorMock = $this->getMockForAbstractClass(
-            ProcessorInterface::class
-        );
-        $this->layoutCacheKeyMock = $this->getMockForAbstractClass(
-            LayoutCacheKeyInterface::class
-        );
+        $this->layoutProcessorMock = $this->createMock(ProcessorInterface::class);
+        $this->layoutCacheKeyMock = $this->createMock(LayoutCacheKeyInterface::class);
 
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -115,12 +110,12 @@ class RenderTest extends TestCase
         $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-
-        $this->translateInline = $this->getMockForAbstractClass(InlineInterface::class);
+        
+        $this->translateInline = $this->createMock(InlineInterface::class);
 
         $regexFactoryMock = $this->getMockBuilder(RegexFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $regexObject = new Regex(self::VALIDATION_RULE_PATTERN);
@@ -165,8 +160,17 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive([], [], [], [], [], [], ['blocks', ''], ['handles', ''])
-            ->willReturnOnConsecutiveCalls(null, null, null, null, null, null, '', '');
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if (empty($arg1) && empty($arg2)) {
+                        return null;
+                    } elseif ($arg1 === 'blocks' && $arg2 === '') {
+                        return '';
+                    } elseif ($arg1 === 'handles' && $arg2 === '') {
+                        return '';
+                    }
+                }
+            );
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
@@ -201,15 +205,16 @@ class RenderTest extends TestCase
             ->willReturn('magento_pagecache');
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(
-                ['originalRequest'],
-                ['blocks', ''],
-                ['handles', '']
-            )
-            ->willReturnOnConsecutiveCalls(
-                $originalRequest,
-                json_encode($blocks),
-                base64_encode(json_encode($handles))
+            ->willReturnCallback(
+                function ($arg1, $arg2 = '') use ($originalRequest, $blocks, $handles) {
+                    if ($arg1 === 'originalRequest') {
+                        return $originalRequest;
+                    } elseif ($arg1 === 'blocks' && $arg2 === '') {
+                        return json_encode($blocks);
+                    } elseif ($arg1 === 'handles' && $arg2 === '') {
+                        return base64_encode(json_encode($handles));
+                    }
+                }
             );
         $this->requestMock
             ->method('getRequestUri')
@@ -228,8 +233,15 @@ class RenderTest extends TestCase
             ->method('addCacheKeys');
         $this->layoutMock
             ->method('getBlock')
-            ->withConsecutive([$blocks[0]], [$blocks[1]])
-            ->willReturnOnConsecutiveCalls($blockInstance1, $blockInstance2);
+            ->willReturnCallback(
+                function ($arg1) use ($blocks, $blockInstance1, $blockInstance2) {
+                    if ($arg1 === $blocks[0]) {
+                        return $blockInstance1;
+                    } elseif ($arg1 === $blocks[1]) {
+                        return $blockInstance2;
+                    }
+                }
+            );
 
         $this->translateInline->expects($this->once())
             ->method('processResponseBody')

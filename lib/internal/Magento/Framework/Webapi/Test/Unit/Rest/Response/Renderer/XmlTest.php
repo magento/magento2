@@ -2,8 +2,8 @@
 /**
  * Test XML Renderer for REST.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Webapi\Rest\Response\Renderer\Xml;
 use Magento\Framework\Xml\Generator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XmlTest extends TestCase
 {
@@ -36,9 +37,8 @@ class XmlTest extends TestCase
 
     /**
      * Test render method.
-     *
-     * @dataProvider providerXmlRender
-     */
+     *     */
+    #[DataProvider('providerXmlRender')]
     public function testRender($dataToRender, $expectedXml, $message)
     {
         $actualXml = $this->_restXmlRenderer->render($dataToRender);
@@ -59,7 +59,7 @@ class XmlTest extends TestCase
      *
      * @return array
      */
-    public function providerXmlRender()
+    public static function providerXmlRender()
     {
         return [
             // Each array consists of data to render, expected XML and assert message

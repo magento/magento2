@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\TotalsCollector;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/SetupUtil.php';
 require_once __DIR__ . '/../../../../_files/tax_calculation_data_aggregated.php';
@@ -297,10 +298,10 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      * @param array $expectedResults
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
-     * @dataProvider taxDataProvider
      * @return void
      */
-    public function testTaxCalculation($configData, $quoteData, $expectedResults)
+    #[DataProvider('taxDataProvider')]
+    public function testTaxCalculation($config_data, $quote_data, $expected_results)
     {
         $db = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -310,12 +311,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $db->restoreFromDbDump();
         //Setup tax configurations
-        $this->setupUtil->setupTax($configData);
+        $this->setupUtil->setupTax($config_data);
 
-        $quote = $this->setupUtil->setupQuote($quoteData);
+        $quote = $this->setupUtil->setupQuote($quote_data);
         $quoteAddress = $quote->getShippingAddress();
         $this->totalsCollector->collectAddressTotals($quote, $quoteAddress);
-        $this->verifyResult($quoteAddress, $expectedResults);
+        $this->verifyResult($quoteAddress, $expected_results);
 
         $skus = array_map(function ($item) {
             return $item['sku'];
@@ -329,7 +330,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
      *
      * @return array
      */
-    public function taxDataProvider()
+    public static function taxDataProvider()
     {
         global $taxCalculationData;
         return $taxCalculationData;

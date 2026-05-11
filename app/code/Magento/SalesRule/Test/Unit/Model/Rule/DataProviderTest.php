@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model\Rule;
 
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class DataProviderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var DataProvider
      */
@@ -66,7 +68,6 @@ class DataProviderTest extends TestCase
         $ruleMock = $this->createMock(Rule::class);
         $metaDataValueProviderMock = $this->getMockBuilder(ValueProvider::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $registryMock = $this->createMock(Registry::class);
         $registryMock->expects($this->once())
@@ -91,11 +92,19 @@ class DataProviderTest extends TestCase
         $ruleId = 42;
         $ruleData = ['name' => 'Sales Price Rule', 'store_labels' => ['1' => 'Store Label']];
 
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountAmount', 'setDiscountAmount', 'getDiscountQty', 'setDiscountQty',])
-            ->onlyMethods(['load', 'getId', 'getData', 'getStoreLabels'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            [
+                'getDiscountAmount',
+                'setDiscountAmount',
+                'getDiscountQty',
+                'setDiscountQty',
+                'load',
+                'getId',
+                'getData',
+                'getStoreLabels'
+            ]
+        );
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$ruleMock]);
 
         $ruleMock->expects($this->atLeastOnce())->method('getId')->willReturn($ruleId);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel;
 
@@ -20,7 +20,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 abstract class AbstractResource
 {
     /**
-     * @var Json
+     * @var Json|null
      * @since 101.0.0
      */
     protected $serializer;
@@ -82,7 +82,8 @@ abstract class AbstractResource
     /**
      * Commit resource transaction
      *
-     * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
+     * @deprecated
+     * @see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
      */
     public function commit()
@@ -207,6 +208,11 @@ abstract class AbstractResource
                 $value
             );
         }
+
+        if (is_array($value)) {
+            $value = $this->getSerializer()->serialize($value);
+        }
+
         return $value;
     }
 
@@ -248,7 +254,6 @@ abstract class AbstractResource
      * Get serializer
      *
      * @return Json
-     * @deprecated 101.0.0
      * @since 101.0.0
      */
     protected function getSerializer()
@@ -263,7 +268,6 @@ abstract class AbstractResource
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 101.0.1
      */
     private function getLogger()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice;
@@ -67,7 +67,7 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         GroupManagementInterface $groupManagement,
-        ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
@@ -296,7 +296,9 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
             } elseif ($v['website_id'] == 0 && !isset($data[$key])) {
                 $data[$key] = $v;
                 $data[$key]['website_id'] = $websiteId;
-                if ($this->_isPriceFixed($price)) {
+                if ($this->_isPriceFixed($price) &&
+                    $this->isPercentageValue($data[$key])
+                ) {
                     $data[$key]['price'] = $v['price'] * $rates[$websiteId]['rate'];
                     $data[$key]['website_price'] = $v['price'] * $rates[$websiteId]['rate'];
                 }
@@ -465,5 +467,16 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Check if data consists of percentage value
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function isPercentageValue(array $data): bool
+    {
+        return (array_key_exists('percentage_value', $data) && $data['percentage_value'] === null);
     }
 }

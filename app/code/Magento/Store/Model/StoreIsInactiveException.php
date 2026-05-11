@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Store\Model;
 
@@ -19,7 +19,7 @@ class StoreIsInactiveException extends LocalizedException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('Store is inactive');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order\Pdf;
@@ -12,6 +12,7 @@ use Magento\Framework\File\Pdf\Image;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\Sales\Model\RtlTextHandler;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order PDF abstract model
@@ -132,6 +133,11 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
     protected $addressRenderer;
 
     /**
+     * @var Magento\Tax\Helper\Data
+     */
+    private $taxHelper;
+
+    /**
      * @var array $pageSettings
      */
     private $pageSettings;
@@ -156,6 +162,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @param Database $fileStorageDatabase
      * @param RtlTextHandler|null $rtlTextHandler
      * @param Image $image
+     * @param TaxHelper $taxHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -170,9 +177,10 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         array $data = [],
-        Database $fileStorageDatabase = null,
+        ?Database $fileStorageDatabase = null,
         ?RtlTextHandler $rtlTextHandler = null,
-        ?Image $image = null
+        ?Image $image = null,
+        ?TaxHelper $taxHelper = null
     ) {
         $this->addressRenderer = $addressRenderer;
         $this->_paymentData = $paymentData;
@@ -185,6 +193,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;
         $this->inlineTranslation = $inlineTranslation;
+        $this->taxHelper = $taxHelper ?: ObjectManager::getInstance()->get(TaxHelper::class);
         $this->fileStorageDatabase = $fileStorageDatabase ?: ObjectManager::getInstance()->get(Database::class);
         $this->rtlTextHandler = $rtlTextHandler ?: ObjectManager::getInstance()->get(RtlTextHandler::class);
         $this->image = $image ?: ObjectManager::getInstance()->get(Image::class);
@@ -604,11 +613,18 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             }
 
             $yShipments = $this->y;
-            $totalShippingChargesText = "("
-                . __('Total Shipping Charges')
-                . " "
-                . $order->formatPriceTxt($order->getShippingAmount())
-                . ")";
+            $totalShippingChargesText = "(" . __('Total Shipping Charges') . " ";
+            if ($this->taxHelper->displayShippingPriceIncludingTax()) {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingInclTax());
+            } else {
+                $totalShippingChargesText .= $order->formatPriceTxt($order->getShippingAmount());
+            }
+
+            if ($this->taxHelper->displayShippingBothPrices()
+                && $order->getShippingInclTax() != $order->getShippingAmount()) {
+                $totalShippingChargesText .= "(Incl. Tax " . $order->getShippingInclTax() . ")";
+            }
+            $totalShippingChargesText .= ")";
 
             $page->drawText($totalShippingChargesText, 285, $yShipments - $topMargin, 'UTF-8');
             $yShipments -= $topMargin + 10;
@@ -1050,7 +1066,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             if ($this->y - $itemsProp['shift'] < 15) {
                 $page = $this->newPage($pageSettings);
             }
-            $this->correctLines($lines, $page, $height);
+            $page = $this->correctLines($lines, $page, $height);
         }
 
         return $page;
@@ -1065,7 +1081,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @throws \Zend_Pdf_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function correctLines($lines, $page, $height) :void
+    private function correctLines($lines, $page, $height) :\Zend_Pdf_Page
     {
         foreach ($lines as $line) {
             $maxHeight = 0;
@@ -1092,12 +1108,16 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
                 if (!is_array($column['text'])) {
                     $column['text'] = [$column['text']];
                 }
-                $top = $this->correctText($column, $height, $font, $page);
+                $textCorrection = $this->correctText($column, $height, $font, $page);
+                $top = $textCorrection['top'];
+                $page = $textCorrection['page'];
 
                 $maxHeight = $top > $maxHeight ? $top : $maxHeight;
             }
             $this->y -= $maxHeight;
         }
+
+        return $page;
     }
 
     /**
@@ -1111,7 +1131,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function correctText($column, $height, $font, $page) :int
+    private function correctText($column, $height, $font, $page) :array
     {
         $top = 0;
         $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
@@ -1144,6 +1164,6 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
             $page->drawText($part, $feed, $this->y - $top, 'UTF-8');
             $top += $lineSpacing;
         }
-        return $top;
+        return ['top' => $top, 'page' => $page];
     }
 }

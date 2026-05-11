@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CacheFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param string $area
-     * @dataProvider cacheConfigDataProvider
      */
+    #[DataProvider('cacheConfigDataProvider')]
     public function testCacheConfig($area)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);
@@ -30,7 +32,7 @@ class CacheFilesTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public function cacheConfigDataProvider()
+    public static function cacheConfigDataProvider()
     {
         return ['global' => ['global'], 'adminhtml' => ['adminhtml'], 'frontend' => ['frontend']];
     }

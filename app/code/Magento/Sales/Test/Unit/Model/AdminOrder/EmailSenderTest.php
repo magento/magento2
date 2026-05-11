@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ class EmailSenderTest extends TestCase
     protected function setUp(): void
     {
         $this->messageManagerMock = $this->createMock(Manager::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
         $this->invoiceSenderMock = $this->createMock(InvoiceSender::class);
 

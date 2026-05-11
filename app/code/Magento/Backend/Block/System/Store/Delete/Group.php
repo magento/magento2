@@ -1,19 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Store\Delete;
 
 /**
  * Adminhtml store delete group block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Group extends \Magento\Backend\Block\Template
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {

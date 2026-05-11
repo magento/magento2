@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class Enum extends EnumType
             $config['values'][$value->getValue()] = [
                 'value' => $value->getValue(),
                 'description' => $value->getDescription(),
-                'deprecationReason'=> $value->getDeprecatedReason()
+                'deprecationReason' => $value->getDeprecatedReason() ?: null
             ];
         }
         parent::__construct($config);

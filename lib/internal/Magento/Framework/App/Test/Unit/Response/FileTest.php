@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -77,7 +77,7 @@ class FileTest extends TestCase
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -87,7 +87,7 @@ class FileTest extends TestCase
 
         $this->sessionConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,7 +111,7 @@ class FileTest extends TestCase
         $options = [
             'filePath' => 'path/to/file.pdf'
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
@@ -136,7 +136,7 @@ class FileTest extends TestCase
         $options = [
             'filePath' => $filePath
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -149,11 +149,11 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->never())
             ->method('delete')
             ->with($filePath);
-        $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
+        $stream = $this->createMock(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $directory->expects($this->once())
             ->method('openFile')
             ->with($filePath)
@@ -179,19 +179,34 @@ class FileTest extends TestCase
             ->with(200);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
-                ['Content-Type', $fileMimetype, true],
-                ['Content-Length', $fileSize, true],
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    true
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 == 'Content-Disposition' &&
+                        $arg2 == 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Type' &&
+                        $arg2 == $fileMimetype &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Length' &&
+                        $arg2 == $fileSize &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Pragma' &&
+                        $arg2 == 'public' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Cache-Control' &&
+                        $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Last-Modified' && preg_match('/\+|\-\d{4}$/', $arg2) !== false &&
+                        $arg3 == true) {
+                        return $this->responseMock;
+                    }
+                }
+            );
         $this->responseMock->expects($this->once())
             ->method('sendHeaders');
         $this->getModel($options)->sendResponse();
@@ -211,7 +226,7 @@ class FileTest extends TestCase
             'filePath' => $filePath,
             'remove' => true
         ];
-        $directory = $this->getMockForAbstractClass(ReadInterface::class);
+        $directory = $this->createMock(ReadInterface::class);
         $directory->expects($this->once())
             ->method('isExist')
             ->with($filePath)
@@ -224,11 +239,11 @@ class FileTest extends TestCase
             ->method('stat')
             ->with($filePath)
             ->willReturn($stat);
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->once())
             ->method('delete')
             ->with($filePath);
-        $stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
+        $stream = $this->createMock(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $directory->expects($this->once())
             ->method('openFile')
             ->with($filePath)
@@ -254,19 +269,34 @@ class FileTest extends TestCase
             ->with(200);
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', true],
-                ['Content-Type', $fileMimetype, true],
-                ['Content-Length', $fileSize, true],
-                ['Pragma', 'public', true],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    true
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 === 'Content-Disposition' &&
+                        $arg2 === 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Content-Type' &&
+                        $arg2 === $fileMimetype &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Content-Length' &&
+                        $arg2 === $fileSize &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Pragma' &&
+                        $arg2 === 'public' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Cache-Control' &&
+                        $arg2 === 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 === true) {
+                        return $this->responseMock;
+                    } elseif ($arg1 === 'Last-Modified' &&
+                        preg_match('/\+|\-\d{4}$/', $arg2) !== false && $arg3 === true) {
+                        return $this->responseMock;
+                    }
+                }
+            );
         $this->responseMock->expects($this->once())
             ->method('sendHeaders');
         $this->getModel($options)->sendResponse();
@@ -282,19 +312,35 @@ class FileTest extends TestCase
         ];
         $this->responseMock->expects($this->exactly(6))
             ->method('setHeader')
-            ->withConsecutive(
-                ['Content-Disposition', 'attachment; filename="' . $fileName . '"', false],
-                ['Content-Type', $fileMimetype, false],
-                ['Content-Length', $fileSize, false],
-                ['Pragma', 'public', false],
-                ['Cache-Control', 'must-revalidate, post-check=0, pre-check=0', false],
-                [
-                    'Last-Modified',
-                    $this->callback(fn (string $str) => preg_match('/\+|\-\d{4}$/', $str) !== false),
-                    false
-                ],
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2, $arg3) use ($fileName, $fileMimetype, $fileSize) {
+                    if ($arg1 == 'Content-Disposition' &&
+                        $arg2 == 'attachment; filename="' . $fileName . '"' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Type' &&
+                        $arg2 == $fileMimetype &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Content-Length' &&
+                        $arg2 == $fileSize &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Pragma' &&
+                        $arg2 == 'public' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Cache-Control' &&
+                        $arg2 == 'must-revalidate, post-check=0, pre-check=0' &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    } elseif ($arg1 == 'Last-Modified' && preg_match('/\+|\-\d{4}$/', $arg2) !== false &&
+                        $arg3 == false) {
+                        return $this->responseMock;
+                    }
+                }
+            );
+
         $this->responseMock->expects($this->once())
             ->method('getContent')
             ->willReturn('Bienvenue à Paris');

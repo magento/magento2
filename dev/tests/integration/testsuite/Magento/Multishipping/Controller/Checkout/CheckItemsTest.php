@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Quote\Api\CartRepositoryInterface as QuoteRepository;
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Multishipping\Controller\Checkout
@@ -70,8 +71,8 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
      * @magentoConfigFixture current_store multishipping/options/checkout_multiple_maximum_qty 200
-     * @dataProvider requestDataProvider
      */
+    #[DataProvider('requestDataProvider')]
     public function testExecute($requestQuantity, $expectedResponse)
     {
         $this->loginCustomer();
@@ -143,31 +144,31 @@ class CheckItemsTest extends \Magento\TestFramework\TestCase\AbstractController
      * Variations of request data.
      * @returns array
      */
-    public function requestDataProvider(): array
+    public static function requestDataProvider(): array
     {
         return [
             [
-                'request' => [],
-                'response' => [
+                'requestQuantity' => [],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'We are unable to process your request. Please, try again later.'
                 ]
             ],
             [
-                'request' => ['qty' => 2],
-                'response' => [
+                'requestQuantity' => ['qty' => 2],
+                'expectedResponse' => [
                     'success' => true,
                 ]
             ],
             [
-                'request' => ['qty' => 101],
-                'response' => [
+                'requestQuantity' => ['qty' => 101],
+                'expectedResponse' => [
                     'success' => false,
-                    'error_message' => 'The requested qty is not available']
+                    'error_message' => 'Not enough items for sale']
             ],
             [
-                'request' => ['qty' => 230],
-                'response' => [
+                'requestQuantity' => ['qty' => 230],
+                'expectedResponse' => [
                     'success' => false,
                     'error_message' => 'Maximum qty allowed for Shipping to multiple addresses is 200']
             ],

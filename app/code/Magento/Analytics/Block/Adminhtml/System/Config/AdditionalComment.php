@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Block\Adminhtml\System\Config;
 
@@ -11,8 +11,7 @@ namespace Magento\Analytics\Block\Adminhtml\System\Config;
 class AdditionalComment extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-     * @return string
+     * @inheritdoc
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
@@ -22,6 +21,8 @@ class AdditionalComment extends \Magento\Config\Block\System\Config\Form\Field
     }
 
     /**
+     * Add additional html formatting
+     *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @param string $html
      * @return string

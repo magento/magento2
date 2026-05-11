@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,7 +19,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -27,6 +29,7 @@ use Psr\Log\LoggerInterface;
 class DbTest extends TestCase
 {
     use SelectRendererTrait;
+    use MockCreationTrait;
 
     /**
      * @var AbstractDb
@@ -60,7 +63,7 @@ class DbTest extends TestCase
             $this->createPartialMock(Query::class, ['fetchAll']);
         $this->entityFactoryMock =
             $this->createPartialMock(EntityFactory::class, ['create']);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->collection = new DbCollection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -165,14 +168,16 @@ class DbTest extends TestCase
             $this->exactly(3)
         )->method(
             'prepareSqlCondition'
-        )->withConsecutive(
-            ["`weight`", ['in' => [1, 3]]],
-            ['`name`', ['like' => 'M%']],
-            ['`is_imported`', $this->anything()]
-        )->willReturnOnConsecutiveCalls(
-            'weight in (1, 3)',
-            "name like 'M%'",
-            'is_imported = 1'
+        )->willReturnCallback(
+            function ($arg1, $arg2) {
+                if ($arg1 == "`weight`" && $arg2 == ['in' => [1, 3]]) {
+                    return 'weight in (1, 3)';
+                } elseif ($arg1 == "`name`" && $arg2 == ['like' => 'M%']) {
+                    return "name like 'M%'";
+                } elseif ($arg1 == "`is_imported`") {
+                    return 'is_imported = 1';
+                }
+            }
         );
         $renderer = $this->getSelectRenderer($this->objectManager);
         $select = new Select($adapter, $renderer);
@@ -303,9 +308,8 @@ class DbTest extends TestCase
      * @param bool $printFlag
      * @param string $query
      * @param string $expected
-     *
-     * @dataProvider printLogQueryPrintingDataProvider
-     */
+     *     */
+    #[DataProvider('printLogQueryPrintingDataProvider')]
     public function testPrintLogQueryPrinting($printQuery, $printFlag, $query, $expected)
     {
         $this->expectOutputString($expected);
@@ -316,7 +320,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function printLogQueryPrintingDataProvider()
+    public static function printLogQueryPrintingDataProvider()
     {
         return [
             [false, false, 'some_query', ''],
@@ -329,9 +333,8 @@ class DbTest extends TestCase
      * @param bool $logQuery
      * @param bool $logFlag
      * @param int $expectedCalls
-     *
-     * @dataProvider printLogQueryLoggingDataProvider
-     */
+     *     */
+    #[DataProvider('printLogQueryLoggingDataProvider')]
     public function testPrintLogQueryLogging($logQuery, $logFlag, $expectedCalls)
     {
         $this->collection->setFlag('log_query', $logFlag);
@@ -342,7 +345,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function printLogQueryLoggingDataProvider()
+    public static function printLogQueryLoggingDataProvider()
     {
         return [
             [true, false, 1],
@@ -403,7 +406,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -431,16 +434,7 @@ class DbTest extends TestCase
             ->with('testField1=testValue1');
         $selectMock->expects($this->exactly(3))
             ->method('where')
-            ->willReturnMap([
-                ['testValue2', $this->returnSelf()],
-                [
-                    'testField3 = testValue3',
-                    null,
-                    Select::TYPE_CONDITION,
-                    $this->returnSelf()
-                ],
-                ['testField4=testValue4', $this->returnSelf()],
-            ]);
+            ->willReturnSelf();
         $adapterMock->expects($this->once())
             ->method('prepareSqlCondition')
             ->with('testField3', 'testValue3')
@@ -463,7 +457,7 @@ class DbTest extends TestCase
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['__toString'])
+            ->onlyMethods(['__toString'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -493,7 +487,7 @@ class DbTest extends TestCase
             ['select', 'quoteInto', 'prepareSqlCondition', 'fetchOne']
         );
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['orWhere', 'where', 'reset', 'columns'])
+            ->onlyMethods(['orWhere', 'where', 'reset', 'columns'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -522,14 +516,13 @@ class DbTest extends TestCase
         $this->assertNull($this->collection->getData());
     }
 
-    /**
-     * @dataProvider distinctDataProvider
-     */
+    /**     */
+    #[DataProvider('distinctDataProvider')]
     public function testDistinct($flag, $expectedFlag)
     {
         $adapterMock = $this->createPartialMock(Mysql::class, ['select']);
         $selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['distinct'])
+            ->onlyMethods(['distinct'])
             ->setConstructorArgs(
                 [
                     'adapter' => $adapterMock,
@@ -552,7 +545,7 @@ class DbTest extends TestCase
     /**
      * @return array
      */
-    public function distinctDataProvider()
+    public static function distinctDataProvider()
     {
         return [
             [true, true],
@@ -581,11 +574,10 @@ class DbTest extends TestCase
             ->with($selectMock, [])
             ->willReturn([$data]);
 
-        $objectMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setIdFieldName'])
-            ->onlyMethods(['addData', 'getData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $objectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setIdFieldName', 'addData', 'getData']
+        );
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

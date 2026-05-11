@@ -1,25 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\History;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Controller\Adminhtml\History\Download;
 use Magento\ImportExport\Helper\Report;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -88,9 +89,7 @@ class DownloadTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
         $this->reportHelper = $this->createPartialMock(
             Report::class,
             ['importFileExists', 'getReportSize', 'getReportOutput']
@@ -147,8 +146,8 @@ class DownloadTest extends TestCase
      *
      * @param string $requestFilename
      * @param string $processedFilename
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($requestFilename, $processedFilename)
     {
         $this->request->method('getParam')
@@ -159,8 +158,7 @@ class DownloadTest extends TestCase
             ->with($processedFilename)
             ->willReturn(true);
 
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->getMock();
+        $responseMock = $this->createMock(ResponseInterface::class);
         $this->fileFactory->expects($this->once())
             ->method('create')
             ->with(
@@ -177,12 +175,11 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'Normal file name' => ['filename.csv', 'filename.csv'],
-            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd'],
-            'Empty file name' => ['', ''],
+            'Relative file name' => ['../../../../../../../../etc/passwd', 'passwd']
         ];
     }
 
@@ -195,5 +192,28 @@ class DownloadTest extends TestCase
         $this->reportHelper->method('importFileExists')->willReturn(false);
         $this->resultRaw->expects($this->never())->method('setContents');
         $this->downloadController->execute();
+    }
+
+    /**
+     * Test execute() with return Redirect
+     * @param string|null $requestFilename
+     */
+    #[DataProvider('executeWithRedirectDataProvider')]
+    public function testExecuteWithRedirect(?string $requestFilename): void
+    {
+        $this->request->method('getParam')->with('filename')->willReturn($requestFilename);
+        $this->resultRaw->expects($this->never())->method('setContents');
+        $this->assertSame($this->redirect, $this->downloadController->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public static function executeWithRedirectDataProvider(): array
+    {
+        return [
+            'null file name' => [null],
+            'empty file name' => [''],
+        ];
     }
 }

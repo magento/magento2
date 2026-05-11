@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
@@ -20,6 +20,7 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -341,20 +342,30 @@ class PriceTest extends \PHPUnit\Framework\TestCase
             ->execute($observer);
     }
 
-    /**
-     * @dataProvider saveCustomPriceAttributeDataProvider
-     */
     #[
         AppArea('adminhtml'),
         DbIsolation(false),
+        DataProvider('saveCustomPriceAttributeDataProvider'),
         Config('catalog/price/scope', '1', 'store'),
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
         DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
-        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr1'),
-        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr2'),
-        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr3'),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'price', 'backend_type' => 'decimal', 'is_filterable' => 1],
+            'attr1'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'price', 'backend_type' => 'decimal', 'is_filterable' => 1],
+            'attr2'
+        ),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'price', 'backend_type' => 'decimal', 'is_filterable' => 1],
+            'attr3'
+        ),
         DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product'),
     ]
     public function testSaveCustomPriceAttribute(
@@ -424,12 +435,12 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function saveCustomPriceAttributeDataProvider(): array
+    public static function saveCustomPriceAttributeDataProvider(): array
     {
         return [
             [
                 'attributes' => ['attr1', 'attr2', 'attr3'],
-                'set' => [
+                'updates' => [
                     'attr1' => [
                         'admin' => 9,
                     ],

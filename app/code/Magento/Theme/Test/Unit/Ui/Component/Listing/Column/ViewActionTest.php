@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,6 +13,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Theme\Ui\Component\Listing\Column\ViewAction;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +47,7 @@ class ViewActionTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
     }
 
     /**
@@ -55,10 +56,9 @@ class ViewActionTest extends TestCase
      * @param array $expectedDataSourceItems
      * @param string $expectedUrlPath
      * @param array $expectedUrlParam
-     *
-     * @dataProvider getPrepareDataSourceDataProvider
      * @return void
      */
+    #[DataProvider('getPrepareDataSourceDataProvider')]
     public function testPrepareDataSource(
         $data,
         $dataSourceItems,
@@ -66,11 +66,8 @@ class ViewActionTest extends TestCase
         $expectedUrlPath,
         $expectedUrlParam
     ) {
-        $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contextMock = $this->createMock(ContextInterface::class);
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->model = $this->objectManager->getObject(
             ViewAction::class,
@@ -99,7 +96,7 @@ class ViewActionTest extends TestCase
      * Data provider for testPrepareDataSource
      * @return array
      */
-    public function getPrepareDataSourceDataProvider()
+    public static function getPrepareDataSourceDataProvider()
     {
         return [
             [

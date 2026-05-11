@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,7 +67,7 @@ class DesignLoader
         ImageFactory $subject,
         Product $product,
         string $imageId,
-        array $attributes = null
+        ?array $attributes = null
     ) {
         try {
             $area = $this->areaList->getArea($this->appState->getAreaCode());

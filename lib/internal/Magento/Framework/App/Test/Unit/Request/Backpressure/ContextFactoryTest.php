@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ use Magento\Framework\App\Backpressure\IdentityProviderInterface;
 use Magento\Framework\App\Request\Backpressure\RequestTypeExtractorInterface;
 use Magento\Framework\App\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ContextFactoryTest extends TestCase
@@ -75,7 +76,7 @@ class ContextFactoryTest extends TestCase
      *
      * @return array
      */
-    public function getIdentityCases(): array
+    public static function getIdentityCases(): array
     {
         return [
             'guest' => [
@@ -93,14 +94,9 @@ class ContextFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * Verify that identity is created for customers.
-     *
-     * @param int $userType
-     * @param string $userId
-     * @return void
-     * @dataProvider getIdentityCases
+    /**     * @return void
      */
+    #[DataProvider('getIdentityCases')]
     public function testCreateForIdentity(
         int $userType,
         string $userId

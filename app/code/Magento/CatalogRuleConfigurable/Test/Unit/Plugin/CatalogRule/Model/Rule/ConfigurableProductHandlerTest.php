@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CatalogRuleConfigurable\Test\Unit\Plugin\CatalogRule\Model\Rule;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler;
@@ -131,8 +132,8 @@ class ConfigurableProductHandlerTest extends TestCase
      * @param array $matchingProductIds
      * @param array $expectedMatchingProductIds
      * @return void
-     * @dataProvider aroundGetMatchingProductIdsDataProvider
      */
+    #[DataProvider('aroundGetMatchingProductIdsDataProvider')]
     public function testAroundGetMatchingProductIdsWithProductsFilter(
         array $productsFilter,
         array $expectedProductsFilter,
@@ -190,7 +191,7 @@ class ConfigurableProductHandlerTest extends TestCase
     /**
      * @return array[]
      */
-    public function aroundGetMatchingProductIdsDataProvider(): array
+    public static function aroundGetMatchingProductIdsDataProvider(): array
     {
         return [
             [

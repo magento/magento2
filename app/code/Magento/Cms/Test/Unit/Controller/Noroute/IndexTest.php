@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $responseMock = $this->createMock(Http::class);
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class IndexTest extends TestCase
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->_requestMock = $this->createMock(RequestHttp::class);
         $this->_cmsHelperMock = $this->createMock(CmsPage::class);
         $valueMap = [
@@ -122,10 +122,13 @@ class IndexTest extends TestCase
 
         $this->resultPageMock
             ->method('setHeader')
-            ->withConsecutive(
-                ['Status', '404 File not found'],
-                ['Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0']
-            )->willReturn($this->resultPageMock);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'Status' && $arg2 == '404 File not found') {
+                    return $this->resultPageMock;
+                } elseif ($arg1 == 'Cache-Control' && $arg2 == 'no-store, no-cache, must-revalidate, max-age=0') {
+                    return $this->resultPageMock;
+                }
+            });
 
         $this->_cmsHelperMock->expects(
             $this->once()

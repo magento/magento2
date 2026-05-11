@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\TestCase\GraphQl;
@@ -22,6 +22,8 @@ class Client
     public const GRAPHQL_METHOD_POST = 'POST';
     /**#@-*/
 
+    private const SET_COOKIE_HEADER_NAME = 'Set-Cookie';
+
     /** @var CurlClient */
     private $curlClient;
 
@@ -33,8 +35,8 @@ class Client
      * @param JsonSerializer|null $json
      */
     public function __construct(
-        \Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
-        \Magento\TestFramework\Helper\JsonSerializer $json = null
+        ?\Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
+        ?\Magento\TestFramework\Helper\JsonSerializer $json = null
     ) {
         $objectManager = Bootstrap::getObjectManager();
         $this->curlClient = $curlClient ?: $objectManager->get(CurlClient::class);
@@ -264,7 +266,15 @@ class Client
         foreach ($headerLines as $headerLine) {
             $headerParts = preg_split('/: /', $headerLine, 2);
             if (count($headerParts) == 2) {
-                $headersArray[trim($headerParts[0])] = trim($headerParts[1]);
+                $headerName = trim($headerParts[0]);
+                if ($headerName === self::SET_COOKIE_HEADER_NAME) {
+                    if (!isset($headersArray[self::SET_COOKIE_HEADER_NAME])) {
+                        $headersArray[self::SET_COOKIE_HEADER_NAME] = [];
+                    }
+                    $headersArray[self::SET_COOKIE_HEADER_NAME][] = trim($headerParts[1]);
+                } else {
+                    $headersArray[$headerName] = trim($headerParts[1]);
+                }
             } elseif (preg_match('/HTTP\/[\.0-9]+/', $headerLine)) {
                 $headersArray[trim('Status-Line')] = trim($headerLine);
             }

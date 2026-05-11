@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Translate\Test\Unit;
 use Laminas\I18n\Translator\Translator;
 use Magento\Framework\Translate\Adapter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AdapterTest extends TestCase
 {
@@ -17,13 +18,12 @@ class AdapterTest extends TestCase
      * Check that translate calls are passed to given translator
      *
      * @param string $strToTranslate
-     * @param string $translatedStr
-     * @dataProvider translateDataProvider
-     */
+     * @param string $translatedStr     */
+    #[DataProvider('translateDataProvider')]
     public function testTranslate($strToTranslate, $translatedStr)
     {
         $translatorMock = $this->getMockBuilder(Translator::class)
-            ->setMethods(['translate'])->getMock();
+            ->onlyMethods(['translate'])->getMock();
         $translatorMock->expects(
             $this->once()
         )->method(
@@ -42,7 +42,7 @@ class AdapterTest extends TestCase
     /**
      * @return array
      */
-    public function translateDataProvider()
+    public static function translateDataProvider()
     {
         return [['Translate me!', 'Translated string']];
     }

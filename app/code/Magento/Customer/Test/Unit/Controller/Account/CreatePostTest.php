@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,6 +37,7 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -169,7 +169,7 @@ class CreatePostTest extends TestCase
          */
         $this->markTestSkipped('Cannot be unit tested with the auto generated builder dependencies');
         $this->customerSessionMock = $this->createMock(Session::class);
-        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->redirectMock = $this->createMock(RedirectInterface::class);
         $this->responseMock = $this->createMock(Response::class);
         $this->requestMock = $this->createMock(Http::class);
 
@@ -179,20 +179,20 @@ class CreatePostTest extends TestCase
             ->method('create')
             ->willReturn($this->urlMock);
 
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $this->customerDetailsMock = $this->getMockForAbstractClass(CustomerInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->customerDetailsMock = $this->createMock(CustomerInterface::class);
         $this->customerDetailsFactoryMock = $this->createMock(
             CustomerInterfaceFactory::class
         );
 
         $this->messageManagerMock = $this->createMock(Manager::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->storeMock = $this->createMock(Store::class);
 
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
-        $this->accountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
+        $this->accountManagement = $this->createMock(AccountManagementInterface::class);
         $this->addressHelperMock = $this->createMock(Address::class);
         $formFactoryMock = $this->createMock(FormFactory::class);
 
@@ -213,12 +213,12 @@ class CreatePostTest extends TestCase
         $this->customerExtractorMock = $this->createMock(CustomerExtractor::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock->expects($this->any())
@@ -328,9 +328,8 @@ class CreatePostTest extends TestCase
      * @param $vatValidationEnabled
      * @param $addressType
      * @param $successMessage
-     *
-     * @dataProvider getSuccessMessageDataProvider
      */
+    #[DataProvider('getSuccessMessageDataProvider')]
     public function testSuccessMessage(
         $customerId,
         $customerEmail,
@@ -419,7 +418,7 @@ class CreatePostTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessMessageDataProvider()
+    public static function getSuccessMessageDataProvider()
     {
         return [
             [
@@ -468,9 +467,8 @@ class CreatePostTest extends TestCase
      * @param $successUrl
      * @param $isSetFlag
      * @param $successMessage
-     *
-     * @dataProvider getSuccessRedirectDataProvider
      */
+    #[DataProvider('getSuccessRedirectDataProvider')]
     public function testSuccessRedirect(
         $customerId,
         $password,
@@ -571,7 +569,7 @@ class CreatePostTest extends TestCase
     /**
      * @return array
      */
-    public function getSuccessRedirectDataProvider()
+    public static function getSuccessRedirectDataProvider()
     {
         return [
             [

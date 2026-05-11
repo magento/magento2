@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote;
 
@@ -10,6 +10,9 @@ use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -335,6 +338,9 @@ class Address extends AbstractAddress implements
      * @param array $data
      * @param Json $serializer
      * @param StoreManagerInterface $storeManager
+     * @param CompositeValidator|null $compositeValidator
+     * @param CountryModelsCache|null $countryModelsCache
+     * @param RegionModelsCache|null $regionModelsCache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -368,11 +374,14 @@ class Address extends AbstractAddress implements
         Address\CustomAttributeListInterface $attributeList,
         TotalsCollector $totalsCollector,
         TotalsReader $totalsReader,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        StoreManagerInterface $storeManager = null
+        ?Json $serializer = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CompositeValidator $compositeValidator = null,
+        ?CountryModelsCache $countryModelsCache = null,
+        ?RegionModelsCache $regionModelsCache = null,
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_addressItemFactory = $addressItemFactory;
@@ -409,7 +418,10 @@ class Address extends AbstractAddress implements
             $dataObjectHelper,
             $resource,
             $resourceCollection,
-            $data
+            $data,
+            $compositeValidator,
+            $countryModelsCache,
+            $regionModelsCache,
         );
     }
 
@@ -1020,7 +1032,7 @@ class Address extends AbstractAddress implements
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function requestShippingRates(AbstractItem $item = null)
+    public function requestShippingRates(?AbstractItem $item = null)
     {
         $storeId = $this->getQuote()->getStoreId() ?: $this->storeManager->getStore()->getId();
         $taxInclude = $this->_scopeConfig->getValue(

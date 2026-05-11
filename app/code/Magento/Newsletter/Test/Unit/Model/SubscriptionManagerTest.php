@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -18,6 +19,7 @@ use Magento\Newsletter\Model\SubscriptionManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -29,6 +31,8 @@ use Psr\Log\LoggerInterface;
  */
 class SubscriptionManagerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SubscriberFactory|MockObject
      */
@@ -70,11 +74,11 @@ class SubscriptionManagerTest extends TestCase
     protected function setUp(): void
     {
         $this->subscriberFactory = $this->createMock(SubscriberFactory::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->customerAccountManagement = $this->getMockForAbstractClass(AccountManagementInterface::class);
-        $this->customerRepository = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->customerAccountManagement = $this->createMock(AccountManagementInterface::class);
+        $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->subscriptionManager = $objectManager->getObject(
@@ -98,8 +102,8 @@ class SubscriptionManagerTest extends TestCase
      * @param int $storeId
      * @param bool $isConfirmNeed
      * @param array $expectedData
-     * @dataProvider subscribeDataProvider
      */
+    #[DataProvider('subscribeDataProvider')]
     public function testSubscribe(
         array $subscriberData,
         string $email,
@@ -108,7 +112,7 @@ class SubscriptionManagerTest extends TestCase
         array $expectedData
     ): void {
         $websiteId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var Subscriber|MockObject $subscriber */
@@ -145,15 +149,15 @@ class SubscriptionManagerTest extends TestCase
      *
      * @return array
      */
-    public function subscribeDataProvider(): array
+    public static function subscribeDataProvider(): array
     {
         return [
             'Subscribe new' => [
-                'subscriber_data' => [],
+                'subscriberData' => [],
                 'email' => 'email@example.com',
-                'store_id' => 1,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
                     'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
@@ -161,11 +165,11 @@ class SubscriptionManagerTest extends TestCase
                 ],
             ],
             'Subscribe new: confirm required' => [
-                'subscriber_data' => [],
+                'subscriberData' => [],
                 'email' => 'email@example.com',
-                'store_id' => 1,
-                'is_confirm_need' => true,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => true,
+                'expectedData' => [
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
                     'subscriber_status' => Subscriber::STATUS_NOT_ACTIVE,
@@ -173,7 +177,7 @@ class SubscriptionManagerTest extends TestCase
                 ],
             ],
             'Subscribe existing' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
@@ -182,9 +186,9 @@ class SubscriptionManagerTest extends TestCase
                     'customer_id' => 0,
                 ],
                 'email' => 'email@example.com',
-                'store_id' => 1,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
@@ -204,16 +208,15 @@ class SubscriptionManagerTest extends TestCase
         $email = 'email@example.com';
         $storeId = 2;
         $websiteId = 1;
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         $confirmCode = 'confirm code';
         /** @var Subscriber|MockObject $subscriber */
-        $subscriber = $this->getMockBuilder(Subscriber::class)
-            ->addMethods(['setCheckCode'])
-            ->onlyMethods(['loadBySubscriberEmail', 'getId', 'unsubscribe'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subscriber = $this->createPartialMockWithReflection(
+            Subscriber::class,
+            ['loadBySubscriberEmail', 'getId', 'unsubscribe', 'setCheckCode']
+        );
         $subscriber->expects($this->once())
             ->method('loadBySubscriberEmail')
             ->with($email, $websiteId)
@@ -238,8 +241,8 @@ class SubscriptionManagerTest extends TestCase
      * @param bool $isConfirmNeed
      * @param array $expectedData
      * @param bool $needToSendEmail
-     * @dataProvider subscribeCustomerDataProvider
      */
+    #[DataProvider('subscribeCustomerDataProvider')]
     public function testSubscribeCustomer(
         array $subscriberData,
         array $customerData,
@@ -250,11 +253,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
@@ -339,19 +342,19 @@ class SubscriptionManagerTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function subscribeCustomerDataProvider(): array
+    public static function subscribeCustomerDataProvider(): array
     {
         return [
             'Subscribe new' => [
-                'subscriber_data' => [],
-                'customer_data' => [
+                'subscriberData' => [],
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMED,
                 ],
-                'store_id' => 1,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
@@ -361,15 +364,15 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Subscribe new: customer confirm required' => [
-                'subscriber_data' => [],
-                'customer_data' => [
+                'subscriberData' => [],
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMATION_REQUIRED,
                 ],
-                'store_id' => 1,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
                     'store_id' => 1,
@@ -379,7 +382,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => false,
             ],
             'Subscribe existing' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -387,14 +390,14 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_UNSUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMED,
                 ],
-                'store_id' => 1,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -405,7 +408,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Subscribe existing: subscription confirm required' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -413,14 +416,14 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_UNSUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMED,
                 ],
-                'store_id' => 1,
-                'is_confirm_need' => true,
-                'expected_data' => [
+                'storeId' => 1,
+                'isConfirmNeed' => true,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -431,7 +434,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Update subscription data' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -439,14 +442,14 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email2@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMED,
                 ],
-                'store_id' => 2,
-                'is_confirm_need' => false,
-                'expected_data' => [
+                'storeId' => 2,
+                'isConfirmNeed' => false,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email2@example.com',
@@ -457,7 +460,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Update subscription data: subscription confirm required ' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -465,14 +468,14 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_NOT_ACTIVE,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email2@example.com',
                     'confirmation_status' => AccountManagementInterface::ACCOUNT_CONFIRMED,
                 ],
-                'store_id' => 2,
-                'is_confirm_need' => true,
-                'expected_data' => [
+                'storeId' => 2,
+                'isConfirmNeed' => true,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email2@example.com',
@@ -493,8 +496,8 @@ class SubscriptionManagerTest extends TestCase
      * @param int $storeId
      * @param array $expectedData
      * @param bool $needToSendEmail
-     * @dataProvider unsubscribeCustomerDataProvider
      */
+    #[DataProvider('unsubscribeCustomerDataProvider')]
     public function testUnsubscribeCustomer(
         array $subscriberData,
         array $customerData,
@@ -504,11 +507,11 @@ class SubscriptionManagerTest extends TestCase
     ): void {
         $websiteId = 1;
         $customerId = $customerData['id'];
-        $store = $this->getMockForAbstractClass(StoreInterface::class);
+        $store = $this->createMock(StoreInterface::class);
         $store->method('getWebsiteId')->willReturn($websiteId);
         $this->storeManager->method('getStore')->with($storeId)->willReturn($store);
         /** @var CustomerInterface|MockObject $customer */
-        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
+        $customer = $this->createMock(CustomerInterface::class);
         $customer->method('getId')->willReturn($customerId);
         $customer->method('getEmail')->willReturn($customerData['email']);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
@@ -558,22 +561,22 @@ class SubscriptionManagerTest extends TestCase
      *
      * @return array
      */
-    public function unsubscribeCustomerDataProvider(): array
+    public static function unsubscribeCustomerDataProvider(): array
     {
         return [
             'Unsubscribe new' => [
-                'subscriber_data' => [],
-                'customer_data' => [
+                'subscriberData' => [],
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                 ],
-                'store_id' => 1,
-                'expected_data' => [
+                'storeId' => 1,
+                'expectedData' => [
                 ],
                 'needToSendEmail' => false,
             ],
             'Unsubscribe existing' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -581,12 +584,12 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_SUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                 ],
-                'store_id' => 1,
-                'expected_data' => [
+                'storeId' => 1,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -597,7 +600,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Unsubscribe existing: subscription confirm required' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -605,12 +608,12 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_NOT_ACTIVE,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email@example.com',
                 ],
-                'store_id' => 1,
-                'expected_data' => [
+                'storeId' => 1,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -621,7 +624,7 @@ class SubscriptionManagerTest extends TestCase
                 'needToSendEmail' => true,
             ],
             'Update subscription data' => [
-                'subscriber_data' => [
+                'subscriberData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email@example.com',
@@ -629,12 +632,12 @@ class SubscriptionManagerTest extends TestCase
                     'subscriber_status' => Subscriber::STATUS_UNSUBSCRIBED,
                     'subscriber_confirm_code' => '',
                 ],
-                'customer_data' => [
+                'customerData' => [
                     'id' => 1,
                     'email' => 'email2@example.com',
                 ],
-                'store_id' => 2,
-                'expected_data' => [
+                'storeId' => 2,
+                'expectedData' => [
                     'subscriber_id' => 1,
                     'customer_id' => 1,
                     'subscriber_email' => 'email2@example.com',

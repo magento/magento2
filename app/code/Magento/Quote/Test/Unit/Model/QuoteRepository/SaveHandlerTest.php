@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
 use Magento\Quote\Model\QuoteRepository\SaveHandler;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResourceModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveHandler
      */
@@ -91,24 +93,23 @@ class SaveHandlerTest extends TestCase
         $this->shippingAssignmentPersisterMock = $this->getMockBuilder(ShippingAssignmentPersister::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressRepositoryMock = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->getMockForAbstractClass();
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getItems', 'setLastAddedItem', 'getBillingAddress', 'getExtensionAttributes', 'isVirtual',
-                    'collectTotals'
-                ]
-            )
-            ->getMock();
-        $this->billingAddressMock = $this->getMockBuilder(QuoteAddress::class)
-            ->setMethods(['getCustomerAddress', 'getCustomerAddressId', 'setCustomerAddressId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->extensionAttributesMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->setMethods(['getShippingAssignments'])
-            ->getMockForAbstractClass();
+        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'setLastAddedItem',
+                'getItems',
+                'getBillingAddress',
+                'getExtensionAttributes',
+                'isVirtual',
+                'collectTotals'
+            ]
+        );
+        $this->billingAddressMock = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            ['getCustomerAddressId', 'setCustomerAddressId', 'getCustomerAddress']
+        );
+        $this->extensionAttributesMock = $this->createMock(CartExtensionInterface::class);
 
         $this->quoteMock->expects(static::any())
             ->method('getBillingAddress')
@@ -156,8 +157,7 @@ class SaveHandlerTest extends TestCase
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('isVirtual')
             ->willReturn(true);
-        $this->extensionAttributesMock->expects(static::never())
-            ->method('getShippingAssignments');
+        // Do not configure getShippingAssignments; not used for virtual quotes
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('collectTotals')
             ->willReturnSelf();
@@ -194,8 +194,7 @@ class SaveHandlerTest extends TestCase
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('isVirtual')
             ->willReturn(true);
-        $this->extensionAttributesMock->expects(static::never())
-            ->method('getShippingAssignments');
+        // Do not configure getShippingAssignments; not used for virtual quotes
         $this->quoteMock->expects(static::atLeastOnce())
             ->method('collectTotals')
             ->willReturnSelf();

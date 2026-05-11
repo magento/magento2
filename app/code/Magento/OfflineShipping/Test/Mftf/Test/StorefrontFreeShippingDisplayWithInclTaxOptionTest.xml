@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,6 +54,10 @@
         <waitForPageLoad stepKey="waitForSelectCountry"/>
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
         <waitForPageLoad stepKey="waitForSelectRegion"/>
+        <!-- Flush cache -->
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache1">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <see selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"  stepKey="seeTaxForCA"/>
         <!-- See available Free Shipping option -->
         <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodLabel">

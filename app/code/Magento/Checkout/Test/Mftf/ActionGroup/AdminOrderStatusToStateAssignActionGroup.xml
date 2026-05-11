@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOrderStatusToStateAssignActionGroup" extends="AdminGoToOrderStatusPageActionGroup">
+        <annotations>
+            <description>Order Default Status assignation to Order State.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderStatus" type="string"/>
+            <argument name="orderState" type="string" />
+        </arguments>
+        <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn" after="waitForPageLoaded"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{orderStatus}}" stepKey="selectOrderStatus"/>
+        <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{orderState}}" stepKey="selectOrderState"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
+        <checkOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
+        <click selector="{{AdminAssignOrderStatusToStateSection.saveStatusAssignment}}" stepKey="clickSaveStatus"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageVisible"/>
+        <see userInput="You assigned the order status." selector="{{AdminMessagesSection.success}}" stepKey="assertSaveSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

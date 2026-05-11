@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\ErrorHandler;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ErrorHandlerTest extends TestCase
@@ -22,13 +24,9 @@ class ErrorHandlerTest extends TestCase
         $this->object = new ErrorHandler();
     }
 
-    /**
-     * @param int $errorNo
-     * @param string $errorStr
-     * @param string $errorFile
-     * @param bool $expectedResult
-     * @dataProvider handlerProvider
+    /**     * @param bool $expectedResult
      */
+    #[DataProvider('handlerProvider')]
     public function testHandler($errorNo, $errorStr, $errorFile, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->object->handler($errorNo, $errorStr, $errorFile, 11));
@@ -37,7 +35,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProvider()
+    public static function handlerProvider()
     {
         return [
             [0, 'DateTimeZone::__construct', 0, false],
@@ -45,13 +43,9 @@ class ErrorHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * Test handler() method with 'false' result
-     *
-     * @param int $errorNo
-     * @param string $errorPhrase
-     * @dataProvider handlerProviderException
+    /**     * @param string $errorPhrase
      */
+    #[DataProvider('handlerProviderException')]
     public function testHandlerException($errorNo, $errorPhrase)
     {
         $errorStr = 'test_string';
@@ -68,7 +62,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function handlerProviderException()
+    public static function handlerProviderException()
     {
         return [
             [E_ERROR, 'Error'],
@@ -82,7 +76,6 @@ class ErrorHandlerTest extends TestCase
             [E_USER_ERROR, 'User Error'],
             [E_USER_WARNING, 'User Warning'],
             [E_USER_NOTICE, 'User Notice'],
-            [E_STRICT, 'Strict Notice'],
             [E_RECOVERABLE_ERROR, 'Recoverable Error'],
             [E_DEPRECATED, 'Deprecated Functionality'],
             [E_USER_DEPRECATED, 'User Deprecated Functionality'],

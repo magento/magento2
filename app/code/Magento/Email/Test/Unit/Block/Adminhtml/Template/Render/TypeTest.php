@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -11,11 +11,14 @@ namespace Magento\Email\Test\Unit\Block\Adminhtml\Template\Render;
 use Magento\Email\Block\Adminhtml\Template\Grid\Renderer\Type;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TypeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|Type
      */
@@ -26,10 +29,10 @@ class TypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->block = $this->getMockBuilder(Type::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__'])
-            ->getMock();
+        $this->block = $this->createPartialMockWithReflection(
+            Type::class,
+            ['__']
+        );
     }
 
     /**

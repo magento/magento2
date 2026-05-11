@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class UnsignedTest extends TestCase
         /** @var IntegerColumnDto|MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isUnsigned'])
+            ->onlyMethods(['isUnsigned'])
             ->getMock();
         $column->expects($this->any())
             ->method('isUnsigned')
@@ -60,7 +60,7 @@ class UnsignedTest extends TestCase
         /** @var IntegerColumnDto|MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
-            ->setMethods(['isUnsigned'])
+            ->onlyMethods(['isUnsigned'])
             ->getMock();
         $column->expects($this->any())
             ->method('isUnsigned')

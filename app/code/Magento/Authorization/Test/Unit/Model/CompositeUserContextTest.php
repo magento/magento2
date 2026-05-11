@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -36,10 +36,10 @@ class CompositeUserContextTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->compositeHelperMock = $this->getMockBuilder(CompositeHelper::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['filterAndSortDeclaredComponents'])
-            ->getMock();
+        $this->compositeHelperMock = $this->createPartialMock(
+            CompositeHelper::class,
+            ['filterAndSortDeclaredComponents']
+        );
         $this->compositeHelperMock
             ->expects($this->any())
             ->method('filterAndSortDeclaredComponents')
@@ -70,9 +70,10 @@ class CompositeUserContextTest extends TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMock();
+        $userContextMock = $this->createPartialMock(
+            CompositeUserContext::class,
+            ['getUserId', 'getUserType']
+        );
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($expectedUserId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($expectedUserType);
         $contexts = [
@@ -93,9 +94,10 @@ class CompositeUserContextTest extends TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMock();
+        $userContextMock = $this->createPartialMock(
+            CompositeUserContext::class,
+            ['getUserId', 'getUserType']
+        );
         $userContextMock->expects($this->any())->method('getUserId')->willReturn($expectedUserId);
         $userContextMock->expects($this->any())->method('getUserType')->willReturn($expectedUserType);
         $contexts = [
@@ -116,9 +118,10 @@ class CompositeUserContextTest extends TestCase
     {
         $expectedUserId = 1;
         $expectedUserType = 'Customer';
-        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMock();
+        $userContextMock = $this->createPartialMock(
+            CompositeUserContext::class,
+            ['getUserId', 'getUserType']
+        );
         $userContextMock->expects($this->exactly(3))->method('getUserType')
             ->willReturn($expectedUserType);
         $userContextMock->expects($this->exactly(3))->method('getUserId')
@@ -142,9 +145,10 @@ class CompositeUserContextTest extends TestCase
     public function testEmptyUserContext()
     {
         $expectedUserId = null;
-        $userContextMock = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId'])->getMock();
+        $userContextMock = $this->createPartialMock(
+            CompositeUserContext::class,
+            ['getUserId']
+        );
         $userContextMock->expects($this->any())->method('getUserId')
             ->willReturn($expectedUserId);
         $contexts = [
@@ -168,9 +172,10 @@ class CompositeUserContextTest extends TestCase
      */
     protected function createUserContextMock($userId = null, $userType = null)
     {
-        $useContextMock = $this->getMockBuilder(CompositeUserContext::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUserId', 'getUserType'])->getMock();
+        $useContextMock = $this->createPartialMock(
+            CompositeUserContext::class,
+            ['getUserId', 'getUserType']
+        );
         if ($userId !== null && $userType !== null) {
             $useContextMock->expects($this->any())->method('getUserId')->willReturn($userId);
             $useContextMock->expects($this->any())->method('getUserType')->willReturn($userType);
@@ -188,7 +193,6 @@ class CompositeUserContextTest extends TestCase
             CompositeUserContext::class,
             'userContexts'
         );
-        $userContext->setAccessible(true);
         $values = $userContext->getValue($model);
         $this->assertCount(1, $values, 'User context is not registered.');
         $this->assertEquals($userContextMock, $values[0], 'User context is registered incorrectly.');

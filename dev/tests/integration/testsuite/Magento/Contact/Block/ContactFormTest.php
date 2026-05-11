@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Contact\ViewModel\UserDataProvider;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +31,7 @@ class ContactFormTest extends TestCase
     private $block;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -41,37 +42,40 @@ class ContactFormTest extends TestCase
     }
 
     /**
-     * @param $setViewModel
-     * @param $expectedViewModelType
-     *
-     * @dataProvider dataProvider
+     * @param bool $setViewModel
+     * @param string $expectedViewModelType
      */
+    #[DataProvider('dataProvider')]
     public function testViewModel($setViewModel, $expectedViewModelType)
     {
         if ($setViewModel) {
-            $someViewModel = $this->getMockForAbstractClass(
-                ArgumentInterface::class,
-                [],
-                self::SOME_VIEW_MODEL
-            );
+            $someViewModel = $this->createMock(ArgumentInterface::class);
             $this->block->setData('view_model', $someViewModel);
         }
 
         $this->block->toHtml();
 
-        $this->assertInstanceOf($expectedViewModelType, $this->block->getData('view_model'));
+        $viewModel = $this->block->getData('view_model');
+        if ($setViewModel) {
+            // When a view model was pre-set, verify it wasn't replaced
+            $this->assertInstanceOf(ArgumentInterface::class, $viewModel);
+            $this->assertNotInstanceOf(UserDataProvider::class, $viewModel);
+        } else {
+            // When no view model was set, verify the default UserDataProvider was added
+            $this->assertInstanceOf($expectedViewModelType, $viewModel);
+        }
     }
 
-    public function dataProvider(): array
+    public static function dataProvider(): array
     {
         return [
             'view model was not preset before' => [
-                'set view model' => false,
-                'expected view model type' => UserDataProvider::class
+                false,  // $setViewModel
+                UserDataProvider::class  // $expectedViewModelType
             ],
             'view model was pre-installed before' => [
-                'set view model' => true,
-                'expected view model type' => self::SOME_VIEW_MODEL
+                true,  // $setViewModel
+                ArgumentInterface::class  // $expectedViewModelType
             ]
         ];
     }

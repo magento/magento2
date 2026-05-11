@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,10 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\ImportExport\Model\ResourceModel\Helper;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DownloadTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -101,6 +106,11 @@ class DownloadTest extends TestCase
      */
     protected $resultRedirectMock;
 
+    /**
+     * @var Helper
+     */
+    protected $resourceHelper;
+
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -111,12 +121,12 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->backupModelMock = $this->getMockBuilder(Backup::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
-            ->getMock();
+        $this->backupModelMock = $this->createPartialMockWithReflection(
+            Backup::class,
+            ['getTime', 'getPath', 'exists', 'getSize', 'output', 'getFileName']
+        );
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,17 +135,21 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRawMock = $this->getMockBuilder(Raw::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->resourceHelper = $this->getMockBuilder(Helper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -149,9 +163,19 @@ class DownloadTest extends TestCase
                 'resultRedirectFactory' => $this->resultRedirectFactoryMock
             ]
         );
+
+        $objects = [
+            [
+                Data::class,
+                $this->dataHelperMock
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->downloadController = $this->objectManager->getObject(
             Download::class,
             [
+                'helper' => $this->resourceHelper,
                 'context' => $this->context,
                 'backupModelFactory' => $this->backupModelFactoryMock,
                 'fileFactory' => $this->fileFactoryMock,
@@ -223,8 +247,8 @@ class DownloadTest extends TestCase
      * @param int $time
      * @param bool $exists
      * @param int $existsCount
-     * @dataProvider executeBackupNotFoundDataProvider
      */
+    #[DataProvider('executeBackupNotFoundDataProvider')]
     public function testExecuteBackupNotFound($time, $exists, $existsCount)
     {
         $type = 'db';
@@ -260,7 +284,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeBackupNotFoundDataProvider()
+    public static function executeBackupNotFoundDataProvider()
     {
         return [
             [1, false, 1],

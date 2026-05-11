@@ -1,11 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 
@@ -17,6 +20,11 @@ use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
  */
 class Validator extends AbstractValidator implements RowValidatorInterface
 {
+    /**
+     * Filter chain const
+     */
+    private const FILTER_CHAIN = "php://filter";
+
     /**
      * @var RowValidatorInterface[]|AbstractValidator[]
      */
@@ -49,15 +57,33 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected $invalidAttribute;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @var UniqueAttributeValidator
+     */
+    private $uniqueAttributeValidator;
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
+     * @param StringUtils $string
      * @param RowValidatorInterface[] $validators
+     * @param TimezoneInterface|null $localeDate
+     * @param UniqueAttributeValidator|null $uniqueAttributeValidator
      */
     public function __construct(
         \Magento\Framework\Stdlib\StringUtils $string,
-        $validators = []
+        $validators = [],
+        ?TimezoneInterface $localeDate = null,
+        ?UniqueAttributeValidator $uniqueAttributeValidator = null
     ) {
         $this->string = $string;
         $this->validators = $validators;
+        $this->localeDate = $localeDate ?: ObjectManager::getInstance()
+            ->get(TimezoneInterface::class);
+        $this->uniqueAttributeValidator = $uniqueAttributeValidator
+            ?: ObjectManager::getInstance()->get(UniqueAttributeValidator::class);
     }
 
     /**
@@ -70,6 +96,10 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function textValidation($attrCode, $type)
     {
         $val = $this->string->cleanString($this->_rowData[$attrCode]);
+        if (stripos($val, self::FILTER_CHAIN) !== false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+            return false;
+        }
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } elseif ($attrCode == Product::COL_SKU) {
@@ -164,11 +194,32 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         }
 
         if ($doCheck === true) {
-            return isset($rowData[$attrCode])
-                && strlen(trim($rowData[$attrCode]))
-                && trim($rowData[$attrCode]) !== $this->context->getEmptyAttributeValueConstant();
+            return $this->validateRequiredAttributeValue($attrCode, $rowData);
         }
         return true;
+    }
+
+    /**
+     * Validate required attribute value for both array and string types.
+     *
+     * @param string $attrCode
+     * @param array $rowData
+     * @return bool
+     */
+    private function validateRequiredAttributeValue(string $attrCode, array $rowData): bool
+    {
+        $emptyConstant = $this->context->getEmptyAttributeValueConstant();
+        if (isset($rowData[$attrCode]) && is_array($rowData[$attrCode])) {
+            $trimmedValues = array_map('trim', $rowData[$attrCode]);
+            $filteredArray = array_filter($trimmedValues, function ($value) {
+                return !empty($value);
+            });
+            return !empty($filteredArray)
+                && !in_array($emptyConstant, $trimmedValues, true);
+        }
+        return isset($rowData[$attrCode])
+            && strlen(trim($rowData[$attrCode]))
+            && trim($rowData[$attrCode]) !== $emptyConstant;
     }
 
     /**
@@ -230,7 +281,14 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
         if ($valid && !empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
-                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])
+                || !$this->uniqueAttributeValidator->isValid(
+                    $this->context,
+                    (string) $attrCode,
+                    (string) $rowData[Product::COL_SKU],
+                    (string) $rowData[$attrCode]
+                )
+            ) {
                 $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
                 return false;
             }
@@ -302,7 +360,16 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     private function validateDateTime(string $rowData): bool
     {
         $val = trim($rowData);
-        $valid = strtotime($val) !== false;
+        try {
+            if (!date_create_from_format(DateTime::DATETIME_PHP_FORMAT, $val)
+                && !date_create_from_format(DateTime::DATE_PHP_FORMAT, $val)
+            ) {
+                $this->localeDate->date($val);
+            }
+            $valid = true;
+        } catch (\Exception $e) {
+            $valid = false;
+        }
         if (!$valid) {
             $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
         }
@@ -330,6 +397,40 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     public function getInvalidAttribute()
     {
         return $this->invalidAttribute;
+    }
+
+    /**
+     * Validate attributes against configured properties
+     *
+     * @return array
+     */
+    private function validateAttributes(): array
+    {
+        $this->_clearMessages();
+        $this->setInvalidAttribute(null);
+        $attributeValidationResult['result'] = true;
+
+        if (!isset($this->_rowData['product_type'])) {
+            $attributeValidationResult['result'] = false;
+            return $attributeValidationResult;
+        }
+        $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
+        if ($entityTypeModel) {
+            $result = true;
+            foreach ($this->_rowData as $attrCode => $attrValue) {
+                $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $result = $this->isCategoriesValid($attrValue);
+                } elseif ($attrParams) {
+                    $result = $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
+                }
+                $attributeValidationResult['attributes'][$attrCode] = $result;
+            }
+            if ($this->getMessages()) {
+                $attributeValidationResult['result'] = false;
+            }
+        }
+        return $attributeValidationResult;
     }
 
     /**
@@ -369,14 +470,30 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     {
         $this->_rowData = $value;
         $this->_clearMessages();
-        $returnValue = $this->isValidAttributes();
+        $validatedAttributes = $this->validateAttributes();
+        /** @var Product\Validator\AbstractImportValidator $validator */
         foreach ($this->validators as $validator) {
             if (!$validator->isValid($value)) {
-                $returnValue = false;
                 $this->_addMessages($validator->getMessages());
+            } else {
+                //prioritize specialized validation
+                if ($validator->getFieldName() &&
+                    isset($validatedAttributes['attributes']) &&
+                    isset($validatedAttributes['attributes'][$validator->getFieldName()]) &&
+                    $validatedAttributes['attributes'][$validator->getFieldName()] === false
+                ) {
+                    $validatedAttributes['attributes'][$validator->getFieldName()] = true;
+                    foreach ($this->_messages as $key => $message) {
+                        if (str_contains($message, $validator->getFieldName())) {
+                            unset($this->_messages[$key]);
+                        }
+                    }
+                    $this->_messages = array_values($this->_messages);
+                }
             }
         }
-        return $returnValue;
+
+        return count($this->_messages) == 0;
     }
 
     /**
@@ -431,11 +548,23 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     public function init($context)
     {
+        $this->_uniqueAttributes = [];
+        $this->uniqueAttributeValidator->clearCache();
         $this->context = $context;
         foreach ($this->validators as $validator) {
             $validator->init($context);
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->_uniqueAttributes = [];
+        $this->uniqueAttributeValidator->clearCache();
+        parent::_resetState();
     }
 }

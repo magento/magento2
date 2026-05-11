@@ -1,34 +1,38 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Review reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
-abstract class Review extends \Magento\Backend\App\Action
+abstract class Review extends Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param Context $context
+     * @param FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        FileFactory $fileFactory
     ) {
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
@@ -54,16 +58,20 @@ abstract class Review extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'customer':
-                return $this->_authorization->isAllowed('Magento_Reports::review_customer');
-                break;
-            case 'product':
-                return $this->_authorization->isAllowed('Magento_Reports::review_product');
-                break;
-            default:
-                return $this->_authorization->isAllowed('Magento_Reports::review');
-                break;
-        }
+        return match (strtolower($this->getRequest()->getActionName())) {
+            'exportcustomercsv',
+            'exportcustomerexcel',
+            'customer' =>
+            $this->_authorization->isAllowed('Magento_Reports::review_customer'),
+            'exportproductcsv',
+            'exportproductexcel',
+            'exportproductdetailcsv',
+            'exportproductdetailexcel',
+            'productdetail',
+            'product' =>
+            $this->_authorization->isAllowed('Magento_Reports::review_product'),
+            default =>
+            $this->_authorization->isAllowed('Magento_Reports::review'),
+        };
     }
 }

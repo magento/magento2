@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Module\Setup;
 
 use Magento\Setup\Module\Setup\SetupCache;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SetupCacheTest extends TestCase
 {
@@ -46,9 +47,9 @@ class SetupCacheTest extends TestCase
     }
 
     /**
-     * @dataProvider getNonexistentDataProvider
      * @param string $field
      */
+    #[DataProvider('getNonexistentDataProvider')]
     public function testGetNonexistent($field)
     {
         $this->assertFalse($this->object->get('table', 'parent', 'row', $field));
@@ -57,7 +58,7 @@ class SetupCacheTest extends TestCase
     /**
      * @return array
      */
-    public function getNonexistentDataProvider()
+    public static function getNonexistentDataProvider()
     {
         return [
             [null],
@@ -78,13 +79,13 @@ class SetupCacheTest extends TestCase
     }
 
     /**
-     * @dataProvider hasDataProvider
      * @param string $table
      * @param string $parentId
      * @param string $rowId
      * @param string $field
      * @param bool $expected
      */
+    #[DataProvider('hasDataProvider')]
     public function testHas($table, $parentId, $rowId, $field, $expected)
     {
         $this->object->setField('table', 'parent', 'row', 'field', 'data');
@@ -94,7 +95,7 @@ class SetupCacheTest extends TestCase
     /**
      * @return array
      */
-    public function hasDataProvider()
+    public static function hasDataProvider()
     {
         return [
             'existing'           => ['table', 'parent', 'row', 'field', true],

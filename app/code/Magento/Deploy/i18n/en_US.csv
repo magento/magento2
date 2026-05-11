@@ -12,7 +12,7 @@
 "The configuration file has changed. Run app:config:import or setup:upgrade command to synchronize configuration.","The configuration file has changed. Run app:config:import or setup:upgrade command to synchronize configuration."
 "Wrong type specified: '%1'","Wrong type specified: '%1'"
 "Wrong queue type specified.","Wrong queue type specified."
-"Compilation from source: ","Compilation from source: "
+"Compilation from source: %1","Compilation from source: %1"
 "Wrong deploy strategy type: %1","Wrong deploy strategy type: %1"
 "Some error","Some error"
 "some message","some message"

@@ -1,13 +1,13 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
@@ -15,7 +15,7 @@ use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper;
 use Magento\Catalog\Controller\Adminhtml\Product\NewAction;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\RegexValidator;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\Validator\RegexFactory;
@@ -23,7 +23,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\PageFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class NewActionTest extends ProductTest
+class NewActionTest extends ProductTestCase
 {
     /** @var NewAction */
     protected $action;
@@ -71,34 +71,22 @@ class NewActionTest extends ProductTest
             Builder::class,
             ['build']
         );
-        $this->product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addData', 'getTypeId', 'getStoreId', '__sleep'])->getMock();
-        $this->product->expects($this->any())->method('getTypeId')->willReturn('simple');
-        $this->product->expects($this->any())->method('getStoreId')->willReturn('1');
-        $this->productBuilder->expects($this->any())->method('build')->willReturn($this->product);
+        $this->product = $this->createPartialMock(
+            Product::class,
+            ['addData', 'getTypeId', 'getStoreId', '__sleep']
+        );
+        $this->product->method('getTypeId')->willReturn('simple');
+        $this->product->method('getStoreId')->willReturn('1');
+        $this->productBuilder->method('build')->willReturn($this->product);
 
-        $this->resultPage = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPage = $this->createMock(Page::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $resultPageFactory = $this->createPartialMock(PageFactory::class, ['create']);
 
-        $this->resultForward = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardFactory = $this->getMockBuilder(ForwardFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->resultForward = $this->createMock(Forward::class);
+        $this->resultForwardFactory = $this->createPartialMock(ForwardFactory::class, ['create']);
 
-        $this->regexValidatorFactoryMock = $this->getMockBuilder(RegexFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->regexValidatorFactoryMock = $this->createPartialMock(RegexFactory::class, ['create']);
         $this->regexValidatorMock = $this->createMock(Regex::class);
         $this->regexValidatorFactoryMock->method('create')
             ->willReturn($this->regexValidatorMock);
@@ -121,24 +109,20 @@ class NewActionTest extends ProductTest
      *
      * @param string $value
      * @param bool $exceptionThrown
-     * @dataProvider validationCases
      */
+    #[DataProvider('validationCases')]
     public function testExecute(string $value, bool $exceptionThrown): void
     {
         if ($exceptionThrown) {
-            $this->action->getRequest()->expects($this->any())
-                ->method('getParam')
-                ->willReturn($value);
-            $this->resultForwardFactory->expects($this->any())
-                ->method('create')
-                ->willReturn($this->resultForward);
+            $this->action->getRequest()->method('getParam')->willReturn($value);
+            $this->resultForwardFactory->method('create')->willReturn($this->resultForward);
             $this->resultForward->expects($this->once())
                 ->method('forward')
                 ->with('noroute')
                 ->willReturn(true);
             $this->assertTrue($this->action->execute());
         } else {
-            $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn($value);
+            $this->action->getRequest()->method('getParam')->willReturn($value);
             $this->regexValidatorMock->expects($this->any())
                 ->method('isValid')
                 ->with($value)
@@ -153,7 +137,7 @@ class NewActionTest extends ProductTest
      *
      * @return array
      */
-    public function validationCases(): array
+    public static function validationCases(): array
     {
         return [
             'execute-with-exception' => ['simple\' and true()]|*[self%3a%3ahandle%20or%20self%3a%3alayout',true],

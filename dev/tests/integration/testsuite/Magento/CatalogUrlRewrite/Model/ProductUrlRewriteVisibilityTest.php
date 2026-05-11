@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class for product url rewrites tests
@@ -44,13 +45,13 @@ class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
 
     /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @dataProvider invisibleProductDataProvider
      * @param array $expectedData
      * @return void
      */
     #[
         DataFixture(ProductFixture::class, ['sku' => 'simple', 'name' => 'Simple Url Test Product',
             'visibility' => Visibility::VISIBILITY_NOT_VISIBLE]),
+        DataProvider('invisibleProductDataProvider')
     ]
     public function testUrlRewriteOnInvisibleProductEdit(array $expectedData): void
     {
@@ -78,11 +79,11 @@ class ProductUrlRewriteVisibilityTest extends AbstractUrlRewriteTest
     /**
      * @return array
      */
-    public function invisibleProductDataProvider(): array
+    public static function invisibleProductDataProvider(): array
     {
         return [
             [
-                'expected_data' => [
+                'expectedData' => [
                     [
                         'request_path' => 'simple-url-test-product%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',

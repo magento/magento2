@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Directory\Model;
@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\App\State;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,13 +59,13 @@ class CurrencyConfigTest extends TestCase
     /**
      * Test get currency config for admin, crontab and storefront areas.
      *
-     * @dataProvider getConfigCurrenciesDataProvider
      * @magentoDataFixture Magento/Store/_files/store.php
      * @magentoDbIsolation disabled
      * @param string $areaCode
      * @param array $expected
      * @return void
      */
+    #[DataProvider('getConfigCurrenciesDataProvider')]
     public function testGetConfigCurrencies(string $areaCode, array $expected)
     {
         /** @var State $appState */
@@ -107,28 +108,28 @@ class CurrencyConfigTest extends TestCase
      *
      * @return array
      */
-    public function getConfigCurrenciesDataProvider()
+    public static function getConfigCurrenciesDataProvider()
     {
         return [
             [
-                'areaCode' => Area::AREA_ADMINHTML,
-                'expected' => [
+                Area::AREA_ADMINHTML,  // $areaCode
+                [  // $expected
                     'allowed' => ['BDT', 'BNS', 'BTD', 'EUR', 'USD'],
                     'base' => ['BDT', 'USD'],
                     'default' => ['BDT', 'USD'],
                 ],
             ],
             [
-                'areaCode' => Area::AREA_CRONTAB,
-                'expected' => [
+                Area::AREA_CRONTAB,  // $areaCode
+                [  // $expected
                     'allowed' => ['BDT', 'BNS', 'BTD', 'EUR', 'USD'],
                     'base' => ['BDT', 'USD'],
                     'default' => ['BDT', 'USD'],
                 ],
             ],
             [
-                'areaCode' => Area::AREA_FRONTEND,
-                'expected' => [
+                Area::AREA_FRONTEND,  // $areaCode
+                [  // $expected
                     'default' => [
                         'allowed' => ['EUR', 'USD'],
                         'base' => ['USD'],

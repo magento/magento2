@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class ViewSubscribeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(
+        $this->configMock = $this->createMock(
             ConfigInterface::class,
             [],
             '',
@@ -74,14 +74,11 @@ class ViewSubscribeTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->getMockBuilder(ChangelogBatchWalkerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['walk'])
-            ->getMockForAbstractClass();
+        $this->iteratorMock = $this->createMock(ChangelogBatchWalkerInterface::class);
         $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangelogBatchWalkerFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $changeLogBatchWalkerFactory->method('create')->willReturn($this->iteratorMock);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(
@@ -194,7 +191,11 @@ class ViewSubscribeTest extends TestCase
         $this->stateMock->expects($this->once())
             ->method('setMode')
             ->with(StateInterface::MODE_DISABLED)->willReturnSelf();
-        $this->changelogMock->expects($this->never())
+        $this->stateMock->expects($this->once())
+            ->method('setStatus')
+            ->with(StateInterface::STATUS_IDLE)
+            ->willReturnSelf();
+        $this->changelogMock->expects($this->once())
             ->method('drop');
         $subscriptionMock = $this->createPartialMock(Subscription::class, ['remove']);
         $subscriptionMock->expects($this->exactly(1))->method('remove');
@@ -221,6 +222,8 @@ class ViewSubscribeTest extends TestCase
             ->method('setVersionId');
         $this->stateMock->expects($this->never())
             ->method('setMode');
+        $this->stateMock->expects($this->never())
+            ->method('setStatus');
         $this->changelogMock->expects($this->never())
             ->method('drop');
         $this->subscriptionFactoryMock->expects($this->never())

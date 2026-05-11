@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ImportExport\Model\Export\Entity;
 
@@ -146,6 +146,18 @@ abstract class AbstractEntity
     protected $_storeManager;
 
     /**
+     * Array of pairs store ID to its code.
+     *
+     * @var array
+     */
+    protected $_storeIdToCode = [];
+
+    /**
+     * @var array
+     */
+    private $_invalidRows = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param ResourceConnection $resource
@@ -172,10 +184,8 @@ abstract class AbstractEntity
     protected function _initStores()
     {
         foreach ($this->_storeManager->getStores(true) as $store) {
-            // phpstan:ignore "Access to an undefined property"
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
-        // phpstan:ignore "Access to an undefined property"
         ksort($this->_storeIdToCode);
         // to ensure that 'admin' store (ID is zero) goes first
 
@@ -280,7 +290,7 @@ abstract class AbstractEntity
                 $attrFilterType = \Magento\ImportExport\Model\Export::getAttributeFilterType($attribute);
 
                 if (\Magento\ImportExport\Model\Export::FILTER_TYPE_SELECT == $attrFilterType) {
-                    if (is_scalar($exportFilter[$attrCode]) && trim($exportFilter[$attrCode])) {
+                    if (is_scalar($exportFilter[$attrCode]) && strlen(trim($exportFilter[$attrCode]))) {
                         $collection->addAttributeToFilter($attrCode, ['eq' => $exportFilter[$attrCode]]);
                     }
                 } elseif (\Magento\ImportExport\Model\Export::FILTER_TYPE_MULTISELECT == $attrFilterType) {
@@ -350,7 +360,6 @@ abstract class AbstractEntity
         $errorCode = (string)$errorCode;
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
-        // phpstan:ignore "Access to an undefined property"
         $this->_invalidRows[$errorRowNum] = true;
         $this->_errorsCount++;
 
@@ -508,7 +517,6 @@ abstract class AbstractEntity
      */
     public function getInvalidRowsCount()
     {
-        // phpstan:ignore "Access to an undefined property"
         return count($this->_invalidRows);
     }
 

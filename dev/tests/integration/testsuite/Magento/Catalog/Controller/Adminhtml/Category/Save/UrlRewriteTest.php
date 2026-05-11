@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category\Save;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class defines url rewrite creation for category save controller
@@ -35,10 +36,10 @@ class UrlRewriteTest extends AbstractSaveCategoryTest
 
     /**
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
-     * @dataProvider categoryDataProvider
      * @param array $data
      * @return void
      */
+    #[DataProvider('categoryDataProvider')]
     public function testUrlRewrite(array $data): void
     {
         $responseData = $this->performSaveCategoryRequest($data);
@@ -54,7 +55,7 @@ class UrlRewriteTest extends AbstractSaveCategoryTest
     /**
      * @return array
      */
-    public function categoryDataProvider(): array
+    public static function categoryDataProvider(): array
     {
         return [
             'url_rewrite_is_created_during_category_save' => [

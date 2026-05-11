@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Block\Adminhtml\View;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\View as OrderShipmentView;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -114,18 +116,17 @@ class ViewTest extends TestCase
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoaderMock = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
         $this->shipmentMock = $this->createPartialMock(
             Shipment::class,
             ['getIncrementId', '__wakeup']
         );
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
@@ -133,7 +134,7 @@ class ViewTest extends TestCase
         $this->resultForwardFactoryMock = $this->getMockBuilder(
             ForwardFactory::class
         )->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultForwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
@@ -145,7 +146,7 @@ class ViewTest extends TestCase
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -189,11 +190,10 @@ class ViewTest extends TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->addMethods(['__wakeup'])
-            ->onlyMethods(['getBlock'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $layoutMock = $this->createPartialMockWithReflection(
+            Layout::class,
+            ['__wakeup', 'getBlock']
+        );
         $this->resultPageMock->expects($this->once())
             ->method('getLayout')
             ->willReturn($layoutMock);
@@ -218,11 +218,13 @@ class ViewTest extends TestCase
             ->willReturn($this->pageTitleMock);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->withConsecutive(
-                ['Shipments'],
-                ['View Shipment #' . $incrementId]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1) use ($incrementId) {
+                if ($arg1 == 'Shipments') {
+                    return $this->pageTitleMock;
+                } elseif ($arg1 == 'View Shipment #' . $incrementId) {
+                    return $this->pageTitleMock;
+                }
+            });
 
         $this->assertEquals($this->resultPageMock, $this->controller->execute());
     }

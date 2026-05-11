@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Config\Model\Config\Structure\ElementVisibilityInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants as Constants;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ConcealInProductionWithoutScdOnDemandTest extends TestCase
@@ -100,8 +101,8 @@ class ConcealInProductionWithoutScdOnDemandTest extends TestCase
     /**
      * @param bool $isHidden
      *
-     * @dataProvider visibilityDataProvider
      */
+    #[DataProvider('visibilityDataProvider')]
     public function testIsHiddenScdOnDemandDisabled(bool $isHidden): void
     {
         $path = 'section1/group1/field1';
@@ -120,8 +121,8 @@ class ConcealInProductionWithoutScdOnDemandTest extends TestCase
     /**
      * @param bool $isDisabled
      *
-     * @dataProvider visibilityDataProvider
      */
+    #[DataProvider('visibilityDataProvider')]
     public function testIsDisabledScdOnDemandDisabled(bool $isDisabled): void
     {
         $path = 'section1/group1/field1';
@@ -140,7 +141,7 @@ class ConcealInProductionWithoutScdOnDemandTest extends TestCase
     /**
      * @return array
      */
-    public function visibilityDataProvider(): array
+    public static function visibilityDataProvider(): array
     {
         return [
             [true],

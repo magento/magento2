@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match;
 use Magento\Paypal\Model\Payflow\Transparent;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,12 +44,8 @@ class CVV2MatchTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->payflowproFacade = $this->createMock(Transparent::class);
 
         $this->validator = new CVV2Match();
     }
@@ -58,8 +55,8 @@ class CVV2MatchTest extends TestCase
      * @param DataObject $response
      * @param string $avsSecurityCodeFlag
      *
-     * @dataProvider validationDataProvider
      */
+    #[DataProvider('validationDataProvider')]
     public function testValidation(
         $expectedResult,
         DataObject $response,
@@ -84,7 +81,7 @@ class CVV2MatchTest extends TestCase
     /**
      * @return array
      */
-    public function validationDataProvider()
+    public static function validationDataProvider()
     {
         return [
             [
@@ -94,7 +91,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '0',
+                'avsSecurityCodeFlag' => '0',
             ],
             [
                 'expectedResult' => true,
@@ -103,7 +100,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'Y',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
@@ -112,7 +109,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'X',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => false,
@@ -121,7 +118,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'N',
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
@@ -130,12 +127,12 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => null,
                     ]
                 ),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
                 'response' => new DataObject(),
-                'configValue' => '1',
+                'avsSecurityCodeFlag' => '1',
             ],
             [
                 'expectedResult' => true,
@@ -144,7 +141,7 @@ class CVV2MatchTest extends TestCase
                         'cvv2match' => 'N',
                     ]
                 ),
-                'configValue' => '0',
+                'avsSecurityCodeFlag' => '0',
             ],
         ];
     }

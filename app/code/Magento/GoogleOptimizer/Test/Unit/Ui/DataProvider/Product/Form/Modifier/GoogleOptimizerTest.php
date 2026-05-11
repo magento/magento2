@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,13 @@ namespace Magento\GoogleOptimizer\Test\Unit\Ui\DataProvider\Product\Form\Modifie
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\GoogleOptimizer\Helper\Code;
+use Magento\GoogleOptimizer\Model\Code as ModelCode;
 use Magento\GoogleOptimizer\Helper\Data;
 use Magento\GoogleOptimizer\Ui\DataProvider\Product\Form\Modifier\GoogleOptimizer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Textarea;
@@ -26,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GoogleOptimizerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManagerHelper
      */
@@ -64,7 +69,7 @@ class GoogleOptimizerTest extends TestCase
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->productMock = $this->createMock(Product::class);
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->locatorMock->expects($this->any())
             ->method('getProduct')
             ->willReturn($this->productMock);
@@ -112,10 +117,11 @@ class GoogleOptimizerTest extends TestCase
      * @param string $codeId
      * @param int $expectedCalls
      * @return void
-     * @dataProvider getDataGoogleExperimentEnabledDataProvider
      */
+    #[DataProvider('getDataGoogleExperimentEnabledDataProvider')]
     public function testGetDataGoogleExperimentEnabled($productId, $experimentScript, $codeId, $expectedCalls)
     {
+        $productId = $productId ?? '';
         $expectedResult[$productId]['google_experiment'] = [
             'experiment_script' => $experimentScript,
             'code_id' => $codeId,
@@ -124,10 +130,10 @@ class GoogleOptimizerTest extends TestCase
         $this->canShowPanel(true);
 
         /** @var \Magento\GoogleOptimizer\Model\Code|MockObject $codeModelMock */
-        $codeModelMock = $this->getMockBuilder(\Magento\GoogleOptimizer\Model\Code::class)
-            ->addMethods(['getExperimentScript', 'getCodeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $codeModelMock = $this->createPartialMockWithReflection(
+            ModelCode::class,
+            ['getExperimentScript', 'getCodeId']
+        );
         $codeModelMock->expects($this->exactly($expectedCalls))
             ->method('getExperimentScript')
             ->willReturn($experimentScript);
@@ -149,7 +155,7 @@ class GoogleOptimizerTest extends TestCase
     /**
      * @return array
      */
-    public function getDataGoogleExperimentEnabledDataProvider()
+    public static function getDataGoogleExperimentEnabledDataProvider()
     {
         return [
             ['productId' => 2, 'experimentScript' => 'some script', 'codeId' => '3', 'expectedCalls' => 1],

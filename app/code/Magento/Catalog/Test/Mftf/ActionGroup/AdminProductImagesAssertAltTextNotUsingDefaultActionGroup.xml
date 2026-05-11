@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductImagesAssertAltTextNotUsingDefaultActionGroup" extends="AdminProductAssertImageAltTextActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, clicks on provided image, assert image alt text is not using default value.</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminProductImagesSection.isAltTextEnabled}}" after="waitForSlideOut" stepKey="seeInputEnabled"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminProductImagesSection.altTextUseDefault}}" after="seeInputEnabled" stepKey="dontSeeUseDefaultChecked"/>
+    </actionGroup>
+</actionGroups>

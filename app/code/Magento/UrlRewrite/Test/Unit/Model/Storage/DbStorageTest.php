@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,15 +56,13 @@ class DbStorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->urlRewriteFactory = $this->getMockBuilder(UrlRewriteFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->urlRewriteFactory = $this->createPartialMock(
+            UrlRewriteFactory::class,
+            ['create']
+        );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $this->select = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->select = $this->createMock(Select::class);
         $this->resource = $this->createMock(ResourceConnection::class);
 
         $this->resource->method('getConnection')
@@ -84,6 +82,7 @@ class DbStorageTest extends TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testFindAllByData(): void
     {
@@ -91,7 +90,13 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($column, $value) {
+                if ($column == 'col1 IN (?)' && $value == 'val1') {
+                     return null;
+                } elseif ($column == 'col2 IN (?)' && $value == 'val2') {
+                    return null;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -104,11 +109,13 @@ class DbStorageTest extends TestCase
 
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [['urlRewrite1'], ['row1'], UrlRewrite::class],
-                [['urlRewrite2'], ['row2'], UrlRewrite::class]
-            )
-            ->willReturnOnConsecutiveCalls($this->dataObjectHelper, $this->dataObjectHelper);
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == ['urlRewrite1'] && $arg2 == ['row1'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                } elseif ($arg1 == ['urlRewrite2'] && $arg2 == ['row2'] && $arg3 == UrlRewrite::class) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->urlRewriteFactory
             ->method('create')
@@ -126,7 +133,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -164,11 +175,11 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == ['col1 IN (?)', 'val1'] && $arg2 == ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -213,11 +224,14 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+                ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                    if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                        return $this->dataObjectHelper;
+                    }
+                    if ($arg1 === ['request_path IN (?)', [$arg3, $arg3 . '/']]) {
+                        return $this->dataObjectHelper;
+                    }
+                });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -275,11 +289,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [rtrim($origRequestPath, '/'), rtrim($origRequestPath, '/') . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock
             ->method('quoteIdentifier')
@@ -338,11 +356,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -388,11 +410,15 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(
-                ['col1 IN (?)', 'val1'],
-                ['col2 IN (?)', 'val2'],
-                ['request_path IN (?)', [$origRequestPath, $origRequestPath . '/']]
-            );
+            ->willReturnCallback(function ($arg1, $arg2) use ($origRequestPath) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+                if ($arg1 === ['request_path IN (?)', [rtrim($origRequestPath, '/'),
+                        rtrim($origRequestPath, '/') . '/']]) {
+                    return $this->dataObjectHelper;
+                }
+            });
 
         $this->connectionMock->method('quoteIdentifier')
             ->willReturnArgument(0);
@@ -569,7 +595,12 @@ class DbStorageTest extends TestCase
 
         $this->select
             ->method('where')
-            ->withConsecutive(['col1 IN (?)', 'val1'], ['col2 IN (?)', 'val2']);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 === ['col1 IN (?)', 'val1'] && $arg2 === ['col2 IN (?)', 'val2']) {
+                    return $this->dataObjectHelper;
+                }
+            });
+
         $this->select
             ->method('deleteFromSelect')
             ->with('table_name')

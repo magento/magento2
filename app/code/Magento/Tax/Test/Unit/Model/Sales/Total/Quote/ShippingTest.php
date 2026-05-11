@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Tax\Api\Data\QuoteDetailsInterfaceFactory;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
 use Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ShippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -77,7 +80,7 @@ class ShippingTest extends TestCase
     protected function setUp(): void
     {
         $this->taxConfigMock = $this->createMock(Config::class);
-        $this->taxCalculationMock = $this->getMockForAbstractClass(TaxCalculationInterface::class);
+        $this->taxCalculationMock = $this->createMock(TaxCalculationInterface::class);
         $this->quoteDetailsDataObjectFactory = $this->createPartialMock(
             QuoteDetailsInterfaceFactory::class,
             ['create']
@@ -108,6 +111,7 @@ class ShippingTest extends TestCase
     {
         $storeId = 1;
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
 
         $addressMock = $this->getMockObject(Address::class, [
             'all_items' => [],
@@ -119,13 +123,13 @@ class ShippingTest extends TestCase
         ]);
         $this->taxCalculationMock->expects($this->never())->method('calculateTax');
 
-        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+        $shippingMock = $this->createMock(ShippingInterface::class);
         $shippingMock->expects($this->atLeastOnce())->method('getAddress')->willReturn($addressMock);
-        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
         $shippingAssignmentMock->expects($this->atLeastOnce())->method('getShipping')->willReturn($shippingMock);
         $shippingAssignmentMock->expects($this->once())
             ->method('getItems')
-            ->willReturn([$this->getMockForAbstractClass(CartItemInterface::class)]);
+            ->willReturn([$this->createMock(CartItemInterface::class)]);
 
         $totalMock = $this->createMock(Total::class);
 
@@ -154,11 +158,7 @@ class ShippingTest extends TestCase
             $methods[] = $getterName;
         }
 
-        $mock = $this->getMockBuilder($className)
-            ->disableOriginalConstructor()
-            ->addMethods(array_diff($methods, get_class_methods($className)))
-            ->onlyMethods(get_class_methods($className))
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection($className, $methods);
         foreach ($getterValueMap as $getterName => $value) {
             $mock->expects($this->any())->method($getterName)->willReturn($value);
         }
@@ -168,6 +168,7 @@ class ShippingTest extends TestCase
 
     public function testFetch()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
         $value = 42;
         $total = new Total();
         $total->setShippingInclTax($value);
@@ -181,6 +182,8 @@ class ShippingTest extends TestCase
 
     public function testFetchWithZeroShipping()
     {
+        $this->quoteMock->expects($this->never())->method('getShippingAddress');
+
         $value = 0;
         $total = new Total();
         $total->setShippingInclTax($value);

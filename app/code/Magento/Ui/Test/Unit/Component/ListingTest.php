@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContentType\AbstractContentType;
+use Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory;
+use Magento\Framework\View\Element\UiComponent\ContentType\Html;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Ui\Component\Listing;
@@ -27,18 +30,25 @@ class ListingTest extends TestCase
     protected $objectManager;
 
     /**
+     * @var ContentTypeFactory|MockObject
+     */
+    private ContentTypeFactory $contentTypeFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockForAbstractClass(
+        $this->contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
             false
         );
+
+        $this->contentTypeFactory = $this->createMock(ContentTypeFactory::class);
     }
 
     /**
@@ -68,9 +78,7 @@ class ListingTest extends TestCase
      */
     public function testPrepare(): void
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         $buttons = [
             'button1' => 'button1',
@@ -102,5 +110,49 @@ class ListingTest extends TestCase
             ->with($buttons, $listing);
 
         $listing->prepare();
+    }
+
+    /**
+     * @return void
+     */
+    public function testRenderSpecificContentType(): void
+    {
+        $html = 'html output';
+        $renderer = $this->createMock(Html::class);
+        $renderer->expects($this->once())->method('render')->willReturn($html);
+        $this->contentTypeFactory->expects($this->once())
+            ->method('get')
+            ->with('html')
+            ->willReturn($renderer);
+
+        /** @var Listing $listing */
+        $listing = $this->objectManager->getObject(
+            Listing::class,
+            [
+                'context' => $this->contextMock,
+                'contentTypeFactory' => $this->contentTypeFactory
+            ]
+        );
+        $this->assertSame($html, $listing->render('html'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testRenderParent()
+    {
+        $html = 'html output';
+        $renderer = $this->createMock(AbstractContentType::class);
+        $renderer->expects($this->once())->method('render')->willReturn($html);
+        $this->contextMock->expects($this->once())->method('getRenderEngine')->willReturn($renderer);
+
+        /** @var Listing $listing */
+        $listing = $this->objectManager->getObject(
+            Listing::class,
+            [
+                'context' => $this->contextMock
+            ]
+        );
+        $this->assertSame($html, $listing->render());
     }
 }

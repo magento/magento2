@@ -1,13 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Attribute\Save;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Eav\Model\Entity\Attribute\Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoDbIsolation enabled
@@ -20,9 +28,9 @@ class AttributePriceTest extends AbstractAttributeTest
      * @magentoDataFixture Magento/Catalog/_files/product_decimal_attribute.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @dataProvider uniqueAttributeValueProvider
      * @inheritdoc
      */
+    #[DataProvider('uniqueAttributeValueProvider')]
     public function testUniqueAttribute(string $firstSku, string $secondSku): void
     {
         $this->markTestSkipped('Test is blocked by issue MC-29018');
@@ -42,23 +50,45 @@ class AttributePriceTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider productProvider
      * @param string $productSku
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('productProvider')]
     public function testDefaultValue(string $productSku): void
     {
         // product price attribute does not support default value
     }
 
+    #[
+        AppArea('adminhtml'),
+        Config('catalog/price/scope', '2', 'store'),
+        DataFixture(
+            AttributeFixture::class,
+            ['frontend_input' => 'price', 'backend_type' => 'decimal'],
+            'decimalAttr'
+        ),
+    ]
+    public function testScopePriceAttribute()
+    {
+        $attributeFixtures = Bootstrap::getObjectManager()
+            ->get(DataFixtureStorageManager::class)->getStorage();
+        $attribute = $this->attributeRepository->get(
+            ProductAttributeInterface::ENTITY_TYPE_CODE,
+            $attributeFixtures->get('decimalAttr')->getAttributeCode()
+        );
+
+        $this->assertFalse($attribute->isScopeStore());
+        $this->assertTrue($attribute->isScopeGlobal());
+    }
+
     /**
      * @inheritdoc
      */
-    public function productProvider(): array
+    public static function productProvider(): array
     {
         return [
             [
-                'product_sku' => 'simple2',
+                'productSku' => 'simple2',
             ],
         ];
     }
@@ -66,12 +96,12 @@ class AttributePriceTest extends AbstractAttributeTest
     /**
      * @inheritdoc
      */
-    public function uniqueAttributeValueProvider(): array
+    public static function uniqueAttributeValueProvider(): array
     {
         return [
             [
-                'first_product_sku' => 'simple2',
-                'second_product_sku' => 'simple-out-of-stock',
+                'firstSku' => 'simple2',
+                'secondSku' => 'simple-out-of-stock',
             ],
         ];
     }

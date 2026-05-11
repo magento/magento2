@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,8 +28,10 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Customer\Model\Customer\Mapper as CustomerMapper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -40,6 +42,8 @@ use Psr\Log\LoggerInterface;
  */
 class InlineEditTest extends TestCase
 {
+
+    use MockCreationTrait;
     /**
      * @var InlineEdit
      */
@@ -91,7 +95,7 @@ class InlineEditTest extends TestCase
     private $addressMapper;
 
     /**
-     * @var \Magento\Customer\Model\Customer\Mapper|MockObject
+     * @var CustomerMapper|MockObject
      */
     private $customerMapper;
 
@@ -153,70 +157,44 @@ class InlineEditTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->escaper = new Escaper();
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false
+        $this->request = $this->createMock(
+            RequestInterface::class
         );
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false
+        $this->messageManager = $this->createMock(
+            ManagerInterface::class
         );
-        $this->customerData = $this->getMockForAbstractClass(
-            CustomerInterface::class,
-            [],
-            '',
-            false
+        $this->customerData = $this->createMock(
+            CustomerInterface::class
         );
-        $this->address = $this->getMockForAbstractClass(
-            AddressInterface::class,
-            [],
-            'address',
-            false
-        );
+
+        $this->address = $this->getMock(AddressInterface::class, 'address');
+
         $this->addressMapper = $this->createMock(Mapper::class);
-        $this->customerMapper = $this->createMock(\Magento\Customer\Model\Customer\Mapper::class);
+        $this->customerMapper = $this->createMock(CustomerMapper::class);
         $this->resultJsonFactory = $this->createPartialMock(
             JsonFactory::class,
             ['create']
         );
         $this->resultJson = $this->createMock(Json::class);
-        $this->customerRepository = $this->getMockForAbstractClass(
-            CustomerRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->customerRepository = $this->createMock(
+            CustomerRepositoryInterface::class
         );
         $this->dataObjectHelper = $this->createMock(DataObjectHelper::class);
         $this->addressDataFactory = $this->createPartialMock(
             AddressInterfaceFactory::class,
             ['create']
         );
-        $this->addressRepository = $this->getMockForAbstractClass(
-            AddressRepositoryInterface::class,
-            [],
-            '',
-            false
+        $this->addressRepository = $this->createMock(
+            AddressRepositoryInterface::class
         );
         $this->messageCollection = $this->createMock(Collection::class);
-        $this->message = $this->getMockForAbstractClass(
-            MessageInterface::class,
-            [],
-            '',
-            false
+        $this->message = $this->createMock(
+            MessageInterface::class
         );
-        $this->logger = $this->getMockForAbstractClass(
-            LoggerInterface::class,
-            [],
-            '',
-            false
+        $this->logger = $this->createMock(
+            LoggerInterface::class
         );
-        $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->emailNotification = $this->createMock(EmailNotificationInterface::class);
 
         $this->context = $objectManager->getObject(
             Context::class,
@@ -244,7 +222,6 @@ class InlineEditTest extends TestCase
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
         $reflectionProperty = $reflection->getProperty('emailNotification');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->controller, $this->emailNotification);
 
         $this->items = [
@@ -253,6 +230,20 @@ class InlineEditTest extends TestCase
                 'billing_postcode' => '07294'
             ]
         ];
+    }
+
+    /**
+     * @param string $class
+     * @param string $mockClassName
+     * @return mixed|MockObject
+     */
+    private function getMock(string $class, string $mockClassName): MockObject
+    {
+        if (class_exists($mockClassName)) {
+            return new $mockClassName();
+        }
+
+        return $this->createMock($class);
     }
 
     /**
@@ -267,8 +258,13 @@ class InlineEditTest extends TestCase
             ->willReturn($this->resultJson);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['items', []], ['isAjax'])
-            ->willReturnOnConsecutiveCalls($this->items, true);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'items' && empty($arg2)) {
+                    return $this->items;
+                } elseif ($arg1 == 'isAjax') {
+                    return true;
+                }
+            });
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with(14)
@@ -359,25 +355,29 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->address,
-                    [
-                        'postcode' => '07294',
-                        'firstname' => 'Firstname',
-                        'lastname' => 'Lastname'
-                    ],
-                    AddressInterface::class
-                ],
-                [
-                    $this->customerData,
-                    [
-                        'name' => 'Firstname Lastname',
-                        'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                static $callCount = 0;
+                $callCount++;
+                switch ($callCount) {
+                    case 1:
+                        if ($arg1 == $this->address && $arg2 == [
+                                'postcode' => '07294',
+                                'firstname' => 'Firstname',
+                                'lastname' => 'Lastname'
+                            ] && $arg3 == AddressInterface::class) {
+                            return null;
+                        }
+                        break;
+                    case 2:
+                        if ($arg1 == $this->customerData && $arg2 == [
+                                'name' => 'Firstname Lastname',
+                                'email' => 'test@test.ua'
+                            ] && $arg3 == CustomerInterface::class) {
+                            return null;
+                        }
+                        break;
+                }
+            });
 
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
@@ -408,8 +408,13 @@ class InlineEditTest extends TestCase
             ->willReturn($this->resultJson);
         $this->request
             ->method('getParam')
-            ->withConsecutive(['items', []], ['isAjax'])
-            ->willReturnOnConsecutiveCalls([], false);
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'items' && empty($arg2)) {
+                    return [];
+                } elseif ($arg1 == 'isAjax') {
+                    return false;
+                }
+            });
         $this->resultJson
             ->expects($this->once())
             ->method('setData')
@@ -436,16 +441,14 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->customerData,
-                    [
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 === $this->customerData && $arg2 === [
                         'name' => 'Firstname Lastname',
                         'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+                    ] && $arg3 === CustomerInterface::class) {
+                    return null;
+                }
+            });
 
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
@@ -480,16 +483,14 @@ class InlineEditTest extends TestCase
         $this->prepareMocksForTesting();
         $this->dataObjectHelper
             ->method('populateWithArray')
-            ->withConsecutive(
-                [
-                    $this->customerData,
-                    [
+            ->willReturnCallback(function ($arg1, $arg2, $arg3) {
+                if ($arg1 == $this->customerData && $arg2 === [
                         'name' => 'Firstname Lastname',
                         'email' => 'test@test.ua'
-                    ],
-                    CustomerInterface::class
-                ]
-            );
+                    ] && $arg3 === CustomerInterface::class) {
+                    return null;
+                }
+            });
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);

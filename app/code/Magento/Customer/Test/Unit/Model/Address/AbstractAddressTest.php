@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,19 +17,27 @@ use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Eav\Model\Config;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Address\AbstractAddress\RegionModelsCache;
+use Magento\Customer\Model\Address\AbstractAddress\CountryModelsCache;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractAddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Context|MockObject  */
     protected $contextMock;
 
@@ -91,9 +99,7 @@ class AbstractAddressTest extends TestCase
             ->willReturn($countryMock);
 
         $this->resourceMock = $this->createMock(Customer::class);
-        $this->resourceCollectionMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->objectManager = new ObjectManager($this);
         $this->compositeValidatorMock = $this->createMock(CompositeValidator::class);
         $this->model = $this->objectManager->getObject(
@@ -109,6 +115,8 @@ class AbstractAddressTest extends TestCase
                 'resource' => $this->resourceMock,
                 'resourceCollection' => $this->resourceCollectionMock,
                 'compositeValidator' => $this->compositeValidatorMock,
+                'countryModelsCache' => new CountryModelsCache,
+                'regionModelsCache' => new RegionModelsCache,
             ]
         );
     }
@@ -162,6 +170,28 @@ class AbstractAddressTest extends TestCase
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
+    /**
+     * Test regionid for empty value
+     *
+     * @inheritdoc
+     * @return void
+     */
+    public function testGetRegionId()
+    {
+        $this->model->setData('region_id', 0);
+        $this->model->setData('region', '');
+        $this->model->setData('country_id', 'GB');
+        $region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getCode', '__wakeup', 'load', 'loadByCode', 'getId']
+        );
+        $region->method('loadByCode')
+            ->willReturnSelf();
+        $this->regionFactoryMock->method('create')
+            ->willReturn($region);
+        $this->assertEquals(0, $this->model->getRegionId());
+    }
+
     public function testGetRegionCodeWithRegion()
     {
         $countryId = 2;
@@ -194,11 +224,10 @@ class AbstractAddressTest extends TestCase
      */
     protected function prepareGetRegion($countryId, $regionName = 'RegionName')
     {
-        $region = $this->getMockBuilder(Region::class)
-            ->addMethods(['getCountryId'])
-            ->onlyMethods(['getName', '__wakeup', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getName', '__wakeup', 'load']
+        );
         $region->expects($this->once())
             ->method('getName')
             ->willReturn($regionName);
@@ -215,11 +244,10 @@ class AbstractAddressTest extends TestCase
      */
     protected function prepareGetRegionCode($countryId, $regionCode = 'UK')
     {
-        $region = $this->getMockBuilder(Region::class)
-            ->addMethods(['getCountryId', 'getCode'])
-            ->onlyMethods(['__wakeup', 'load', 'loadByCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getCode', '__wakeup', 'load', 'loadByCode']
+        );
         $region->method('loadByCode')
             ->willReturnSelf();
         $region->expects($this->once())
@@ -308,9 +336,8 @@ class AbstractAddressTest extends TestCase
      * @param array $data
      * @param array|bool $expected
      * @return void
-     *
-     * @dataProvider validateDataProvider
-     */
+     * */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $data, $expected)
     {
         $this->compositeValidatorMock->method('validate')->with($this->model)->willReturn($expected);
@@ -326,7 +353,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         $countryId = 1;
         $data = [
@@ -378,18 +405,16 @@ class AbstractAddressTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getStreetFullDataProvider
-     */
+    /** */
+    #[DataProvider('getStreetFullDataProvider')]
     public function testGetStreetFullAlwaysReturnsString($expectedResult, $street)
     {
         $this->model->setData('street', $street);
         $this->assertEquals($expectedResult, $this->model->getStreetFull());
     }
 
-    /**
-     * @dataProvider getStreetFullDataProvider
-     */
+    /** */
+    #[DataProvider('getStreetFullDataProvider')]
     public function testSetDataStreetAlwaysConvertedToString($expectedResult, $street)
     {
         $this->model->setData('street', $street);
@@ -399,7 +424,7 @@ class AbstractAddressTest extends TestCase
     /**
      * @return array
      */
-    public function getStreetFullDataProvider()
+    public static function getStreetFullDataProvider()
     {
         return [
             [null, null],
@@ -409,6 +434,57 @@ class AbstractAddressTest extends TestCase
             ['single line', 'single line'],
             ['single line', ['single line', null]],
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetCustomerAttributes(): void
+    {
+        $model = $this->createPartialMock(
+            AbstractAddress::class,
+            ['getCustomAttributesCodes']
+        );
+        $customAttributeFactory = $this->createMock(\Magento\Customer\Model\AttributeFactory::class);
+        $customAttributeFactory->method('create')
+            ->willReturnCallback(
+                function ($data) {
+                    return new AttributeValue($data);
+                }
+            );
+        $data = [
+            'customer_attribute1' => new AttributeValue([
+                'attribute_code' => 'customer_attribute1',
+                'value' => 'customer_attribute1_value'
+            ]),
+            'customer_attribute2' => new AttributeValue([
+                'attribute_code' => 'customer_attribute2',
+                'value' => ['customer_attribute2_value1', 'customer_attribute2_value2']
+            ])
+        ];
+        $model->method('getCustomAttributesCodes')->willReturn(array_keys($data));
+        $this->objectManager->setBackwardCompatibleProperty(
+            $model,
+            'customAttributeFactory',
+            $customAttributeFactory
+        );
+        $model->setData('custom_attributes', $data);
+        $this->assertEquals(
+            [
+                [
+                    'attribute_code' => 'customer_attribute1',
+                    'value' => 'customer_attribute1_value'
+                ],
+                [
+                    'attribute_code' => 'customer_attribute2',
+                    'value' => "customer_attribute2_value1\ncustomer_attribute2_value2"
+                ]
+            ],
+            array_map(
+                fn ($attr) => ['attribute_code' => $attr->getAttributeCode(), 'value' => $attr->getValue()],
+                $model->getCustomAttributes()
+            )
+        );
     }
 
     protected function tearDown(): void

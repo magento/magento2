@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,12 +20,12 @@ use PHPUnit\Framework\TestCase;
 
 class IgnoreTaxNotificationTest extends TestCase
 {
-    public function testExecute()
+    public function testExecute(): void
     {
         $objectManager = new ObjectManager($this);
         $cacheTypeList = $this->getMockBuilder(TypeList::class)
             ->disableOriginalConstructor()
-            ->setMethods(['cleanType'])
+            ->onlyMethods(['cleanType'])
             ->getMock();
         $cacheTypeList->expects($this->once())
             ->method('cleanType')
@@ -34,7 +34,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getParam'])
+            ->onlyMethods(['getParam'])
             ->getMock();
         $request->expects($this->once())
             ->method('getParam')
@@ -49,7 +49,7 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->once())
             ->method('create')
@@ -58,17 +58,14 @@ class IgnoreTaxNotificationTest extends TestCase
 
         $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['saveConfig'])
+            ->onlyMethods(['saveConfig'])
             ->getMock();
         $config->expects($this->once())
             ->method('saveConfig')
             ->with('tax/notification/ignore_tax', 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)
             ->willReturn(null);
 
-        $manager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get', 'create', 'configure'])
-            ->getMockForAbstractClass();
+        $manager = $this->createMock(ObjectManagerInterface::class);
         $manager->expects($this->any())
             ->method('get')
             ->willReturn($config);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting shipping methods on cart for customer
@@ -147,9 +148,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      *
      * @param string $input
      * @param string $message
-     * @dataProvider dataProviderSetShippingMethodWithWrongParameters
      * @throws Exception
      */
+    #[DataProvider('dataProviderSetShippingMethodWithWrongParameters')]
     public function testSetShippingMethodWithWrongParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -178,7 +179,7 @@ QUERY;
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function dataProviderSetShippingMethodWithWrongParameters(): array
+    public static function dataProviderSetShippingMethodWithWrongParameters(): array
     {
         return [
             'shipping_methods_are_empty' => [

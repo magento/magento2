@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,7 +43,7 @@ class AddressComparator implements AddressComparatorInterface
                 (int)$address2->getCustomerAddressId());
         } else {
             $addressKeys = array_intersect_key($address1->getData(), $address2->getData());
-            $removeKeys = ['address_type', 'region_code', 'save_in_address_book'];
+            $removeKeys = ['address_type', 'region_code', 'save_in_address_book', 'customer_address_id'];
             $addressKeys = array_diff_key($addressKeys, array_flip($removeKeys));
 
             $address1Data = array_intersect_key($address1->getData(), $addressKeys);

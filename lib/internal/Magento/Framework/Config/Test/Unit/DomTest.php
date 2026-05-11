@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\ValidationStateInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\Config\Dom class.
@@ -24,7 +25,7 @@ class DomTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->validationStateMock = $this->getMockForAbstractClass(
+        $this->validationStateMock = $this->createMock(
             ValidationStateInterface::class
         );
         $this->validationStateMock->method('isValidationRequired')
@@ -36,9 +37,8 @@ class DomTest extends TestCase
      * @param string $newXmlFile
      * @param array $ids
      * @param string|null $typeAttributeName
-     * @param string $expectedXmlFile
-     * @dataProvider mergeDataProvider
-     */
+     * @param string $expectedXmlFile     */
+    #[DataProvider('mergeDataProvider')]
     public function testMerge($xmlFile, $newXmlFile, $ids, $typeAttributeName, $expectedXmlFile)
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
@@ -51,7 +51,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function mergeDataProvider()
+    public static function mergeDataProvider()
     {
         // note differences of XML declaration in fixture files: sometimes encoding is specified, sometimes isn't
         return [
@@ -146,9 +146,8 @@ class DomTest extends TestCase
 
     /**
      * @param string $xml
-     * @param array $expectedErrors
-     * @dataProvider validateDataProvider
-     */
+     * @param array $expectedErrors     */
+    #[DataProvider('validateDataProvider')]
     public function testValidate($xml, array $expectedErrors)
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
@@ -165,7 +164,7 @@ class DomTest extends TestCase
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider()
     {
         return [
             'valid' => ['<root><node id="id1"/><node id="id2"/></root>', []],

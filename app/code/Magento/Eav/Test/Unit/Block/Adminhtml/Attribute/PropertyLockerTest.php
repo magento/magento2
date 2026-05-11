@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,11 +13,14 @@ use Magento\Eav\Model\Entity\Attribute\Config;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PropertyLockerTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var PropertyLocker */
     protected $object;
 
@@ -33,23 +36,23 @@ class PropertyLockerTest extends TestCase
     protected function setUp(): void
     {
         $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
-            ->setMethods(['getId'])
+            ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $registryMock = $this->getMockBuilder(Registry::class)
-            ->setMethods(['registry'])
+            ->onlyMethods(['registry'])
             ->disableOriginalConstructor()
             ->getMock();
         $registryMock->expects($this->atLeastOnce())->method('registry')->willReturn($this->attributeMock);
 
         $this->attributeConfigMock = $this->getMockBuilder(Config::class)
-            ->setMethods(['getLockedFields'])
+            ->onlyMethods(['getLockedFields'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->formMock = $this->getMockBuilder(Form::class)
-            ->setMethods(['getElement'])
+            ->onlyMethods(['getElement'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -68,10 +71,10 @@ class PropertyLockerTest extends TestCase
         $this->attributeMock->expects($this->once())->method('getId')->willReturn(1);
         $this->attributeConfigMock->expects($this->once())->method('getLockedFields')->willReturn($lockedFields);
 
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['setDisabled', 'setReadonly'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['setDisabled', 'setReadonly']
+        );
         $elementMock->expects($this->exactly(2))->method('setDisabled');
         $elementMock->expects($this->exactly(2))->method('setReadonly');
         $this->formMock->expects($this->exactly(2))->method('getElement')->willReturn($elementMock);

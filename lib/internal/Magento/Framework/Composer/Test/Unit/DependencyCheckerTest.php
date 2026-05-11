@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,13 +30,12 @@ class DependencyCheckerTest extends TestCase
     protected function setUp(): void
     {
         $this->composerFactory = $this->getMockBuilder(ApplicationFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->composerApp = $this->getMockBuilder(Application::class)
-            ->setMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
-            ->disableOriginalConstructor()
+            ->onlyMethods(['setAutoExit', 'resetComposer', 'run','__destruct'])
             ->getMock();
         $this->composerFactory->method('create')->willReturn($this->composerApp);
         parent::setUp();
@@ -48,33 +47,28 @@ class DependencyCheckerTest extends TestCase
      */
     public function testCheckDependencies(): void
     {
-
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(2))->method('getRoot');
         $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $this->composerApp->expects($this->any())->method('__destruct');
 
+        $callCount = 0;
         $this->composerApp
             ->method('run')
-            ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(
-                    function ($input, $buffer) {
+            ->willReturnCallback(
+                function ($input, $buffer) use (&$callCount) {
+                    $callCount++;
+                    if ($callCount === 1) {
                         $output = 'magento/package-b requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
-                        $buffer->writeln($output);
-                        return 1;
-                    }
-                ),
-                $this->returnCallback(
-                    function ($input, $buffer) {
+                    } else {
                         $output = 'magento/package-c requires magento/package-b (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
-                        $buffer->writeln($output);
-                        return 1;
                     }
-                )
+                    $buffer->writeln($output);
+                    return 1;
+                }
             );
 
         $dependencyChecker = new DependencyChecker($this->composerFactory, $directoryList);
@@ -97,37 +91,28 @@ class DependencyCheckerTest extends TestCase
         $directoryList = $this->createMock(DirectoryList::class);
         $directoryList->expects($this->exactly(3))->method('getRoot');
         $this->composerApp->expects($this->once())->method('setAutoExit')->with(false);
-        $this->composerApp->expects($this->any())->method('__destruct');
 
+        $callCount = 0;
         $this->composerApp
             ->method('run')
-            ->willReturnOnConsecutiveCalls(
-                $this->returnCallback(
-                    function ($input, $buffer) {
+            ->willReturnCallback(
+                function ($input, $buffer) use (&$callCount) {
+                    $callCount++;
+                    if ($callCount === 1) {
                         $output = 'magento/package-b requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-c requires magento/package-a (1.0)' . PHP_EOL;
-                        $buffer->writeln($output);
-                        return 1;
-                    }
-                ),
-                $this->returnCallback(
-                    function ($input, $buffer) {
+                    } elseif ($callCount === 2) {
                         $output = 'magento/package-c requires magento/package-b (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL .
                             'magento/package-d requires magento/package-b (1.0)' . PHP_EOL;
-                        $buffer->writeln($output);
-                        return 1;
-                    }
-                ),
-                $this->returnCallback(
-                    function ($input, $buffer) {
+                    } else {
                         $output = 'magento/package-d requires magento/package-c (1.0)' . PHP_EOL .
                             'magento/project-community-edition requires magento/package-a (1.0)' . PHP_EOL;
-                        $buffer->writeln($output);
-                        return 1;
                     }
-                )
+                    $buffer->writeln($output);
+                    return 1;
+                }
             );
 
         $dependencyChecker = new DependencyChecker($this->composerFactory, $directoryList);

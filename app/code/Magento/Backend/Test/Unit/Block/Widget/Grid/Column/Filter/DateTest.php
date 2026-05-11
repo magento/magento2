@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Asset\Repository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var Date */
     protected $model;
 
@@ -62,64 +65,53 @@ class DateTest extends TestCase
      */
     private $repositoryMock;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
     protected function setUp(): void
     {
-        $this->mathRandomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUniqueHash'])
-            ->getMock();
+        $this->objectManagerHelper = new ObjectManager($this);
+        $this->mathRandomMock = $this->createPartialMock(
+            Random::class,
+            ['getUniqueHash']
+        );
 
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
 
-        $this->dateTimeFormatterMock = $this
-            ->getMockBuilder(DateTimeFormatterInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->dateTimeFormatterMock = $this->createMock(DateTimeFormatterInterface::class);
 
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTimezone', 'getHtmlId', 'getId'])
-            ->getMock();
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getTimezone', 'getHtmlId', 'getId']
+        );
 
-        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
 
-        $this->escaperMock = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->escaperMock = $this->createMock(Escaper::class);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
 
         $this->contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
         $this->contextMock->expects($this->once())->method('getLocaleDate')->willReturn($this->localeDateMock);
 
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
 
         $this->contextMock->expects($this->once())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->repositoryMock = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getUrlWithParams'])
-            ->getMock();
+        $this->repositoryMock = $this->createPartialMock(
+            Repository::class,
+            ['getUrlWithParams']
+        );
 
         $this->contextMock->expects($this->once())
             ->method('getAssetRepository')
             ->willReturn($this->repositoryMock);
 
-        $objectManagerHelper = new ObjectManager($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->model = $this->objectManagerHelper->getObject(
             Date::class,
             [
                 'mathRandom' => $this->mathRandomMock,

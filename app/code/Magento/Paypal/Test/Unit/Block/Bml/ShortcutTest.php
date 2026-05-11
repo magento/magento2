@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,17 +40,17 @@ class ShortcutTest extends TestCase
     {
         $this->paymentHelperMock = $this->createMock(Data::class);
         $this->randomMock = $this->createMock(Random::class);
-        $this->paypalShortcutHelperMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->paypalShortcutHelperMock = $this->createMock(ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setMethod'])
+            ->onlyMethods(['setMethod'])
             ->getMock();
         $configFactoryMock->expects($this->any())->method('create')->willReturn($configMock);
 
@@ -103,8 +103,7 @@ class ShortcutTest extends TestCase
         $bmlMethodCode = '';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
         $expressMethod = $this->getMockBuilder(Express::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->disableOriginalConstructor()->getMock();
 
         $this->paypalShortcutHelperMock->expects($this->once())->method('validate')
             ->with($paymentMethodCode, $isInCatalog)->willReturn(true);
@@ -123,8 +122,7 @@ class ShortcutTest extends TestCase
         $hash = 'hash';
         $this->shortcut->setIsInCatalogProduct($isInCatalog);
         $expressMethod = $this->getMockBuilder(Express::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])->getMock();
+            ->disableOriginalConstructor()->getMock();
         $expectedData = [
             'is_in_catalog_product' => $isInCatalog,
             'module_name' => 'Magento_Paypal',

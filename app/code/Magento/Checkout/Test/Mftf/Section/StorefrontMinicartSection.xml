@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,5 +51,6 @@
         <element name="productCountNew" type="text" selector=".minicart-wrapper .action.showcart .counter-number"/>
         <element name="image" type="text" selector="//*[@class='product-image-container']//img[contains(@src, '{{var1}}')]" parameterized="true"/>
         <element name="proceedToCheckout" type="button" selector="//button[@data-role='proceed-to-checkout']"/>
+        <element name="deleteProductBasedOnQty" type="button" selector="//input[@data-item-qty='{{quantity}}']/../../..//div[@class='product actions']//a[@class='action delete']" parameterized="true"/>
     </section>
 </sections>

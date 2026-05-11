@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Laminas\Mime\Message as LaminasMimeMessage;
+use Symfony\Component\Mime\Message;
+use Symfony\Component\Mime\Part\TextPart;
+use Symfony\Component\Mime\Part\Multipart\AlternativePart;
 
 /**
  * Magento Framework Mime message
@@ -15,7 +17,7 @@ use Laminas\Mime\Message as LaminasMimeMessage;
 class MimeMessage implements MimeMessageInterface
 {
     /**
-     * @var LaminasMimeMessage
+     * @var Message
      */
     private $mimeMessage;
 
@@ -26,8 +28,19 @@ class MimeMessage implements MimeMessageInterface
      */
     public function __construct(array $parts)
     {
-        $this->mimeMessage = new LaminasMimeMessage();
-        $this->mimeMessage->setParts($parts);
+        $headers = null;
+        $body = null;
+
+        foreach ($parts as $part) {
+            $mimePart = $part->getMimePart();
+            if ($mimePart instanceof TextPart) {
+                $headers = $mimePart->getHeaders();
+                $body = $mimePart;
+                break;
+            }
+        }
+
+        $this->mimeMessage = new Message($headers, $body);
     }
 
     /**
@@ -35,7 +48,16 @@ class MimeMessage implements MimeMessageInterface
      */
     public function getParts(): array
     {
-        return $this->mimeMessage->getParts();
+        $parts = [];
+        $body = $this->mimeMessage->getBody();
+
+        if ($body instanceof AlternativePart) {
+            $parts = $body->getParts();
+        } elseif ($body instanceof TextPart) {
+            $parts[] = $body;
+        }
+
+        return $parts;
     }
 
     /**
@@ -43,7 +65,8 @@ class MimeMessage implements MimeMessageInterface
      */
     public function isMultiPart(): bool
     {
-        return $this->mimeMessage->isMultiPart();
+        $body = $this->mimeMessage->getBody();
+        return $body instanceof AlternativePart && $body->countParts() > 1;
     }
 
     /**
@@ -51,7 +74,7 @@ class MimeMessage implements MimeMessageInterface
      */
     public function getMessage(string $endOfLine = MimeInterface::LINE_END): string
     {
-        return $this->mimeMessage->generateMessage($endOfLine);
+        return str_replace("\r\n", $endOfLine, $this->mimeMessage->toString());
     }
 
     /**
@@ -59,7 +82,15 @@ class MimeMessage implements MimeMessageInterface
      */
     public function getPartHeadersAsArray(int $partNum): array
     {
-        return $this->mimeMessage->getPartHeadersArray($partNum);
+        $parts = $this->getParts();
+        if (isset($parts[$partNum])) {
+            $headersArray = [];
+            foreach ($parts[$partNum]->getHeaders()->toArray() as $header) {
+                $headersArray[$header->getName()] = $header->getBodyAsString();
+            }
+            return $headersArray;
+        }
+        return [];
     }
 
     /**
@@ -67,7 +98,14 @@ class MimeMessage implements MimeMessageInterface
      */
     public function getPartHeaders(int $partNum, string $endOfLine = MimeInterface::LINE_END): string
     {
-        return $this->mimeMessage->getPartHeaders($partNum, $endOfLine);
+        $parts = $this->getParts();
+        if (isset($parts[$partNum])) {
+            $headers = $parts[$partNum]->getHeaders();
+            $headersString = $headers->toString();
+
+            return str_replace("\r\n", $endOfLine, $headersString);
+        }
+        return '';
     }
 
     /**
@@ -75,6 +113,23 @@ class MimeMessage implements MimeMessageInterface
      */
     public function getPartContent(int $partNum, string $endOfLine = MimeInterface::LINE_END): string
     {
-        return $this->mimeMessage->getPartContent($partNum, $endOfLine);
+        $parts = $this->getParts();
+        if (isset($parts[$partNum])) {
+            $content = $parts[$partNum]->getBodyAsString();
+
+            return str_replace("\r\n", $endOfLine, $content);
+        }
+
+        return '';
+    }
+
+    /**
+     * Get Mime Message Object
+     *
+     * @return Message
+     */
+    public function getMimeMessage(): Message
+    {
+        return $this->mimeMessage;
     }
 }

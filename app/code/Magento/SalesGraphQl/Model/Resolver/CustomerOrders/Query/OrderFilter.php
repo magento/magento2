@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,6 +25,8 @@ class OrderFilter
      */
     private $fieldTranslatorArray = [
         'number' => 'increment_id',
+        'order_date' => 'created_at',
+        'grand_total' => 'base_grand_total',
     ];
 
     /**
@@ -38,15 +40,11 @@ class OrderFilter
     private $filterGroupBuilder;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param string[] $fieldTranslatorArray
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         FilterBuilder $filterBuilder,
         FilterGroupBuilder $filterGroupBuilder,
         array $fieldTranslatorArray = []
@@ -85,33 +83,35 @@ class OrderFilter
         $filterGroups[] = $this->filterGroupBuilder->create();
 
         if (isset($args['filter'])) {
-            $filters = [];
             foreach ($args['filter'] as $field => $cond) {
                 if (isset($this->fieldTranslatorArray[$field])) {
                     $field = $this->fieldTranslatorArray[$field];
                 }
+                $filters = [];
                 foreach ($cond as $condType => $value) {
                     if ($condType === 'match') {
                         if (is_array($value)) {
                             throw new InputException(__('Invalid match filter'));
                         }
                         $searchValue = $value !== null ? str_replace('%', '', $value) : '';
-                        $filters[] = $this->filterBuilder->setField($field)
+                        $filter = $this->filterBuilder->setField($field)
                             ->setValue("%{$searchValue}%")
                             ->setConditionType('like')
                             ->create();
                     } else {
-                        $filters[] = $this->filterBuilder->setField($field)
+                        $filter = $this->filterBuilder->setField($field)
                             ->setValue($value)
                             ->setConditionType($condType)
                             ->create();
                     }
+                    $filters[] = $filter;
                 }
-            }
 
-            $this->filterGroupBuilder->setFilters($filters);
-            $filterGroups[] = $this->filterGroupBuilder->create();
+                $this->filterGroupBuilder->setFilters($filters);
+                $filterGroups[] = $this->filterGroupBuilder->create();
+            }
         }
+
         return $filterGroups;
     }
 }

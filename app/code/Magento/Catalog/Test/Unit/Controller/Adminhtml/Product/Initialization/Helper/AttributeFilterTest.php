@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -44,8 +45,8 @@ class AttributeFilterTest extends TestCase
      * @param array $expectedProductData
      * @param array $initialProductData
      * @param mixed $attributeList
-     * @dataProvider setupInputDataProvider
      */
+    #[DataProvider('setupInputDataProvider')]
     public function testPrepareProductAttributes(
         array $requestProductData,
         array $useDefaults,
@@ -54,10 +55,7 @@ class AttributeFilterTest extends TestCase
         mixed $attributeList
     ): void {
         /** @var MockObject | Product $productMockMap */
-        $productMockMap = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getAttributes'])
-            ->getMock();
+        $productMockMap = $this->createPartialMock(Product::class, ['getData', 'getAttributes']);
 
         if (!empty($initialProductData)) {
             $productMockMap->expects($this->any())->method('getData')->willReturnMap($initialProductData);
@@ -85,11 +83,11 @@ class AttributeFilterTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setupInputDataProvider(): array
+    public static function setupInputDataProvider(): array
     {
         return [
             'test case for create new product without custom attribute' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName',
                     'sku' => 'testSku',
                     'price' => '100',
@@ -105,7 +103,7 @@ class AttributeFilterTest extends TestCase
                 'attributeList' => null
             ],
             'test case for create new product with custom attribute' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName',
                     'sku' => 'testSku',
                     'price' => '100',
@@ -131,7 +129,7 @@ class AttributeFilterTest extends TestCase
                 ]
             ],
             'test case for update product without use_defaults' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -154,7 +152,7 @@ class AttributeFilterTest extends TestCase
                 'attributeList' => null
             ],
             'test case for update product with custom attribute' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -185,7 +183,7 @@ class AttributeFilterTest extends TestCase
                 ]
             ],
             'test case for update product without use_defaults_2' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -209,7 +207,7 @@ class AttributeFilterTest extends TestCase
                 'attributeList' => null
             ],
             'test case for update product with use_defaults' => [
-                'productData' => [
+                'requestProductData' => [
                     'name' => 'testName2',
                     'sku' => 'testSku2',
                     'price' => '101',
@@ -348,12 +346,8 @@ class AttributeFilterTest extends TestCase
         foreach ($useDefaults as $attributecode => $isDefault) {
             if ($isDefault === '1') {
                 /** @var Attribute | MockObject $attribute */
-                $attribute = $this->getMockBuilder(Attribute::class)
-                    ->disableOriginalConstructor()
-                    ->getMock();
-                $attribute->expects($this->any())
-                    ->method('getBackendType')
-                    ->willReturn('varchar');
+                $attribute = $this->createMock(Attribute::class);
+                $attribute->method('getBackendType')->willReturn('varchar');
 
                 $returnArray[$attributecode] = $attribute;
             }

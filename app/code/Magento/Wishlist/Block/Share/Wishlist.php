@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Wishlist block shared items
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Share;
 
@@ -53,7 +51,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Prepare global layout
      *
      * @return $this
-     *
      */
     protected function _prepareLayout()
     {

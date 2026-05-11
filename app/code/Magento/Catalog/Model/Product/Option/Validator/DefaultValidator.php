@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Option\Validator;
@@ -37,7 +37,7 @@ class DefaultValidator extends \Magento\Framework\Validator\AbstractValidator
     public function __construct(
         \Magento\Catalog\Model\ProductOptions\ConfigInterface $productOptionConfig,
         \Magento\Catalog\Model\Config\Source\Product\Options\Price $priceConfig,
-        \Magento\Framework\Locale\FormatInterface $localeFormat = null
+        ?\Magento\Framework\Locale\FormatInterface $localeFormat = null
     ) {
         foreach ($productOptionConfig->getAll() as $option) {
             foreach ($option['types'] as $type) {

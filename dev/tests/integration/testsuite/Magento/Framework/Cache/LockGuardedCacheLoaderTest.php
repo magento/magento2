@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache;
 use Magento\Framework\Lock\Backend\Database;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,20 +24,9 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private ?LockGuardedCacheLoader $lockGuardedCacheLoader;
 
-    /**
-     * @param string|null $name
-     * @param array $data
-     * @param $dataName
-     */
-    public function __construct(?string $name = null, array $data = [], $dataName = '')
-    {
-        $this->om = Bootstrap::getObjectManager();
-
-        parent::__construct($name, $data, $dataName);
-    }
-
     protected function setUp(): void
     {
+        $this->om = Bootstrap::getObjectManager();
         $this->lockGuardedCacheLoader = $this->om
             ->create(
                 LockGuardedCacheLoader::class,
@@ -47,8 +37,6 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider dataProviderLockGuardedCacheLoader
-     *
      * @param $lockName
      * @param $dataLoader
      * @param $dataCollector
@@ -56,6 +44,7 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
      * @param $expected
      * @return void
      */
+    #[DataProvider('dataProviderLockGuardedCacheLoader')]
     public function testLockedLoadData(
         $lockName,
         $dataLoader,
@@ -76,7 +65,7 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array[]
      */
-    public function dataProviderLockGuardedCacheLoader(): array
+    public static function dataProviderLockGuardedCacheLoader(): array
     {
         return [
             'Data loader read' => [

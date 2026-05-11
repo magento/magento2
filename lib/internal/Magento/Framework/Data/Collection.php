@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Data;
@@ -77,7 +77,7 @@ class Collection implements
     /**
      * Pager page size
      *
-     * if page size is false, then we works with all items
+     * if page size is false, then we work with all items
      *
      * @var int|false
      */
@@ -161,8 +161,8 @@ class Collection implements
      * - ["finset" => $valueInSet]
      * </pre>
      *
-     * If non matched - sequential parallel arrays are expected and OR conditions
-     * will be built using above mentioned structure.
+     * If non-matched - sequential parallel arrays are expected and OR conditions
+     * will be built using above-mentioned structure.
      *
      * Example:
      * <pre>
@@ -362,7 +362,7 @@ class Collection implements
      * Search all items by field value
      *
      * @param string $column
-     * @param array $value
+     * @param float|int|null|string $value
      * @return array
      */
     public function getItemsByColumnValue($column, $value)
@@ -825,10 +825,11 @@ class Collection implements
      * Retrieve item by id
      *
      * @param string|int $idValue
-     * @return DataObject
+     * @return DataObject|null
      */
     public function getItemById($idValue)
     {
+        $idValue = $idValue ?? '';
         $this->load();
         if (isset($this->_items[$idValue])) {
             return $this->_items[$idValue];
@@ -933,7 +934,7 @@ class Collection implements
     public function _resetState(): void
     {
         $this->clear();
-        // TODO: Is it safe to move the following into clear() ?
+        $this->_isCollectionLoaded = null;
         $this->_orders = [];
         $this->_filters = [];
         $this->_isFiltersRendered = false;

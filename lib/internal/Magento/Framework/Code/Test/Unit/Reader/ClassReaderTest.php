@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +9,7 @@ namespace Magento\Framework\Code\Test\Unit\Reader;
 
 use Magento\Framework\Code\Reader\ClassReader;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
 
@@ -32,10 +32,9 @@ class ClassReaderTest extends TestCase
     /**
      * Get constructor test
      *
-     * @param array $testData
-     * @dataProvider getTestData
-     * @throws \ReflectionException
+     * @param array $testData     * @throws \ReflectionException
      */
+    #[DataProvider('getTestData')]
     public function testGetConstructor(array $testData)
     {
         $this->assertEquals(
@@ -53,7 +52,6 @@ class ClassReaderTest extends TestCase
         $this->assertEquals([0 => 'FirstClassForParentCall'], $model->getParents('ThirdClassForParentCall'));
         $reflection = new \ReflectionClass(ClassReader::class);
         $expectedClass = $reflection->getProperty('parentsCache');
-        $expectedClass->setAccessible(true);
         $this->assertEquals(
             $expectedClass->getValue($model)['ThirdClassForParentCall'],
             $model->getParents('ThirdClassForParentCall')
@@ -86,7 +84,7 @@ class ClassReaderTest extends TestCase
      *
      * @return array
      */
-    public function getTestData()
+    public static function getTestData()
     {
         return
             [

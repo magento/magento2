@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,11 +33,8 @@
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="createProductA" stepKey="deleteProductA"/>
-            <deleteData createDataKey="createProductB" stepKey="deleteProductB"/>
-            <deleteData createDataKey="createProductC" stepKey="deleteProductC"/>
-            <deleteData createDataKey="createProductD" stepKey="deleteProductD"/>
-            <deleteData createDataKey="createProductE" stepKey="deleteProductE"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
         </after>
 
@@ -46,6 +43,12 @@
             <requiredEntity createDataKey="createCategoryA"/>
             <field key="name">A</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices1">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryAPageFirstTime">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
         </actionGroup>
@@ -66,6 +69,12 @@
             <requiredEntity createDataKey="createCategoryB"/>
             <field key="name">B</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices2">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontGoToSubCategoryPageActionGroup" stepKey="openCategoryBPage">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
             <argument name="subCategoryName" value="$$createCategoryB.name$$"/>
@@ -96,6 +105,12 @@
             <requiredEntity createDataKey="createCategoryC"/>
             <field key="name">C</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices3">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory1"/>
 
         <!-- admin side category tree hierarchy validation for category A, category B and category C-->
         <seeElement  selector="{{AdminCategoryBasicFieldSection.categoryTreeForThree($createCategoryA.name$,$createCategoryB.name$,$createCategoryC.name$)}}"  stepKey="verifyThreeLayerCategoryTree"/>
@@ -143,6 +158,12 @@
             <field key="name">D</field>
         </createData>
 
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices4">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory2"/>
+
         <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C and category D-->
         <reloadPage stepKey="refreshEditCategoryDPage" />
         <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandAll"/>
@@ -178,6 +199,12 @@
             <requiredEntity createDataKey="createCategoryE"/>
             <field key="name">E</field>
         </createData>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices5">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadExpandCategory3"/>
 
         <!-- admin side category tree hierarchy validation with product qty for category A, category B, category C, category D and category E-->
         <reloadPage stepKey="refreshCategoryEPage" />

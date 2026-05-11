@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,19 +41,9 @@ class DownloadableTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->purchasedFactory = $this->getMockBuilder(PurchasedFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->itemsFactory = $this->getMockBuilder(
-            CollectionFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $contextMock = $this->createMock(Context::class);
+        $this->purchasedFactory = $this->createPartialMock(PurchasedFactory::class, ['create']);
+        $this->itemsFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
 
         $purchasedLink = new \Magento\Downloadable\Model\Sales\Order\Link\Purchased(
             $this->purchasedFactory,
@@ -70,24 +60,14 @@ class DownloadableTest extends TestCase
 
     public function testGetLinks()
     {
-        $item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
-        $linkPurchased = $this->getMockBuilder(Purchased::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['load'])
-            ->getMock();
-        $itemCollection =
-            $this->getMockBuilder(Collection::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['addFieldToFilter'])
-                ->getMock();
+        $item = $this->createPartialMock(Item::class, ['getId']);
+        $linkPurchased = $this->createPartialMock(Purchased::class, ['load']);
+        $itemCollection = $this->createPartialMock(Collection::class, ['addFieldToFilter']);
 
         $this->block->setData('item', $item);
         $this->purchasedFactory->expects($this->once())->method('create')->willReturn($linkPurchased);
         $linkPurchased->expects($this->once())->method('load')->with('itemId', 'order_item_id')->willReturnSelf();
-        $item->expects($this->any())->method('getId')->willReturn('itemId');
+        $item->method('getId')->willReturn('itemId');
         $this->itemsFactory->expects($this->once())->method('create')->willReturn($itemCollection);
         $itemCollection->expects($this->once())
             ->method('addFieldToFilter')

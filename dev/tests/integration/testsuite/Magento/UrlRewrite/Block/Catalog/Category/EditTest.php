@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\UrlRewrite\Block\Catalog\Edit\Form;
 use Magento\UrlRewrite\Block\Link;
 use Magento\UrlRewrite\Block\Selector;
 use Magento\UrlRewrite\Model\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,14 +28,13 @@ class EditTest extends TestCase
     /**
      * Test prepare layout
      *
-     * @dataProvider prepareLayoutDataProvider
-     *
      * @param array $blockAttributes
      * @param array $expected
      *
      * @return void
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('prepareLayoutDataProvider')]
     public function testPrepareLayout($blockAttributes, $expected): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -301,7 +301,7 @@ class EditTest extends TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider(): array
+    public static function prepareLayoutDataProvider(): array
     {
         /** @var $urlRewrite UrlRewrite */
         $urlRewrite = Bootstrap::getObjectManager()->create(

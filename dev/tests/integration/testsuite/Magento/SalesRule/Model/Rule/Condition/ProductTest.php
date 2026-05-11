@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model\Rule\Condition;
@@ -26,6 +26,7 @@ use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -71,9 +72,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @dataProvider validateProductConditionDataProvider
      */
     #[
+        DataProvider('validateProductConditionDataProvider'),
         AppIsolation(true),
         DbIsolation(false),
         DataFixture(
@@ -140,7 +141,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function validateProductConditionDataProvider()
+    public static function validateProductConditionDataProvider()
     {
         $validCategoryId = 333;
         $invalidCategoryId = 2;
@@ -201,8 +202,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      * @magentoDataFixture Magento/SalesRule/_files/rules_parent_category.php
-     * @dataProvider conditionsDataProvider
      */
+    #[DataProvider('conditionsDataProvider')]
     public function testValidateParentCategoryWithConfigurable(array $conditions, bool $expected): void
     {
         $quote = $this->getQuote('test_cart_with_configurable');
@@ -235,7 +236,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function conditionsDataProvider(): array
+    public static function conditionsDataProvider(): array
     {
         return [
             'If total quantity  is 1 for a subselection of items in cart matching ALL of these conditions: ' .

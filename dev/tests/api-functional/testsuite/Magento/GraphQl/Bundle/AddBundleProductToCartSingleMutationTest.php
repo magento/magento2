@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -152,7 +153,7 @@ QUERY;
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }
 
-    public function dataProviderTestUpdateBundleItemQuantity(): array
+    public static function dataProviderTestUpdateBundleItemQuantity(): array
     {
         return [
             [2],
@@ -233,9 +234,9 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_and_custom_quantity.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @dataProvider bundleItemOptionsDataProvider
      * @return void
      */
+    #[DataProvider('bundleItemOptionsDataProvider')]
     public function testAddBundleItemWithCustomOptionQuantity(
         string $optionQty0,
         string $optionQty1,
@@ -320,7 +321,7 @@ QUERY;
      *
      * @return array
      */
-    public function bundleItemOptionsDataProvider(): array
+    public static function bundleItemOptionsDataProvider(): array
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Sales\Model\Order\ShipmentRepository;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TrackTest extends TestCase
 {
@@ -65,10 +66,10 @@ class TrackTest extends TestCase
     }
 
     /**
-     * @dataProvider isCustomDataProvider
      * @param bool $expectedResult
      * @param string $carrierCodeToSet
      */
+    #[DataProvider('isCustomDataProvider')]
     public function testIsCustom($expectedResult, $carrierCodeToSet)
     {
         $this->_model->setCarrierCode($carrierCodeToSet);

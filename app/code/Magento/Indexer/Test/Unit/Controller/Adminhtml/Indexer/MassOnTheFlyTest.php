@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,12 +24,16 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Indexer\Controller\Adminhtml\Indexer\MassOnTheFly;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassOnTheFlyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MassOnTheFly
      */
@@ -124,14 +127,14 @@ class MassOnTheFlyTest extends TestCase
             'getMessageManager'
         ]);
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
 
-        $this->view = $this->getMockBuilder(ViewInterface::class)
-            ->addMethods(['getConfig', 'getTitle'])
-            ->onlyMethods([
+        $this->view = $this->createPartialMockWithReflection(
+            ViewInterface::class,
+            [
                 'loadLayout',
                 'getPage',
                 'renderLayout',
@@ -143,44 +146,35 @@ class MassOnTheFlyTest extends TestCase
                 'getLayout',
                 'addActionLayoutHandles',
                 'setIsLayoutLoaded',
-                'isLayoutLoaded'
-            ])
-            ->getMockForAbstractClass();
+                'isLayoutLoaded',
+                'getConfig',
+                'getTitle'
+            ]
+        );
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['setIsUrlNotice']
+        );
         $this->session->expects($this->any())->method('setIsUrlNotice')->willReturn($this->objectManager);
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->actionFlag->expects($this->any())->method("get")->willReturn($this->objectManager);
-        $this->objectManager = $this->getMockBuilder(ObjectManager::class)
-            ->addMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->request = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            ['getParam', 'getRequest'],
-            '',
-            false
+        $this->objectManager = $this->createPartialMockWithReflection(
+            ObjectManager::class,
+            ['get']
         );
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->response->expects($this->any())->method("setRedirect")->willReturn(1);
         $this->page = $this->createMock(Page::class);
         $this->config = $this->createMock(Page::class);
         $this->title = $this->createMock(Title::class);
-        $this->messageManager = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            ['addErrorMessage', 'addSuccess'],
-            '',
-            false
-        );
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
-        $this->indexReg = $this->getMockBuilder(IndexerRegistry::class)
-            ->addMethods(['setScheduled'])
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indexReg = $this->createPartialMockWithReflection(
+            IndexerRegistry::class,
+            ['setScheduled', 'get']
+        );
         $this->helper = $this->createPartialMock(Data::class, ['getUrl']);
         $this->contextMock->expects($this->any())->method("getObjectManager")->willReturn($this->objectManager);
         $this->contextMock->expects($this->any())->method("getRequest")->willReturn($this->request);
@@ -195,8 +189,8 @@ class MassOnTheFlyTest extends TestCase
      * @param array $indexerIds
      * @param \Exception $exception
      * @param array $expectsExceptionValues
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($indexerIds, $exception, $expectsExceptionValues)
     {
         $this->model = new MassOnTheFly($this->contextMock);
@@ -212,12 +206,7 @@ class MassOnTheFlyTest extends TestCase
             $this->objectManager->expects($this->any())
                 ->method('get')->with(IndexerRegistry::class)
                 ->willReturn($this->indexReg);
-            $indexerInterface = $this->getMockForAbstractClass(
-                IndexerInterface::class,
-                ['setScheduled'],
-                '',
-                false
-            );
+            $indexerInterface = $this->createMock(IndexerInterface::class);
             $this->indexReg->expects($this->any())
                 ->method('get')->with(1)
                 ->willReturn($indexerInterface);
@@ -254,28 +243,28 @@ class MassOnTheFlyTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider()
     {
         return [
             'set1' => [
-                'idexers' => 1,
+                'indexerIds' => 1,
                 "exception" => null,
-                "expectsValues" => [0, 0, 0]
+                "expectsExceptionValues" => [0, 0, 0]
             ],
             'set2' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => null,
-                "expectsException" => [1, 0, 0]
+                "expectsExceptionValues" => [1, 0, 0]
             ],
             'set3' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new LocalizedException(__('Test Phrase')),
-                "expectsException" => [0, 0, 1]
+                "expectsExceptionValues" => [0, 0, 1]
             ],
             'set4' => [
-                'idexers' => [1],
+                'indexerIds' => [1],
                 "exception" => new \Exception(),
-                "expectsException" => [0, 1, 0]
+                "expectsExceptionValues" => [0, 1, 0]
             ]
         ];
     }
