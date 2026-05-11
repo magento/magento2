@@ -277,13 +277,20 @@ class ProductsListTest extends TestCase
      * @param bool $pagerEnable
      * @param int  $productsCount
      * @param int  $productsPerPage
-     * @param int  $expectedPageSize
+     * @param int  $expectedLimit
      */
     #[DataProvider('createCollectionDataProvider')]
-    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedPageSize)
+    public function testCreateCollection($pagerEnable, $productsCount, $productsPerPage, $expectedLimit)
     {
         $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
             ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
+
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select->expects($this->once())
+            ->method('limit')
+            ->with($expectedLimit, 0)
+            ->willReturnSelf();
+
         $collection = $this->createMock(Collection::class);
         $collection->expects($this->once())->method('setVisibility')
             ->with([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH])
@@ -299,9 +306,8 @@ class ProductsListTest extends TestCase
             ->with(Product::STATUS, ProductStatus::STATUS_ENABLED)
             ->willReturnSelf();
         $collection->expects($this->once())->method('addAttributeToSort')->with('entity_id', 'desc')->willReturnSelf();
-        $collection->expects($this->once())->method('setPageSize')->with($expectedPageSize)->willReturnSelf();
-        $collection->expects($this->once())->method('setCurPage')->willReturnSelf();
         $collection->expects($this->once())->method('distinct')->willReturnSelf();
+        $collection->expects($this->once())->method('getSelect')->willReturn($select);
 
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
         $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
@@ -323,6 +329,9 @@ class ProductsListTest extends TestCase
 
         $this->productsList->setData('show_pager', $pagerEnable);
         $this->productsList->setData('products_count', $productsCount);
+        $this->productsList->setData('page_var_name', 'page');
+
+        $this->request->expects($this->any())->method('getParam')->with('page')->willReturn(1);
 
         $this->assertSame($collection, $this->productsList->createCollection());
     }
@@ -333,10 +342,10 @@ class ProductsListTest extends TestCase
     public static function createCollectionDataProvider()
     {
         return [
-            [true, 1, null, 5],
+            [true, 1, null, 1],
             [true, 5, null, 5],
             [true, 10, null, 5],
-            [true, 1, 2, 2],
+            [true, 1, 2, 1],
             [true, 5, 3, 3],
             [true, 10, 7, 7],
             [false, 1, null, 1],
@@ -345,6 +354,88 @@ class ProductsListTest extends TestCase
             [false, 1, 3, 1],
             [false, 3, 5, 3],
             [false, 5, 10, 5]
+        ];
+    }
+
+    /**
+     * Test that collection limit respects total products count on subsequent pages
+     *
+     * @param int $currentPage
+     * @param int $productsPerPage
+     * @param int $totalProducts
+     * @param int $expectedLimit
+     * @param int $expectedOffset
+     */
+    #[DataProvider('createCollectionWithTotalLimitDataProvider')]
+    public function testCreateCollectionWithTotalLimit(
+        $currentPage,
+        $productsPerPage,
+        $totalProducts,
+        $expectedLimit,
+        $expectedOffset
+    ) {
+        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')
+            ->willReturn([Visibility::VISIBILITY_IN_CATALOG, Visibility::VISIBILITY_BOTH]);
+
+        $select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $select->expects($this->once())
+            ->method('limit')
+            ->with($expectedLimit, $expectedOffset)
+            ->willReturnSelf();
+
+        $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())->method('setVisibility')->willReturnSelf();
+        $collection->expects($this->once())->method('addMinimalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addFinalPrice')->willReturnSelf();
+        $collection->expects($this->once())->method('addTaxPercents')->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $collection->expects($this->once())->method('addUrlRewrite')->willReturnSelf();
+        $collection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $collection->expects($this->once())
+            ->method('addAttributeToFilter')
+            ->with(Product::STATUS, ProductStatus::STATUS_ENABLED)
+            ->willReturnSelf();
+        $collection->expects($this->once())->method('addAttributeToSort')->with('entity_id', 'desc')->willReturnSelf();
+        $collection->expects($this->once())->method('distinct')->willReturnSelf();
+        $collection->expects($this->once())->method('getSelect')->willReturn($select);
+
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
+
+        $this->widgetConditionsHelper->expects($this->once())
+            ->method('decode')
+            ->with('some_serialized_conditions')
+            ->willReturn([]);
+
+        $this->builder->expects($this->once())->method('attachConditionToCollection')
+            ->with($collection, $this->getConditionsForCollection($collection))
+            ->willReturnSelf();
+
+        $this->productsList->setData('products_per_page', $productsPerPage);
+        $this->productsList->setData('show_pager', true);
+        $this->productsList->setData('products_count', $totalProducts);
+        $this->productsList->setData('page_var_name', 'page');
+
+        $this->request->expects($this->once())->method('getParam')->with('page')->willReturn($currentPage);
+
+        $this->assertSame($collection, $this->productsList->createCollection());
+    }
+
+    /**
+     * Data provider for testCreateCollectionWithTotalLimit
+     *
+     * @return array
+     */
+    public static function createCollectionWithTotalLimitDataProvider()
+    {
+        return [
+            // [currentPage, productsPerPage, totalProducts, expectedLimit, expectedOffset]
+            'page 1 of 2 with 9 total' => [1, 5, 9, 5, 0],
+            'page 2 of 2 with 9 total' => [2, 5, 9, 4, 5],
+            'page 1 of 3 with 12 total' => [1, 5, 12, 5, 0],
+            'page 2 of 3 with 12 total' => [2, 5, 12, 5, 5],
+            'page 3 of 3 with 12 total' => [3, 5, 12, 2, 10],
+            'page beyond limit' => [3, 5, 9, 0, 10],
         ];
     }
 

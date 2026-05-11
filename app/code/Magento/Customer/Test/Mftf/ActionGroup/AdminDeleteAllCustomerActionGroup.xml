@@ -21,6 +21,7 @@
         <conditionalClick selector="{{AdminCustomerGridMainActionsSection.multicheck}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="selectAllCustomers"/>
         <conditionalClick selector="{{AdminCustomerGridMainActionsSection.actions}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="openActions"/>
         <conditionalClick selector="{{AdminCustomerGridMainActionsSection.delete}}" dependentSelector="{{AdminDataGridTableSection.dataGridEmpty}}" visible="false" stepKey="clickDelete"/>
+        <waitForPageLoad stepKey="waitForConfirmationAlert"/>
         <conditionalClick selector="{{AdminConfirmationModalSection.ok}}" dependentSelector="{{AdminConfirmationModalSection.ok}}" visible="true" stepKey="confirmDelete"/>
         <!-- Wait for success message if customers were deleted -->
         <waitForPageLoad stepKey="waitForGridReload"/>

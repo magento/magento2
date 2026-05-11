@@ -214,7 +214,7 @@ class ContentTest extends TestCase
         $this->formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with($this->isType('array'))
+            ->with($this->isArray())
             ->willReturn($this->formMock);
 
         $this->wysiwygConfigMock
@@ -259,7 +259,7 @@ class ContentTest extends TestCase
         $this->formFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with($this->isType('array'))
+            ->with($this->isArray())
             ->willReturn($this->formMock);
 
         $returnedEditorConfig = new DataObject(['sample' => 'value']);
@@ -267,7 +267,7 @@ class ContentTest extends TestCase
         $this->wysiwygConfigMock
             ->expects($this->once())
             ->method('getConfig')
-            ->with($this->isType('array'))
+            ->with($this->isArray())
             ->willReturn($returnedEditorConfig);
 
         $this->formMock
@@ -348,12 +348,10 @@ class ContentTest extends TestCase
 
         if ($isMethod) {
             $method = $ref->getMethod($member);
-            $method->setAccessible(true);
             return $method->invokeArgs($object, $args);
         }
 
         $property = $ref->getProperty($member);
-        $property->setAccessible(true);
         return $property->getValue($object);
     }
 }
