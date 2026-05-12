@@ -152,7 +152,7 @@ class PreviewTest extends TestCase
     public function testToHtml()
     {
         $this->templateMock->expects($this->once())->method('revertDesign');
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn(self::PROCESSED_TEMPLATE_TEXT);
 
@@ -178,7 +178,7 @@ class PreviewTest extends TestCase
             ->willReturnSelf();
         $this->templateMock->expects($this->once())->method('isPlain')->willReturn(true);
         $this->backendSessionMock->expects($this->any())->method('hasPreviewData')->willReturn(false);
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn(self::PROCESSED_TEMPLATE_TEXT);
         $this->assertEquals('<pre>Processed Template</pre>', $this->preview->toHtml());

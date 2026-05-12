@@ -11,10 +11,14 @@ use Magento\Framework\Cache\Backend\MongoDb;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MongoDbTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var MongoDb|null
      */
@@ -27,10 +31,10 @@ class MongoDbTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_collection = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->_collection = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop']
+        );
         $this->_model = $this->createPartialMock(MongoDb::class, ['_getCollection']);
         $this->_model->expects($this->any())->method('_getCollection')->willReturn($this->_collection);
     }
@@ -44,8 +48,8 @@ class MongoDbTest extends TestCase
     /**
      * @param array $ids
      * @param array $expected
-     * @dataProvider getIdsDataProvider
      */
+     #[DataProvider('getIdsDataProvider')]
     public function testGetIds(array $ids, array $expected)
     {
         $result = new \ArrayIterator($ids);
@@ -67,8 +71,8 @@ class MongoDbTest extends TestCase
 
     /**
      * @param array $tags
-     * @dataProvider getTagsDataProvider
      */
+     #[DataProvider('getTagsDataProvider')]
     public function testGetTags(array $tags)
     {
         $this->_collection->expects($this->once())->method('distinct')->with('tags')->willReturn($tags);
@@ -88,8 +92,8 @@ class MongoDbTest extends TestCase
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingTags
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsNotMatchingTags
      * @covers \Magento\Framework\Cache\Backend\MongoDb::getIdsMatchingAnyTags
-     * @dataProvider getIdsMatchingTagsDataProvider
      */
+     #[DataProvider('getIdsMatchingTagsDataProvider')]
     public function testGetIdsMatchingTags($method, $tags, $expectedInput)
     {
         $expectedOutput = new \ArrayIterator(['test1' => 'test1', 'test2' => 'test2']);
@@ -171,8 +175,8 @@ class MongoDbTest extends TestCase
      * @param array $expectedInput
      * @param array|null $mongoOutput
      * @param array|bool $expected
-     * @dataProvider getMetadatasDataProvider
      */
+     #[DataProvider('getMetadatasDataProvider')]
     public function testGetMetadatas($cacheId, $expectedInput, $mongoOutput, $expected)
     {
         $this->_collection->expects(
@@ -231,8 +235,8 @@ class MongoDbTest extends TestCase
 
     /**
      * @param bool $doNotTestValidity
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testLoad($doNotTestValidity)
     {
         include_once __DIR__ . '/_files/MongoBinData.txt';
@@ -337,8 +341,8 @@ class MongoDbTest extends TestCase
      * @param string $mode
      * @param array $tags
      * @param array $expectedQuery
-     * @dataProvider cleanDataProvider
      */
+     #[DataProvider('cleanDataProvider')]
     public function testClean($mode, $tags, $expectedQuery)
     {
         $this->_collection->expects($this->once())->method('remove')->with($expectedQuery);

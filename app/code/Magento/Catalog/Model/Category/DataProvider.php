@@ -383,7 +383,7 @@ class DataProvider extends ModifierPoolDataProvider
             $categoryData = $this->filterFields($categoryData);
             $categoryData = $this->convertValues($category, $categoryData);
 
-            $this->loadedData[$category->getId()] = $categoryData;
+            $this->loadedData[$category->getId() ?? ''] = $categoryData;
         }
 
         return $this->loadedData;

@@ -10,6 +10,7 @@ namespace Magento\Security\Model\UserExpiration;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,9 +47,10 @@ class ValidatorTest extends TestCase
      * Verify validation for date expiration with different locales.
      *
      * @magentoAppArea adminhtml
-     * @dataProvider validateUserExpiresAtDataProvider
+     * @param string $locale
      * @return void
      */
+    #[DataProvider('validateUserExpiresAtDataProvider')]
     public function testValidateUserExpiresAt(string $locale): void
     {
         $this->markTestSkipped('Test is blocked by issue AC-285');

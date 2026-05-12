@@ -11,6 +11,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test related to update category.
@@ -38,13 +39,13 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
     }
 
     /**
-     * @dataProvider categoryDataProvider
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      *
      * @param array $postData
      * @return void
      */
+    #[DataProvider('categoryDataProvider')]
     public function testUpdateCategoryForDefaultStoreView(array $postData): void
     {
         $storeId = (int)$this->storeManager->getStore('default')->getId();

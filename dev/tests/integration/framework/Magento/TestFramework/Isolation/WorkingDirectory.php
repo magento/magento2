@@ -35,7 +35,8 @@ class WorkingDirectory
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
-        if (getcwd() != $this->_currentWorkingDir) {
+        // PHP 8.5 Compatibility: Check for null before passing to chdir()
+        if ($this->_currentWorkingDir !== null && getcwd() != $this->_currentWorkingDir) {
             chdir($this->_currentWorkingDir);
         }
     }

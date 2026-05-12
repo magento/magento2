@@ -86,7 +86,6 @@ class FooterTest extends TestCase
     {
         $reflection = new \ReflectionClass($this->block);
         $method = $reflection->getMethod('getCacheLifetime');
-        $method->setAccessible(true);
         $this->assertEquals(3600, $method->invoke($this->block));
     }
 }

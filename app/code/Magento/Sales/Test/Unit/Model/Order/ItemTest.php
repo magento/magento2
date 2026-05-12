@@ -1291,7 +1291,6 @@ class ItemTest extends TestCase
         // Use reflection to reset the static $_statuses variable to null
         $reflection = new \ReflectionClass(Item::class);
         $property = $reflection->getProperty('_statuses');
-        $property->setAccessible(true);
         $property->setValue(null, null);
 
         // Now call getStatusName which should trigger initialization

@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\File\Uploader
@@ -47,9 +48,9 @@ class UploaderTest extends TestCase
     }
 
     /**
-     * @dataProvider uploadDataProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      */
+    #[DataProvider('uploadDataProvider')]
     public function testUpload(string $expectedFile, ?string $newImageName = null): void
     {
         $this->mediaDirectory->delete('customer_address');

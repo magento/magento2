@@ -67,7 +67,6 @@ class RedirectTest extends AbstractController
         $request = $this->getRequest();
         $reflection = new \ReflectionClass($request);
         $property = $reflection->getProperty('requestUri');
-        $property->setAccessible(true);
         $property->setValue($request, null);
 
         $request->setServer(new Parameters(['REQUEST_URI' => $requestUri]));

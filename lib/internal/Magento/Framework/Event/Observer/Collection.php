@@ -59,7 +59,8 @@ class Collection
      */
     public function addObserver(\Magento\Framework\Event\Observer $observer)
     {
-        $this->_observers[$observer->getName()] = $observer;
+        $observerName = $observer->getName() ?? '';
+        $this->_observers[$observerName] = $observer;
         return $this;
     }
 

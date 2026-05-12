@@ -46,6 +46,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\SubmitQuoteValidator;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -216,6 +217,11 @@ class QuoteManagementTest extends TestCase
     private $cartMutexMock;
 
     /**
+     * @var QuoteAddressValidator|MockObject
+     */
+    private $quoteAddressValidatorMock;
+
+    /**
      * @inheriDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -292,6 +298,7 @@ class QuoteManagementTest extends TestCase
         $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
 
         $this->cartMutexMock = $this->createMock(CartMutexInterface::class);
+        $this->quoteAddressValidatorMock = $this->createMock(QuoteAddressValidator::class);
 
         $this->model = $objectManager->getObject(
             QuoteManagement::class,
@@ -317,7 +324,8 @@ class QuoteManagementTest extends TestCase
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
                 'addressRepository' => $this->addressRepositoryMock,
-                'lockManager' => $this->lockManagerMock
+                'lockManager' => $this->lockManagerMock,
+                'quoteAddressValidator' => $this->quoteAddressValidatorMock
             ]
         );
 
@@ -932,7 +940,8 @@ class QuoteManagementTest extends TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
-                    'cartMutex' => $this->cartMutexMock
+                    'cartMutex' => $this->cartMutexMock,
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock
                 ]
             )
             ->getMock();
@@ -1015,7 +1024,8 @@ class QuoteManagementTest extends TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
-                    'cartMutex' => $this->cartMutexMock
+                    'cartMutex' => $this->cartMutexMock,
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock
                 ]
             )
             ->getMock();
@@ -1254,7 +1264,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1270,7 +1279,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -1397,7 +1405,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

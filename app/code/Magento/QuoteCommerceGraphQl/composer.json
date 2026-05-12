@@ -1,0 +1,22 @@
+{
+    "name": "magento/module-quote-commerce-graph-ql",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "php": "~8.3.0||~8.4.0||~8.5.0",
+        "magento/framework": "*",
+        "magento/module-quote-graph-ql": "*",
+        "magento/module-quote": "*"
+    },
+    "license": [
+        "proprietary"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\QuoteCommerceGraphQl\\": ""
+        }
+    }
+}

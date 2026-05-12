@@ -12,6 +12,7 @@ use Magento\Framework\Message\Session;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\LayoutFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -56,12 +57,12 @@ class DepersonalizePluginTest extends TestCase
 
     /**
      * @magentoCache full_page enabled
-     * @dataProvider afterGenerateElementsDataProvider
      *
      * @param string $layout
      * @param array $expectedResult
      * @return void
      */
+    #[DataProvider('afterGenerateElementsDataProvider')]
     public function testAfterGenerateElements(string $layout, array $expectedResult): void
     {
         $this->cache->clean();

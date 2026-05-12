@@ -157,7 +157,7 @@ class SaveTest extends AttributeTest
         $this->redirectMock = $this->createMock(ResultRedirect::class);
         $this->jsonResultMock = $this->createMock(ResultJson::class);
         $this->productAttributeMock = $this->createMock(Attribute::class);
-           
+
         $this->buildFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->builderMock);
@@ -1034,5 +1034,74 @@ class SaveTest extends AttributeTest
             'presentation' => $this->presentationMock,
             '_session' => $this->sessionMock
         ]);
+    }
+
+    public function testMarkAttributeOptionsAsDeletedMarksGhostOptionsForSelect(): void
+    {
+        $controller = $this->getModel();
+
+        // 23 real records => valid option_0 .. option_22
+        $data = [
+            'attribute_options_select' => array_fill(0, 23, ['record_id' => 0]),
+            'option' => [
+                'value' => [],
+                'delete' => [
+                    // simulate real user deletions too
+                    'option_12' => 1,
+                    'option_22' => 1,
+                ],
+            ],
+        ];
+
+        // UI sometimes sends extra ghost keys (option_23/option_24) repeating the last value
+        for ($i = 0; $i <= 24; $i++) {
+            $data['option']['value']['option_' . $i] = [0 => (string)($i + 1), 1 => (string)($i + 1)];
+        }
+
+        $this->invokeMarkAttributeOptionsAsDeleted($controller, $data);
+
+        // Ghost keys must be forced deleted:
+        $this->assertSame(1, $data['option']['delete']['option_23']);
+        $this->assertSame(1, $data['option']['delete']['option_24']);
+
+        // Real keys should not be auto-deleted by this method:
+        $this->assertArrayNotHasKey('option_0', $data['option']['delete']);
+
+        // Existing delete flags should remain:
+        $this->assertSame(1, $data['option']['delete']['option_12']);
+        $this->assertSame(1, $data['option']['delete']['option_22']);
+    }
+
+    public function testMarkAttributeOptionsAsDeletedDoesNothingWhenNoRowsKey(): void
+    {
+        $controller = $this->getModel();
+
+        $data = [
+            // no attribute_options_select or attribute_options_multiselect
+            'option' => [
+                'value' => [
+                    'option_0' => [0 => '1', 1 => '1'],
+                    'option_1' => [0 => '2', 1 => '2'],
+                ],
+                'delete' => [],
+            ],
+        ];
+
+        $this->invokeMarkAttributeOptionsAsDeleted($controller, $data);
+
+        $this->assertSame([], $data['option']['delete']);
+    }
+
+    /**
+     * Helper to call the private method via reflection.
+     */
+    private function invokeMarkAttributeOptionsAsDeleted(
+        \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save $controller,
+        array &$data
+    ): void {
+        $method = new \ReflectionMethod($controller, 'markAttributeOptionsAsDeleted');
+
+        $args = [&$data]; // pass by reference
+        $method->invokeArgs($controller, $args);
     }
 }

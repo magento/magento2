@@ -25,9 +25,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * API test for return items to stock
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReturnItemsAfterRefundOrderTest extends WebapiAbstract
 {
@@ -50,10 +53,8 @@ class ReturnItemsAfterRefundOrderTest extends WebapiAbstract
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
-    /**
-     * @dataProvider dataProvider
-     */
     #[
+        DataProvider('dataProvider'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(
@@ -106,10 +107,8 @@ class ReturnItemsAfterRefundOrderTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @dataProvider refundWithReturnItemsToStockUnshippedOrderDataProvider
-     */
     #[
+        DataProvider('refundWithReturnItemsToStockUnshippedOrderDataProvider'),
         DataFixture(ProductFixture::class, as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(

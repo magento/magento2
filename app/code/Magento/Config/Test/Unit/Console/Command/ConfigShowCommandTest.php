@@ -542,7 +542,7 @@ class ConfigShowCommandTest extends TestCase
         } catch (\RuntimeException $e) {
             $hadOriginal = false;
         }
-        $objectManagerMock = $this->getMockForAbstractClass(
+        $objectManagerMock = $this->createMock(
             ObjectManagerInterface::class
         );
         $objectManagerMock->method('get')
@@ -598,7 +598,6 @@ class ConfigShowCommandTest extends TestCase
     {
         $reflection = new \ReflectionClass($object);
         $prop = $reflection->getProperty($property);
-        $prop->setAccessible(true);
         return $prop->getValue($object);
     }
 }

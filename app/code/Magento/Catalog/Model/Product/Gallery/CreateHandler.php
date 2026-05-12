@@ -191,6 +191,10 @@ class CreateHandler implements ExtensionInterface
         $this->mediaEavCache = null;
         $attrCode = $this->getAttribute()->getAttributeCode();
 
+        if (!$this->hasDataChanges($product, $attrCode)) {
+            return $product;
+        }
+
         $value = $product->getData($attrCode);
 
         if (!is_array($value) || !isset($value['images'])) {
@@ -361,28 +365,29 @@ class CreateHandler implements ExtensionInterface
         ];
         
         foreach ($fields as $field => $meta) {
-            if (!isset($image[$field]) || $image[$field] === '') {
-                $result[$field] = $meta['default'];
+            $value = $image[$field] ?? null;
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                $value = $value === null || $value === '' ? $meta['default'] : $value;
             } else {
-                $result[$field] = match ($meta['type']) {
-                    'int' => (int) $image[$field],
-                    default => (string) $image[$field],
-                };
-            }
-            if ($storeId !== Store::DEFAULT_STORE_ID) {
-                $useDefaultKey = $field . '_use_default';
-                if (isset($image[$useDefaultKey])) {
-                    if ($image[$useDefaultKey]) {
-                        $result[$field] = null;
-                    } elseif ($result[$field] === null) {
-                        $result[$field] = match ($meta['type']) {
-                            // the empty string will allow clearing label in store view scope
-                            // null value is interpreted as "use default"
-                            'string' => '',
-                            default => $result[$field],
-                        };
-                    }
+                if (!empty($image[$field . '_use_default'])) {
+                    $value = null;
                 }
+                if ($value === '') {
+                    $value = match ($meta['type']) {
+                        'int' => null,
+                        // Empty string allows clearing label in store view scope
+                        // NULL is interpreted as "use default" in store view scope
+                        default => $value,
+                    };
+                }
+            }
+
+            $result[$field] = null;
+            if ($value !== null) {
+                $result[$field] = match ($meta['type']) {
+                    'int' => (int) $value,
+                    default => (string) $value,
+                };
             }
         }
         return $result;
@@ -833,5 +838,28 @@ class CreateHandler implements ExtensionInterface
                 );
             }
         }
+    }
+
+    /**
+     * Checks whether media gallery data changed
+     *
+     * @param Product $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function hasDataChanges(Product $product, string $attributeCode): bool
+    {
+        $value = $product->getData($attributeCode);
+        $oldValue = $product->getOrigData($attributeCode);
+
+        if ($value !== $oldValue) {
+            return true;
+        }
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
+            if ($product->dataHasChangedFor($mediaAttrCode)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

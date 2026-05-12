@@ -58,7 +58,7 @@ class IdentityProvider implements IdentityProviderInterface
         }
 
         $userType = $this->userContext->getUserType();
-        if (isset(self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType])) {
+        if ($userType !== null && isset(self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType])) {
             return self::USER_CONTEXT_IDENTITY_TYPE_MAP[$userType];
         }
 

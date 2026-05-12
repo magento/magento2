@@ -258,15 +258,16 @@ class VaultTest extends TestCase
         $paymentModel = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $extensionAttributes = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->addMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            OrderPaymentExtensionInterface::class,
+            ['setVaultPaymentToken', 'getVaultPaymentToken']
+        );
 
-        $commandManagerPool = $this->getMockForAbstractClass(CommandManagerPoolInterface::class);
-        $commandManager = $this->getMockForAbstractClass(CommandManagerInterface::class);
+        $commandManagerPool = $this->createMock(CommandManagerPoolInterface::class);
+        $commandManager = $this->createMock(CommandManagerInterface::class);
 
-        $tokenManagement = $this->getMockForAbstractClass(PaymentTokenManagementInterface::class);
-        $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
+        $tokenManagement = $this->createMock(PaymentTokenManagementInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
 
         $tokenDetails = [
             'cc_last4' => '1111',

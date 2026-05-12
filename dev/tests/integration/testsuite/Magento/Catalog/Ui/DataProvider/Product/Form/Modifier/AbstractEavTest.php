@@ -92,7 +92,7 @@ abstract class AbstractEavTest extends TestCase
             'gallery' => 'image'
         ];
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn(
             $this->objectManager->get(StoreInterface::class)
         );
