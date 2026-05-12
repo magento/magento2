@@ -1,0 +1,1170 @@
+#
+# Copyright 2026 Adobe
+# All Rights Reserved.
+#
+
+name: PR Quality Gates
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - "*"
+  workflow_dispatch:
+
+# Repository variables used by this workflow:
+# - PR_QA_ENABLED_JOBS: CSV list of optional jobs to run.
+#   Supported values:
+#   copyright-check,coding-standard,aggregate-linked-pr-checks
+#   Note: mainline-alignment and detect-changes always run on pull_request.
+# - PR_QA_CODING_STANDARD_ENABLED_CHECKS: CSV list of coding-standard sub-checks.
+#   Empty or includes "all" => run all coding-standard sub-checks.
+#   Supported values:
+#   all,phpcs,phpcs-xml,phpcs-html,phpcs-graphql,phpcs-less,phpmd,phpstan,
+#   phpcpd,strict-types,fixture-reuse,rector,eslint
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────
+  # Pre-check: Detect which file types are present in the PR so that
+  # language-specific jobs (PHPCS, ESLint, Rector) can skip entirely
+  # when no relevant files were changed.
+  # ──────────────────────────────────────────────────────────────────────
+  detect-changes:
+    needs: mainline-alignment
+    if: >-
+      github.event_name == 'pull_request' &&
+      vars.PR_QA_ENABLED_JOBS != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      has_php: ${{ steps.check.outputs.has_php }}
+      has_js: ${{ steps.check.outputs.has_js }}
+      has_static: ${{ steps.check.outputs.has_static }}
+      has_new_files: ${{ steps.check.outputs.has_new_files }}
+      copyright_files: ${{ steps.check.outputs.copyright_files }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          # Blobless partial clone: downloads commit/tree objects only.
+          # File blobs are fetched on demand — only .github/ files are
+          # written to disk (needed for the CI file presence check).
+          # git diff --name-only only needs tree objects, so it works here.
+          filter: blob:none
+          sparse-checkout: |
+            .github
+
+      - name: Debug PR gating context
+        run: |
+          set -euo pipefail
+          echo "event_name=${{ github.event_name }}"
+          echo "event_action=${{ github.event.action }}"
+          echo "base_owner=${{ github.event.pull_request.base.repo.owner.login }}"
+          echo "base_repo=${{ github.event.pull_request.base.repo.name }}"
+          echo "head_owner=${{ github.event.pull_request.head.repo.owner.login }}"
+          echo "head_repo=${{ github.event.pull_request.head.repo.name }}"
+          echo "PR_QA_ENABLED_JOBS='${{ vars.PR_QA_ENABLED_JOBS }}'"
+
+      - name: Verify CI files are not removed
+        run: |
+          set -euo pipefail
+          missing=false
+          for f in \
+            .github/workflows/pr-quality-gates.yml \
+            .github/scripts/check_copyright.py \
+            .github/scripts/copyright-template.txt \
+            .github/scripts/rector-compat.php \
+            .github/scripts/phpmd-ruleset.xml \
+            .github/scripts/phpstan.neon \
+            .github/scripts/phpstan-framework-autoload.php \
+            .github/scripts/phpstan-extensions.neon \
+            .github/scripts/filter-blacklist.sh; do
+            if [ ! -f "$f" ]; then
+              echo "::error::Required CI file missing: $f"
+              missing=true
+            fi
+          done
+          if [ "$missing" = "true" ]; then
+            echo "::error::CI files must not be removed. Restore them before merging."
+            exit 1
+          fi
+          echo "All required CI files present."
+
+      - name: Detect changed file types
+        id: check
+        run: |
+          set -euo pipefail
+          base_ref="${{ github.event.pull_request.base.ref }}"
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          pr_number="${{ github.event.pull_request.number }}"
+
+          if ! git cat-file -e "${base_sha}^{commit}" 2>/dev/null; then
+            git fetch origin "$base_ref" || true
+            base_sha="origin/$base_ref"
+          fi
+
+          if ! git cat-file -e "${head_sha}^{commit}" 2>/dev/null; then
+            git fetch origin "pull/${pr_number}/head:pr-${pr_number}-head" || true
+            if git rev-parse --verify -q "pr-${pr_number}-head" >/dev/null; then
+              head_sha="pr-${pr_number}-head"
+            fi
+          fi
+
+          changed=$(git diff --name-only --diff-filter=ACMR "$base_sha...$head_sha" \
+            | grep -vE '^(\.github|vendor|lib/web)/' || true)
+
+          has_php=false
+          has_js=false
+          has_static=false
+          has_new_files=false
+
+          if echo "$changed" | grep -qE '\.(php|phtml)$'; then
+            has_php=true
+          fi
+          if echo "$changed" | grep -E '\.js$' | grep -qv '\.min\.js$'; then
+            has_js=true
+          fi
+          if echo "$changed" | grep -qE '\.(xml|xsd|html|graphqls|less)$'; then
+            has_static=true
+          fi
+
+          added=$(git diff --name-only --diff-filter=A "$base_sha...$head_sha" \
+            | grep -vE '^(\.github|vendor|lib/web)/' \
+            | grep -qE '\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$' && echo true || echo false)
+          has_new_files=$added
+
+          copyright_files=$(git diff --name-only --diff-filter=ACMRT "$base_sha...$head_sha" \
+            | grep -vE '^(\.github|vendor|lib/web)/' \
+            | grep -E '\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$' || true)
+
+          echo "has_php=$has_php" >> "$GITHUB_OUTPUT"
+          echo "has_js=$has_js" >> "$GITHUB_OUTPUT"
+          echo "has_static=$has_static" >> "$GITHUB_OUTPUT"
+          echo "has_new_files=$has_new_files" >> "$GITHUB_OUTPUT"
+          {
+            echo "copyright_files<<EOF"
+            echo "$copyright_files"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+          echo "PHP files changed: $has_php"
+          echo "JS files changed: $has_js"
+          echo "Static files changed: $has_static"
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 2: Mainline Alignment (Branch Freshness + PR Gate)
+  #
+  # PRs live on a fork (e.g. adobe-commerce-tier-4/<repo>), but the
+  # mainline lives on the upstream repo (magento-commerce/<repo>).
+  # This job fetches the upstream mainline branch and verifies the PR
+  # branch is rebased on its HEAD -- catching stale branches and merge
+  # conflicts before expensive CI builds waste cycles.
+  # ──────────────────────────────────────────────────────────────────────
+  mainline-alignment:
+    if: >-
+      github.event_name == 'pull_request' &&
+      vars.PR_QA_ENABLED_JOBS != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    env:
+      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout: |
+            .github
+
+      - name: Check branch alignment with upstream mainline
+        uses: actions/github-script@v9
+        env:
+          GIT_CONFIG_NOSYSTEM: '1'
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          script: |
+            const { execFileSync } = require('child_process');
+            const git = (...args) => execFileSync('git', args, { encoding: 'utf-8' });
+
+            const baseBranch = context.payload.pull_request.base.ref;
+            const headSha    = context.payload.pull_request.head.sha;
+            const repoOwner  = context.repo.owner;
+            const repoName   = context.repo.repo;
+
+            core.info(`Fork repo   : ${repoOwner}/${repoName}`);
+            core.info(`Base branch : ${baseBranch}`);
+            core.info(`Head SHA    : ${headSha}`);
+
+            // ── Resolve the upstream (parent) repo ───────────────────
+            // If this repo is a fork, compare against the parent's
+            // mainline. Otherwise fall back to origin.
+            let upstreamUrl = '';
+            let upstreamLabel = '';
+
+            try {
+              const { data: repo } = await github.rest.repos.get({
+                owner: repoOwner,
+                repo: repoName,
+              });
+
+              if (repo.fork && repo.parent) {
+                upstreamUrl = repo.parent.clone_url;
+                upstreamLabel = repo.parent.full_name;
+                core.info(`Upstream    : ${upstreamLabel} (detected as parent fork)`);
+              }
+            } catch (e) {
+              core.warning(`Could not query repo metadata: ${e.message}. Falling back to origin.`);
+            }
+
+            // If not a fork (or API call failed), compare against origin.
+            let canUseUpstream = !!upstreamUrl;
+
+            const setGitAuth = (token) => {
+              // actions/checkout v6 injects credentials via includeIf.gitdir entries pointing
+              // to a temporary config file — not via http.extraheader — so unset-all on
+              // extraheader alone leaves a second Authorization header on the wire.
+              // Mirror what checkout's post-run cleanup does: remove those includeIf entries first.
+              try {
+                const keys = git('config', '--local', '--name-only', '--get-regexp', '^includeIf\\.gitdir:')
+                  .trim().split('\n').filter(Boolean);
+                for (const key of keys) {
+                  try { git('config', '--local', '--unset-all', key); } catch(e) {}
+                }
+              } catch(e) {} // no includeIf entries is normal outside of checkout-managed repos
+              // Clear http.extraheader from local and global (system excluded via GIT_CONFIG_NOSYSTEM=1).
+              // Also disable the credential helper so only our one token reaches the wire.
+              for (const scope of ['--local', '--global']) {
+                try { git('config', scope, '--unset-all', 'http.https://github.com/.extraheader'); } catch(e) {}
+              }
+              git('config', '--local', 'credential.https://github.com.helper', '');
+              if (token) {
+                const encoded = Buffer.from(`x-access-token:${token}`).toString('base64');
+                git('config', '--local', 'http.https://github.com/.extraheader', `AUTHORIZATION: basic ${encoded}`);
+              }
+            };
+
+            const crossRepoToken = process.env.CROSS_REPO_READ_TOKEN || '';
+            if (canUseUpstream) {
+              // Authenticate upstream fetch with CROSS_REPO_READ_TOKEN if available.
+              if (crossRepoToken) {
+                setGitAuth(crossRepoToken);
+                core.info(`Upstream fetch: using CROSS_REPO_READ_TOKEN for authentication`);
+              } else {
+                core.info(`Upstream fetch: no CROSS_REPO_READ_TOKEN, attempting anonymous`);
+              }
+
+              // Add the upstream remote and fetch the mainline branch.
+              // If the upstream is private and inaccessible, fall back to origin.
+              try {
+                git('remote', 'add', 'upstream', upstreamUrl);
+              } catch (e) {
+                // Remote may already exist from a previous step.
+                if (!/already exists/.test(e.stderr || '')) throw e;
+              }
+              try {
+                git('fetch', 'upstream', baseBranch);
+              } catch (e) {
+                core.warning(
+                  `Cannot fetch from upstream ${upstreamLabel}. ` +
+                  `Falling back to origin/${baseBranch}.`
+                );
+                canUseUpstream = false;
+              }
+            }
+
+            if (!canUseUpstream) {
+              // Only restore credentials if they were replaced for the upstream fetch.
+              // When no crossRepoToken was supplied, setGitAuth was never called and
+              // the checkout's includeIf credentials are still intact — calling
+              // setGitAuth here would strip them and leave git unauthenticated.
+              if (crossRepoToken) {
+                setGitAuth(process.env.GITHUB_TOKEN || '');
+              }
+              upstreamLabel = `${repoOwner}/${repoName}`;
+              git('fetch', 'origin', baseBranch);
+            }
+
+            const remoteName = canUseUpstream ? 'upstream' : 'origin';
+
+            const mainlineRef = `${remoteName}/${baseBranch}`;
+            const baseHeadSha = git('rev-parse', mainlineRef).trim();
+            core.info(`Mainline HEAD (${upstreamLabel} ${baseBranch}): ${baseHeadSha}`);
+
+            // ── 1. Merge-base check ──────────────────────────────────
+            // The merge-base between the PR head and mainline must equal
+            // mainline HEAD. If it does not, the branch is behind.
+            const mergeBase = git('merge-base', headSha, mainlineRef).trim();
+
+            core.info(`Merge base  : ${mergeBase}`);
+
+            if (mergeBase !== baseHeadSha) {
+              const behind = git('rev-list', '--count', `${mergeBase}..${mainlineRef}`).trim();
+
+              const fetchCmd = canUseUpstream
+                ? `git fetch upstream ${baseBranch} && git merge upstream/${baseBranch}`
+                : `git fetch origin ${baseBranch} && git merge origin/${baseBranch}`;
+
+              core.setFailed(
+                `Branch is ${behind} commit(s) behind ${upstreamLabel} ${baseBranch}.\n\n` +
+                `Merge the latest mainline into the PR branch before CI builds ` +
+                `(PAT, MFTF, integration tests) will run.\n\n` +
+                `To fix:\n` +
+                `  ${fetchCmd}\n` +
+                `  git push\n`
+              );
+              return;
+            }
+
+            // ── 2. Conflict check ────────────────────────────────────
+            // Attempt a tree-only merge to detect conflicts without
+            // actually creating a merge commit.
+            try {
+              execFileSync('git', ['merge-tree', mergeBase, mainlineRef, headSha],
+                { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
+            } catch (e) {
+              const output = (e.stdout || '') + (e.stderr || '');
+              if (/conflict/i.test(output) || /CONFLICT/i.test(output)) {
+                core.setFailed(
+                  `Merge conflicts detected between this branch and ${upstreamLabel} ${baseBranch}.\n` +
+                  `Merge mainline and resolve conflicts before CI can proceed.`
+                );
+                return;
+              }
+            }
+
+            // ── 3. Staleness warning ─────────────────────────────────
+            // If the branch diverged more than 7 days ago, warn (but
+            // do not fail) -- the developer may want to refresh.
+            const mergeBaseDate = git('log', '-1', '--format=%ci', mergeBase).trim();
+
+            const ageMs = Date.now() - new Date(mergeBaseDate).getTime();
+            const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+
+            if (ageDays > 7) {
+              core.warning(
+                `Branch diverged from ${upstreamLabel} ${baseBranch} ${ageDays} days ago. ` +
+                `Consider rebasing to pick up recent mainline changes.`
+              );
+            }
+
+            core.info(
+              `Branch is up to date with ${upstreamLabel} ${baseBranch} ` +
+              `(diverged ${ageDays} day(s) ago). All good.`
+            );
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 4: Copyright Header Check
+  #
+  # Validates that changed files carry the correct Adobe copyright header
+  # with the proper year (based on git creation date).
+  # ──────────────────────────────────────────────────────────────────────
+  copyright-check:
+    needs:
+      - mainline-alignment
+      - detect-changes
+    if: >-
+      always() &&
+      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',copyright-check,') && (
+        github.event_name == 'workflow_dispatch' ||
+        (github.event_name == 'pull_request' &&
+         needs.mainline-alignment.result == 'success' &&
+         needs.detect-changes.result == 'success' &&
+         needs.detect-changes.outputs.has_new_files == 'true')
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /.github/
+            ${{ needs.detect-changes.outputs.copyright_files }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install click==8.2.1
+
+      - name: Check copyright headers (PR)
+        if: github.event_name == 'pull_request'
+        env:
+          PR_CODE_FILES: ${{ needs.detect-changes.outputs.copyright_files }}
+        run: |
+          set -euo pipefail
+          echo "Running copyright check in PR mode..."
+          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Head SHA: ${{ github.event.pull_request.head.sha }}"
+
+          pr_code_files="$PR_CODE_FILES"
+
+          echo "Relevant files in PR:"
+          echo "$pr_code_files"
+
+          if [ -z "$pr_code_files" ]; then
+            echo "No code files changed in this PR"
+            exit 0
+          fi
+
+          exit_code=0
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              if ! python3 .github/scripts/check_copyright.py \
+                --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
+                --path "$file" \
+                --pr-mode \
+                --base-sha "${{ github.event.pull_request.base.sha }}"; then
+                exit_code=1
+              fi
+            fi
+          done <<< "$pr_code_files"
+
+          if [ $exit_code -ne 0 ]; then
+            echo "::error::Some PR files have copyright issues"
+            exit 1
+          fi
+          echo "All relevant PR files have correct copyright headers"
+
+      - name: Check copyright headers (Manual)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          set -euo pipefail
+          echo "Running copyright check in manual mode..."
+          python3 .github/scripts/check_copyright.py \
+            --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
+            --magento-only \
+            --stats \
+            --verbose
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Job 5: Magento Coding Standard (PHPCS + Rector + ESLint)
+  #
+  # Clones magento/magento-coding-standard once and runs all three
+  # tools from it, matching how the repo's own CI invokes them.
+  # ──────────────────────────────────────────────────────────────────────
+  coding-standard:
+    needs: detect-changes
+    if: >-
+      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',coding-standard,') &&
+      github.event_name == 'pull_request' &&
+      (
+        needs.detect-changes.outputs.has_php == 'true' ||
+        needs.detect-changes.outputs.has_js == 'true' ||
+        needs.detect-changes.outputs.has_static == 'true'
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Resolve PHP version from repository composer.json
+        id: php-version
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+        run: python3 .github/scripts/resolve_magento_tool_constraints.py
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
+        with:
+          php-version: ${{ steps.php-version.outputs.php_version }}
+          tools: composer
+          extensions: simplexml, dom
+
+      - name: Setup Node.js
+        if: needs.detect-changes.outputs.has_js == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '21'
+
+      - name: Install Magento Coding Standard
+        id: install-mcs
+        run: |
+          set -euo pipefail
+          composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
+          cd mcs
+
+          # PHPMD/PHPStan versions: same magento/magento2 composer.json as PHP version
+          # resolution (quality-patches release → magento2 refs), written by the
+          # "Resolve PHP version" step to /tmp/magento2-composer.json.
+          if [ ! -f /tmp/magento2-composer.json ]; then
+            echo "::error::Missing /tmp/magento2-composer.json — the Resolve PHP version step must run first."
+            exit 1
+          fi
+          echo "Magento CE composer.json for tool pins (ref: ${{ steps.php-version.outputs.magento_composer_ref }})"
+
+          phpmd_constraint=""
+          phpstan_constraint=""
+          for src in \
+            "${GITHUB_WORKSPACE}/mcs/composer.json" \
+            "/tmp/magento2-composer.json"; do
+            [ -f "$src" ] || continue
+            [ -z "$phpmd_constraint" ] && phpmd_constraint="$("${GITHUB_WORKSPACE}/.github/scripts/read-pkg-constraint.sh" "$src" "phpmd/phpmd" || true)"
+            [ -z "$phpstan_constraint" ] && phpstan_constraint="$("${GITHUB_WORKSPACE}/.github/scripts/read-pkg-constraint.sh" "$src" "phpstan/phpstan" || true)"
+            [ -n "$phpmd_constraint" ] && [ -n "$phpstan_constraint" ] && break
+          done
+
+          if [ -z "$phpmd_constraint" ] || [ -z "$phpstan_constraint" ]; then
+            echo "::error::Could not resolve phpmd/phpmd or phpstan/phpstan from mcs/composer.json or /tmp/magento2-composer.json."
+            exit 1
+          fi
+          echo "Resolved phpmd/phpmd constraint: $phpmd_constraint"
+          echo "Resolved phpstan/phpstan constraint: $phpstan_constraint"
+
+          npm install
+          echo ""
+          echo "PHPCS installed standards:"
+          vendor/bin/phpcs -i
+
+          cd ..
+          mkdir -p qa-tools
+          cd qa-tools
+          composer init --name=local/qa-tools --no-interaction
+          composer config minimum-stability dev
+          composer config prefer-stable true
+          composer require --dev --no-interaction --no-progress --with-all-dependencies \
+            "phpmd/phpmd:${phpmd_constraint}" \
+            "phpstan/phpstan:${phpstan_constraint}" \
+            sebastian/phpcpd
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve enabled checks
+        id: gate
+        if: steps.install-mcs.outputs.ready == 'true'
+        run: |
+          set -euo pipefail
+          ENABLED="${{ vars.PR_QA_CODING_STANDARD_ENABLED_CHECKS }}"
+          is_enabled() {
+            local check="$1"
+            [ -z "$ENABLED" ] && echo "true" && return
+            echo ",$ENABLED," | grep -qF ",all," && echo "true" && return
+            echo ",$ENABLED," | grep -qF ",$check," && echo "true" && return
+            echo "false"
+          }
+          for check in phpcs phpcs-xml phpcs-html phpcs-graphql phpcs-less phpmd phpstan phpcpd strict-types fixture-reuse rector eslint; do
+            key="${check//-/_}"
+            echo "${key}=$(is_enabled "$check")" >> "$GITHUB_OUTPUT"
+          done
+
+      - name: Print resolved tool version map
+        run: |
+          set -euo pipefail
+          phpmd_mcs="$(.github/scripts/read-pkg-constraint.sh "${GITHUB_WORKSPACE}/mcs/composer.json" "phpmd/phpmd" || true)"
+          phpstan_mcs="$(.github/scripts/read-pkg-constraint.sh "${GITHUB_WORKSPACE}/mcs/composer.json" "phpstan/phpstan" || true)"
+          phpmd_m2="$(.github/scripts/read-pkg-constraint.sh "/tmp/magento2-composer.json" "phpmd/phpmd" || true)"
+          phpstan_m2="$(.github/scripts/read-pkg-constraint.sh "/tmp/magento2-composer.json" "phpstan/phpstan" || true)"
+
+          echo "=== Resolved Tool Version Map ==="
+          echo "repo_name=${{ github.event.repository.name }}"
+          echo "base_ref=${{ github.event.pull_request.base.ref }}"
+          echo "magento_composer_ref=${{ steps.php-version.outputs.magento_composer_ref }}"
+          echo "php_version=${{ steps.php-version.outputs.php_version }}"
+          echo "phpmd_constraint_from_mcs=${phpmd_mcs:-<missing>}"
+          echo "phpmd_constraint_from_magento2=${phpmd_m2:-<missing>}"
+          echo "phpstan_constraint_from_mcs=${phpstan_mcs:-<missing>}"
+          echo "phpstan_constraint_from_magento2=${phpstan_m2:-<missing>}"
+
+      - name: Fetch Magento static PHPMD framework
+        run: |
+          set -euo pipefail
+          ref="${{ steps.php-version.outputs.magento_composer_ref }}"
+          if [ -z "$ref" ]; then
+            ref="2.4-develop"
+          fi
+
+          target="/tmp/magento2-static"
+          rm -rf "$target"
+          git clone --depth 1 --filter=blob:none --sparse \
+            --branch "$ref" \
+            https://github.com/magento/magento2.git \
+            "$target"
+          cd "$target"
+          git sparse-checkout set \
+            dev/tests/static/framework \
+            dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd \
+            dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist \
+            dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/blacklist \
+            lib/internal/Magento/Framework
+
+          echo "Fetched Magento static PHPMD framework from ref: $ref"
+
+      - name: Get changed files
+        id: files
+        run: |
+          set -euo pipefail
+          base_ref="${{ github.event.pull_request.base.ref }}"
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          pr_number="${{ github.event.pull_request.number }}"
+
+          if ! git cat-file -e "${base_sha}^{commit}" 2>/dev/null; then
+            git fetch origin "$base_ref" || true
+            base_sha="origin/$base_ref"
+          fi
+
+          if ! git cat-file -e "${head_sha}^{commit}" 2>/dev/null; then
+            git fetch origin "pull/${pr_number}/head:pr-${pr_number}-head" || true
+            if git rev-parse --verify -q "pr-${pr_number}-head" >/dev/null; then
+              head_sha="pr-${pr_number}-head"
+            fi
+          fi
+
+          changed=$(git diff --name-only --diff-filter=ACMRT "$base_sha...$head_sha" \
+            | grep -vE '^(\.github|vendor|lib/web)/' || true)
+          added=$(git diff --name-only --diff-filter=A "$base_sha...$head_sha" \
+            | grep -vE '^(\.github|vendor|lib/web)/' || true)
+
+          php_files=$(echo "$changed"   | grep -E '\.(php|phtml)$'  || true)
+          js_files=$(echo "$changed"    | grep -E '\.js$' | grep -v '\.min\.js$' || true)
+          xml_files=$(echo "$changed"   | grep -E '\.(xml|xsd)$'    || true)
+          html_files=$(echo "$changed"  | grep -E '\.html$'         || true)
+          graphql_files=$(echo "$changed" | grep -E '\.graphqls$'   || true)
+          less_files=$(echo "$changed"  | grep -E '\.less$'         || true)
+          new_php=$(echo "$added"       | grep -E '\.php$'          || true)
+
+          [ -n "$php_files" ] && echo "$php_files" > /tmp/changed_php.txt
+          [ -n "$js_files" ] && echo "$js_files" > /tmp/changed_js.txt
+          [ -n "$xml_files" ] && echo "$xml_files" > /tmp/changed_xml.txt
+          [ -n "$html_files" ] && echo "$html_files" > /tmp/changed_html.txt
+          [ -n "$graphql_files" ] && echo "$graphql_files" > /tmp/changed_graphqls.txt
+          [ -n "$less_files" ] && echo "$less_files" > /tmp/changed_less.txt
+          [ -n "$new_php" ] && echo "$new_php" > /tmp/new_php.txt
+
+          echo "PHP files: $(echo "$php_files" | grep -c . || echo 0)"
+          echo "JS files: $(echo "$js_files" | grep -c . || echo 0)"
+          echo "XML/XSD files: $(echo "$xml_files" | grep -c . || echo 0)"
+          echo "HTML files: $(echo "$html_files" | grep -c . || echo 0)"
+          echo "GraphQL schema files: $(echo "$graphql_files" | grep -c . || echo 0)"
+          echo "LESS files: $(echo "$less_files" | grep -c . || echo 0)"
+          echo "New PHP files: $(echo "$new_php" | grep -c . || echo 0)"
+
+      # ── PHPCS ─────────────────────────────────────────────────────
+
+      - name: Run PHPCS
+        if: always() && steps.gate.outputs.phpcs == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          # Exclude Legacy sniffs that parse XML or load external data
+          # files from the Magento project tree (not available on forks).
+          EXCLUDE="Magento2.Legacy.ObsoleteConfigNodes"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.Layout"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.ObsoleteSystemConfiguration"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.ObsoleteAcl"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.ObsoleteMenu"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.ClassReferencesInConfigurationFiles"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.ModuleXML"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.WidgetXML"
+          EXCLUDE="$EXCLUDE,Magento2.Legacy.RestrictedCode"
+          .github/scripts/run-phpcs.sh "PHP" /tmp/changed_php.txt "--exclude=$EXCLUDE"
+
+      - name: Run PHPCS for XML/XSD
+        if: always() && steps.gate.outputs.phpcs_xml == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        run: |
+          set -euo pipefail
+          .github/scripts/run-phpcs.sh "XML/XSD" /tmp/changed_xml.txt "--extensions=xml,xsd"
+
+      - name: Run PHPCS for HTML
+        if: always() && steps.gate.outputs.phpcs_html == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        run: |
+          set -euo pipefail
+          .github/scripts/run-phpcs.sh "HTML" /tmp/changed_html.txt
+
+      - name: Run PHPCS for GraphQL
+        if: always() && steps.gate.outputs.phpcs_graphql == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        run: |
+          set -euo pipefail
+          .github/scripts/run-phpcs.sh "GraphQL schema" /tmp/changed_graphqls.txt
+
+      - name: Run PHPCS for LESS
+        if: always() && steps.gate.outputs.phpcs_less == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        run: |
+          set -euo pipefail
+          .github/scripts/run-phpcs.sh "LESS" /tmp/changed_less.txt
+
+      # ── Rector ────────────────────────────────────────────────────
+
+      # ── PHPMD ────────────────────────────────────────────────────
+
+      - name: Run PHPMD
+        if: always() && steps.gate.outputs.phpmd == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping phpmd."
+            exit 0
+          fi
+          phpmd_bin="${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpmd"
+          ruleset="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
+          prepend_file="/tmp/magento2-static/phpmd-prepend.php"
+          if [ ! -f "$ruleset" ]; then
+            echo "Magento ruleset not available, falling back to local standalone ruleset."
+            ruleset="${GITHUB_WORKSPACE}/.github/scripts/phpmd-ruleset.xml"
+          fi
+          cat > "$prepend_file" <<'PHP'
+          <?php
+          $root = '/tmp/magento2-static';
+          $traitFile = $root . '/lib/internal/Magento/Framework/GetParameterClassTrait.php';
+          if (is_file($traitFile)) {
+              require_once $traitFile;
+          }
+          spl_autoload_register(static function (string $class) use ($root): void {
+              if (strpos($class, 'Magento\\') !== 0) {
+                  return;
+              }
+              $relative = str_replace('\\', '/', $class) . '.php';
+              foreach ([$root . '/lib/internal/', $root . '/app/code/'] as $base) {
+                  $file = $base . $relative;
+                  if (is_file($file)) {
+                      require_once $file;
+                      return;
+                  }
+              }
+          });
+          PHP
+
+          mapfile -t files < <(while IFS= read -r f; do [ -f "$f" ] && printf '%s\n' "$f"; done < /tmp/changed_php.txt)
+
+          # PHPMD 3.x: Symfony "analyze"; 2.x: legacy positional arguments.
+          phpmd_symfony=false
+          if $phpmd_bin list --raw 2>/dev/null | grep -qE '^analyze[[:space:]]'; then
+            phpmd_symfony=true
+          fi
+
+          batch_size=20
+          for ((i=0; i<${#files[@]}; i+=batch_size)); do
+            batch_files=("${files[@]:i:batch_size}")
+            batch_list=$(printf "%s," "${batch_files[@]}" | sed 's/,*$//')
+            if [ "$phpmd_symfony" = true ]; then
+              php -d auto_prepend_file="$prepend_file" "$phpmd_bin" analyze "${batch_files[@]}" \
+                --format=text \
+                --ruleset="$ruleset" \
+                --suffixes=php --suffixes=phtml \
+                --no-progress || exit $?
+            else
+              php -d auto_prepend_file="$prepend_file" "$phpmd_bin" \
+                "$batch_list" \
+                text \
+                "$ruleset" \
+                --suffixes=php,phtml || exit $?
+            fi
+          done
+
+      # ── PHPStan ──────────────────────────────────────────────────
+
+      - name: Generate Magento stubs for PHPStan
+        if: always() && steps.gate.outputs.phpstan == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping phpstan."
+            exit 0
+          fi
+          bash .github/scripts/generate-stubs.sh /tmp/changed_php.txt
+
+      - name: Run PHPStan
+        if: always() && steps.gate.outputs.phpstan == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping phpstan."
+            exit 0
+          fi
+
+          blacklist_dir="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/blacklist"
+          mapfile -t files_to_scan < <(.github/scripts/filter-blacklist.sh "$blacklist_dir" /tmp/changed_php.txt "PHPStan")
+
+          if [ "${#files_to_scan[@]}" -eq 0 ]; then
+            echo "No PHP files to analyze after blacklist filtering."
+            exit 0
+          fi
+
+          # When the CE sparse clone is present, use phpstan-extensions.neon which
+          # extends the base config with DataObjectClassReflectionExtension and
+          # FilteredErrorFormatter. The extension classes are loaded via
+          # --autoload-file, which PHPStan processes before building its DI
+          # container (unlike bootstrapFiles, which run after container build).
+          # When the sparse clone is absent, fall back to the base neon and the
+          # plain table formatter — extensions are simply not registered.
+          ext_class="/tmp/magento2-static/dev/tests/static/framework/Magento/PhpStan/Reflection/Php/DataObjectClassReflectionExtension.php"
+          fmt_class="/tmp/magento2-static/dev/tests/static/framework/Magento/PhpStan/Formatters/FilteredErrorFormatter.php"
+
+          if [ -f "$ext_class" ] && [ -f "$fmt_class" ]; then
+            phpstan_neon="${GITHUB_WORKSPACE}/.github/scripts/phpstan-extensions.neon"
+            autoload_flag="--autoload-file=${GITHUB_WORKSPACE}/.github/scripts/phpstan-framework-autoload.php"
+            error_format="filtered"
+          else
+            phpstan_neon="${GITHUB_WORKSPACE}/.github/scripts/phpstan.neon"
+            autoload_flag=""
+            error_format="table"
+          fi
+
+          "${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpstan" analyse \
+            $autoload_flag \
+            --configuration="$phpstan_neon" \
+            --no-progress \
+            --error-format="$error_format" \
+            "${files_to_scan[@]}"
+
+      # ── PHPCPD ────────────────────────────────────────────────────
+
+      - name: Run PHPCPD (Copy/Paste Detector)
+        if: always() && steps.gate.outputs.phpcpd == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping phpcpd."
+            exit 0
+          fi
+          blacklist_dir="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist"
+          mapfile -t files_to_scan < <(.github/scripts/filter-blacklist.sh "$blacklist_dir" /tmp/changed_php.txt "PHPCPD")
+
+          if [ "${#files_to_scan[@]}" -eq 0 ]; then
+            echo "No PHP files left for PHPCPD after blacklist filtering."
+            exit 0
+          fi
+
+          "${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpcpd" "${files_to_scan[@]}"
+
+      # ── strict_types ──────────────────────────────────────────────
+
+      - name: Check strict_types declaration
+        if: always() && steps.gate.outputs.strict_types == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -s /tmp/new_php.txt ]; then
+            echo "No new PHP files to check."
+            exit 0
+          fi
+
+          missing=""
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              if ! grep -q 'strict_types=1' "$file"; then
+                missing="$missing\n  $file"
+              fi
+            fi
+          done < /tmp/new_php.txt
+
+          if [ -n "$missing" ]; then
+            echo "::error::New PHP files missing declare(strict_types=1):"
+            echo -e "$missing"
+            exit 1
+          fi
+          echo "All new PHP files have strict_types declaration."
+
+      - name: Check fixture reuse (static parity)
+        if: always() && steps.gate.outputs.fixture_reuse == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping fixture reuse."
+            exit 0
+          fi
+
+          bad_files=""
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            [ -f "$file" ] || continue
+            if ! echo "$file" | grep -qE '^dev/tests/integration/.*/(_files|Fixtures)/'; then
+              continue
+            fi
+            if grep -Pq '(?<![=\s*])\b(require|require_once|include)\b' "$file"; then
+              bad_files="${bad_files}\n${file}"
+            fi
+          done < /tmp/changed_php.txt
+
+          if [ -n "$bad_files" ]; then
+            echo "::error::The following fixture files incorrectly reuse fixtures:"
+            echo -e "$bad_files"
+            echo "Use Magento\\TestFramework\\Workaround\\Override\\Fixture\\Resolver::requireDataFixture"
+            exit 1
+          fi
+          echo "Fixture reuse check passed."
+
+      # ── Rector ────────────────────────────────────────────────────
+
+      - name: Run Rector
+        if: always() && steps.gate.outputs.rector == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        env:
+          RECTOR_PHP_VERSION: ${{ steps.php-version.outputs.php_version }}
+        run: |
+          set -euo pipefail
+          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
+            echo "No PHP files to check, skipping rector."
+            exit 0
+          fi
+
+          file_args=()
+          while IFS= read -r file; do
+            [ -n "$file" ] && [ -f "$file" ] && file_args+=("$GITHUB_WORKSPACE/$file")
+          done < /tmp/changed_php.txt
+
+          if [ ${#file_args[@]} -eq 0 ]; then
+            echo "No PHP files to check."
+            exit 0
+          fi
+
+          cd mcs
+          vendor/bin/rector process \
+            --config "$GITHUB_WORKSPACE/.github/scripts/rector-compat.php" \
+            --dry-run \
+            --autoload-file vendor/squizlabs/php_codesniffer/autoload.php \
+            --autoload-file vendor/magento/php-compatibility-fork/PHPCSAliases.php \
+            "${file_args[@]}"
+
+      # ── ESLint ────────────────────────────────────────────────────
+
+      - name: Run ESLint
+        if: always() && steps.gate.outputs.eslint == 'true' && needs.detect-changes.outputs.has_js == 'true'
+        run: |
+          set -euo pipefail
+          mapfile -t js_args < /tmp/changed_js.txt
+
+          mcs/node_modules/.bin/eslint \
+            -c mcs/eslint/eslint.config.mjs \
+            "${js_args[@]}"
+
+      - name: Validate generated XML test reports are non-empty
+        if: always()
+        run: |
+          set -euo pipefail
+          report_dir="${GITHUB_WORKSPACE}/build/test-reports"
+          if [ ! -d "$report_dir" ]; then
+            echo "No build/test-reports directory found; skipping XML report size check."
+            exit 0
+          fi
+
+          shopt -s nullglob
+          xml_reports=("$report_dir"/*.xml)
+          shopt -u nullglob
+
+          if [ "${#xml_reports[@]}" -eq 0 ]; then
+            echo "No XML reports found in $report_dir; skipping XML report size check."
+            exit 0
+          fi
+
+          has_empty=0
+          for report in "${xml_reports[@]}"; do
+            if [ ! -s "$report" ]; then
+              echo "::error::Test report file is empty: $report"
+              has_empty=1
+            fi
+          done
+
+          if [ "$has_empty" -ne 0 ]; then
+            echo "::error::One or more XML test report files are empty. This often means tests failed before writing JUnit output."
+            exit 1
+          fi
+          echo "All discovered XML test reports are non-empty."
+
+  # ──────────────────────────────────────────────────────────────────────
+  # Final Job: Linked PR Aggregate Gate
+  #
+  # Runs after all PR quality jobs finish and validates linked PRs listed
+  # in the PR description (Related PRs area).
+  # ──────────────────────────────────────────────────────────────────────
+  aggregate-linked-pr-checks:
+    needs:
+      - detect-changes
+      - mainline-alignment
+      - copyright-check
+      - coding-standard
+    if: >-
+      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') &&
+      always() &&
+      github.event_name == 'pull_request' &&
+      contains(fromJSON('["success","failure"]'), needs.detect-changes.result) &&
+      contains(fromJSON('["success","failure"]'), needs.mainline-alignment.result) &&
+      contains(fromJSON('["success","failure"]'), needs.copyright-check.result) &&
+      contains(fromJSON('["success","failure"]'), needs.coding-standard.result) &&
+      vars.PR_QA_ENABLED_JOBS != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
+    permissions:
+      contents: read
+      pull-requests: read
+      checks: read
+      statuses: read
+    steps:
+      - name: Debug aggregate gate context
+        run: |
+          set -euo pipefail
+          echo "detect-changes=${{ needs.detect-changes.result }}"
+          echo "mainline-alignment=${{ needs.mainline-alignment.result }}"
+          echo "copyright-check=${{ needs.copyright-check.result }}"
+          echo "coding-standard=${{ needs.coding-standard.result }}"
+          echo "PR_QA_ENABLED_JOBS='${{ vars.PR_QA_ENABLED_JOBS }}'"
+          if [ -n "${CROSS_REPO_READ_TOKEN}" ]; then
+            echo "CROSS_REPO_READ_TOKEN=present"
+          else
+            echo "CROSS_REPO_READ_TOKEN=missing"
+          fi
+
+      - name: Skip if cross-repo token is missing
+        if: ${{ env.CROSS_REPO_READ_TOKEN == '' }}
+        run: |
+          set -euo pipefail
+          echo "CROSS_REPO_READ_TOKEN is not set. Skipping aggregate-linked-pr-checks."
+          exit 0
+
+      - name: Validate linked PR checks
+        if: ${{ env.CROSS_REPO_READ_TOKEN != '' }}
+        uses: actions/github-script@v9
+        with:
+          github-token: ${{ env.CROSS_REPO_READ_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pr = context.payload.pull_request;
+            const prNumber = pr.number;
+            const body = pr.body || '';
+            // Only scan the "Related Pull Requests" section, up to the placeholder comment.
+            const sectionMatch = body.match(
+              /###\s*Related Pull Requests\s*\n([\s\S]*?)(?=<!-- related pull request placeholder -->|\n###|$)/i
+            );
+            const section = (sectionMatch ? sectionMatch[1] : '').replace(/<!--[\s\S]*?-->/g, '');
+
+            const linkRe = /https:\/\/github\.com\/([^/\s]+)\/([^/\s]+)\/pull\/(\d+)/g;
+            const seen = new Set();
+            const links = [];
+
+            for (const m of section.matchAll(linkRe)) {
+              const linkedOwner = m[1];
+              const linkedRepo = m[2];
+              const linkedPr = Number(m[3]);
+              const key = `${linkedOwner}/${linkedRepo}#${linkedPr}`;
+              if (seen.has(key)) continue;
+              seen.add(key);
+
+              if (linkedOwner === owner && linkedRepo === repo && linkedPr === prNumber) continue;
+              if (linkedOwner !== owner) {
+                core.notice(`Skipping ${key}: not in org ${owner}`);
+                continue;
+              }
+              links.push({ owner: linkedOwner, repo: linkedRepo, number: linkedPr });
+            }
+
+            if (links.length === 0) {
+              core.info('No linked PR URLs found in the Related Pull Requests section. Skipping aggregate gate.');
+              return;
+            }
+
+            const okConclusions = new Set(['success', 'neutral', 'skipped']);
+            const rows = [];
+            let hasFailures = false;
+
+            for (const link of links) {
+              const label = `${link.owner}/${link.repo}#${link.number}`;
+              try {
+                const { data: linked } = await github.rest.pulls.get({
+                  owner: link.owner,
+                  repo: link.repo,
+                  pull_number: link.number,
+                });
+
+                const sha = linked.head.sha;
+                const prState = linked.state;
+
+                const statusesResp = await github.rest.repos.listCommitStatusesForRef({
+                  owner: link.owner,
+                  repo: link.repo,
+                  ref: sha,
+                  per_page: 100,
+                });
+                const statuses = statusesResp.data || [];
+                const badStatuses = statuses.filter(s => s.state !== 'success');
+
+                const checksResp = await github.rest.checks.listForRef({
+                  owner: link.owner,
+                  repo: link.repo,
+                  ref: sha,
+                  per_page: 100,
+                });
+                const checkRuns = checksResp.data.check_runs || [];
+                const badChecks = checkRuns.filter(c => c.status !== 'completed' || !okConclusions.has(c.conclusion || ''));
+
+                const hasAnySignals = statuses.length > 0 || checkRuns.length > 0;
+                const pass = prState === 'open' && hasAnySignals && badStatuses.length === 0 && badChecks.length === 0;
+
+                if (!pass) hasFailures = true;
+
+                rows.push({
+                  pr: label,
+                  state: prState,
+                  totalStatuses: statuses.length,
+                  failingStatuses: badStatuses.length,
+                  totalChecks: checkRuns.length,
+                  failingChecks: badChecks.length,
+                  result: pass ? 'PASS' : 'FAIL',
+                  error: null,
+                });
+              } catch (e) {
+                hasFailures = true;
+                rows.push({
+                  pr: label,
+                  state: 'unknown',
+                  totalStatuses: 0,
+                  failingStatuses: 0,
+                  totalChecks: 0,
+                  failingChecks: 0,
+                  result: 'FAIL',
+                  error: e.message,
+                });
+              }
+            }
+
+            const ciCell = r => {
+              if (r.error) return `error: ${r.error}`;
+              const parts = [];
+              if (r.totalChecks > 0)
+                parts.push(`${r.totalChecks} check run${r.totalChecks !== 1 ? 's' : ''}` +
+                  (r.failingChecks > 0 ? `, ${r.failingChecks} failing` : ', all green'));
+              if (r.totalStatuses > 0)
+                parts.push(`${r.totalStatuses} status${r.totalStatuses !== 1 ? 'es' : ''}` +
+                  (r.failingStatuses > 0 ? `, ${r.failingStatuses} failing` : ', all green'));
+              return parts.length > 0 ? parts.join(' / ') : 'no signals';
+            };
+
+            // GitHub Actions summary: rendered as an HTML table
+            await core.summary
+              .addHeading('Linked PR Aggregate Report', 3)
+              .addTable([
+                ['Linked PR', 'State', 'CI', 'Result'].map(h => ({ data: h, header: true })),
+                ...rows.map(r => [
+                  r.pr,
+                  r.state,
+                  ciCell(r),
+                  r.result === 'PASS' ? '✅ PASS' : '❌ FAIL',
+                ]),
+              ])
+              .write();
+
+            // Step log: plain text
+            const logLines = rows.map(r =>
+              `  ${r.result === 'PASS' ? '✅' : '❌'} ${r.pr}  [${r.state}]  ${ciCell(r)}`
+            );
+            const logReport = logLines.join('\n');
+
+            if (hasFailures) {
+              core.setFailed(`One or more linked PRs are not green:\n${logReport}`);
+            } else {
+              core.info(`All linked PRs are green:\n${logReport}`);
+            }
+
