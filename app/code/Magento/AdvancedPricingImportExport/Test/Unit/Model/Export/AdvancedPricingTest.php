@@ -171,11 +171,10 @@ class AdvancedPricingTest extends TestCase
         $this->abstractCollection = $this->createPartialMockWithReflection(
             AbstractCollection::class,
             [
-                'count',
                 'setOrder',
                 'setStoreId',
-                'getCurPage',
-                'getLastPageNumber',
+                'getAllIds',
+                'clear',
             ]
         );
         $this->exportConfig = $this->createMock(ExportConfig::class);
@@ -258,6 +257,9 @@ class AdvancedPricingTest extends TestCase
 
         $resourceProperty = $reflection->getProperty('_resource');
         $resourceProperty->setValue($this->advancedPricing, $this->resource);
+
+        $loggerProperty = $reflection->getProperty('_logger');
+        $loggerProperty->setValue($this->advancedPricing, $this->logger);
     }
 
     /**
@@ -265,12 +267,11 @@ class AdvancedPricingTest extends TestCase
      */
     public function testExportZeroConditionCalls()
     {
-        $page = 1;
         $itemsPerPage = 10;
 
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
         $this->advancedPricing
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('_getEntityCollection')
             ->willReturn($this->abstractCollection);
         $this->advancedPricing
@@ -278,12 +279,9 @@ class AdvancedPricingTest extends TestCase
             ->method('_prepareEntityCollection')
             ->with($this->abstractCollection);
         $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
-        $this->abstractCollection->expects($this->never())->method('getCurPage');
-        $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
+        $this->abstractCollection->expects($this->once())->method('getAllIds')->with($itemsPerPage, 0)->willReturn([]);
         $this->advancedPricing->expects($this->never())->method('_getHeaderColumns');
         $this->writer->expects($this->never())->method('setHeaderCols');
         $this->writer->expects($this->never())->method('writeRow');
@@ -298,27 +296,44 @@ class AdvancedPricingTest extends TestCase
      */
     public function testExportCurrentPageCalls()
     {
-        $curPage = $lastPage = $page = 1;
         $itemsPerPage = 10;
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
         $this->advancedPricing
-            ->expects($this->exactly(1))
+            ->expects($this->exactly(2))
             ->method('_getEntityCollection')
             ->willReturn($this->abstractCollection);
         $this->advancedPricing
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('_prepareEntityCollection')
             ->with($this->abstractCollection);
-        $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
-        $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
-        $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
-        $headers = ['headers'];
-        $this->advancedPricing->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->method('setHeaderCols')->with($headers);
+        $this->advancedPricing->expects($this->exactly(2))->method('getItemsPerPage')->willReturn($itemsPerPage);
+        $this->abstractCollection->expects($this->exactly(2))->method('setOrder')->with('entity_id', 'asc');
+        $this->abstractCollection->expects($this->exactly(2))->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+        $this->abstractCollection
+            ->expects($this->exactly(2))
+            ->method('getAllIds')
+            ->willReturnCallback(function (int $limit, int $offset) use ($itemsPerPage) {
+                static $calls = 0;
+                ++$calls;
+                if ($calls === 1) {
+                    $this->assertSame($itemsPerPage, $limit);
+                    $this->assertSame(0, $offset);
+                    return [1];
+                }
+
+                $this->assertSame($itemsPerPage, $limit);
+                $this->assertSame($itemsPerPage, $offset);
+                return [];
+            });
+        $headers = [
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_SKU,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_TYPE,
+        ];
+        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
         $webSite = 'All Websites [USD]';
         $userGroup = 'General';
         $this->advancedPricing->method('_getWebsiteCode')->willReturn($webSite);

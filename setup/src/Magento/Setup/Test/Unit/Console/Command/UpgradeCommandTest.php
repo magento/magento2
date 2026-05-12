@@ -23,6 +23,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpgradeCommandTest extends TestCase
 {
     /**
@@ -128,6 +131,8 @@ class UpgradeCommandTest extends TestCase
     public function testExecute($options, $deployMode, $expectedString, $expectedOptions): void
     {
         $this->appStateMock->method('getMode')->willReturn($deployMode);
+        $this->deploymentConfigMock->expects($this->atLeastOnce())->method('resetData');
+        $this->deploymentConfigMock->method('isAvailable')->willReturn(false);
         $this->dbInitStatementsCleanupMock->expects($this->once())
             ->method('execute')
             ->willReturn(false);

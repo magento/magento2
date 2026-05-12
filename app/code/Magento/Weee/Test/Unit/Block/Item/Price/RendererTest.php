@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Weee\Test\Unit\Block\Item\Price;
 
+use Magento\Bundle\Model\Product\Type as BundleProductType;
 use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\Pricing\Render as PricingRender;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Weee\Block\Item\Price\Renderer;
@@ -58,6 +62,7 @@ class RendererTest extends TestCase
                 'getRowWeeeTaxInclTax',
                 'getBaseRowWeeeTaxInclTax',
                 'getBaseWeeeTaxInclTax',
+                'getWeeeTaxAppliedRowAmount',
             ]
         );
 
@@ -219,7 +224,7 @@ class RendererTest extends TestCase
         bool $includeWeee,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -228,8 +233,17 @@ class RendererTest extends TestCase
             ->with($this->item)
             ->willReturn($weeeTax);
 
+        $this->weeeHelper->expects($this->any())
+            ->method('getRowWeeeTaxInclTax')
+            ->with($this->item)
+            ->willReturn($weeeTax);
+
         $this->item->expects($this->once())
             ->method('getPriceInclTax')
+            ->willReturn($price);
+
+        $this->item->expects($this->any())
+            ->method('getRowTotalInclTax')
             ->willReturn($price);
 
         $this->weeeHelper->expects($this->any())
@@ -255,7 +269,7 @@ class RendererTest extends TestCase
         bool $includeWeee,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -264,8 +278,17 @@ class RendererTest extends TestCase
             ->with($this->item)
             ->willReturn($weeeTax);
 
+        $this->weeeHelper->expects($this->any())
+            ->method('getBaseRowWeeeTaxInclTax')
+            ->with($this->item)
+            ->willReturn($weeeTax);
+
         $this->item->expects($this->once())
             ->method('getBasePriceInclTax')
+            ->willReturn($price);
+
+        $this->item->expects($this->any())
+            ->method('getBaseRowTotalInclTax')
             ->willReturn($price);
 
         $this->weeeHelper->expects($this->any())
@@ -291,7 +314,7 @@ class RendererTest extends TestCase
         bool $includeWeee,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -306,6 +329,15 @@ class RendererTest extends TestCase
         $this->item->expects($this->once())
             ->method('getPrice')
             ->willReturn($price);
+
+        $this->item->expects($this->any())
+            ->method('getRowTotal')
+            ->willReturn($price);
+
+        $this->weeeHelper->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->with($this->item)
+            ->willReturn($weeeTax);
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
@@ -330,7 +362,7 @@ class RendererTest extends TestCase
         bool $includeWeee,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -338,7 +370,11 @@ class RendererTest extends TestCase
             ->method('getBaseWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
 
-        $this->item->expects($this->once())
+        $this->item->expects($this->any())
+            ->method('getBaseWeeeTaxAppliedRowAmnt')
+            ->willReturn($weeeTax);
+
+        $this->item->expects($this->any())
             ->method('getBaseRowTotal')
             ->willReturn($price);
 
@@ -373,8 +409,9 @@ class RendererTest extends TestCase
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
-        $this->item->expects($this->any())
+        $this->weeeHelper->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
+            ->with($this->item)
             ->willReturn($weeeTax);
 
         $this->item->expects($this->once())
@@ -547,7 +584,7 @@ class RendererTest extends TestCase
         bool $weeeEnabled,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -556,8 +593,17 @@ class RendererTest extends TestCase
             ->with($this->item)
             ->willReturn($weeeTax);
 
+        $this->weeeHelper->expects($this->any())
+            ->method('getRowWeeeTaxInclTax')
+            ->with($this->item)
+            ->willReturn($weeeTax);
+
         $this->item->expects($this->once())
             ->method('getPriceInclTax')
+            ->willReturn($rowTotal);
+
+        $this->item->expects($this->any())
+            ->method('getRowTotalInclTax')
             ->willReturn($rowTotal);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceInclTax());
@@ -576,7 +622,7 @@ class RendererTest extends TestCase
         bool $weeeEnabled,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -585,8 +631,17 @@ class RendererTest extends TestCase
             ->with($this->item)
             ->willReturn($weeeTax);
 
+        $this->weeeHelper->expects($this->any())
+            ->method('getBaseRowWeeeTaxInclTax')
+            ->with($this->item)
+            ->willReturn($weeeTax);
+
         $this->item->expects($this->once())
             ->method('getBasePriceInclTax')
+            ->willReturn($rowTotal);
+
+        $this->item->expects($this->any())
+            ->method('getBaseRowTotalInclTax')
             ->willReturn($rowTotal);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceInclTax());
@@ -605,7 +660,7 @@ class RendererTest extends TestCase
         bool $weeeEnabled,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -620,6 +675,15 @@ class RendererTest extends TestCase
         $this->item->expects($this->once())
             ->method('getPrice')
             ->willReturn($rowTotal);
+
+        $this->item->expects($this->any())
+            ->method('getRowTotal')
+            ->willReturn($rowTotal);
+
+        $this->weeeHelper->expects($this->any())
+            ->method('getWeeeTaxAppliedRowAmount')
+            ->with($this->item)
+            ->willReturn($weeeTax);
 
         $this->assertEquals($expectedValue, $this->renderer->getFinalUnitDisplayPriceExclTax());
     }
@@ -637,7 +701,7 @@ class RendererTest extends TestCase
         bool $weeeEnabled,
         int $expectedValue
     ) {
-        $this->weeeHelper->expects($this->once())
+        $this->weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
@@ -645,7 +709,11 @@ class RendererTest extends TestCase
             ->method('getBaseWeeeTaxAppliedAmount')
             ->willReturn($weeeTax);
 
-        $this->item->expects($this->once())
+        $this->item->expects($this->any())
+            ->method('getBaseWeeeTaxAppliedRowAmnt')
+            ->willReturn($weeeTax);
+
+        $this->item->expects($this->any())
             ->method('getBaseRowTotal')
             ->willReturn($rowTotal);
 
@@ -673,8 +741,9 @@ class RendererTest extends TestCase
             ->method('isEnabled')
             ->willReturn($weeeEnabled);
 
-        $this->item->expects($this->any())
+        $this->weeeHelper->expects($this->any())
             ->method('getWeeeTaxAppliedRowAmount')
+            ->with($this->item)
             ->willReturn($weeeTax);
 
         $this->item->expects($this->once())
@@ -879,5 +948,210 @@ class RendererTest extends TestCase
             ->willReturn($baseWeeeAmount);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseTotalAmount($itemMock));
+    }
+
+    public static function rowTotalFallbackDataProvider(): array
+    {
+        return [
+            'weee_disabled_fallback_to_calc_price_x_qty' => [
+                false, // weeeEnabled
+                false, // includeWeee (unused when disabled)
+                0.0,   // rowTotal
+                20.0,  // calculationPrice
+                3.0,   // totalQty
+                0.0,   // weeeTaxRowAmount
+                60.0,  // expected
+            ],
+            'weee_enabled_exclude_weee_fallback_to_calc_price_x_qty' => [
+                true,
+                false,
+                0.0,
+                20.0,
+                3.0,
+                5.0,
+                60.0,
+            ],
+            'weee_enabled_include_weee_fallback_to_calc_price_x_qty_plus_weee' => [
+                true,
+                true,
+                0.0,
+                20.0,
+                3.0,
+                5.0,
+                65.0,
+            ],
+        ];
+    }
+
+    #[DataProvider('rowTotalFallbackDataProvider')]
+    public function testGetRowDisplayPriceExclTaxFallsBackToCalculationPriceTimesQty(
+        bool $weeeEnabled,
+        bool $includeWeee,
+        float $rowTotal,
+        float $calculationPrice,
+        float $totalQty,
+        float $weeeTaxRowAmount,
+        float $expected
+    ): void {
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getStoreId',
+                'getRowTotal',
+                'getCalculationPrice',
+                'getTotalQty',
+            ]
+        );
+
+        $item->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(self::STORE_ID);
+
+        $item->expects($this->once())
+            ->method('getRowTotal')
+            ->willReturn($rowTotal);
+
+        $item->expects($this->once())
+            ->method('getCalculationPrice')
+            ->willReturn($calculationPrice);
+
+        $item->expects($this->once())
+            ->method('getTotalQty')
+            ->willReturn($totalQty);
+
+        $this->weeeHelper->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn($weeeEnabled);
+
+        if ($weeeEnabled) {
+            $this->weeeHelper->expects($this->any())
+                ->method('typeOfDisplay')
+                ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
+                ->willReturn($includeWeee);
+
+            if ($includeWeee) {
+                $this->weeeHelper->expects($this->once())
+                    ->method('getWeeeTaxAppliedRowAmount')
+                    ->with($item)
+                    ->willReturn($weeeTaxRowAmount);
+            } else {
+                $this->weeeHelper->expects($this->never())
+                    ->method('getWeeeTaxAppliedRowAmount');
+            }
+        } else {
+            $this->weeeHelper->expects($this->never())
+                ->method('getWeeeTaxAppliedRowAmount');
+        }
+
+        $this->renderer->setItem($item);
+        $this->assertEquals($expected, $this->renderer->getRowDisplayPriceExclTax());
+    }
+
+    public function testGetRowDisplayPriceInclTaxSumsDynamicBundleChildren(): void
+    {
+        $child1 = $this->createPartialMockWithReflection(Item::class, ['getRowTotalInclTax']);
+        $child1->expects($this->once())->method('getRowTotalInclTax')->willReturn(40.0);
+
+        $child2 = $this->createPartialMockWithReflection(Item::class, ['getRowTotalInclTax']);
+        $child2->expects($this->once())->method('getRowTotalInclTax')->willReturn(50.0);
+
+        $parentItem = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getStoreId',
+                'getProductType',
+                'getHasChildren',
+                'isChildrenCalculated',
+                'getChildren',
+                'getParentItem',
+            ]
+        );
+
+        $parentItem->expects($this->any())->method('getStoreId')->willReturn(self::STORE_ID);
+        $parentItem->expects($this->any())->method('getProductType')->willReturn(BundleProductType::TYPE_CODE);
+        $parentItem->expects($this->any())->method('getHasChildren')->willReturn(true);
+        $parentItem->expects($this->any())->method('isChildrenCalculated')->willReturn(true);
+        $parentItem->expects($this->any())->method('getChildren')->willReturn([$child1, $child2]);
+        $parentItem->expects($this->any())->method('getParentItem')->willReturn(null);
+
+        $this->weeeHelper->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->weeeHelper->expects($this->any())
+            ->method('typeOfDisplay')
+            ->with([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], self::ZONE)
+            ->willReturn(true);
+
+        $this->weeeHelper->expects($this->any())
+            ->method('getRowWeeeTaxInclTax')
+            ->willReturnCallback(static function ($item) use ($child1, $child2) {
+                if ($item === $child1) {
+                    return 1.0;
+                }
+                if ($item === $child2) {
+                    return 2.0;
+                }
+                return 0.0;
+            });
+
+        $this->renderer->setItem($parentItem);
+
+        $this->assertEquals(93.0, $this->renderer->getRowDisplayPriceInclTax());
+    }
+
+    public function testReconcileSingleCartLineRowInclTaxToGrandTotalMinusShipping(): void
+    {
+        $itemId = 42;
+
+        $quoteItem = $this->createPartialMockWithReflection(
+            Item::class,
+            [
+                'getStoreId',
+                'getId',
+                'getQuote',
+                'getRowTotalInclTax',
+            ]
+        );
+
+        $quoteItem->expects($this->any())->method('getStoreId')->willReturn(self::STORE_ID);
+        $quoteItem->expects($this->any())->method('getId')->willReturn($itemId);
+        $quoteItem->expects($this->any())->method('getRowTotalInclTax')->willReturn(100.0);
+
+        $visibleItem = $this->createPartialMockWithReflection(Item::class, ['getId']);
+        $visibleItem->expects($this->any())->method('getId')->willReturn($itemId);
+
+        $address = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            ['getShippingInclTax', 'getShippingAmount', 'getShippingTaxAmount']
+        );
+        $address->expects($this->any())->method('getShippingInclTax')->willReturn(5.0);
+
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getAllVisibleItems', 'getGrandTotal', 'getIsVirtual', 'getShippingAddress']
+        );
+        $quote->expects($this->any())->method('getAllVisibleItems')->willReturn([$visibleItem]);
+        $quote->expects($this->any())->method('getGrandTotal')->willReturn(105.01);
+        $quote->expects($this->any())->method('getIsVirtual')->willReturn(false);
+        $quote->expects($this->any())->method('getShippingAddress')->willReturn($address);
+
+        $quoteItem->expects($this->any())->method('getQuote')->willReturn($quote);
+
+        $this->weeeHelper->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->weeeHelper->expects($this->any())
+            ->method('typeOfDisplay')
+            ->with(
+                [WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL],
+                PricingRender::ZONE_CART,
+                self::STORE_ID
+            )
+            ->willReturn(true);
+        $this->weeeHelper->expects($this->any())
+            ->method('getRowWeeeTaxInclTax')
+            ->with($quoteItem)
+            ->willReturn(0.0);
+
+        $this->renderer->setZone(PricingRender::ZONE_CART);
+        $this->renderer->setItem($quoteItem);
+
+        $this->assertEquals(100.01, $this->renderer->getRowDisplayPriceInclTax());
     }
 }
