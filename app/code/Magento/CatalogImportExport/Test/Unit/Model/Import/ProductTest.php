@@ -54,6 +54,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File as DriverFile;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -325,6 +326,11 @@ class ProductTest extends AbstractImportTestCase
      */
     private $skuStorageMock;
 
+    /**
+     * @var DomainValidator|MockObject
+     */
+    private $domainValidator;
+
     /** @var array $productPropertiesMap */
     private array $productPropertiesMap = [];
 
@@ -427,6 +433,11 @@ class ProductTest extends AbstractImportTestCase
 
         $this->skuStorageMock = $this->createMock(SkuStorage::class);
 
+        $this->domainValidator = $this->getMockBuilder(DomainValidator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['isValid'])
+            ->getMock();
+
         $this->_objectConstructor()
             ->_parentObjectConstructor()
             ->_initAttributeSets()
@@ -475,6 +486,8 @@ class ProductTest extends AbstractImportTestCase
             'data' => $this->data,
             'imageTypeProcessor' => $this->imageTypeProcessor,
             'skuStorage' => $this->skuStorageMock,
+            'fileDriver' => $this->driverFile,
+            'domainValidator' => $this->domainValidator,
         ];
 
         $this->importProduct = $this->objectManager->getObject(
@@ -1547,6 +1560,48 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
+     * Test that file-not-found LocalizedException is handled correctly (logged, not re-thrown).
+     *
+     * @return void
+     */
+    public function testUploadMediaFilesHandlesFileNotFoundLocalizedException(): void
+    {
+        $fileName = 'test.jpg';
+        $fileNotFoundException = new LocalizedException(
+            __('File \'%1\' was not found or has read restriction.', $fileName)
+        );
+
+        $fileUploaderMock = $this
+            ->getMockBuilder(Uploader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fileUploaderMock
+            ->expects($this->once())
+            ->method('move')
+            ->with($fileName)
+            ->willThrowException($fileNotFoundException);
+
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_fileUploader',
+            $fileUploaderMock
+        );
+
+        // File-not-found LocalizedException should be logged, not re-thrown
+        $this->_logger->expects($this->once())
+            ->method('critical')
+            ->with($fileNotFoundException);
+
+        $result = $this->invokeMethod(
+            $this->importProduct,
+            'uploadMediaFiles',
+            [$fileName]
+        );
+
+        $this->assertEquals('', $result);
+    }
+
+    /**
      * Check that getProductCategoriesDataSave method will return array with product-category-position relations
      * where new products positioned before existing
      *
@@ -1625,6 +1680,90 @@ class ProductTest extends AbstractImportTestCase
             [true, false, 'File directory \'pub/media/catalog/product\' is not writable.'],
             [true, true, ''],
         ];
+    }
+
+    /**
+     * Test that validation exception is caught and logged.
+     *
+     * @return void
+     */
+    public function testUploadMediaFilesHandlesValidationException(): void
+    {
+        $fileName = 'http://127.0.0.1/image.jpg';
+        $validationException = new LocalizedException(
+            __('mediaUrlNotAvailable')
+        );
+
+        $fileUploaderMock = $this
+            ->getMockBuilder(Uploader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fileUploaderMock
+            ->expects($this->once())
+            ->method('move')
+            ->with($fileName)
+            ->willThrowException($validationException);
+
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_fileUploader',
+            $fileUploaderMock
+        );
+
+        // Validation exception should be caught, logged, and return empty string
+        $this->_logger->expects($this->once())
+            ->method('critical')
+            ->with($validationException);
+
+        $result = $this->invokeMethod(
+            $this->importProduct,
+            'uploadMediaFiles',
+            [$fileName]
+        );
+
+        $this->assertEquals('', $result);
+    }
+
+    /**
+     * Test that file-not-found LocalizedException from uploadMediaFiles is logged and returns empty string.
+     *
+     * @return void
+     */
+    public function testUploadMediaFilesLogsFileNotFoundException(): void
+    {
+        $fileName = 'nonexistent.jpg';
+        $fileNotFoundException = new LocalizedException(
+            __('File \'%1\' was not found or has read restriction.', $fileName)
+        );
+
+        $fileUploaderMock = $this
+            ->getMockBuilder(Uploader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $fileUploaderMock
+            ->expects($this->once())
+            ->method('move')
+            ->with($fileName)
+            ->willThrowException($fileNotFoundException);
+
+        $this->setPropertyValue(
+            $this->importProduct,
+            '_fileUploader',
+            $fileUploaderMock
+        );
+
+        // File-not-found exception should be logged, not re-thrown
+        $this->_logger->expects($this->once())
+            ->method('critical')
+            ->with($fileNotFoundException);
+
+        $result = $this->invokeMethod(
+            $this->importProduct,
+            'uploadMediaFiles',
+            [$fileName]
+        );
+
+        $this->assertEquals('', $result);
     }
 
     /**

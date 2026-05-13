@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteCommerceGraphQl\Model\Resolver;
+namespace Magento\QuoteCommerceCeGraphQl\Model\Resolver;
 
 use Exception;
 use Magento\Framework\Exception\LocalizedException;
@@ -14,8 +14,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteCommerceGraphQl\Model\Cart\ClearCartItems;
-use Magento\QuoteCommerceGraphQl\Model\Cart\ClearCartError;
+use Magento\QuoteCommerceCeGraphQl\Model\Cart\ClearCartItems;
+use Magento\QuoteCommerceCeGraphQl\Model\Cart\ClearCartError;
 
 /**
  * Clear Items from Cart.
