@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Csp\Model\SubresourceIntegrity\Storage;
 
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -40,7 +41,7 @@ class File implements StorageInterface
      *
      * @var string
      */
-    private const MERGED_FILE_PATH = '_cache' . DIRECTORY_SEPARATOR . self::MERGED_FILENAME;
+    private const MERGED_FILE_PATH = '_cache' . '/' . self::MERGED_FILENAME;
 
     /**
      * @var Filesystem
@@ -96,7 +97,7 @@ class File implements StorageInterface
 
             return empty($combinedData) ? null : $this->serializer->serialize($combinedData);
         } catch (FileSystemException $exception) {
-            $this->logger->critical($exception);
+            $this->logger->warning('SRI: Could not load hashes: ' . $exception->getMessage());
 
             return null;
         }
@@ -104,13 +105,12 @@ class File implements StorageInterface
 
     /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(string $data, ?string $context): bool
     {
         try {
-            $staticDir = $this->filesystem->getDirectoryWrite(
-                DirectoryList::STATIC_VIEW
-            );
+            $staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
 
             $dataArray = $this->serializer->unserialize($data);
             if (!is_array($dataArray)) {
@@ -128,29 +128,28 @@ class File implements StorageInterface
                 }
             }
 
+            $mergedSuccess = true;
+            $individualSuccess = true;
+
             if (!empty($mergedFiles)) {
-                $this->saveHashesToFile(
-                    $staticDir,
-                    $mergedFiles,
-                    self::MERGED_FILE_PATH
-                );
+                $mergedSuccess = $this->saveHashesToFile($staticDir, $mergedFiles, self::MERGED_FILE_PATH);
             }
 
             if (!empty($individualFiles)) {
-                $this->saveHashesToFile(
+                $individualSuccess = $this->saveHashesToFile(
                     $staticDir,
                     $individualFiles,
                     $this->resolveFilePath($context)
                 );
             }
 
-            return true;
-        } catch (FileSystemException $exception) {
-            $this->logger->critical($exception);
+            return $mergedSuccess && $individualSuccess;
+        } catch (\InvalidArgumentException $exception) {
+            $this->logger->warning('SRI: Invalid data passed to save: ' . $exception->getMessage());
 
             return false;
-        } catch (\InvalidArgumentException $exception) {
-            $this->logger->critical($exception);
+        } catch (\Exception $exception) {
+            $this->logger->warning('SRI: Could not save hashes: ' . $exception->getMessage());
 
             return false;
         }
@@ -168,7 +167,7 @@ class File implements StorageInterface
 
             return $staticDir->delete($this->resolveFilePath($context));
         } catch (FileSystemException $exception) {
-            $this->logger->critical($exception);
+            $this->logger->warning('SRI: Could not remove hashes: ' . $exception->getMessage());
 
             return false;
         }
@@ -183,7 +182,7 @@ class File implements StorageInterface
      */
     private function resolveFilePath(?string $context): string
     {
-        return ($context ? $context . DIRECTORY_SEPARATOR : '') . self::FILENAME;
+        return ($context ? $context . '/' : '') . self::FILENAME;
     }
 
     /**
@@ -194,7 +193,7 @@ class File implements StorageInterface
      */
     private function isMergedFilePath(string $path): bool
     {
-        return str_contains($path, '_cache/merged/') || str_contains($path, '/merged/');
+        return str_contains($path, '_cache/merged/');
     }
 
     /**
@@ -203,15 +202,55 @@ class File implements StorageInterface
      * @param string $filePath
      * @param ReadInterface $staticDir
      * @return array
-     * @throws FileSystemException
      */
-    private function loadHashesFromFile(string $filePath, $staticDir): array
+    private function loadHashesFromFile(string $filePath, ReadInterface $staticDir): array
     {
-        if (!$staticDir->isFile($filePath)) {
+        try {
+            if (!$staticDir->isFile($filePath)) {
+                return [];
+            }
+
+            return $this->deserializeHashes($staticDir->readFile($filePath), $filePath);
+        } catch (FileSystemException $e) {
+            $this->logger->warning('SRI: Could not read file ' . $filePath . ': ' . $e->getMessage());
             return [];
         }
+    }
 
-        $content = $staticDir->readFile($filePath);
+    /**
+     * Read and deserialize hashes from an open file handle.
+     *
+     * @param resource $resource
+     * @param DriverInterface $driver
+     * @param string $absolutePath
+     * @param string $filePath
+     * @return array
+     */
+    private function readHashesFromHandle(
+        $resource,
+        DriverInterface $driver,
+        string $absolutePath,
+        string $filePath
+    ): array {
+        try {
+            $stat = $driver->stat($absolutePath);
+            $content = ($stat && $stat['size'] > 0) ? $driver->fileRead($resource, $stat['size']) : '';
+            return $this->deserializeHashes($content, $filePath);
+        } catch (FileSystemException $e) {
+            $this->logger->warning('SRI: Could not read hashes file ' . $filePath . ': ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    /**
+     * Deserialize a JSON hashes string into an array.
+     *
+     * @param string $content
+     * @param string $filePath
+     * @return array
+     */
+    private function deserializeHashes(string $content, string $filePath): array
+    {
         if (!$content) {
             return [];
         }
@@ -220,7 +259,7 @@ class File implements StorageInterface
             $decoded = $this->serializer->unserialize($content);
             return is_array($decoded) ? $decoded : [];
         } catch (\InvalidArgumentException $e) {
-            $this->logger->warning('Invalid JSON in ' . $filePath . ': ' . $e->getMessage());
+            $this->logger->warning('SRI: Invalid JSON in hashes file ' . $filePath . ': ' . $e->getMessage());
             return [];
         }
     }
@@ -228,22 +267,55 @@ class File implements StorageInterface
     /**
      * Save hashes to a file, merging with existing hashes.
      *
+     * Uses an exclusive lock held across the entire read-modify-write sequence
+     * to prevent TOCTOU data loss under parallel SCD deployments (--jobs > 1).
+     *
      * @param WriteInterface $staticDir
      * @param array $newHashes
      * @param string $filePath
-     * @return void
-     * @throws FileSystemException
+     * @return bool
      */
     private function saveHashesToFile(
         WriteInterface $staticDir,
         array $newHashes,
         string $filePath
-    ): void {
-        $existingHashes = $this->loadHashesFromFile($filePath, $staticDir);
-        $allHashes = array_merge($existingHashes, $newHashes);
+    ): bool {
+        $resource = null;
+        $driver = $staticDir->getDriver();
 
-        if ($allHashes !== $existingHashes) {
-            $staticDir->writeFile($filePath, $this->serializer->serialize($allHashes), 'w');
+        try {
+            $absolutePath = $staticDir->getAbsolutePath($filePath);
+            $staticDir->create($driver->getParentDirectory($filePath));
+
+            $resource = $driver->fileOpen($absolutePath, 'c+');
+            $driver->fileLock($resource, LOCK_EX);
+            $driver->fileSeek($resource, 0);
+
+            $existingHashes = $this->readHashesFromHandle($resource, $driver, $absolutePath, $filePath);
+            $allHashes = array_merge($existingHashes, $newHashes);
+
+            if ($allHashes !== $existingHashes) {
+                if (!ftruncate($resource, 0)) {
+                    $this->logger->warning('SRI: Failed to truncate hashes file: ' . $filePath);
+                    return false;
+                }
+                $driver->fileSeek($resource, 0);
+                $driver->fileWrite($resource, $this->serializer->serialize($allHashes));
+            }
+
+            return true;
+        } catch (FileSystemException $e) {
+            $this->logger->warning('SRI: Could not write hashes file ' . $filePath . ': ' . $e->getMessage());
+            return false;
+        } finally {
+            if ($resource) {
+                try {
+                    $driver->fileUnlock($resource);
+                    $driver->fileClose($resource);
+                } catch (\Exception $e) {
+                    $this->logger->warning('SRI: Could not close hashes file ' . $filePath . ': ' . $e->getMessage());
+                }
+            }
         }
     }
 }

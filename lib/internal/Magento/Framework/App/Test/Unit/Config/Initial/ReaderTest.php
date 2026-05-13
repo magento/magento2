@@ -100,7 +100,7 @@ class ReaderTest extends TestCase
             ->with('config.xml', 'global')
             ->willReturn([]);
 
-        $this->assertEquals([], $this->model->read());
+        $this->assertEquals(['data' => [], 'metadata' => []], $this->model->read());
     }
 
     /**

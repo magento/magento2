@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <!--
+     * Regression guard for AC-16636: sri.js race condition.
+     *
+     * sri.js registers a require.config({ onNodeCreated }) callback that stamps
+     * integrity attributes onto every script tag RequireJS injects.  It must be
+     * evaluated by the browser BEFORE requirejs-config.js hands RequireJS its
+     * module map, otherwise modules begin loading before the handler is wired up
+     * and are injected without integrity attributes.
+     *
+     * This test:
+     *   1. Deploys static content in production mode with JS minification enabled.
+     *   2. Places a guest order to exercise the full checkout JS stack.
+     *   3. Verifies on the order success page that sri.js appears before
+     *      requirejs-config.js in the DOM.
+     *   4. Verifies that all versioned static JS files end in .min.js and carry
+     *      a valid sha256 integrity attribute.
+    -->
+    <test name="SriJsOrderingTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Subresource Integrity"/>
+            <title value="Verify sri.js is positioned before requirejs-config.js and all minified scripts have SRI on checkout success page"/>
+            <description value="AC-16636 regression guard: sri.js must appear before requirejs-config.js in the DOM so that the onNodeCreated SRI handler is registered before RequireJS starts loading modules. Verified on the order success page after a full guest checkout."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-16636"/>
+            <group value="csp"/>
+            <group value="csp_sri"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!-- Clear any stale maintenance flag left by a previous crashed test run -->
+            <magentoCLI command="maintenance:disable" stepKey="disableStaleMaintenanceMode"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <magentoCLI command="config:set dev/js/minify_files 1" stepKey="enableMinification"/>
+            <magentoCLI command="deploy:mode:set production" stepKey="setProductionMode"/>
+            <magentoCLI command="setup:static-content:deploy en_US -s quick -f" stepKey="deployStaticContent" timeout="600"/>
+            <magentoCLI command="maintenance:disable" stepKey="disableMaintenanceMode"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        </before>
+
+        <after>
+            <magentoCLI command="maintenance:disable" stepKey="disableMaintenanceAfter"/>
+            <magentoCLI command="config:set dev/js/minify_files 0" stepKey="disableMinification"/>
+            <magentoCLI command="deploy:mode:set developer" stepKey="restoreDeveloperMode"/>
+            <magentoCLI command="cache:flush" stepKey="flushCacheAfter"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!-- Add product to cart and navigate to checkout -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+        <waitForPageLoad stepKey="waitForCheckoutLoad"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.shippingTab}}" stepKey="waitForShippingTab"/>
+
+        <!--
+         * Run SRI assertions here — on the checkout shipping page — where RequireJS
+         * has fully bootstrapped and dynamically loaded all its modules.
+         * This is the page most likely to expose the race condition.
+        -->
+
+        <!--
+         * Assert 1: sri.js appears before requirejs-config.js in the DOM.
+         * This is the direct regression guard for the race condition fix in
+         * Magento\RequireJs\Block\Html\Head\Config::_prepareLayout().
+        -->
+        <executeJS
+            function="
+                var scripts = Array.from(document.querySelectorAll('script[src]'));
+                var sriIdx    = scripts.findIndex(function(s) { return s.src.indexOf('Magento_Csp/js/sri') !== -1; });
+                var configIdx = scripts.findIndex(function(s) { return s.src.indexOf('requirejs-config') !== -1; });
+                return sriIdx !== -1 &amp;&amp; configIdx !== -1 &amp;&amp; sriIdx &lt; configIdx;
+            "
+            stepKey="checkSriJsBeforeRequireJsConfig"/>
+        <assertTrue stepKey="assertSriJsBeforeRequireJsConfig"
+            message="sri.js must appear before requirejs-config.js in the page head so that the onNodeCreated handler is registered before RequireJS starts loading modules">
+            <actualResult type="variable">checkSriJsBeforeRequireJsConfig</actualResult>
+        </assertTrue>
+
+        <!--
+         * Assert 2: window.sriHashes inline script appears before requirejs-config.js in the DOM.
+         * window.sriHashes must be defined before requirejs-config.js executes so that
+         * sri.js onNodeCreated callbacks can read it on the first require() call.
+         * On a cached load requirejs-config.js executes instantly — if window.sriHashes
+         * is defined later in the page the integrity attributes are never applied.
+        -->
+        <executeJS
+            function="
+                var scripts = Array.from(document.scripts);
+                var sriHashesIdx = scripts.findIndex(function(s) { return s.textContent.indexOf('window.sriHashes') !== -1; });
+                var configIdx    = scripts.findIndex(function(s) { var src = s.getAttribute('src') || ''; return src.indexOf('requirejs-config') !== -1; });
+                return sriHashesIdx !== -1 &amp;&amp; configIdx !== -1 &amp;&amp; sriHashesIdx &lt; configIdx;
+            "
+            stepKey="checkSriHashesBeforeRequireJsConfig"/>
+        <assertTrue stepKey="assertSriHashesBeforeRequireJsConfig"
+            message="window.sriHashes inline script must appear before requirejs-config.js so it is defined before RequireJS fires onNodeCreated">
+            <actualResult type="variable">checkSriHashesBeforeRequireJsConfig</actualResult>
+        </assertTrue>
+
+        <!--
+         * Assert 3: window.sriHashes is populated.
+         * A count of zero means SRI is effectively disabled regardless of script ordering.
+        -->
+        <executeJS function="return window.sriHashes ? Object.keys(window.sriHashes).length : 0;" stepKey="getSriHashCount"/>
+        <assertGreaterThan stepKey="assertSriHashesNotEmpty"
+            message="window.sriHashes must be populated after static deploy">
+            <actualResult type="variable">getSriHashCount</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertGreaterThan>
+
+        <!--
+         * Assert 4: All versioned static scripts are minified (.min.js) and have an integrity attribute.
+         * Minification is enabled in before, so every deployed JS file must end in .min.js.
+         * Returns the count of scripts that are either non-minified or missing integrity.
+        -->
+        <executeJS
+            function="
+                var staticUrlPattern = /\/static\/version\d+\//;
+                var violations = 0;
+                document.querySelectorAll('script[src]').forEach(function(script) {
+                    var src = script.getAttribute('src');
+                    if (!src || !staticUrlPattern.test(src)) { return; }
+                    if (src.indexOf('.min.js') === -1) { violations++; }
+                    if (!script.getAttribute('integrity')) { violations++; }
+                });
+                return violations;
+            "
+            stepKey="getMinificationAndSriViolations"/>
+        <assertEquals stepKey="assertAllScriptsMinifiedWithSri"
+            message="All versioned static JS files must end in .min.js and have a sha256 integrity attribute">
+            <actualResult type="variable">getMinificationAndSriViolations</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertEquals>
+
+        <!-- Complete the guest order to confirm checkout remains functional after the fix -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShipping"/>
+        <waitForPageLoad stepKey="waitForPaymentPage"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrder"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderClickable"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad stepKey="waitForSuccessPage"/>
+        <waitForElementVisible selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForSuccessMessage"/>
+
+    </test>
+
+</tests>
