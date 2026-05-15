@@ -31,6 +31,11 @@ trait GetParameterClassTrait
             return null;
         }
 
+        // Workaround for PHP versions < 8.5, which do not resolve the 'parent' type automatically.
+        if (\PHP_VERSION_ID < 80500 && 'parent' === (string)$parameterType) {
+            return $reflectionParameter->getDeclaringClass()->getParentClass();
+        }
+
         // get $parameterType package name
         $parameterPackage = strstr(trim((string)$parameterType), "\\", true);
 
