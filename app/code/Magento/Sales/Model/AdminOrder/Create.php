@@ -590,21 +590,32 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
-        foreach ($order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem) {
-            /* @var $orderItem \Magento\Sales\Model\Order\Item */
-            if (!$orderItem->getParentItem()) {
-                $qty = $orderItem->getQtyOrdered();
-                if (!$order->getReordered()) {
-                    $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
-                }
 
-                if ($qty > 0) {
-                    $item = $this->initFromOrderItem($orderItem, $qty);
-                    if (is_string($item)) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__($item));
+        // Skip stock validation when re-adding items from the original order,
+        // as the stock was already allocated when the order was placed.
+        $quote = $this->getQuote();
+        $oldSuperMode = $quote->getIsSuperMode();
+        $quote->setIsSuperMode(true);
+
+        try {
+            foreach ($order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem) {
+                /* @var $orderItem \Magento\Sales\Model\Order\Item */
+                if (!$orderItem->getParentItem()) {
+                    $qty = $orderItem->getQtyOrdered();
+                    if (!$order->getReordered()) {
+                        $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
+                    }
+
+                    if ($qty > 0) {
+                        $item = $this->initFromOrderItem($orderItem, $qty);
+                        if (is_string($item)) {
+                            throw new \Magento\Framework\Exception\LocalizedException(__($item));
+                        }
                     }
                 }
             }
+        } finally {
+            $quote->setIsSuperMode($oldSuperMode);
         }
 
         $shippingAddress = $order->getShippingAddress();
