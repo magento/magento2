@@ -2026,6 +2026,15 @@
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+                <item name="valkey" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\ValkeyRequestLogger</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Setup\Model\ConfigOptionsList\BackpressureLogger">
+        <arguments>
+            <argument name="validLoggerTypes" xsi:type="array">
+                <item name="redis" xsi:type="string">redis</item>
+                <item name="valkey" xsi:type="string">valkey</item>
             </argument>
         </arguments>
     </type>
