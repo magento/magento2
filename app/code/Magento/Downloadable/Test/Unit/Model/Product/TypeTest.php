@@ -16,6 +16,8 @@ use Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface;
 use Magento\Downloadable\Model\ResourceModel\Link;
 use Magento\Downloadable\Model\ResourceModel\Link\Collection;
 use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
+use Magento\Downloadable\Model\ResourceModel\Sample\Collection as SampleCollection;
+use Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory as SampleCollectionFactory;
 use Magento\Downloadable\Model\ResourceModel\SampleFactory;
 use Magento\Eav\Model\Config;
 use Magento\Framework\Event\ManagerInterface;
@@ -71,6 +73,11 @@ class TypeTest extends TestCase
     private $linksFactory;
 
     /**
+     * @var SampleCollectionFactory|MockObject
+     */
+    private $samplesFactory;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -88,7 +95,7 @@ class TypeTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $samplesFactory = $this->createMock(\Magento\Downloadable\Model\ResourceModel\Sample\CollectionFactory::class);
+        $this->samplesFactory = $this->createMock(SampleCollectionFactory::class);
         $sampleFactory = $this->createMock(\Magento\Downloadable\Model\SampleFactory::class);
         $linkFactory = $this->createMock(LinkFactory::class);
 
@@ -127,6 +134,7 @@ class TypeTest extends TestCase
                 'setTypeHasOptions',
                 'setLinksExist',
                 'getDownloadableLinks',
+                'getDownloadableSamples',
                 'getResource',
                 'canAffectOptions',
                 '__wakeup',
@@ -162,7 +170,7 @@ class TypeTest extends TestCase
                 'sampleResFactory' => $sampleResFactory,
                 'linkResource' => $linkResource,
                 'linksFactory' => $this->linksFactory,
-                'samplesFactory' => $samplesFactory,
+                'samplesFactory' => $this->samplesFactory,
                 'sampleFactory' => $sampleFactory,
                 'linkFactory' => $linkFactory,
                 'eavConfig' => $eavConfigMock,
@@ -185,11 +193,101 @@ class TypeTest extends TestCase
 
     public function testHasLinks()
     {
-        $this->product->method('getLinksPurchasedSeparately')->willReturn(true);
-        $this->product->expects($this->exactly(2))
+        $this->product->expects($this->once())
             ->method('getDownloadableLinks')
             ->willReturn(['link1', 'link2']);
         $this->assertTrue($this->target->hasLinks($this->product));
+    }
+
+    public function testHasLinksReturnsFalseWhenCachedLinksAreEmpty(): void
+    {
+        $this->product->expects($this->once())
+            ->method('getDownloadableLinks')
+            ->willReturn([]);
+
+        $this->assertFalse($this->target->hasLinks($this->product));
+    }
+
+    public function testHasLinksUsesDbFallbackWhenCachedLinksAreUnavailable(): void
+    {
+        $linksCollection = $this->createPartialMock(
+            Collection::class,
+            ['addProductToFilter', 'getSize']
+        );
+
+        $this->product->expects($this->once())
+            ->method('getDownloadableLinks')
+            ->willReturn(null);
+        $this->product->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn(123);
+        $this->linksFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($linksCollection);
+        $linksCollection->expects($this->once())
+            ->method('addProductToFilter')
+            ->with(123)
+            ->willReturnSelf();
+        $linksCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->assertTrue($this->target->hasLinks($this->product));
+    }
+
+    public function testHasSamplesReturnsTrueWhenSampleCollectionHasItems(): void
+    {
+        $sampleCollection = $this->createMock(SampleCollection::class);
+
+        $this->product->expects($this->once())
+            ->method('getDownloadableSamples')
+            ->willReturn($sampleCollection);
+        $sampleCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->assertTrue($this->target->hasSamples($this->product));
+    }
+
+    public function testHasSamplesReturnsFalseWhenSampleCollectionIsEmpty(): void
+    {
+        $sampleCollection = $this->createMock(SampleCollection::class);
+
+        $this->product->expects($this->once())
+            ->method('getDownloadableSamples')
+            ->willReturn($sampleCollection);
+        $sampleCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(0);
+
+        $this->assertFalse($this->target->hasSamples($this->product));
+    }
+
+    public function testHasSamplesUsesDbFallbackWhenCachedSamplesAreUnavailable(): void
+    {
+        $sampleCollection = $this->createPartialMock(
+            SampleCollection::class,
+            ['addProductToFilter', 'getSize']
+        );
+
+        $this->product->expects($this->once())
+            ->method('getDownloadableSamples')
+            ->willReturn(null);
+        $this->product->expects($this->once())
+            ->method('getEntityId')
+            ->willReturn(123);
+        $this->samplesFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($sampleCollection);
+        $sampleCollection->expects($this->once())
+            ->method('addProductToFilter')
+            ->with(123)
+            ->willReturnSelf();
+        $sampleCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn(1);
+
+        $this->assertTrue($this->target->hasSamples($this->product));
     }
 
     public function testCheckProductBuyState()

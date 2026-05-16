@@ -170,7 +170,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         $hasLinks = $product->getData('links_exist');
         if (null === $hasLinks) {
-            $hasLinks = (count($this->getLinks($product)) > 0);
+            $links = $product->getDownloadableLinks();
+            if ($links !== null) {
+                $hasLinks = !empty($links);
+            } else {
+                $hasLinks = $this->_linksFactory->create()
+                    ->addProductToFilter($product->getEntityId())
+                    ->getSize() > 0;
+            }
         }
         return $hasLinks;
     }
@@ -238,7 +245,14 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasSamples($product)
     {
-        return count($this->getSamples($product)) > 0;
+        $samples = $product->getDownloadableSamples();
+        if ($samples !== null) {
+            return $samples->getSize() > 0;
+        }
+
+        return $this->_samplesFactory->create()
+            ->addProductToFilter($product->getEntityId())
+            ->getSize() > 0;
     }
 
     /**
