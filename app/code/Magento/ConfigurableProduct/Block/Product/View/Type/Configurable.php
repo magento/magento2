@@ -222,6 +222,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      *
      * @return array
      * @api
+     * @since 100.4.9
      */
     public function getAdditionalConfig(): array
     {
