@@ -68,7 +68,7 @@ class ResolverTest extends TestCase
     public function testGetByAreaWithThemeDefaultArea()
     {
         $this->designMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getDesignTheme'
         )->willReturn(
@@ -101,7 +101,7 @@ class ResolverTest extends TestCase
     public function testGetByAreaWithDesignDefaultArea()
     {
         $this->designMock->expects(
-            $this->exactly(2)
+            $this->once()
         )->method(
             'getDesignTheme'
         )->willReturn(
@@ -257,5 +257,125 @@ class ResolverTest extends TestCase
         );
 
         $this->assertEquals($this->themeMock, $this->model->get());
+    }
+
+    public function testGetCachesResolvedThemeByArea()
+    {
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getDesignTheme'
+        )->willReturn(
+            $this->themeMock
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getArea'
+        )->willReturn(
+            'design_area'
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurationDesignTheme'
+        )->with(
+            'other_area'
+        )->willReturn(
+            'other_theme'
+        );
+
+        $this->themeMock->expects(
+            $this->once()
+        )->method(
+            'getArea'
+        )->willReturn(
+            'theme_area'
+        );
+
+        $this->themeCollectionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->willReturn(
+            $this->themeCollectionMock
+        );
+
+        $this->themeCollectionMock->expects(
+            $this->once()
+        )->method(
+            'getThemeByFullPath'
+        )->with(
+            'other_area' . ThemeInterface::PATH_SEPARATOR . 'other_theme'
+        )->willReturn(
+            $this->themeMock
+        );
+
+        $this->appStateMock->expects(
+            $this->exactly(2)
+        )->method(
+            'getAreaCode'
+        )->willReturn(
+            'other_area'
+        );
+
+        $this->assertSame($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
+    }
+
+    public function testGetCachesNullResolvedThemeByArea()
+    {
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getDesignTheme'
+        )->willReturn(
+            null
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getArea'
+        )->willReturn(
+            'design_area'
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurationDesignTheme'
+        )->with(
+            'other_area'
+        )->willReturn(
+            12
+        );
+
+        $this->themeCollectionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->willReturn(
+            $this->themeCollectionMock
+        );
+
+        $this->themeCollectionMock->expects(
+            $this->once()
+        )->method(
+            'getItemById'
+        )->with(
+            12
+        )->willReturn(
+            null
+        );
+
+        $this->appStateMock->expects(
+            $this->exactly(2)
+        )->method(
+            'getAreaCode'
+        )->willReturn(
+            'other_area'
+        );
+
+        $this->assertNull($this->model->get());
+        $this->assertNull($this->model->get());
     }
 }
