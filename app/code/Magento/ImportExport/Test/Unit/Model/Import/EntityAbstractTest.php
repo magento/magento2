@@ -23,6 +23,7 @@ use Magento\ImportExport\Model\Import\AbstractEntity;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class EntityAbstractTest extends AbstractImportTestCase
@@ -577,6 +578,93 @@ class EntityAbstractTest extends AbstractImportTestCase
     }
 
     /**
+     * Test for method _saveValidatedBunches()
+     *
+     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::_saveValidatedBunches
+     */
+    public function testSaveValidatedBunchesSplitsRowsAtLegacySerializedSizeThreshold()
+    {
+        $rows = [
+            ['sku' => 'sku-1', 'description' => str_repeat('a', 60)],
+            ['sku' => 'sku-2', 'description' => str_repeat('b', 60)],
+            ['sku' => 'sku-3', 'description' => str_repeat('c', 60)],
+            ['sku' => 'sku-4', 'description' => str_repeat('d', 60)],
+            ['sku' => 'sku-5', 'description' => str_repeat('e', 60)],
+        ];
+        $maxDataSize = 200;
+        $savedBunches = [];
+        $dataSourceModel = $this->getMockBuilder(ImportData::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['cleanProcessedBunches', 'saveBunch'])
+            ->getMock();
+        $dataSourceModel->expects($this->once())
+            ->method('cleanProcessedBunches');
+        $dataSourceModel->expects($this->exactly(2))
+            ->method('saveBunch')
+            ->willReturnCallback(
+                function (string $entityTypeCode, string $behavior, array $bunchRows) use (&$savedBunches): int {
+                    $savedBunches[] = $bunchRows;
+                    return count($savedBunches);
+                }
+            );
+
+        $model = $this->createImportEntityModel($dataSourceModel, $maxDataSize);
+        $model->setSource($this->createImportSource($rows));
+
+        $saveValidatedBunches = new \ReflectionMethod($model, '_saveValidatedBunches');
+        $saveValidatedBunches->invoke($model);
+
+        $expectedBunches = $this->simulateLegacyBunches($rows, $maxDataSize);
+
+        $this->assertCount(2, $savedBunches);
+        $this->assertSame($expectedBunches, $savedBunches);
+    }
+
+    /**
+     * @covers \Magento\ImportExport\Model\Import\AbstractEntity::_saveValidatedBunches
+     */
+    public function testSaveValidatedBunchesAccountsForNonSequentialKeysAfterFlush()
+    {
+        $rows = [
+            ['sku' => 'sku-1', 'description' => str_repeat('a', 30)],
+            ['sku' => 'sku-2', 'description' => str_repeat('b', 30)],
+            ['sku' => 'sku-3', 'description' => str_repeat('c', 30)],
+            ['sku' => 'sku-4', 'description' => str_repeat('d', 30)],
+            ['sku' => 'sku-5', 'description' => str_repeat('e', 30)],
+            ['sku' => 'sku-6', 'description' => str_repeat('f', 30)],
+            ['sku' => 'sku-7', 'description' => str_repeat('g', 30)],
+            ['sku' => 'sku-8', 'description' => str_repeat('h', 30)],
+        ];
+        $maxDataSize = 128;
+        $savedBunches = [];
+        $dataSourceModel = $this->getMockBuilder(ImportData::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['cleanProcessedBunches', 'saveBunch'])
+            ->getMock();
+        $dataSourceModel->expects($this->once())
+            ->method('cleanProcessedBunches');
+        $dataSourceModel->expects($this->exactly(4))
+            ->method('saveBunch')
+            ->willReturnCallback(
+                function (string $entityTypeCode, string $behavior, array $bunchRows) use (&$savedBunches): int {
+                    $savedBunches[] = $bunchRows;
+                    return count($savedBunches);
+                }
+            );
+
+        $model = $this->createImportEntityModel($dataSourceModel, $maxDataSize);
+        $model->setSource($this->createImportSource($rows, 100));
+
+        $saveValidatedBunches = new \ReflectionMethod($model, '_saveValidatedBunches');
+        $saveValidatedBunches->invoke($model);
+
+        $expectedBunches = $this->simulateLegacyBunches($rows, $maxDataSize, 100);
+
+        $this->assertCount(4, $savedBunches);
+        $this->assertSame($expectedBunches, $savedBunches);
+    }
+
+    /**
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
@@ -590,5 +678,147 @@ class EntityAbstractTest extends AbstractImportTestCase
         $this->_model->setSource($source);
 
         return $source;
+    }
+
+    /**
+     * @param ImportData|MockObject $dataSourceModel
+     * @param int $maxDataSize
+     * @return AbstractEntity
+     */
+    private function createImportEntityModel(ImportData|MockObject $dataSourceModel, int $maxDataSize): AbstractEntity
+    {
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $importFactory = $this->createMock(ImportFactory::class);
+        $resourceHelper = $this->createMock(Helper::class);
+        $resource = $this->createMock(ResourceConnection::class);
+
+        return new class (
+            new StringUtils(),
+            $scopeConfig,
+            $importFactory,
+            $resourceHelper,
+            $resource,
+            $this->getErrorAggregatorObject(),
+            [
+                'data_source_model' => $dataSourceModel,
+                'connection' => 'not_used',
+                'helpers' => [],
+                'page_size' => 1,
+                'max_data_size' => $maxDataSize,
+                'bunch_size' => 0,
+                'collection_by_pages_iterator' => 'not_used',
+            ],
+            new Json()
+        ) extends AbstractEntity {
+            /**
+             * Import entity identifier field.
+             *
+             * @var string
+             */
+            protected $masterAttributeCode = 'sku';
+
+            protected function _importData()
+            {
+                return true;
+            }
+
+            public function getEntityTypeCode()
+            {
+                return 'test_entity';
+            }
+
+            public function validateRow(array $rowData, $rowNumber)
+            {
+                return true;
+            }
+        };
+    }
+
+    /**
+     * @param array $rows
+     * @return AbstractSource
+     */
+    private function createImportSource(array $rows, int $keyOffset = 0): AbstractSource
+    {
+        return new class ($rows, $keyOffset) extends AbstractSource {
+            /**
+             * @var array
+             */
+            private array $rows;
+
+            /**
+             * @var int
+             */
+            private int $position = 0;
+
+            /**
+             * @var int
+             */
+            private int $keyOffset;
+
+            /**
+             * @param array $rows
+             * @param int $keyOffset
+             */
+            public function __construct(array $rows, int $keyOffset)
+            {
+                $this->rows = array_values($rows);
+                $this->keyOffset = $keyOffset;
+                parent::__construct(array_keys($this->rows[0]));
+            }
+
+            /**
+             * @return array|false
+             */
+            protected function _getNextRow()
+            {
+                if (!isset($this->rows[$this->position])) {
+                    return false;
+                }
+
+                return array_values($this->rows[$this->position++]);
+            }
+
+            /**
+             * @return int
+             */
+            #[\ReturnTypeWillChange]
+            public function key()
+            {
+                return parent::key() + $this->keyOffset;
+            }
+        };
+    }
+
+    /**
+     * @param array $rows
+     * @param int $maxDataSize
+     * @return array
+     */
+    private function simulateLegacyBunches(array $rows, int $maxDataSize, int $keyOffset = 0): array
+    {
+        $serializer = new Json();
+        $bunchRows = [];
+        $bunches = [];
+        $previousRow = null;
+
+        foreach ($rows as $key => $row) {
+            if ($previousRow !== null) {
+                $bunchRows[$keyOffset + $key - 1] = $previousRow;
+                if (strlen($serializer->serialize($bunchRows)) >= $maxDataSize) {
+                    $bunches[] = $bunchRows;
+                    $bunchRows = [];
+                }
+            }
+
+            $previousRow = $row;
+        }
+
+        if ($previousRow !== null) {
+            $bunchRows[$keyOffset + count($rows) - 1] = $previousRow;
+            $bunches[] = $bunchRows;
+        }
+
+        return $bunches;
     }
 }
