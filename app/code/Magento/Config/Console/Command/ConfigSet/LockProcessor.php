@@ -78,9 +78,15 @@ class LockProcessor implements ConfigSetProcessorInterface
 
     /**
      * Processes lock flow of config:set command.
+     *
      * Requires read access to filesystem.
      *
-     * {@inheritdoc}
+     * @param string $path The configuration path in format group/section/field_name
+     * @param string $value The configuration value
+     * @param string $scope The configuration scope
+     * @param string $scopeCode The scope code
+     * @return void
+     * @throws CouldNotSaveException An exception on processing error
      */
     public function process($path, $value, $scope, $scopeCode)
     {
@@ -94,10 +100,16 @@ class LockProcessor implements ConfigSetProcessorInterface
                  * for storing system configuration into database and configuration files.
                  */
                 $backendModel->validateBeforeSave();
-                $backendModel->beforeSave();
 
+                /**
+                 * Capture the value before beforeSave() is called, since backend models
+                 * may transform the value in beforeSave() for database serialization
+                 * (e.g. converting a string to an array). The env.php lock storage
+                 * requires the validated scalar value, not the DB-serialized form.
+                 */
                 $value = $backendModel->getValue();
 
+                $backendModel->beforeSave();
                 $backendModel->afterSave();
 
                 /**
