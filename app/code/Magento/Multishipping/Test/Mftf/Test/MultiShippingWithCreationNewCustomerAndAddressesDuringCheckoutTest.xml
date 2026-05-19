@@ -76,6 +76,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomerGridFiltersAfterTest"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="openCategoryPage">
