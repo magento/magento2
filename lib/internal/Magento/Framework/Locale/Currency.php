@@ -74,31 +74,30 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
     public function getCurrency($currency)
     {
         \Magento\Framework\Profiler::start('locale/currency');
-        if (!isset(self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency])) {
+        $locale = (string) ($this->_localeResolver->getLocale() ?? '');
+        if (!isset(self::$_currencyCache[$locale][$currency])) {
             $options = [];
             try {
                 $currencyObject = $this->_currencyFactory->create(
-                    ['options' => $currency, 'locale' => $this->_localeResolver->getLocale() ?? '']
+                    ['options' => $currency, 'locale' => $locale]
                 );
             } catch (\Exception $e) {
                 $currencyObject = $this->_currencyFactory->create(
-                    ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale() ?? '']
+                    ['options' => $this->getDefaultCurrency(), 'locale' => $locale]
                 );
                 $options[self::CURRENCY_OPTION_NAME] = $currency;
                 $options[self::CURRENCY_OPTION_CURRENCY] = $currency;
                 $options[self::CURRENCY_OPTION_SYMBOL] = $currency;
             }
-
             $options = new \Magento\Framework\DataObject($options);
             $this->_eventManager->dispatch(
                 'currency_display_options_forming',
                 ['currency_options' => $options, 'base_code' => $currency]
             );
-
             $currencyObject->setFormat($options->toArray());
-            self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency] = $currencyObject;
+            self::$_currencyCache[$locale][$currency] = $currencyObject;
         }
         \Magento\Framework\Profiler::stop('locale/currency');
-        return self::$_currencyCache[$this->_localeResolver->getLocale() ?? ''][$currency];
+        return self::$_currencyCache[$locale][$currency];
     }
 }
