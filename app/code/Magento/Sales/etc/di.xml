@@ -1085,4 +1085,9 @@
         <plugin name="GroupedProduct" disabled="true" />
         <plugin name="configurable" disabled="true" />
     </type>
+    <type name="Magento\Sales\Cron\CleanExpiredQuotes">
+        <arguments>
+            <argument name="batchSize" xsi:type="number">5000</argument>
+        </arguments>
+    </type>
 </config>

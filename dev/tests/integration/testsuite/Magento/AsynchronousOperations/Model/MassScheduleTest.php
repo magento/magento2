@@ -111,6 +111,7 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
     {
         try {
             $this->sendBulk($products);
+            sleep(5);
         } catch (BulkException $bulkException) {
             $this->fail('Bulk was not accepted in full');
         }

@@ -101,6 +101,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\QueryParser">
+        <arguments>
+            <argument name="maxNestingDepth" xsi:type="number">200</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>

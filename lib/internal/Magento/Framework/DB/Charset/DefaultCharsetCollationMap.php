@@ -21,6 +21,9 @@ class DefaultCharsetCollationMap
     public const VERSION_10_6 = '10.6.';
     public const VERSION_10_11 = '10.11.';
     public const VERSION_11_4 = '11.4.';
+    public const VERSION_11_8 = '11.8.';
+    public const VERSION_12_2 = '12.2.';
+    public const VERSION_12_3 = '12.3.';
     public const VERSION_MYSQL_8_29 = 'mysql_8_29';
     public const VERSION_DEFAULT = 'default';
 
@@ -36,6 +39,9 @@ class DefaultCharsetCollationMap
         self::VERSION_10_6 => 'utf8mb4',
         self::VERSION_10_11 => 'utf8mb4',
         self::VERSION_11_4 => 'utf8mb4',
+        self::VERSION_11_8 => 'utf8mb4',
+        self::VERSION_12_2 => 'utf8mb4',
+        self::VERSION_12_3 => 'utf8mb4',
         self::VERSION_MYSQL_8_29 => 'utf8mb4',
         self::VERSION_DEFAULT => 'utf8',
     ];
@@ -50,6 +56,9 @@ class DefaultCharsetCollationMap
         self::VERSION_10_6 => 'utf8mb4_general_ci',
         self::VERSION_10_11 => 'utf8mb4_general_ci',
         self::VERSION_11_4 => 'utf8mb4_general_ci',
+        self::VERSION_11_8 => 'utf8mb4_general_ci',
+        self::VERSION_12_2 => 'utf8mb4_general_ci',
+        self::VERSION_12_3 => 'utf8mb4_general_ci',
         self::VERSION_MYSQL_8_29 => 'utf8mb4_general_ci',
         self::VERSION_DEFAULT => 'utf8_general_ci',
     ];
