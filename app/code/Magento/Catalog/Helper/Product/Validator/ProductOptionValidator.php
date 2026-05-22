@@ -13,7 +13,6 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filter\Input\MaliciousCode;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Product options validator
@@ -34,13 +33,11 @@ class ProductOptionValidator extends AbstractHelper
      * @param Context $context
      * @param MaliciousCode $maliciousCode
      * @param Filesystem $filesystem
-     * @param DriverPool $driverPool
      */
     public function __construct(
         Context $context,
         private readonly MaliciousCode $maliciousCode,
-        private readonly Filesystem $filesystem,
-        private readonly DriverPool $driverPool
+        private readonly Filesystem $filesystem
     ) {
         parent::__construct($context);
     }
@@ -97,9 +94,9 @@ class ProductOptionValidator extends AbstractHelper
      */
     private function validateFilePath(string $quotePath, string $orderPath): void
     {
-        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $allowedDirectory = rtrim($mediaDirectory->getAbsolutePath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $driver = $this->driverPool->getDriver(DriverPool::FILE);
+        $driver = $mediaDirectory->getDriver();
 
         $quoteFullPath = $this->buildFullPath($quotePath, $allowedDirectory);
         $quoteResolved = $driver->getRealPath($quoteFullPath);
