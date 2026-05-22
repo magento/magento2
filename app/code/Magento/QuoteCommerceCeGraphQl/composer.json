@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-quote-commerce-graph-ql",
+    "name": "magento/module-quote-commerce-ce-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
     "require": {
@@ -9,14 +9,15 @@
         "magento/module-quote": "*"
     },
     "license": [
-        "proprietary"
+        "OSL-3.0",
+        "AFL-3.0"
     ],
     "autoload": {
         "files": [
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\QuoteCommerceGraphQl\\": ""
+            "Magento\\QuoteCommerceCeGraphQl\\": ""
         }
     }
 }

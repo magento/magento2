@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteCommerceGraphQl\Model\Cart;
+namespace Magento\QuoteCommerceCeGraphQl\Model\Cart;
 
 use Exception;
 use Magento\Framework\Exception\NoSuchEntityException;

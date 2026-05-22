@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\QuoteCommerceGraphQl\Model\Cart;
+namespace Magento\QuoteCommerceCeGraphQl\Model\Cart;
 
 /**
  * Clear Cart Error. Identify error code based on the message

@@ -5,7 +5,7 @@
 
 
 type Mutation {
-    clearCart(input: ClearCartInput! @doc(description: "An input object that defines cart ID of the shopper.")): ClearCartOutput! @resolver (class: "\\Magento\\QuoteCommerceGraphQl\\Model\\Resolver\\ClearCart") @doc(description:"Remove all items from the specified cart.")
+    clearCart(input: ClearCartInput! @doc(description: "An input object that defines cart ID of the shopper.")): ClearCartOutput! @resolver (class: "\\Magento\\QuoteCommerceCeGraphQl\\Model\\Resolver\\ClearCart") @doc(description:"Remove all items from the specified cart.")
 }
 
 input ClearCartInput @doc(description: "Assigns a specific `cart_id` to the empty cart.") {
