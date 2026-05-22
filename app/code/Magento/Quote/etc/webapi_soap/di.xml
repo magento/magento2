@@ -15,6 +15,7 @@
     </type>
     <type name="Magento\Quote\Model\Quote">
         <plugin name="updateQuoteStoreId" type="Magento\Quote\Model\Quote\Plugin\UpdateQuoteStoreId" />
+        <plugin name="validateQuoteAddress" type="Magento\Quote\Plugin\QuoteAddress" />
     </type>
     <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain">
         <arguments>
