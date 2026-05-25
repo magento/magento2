@@ -236,7 +236,13 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
             if (!empty($priceRow['delete'])) {
                 continue;
             }
-            if ($priceRow['website_id'] == 0) {
+            // Price rows with empty website_id can arrive from the admin form
+            // after a website has been unassigned from the product; skip them
+            // to avoid "Undefined array key" warnings on the currency lookup.
+            if (!isset($priceRow['website_id']) || $priceRow['website_id'] === '' || $priceRow['website_id'] == 0) {
+                continue;
+            }
+            if (!isset($rates[$priceRow['website_id']])) {
                 continue;
             }
 
