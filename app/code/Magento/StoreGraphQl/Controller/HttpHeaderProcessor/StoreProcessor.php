@@ -79,7 +79,7 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     /**
      * Handle the value of the store and set the scope
      *
-     * @see \Magento\Store\App\Action\Plugin\Context::beforeDispatch
+     * @see \Magento\Store\App\Action\Plugin\Context::beforeExecute
      *
      * @param string $headerValue
      * @return void
