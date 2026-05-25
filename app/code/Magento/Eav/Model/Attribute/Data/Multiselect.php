@@ -130,7 +130,7 @@ class Multiselect extends AbstractData
     {
         $errors = [];
         foreach ($values as $value) {
-            if (!$this->getAttribute()->getSource()->getOptionText($value)) {
+            if ($this->getAttribute()->getSource()->getOptionText($value) === false) {
                 $errors[] = __(
                     'Attribute %1 does not contain option with Id %2',
                     $this->getAttribute()->getAttributeCode(),

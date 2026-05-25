@@ -56,7 +56,7 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         if (!empty($value)
             && $attribute->getSourceModel()
-            && !$attribute->getSource()->getOptionText($value)
+            && $attribute->getSource()->getOptionText($value) === false
         ) {
             $errors[] = __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $value);
         }
