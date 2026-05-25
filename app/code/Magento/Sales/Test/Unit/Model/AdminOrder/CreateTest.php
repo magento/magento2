@@ -505,6 +505,18 @@ class CreateTest extends TestCase
         $quote->expects($this->once())
             ->method('setCustomerGroupId');
 
+        $catalogProduct = $this->getMockBuilder(\Magento\Catalog\Helper\Product::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getSkipSaleableCheck', 'setSkipSaleableCheck'])
+            ->getMock();
+        $this->objectManager->method('get')
+            ->willReturnCallback(function ($type) use ($catalogProduct) {
+                if ($type === \Magento\Catalog\Helper\Product::class) {
+                    return $catalogProduct;
+                }
+                return null;
+            });
+
         $this->adminOrderCreate->initFromOrder($this->orderMock);
     }
 

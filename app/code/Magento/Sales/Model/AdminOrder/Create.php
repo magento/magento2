@@ -590,21 +590,38 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
-        foreach ($order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem) {
-            /* @var $orderItem \Magento\Sales\Model\Order\Item */
-            if (!$orderItem->getParentItem()) {
-                $qty = $orderItem->getQtyOrdered();
-                if (!$order->getReordered()) {
-                    $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
-                }
 
-                if ($qty > 0) {
-                    $item = $this->initFromOrderItem($orderItem, $qty);
-                    if (is_string($item)) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__($item));
+        // Bypass salability checks for products that are out of stock on
+        // the original order. Otherwise non-MSI stores with backorders
+        // disabled would silently drop items in Create::initFromOrderItem
+        // (Quote::addProduct -> Product::isSalable -> StockRegistry says
+        // is_in_stock=false), leaving Admin "Reorder" with an empty quote
+        // and a confusing "This product is out of stock" message.
+        $catalogProduct = $this->_objectManager->get(\Magento\Catalog\Helper\Product::class);
+        $previousSkipSaleableCheck = $catalogProduct->getSkipSaleableCheck();
+        $catalogProduct->setSkipSaleableCheck(true);
+
+        try {
+            foreach (
+                $order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem
+            ) {
+                /* @var $orderItem \Magento\Sales\Model\Order\Item */
+                if (!$orderItem->getParentItem()) {
+                    $qty = $orderItem->getQtyOrdered();
+                    if (!$order->getReordered()) {
+                        $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
+                    }
+
+                    if ($qty > 0) {
+                        $item = $this->initFromOrderItem($orderItem, $qty);
+                        if (is_string($item)) {
+                            throw new \Magento\Framework\Exception\LocalizedException(__($item));
+                        }
                     }
                 }
             }
+        } finally {
+            $catalogProduct->setSkipSaleableCheck($previousSkipSaleableCheck);
         }
 
         $shippingAddress = $order->getShippingAddress();
