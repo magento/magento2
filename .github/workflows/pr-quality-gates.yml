@@ -38,120 +38,89 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
+      pull-requests: read
     outputs:
       has_php: ${{ steps.check.outputs.has_php }}
       has_js: ${{ steps.check.outputs.has_js }}
       has_static: ${{ steps.check.outputs.has_static }}
       has_new_files: ${{ steps.check.outputs.has_new_files }}
+      has_copyright_files: ${{ steps.check.outputs.has_copyright_files }}
       copyright_files: ${{ steps.check.outputs.copyright_files }}
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          # Blobless partial clone: downloads commit/tree objects only.
-          # File blobs are fetched on demand — only .github/ files are
-          # written to disk (needed for the CI file presence check).
-          # git diff --name-only only needs tree objects, so it works here.
-          filter: blob:none
-          sparse-checkout: |
-            .github
-
-      - name: Debug PR gating context
-        run: |
-          set -euo pipefail
-          echo "event_name=${{ github.event_name }}"
-          echo "event_action=${{ github.event.action }}"
-          echo "base_owner=${{ github.event.pull_request.base.repo.owner.login }}"
-          echo "base_repo=${{ github.event.pull_request.base.repo.name }}"
-          echo "head_owner=${{ github.event.pull_request.head.repo.owner.login }}"
-          echo "head_repo=${{ github.event.pull_request.head.repo.name }}"
-          echo "PR_QA_ENABLED_JOBS='${{ vars.PR_QA_ENABLED_JOBS }}'"
-
-      - name: Verify CI files are not removed
-        run: |
-          set -euo pipefail
-          missing=false
-          for f in \
-            .github/workflows/pr-quality-gates.yml \
-            .github/scripts/check_copyright.py \
-            .github/scripts/copyright-template.txt \
-            .github/scripts/rector-compat.php \
-            .github/scripts/phpmd-ruleset.xml \
-            .github/scripts/phpstan.neon \
-            .github/scripts/phpstan-framework-autoload.php \
-            .github/scripts/phpstan-extensions.neon \
-            .github/scripts/filter-blacklist.sh; do
-            if [ ! -f "$f" ]; then
-              echo "::error::Required CI file missing: $f"
-              missing=true
-            fi
-          done
-          if [ "$missing" = "true" ]; then
-            echo "::error::CI files must not be removed. Restore them before merging."
-            exit 1
-          fi
-          echo "All required CI files present."
-
-      - name: Detect changed file types
+      - name: Detect changed files and verify CI integrity
         id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          base_ref="${{ github.event.pull_request.base.ref }}"
-          base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
-          pr_number="${{ github.event.pull_request.number }}"
+          pr="${{ github.event.pull_request.number }}"
+          repo="${{ github.repository }}"
+          echo "PR #${pr}  ${{ github.event.pull_request.head.repo.full_name }} → ${{ github.event.pull_request.base.repo.full_name }}"
+          echo "PR_QA_ENABLED_JOBS: ${{ vars.PR_QA_ENABLED_JOBS }}"
 
-          if ! git cat-file -e "${base_sha}^{commit}" 2>/dev/null; then
-            git fetch origin "$base_ref" || true
-            base_sha="origin/$base_ref"
-          fi
+          # Fetch all changed files as "filename TAB status" pairs (paginated)
+          files=$(gh api "repos/${repo}/pulls/${pr}/files" --paginate \
+            --jq '.[] | [.filename, .status] | @tsv')
 
-          if ! git cat-file -e "${head_sha}^{commit}" 2>/dev/null; then
-            git fetch origin "pull/${pr_number}/head:pr-${pr_number}-head" || true
-            if git rev-parse --verify -q "pr-${pr_number}-head" >/dev/null; then
-              head_sha="pr-${pr_number}-head"
+          # Verify required CI files are not removed in this PR
+          required=(
+            .github/workflows/pr-quality-gates.yml
+            .github/scripts/check_copyright.py
+            .github/scripts/copyright-template.txt
+            .github/scripts/rector-compat.php
+            .github/scripts/phpmd-ruleset.xml
+            .github/scripts/phpstan.neon
+            .github/scripts/phpstan-framework-autoload.php
+            .github/scripts/phpstan-extensions.neon
+            .github/scripts/filter-blacklist.sh
+          )
+          missing=false
+          while IFS=$'\t' read -r filename status; do
+            [[ "$status" != "removed" ]] && continue
+            for req in "${required[@]}"; do
+              if [[ "$filename" == "$req" ]]; then
+                echo "::error::Required CI file removed: $filename"
+                missing=true
+              fi
+            done
+          done <<< "$files"
+          if $missing; then echo "::error::Restore removed CI files before merging."; exit 1; fi
+
+          # Categorize files (exclude .github/, vendor/, lib/web/)
+          has_php=false; has_js=false; has_static=false
+          has_new_files=false; has_copyright_files=false
+          copyright_files=""
+          copyright_exts='\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$'
+
+          while IFS=$'\t' read -r filename status; do
+            [[ -z "$filename" ]] && continue
+            [[ "$filename" =~ ^(\.github|vendor|lib/web)/ ]] && continue
+            [[ "$filename" =~ \.(php|phtml)$ ]]                                        && has_php=true
+            [[ "$filename" =~ \.js$ && ! "$filename" =~ \.min\.js$ ]]                 && has_js=true
+            [[ "$filename" =~ \.(xml|xsd|html|graphqls|less)$ ]]                      && has_static=true
+            if [[ "$filename" =~ $copyright_exts && "$status" =~ ^(added|modified|renamed|copied)$ ]]; then
+              has_copyright_files=true
+              copyright_files+="${filename}"$'\n'
+              [[ "$status" == "added" ]] && has_new_files=true
             fi
-          fi
+          done <<< "$files"
+          copyright_files="${copyright_files%$'\n'}"
 
-          changed=$(git diff --name-only --diff-filter=ACMR "$base_sha...$head_sha" \
-            | grep -vE '^(\.github|vendor|lib/web)/' || true)
-
-          has_php=false
-          has_js=false
-          has_static=false
-          has_new_files=false
-
-          if echo "$changed" | grep -qE '\.(php|phtml)$'; then
-            has_php=true
-          fi
-          if echo "$changed" | grep -E '\.js$' | grep -qv '\.min\.js$'; then
-            has_js=true
-          fi
-          if echo "$changed" | grep -qE '\.(xml|xsd|html|graphqls|less)$'; then
-            has_static=true
-          fi
-
-          added=$(git diff --name-only --diff-filter=A "$base_sha...$head_sha" \
-            | grep -vE '^(\.github|vendor|lib/web)/' \
-            | grep -qE '\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$' && echo true || echo false)
-          has_new_files=$added
-
-          copyright_files=$(git diff --name-only --diff-filter=ACMRT "$base_sha...$head_sha" \
-            | grep -vE '^(\.github|vendor|lib/web)/' \
-            | grep -E '\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$' || true)
-
-          echo "has_php=$has_php" >> "$GITHUB_OUTPUT"
-          echo "has_js=$has_js" >> "$GITHUB_OUTPUT"
-          echo "has_static=$has_static" >> "$GITHUB_OUTPUT"
-          echo "has_new_files=$has_new_files" >> "$GITHUB_OUTPUT"
+          echo "has_php=$has_php"                         >> "$GITHUB_OUTPUT"
+          echo "has_js=$has_js"                           >> "$GITHUB_OUTPUT"
+          echo "has_static=$has_static"                   >> "$GITHUB_OUTPUT"
+          echo "has_new_files=$has_new_files"             >> "$GITHUB_OUTPUT"
+          echo "has_copyright_files=$has_copyright_files" >> "$GITHUB_OUTPUT"
           {
             echo "copyright_files<<EOF"
             echo "$copyright_files"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
+
           echo "PHP files changed: $has_php"
           echo "JS files changed: $has_js"
           echo "Static files changed: $has_static"
+          echo "Copyright-eligible files changed: $has_copyright_files"
 
   # ──────────────────────────────────────────────────────────────────────
   # Job 2: Mainline Alignment (Branch Freshness + PR Gate)
@@ -170,191 +139,85 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
+      pull-requests: read
     env:
       CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          filter: blob:none
-          sparse-checkout: |
-            .github
-
       - name: Check branch alignment with upstream mainline
-        uses: actions/github-script@v9
         env:
-          GIT_CONFIG_NOSYSTEM: '1'
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          script: |
-            const { execFileSync } = require('child_process');
-            const git = (...args) => execFileSync('git', args, { encoding: 'utf-8' });
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          base_branch="${{ github.event.pull_request.base.ref }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          repo="${{ github.repository }}"
+          owner="${repo%%/*}"
+          echo "Base branch : ${base_branch}"
+          echo "Head SHA    : ${head_sha}"
 
-            const baseBranch = context.payload.pull_request.base.ref;
-            const headSha    = context.payload.pull_request.head.sha;
-            const repoOwner  = context.repo.owner;
-            const repoName   = context.repo.repo;
+          # Resolve upstream (parent) repo; fall back to origin if not a fork
+          upstream_owner="$owner"
+          upstream_repo="${repo##*/}"
+          upstream_label="$repo"
+          meta=$(gh api "repos/${repo}" \
+            --jq '[.fork, (.parent.owner.login // ""), (.parent.name // ""), (.parent.full_name // "")] | @tsv' \
+            2>/dev/null || echo "false		")
+          IFS=$'\t' read -r is_fork p_owner p_repo p_label <<< "$meta"
+          if [[ "$is_fork" == "true" && -n "$p_owner" ]]; then
+            upstream_owner="$p_owner"
+            upstream_repo="$p_repo"
+            upstream_label="$p_label"
+            echo "Upstream    : ${upstream_label} (parent fork)"
+          fi
 
-            core.info(`Fork repo   : ${repoOwner}/${repoName}`);
-            core.info(`Base branch : ${baseBranch}`);
-            core.info(`Head SHA    : ${headSha}`);
+          # Get upstream mainline HEAD SHA; fall back to origin on error
+          if ! mainline_sha=$(gh api "repos/${upstream_owner}/${upstream_repo}/branches/${base_branch}" \
+              --jq '.commit.sha' 2>/dev/null); then
+            echo "::warning::Cannot reach ${upstream_label}/${base_branch}. Falling back to origin."
+            upstream_owner="$owner"
+            upstream_repo="${repo##*/}"
+            upstream_label="$repo"
+            mainline_sha=$(gh api "repos/${repo}/branches/${base_branch}" --jq '.commit.sha')
+          fi
+          echo "Mainline HEAD (${upstream_label} ${base_branch}): ${mainline_sha}"
 
-            // ── Resolve the upstream (parent) repo ───────────────────
-            // If this repo is a fork, compare against the parent's
-            // mainline. Otherwise fall back to origin.
-            let upstreamUrl = '';
-            let upstreamLabel = '';
+          # ── 1. Freshness check ──────────────────────────────────────────
+          cmp=$(gh api "repos/${repo}/compare/${mainline_sha}...${head_sha}" \
+            --jq '[.behind_by, .ahead_by, .status, (.merge_base_commit.commit.committer.date // "")] | @tsv')
+          IFS=$'\t' read -r behind ahead cmp_status merge_base_date <<< "$cmp"
+          echo "Status: ${cmp_status}, behind_by: ${behind}, ahead_by: ${ahead}"
 
-            try {
-              const { data: repo } = await github.rest.repos.get({
-                owner: repoOwner,
-                repo: repoName,
-              });
+          if [[ "$behind" -gt 0 ]]; then
+            if [[ "$upstream_owner" != "$owner" ]]; then
+              fetch_cmd="git fetch upstream ${base_branch} && git merge upstream/${base_branch}"
+            else
+              fetch_cmd="git fetch origin ${base_branch} && git merge origin/${base_branch}"
+            fi
+            echo "::error::Branch is ${behind} commit(s) behind ${upstream_label} ${base_branch}.%0A%0AMerge the latest mainline before CI builds (PAT, MFTF, integration tests) will run.%0A%0ATo fix:%0A  ${fetch_cmd}%0A  git push"
+            exit 1
+          fi
 
-              if (repo.fork && repo.parent) {
-                upstreamUrl = repo.parent.clone_url;
-                upstreamLabel = repo.parent.full_name;
-                core.info(`Upstream    : ${upstreamLabel} (detected as parent fork)`);
-              }
-            } catch (e) {
-              core.warning(`Could not query repo metadata: ${e.message}. Falling back to origin.`);
-            }
+          # ── 2. Conflict check ───────────────────────────────────────────
+          mergeable=$(gh api "repos/${repo}/pulls/${{ github.event.pull_request.number }}" \
+            --jq '.mergeable')
+          if [[ "$mergeable" == "false" ]]; then
+            echo "::error::Merge conflicts detected between this branch and ${upstream_label} ${base_branch}. Merge mainline and resolve conflicts before CI can proceed."
+            exit 1
+          fi
+          [[ "$mergeable" == "null" ]] && echo "::warning::GitHub has not yet computed mergeability. Conflict check skipped."
 
-            // If not a fork (or API call failed), compare against origin.
-            let canUseUpstream = !!upstreamUrl;
-
-            const setGitAuth = (token) => {
-              // actions/checkout v6 injects credentials via includeIf.gitdir entries pointing
-              // to a temporary config file — not via http.extraheader — so unset-all on
-              // extraheader alone leaves a second Authorization header on the wire.
-              // Mirror what checkout's post-run cleanup does: remove those includeIf entries first.
-              try {
-                const keys = git('config', '--local', '--name-only', '--get-regexp', '^includeIf\\.gitdir:')
-                  .trim().split('\n').filter(Boolean);
-                for (const key of keys) {
-                  try { git('config', '--local', '--unset-all', key); } catch(e) {}
-                }
-              } catch(e) {} // no includeIf entries is normal outside of checkout-managed repos
-              // Clear http.extraheader from local and global (system excluded via GIT_CONFIG_NOSYSTEM=1).
-              // Also disable the credential helper so only our one token reaches the wire.
-              for (const scope of ['--local', '--global']) {
-                try { git('config', scope, '--unset-all', 'http.https://github.com/.extraheader'); } catch(e) {}
-              }
-              git('config', '--local', 'credential.https://github.com.helper', '');
-              if (token) {
-                const encoded = Buffer.from(`x-access-token:${token}`).toString('base64');
-                git('config', '--local', 'http.https://github.com/.extraheader', `AUTHORIZATION: basic ${encoded}`);
-              }
-            };
-
-            const crossRepoToken = process.env.CROSS_REPO_READ_TOKEN || '';
-            if (canUseUpstream) {
-              // Authenticate upstream fetch with CROSS_REPO_READ_TOKEN if available.
-              if (crossRepoToken) {
-                setGitAuth(crossRepoToken);
-                core.info(`Upstream fetch: using CROSS_REPO_READ_TOKEN for authentication`);
-              } else {
-                core.info(`Upstream fetch: no CROSS_REPO_READ_TOKEN, attempting anonymous`);
-              }
-
-              // Add the upstream remote and fetch the mainline branch.
-              // If the upstream is private and inaccessible, fall back to origin.
-              try {
-                git('remote', 'add', 'upstream', upstreamUrl);
-              } catch (e) {
-                // Remote may already exist from a previous step.
-                if (!/already exists/.test(e.stderr || '')) throw e;
-              }
-              try {
-                git('fetch', 'upstream', baseBranch);
-              } catch (e) {
-                core.warning(
-                  `Cannot fetch from upstream ${upstreamLabel}. ` +
-                  `Falling back to origin/${baseBranch}.`
-                );
-                canUseUpstream = false;
-              }
-            }
-
-            if (!canUseUpstream) {
-              // Only restore credentials if they were replaced for the upstream fetch.
-              // When no crossRepoToken was supplied, setGitAuth was never called and
-              // the checkout's includeIf credentials are still intact — calling
-              // setGitAuth here would strip them and leave git unauthenticated.
-              if (crossRepoToken) {
-                setGitAuth(process.env.GITHUB_TOKEN || '');
-              }
-              upstreamLabel = `${repoOwner}/${repoName}`;
-              git('fetch', 'origin', baseBranch);
-            }
-
-            const remoteName = canUseUpstream ? 'upstream' : 'origin';
-
-            const mainlineRef = `${remoteName}/${baseBranch}`;
-            const baseHeadSha = git('rev-parse', mainlineRef).trim();
-            core.info(`Mainline HEAD (${upstreamLabel} ${baseBranch}): ${baseHeadSha}`);
-
-            // ── 1. Merge-base check ──────────────────────────────────
-            // The merge-base between the PR head and mainline must equal
-            // mainline HEAD. If it does not, the branch is behind.
-            const mergeBase = git('merge-base', headSha, mainlineRef).trim();
-
-            core.info(`Merge base  : ${mergeBase}`);
-
-            if (mergeBase !== baseHeadSha) {
-              const behind = git('rev-list', '--count', `${mergeBase}..${mainlineRef}`).trim();
-
-              const fetchCmd = canUseUpstream
-                ? `git fetch upstream ${baseBranch} && git merge upstream/${baseBranch}`
-                : `git fetch origin ${baseBranch} && git merge origin/${baseBranch}`;
-
-              core.setFailed(
-                `Branch is ${behind} commit(s) behind ${upstreamLabel} ${baseBranch}.\n\n` +
-                `Merge the latest mainline into the PR branch before CI builds ` +
-                `(PAT, MFTF, integration tests) will run.\n\n` +
-                `To fix:\n` +
-                `  ${fetchCmd}\n` +
-                `  git push\n`
-              );
-              return;
-            }
-
-            // ── 2. Conflict check ────────────────────────────────────
-            // Attempt a tree-only merge to detect conflicts without
-            // actually creating a merge commit.
-            try {
-              execFileSync('git', ['merge-tree', mergeBase, mainlineRef, headSha],
-                { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] });
-            } catch (e) {
-              const output = (e.stdout || '') + (e.stderr || '');
-              if (/conflict/i.test(output) || /CONFLICT/i.test(output)) {
-                core.setFailed(
-                  `Merge conflicts detected between this branch and ${upstreamLabel} ${baseBranch}.\n` +
-                  `Merge mainline and resolve conflicts before CI can proceed.`
-                );
-                return;
-              }
-            }
-
-            // ── 3. Staleness warning ─────────────────────────────────
-            // If the branch diverged more than 7 days ago, warn (but
-            // do not fail) -- the developer may want to refresh.
-            const mergeBaseDate = git('log', '-1', '--format=%ci', mergeBase).trim();
-
-            const ageMs = Date.now() - new Date(mergeBaseDate).getTime();
-            const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
-
-            if (ageDays > 7) {
-              core.warning(
-                `Branch diverged from ${upstreamLabel} ${baseBranch} ${ageDays} days ago. ` +
-                `Consider rebasing to pick up recent mainline changes.`
-              );
-            }
-
-            core.info(
-              `Branch is up to date with ${upstreamLabel} ${baseBranch} ` +
-              `(diverged ${ageDays} day(s) ago). All good.`
-            );
+          # ── 3. Staleness warning ────────────────────────────────────────
+          if [[ -n "$merge_base_date" && "$merge_base_date" != "null" ]]; then
+            now=$(date +%s)
+            base_epoch=$(date -d "$merge_base_date" +%s 2>/dev/null || echo "")
+            if [[ -n "$base_epoch" ]]; then
+              age_days=$(( (now - base_epoch) / 86400 ))
+              [[ "$age_days" -gt 7 ]] && echo "::warning::Branch diverged from ${upstream_label} ${base_branch} ${age_days} days ago. Consider rebasing."
+              echo "Branch is up to date with ${upstream_label} ${base_branch} (diverged ${age_days} day(s) ago). All good."
+            fi
+          else
+            echo "Branch is up to date with ${upstream_label} ${base_branch}. All good."
+          fi
 
   # ──────────────────────────────────────────────────────────────────────
   # Job 4: Copyright Header Check
@@ -368,13 +231,11 @@ jobs:
       - detect-changes
     if: >-
       always() &&
-      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',copyright-check,') && (
-        github.event_name == 'workflow_dispatch' ||
-        (github.event_name == 'pull_request' &&
-         needs.mainline-alignment.result == 'success' &&
-         needs.detect-changes.result == 'success' &&
-         needs.detect-changes.outputs.has_new_files == 'true')
-      )
+      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',copyright-check,') &&
+      github.event_name == 'pull_request' &&
+      needs.mainline-alignment.result == 'success' &&
+      needs.detect-changes.result == 'success' &&
+      needs.detect-changes.outputs.has_copyright_files == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -417,35 +278,16 @@ jobs:
             exit 0
           fi
 
-          exit_code=0
-          while IFS= read -r file; do
-            if [ -n "$file" ] && [ -f "$file" ]; then
-              if ! python3 .github/scripts/check_copyright.py \
-                --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
-                --path "$file" \
-                --pr-mode \
-                --base-sha "${{ github.event.pull_request.base.sha }}"; then
-                exit_code=1
-              fi
-            fi
-          done <<< "$pr_code_files"
-
-          if [ $exit_code -ne 0 ]; then
+          printf '%s\n' "$pr_code_files" | grep -v '^$' > /tmp/copyright_files.txt
+          if ! python3 .github/scripts/check_copyright.py \
+            --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
+            --file-list /tmp/copyright_files.txt \
+            --pr-mode \
+            --base-sha "${{ github.event.pull_request.base.sha }}"; then
             echo "::error::Some PR files have copyright issues"
             exit 1
           fi
-          echo "All relevant PR files have correct copyright headers"
 
-      - name: Check copyright headers (Manual)
-        if: github.event_name == 'workflow_dispatch'
-        run: |
-          set -euo pipefail
-          echo "Running copyright check in manual mode..."
-          python3 .github/scripts/check_copyright.py \
-            --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
-            --magento-only \
-            --stats \
-            --verbose
 
   # ──────────────────────────────────────────────────────────────────────
   # Job 5: Magento Coding Standard (PHPCS + Rector + ESLint)
@@ -714,6 +556,23 @@ jobs:
           if [ ! -f "$ruleset" ]; then
             echo "Magento ruleset not available, falling back to local standalone ruleset."
             ruleset="${GITHUB_WORKSPACE}/.github/scripts/phpmd-ruleset.xml"
+          else
+            # Wrap the primary ruleset to exclude rules that require the full
+            # vendor tree (Laminas etc.) and crash in the sparse-clone environment.
+            wrapper="/tmp/phpmd-ruleset-ci.xml"
+            cat > "$wrapper" <<XML
+            <?xml version="1.0" encoding="UTF-8"?>
+            <ruleset name="Magento PHPMD (CI)" xmlns="http://pmd.sf.net/ruleset/1.0.0"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">
+                <description>Magento PHPMD rules, excluding rules that require the full vendor tree.</description>
+                <rule ref="${ruleset}">
+                    <exclude name="CookieAndSessionMisuse"/>
+                    <exclude name="AllPurposeAction"/>
+                </rule>
+            </ruleset>
+            XML
+            ruleset="$wrapper"
           fi
           cat > "$prepend_file" <<'PHP'
           <?php
@@ -990,8 +849,8 @@ jobs:
       github.event_name == 'pull_request' &&
       contains(fromJSON('["success","failure"]'), needs.detect-changes.result) &&
       contains(fromJSON('["success","failure"]'), needs.mainline-alignment.result) &&
-      contains(fromJSON('["success","failure"]'), needs.copyright-check.result) &&
-      contains(fromJSON('["success","failure"]'), needs.coding-standard.result) &&
+      contains(fromJSON('["success","failure","skipped"]'), needs.copyright-check.result) &&
+      contains(fromJSON('["success","failure","skipped"]'), needs.coding-standard.result) &&
       vars.PR_QA_ENABLED_JOBS != ''
     runs-on: ubuntu-latest
     timeout-minutes: 5

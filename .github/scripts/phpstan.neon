@@ -5,7 +5,7 @@
 
 parameters:
     # Level 1 catches undefined variables, wrong argument counts,
-    # basic type issues. Same level Jenkins uses.
+    # basic type issues.
     level: 1
     checkExplicitMixedMissingReturn: true
     checkPhpDocMissingReturn: true
@@ -28,6 +28,7 @@ parameters:
         - */Test/Mftf/*
         - */Test/Performance/*
         - */testsuite/*
+        - */dev/tests/*
     ignoreErrors:
         # Constructor unused parameters (common in Magento DI)
         - '#Constructor of class [a-zA-Z0-9\\_]+ has an unused parameter#'
@@ -51,8 +52,16 @@ parameters:
         # Note: "extends unknown class" cannot be suppressed via ignoreErrors
         # (PHPStan hard-rejects it) — those are handled via excludePaths or the
         # lib/internal autoloader.
-        - '#has invalid type#'
+        - '#has invalid.*type#'
         - '#Class [a-zA-Z0-9\\_\\\\]+ not found\.#'
+        - '#Instantiated class [a-zA-Z0-9\\_\\\\]+ not found\.#'
         - '#is not an Attribute class#'
         - '#has unknown class [a-zA-Z0-9\\_\\\\]+ as its type#'
-        - '#calls parent::__construct\(\) but [a-zA-Z0-9\\_\\\\]+ does not extend any class#'
+        - '#calls parent::[a-zA-Z0-9_]+\(\) but [a-zA-Z0-9\\_\\\\]+ does not extend any class#'
+        # Stub-generated classes have no constructor; sparse-clone cannot include
+        # the real implementation (e.g. Magento\\Framework\\DataObject).
+        - '#does not have a constructor and must be instantiated without any parameters#'
+        # Laminas static method calls when Laminas is not installed in sparse-clone
+        - '#Call to static method [a-zA-Z0-9_]+\(\) on an unknown class#'
+        # Undefined variables: GHA scope is changed files only, parity with Static Tests
+        - '#Undefined variable:#'

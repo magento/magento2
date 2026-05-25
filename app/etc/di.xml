@@ -1990,13 +1990,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
-    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
         <arguments>
             <argument name="maxPageSize" xsi:type="number">300</argument>

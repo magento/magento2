@@ -22,9 +22,24 @@ if [ ! -f "$FILE_LIST" ]; then
 fi
 
 # Extract all 'use Magento\...' from the changed files only, strip aliases
-classes=$(cat "$FILE_LIST" | while IFS= read -r f; do
+use_classes=$(cat "$FILE_LIST" | while IFS= read -r f; do
   [ -n "$f" ] && [ -f "$f" ] && grep -h '^use Magento\\' "$f" 2>/dev/null || true
 done | sed -E 's/^use[[:space:]]+//;s/[[:space:]]+as[[:space:]].*//;s/[[:space:]]*;[[:space:]]*$//' | sort -u)
+
+# Also extract fully-qualified parent classes from 'extends' clauses.
+# Catches cases like: class Foo extends \Magento\Catalog\...\Bar
+# where no matching 'use' statement exists in the changed file.
+extends_classes=$(cat "$FILE_LIST" | while IFS= read -r f; do
+  [ -n "$f" ] && [ -f "$f" ] && grep -hE '\bextends\b' "$f" 2>/dev/null | grep -oE '\\?Magento(\\[A-Za-z0-9_]+)+' | sed 's/^\\//' || true
+done | sort -u)
+
+# Also extract Magento interfaces from 'implements' clauses — stubs for these
+# prevent "implements unknown interface Magento\..." errors in sparse clone.
+implements_classes=$(cat "$FILE_LIST" | while IFS= read -r f; do
+  [ -n "$f" ] && [ -f "$f" ] && grep -hE '\bimplements\b' "$f" 2>/dev/null | grep -oE '\\?Magento(\\[A-Za-z0-9_]+)+' | sed 's/^\\//' || true
+done | sort -u)
+
+classes=$(printf '%s\n%s\n%s\n' "$use_classes" "$extends_classes" "$implements_classes" | grep -v '^$' | sort -u)
 
 if [ -z "$classes" ]; then
   echo "No Magento class references found in changed files."

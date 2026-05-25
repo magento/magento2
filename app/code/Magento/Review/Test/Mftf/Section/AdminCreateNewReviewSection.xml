@@ -9,7 +9,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateNewReviewSection">
         <element name="addNewReviewButton" type="button" selector="#add" timeout="30"/>
-        <element name="addNewReviewBySKU" type="text"  selector="//td[contains(@class,'col-sku')][contains(text(),'{{sku}}')]"  parameterized="true"/>
+        <element name="addNewReviewBySKU" type="text" selector="//td[contains(@class,'col-sku')][contains(normalize-space(.),'{{sku}}')]" parameterized="true"/>
         <element name="select_stores" type="text" selector="#select_stores"/>
         <element name="nickname" type="text" selector="#nickname"/>
         <element name="title" type="text" selector="#title"/>

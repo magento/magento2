@@ -84,6 +84,9 @@ def _normalize_copyright(text: str) -> str:
     between file types, matching the approach used by the Jenkins
     SanityCopyrightChecker.
     """
+    # Remove PHP inline declarations so that '<?php declare(strict_types=1)'
+    # and '<?php' normalize identically and the copyright substring check passes.
+    text = re.sub(r'\bdeclare\s*\([^)]*\)\s*;?', '', text)
     return re.sub(r'[\s#/\*\-<>!?\[\]]+', '', text).lower()
 
 
@@ -129,11 +132,10 @@ def get_git_creation_year(file_path: str, debug: bool = False, use_current_year:
     if debug:
         click.echo(f"  Finding git creation year for: {file_path}")
 
-    # Try multiple git commands to find the creation year
+    # Primary: follow renames; fallback: without --follow if rename chain fails
     git_commands = [
         ['git', 'log', '--follow', '--format=%ad', '--date=format:%Y', '--reverse', '--', file_path],
-        ['git', 'log', '--format=%ad', '--date=format:%Y', '--reverse', '--', file_path],
-        ['git', 'log', '--diff-filter=A', '--format=%ad', '--date=format:%Y', '--', file_path],
+        ['git', 'log',             '--format=%ad', '--date=format:%Y', '--reverse', '--', file_path],
     ]
 
     for i, cmd in enumerate(git_commands):
@@ -551,6 +553,27 @@ def check_file(file_path: str, template: str, fix: bool = False, dry_run: bool =
 
     # ── No match ──────────────────────────────────────────────────────
 
+    # For existing files in PR mode: if the copyright year already in the file
+    # is earlier than what git log reports, accept it. This handles files that
+    # predate the repository's available git history (e.g. Copyright 2011 when
+    # git log only goes back to 2015 due to history truncation or rebase).
+    # New files are excluded — they must carry the current year.
+    if pr_mode and base_sha and existing_header:
+        try:
+            cat_result = subprocess.run(
+                ['git', 'cat-file', '-e', f'{base_sha}:{file_path}'],
+                capture_output=True, cwd=_GIT_ROOT
+            )
+            if cat_result.returncode == 0:
+                existing_year_match = re.search(r'[Cc]opyright\s+(\d{4})', existing_header)
+                if existing_year_match and int(existing_year_match.group(1)) < int(year):
+                    if debug:
+                        click.echo(f'  Accepting copyright year {existing_year_match.group(1)}: '
+                                   f'predates git history (git reports {year})')
+                    return True
+        except Exception:
+            pass
+
     if dry_run:
         click.echo(f"  Would fix: {file_path}")
         return False
@@ -605,11 +628,12 @@ def check_file(file_path: str, template: str, fix: bool = False, dry_run: bool =
 @click.option('--stats', is_flag=True, help='Show detailed statistics')
 @click.option('--debug', is_flag=True, help='Show detailed git debugging information')
 @click.option('--path', default='.', help='Path to check - can be a file or directory (default: current directory)')
+@click.option('--file-list', default='', help='File containing paths to check, one per line (faster than looping --path calls)')
 @click.option('--verbose', is_flag=True, help='Show verbose output with detailed information')
 @click.option('--pr-mode', is_flag=True, help='PR mode: trust existing year for modified files, current year for new files')
 @click.option('--base-sha', default='', help='Base commit SHA for PR mode: used to detect new vs modified files without git log')
 def main(template: str, fix: bool, dry_run: bool, extensions: str, exclude: str,
-         magento_only: bool, stats: bool, debug: bool, path: str, verbose: bool, pr_mode: bool, base_sha: str):
+         magento_only: bool, stats: bool, debug: bool, path: str, file_list: str, verbose: bool, pr_mode: bool, base_sha: str):
     """Check copyright headers against a template file (Magento-optimized).
 
     Template should contain {{YEAR}} placeholder which will be replaced with
@@ -636,13 +660,35 @@ def main(template: str, fix: bool, dry_run: bool, extensions: str, exclude: str,
         click.echo("Cannot use --dry-run and --fix together", err=True)
         sys.exit(1)
 
-    if not os.path.exists(path):
-        click.echo(f"Path does not exist: {path}", err=True)
-        sys.exit(1)
-
     template_content = load_template(template)
     extensions_list = [ext.strip() for ext in extensions.split(',')]
     exclude_list = [entry.strip() for entry in exclude.split(',') if entry.strip()]
+
+    if file_list:
+        if not os.path.exists(file_list):
+            click.echo(f"File list not found: {file_list}", err=True)
+            sys.exit(1)
+        with open(file_list) as fh:
+            paths = [line.strip() for line in fh if line.strip()]
+        issues_found = []
+        for file_path in paths:
+            if not os.path.isfile(file_path):
+                continue
+            if should_exclude_file(file_path, exclude_list):
+                continue
+            if not any(file_path.endswith(ext) for ext in extensions_list):
+                continue
+            if not check_file(file_path, template_content, fix, dry_run, debug, pr_mode, base_sha):
+                issues_found.append(file_path)
+        if issues_found:
+            click.echo(f"\n{len(issues_found)} file(s) have copyright issues")
+            sys.exit(1)
+        click.echo("All relevant PR files have correct copyright headers")
+        return
+
+    if not os.path.exists(path):
+        click.echo(f"Path does not exist: {path}", err=True)
+        sys.exit(1)
 
     issues_found = []
     files_checked = 0
