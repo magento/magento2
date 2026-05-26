@@ -95,7 +95,7 @@ class ProductOptionValidator extends AbstractHelper
     private function validateFilePath(string $quotePath, string $orderPath): void
     {
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $allowedDirectory = rtrim($mediaDirectory->getAbsolutePath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
+        $allowedDirectory = realpath(rtrim($mediaDirectory->getAbsolutePath(), DIRECTORY_SEPARATOR)) . DIRECTORY_SEPARATOR;
         $driver = $mediaDirectory->getDriver();
 
         $quoteFullPath = $this->buildFullPath($quotePath, $allowedDirectory);
