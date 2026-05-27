@@ -215,7 +215,11 @@ sub vcl_deliver {
     if (resp.http.Cache-Control !~ "private" && req.url !~ "^/(pub/)?(media|static)/") {
         set resp.http.Pragma = "no-cache";
         set resp.http.Expires = "-1";
-        set resp.http.Cache-Control = "no-cache, must-revalidate, max-age=0";
+        if (obj.uncacheable) {
+            set resp.http.Cache-Control = "no-store, no-cache, must-revalidate, max-age=0";
+        } else {
+            set resp.http.Cache-Control = "no-cache, must-revalidate, max-age=0";
+        }
     }
 
     if (!resp.http.X-Magento-Debug) {
