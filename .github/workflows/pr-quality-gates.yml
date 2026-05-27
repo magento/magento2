@@ -13,137 +13,38 @@ on:
   workflow_dispatch:
 
 # Repository variables used by this workflow:
-# - PR_QA_ENABLED_JOBS: CSV list of optional jobs to run.
+# - PR_QA_ENABLED_JOBS: CSV list of checks to run.
 #   Supported values:
-#   copyright-check,coding-standard,aggregate-linked-pr-checks
-#   Note: mainline-alignment and detect-changes always run on pull_request.
+#   coding-standard,aggregate-linked-pr-checks
 # - PR_QA_CODING_STANDARD_ENABLED_CHECKS: CSV list of coding-standard sub-checks.
 #   Empty or includes "all" => run all coding-standard sub-checks.
 #   Supported values:
-#   all,phpcs,phpcs-xml,phpcs-html,phpcs-graphql,phpcs-less,phpmd,phpstan,
-#   phpcpd,strict-types,fixture-reuse,rector,eslint
+#   all,phpcs,phpcs-xml,phpcs-html,phpcs-graphql,phpcs-less,phpmd,
+#   strict-types,fixture-reuse,eslint,typescript
 
 jobs:
   # ──────────────────────────────────────────────────────────────────────
-  # Pre-check: Detect which file types are present in the PR so that
-  # language-specific jobs (PHPCS, ESLint, Rector) can skip entirely
-  # when no relevant files were changed.
+  # Single job: mainline alignment + change detection + coding standard
+  # + linked-PR aggregate gate, run sequentially so the PR shows one check.
   # ──────────────────────────────────────────────────────────────────────
-  detect-changes:
-    needs: mainline-alignment
+  pr-quality-gates:
     if: >-
       github.event_name == 'pull_request' &&
       vars.PR_QA_ENABLED_JOBS != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 25
     permissions:
       contents: read
       pull-requests: read
-    outputs:
-      has_php: ${{ steps.check.outputs.has_php }}
-      has_js: ${{ steps.check.outputs.has_js }}
-      has_static: ${{ steps.check.outputs.has_static }}
-      has_new_files: ${{ steps.check.outputs.has_new_files }}
-      has_copyright_files: ${{ steps.check.outputs.has_copyright_files }}
-      copyright_files: ${{ steps.check.outputs.copyright_files }}
-    steps:
-      - name: Detect changed files and verify CI integrity
-        id: check
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          pr="${{ github.event.pull_request.number }}"
-          repo="${{ github.repository }}"
-          echo "PR #${pr}  ${{ github.event.pull_request.head.repo.full_name }} → ${{ github.event.pull_request.base.repo.full_name }}"
-          echo "PR_QA_ENABLED_JOBS: ${{ vars.PR_QA_ENABLED_JOBS }}"
-
-          # Fetch all changed files as "filename TAB status" pairs (paginated)
-          files=$(gh api "repos/${repo}/pulls/${pr}/files" --paginate \
-            --jq '.[] | [.filename, .status] | @tsv')
-
-          # Verify required CI files are not removed in this PR
-          required=(
-            .github/workflows/pr-quality-gates.yml
-            .github/scripts/check_copyright.py
-            .github/scripts/copyright-template.txt
-            .github/scripts/rector-compat.php
-            .github/scripts/phpmd-ruleset.xml
-            .github/scripts/phpstan.neon
-            .github/scripts/phpstan-framework-autoload.php
-            .github/scripts/phpstan-extensions.neon
-            .github/scripts/filter-blacklist.sh
-          )
-          missing=false
-          while IFS=$'\t' read -r filename status; do
-            [[ "$status" != "removed" ]] && continue
-            for req in "${required[@]}"; do
-              if [[ "$filename" == "$req" ]]; then
-                echo "::error::Required CI file removed: $filename"
-                missing=true
-              fi
-            done
-          done <<< "$files"
-          if $missing; then echo "::error::Restore removed CI files before merging."; exit 1; fi
-
-          # Categorize files (exclude .github/, vendor/, lib/web/)
-          has_php=false; has_js=false; has_static=false
-          has_new_files=false; has_copyright_files=false
-          copyright_files=""
-          copyright_exts='\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$'
-
-          while IFS=$'\t' read -r filename status; do
-            [[ -z "$filename" ]] && continue
-            [[ "$filename" =~ ^(\.github|vendor|lib/web)/ ]] && continue
-            [[ "$filename" =~ \.(php|phtml)$ ]]                                        && has_php=true
-            [[ "$filename" =~ \.js$ && ! "$filename" =~ \.min\.js$ ]]                 && has_js=true
-            [[ "$filename" =~ \.(xml|xsd|html|graphqls|less)$ ]]                      && has_static=true
-            if [[ "$filename" =~ $copyright_exts && "$status" =~ ^(added|modified|renamed|copied)$ ]]; then
-              has_copyright_files=true
-              copyright_files+="${filename}"$'\n'
-              [[ "$status" == "added" ]] && has_new_files=true
-            fi
-          done <<< "$files"
-          copyright_files="${copyright_files%$'\n'}"
-
-          echo "has_php=$has_php"                         >> "$GITHUB_OUTPUT"
-          echo "has_js=$has_js"                           >> "$GITHUB_OUTPUT"
-          echo "has_static=$has_static"                   >> "$GITHUB_OUTPUT"
-          echo "has_new_files=$has_new_files"             >> "$GITHUB_OUTPUT"
-          echo "has_copyright_files=$has_copyright_files" >> "$GITHUB_OUTPUT"
-          {
-            echo "copyright_files<<EOF"
-            echo "$copyright_files"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
-
-          echo "PHP files changed: $has_php"
-          echo "JS files changed: $has_js"
-          echo "Static files changed: $has_static"
-          echo "Copyright-eligible files changed: $has_copyright_files"
-
-  # ──────────────────────────────────────────────────────────────────────
-  # Job 2: Mainline Alignment (Branch Freshness + PR Gate)
-  #
-  # PRs live on a fork (e.g. adobe-commerce-tier-4/<repo>), but the
-  # mainline lives on the upstream repo (magento-commerce/<repo>).
-  # This job fetches the upstream mainline branch and verifies the PR
-  # branch is rebased on its HEAD -- catching stale branches and merge
-  # conflicts before expensive CI builds waste cycles.
-  # ──────────────────────────────────────────────────────────────────────
-  mainline-alignment:
-    if: >-
-      github.event_name == 'pull_request' &&
-      vars.PR_QA_ENABLED_JOBS != ''
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-      pull-requests: read
+      checks: read
+      statuses: read
     env:
       CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
     steps:
+
+      # ── Mainline alignment ──────────────────────────────────────────
       - name: Check branch alignment with upstream mainline
+        id: mainline
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -219,109 +120,150 @@ jobs:
             echo "Branch is up to date with ${upstream_label} ${base_branch}. All good."
           fi
 
-  # ──────────────────────────────────────────────────────────────────────
-  # Job 4: Copyright Header Check
-  #
-  # Validates that changed files carry the correct Adobe copyright header
-  # with the proper year (based on git creation date).
-  # ──────────────────────────────────────────────────────────────────────
-  copyright-check:
-    needs:
-      - mainline-alignment
-      - detect-changes
-    if: >-
-      always() &&
-      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',copyright-check,') &&
-      github.event_name == 'pull_request' &&
-      needs.mainline-alignment.result == 'success' &&
-      needs.detect-changes.result == 'success' &&
-      needs.detect-changes.outputs.has_copyright_files == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          filter: blob:none
-          sparse-checkout-cone-mode: false
-          sparse-checkout: |
-            /.github/
-            ${{ needs.detect-changes.outputs.copyright_files }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install click==8.2.1
-
-      - name: Check copyright headers (PR)
-        if: github.event_name == 'pull_request'
+      # ── Detect changed files ────────────────────────────────────────
+      - name: Detect changed files and verify CI integrity
+        id: check
         env:
-          PR_CODE_FILES: ${{ needs.detect-changes.outputs.copyright_files }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          echo "Running copyright check in PR mode..."
-          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Head SHA: ${{ github.event.pull_request.head.sha }}"
+          pr="${{ github.event.pull_request.number }}"
+          repo="${{ github.repository }}"
+          echo "PR #${pr}  ${{ github.event.pull_request.head.repo.full_name }} → ${{ github.event.pull_request.base.repo.full_name }}"
+          echo "PR_QA_ENABLED_JOBS: ${{ vars.PR_QA_ENABLED_JOBS }}"
 
-          pr_code_files="$PR_CODE_FILES"
+          # Fetch all changed files as "filename TAB status" pairs (paginated)
+          files=$(gh api "repos/${repo}/pulls/${pr}/files" --paginate \
+            --jq '.[] | [.filename, .status] | @tsv')
 
-          echo "Relevant files in PR:"
-          echo "$pr_code_files"
+          # Verify required CI files are not removed in this PR
+          required=(
+            .github/workflows/pr-quality-gates.yml
+            .github/scripts/copyright-template.txt
+            .github/scripts/phpmd-ruleset.xml
+            .github/scripts/tslint.json
+            .github/scripts/filter-blacklist.sh
+          )
+          missing=false
+          while IFS=$'\t' read -r filename status; do
+            [[ "$status" != "removed" ]] && continue
+            for req in "${required[@]}"; do
+              if [[ "$filename" == "$req" ]]; then
+                echo "::error::Required CI file removed: $filename"
+                missing=true
+              fi
+            done
+          done <<< "$files"
+          if $missing; then echo "::error::Restore removed CI files before merging."; exit 1; fi
 
-          if [ -z "$pr_code_files" ]; then
-            echo "No code files changed in this PR"
-            exit 0
-          fi
+          # Categorize files (exclude .github/, vendor/, lib/web/ except lib/web/mage/)
+          # lib/web/ contains vendored third-party JS/CSS (jQuery, RequireJS, etc.)
+          # lib/web/mage/ is Adobe-authored JS and is included.
+          has_php=false; has_js=false; has_static=false; has_ts=false
+          has_new_files=false; has_copyright_files=false
+          copyright_files=""
+          copyright_exts='\.(php|phtml|js|css|scss|less|xml|xsd|html|graphqls)$'
+          count_new=0; count_modified=0; count_removed=0
+          php_list=""; js_list=""; xml_list=""; html_list=""
+          graphql_list=""; less_list=""; new_php_list=""; copyright_added_list=""
+          ts_list=""
 
-          printf '%s\n' "$pr_code_files" | grep -v '^$' > /tmp/copyright_files.txt
-          if ! python3 .github/scripts/check_copyright.py \
-            --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt" \
-            --file-list /tmp/copyright_files.txt \
-            --pr-mode \
-            --base-sha "${{ github.event.pull_request.base.sha }}"; then
-            echo "::error::Some PR files have copyright issues"
-            exit 1
-          fi
+          while IFS=$'\t' read -r filename status; do
+            [[ -z "$filename" ]] && continue
+            [[ "$filename" =~ ^(\.github|vendor)/ ]] && continue
+            [[ "$filename" =~ ^lib/web/ && ! "$filename" =~ ^lib/web/mage/ ]] && continue
+            case "$status" in
+              added)                    count_new=$((count_new + 1)) ;;
+              modified|renamed|copied)  count_modified=$((count_modified + 1)) ;;
+              removed)                  count_removed=$((count_removed + 1)) ;;
+            esac
+            [[ "$filename" =~ \.(php|phtml)$ ]]                                        && has_php=true
+            [[ "$filename" =~ \.js$ && ! "$filename" =~ \.min\.js$ ]]                 && has_js=true
+            [[ "$filename" =~ \.(xml|xsd|html|graphqls|less)$ ]]                      && has_static=true
+            [[ "$filename" =~ \.ts$ && ! "$filename" =~ \.d\.ts$ ]]                   && has_ts=true
+            if [[ "$status" =~ ^(added|modified|renamed|copied)$ ]]; then
+              [[ "$filename" =~ \.(php|phtml)$ ]] && php_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.js$ && ! "$filename" =~ \.min\.js$ ]] && js_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.(xml|xsd)$ ]] && xml_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.html$ ]] && html_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.graphqls$ ]] && graphql_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.less$ ]] && less_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.php$ && "$status" == "added" ]] && new_php_list+="${filename}"$'\n'
+              [[ "$filename" =~ \.ts$ && ! "$filename" =~ \.d\.ts$ ]] && ts_list+="${filename}"$'\n'
+            fi
+            if [[ "$filename" =~ $copyright_exts && "$status" =~ ^(added|modified|renamed|copied)$ ]]; then
+              has_copyright_files=true
+              copyright_files+="${filename}"$'\n'
+              if [[ "$status" == "added" ]]; then
+                has_new_files=true
+                copyright_added_list+="${filename}"$'\n'
+              fi
+            fi
+          done <<< "$files"
+          copyright_files="${copyright_files%$'\n'}"
 
+          # Write file lists for coding-standard checks (avoids git diff in later steps)
+          [ -n "$php_list" ]             && printf '%s' "${php_list%$'\n'}"              > /tmp/changed_php.txt
+          [ -n "$js_list" ]              && printf '%s' "${js_list%$'\n'}"               > /tmp/changed_js.txt
+          [ -n "$xml_list" ]             && printf '%s' "${xml_list%$'\n'}"              > /tmp/changed_xml.txt
+          [ -n "$html_list" ]            && printf '%s' "${html_list%$'\n'}"             > /tmp/changed_html.txt
+          [ -n "$graphql_list" ]         && printf '%s' "${graphql_list%$'\n'}"          > /tmp/changed_graphqls.txt
+          [ -n "$less_list" ]            && printf '%s' "${less_list%$'\n'}"             > /tmp/changed_less.txt
+          [ -n "$new_php_list" ]         && printf '%s' "${new_php_list%$'\n'}"          > /tmp/new_php.txt
+          [ -n "$copyright_files" ]      && printf '%s' "$copyright_files"               > /tmp/copyright_changed.txt
+          [ -n "$copyright_added_list" ] && printf '%s' "${copyright_added_list%$'\n'}" > /tmp/copyright_added.txt
+          [ -n "$ts_list" ]              && printf '%s' "${ts_list%$'\n'}"               > /tmp/changed_ts.txt
 
-  # ──────────────────────────────────────────────────────────────────────
-  # Job 5: Magento Coding Standard (PHPCS + Rector + ESLint)
-  #
-  # Clones magento/magento-coding-standard once and runs all three
-  # tools from it, matching how the repo's own CI invokes them.
-  # ──────────────────────────────────────────────────────────────────────
-  coding-standard:
-    needs: detect-changes
-    if: >-
-      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',coding-standard,') &&
-      github.event_name == 'pull_request' &&
-      (
-        needs.detect-changes.outputs.has_php == 'true' ||
-        needs.detect-changes.outputs.has_js == 'true' ||
-        needs.detect-changes.outputs.has_static == 'true'
-      )
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions:
-      contents: read
-    steps:
+          echo "has_php=$has_php"                         >> "$GITHUB_OUTPUT"
+          echo "has_js=$has_js"                           >> "$GITHUB_OUTPUT"
+          echo "has_static=$has_static"                   >> "$GITHUB_OUTPUT"
+          echo "has_ts=$has_ts"                           >> "$GITHUB_OUTPUT"
+          echo "has_new_files=$has_new_files"             >> "$GITHUB_OUTPUT"
+          echo "has_copyright_files=$has_copyright_files" >> "$GITHUB_OUTPUT"
+          {
+            echo "copyright_files<<EOF"
+            echo "$copyright_files"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          count_total=$((count_new + count_modified + count_removed))
+          echo "PHP files changed: $has_php"
+          echo "JS files changed: $has_js"
+          echo "Static files changed: $has_static"
+          echo "TS files changed: $has_ts"
+          echo "Copyright-eligible files changed: $has_copyright_files"
+          echo "Files: ${count_total} total  |  ${count_new} new  |  ${count_modified} modified  |  ${count_removed} deleted"
+
+      - name: Set file type env vars
+        run: |
+          echo "HAS_PHP=${{ steps.check.outputs.has_php }}"                          >> "$GITHUB_ENV"
+          echo "HAS_JS=${{ steps.check.outputs.has_js }}"                            >> "$GITHUB_ENV"
+          echo "HAS_STATIC=${{ steps.check.outputs.has_static }}"                    >> "$GITHUB_ENV"
+          echo "HAS_TS=${{ steps.check.outputs.has_ts }}"                            >> "$GITHUB_ENV"
+          echo "HAS_COPYRIGHT_FILES=${{ steps.check.outputs.has_copyright_files }}"  >> "$GITHUB_ENV"
+          echo "HAS_PHP_OR_STATIC=${{ steps.check.outputs.has_php == 'true' || steps.check.outputs.has_static == 'true' }}" >> "$GITHUB_ENV"
+
+      # ── Coding standard ─────────────────────────────────────────────
       - uses: actions/checkout@v6
+        if: >-
+          contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',coding-standard,') &&
+          (env.HAS_PHP == 'true' || env.HAS_JS == 'true' || env.HAS_STATIC == 'true' || env.HAS_TS == 'true')
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+          filter: blob:none
+          sparse-checkout: .github
+          sparse-checkout-cone-mode: true
 
       - name: Resolve PHP version from repository composer.json
         id: php-version
+        if: env.HAS_PHP_OR_STATIC == 'true'
         env:
           REPO_NAME: ${{ github.event.repository.name }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
         run: python3 .github/scripts/resolve_magento_tool_constraints.py
 
       - name: Setup PHP
+        if: env.HAS_PHP_OR_STATIC == 'true'
         uses: shivammathur/setup-php@accd6127cb78bee3e8082180cb391013d204ef9f # 2.37.0
         with:
           php-version: ${{ steps.php-version.outputs.php_version }}
@@ -329,60 +271,62 @@ jobs:
           extensions: simplexml, dom
 
       - name: Setup Node.js
-        if: needs.detect-changes.outputs.has_js == 'true'
+        if: env.HAS_JS == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: '21'
 
       - name: Install Magento Coding Standard
         id: install-mcs
+        if: >-
+          contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',coding-standard,') &&
+          (env.HAS_PHP == 'true' || env.HAS_JS == 'true' || env.HAS_STATIC == 'true' || env.HAS_TS == 'true')
         run: |
           set -euo pipefail
-          composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
-          cd mcs
 
-          # PHPMD/PHPStan versions: same magento/magento2 composer.json as PHP version
-          # resolution (quality-patches release → magento2 refs), written by the
-          # "Resolve PHP version" step to /tmp/magento2-composer.json.
-          if [ ! -f /tmp/magento2-composer.json ]; then
-            echo "::error::Missing /tmp/magento2-composer.json — the Resolve PHP version step must run first."
-            exit 1
+          if [ "$HAS_PHP_OR_STATIC" = "true" ]; then
+            composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
+            cd mcs && npm install && cd "${GITHUB_WORKSPACE}"
+
+            echo "PHPCS installed standards:"
+            mcs/vendor/bin/phpcs -i
+
+            # PHPMD version: same magento/magento2 composer.json as PHP version
+            # resolution (quality-patches release → magento2 refs), written by the
+            # "Resolve PHP version" step to /tmp/magento2-composer.json.
+            if [ ! -f /tmp/magento2-composer.json ]; then
+              echo "::error::Missing /tmp/magento2-composer.json — the Resolve PHP version step must run first."
+              exit 1
+            fi
+            echo "Magento CE composer.json for tool pins (ref: ${{ steps.php-version.outputs.magento_composer_ref }})"
+
+            phpmd_constraint=""
+            for src in \
+              "${GITHUB_WORKSPACE}/mcs/composer.json" \
+              "/tmp/magento2-composer.json"; do
+              [ -f "$src" ] || continue
+              [ -z "$phpmd_constraint" ] && phpmd_constraint="$("${GITHUB_WORKSPACE}/.github/scripts/read-pkg-constraint.sh" "$src" "phpmd/phpmd" || true)"
+              [ -n "$phpmd_constraint" ] && break
+            done
+
+            if [ -z "$phpmd_constraint" ]; then
+              echo "::error::Could not resolve phpmd/phpmd from mcs/composer.json or /tmp/magento2-composer.json."
+              exit 1
+            fi
+            echo "Resolved phpmd/phpmd constraint: $phpmd_constraint"
+
+            mkdir -p qa-tools
+            cd qa-tools
+            composer init --name=local/qa-tools --no-interaction
+            composer config minimum-stability dev
+            composer config prefer-stable true
+            composer require --dev --no-interaction --no-progress --with-all-dependencies \
+              "phpmd/phpmd:${phpmd_constraint}"
+          elif [ "$HAS_JS" = "true" ]; then
+            git clone --depth 1 --no-tags \
+              https://github.com/magento/magento-coding-standard.git mcs
+            cd mcs && npm install && cd "${GITHUB_WORKSPACE}"
           fi
-          echo "Magento CE composer.json for tool pins (ref: ${{ steps.php-version.outputs.magento_composer_ref }})"
-
-          phpmd_constraint=""
-          phpstan_constraint=""
-          for src in \
-            "${GITHUB_WORKSPACE}/mcs/composer.json" \
-            "/tmp/magento2-composer.json"; do
-            [ -f "$src" ] || continue
-            [ -z "$phpmd_constraint" ] && phpmd_constraint="$("${GITHUB_WORKSPACE}/.github/scripts/read-pkg-constraint.sh" "$src" "phpmd/phpmd" || true)"
-            [ -z "$phpstan_constraint" ] && phpstan_constraint="$("${GITHUB_WORKSPACE}/.github/scripts/read-pkg-constraint.sh" "$src" "phpstan/phpstan" || true)"
-            [ -n "$phpmd_constraint" ] && [ -n "$phpstan_constraint" ] && break
-          done
-
-          if [ -z "$phpmd_constraint" ] || [ -z "$phpstan_constraint" ]; then
-            echo "::error::Could not resolve phpmd/phpmd or phpstan/phpstan from mcs/composer.json or /tmp/magento2-composer.json."
-            exit 1
-          fi
-          echo "Resolved phpmd/phpmd constraint: $phpmd_constraint"
-          echo "Resolved phpstan/phpstan constraint: $phpstan_constraint"
-
-          npm install
-          echo ""
-          echo "PHPCS installed standards:"
-          vendor/bin/phpcs -i
-
-          cd ..
-          mkdir -p qa-tools
-          cd qa-tools
-          composer init --name=local/qa-tools --no-interaction
-          composer config minimum-stability dev
-          composer config prefer-stable true
-          composer require --dev --no-interaction --no-progress --with-all-dependencies \
-            "phpmd/phpmd:${phpmd_constraint}" \
-            "phpstan/phpstan:${phpstan_constraint}" \
-            sebastian/phpcpd
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Resolve enabled checks
@@ -398,18 +342,17 @@ jobs:
             echo ",$ENABLED," | grep -qF ",$check," && echo "true" && return
             echo "false"
           }
-          for check in phpcs phpcs-xml phpcs-html phpcs-graphql phpcs-less phpmd phpstan phpcpd strict-types fixture-reuse rector eslint; do
+          for check in php-lint phpcs phpcs-xml xml-lint phpcs-html phpcs-graphql phpcs-less phpmd strict-types fixture-reuse eslint typescript; do
             key="${check//-/_}"
             echo "${key}=$(is_enabled "$check")" >> "$GITHUB_OUTPUT"
           done
 
       - name: Print resolved tool version map
+        if: env.HAS_PHP_OR_STATIC == 'true'
         run: |
           set -euo pipefail
           phpmd_mcs="$(.github/scripts/read-pkg-constraint.sh "${GITHUB_WORKSPACE}/mcs/composer.json" "phpmd/phpmd" || true)"
-          phpstan_mcs="$(.github/scripts/read-pkg-constraint.sh "${GITHUB_WORKSPACE}/mcs/composer.json" "phpstan/phpstan" || true)"
           phpmd_m2="$(.github/scripts/read-pkg-constraint.sh "/tmp/magento2-composer.json" "phpmd/phpmd" || true)"
-          phpstan_m2="$(.github/scripts/read-pkg-constraint.sh "/tmp/magento2-composer.json" "phpstan/phpstan" || true)"
 
           echo "=== Resolved Tool Version Map ==="
           echo "repo_name=${{ github.event.repository.name }}"
@@ -418,17 +361,15 @@ jobs:
           echo "php_version=${{ steps.php-version.outputs.php_version }}"
           echo "phpmd_constraint_from_mcs=${phpmd_mcs:-<missing>}"
           echo "phpmd_constraint_from_magento2=${phpmd_m2:-<missing>}"
-          echo "phpstan_constraint_from_mcs=${phpstan_mcs:-<missing>}"
-          echo "phpstan_constraint_from_magento2=${phpstan_m2:-<missing>}"
 
       - name: Fetch Magento static PHPMD framework
+        if: env.HAS_PHP_OR_STATIC == 'true'
         run: |
           set -euo pipefail
           ref="${{ steps.php-version.outputs.magento_composer_ref }}"
           if [ -z "$ref" ]; then
             ref="2.4-develop"
           fi
-
           target="/tmp/magento2-static"
           rm -rf "$target"
           git clone --depth 1 --filter=blob:none --sparse \
@@ -439,66 +380,71 @@ jobs:
           git sparse-checkout set \
             dev/tests/static/framework \
             dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd \
-            dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist \
-            dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/blacklist \
             lib/internal/Magento/Framework
 
           echo "Fetched Magento static PHPMD framework from ref: $ref"
 
-      - name: Get changed files
+      - name: Checkout changed files and fetch base commit
         id: files
+        if: steps.install-mcs.outputs.ready == 'true'
         run: |
           set -euo pipefail
-          base_ref="${{ github.event.pull_request.base.ref }}"
           base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
-          pr_number="${{ github.event.pull_request.number }}"
+          echo "base_sha=$base_sha" >> "$GITHUB_ENV"
+          git fetch --filter=blob:none --depth=1 origin "$base_sha" 2>/dev/null || true
 
-          if ! git cat-file -e "${base_sha}^{commit}" 2>/dev/null; then
-            git fetch origin "$base_ref" || true
-            base_sha="origin/$base_ref"
-          fi
+          # Deduplicate across all file lists so each blob is fetched exactly once.
+          # Use `cat "$f"; echo` to ensure a newline after each file's content —
+          # without it, the last entry of one list concatenates with the first of the next.
+          all_files=$(mktemp)
+          for f in /tmp/changed_php.txt /tmp/changed_js.txt /tmp/changed_xml.txt \
+                   /tmp/changed_html.txt /tmp/changed_graphqls.txt /tmp/changed_less.txt \
+                   /tmp/changed_ts.txt /tmp/copyright_changed.txt; do
+            [ -f "$f" ] || continue
+            cat "$f"; echo
+          done | sort -u | grep -v '^$' > "$all_files"
 
-          if ! git cat-file -e "${head_sha}^{commit}" 2>/dev/null; then
-            git fetch origin "pull/${pr_number}/head:pr-${pr_number}-head" || true
-            if git rev-parse --verify -q "pr-${pr_number}-head" >/dev/null; then
-              head_sha="pr-${pr_number}-head"
+          checked_out=0
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            tmp=$(mktemp)
+            if git show "HEAD:${file}" > "$tmp" 2>/dev/null; then
+              mkdir -p "$(dirname "$file")"
+              mv "$tmp" "$file"
+              checked_out=$((checked_out + 1))
+            else
+              rm -f "$tmp"
+              echo "::warning::Could not fetch $file from HEAD (not at HEAD — removed in PR?)"
             fi
+          done < "$all_files"
+          rm -f "$all_files"
+          echo "Checked out ${checked_out} changed file(s)."
+
+      # ── PHP syntax lint ───────────────────────────────────────────
+
+      - name: PHP syntax lint
+        id: php-lint
+        if: always() && steps.gate.outputs.php_lint == 'true' && env.HAS_PHP == 'true'
+        run: |
+          set -euo pipefail
+          errors=0
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            if ! php -l "$file" 2>&1; then
+              errors=$((errors + 1))
+            fi
+          done < /tmp/changed_php.txt
+          if [ "$errors" -gt 0 ]; then
+            echo "::error::${errors} file(s) have PHP parse errors"
+            exit 1
           fi
-
-          changed=$(git diff --name-only --diff-filter=ACMRT "$base_sha...$head_sha" \
-            | grep -vE '^(\.github|vendor|lib/web)/' || true)
-          added=$(git diff --name-only --diff-filter=A "$base_sha...$head_sha" \
-            | grep -vE '^(\.github|vendor|lib/web)/' || true)
-
-          php_files=$(echo "$changed"   | grep -E '\.(php|phtml)$'  || true)
-          js_files=$(echo "$changed"    | grep -E '\.js$' | grep -v '\.min\.js$' || true)
-          xml_files=$(echo "$changed"   | grep -E '\.(xml|xsd)$'    || true)
-          html_files=$(echo "$changed"  | grep -E '\.html$'         || true)
-          graphql_files=$(echo "$changed" | grep -E '\.graphqls$'   || true)
-          less_files=$(echo "$changed"  | grep -E '\.less$'         || true)
-          new_php=$(echo "$added"       | grep -E '\.php$'          || true)
-
-          [ -n "$php_files" ] && echo "$php_files" > /tmp/changed_php.txt
-          [ -n "$js_files" ] && echo "$js_files" > /tmp/changed_js.txt
-          [ -n "$xml_files" ] && echo "$xml_files" > /tmp/changed_xml.txt
-          [ -n "$html_files" ] && echo "$html_files" > /tmp/changed_html.txt
-          [ -n "$graphql_files" ] && echo "$graphql_files" > /tmp/changed_graphqls.txt
-          [ -n "$less_files" ] && echo "$less_files" > /tmp/changed_less.txt
-          [ -n "$new_php" ] && echo "$new_php" > /tmp/new_php.txt
-
-          echo "PHP files: $(echo "$php_files" | grep -c . || echo 0)"
-          echo "JS files: $(echo "$js_files" | grep -c . || echo 0)"
-          echo "XML/XSD files: $(echo "$xml_files" | grep -c . || echo 0)"
-          echo "HTML files: $(echo "$html_files" | grep -c . || echo 0)"
-          echo "GraphQL schema files: $(echo "$graphql_files" | grep -c . || echo 0)"
-          echo "LESS files: $(echo "$less_files" | grep -c . || echo 0)"
-          echo "New PHP files: $(echo "$new_php" | grep -c . || echo 0)"
+          echo "All PHP files passed syntax check."
 
       # ── PHPCS ─────────────────────────────────────────────────────
 
       - name: Run PHPCS
-        if: always() && steps.gate.outputs.phpcs == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        id: phpcs
+        if: always() && steps.gate.outputs.phpcs == 'true' && env.HAS_PHP == 'true'
         run: |
           set -euo pipefail
           # Exclude Legacy sniffs that parse XML or load external data
@@ -514,36 +460,58 @@ jobs:
           EXCLUDE="$EXCLUDE,Magento2.Legacy.RestrictedCode"
           .github/scripts/run-phpcs.sh "PHP" /tmp/changed_php.txt "--exclude=$EXCLUDE"
 
+      - name: XML well-formedness lint
+        id: xml-lint
+        if: always() && steps.gate.outputs.xml_lint == 'true' && env.HAS_STATIC == 'true'
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y -q libxml2-utils 2>/dev/null
+          errors=0
+          while IFS= read -r file; do
+            [ -n "$file" ] || continue
+            if ! xmllint --noout "$file" 2>&1; then
+              errors=$((errors + 1))
+            fi
+          done < /tmp/changed_xml.txt
+          if [ "$errors" -gt 0 ]; then
+            echo "::error::${errors} XML/XSD file(s) are not well-formed"
+            exit 1
+          fi
+          echo "All XML/XSD files are well-formed."
+
       - name: Run PHPCS for XML/XSD
-        if: always() && steps.gate.outputs.phpcs_xml == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        id: phpcs-xml
+        if: always() && steps.gate.outputs.phpcs_xml == 'true' && env.HAS_STATIC == 'true'
         run: |
           set -euo pipefail
           .github/scripts/run-phpcs.sh "XML/XSD" /tmp/changed_xml.txt "--extensions=xml,xsd"
 
       - name: Run PHPCS for HTML
-        if: always() && steps.gate.outputs.phpcs_html == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        id: phpcs-html
+        if: always() && steps.gate.outputs.phpcs_html == 'true' && env.HAS_STATIC == 'true'
         run: |
           set -euo pipefail
           .github/scripts/run-phpcs.sh "HTML" /tmp/changed_html.txt
 
       - name: Run PHPCS for GraphQL
-        if: always() && steps.gate.outputs.phpcs_graphql == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        id: phpcs-graphql
+        if: always() && steps.gate.outputs.phpcs_graphql == 'true' && env.HAS_STATIC == 'true'
         run: |
           set -euo pipefail
           .github/scripts/run-phpcs.sh "GraphQL schema" /tmp/changed_graphqls.txt
 
       - name: Run PHPCS for LESS
-        if: always() && steps.gate.outputs.phpcs_less == 'true' && needs.detect-changes.outputs.has_static == 'true'
+        id: phpcs-less
+        if: always() && steps.gate.outputs.phpcs_less == 'true' && env.HAS_STATIC == 'true'
         run: |
           set -euo pipefail
           .github/scripts/run-phpcs.sh "LESS" /tmp/changed_less.txt
 
-      # ── Rector ────────────────────────────────────────────────────
-
       # ── PHPMD ────────────────────────────────────────────────────
 
       - name: Run PHPMD
-        if: always() && steps.gate.outputs.phpmd == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        id: phpmd
+        if: always() && steps.gate.outputs.phpmd == 'true' && env.HAS_PHP == 'true'
         run: |
           set -euo pipefail
           if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
@@ -551,29 +519,23 @@ jobs:
             exit 0
           fi
           phpmd_bin="${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpmd"
-          ruleset="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
+          magento_ruleset="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
           prepend_file="/tmp/magento2-static/phpmd-prepend.php"
-          if [ ! -f "$ruleset" ]; then
-            echo "Magento ruleset not available, falling back to local standalone ruleset."
-            ruleset="${GITHUB_WORKSPACE}/.github/scripts/phpmd-ruleset.xml"
-          else
-            # Wrap the primary ruleset to exclude rules that require the full
-            # vendor tree (Laminas etc.) and crash in the sparse-clone environment.
-            wrapper="/tmp/phpmd-ruleset-ci.xml"
-            cat > "$wrapper" <<XML
-            <?xml version="1.0" encoding="UTF-8"?>
-            <ruleset name="Magento PHPMD (CI)" xmlns="http://pmd.sf.net/ruleset/1.0.0"
-                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                     xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">
-                <description>Magento PHPMD rules, excluding rules that require the full vendor tree.</description>
-                <rule ref="${ruleset}">
-                    <exclude name="CookieAndSessionMisuse"/>
-                    <exclude name="AllPurposeAction"/>
-                </rule>
-            </ruleset>
-            XML
-            ruleset="$wrapper"
-          fi
+          # Wrap the Magento ruleset to exclude rules that require the full
+          # vendor tree (Laminas etc.) and crash in the sparse-clone environment.
+          ruleset="/tmp/phpmd-ruleset-ci.xml"
+          {
+            printf '<?xml version="1.0" encoding="UTF-8"?>\n'
+            printf '<ruleset name="Magento PHPMD (CI)" xmlns="http://pmd.sf.net/ruleset/1.0.0"\n'
+            printf '         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+            printf '         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">\n'
+            printf '  <description>Magento PHPMD rules, excluding rules that require the full vendor tree.</description>\n'
+            printf '  <rule ref="%s">\n' "$magento_ruleset"
+            printf '    <exclude name="CookieAndSessionMisuse"/>\n'
+            printf '    <exclude name="AllPurposeAction"/>\n'
+            printf '  </rule>\n'
+            printf '</ruleset>\n'
+          } > "$ruleset"
           cat > "$prepend_file" <<'PHP'
           <?php
           $root = '/tmp/magento2-static';
@@ -604,105 +566,43 @@ jobs:
             phpmd_symfony=true
           fi
 
+          phpmd_exit=0
           batch_size=20
           for ((i=0; i<${#files[@]}; i+=batch_size)); do
             batch_files=("${files[@]:i:batch_size}")
             batch_list=$(printf "%s," "${batch_files[@]}" | sed 's/,*$//')
             if [ "$phpmd_symfony" = true ]; then
-              php -d auto_prepend_file="$prepend_file" "$phpmd_bin" analyze "${batch_files[@]}" \
+              timeout 120 php -d auto_prepend_file="$prepend_file" -d memory_limit=512M \
+                "$phpmd_bin" analyze "${batch_files[@]}" \
                 --format=text \
                 --ruleset="$ruleset" \
                 --suffixes=php --suffixes=phtml \
-                --no-progress || exit $?
+                --no-progress 2>/dev/null || phpmd_exit=$?
             else
-              php -d auto_prepend_file="$prepend_file" "$phpmd_bin" \
+              timeout 120 php -d auto_prepend_file="$prepend_file" -d memory_limit=512M \
+                "$phpmd_bin" \
                 "$batch_list" \
                 text \
                 "$ruleset" \
-                --suffixes=php,phtml || exit $?
+                --suffixes=php,phtml 2>/dev/null || phpmd_exit=$?
             fi
+            [ "$phpmd_exit" -ne 0 ] && break
           done
-
-      # ── PHPStan ──────────────────────────────────────────────────
-
-      - name: Generate Magento stubs for PHPStan
-        if: always() && steps.gate.outputs.phpstan == 'true' && needs.detect-changes.outputs.has_php == 'true'
-        run: |
-          set -euo pipefail
-          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
-            echo "No PHP files to check, skipping phpstan."
-            exit 0
+          if [ "$phpmd_exit" -eq 124 ]; then
+            echo "::error::PHPMD batch timed out (120 s). The PR may have too many complex files for a single batch. Consider splitting the PR."
+            exit 1
           fi
-          bash .github/scripts/generate-stubs.sh /tmp/changed_php.txt
-
-      - name: Run PHPStan
-        if: always() && steps.gate.outputs.phpstan == 'true' && needs.detect-changes.outputs.has_php == 'true'
-        run: |
-          set -euo pipefail
-          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
-            echo "No PHP files to check, skipping phpstan."
-            exit 0
+          if [ "$phpmd_exit" -eq 143 ]; then
+            echo "::error::PHPMD was terminated by SIGTERM (exit 143). Possible cause: OOM or job timeout on a large PR."
+            exit 1
           fi
-
-          blacklist_dir="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/blacklist"
-          mapfile -t files_to_scan < <(.github/scripts/filter-blacklist.sh "$blacklist_dir" /tmp/changed_php.txt "PHPStan")
-
-          if [ "${#files_to_scan[@]}" -eq 0 ]; then
-            echo "No PHP files to analyze after blacklist filtering."
-            exit 0
-          fi
-
-          # When the CE sparse clone is present, use phpstan-extensions.neon which
-          # extends the base config with DataObjectClassReflectionExtension and
-          # FilteredErrorFormatter. The extension classes are loaded via
-          # --autoload-file, which PHPStan processes before building its DI
-          # container (unlike bootstrapFiles, which run after container build).
-          # When the sparse clone is absent, fall back to the base neon and the
-          # plain table formatter — extensions are simply not registered.
-          ext_class="/tmp/magento2-static/dev/tests/static/framework/Magento/PhpStan/Reflection/Php/DataObjectClassReflectionExtension.php"
-          fmt_class="/tmp/magento2-static/dev/tests/static/framework/Magento/PhpStan/Formatters/FilteredErrorFormatter.php"
-
-          if [ -f "$ext_class" ] && [ -f "$fmt_class" ]; then
-            phpstan_neon="${GITHUB_WORKSPACE}/.github/scripts/phpstan-extensions.neon"
-            autoload_flag="--autoload-file=${GITHUB_WORKSPACE}/.github/scripts/phpstan-framework-autoload.php"
-            error_format="filtered"
-          else
-            phpstan_neon="${GITHUB_WORKSPACE}/.github/scripts/phpstan.neon"
-            autoload_flag=""
-            error_format="table"
-          fi
-
-          "${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpstan" analyse \
-            $autoload_flag \
-            --configuration="$phpstan_neon" \
-            --no-progress \
-            --error-format="$error_format" \
-            "${files_to_scan[@]}"
-
-      # ── PHPCPD ────────────────────────────────────────────────────
-
-      - name: Run PHPCPD (Copy/Paste Detector)
-        if: always() && steps.gate.outputs.phpcpd == 'true' && needs.detect-changes.outputs.has_php == 'true'
-        run: |
-          set -euo pipefail
-          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
-            echo "No PHP files to check, skipping phpcpd."
-            exit 0
-          fi
-          blacklist_dir="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpcpd/blacklist"
-          mapfile -t files_to_scan < <(.github/scripts/filter-blacklist.sh "$blacklist_dir" /tmp/changed_php.txt "PHPCPD")
-
-          if [ "${#files_to_scan[@]}" -eq 0 ]; then
-            echo "No PHP files left for PHPCPD after blacklist filtering."
-            exit 0
-          fi
-
-          "${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpcpd" "${files_to_scan[@]}"
+          exit "$phpmd_exit"
 
       # ── strict_types ──────────────────────────────────────────────
 
       - name: Check strict_types declaration
-        if: always() && steps.gate.outputs.strict_types == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        id: strict-types
+        if: always() && steps.gate.outputs.strict_types == 'true' && env.HAS_PHP == 'true'
         run: |
           set -euo pipefail
           if [ ! -s /tmp/new_php.txt ]; then
@@ -727,7 +627,8 @@ jobs:
           echo "All new PHP files have strict_types declaration."
 
       - name: Check fixture reuse (static parity)
-        if: always() && steps.gate.outputs.fixture_reuse == 'true' && needs.detect-changes.outputs.has_php == 'true'
+        id: fixture-reuse
+        if: always() && steps.gate.outputs.fixture_reuse == 'true' && env.HAS_PHP == 'true'
         run: |
           set -euo pipefail
           if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
@@ -755,41 +656,40 @@ jobs:
           fi
           echo "Fixture reuse check passed."
 
-      # ── Rector ────────────────────────────────────────────────────
+      # ── Copyright headers ─────────────────────────────────────────
 
-      - name: Run Rector
-        if: always() && steps.gate.outputs.rector == 'true' && needs.detect-changes.outputs.has_php == 'true'
-        env:
-          RECTOR_PHP_VERSION: ${{ steps.php-version.outputs.php_version }}
+      - name: Check copyright headers
+        id: copyright
+        if: always() && steps.install-mcs.outputs.ready == 'true' && env.HAS_COPYRIGHT_FILES == 'true'
         run: |
           set -euo pipefail
-          if [ ! -f /tmp/changed_php.txt ] || [ ! -s /tmp/changed_php.txt ]; then
-            echo "No PHP files to check, skipping rector."
+          if [ ! -f /tmp/copyright_changed.txt ] || [ ! -s /tmp/copyright_changed.txt ]; then
+            echo "No copyright-eligible files — skipping."
             exit 0
           fi
 
-          file_args=()
-          while IFS= read -r file; do
-            [ -n "$file" ] && [ -f "$file" ] && file_args+=("$GITHUB_WORKSPACE/$file")
-          done < /tmp/changed_php.txt
+          # Pre-fetch base versions so the PHP script needs no shell execution
+          mkdir -p /tmp/copyright_base
+          while IFS= read -r f; do
+            [ -z "$f" ] && continue
+            mkdir -p "/tmp/copyright_base/$(dirname "$f")"
+            git show "${base_sha}:${f}" > "/tmp/copyright_base/${f}" 2>/dev/null || true
+          done < /tmp/copyright_changed.txt
 
-          if [ ${#file_args[@]} -eq 0 ]; then
-            echo "No PHP files to check."
-            exit 0
-          fi
+          added_flag=""
+          [ -f /tmp/copyright_added.txt ] && added_flag="--added /tmp/copyright_added.txt"
 
-          cd mcs
-          vendor/bin/rector process \
-            --config "$GITHUB_WORKSPACE/.github/scripts/rector-compat.php" \
-            --dry-run \
-            --autoload-file vendor/squizlabs/php_codesniffer/autoload.php \
-            --autoload-file vendor/magento/php-compatibility-fork/PHPCSAliases.php \
-            "${file_args[@]}"
+          php .github/scripts/check_copyright_pr.php \
+            --files    /tmp/copyright_changed.txt \
+            $added_flag \
+            --base-dir /tmp/copyright_base \
+            --template "${GITHUB_WORKSPACE}/.github/scripts/copyright-template.txt"
 
       # ── ESLint ────────────────────────────────────────────────────
 
       - name: Run ESLint
-        if: always() && steps.gate.outputs.eslint == 'true' && needs.detect-changes.outputs.has_js == 'true'
+        id: eslint
+        if: always() && steps.gate.outputs.eslint == 'true' && env.HAS_JS == 'true'
         run: |
           set -euo pipefail
           mapfile -t js_args < /tmp/changed_js.txt
@@ -798,77 +698,73 @@ jobs:
             -c mcs/eslint/eslint.config.mjs \
             "${js_args[@]}"
 
-      - name: Validate generated XML test reports are non-empty
-        if: always()
+      # ── TypeScript ────────────────────────────────────────────────
+
+      - name: Run TypeScript checks
+        id: typescript
+        if: always() && steps.gate.outputs.typescript == 'true' && env.HAS_TS == 'true'
         run: |
           set -euo pipefail
-          report_dir="${GITHUB_WORKSPACE}/build/test-reports"
-          if [ ! -d "$report_dir" ]; then
-            echo "No build/test-reports directory found; skipping XML report size check."
-            exit 0
+          npm install --prefix /tmp/ts-tools typescript tslint 2>/dev/null
+          TSC=/tmp/ts-tools/node_modules/.bin/tsc
+          TSLINT=/tmp/ts-tools/node_modules/.bin/tslint
+
+          mapfile -t ts_files < /tmp/changed_ts.txt
+
+          # Fetch tslint.json from HEAD if present (compiler options only — do not use
+          # tsconfig.json include paths, which would try to compile the full project tree)
+          _tmp=$(mktemp)
+          if git show "HEAD:tslint.json" > "$_tmp" 2>/dev/null && [ -s "$_tmp" ]; then
+            mv "$_tmp" tslint.json
+            echo "Using repo tslint.json"
+          else
+            rm -f "$_tmp"
+            cp .github/scripts/tslint.json tslint.json
+            echo "Using bundled .github/scripts/tslint.json (repo has no tslint.json)"
           fi
 
-          shopt -s nullglob
-          xml_reports=("$report_dir"/*.xml)
-          shopt -u nullglob
+          tslint_exit=0
+          tsc_exit=0
 
-          if [ "${#xml_reports[@]}" -eq 0 ]; then
-            echo "No XML reports found in $report_dir; skipping XML report size check."
-            exit 0
-          fi
+          # tslint — mirrors npm run test:static:log
+          "$TSLINT" --format stylish "${ts_files[@]}" || tslint_exit=$?
 
-          has_empty=0
-          for report in "${xml_reports[@]}"; do
-            if [ ! -s "$report" ]; then
-              echo "::error::Test report file is empty: $report"
-              has_empty=1
-            fi
-          done
+          # tsc --noEmit --noResolve — mirrors npm run test:errors:log
+          # --noResolve skips import resolution so only the changed files are needed
+          "$TSC" --noEmit --noResolve --allowSyntheticDefaultImports \
+            --esModuleInterop --strict --target ES2020 \
+            "${ts_files[@]}" || tsc_exit=$?
 
-          if [ "$has_empty" -ne 0 ]; then
-            echo "::error::One or more XML test report files are empty. This often means tests failed before writing JUnit output."
-            exit 1
-          fi
-          echo "All discovered XML test reports are non-empty."
+          [ "$tslint_exit" -gt 0 ] || [ "$tsc_exit" -gt 0 ] && exit 1 || true
 
-  # ──────────────────────────────────────────────────────────────────────
-  # Final Job: Linked PR Aggregate Gate
-  #
-  # Runs after all PR quality jobs finish and validates linked PRs listed
-  # in the PR description (Related PRs area).
-  # ──────────────────────────────────────────────────────────────────────
-  aggregate-linked-pr-checks:
-    needs:
-      - detect-changes
-      - mainline-alignment
-      - copyright-check
-      - coding-standard
-    if: >-
-      contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') &&
-      always() &&
-      github.event_name == 'pull_request' &&
-      contains(fromJSON('["success","failure"]'), needs.detect-changes.result) &&
-      contains(fromJSON('["success","failure"]'), needs.mainline-alignment.result) &&
-      contains(fromJSON('["success","failure","skipped"]'), needs.copyright-check.result) &&
-      contains(fromJSON('["success","failure","skipped"]'), needs.coding-standard.result) &&
-      vars.PR_QA_ENABLED_JOBS != ''
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    env:
-      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
-    permissions:
-      contents: read
-      pull-requests: read
-      checks: read
-      statuses: read
-    steps:
+      - name: Coding standard results summary
+        if: always() && steps.install-mcs.outputs.ready == 'true'
+        run: |
+          {
+            echo "## Coding Standard Results"
+            echo "| Check | Status |"
+            echo "|-------|--------|"
+            echo "| PHP syntax lint | ${{ steps.php-lint.outcome      == 'success' && '✅' || steps.php-lint.outcome      == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPCS PHP       | ${{ steps.phpcs.outcome        == 'success' && '✅' || steps.phpcs.outcome        == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| XML lint        | ${{ steps.xml-lint.outcome     == 'success' && '✅' || steps.xml-lint.outcome     == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPCS XML/XSD   | ${{ steps.phpcs-xml.outcome    == 'success' && '✅' || steps.phpcs-xml.outcome    == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPCS HTML      | ${{ steps.phpcs-html.outcome   == 'success' && '✅' || steps.phpcs-html.outcome   == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPCS GraphQL   | ${{ steps.phpcs-graphql.outcome == 'success' && '✅' || steps.phpcs-graphql.outcome == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPCS LESS      | ${{ steps.phpcs-less.outcome   == 'success' && '✅' || steps.phpcs-less.outcome   == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| PHPMD           | ${{ steps.phpmd.outcome        == 'success' && '✅' || steps.phpmd.outcome        == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| Strict types    | ${{ steps.strict-types.outcome == 'success' && '✅' || steps.strict-types.outcome == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| Fixture reuse   | ${{ steps.fixture-reuse.outcome == 'success' && '✅' || steps.fixture-reuse.outcome == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| Copyright       | ${{ steps.copyright.outcome    == 'success' && '✅' || steps.copyright.outcome    == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| ESLint          | ${{ steps.eslint.outcome       == 'success' && '✅' || steps.eslint.outcome       == 'skipped' && '⏭️' || '❌' }} |"
+            echo "| TypeScript      | ${{ steps.typescript.outcome   == 'success' && '✅' || steps.typescript.outcome   == 'skipped' && '⏭️' || '❌' }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # ── Linked PR aggregate gate ────────────────────────────────────
+
       - name: Debug aggregate gate context
+        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,')
         run: |
           set -euo pipefail
-          echo "detect-changes=${{ needs.detect-changes.result }}"
-          echo "mainline-alignment=${{ needs.mainline-alignment.result }}"
-          echo "copyright-check=${{ needs.copyright-check.result }}"
-          echo "coding-standard=${{ needs.coding-standard.result }}"
           echo "PR_QA_ENABLED_JOBS='${{ vars.PR_QA_ENABLED_JOBS }}'"
           if [ -n "${CROSS_REPO_READ_TOKEN}" ]; then
             echo "CROSS_REPO_READ_TOKEN=present"
@@ -877,14 +773,14 @@ jobs:
           fi
 
       - name: Skip if cross-repo token is missing
-        if: ${{ env.CROSS_REPO_READ_TOKEN == '' }}
+        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.CROSS_REPO_READ_TOKEN == ''
         run: |
           set -euo pipefail
           echo "CROSS_REPO_READ_TOKEN is not set. Skipping aggregate-linked-pr-checks."
           exit 0
 
       - name: Validate linked PR checks
-        if: ${{ env.CROSS_REPO_READ_TOKEN != '' }}
+        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.CROSS_REPO_READ_TOKEN != ''
         uses: actions/github-script@v9
         with:
           github-token: ${{ env.CROSS_REPO_READ_TOKEN }}
