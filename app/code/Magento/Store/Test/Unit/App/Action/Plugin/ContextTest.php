@@ -15,15 +15,12 @@ use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\App\Action\Plugin\Context;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Test\Unit\App\Action\Plugin\_files\ContextTestSession;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/_files/ContextTestSession.php';
-
 class ContextTest extends TestCase
 {
-    /** @var ContextTestSession|MockObject */
+    /** @var SessionManagerInterface|MockObject */
     private $session;
 
     /** @var HttpContext|MockObject */
@@ -43,7 +40,9 @@ class ContextTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->session = $this->createMock(ContextTestSession::class);
+        $this->session = $this->getMockBuilder(SessionManagerInterface::class)
+            ->addMethods(['getCurrencyCode'])
+            ->getMockForAbstractClass();
         $this->httpContext = $this->createMock(HttpContext::class);
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->storeCookieManager = $this->createMock(StoreCookieManagerInterface::class);
