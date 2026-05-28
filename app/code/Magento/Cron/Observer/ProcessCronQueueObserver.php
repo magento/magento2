@@ -14,7 +14,6 @@ use Exception;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
@@ -250,19 +249,10 @@ class ProcessCronQueueObserver implements ObserverInterface
     }
 
     /**
-     * Lazy-resolve the resource connection, tolerating environments where
-     * the ObjectManager is not bootstrapped (e.g. unit tests). Production
-     * code path always receives the dependency through DI.
+     * Return the injected resource connection, or null if none was provided.
      */
     private function getResourceConnection(): ?ResourceConnection
     {
-        if ($this->resourceConnection === null) {
-            try {
-                $this->resourceConnection = ObjectManager::getInstance()->get(ResourceConnection::class);
-            } catch (\Throwable $e) {
-                return null;
-            }
-        }
         return $this->resourceConnection;
     }
 
