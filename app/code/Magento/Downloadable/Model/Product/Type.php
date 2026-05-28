@@ -169,17 +169,16 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     public function hasLinks($product)
     {
         $hasLinks = $product->getData('links_exist');
-        if (null === $hasLinks) {
-            $links = $product->getDownloadableLinks();
-            if ($links !== null) {
-                $hasLinks = !empty($links);
-            } else {
-                $hasLinks = $this->_linksFactory->create()
-                    ->addProductToFilter($product->getEntityId())
-                    ->getSize() > 0;
-            }
+        if (null !== $hasLinks) {
+            return (bool)$hasLinks;
         }
-        return $hasLinks;
+        $links = $product->getDownloadableLinks();
+        if ($links !== null) {
+            return !empty($links);
+        }
+        return $this->_linksFactory->create()
+            ->addProductToFilter($product->getEntityId())
+            ->getSize() > 0;
     }
 
     /**

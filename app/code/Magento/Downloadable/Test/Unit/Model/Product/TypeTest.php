@@ -135,6 +135,7 @@ class TypeTest extends TestCase
                 'setLinksExist',
                 'getDownloadableLinks',
                 'getDownloadableSamples',
+                'getData',
                 'getResource',
                 'canAffectOptions',
                 '__wakeup',
@@ -191,8 +192,36 @@ class TypeTest extends TestCase
         $this->assertEquals($result, $this->target);
     }
 
+    public function testHasLinksReturnsTrueWhenLinksExistFlagIsSet(): void
+    {
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('links_exist')
+            ->willReturn(1);
+        $this->product->expects($this->never())
+            ->method('getDownloadableLinks');
+
+        $this->assertTrue($this->target->hasLinks($this->product));
+    }
+
+    public function testHasLinksReturnsFalseWhenLinksExistFlagIsZero(): void
+    {
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('links_exist')
+            ->willReturn(0);
+        $this->product->expects($this->never())
+            ->method('getDownloadableLinks');
+
+        $this->assertFalse($this->target->hasLinks($this->product));
+    }
+
     public function testHasLinks()
     {
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('links_exist')
+            ->willReturn(null);
         $this->product->expects($this->once())
             ->method('getDownloadableLinks')
             ->willReturn(['link1', 'link2']);
@@ -201,6 +230,10 @@ class TypeTest extends TestCase
 
     public function testHasLinksReturnsFalseWhenCachedLinksAreEmpty(): void
     {
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('links_exist')
+            ->willReturn(null);
         $this->product->expects($this->once())
             ->method('getDownloadableLinks')
             ->willReturn([]);
@@ -215,6 +248,10 @@ class TypeTest extends TestCase
             ['addProductToFilter', 'getSize']
         );
 
+        $this->product->expects($this->once())
+            ->method('getData')
+            ->with('links_exist')
+            ->willReturn(null);
         $this->product->expects($this->once())
             ->method('getDownloadableLinks')
             ->willReturn(null);
