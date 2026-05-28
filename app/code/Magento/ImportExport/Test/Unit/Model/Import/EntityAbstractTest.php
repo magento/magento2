@@ -26,6 +26,9 @@ use Magento\ImportExport\Model\ResourceModel\Helper;
 use Magento\ImportExport\Model\ResourceModel\Import\Data as ImportData;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EntityAbstractTest extends AbstractImportTestCase
 {
     /**
@@ -581,6 +584,7 @@ class EntityAbstractTest extends AbstractImportTestCase
      * Test for method _saveValidatedBunches()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::_saveValidatedBunches
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveValidatedBunchesSplitsRowsAtLegacySerializedSizeThreshold()
     {
@@ -622,6 +626,7 @@ class EntityAbstractTest extends AbstractImportTestCase
 
     /**
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::_saveValidatedBunches
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSaveValidatedBunchesAccountsForNonSequentialKeysAfterFlush()
     {
