@@ -294,6 +294,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $paymentMethodSpecifications;
 
     /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    private \Magento\Catalog\Helper\Product $catalogProductHelper;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -330,6 +335,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param HttpRequest|null $request
      * @param SpecificationFactory|null $paymentMethodSpecificationFactory
      * @param array $paymentMethodSpecifications
+     * @param \Magento\Catalog\Helper\Product|null $catalogProductHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -368,7 +374,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         ?OrderRepositoryInterface $orderRepositoryInterface = null,
         ?HttpRequest $request = null,
         ?SpecificationFactory $paymentMethodSpecificationFactory = null,
-        array $paymentMethodSpecifications = []
+        array $paymentMethodSpecifications = [],
+        ?\Magento\Catalog\Helper\Product $catalogProductHelper = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -412,6 +419,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->paymentMethodSpecificationFactory = $paymentMethodSpecificationFactory ?: ObjectManager::getInstance()
             ->get(SpecificationFactory::class);
         $this->paymentMethodSpecifications = $paymentMethodSpecifications;
+        $this->catalogProductHelper = $catalogProductHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Product::class);
     }
 
     /**
@@ -597,9 +606,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         // (Quote::addProduct -> Product::isSalable -> StockRegistry says
         // is_in_stock=false), leaving Admin "Reorder" with an empty quote
         // and a confusing "This product is out of stock" message.
-        $catalogProduct = $this->_objectManager->get(\Magento\Catalog\Helper\Product::class);
-        $previousSkipSaleableCheck = $catalogProduct->getSkipSaleableCheck();
-        $catalogProduct->setSkipSaleableCheck(true);
+        $previousSkipSaleableCheck = $this->catalogProductHelper->getSkipSaleableCheck();
+        $this->catalogProductHelper->setSkipSaleableCheck(true);
 
         try {
             foreach (
@@ -621,7 +629,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 }
             }
         } finally {
-            $catalogProduct->setSkipSaleableCheck($previousSkipSaleableCheck);
+            $this->catalogProductHelper->setSkipSaleableCheck($previousSkipSaleableCheck);
         }
 
         $shippingAddress = $order->getShippingAddress();
