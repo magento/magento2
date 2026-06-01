@@ -30,7 +30,7 @@ class Calculator extends Validator
     public function processFreeShipping(AbstractItem $item)
     {
         $address = $item->getAddress();
-        $item->setFreeShipping(false);
+        $this->resetFreeShipping($item);
 
         /* @var $rule SalesRule */
         foreach ($this->getRules($address) as $rule) {
@@ -107,6 +107,23 @@ class Calculator extends Validator
             foreach ($item->getChildren() as $child) {
                 $child->setFreeShipping($rule->getDiscountQty() ? $rule->getDiscountQty() : true);
                 $child->setFreeShippingMethod($method);
+            }
+        }
+    }
+
+    /**
+     * Reset free shipping for item
+     *
+     * @param AbstractItem $item
+     *
+     * @return void
+     */
+    private function resetFreeShipping(AbstractItem $item): void
+    {
+        $item->setFreeShipping(false);
+        if ($item->getHasChildren() && $item->isShipSeparately()) {
+            foreach ($item->getChildren() as $child) {
+                $child->setFreeShipping(false);
             }
         }
     }

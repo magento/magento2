@@ -54,7 +54,7 @@
     </entity>
     <entity name="AdminEnableFreeMethodUSPSConfigData" type="usps_config">
         <data key="path">carriers/usps/free_method</data>
-        <data key="value">7</data>
+        <data key="value">LIBRARY_MAIL_MACHINABLE_5-DIGIT</data>
     </entity>
     <entity name="AdminDisableFreeMethodUSPSConfigData" type="usps_config">
         <data key="path">carriers/usps/free_method</data>

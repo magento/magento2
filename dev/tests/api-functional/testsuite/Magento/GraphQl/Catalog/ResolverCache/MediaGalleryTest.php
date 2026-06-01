@@ -574,6 +574,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $registry->register('isSecureArea', true);
 
         $this->productRepository->delete($product);
+        sleep(5);
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);

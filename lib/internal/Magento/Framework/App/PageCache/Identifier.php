@@ -51,8 +51,7 @@ class Identifier implements IdentifierInterface
     public function getValue()
     {
         $pattern = $this->getMarketingParameterPatterns();
-        $replace = array_fill(0, count($pattern), '');
-        $url = preg_replace($pattern, $replace, (string)$this->request->getUriString());
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
         list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
@@ -101,19 +100,27 @@ class Identifier implements IdentifierInterface
      * @param string $url
      * @return array
      */
-    private function reconstructUrl(string $url): array
+    public function reconstructUrl(string $url): array
     {
         if (empty($url)) {
             return [$url, ''];
         }
+
         $baseUrl = strtok($url, '?');
-        $query = $this->request->getUri()->getQueryAsArray();
-        if (!empty($query)) {
-            ksort($query);
-            $query = http_build_query($query);
+        $queryString = parse_url($url, PHP_URL_QUERY) ?: '';
+
+        $queryArray = [];
+        if ($queryString !== '') {
+            parse_str($queryString, $queryArray);
+        }
+
+        if (!empty($queryArray)) {
+            ksort($queryArray);
+            $query = http_build_query($queryArray);
         } else {
             $query = '';
         }
+
         return [$baseUrl, $query];
     }
 }

@@ -174,9 +174,10 @@
             </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>JavaScript Settings</label>
-                <field id="merge_files" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="merge_files" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Merge JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>When disabled, each script is loaded separately.</comment>
                 </field>
                 <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Enable JavaScript Bundling</label>

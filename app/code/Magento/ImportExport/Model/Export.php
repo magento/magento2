@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\ImportExport\Model\Export\Entity\Factory;
+use Magento\ImportExport\Model\Export\FileInfo;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -89,6 +90,11 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
     private $localeEmulator;
 
     /**
+     * @var FileInfo
+     */
+    private $fileInfo;
+
+    /**
      * Internal marker returned in queue export flow to avoid loading full file content into memory.
      */
     private const RESULT_WRITTEN_TO_FILE = '__RESULT_WRITTEN_TO_FILE__';
@@ -101,6 +107,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac
      * @param array $data
      * @param LocaleEmulatorInterface|null $localeEmulator
+     * @param FileInfo|null $fileInfo
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -109,13 +116,17 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         \Magento\ImportExport\Model\Export\Entity\Factory $entityFactory,
         \Magento\ImportExport\Model\Export\Adapter\Factory $exportAdapterFac,
         array $data = [],
-        ?LocaleEmulatorInterface $localeEmulator = null
+        ?LocaleEmulatorInterface $localeEmulator = null,
+        ?FileInfo $fileInfo = null
     ) {
         $this->_exportConfig = $exportConfig;
         $this->_entityFactory = $entityFactory;
         $this->_exportAdapterFac = $exportAdapterFac;
         parent::__construct($logger, $filesystem, $data);
         $this->localeEmulator = $localeEmulator ?? ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
+        $this->fileInfo = $fileInfo ?? ObjectManager::getInstance()->get(
+            FileInfo::class
+        );
     }
 
     /**
@@ -181,8 +192,8 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
                     $arguments = [];
                     $fileName = (string)$this->getData('file_name');
                     if ($fileName !== '') {
-                        // Queue export flow: write directly to final destination to avoid giant in-memory readback.
-                        $arguments['destination'] = 'export/' . $fileName;
+                        // Queue export flow: write to a temporary destination and publish atomically on success.
+                        $arguments['destination'] = $this->fileInfo->getInProgressFilePath($fileName);
                     }
                     $this->_writer = $this->_exportAdapterFac->create(
                         $fileFormats[$this->getFileFormat()]['model'],
@@ -241,7 +252,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             if ($contentLength === 0) {
                 if ($isQueueFlow) {
                     $directory = $this->_varDirectory;
-                    $filePath = 'export/' . $fileName;
+                    $filePath = $this->fileInfo->getInProgressFilePath($fileName);
                     if ($directory->isFile($filePath)) {
                         $directory->delete($filePath);
                     }
