@@ -91,10 +91,12 @@ class SaveCategoryWithEnabledFlatTest extends AbstractSaveCategoryTest
             // Indexer doesn't exist, skip cleanup
         }
         $this->deleteAllCategoryUrlRewrites();
-        try {
-            $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
-        } catch (NoSuchEntityException $e) {
-            //Category already deleted.
+        if ($this->createdCategoryId !== null) {
+            try {
+                $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
+            } catch (NoSuchEntityException $e) {
+                //Category already deleted.
+            }
         }
         $this->createdCategoryId = null;
     }

@@ -64,6 +64,7 @@
                 <argument name="name" value="{{SimpleTaxTexas.identifier}}-{{SimpleTaxTexas.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Navigate to StoreFront -->

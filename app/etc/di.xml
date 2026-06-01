@@ -1884,7 +1884,8 @@
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.6)" xsi:type="string">^10\.[2-6]\.</item>
                 <item name="MariaDB-(10.11)" xsi:type="string">^10\.11\.</item>
-                <item name="MariaDB-11.4" xsi:type="string">^11\.4\.</item>
+                <item name="MariaDB-(11.4-11.8)" xsi:type="string">^11\.[4|8]\.</item>
+                <item name="MariaDB-(12.2-12.3)" xsi:type="string">^12\.[2-3]\.</item>
             </argument>
         </arguments>
     </type>
@@ -1989,13 +1990,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
-    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
         <arguments>
             <argument name="maxPageSize" xsi:type="number">300</argument>
@@ -2025,6 +2019,15 @@
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+                <item name="valkey" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\ValkeyRequestLogger</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Setup\Model\ConfigOptionsList\BackpressureLogger">
+        <arguments>
+            <argument name="validLoggerTypes" xsi:type="array">
+                <item name="redis" xsi:type="string">redis</item>
+                <item name="valkey" xsi:type="string">valkey</item>
             </argument>
         </arguments>
     </type>

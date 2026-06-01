@@ -37,7 +37,10 @@ class BackpressureLoggerTest extends TestCase
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->configList = new BackpressureLogger($this->validatorMock);
+        $this->configList = new BackpressureLogger(
+            $this->validatorMock,
+            ['redis' => 'redis', 'valkey' => 'valkey']
+        );
     }
 
     /**
@@ -217,6 +220,36 @@ class BackpressureLoggerTest extends TestCase
                     ]
                 ],
             ],
+            'valkey minimum options' => [
+                'options' => ['backpressure-logger' => 'valkey'],
+                'deploymentConfigReturnMap' => [
+                    ['backpressure/logger/options/server', null, null],
+                    ['backpressure/logger/options/port', null, null],
+                    ['backpressure/logger/options/timeout', null, null],
+                    ['backpressure/logger/options/persistent', null, null],
+                    ['backpressure/logger/options/db', null, null],
+                    ['backpressure/logger/options/password', null, null],
+                    ['backpressure/logger/options/user', null, null],
+                    ['backpressure/logger/id-prefix', null, null],
+                ],
+                'expectedConfigData' => [
+                    'backpressure' => [
+                        'logger' => [
+                            'type' => 'valkey',
+                            'options' => [
+                                'server' => '127.0.0.1',
+                                'port' => 6379,
+                                'db' => 3,
+                                'password' => null,
+                                'timeout' => null,
+                                'persistent' => '',
+                                'user' => null
+                            ],
+                            'id-prefix' => self::expectedIdPrefix()
+                        ]
+                    ]
+                ],
+            ],
             'update-part-of-configuration' => [
                 'options' => [
                     'backpressure-logger-redis-port' => 4433,
@@ -255,6 +288,43 @@ class BackpressureLoggerTest extends TestCase
                 ],
             ]
         ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function dataProviderValidate(): array
+    {
+        return [
+            'redis valid connection' => ['redis', true, []],
+            'valkey valid connection' => ['valkey', true, []],
+            'redis invalid connection' => [
+                'redis',
+                false,
+                ['Invalid Redis configuration. Could not connect to Redis server.']
+            ],
+            'valkey invalid connection' => [
+                'valkey',
+                false,
+                ['Invalid Redis configuration. Could not connect to Redis server.']
+            ],
+            'unknown type' => ['unknown', null, ["Invalid backpressure request logger type: 'unknown'"]],
+        ];
+    }
+
+    #[DataProvider('dataProviderValidate')]
+    public function testValidate(string $loggerType, ?bool $connectionValid, array $expectedErrors): void
+    {
+        if ($connectionValid !== null) {
+            $this->validatorMock->method('isValidConnection')->willReturn($connectionValid);
+        }
+
+        $errors = $this->configList->validate(
+            ['backpressure-logger' => $loggerType],
+            $this->deploymentConfigMock
+        );
+
+        $this->assertEquals($expectedErrors, $errors);
     }
 
     /**
