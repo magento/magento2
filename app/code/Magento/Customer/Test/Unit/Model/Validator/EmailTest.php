@@ -58,7 +58,7 @@ class EmailTest extends TestCase
         $this->assertSame($expectedIsValid, $isValid);
         if (!$expectedIsValid) {
             $this->assertSame(
-                [['email' => '"Email" uses too many characters.']],
+                [['email' => '"Email" length must be equal or less than 255 characters.']],
                 $this->emailValidator->getMessages()
             );
         }

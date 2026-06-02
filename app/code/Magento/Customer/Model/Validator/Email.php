@@ -32,7 +32,13 @@ class Email extends AbstractValidator
     {
         $email = $customer->getEmail();
         if ($email !== null && strlen($email) > self::MAX_EMAIL_LENGTH) {
-            parent::_addMessages([['email' => (string) __('"%1" uses too many characters.', __('Email'))]]);
+            parent::_addMessages([[
+                'email' => (string) __(
+                    '"%1" length must be equal or less than %2 characters.',
+                    __('Email'),
+                    self::MAX_EMAIL_LENGTH
+                ),
+            ]]);
         }
 
         return count($this->_messages) === 0;
