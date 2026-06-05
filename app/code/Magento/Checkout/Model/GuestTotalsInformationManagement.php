@@ -5,6 +5,9 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\GuestCart\GetGuestCart;
+
 class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTotalsInformationManagementInterface
 {
     /**
@@ -18,20 +21,28 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
     protected $totalsInformationManagement;
 
     /**
+     * @var GetGuestCart|null
+     */
+    private $getGuestCart;
+
+    /**
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\TotalsInformationManagementInterface $totalsInformationManagement
+     * @param GetGuestCart|null $getGuestCart
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        \Magento\Checkout\Api\TotalsInformationManagementInterface $totalsInformationManagement
+        \Magento\Checkout\Api\TotalsInformationManagementInterface $totalsInformationManagement,
+        ?GetGuestCart $getGuestCart = null
     ) {
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->totalsInformationManagement = $totalsInformationManagement;
+        $this->getGuestCart = $getGuestCart ?? ObjectManager::getInstance()->get(GetGuestCart::class);
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function calculate(
         $cartId,
@@ -39,6 +50,7 @@ class GuestTotalsInformationManagement implements \Magento\Checkout\Api\GuestTot
     ) {
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        $this->getGuestCart->execute($cartId, (int) $quoteIdMask->getQuoteId());
         return $this->totalsInformationManagement->calculate(
             $quoteIdMask->getQuoteId(),
             $addressInformation

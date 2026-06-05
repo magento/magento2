@@ -210,11 +210,15 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
 
         //Grab masked quote Id to pass to payment manager
         /** @var $quoteIdMask \Magento\Quote\Model\QuoteIdMask */
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load(
-            $this->checkoutSession->getQuote()->getId(),
-            'quote_id'
-        );
+        $quoteIdMask = $this->quoteIdMaskFactory->create();
+        $quoteIdMask->setQuoteId($this->checkoutSession->getQuote()->getId());
+        $quoteIdMask->save();
         $maskedCartId = $quoteIdMask->getMaskedId();
+
+        //Convert customer quote to guest.
+        /** @var \Magento\Persistent\Model\QuoteManager $quoteManager */
+        $quoteManager = $this->objectManager->get(\Magento\Persistent\Model\QuoteManager::class);
+        $quoteManager->convertCustomerCartToGuest($quote);
 
         //Submit order as expired/emulated customer
         /** @var \Magento\Checkout\Model\GuestPaymentInformationManagement $paymentManagement */
