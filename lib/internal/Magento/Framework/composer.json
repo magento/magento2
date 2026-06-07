@@ -53,6 +53,21 @@
         "webonyx/graphql-php": "^15.0",
         "wikimedia/less.php": "^5.5"
     },
+    "replace": {
+        "paragonie/random_compat": "*",
+        "ralouphie/getallheaders": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-intl-grapheme": "*",
+        "symfony/polyfill-intl-idn": "*",
+        "symfony/polyfill-intl-normalizer": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*",
+        "symfony/polyfill-php83": "*"
+    },
     "archive": {
         "exclude": [
             "Amqp",
