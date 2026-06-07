@@ -26,6 +26,7 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="enableGuestCheckout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

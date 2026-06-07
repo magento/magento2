@@ -41,6 +41,7 @@
             <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
