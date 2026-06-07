@@ -7,6 +7,8 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\ValidatorException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestStatus\TestStatus;
 
@@ -58,6 +60,10 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      */
     private $filesystem;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    private $componentRegistrar;
 
     protected function setUp(): void
     {
@@ -74,6 +80,7 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
         );
         $this->simpleFactory = $om->get(\Magento\Framework\View\Design\Fallback\Rule\SimpleFactory::class);
         $this->filesystem = $om->get(\Magento\Framework\Filesystem::class);
+        $this->componentRegistrar = $om->get(\Magento\Framework\Component\ComponentRegistrar::class);
     }
 
     /**
@@ -89,6 +96,8 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
      * @param string $module
      * @param string $filePath
      * @param string $absolutePath
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     #[DataProvider('referencesFromStaticFilesDataProvider')]
     public function testReferencesFromStaticFiles($area, $themePath, $locale, $module, $filePath, $absolutePath)
@@ -108,20 +117,18 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
             if ($relatedModule) {
                 $fallbackModule = $relatedModule;
             } else {
-                if ('less' == pathinfo($filePath, PATHINFO_EXTENSION)) {
-                    /**
-                     * The LESS library treats the related resources with relative links not in the same way as CSS:
-                     * when another LESS file is included, it is embedded directly into the resulting document, but the
-                     * relative paths of related resources are not adjusted accordingly to the new root file.
-                     * Probably it is a bug of the LESS library.
-                     */
-                    $this->markTestSkipped("Due to LESS library specifics, the '{$relatedResource}' cannot be tested.");
-                }
+                // Resolve relative URLs from the declaring file (same as CSS). LESS @import inlining can make
+                // runtime URLs differ from this static check; this test only verifies on-disk fallback paths.
                 $fallbackModule = $module;
                 $relatedPath = \Magento\Framework\View\FileSystem::getRelatedPath($filePath, $relatedResource);
             }
             // the $relatedPath will be suitable for feeding to the fallback system
-            $staticFile = $this->getStaticFile($area, $themePath, $locale, $relatedPath, $fallbackModule);
+            $staticFile = false;
+            try {
+                $staticFile = $this->getStaticFile($area, $themePath, $locale, $relatedPath, $fallbackModule);
+            } catch (ValidatorException $exception) {
+                $staticFile = false;
+            }
             if (empty($staticFile) && substr($relatedPath, 0, 2) === '..') {
                 //check if static file exists on lib level
                 $path = substr($relatedPath, 2);
@@ -130,11 +137,169 @@ class StaticFilesTest extends \PHPUnit\Framework\TestCase
                 $params = ['area' => $area, 'theme' => $themePath, 'locale' => $locale];
                 $staticFile = $this->alternativeResolver->resolveFile($rule, $path, $params);
             }
+            $isLessRelative = (pathinfo($filePath, PATHINFO_EXTENSION) === 'less') && !$relatedModule;
+            if (empty($staticFile) && $isLessRelative) {
+                $staticFile = $this->resolveLessRelativeResourcePhysically($area, $absolutePath, $relatedResource);
+            }
             $this->assertNotEmpty(
                 $staticFile,
                 "The related resource cannot be resolved through fallback: '{$relatedResource}'"
             );
         }
+    }
+
+    /**
+     * When LESS uses relative url() paths, theme fallback may miss or reject paths; verify the asset exists on disk.
+     *
+     * @param string $area
+     * @param string $absolutePath
+     * @param string $relatedResource
+     * @return bool|string
+     */
+    private function resolveLessRelativeResourcePhysically($area, $absolutePath, $relatedResource)
+    {
+        $physical = $this->resolveLessRelativeUrlByAncestorDirectories($absolutePath, $relatedResource);
+        if ($physical) {
+            return $physical;
+        }
+        $physical = $this->resolveLessThemeSiblingWebAsset($absolutePath, $relatedResource);
+        if ($physical) {
+            return $physical;
+        }
+        $physical = $this->resolveLessUrlViaModuleRegistrar($relatedResource);
+        if ($physical) {
+            return $physical;
+        }
+        return $this->resolveLessViaDesignAreaGlob($area, $relatedResource);
+    }
+
+    /**
+     * Try joining $relatedResource with dirname($absolutePath) and successive parents (handles shallow ../ paths).
+     *
+     * @param string $absolutePath
+     * @param string $relatedResource
+     * @return bool|string
+     */
+    private function resolveLessRelativeUrlByAncestorDirectories($absolutePath, $relatedResource)
+    {
+        $dir = dirname($absolutePath);
+        for ($step = 0; $step < 24; $step++) {
+            $candidate = \Magento\Framework\View\FileSystem::normalizePath($dir . '/' . $relatedResource);
+            if (is_file($candidate)) {
+                return $candidate;
+            }
+            $parentDir = dirname($dir);
+            if ($parentDir === $dir) {
+                break;
+            }
+            $dir = $parentDir;
+        }
+        return false;
+    }
+
+    /**
+     * Resolve urls like ../Magento_Module/images/foo.png against that module's view area web directories.
+     *
+     * @param string $relatedResource
+     * @return bool|string
+     */
+    private function resolveLessUrlViaModuleRegistrar($relatedResource)
+    {
+        $trimmed = preg_replace('#^(\.\./)+#', '', $relatedResource);
+        if (!preg_match('#^(Magento_[A-Za-z0-9]+)/(.+)$#', $trimmed, $matches)) {
+            return false;
+        }
+        $moduleName = $matches[1];
+        $inModulePath = $matches[2];
+        $moduleRoot = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        if (!$moduleRoot) {
+            return false;
+        }
+        foreach (['view/adminhtml/web', 'view/frontend/web', 'view/base/web'] as $viewWeb) {
+            $candidate = \Magento\Framework\View\FileSystem::normalizePath(
+                $moduleRoot . '/' . $viewWeb . '/' . $inModulePath
+            );
+            if (is_file($candidate)) {
+                return $candidate;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Resolve ../images and ../mui paths against the theme package web directory (sibling of module override dirs).
+     *
+     * @param string $absolutePath
+     * @param string $relatedResource
+     * @return bool|string
+     */
+    private function resolveLessThemeSiblingWebAsset($absolutePath, $relatedResource)
+    {
+        $patterns = [
+            '#\.\./images/([^/?\']+)$#' => '/../web/images/',
+            '#\.\./mui/images/([^/?\']+)$#' => '/../web/mui/images/',
+        ];
+        foreach ($patterns as $pattern => $suffixTemplate) {
+            if (!preg_match($pattern, $relatedResource, $matches)) {
+                continue;
+            }
+            $fileName = $matches[1];
+            $dir = dirname($absolutePath);
+            for ($step = 0; $step < 24; $step++) {
+                $candidate = \Magento\Framework\View\FileSystem::normalizePath($dir . $suffixTemplate . $fileName);
+                if (is_file($candidate)) {
+                    return $candidate;
+                }
+                $parentDir = dirname($dir);
+                if ($parentDir === $dir) {
+                    break;
+                }
+                $dir = $parentDir;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Last-resort lookup for assets that live on another theme package or under lib/web (child themes, module LESS).
+     *
+     * @param string $area
+     * @param string $relatedResource
+     * @return bool|string
+     */
+    private function resolveLessViaDesignAreaGlob($area, $relatedResource)
+    {
+        $root = rtrim($this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath(), '/');
+        $trimmed = preg_replace('#^(\.\./)+#', '', $relatedResource);
+        if (preg_match('#(^|/)web/mui/images/([^/?\']+)$#', $trimmed, $matches)) {
+            $fileName = $matches[2];
+            $globPatterns = [
+                $root . '/app/design/' . $area . '/Magento/*/web/mui/images/' . $fileName,
+                $root . '/ee/app/design/' . $area . '/Magento/*/web/mui/images/' . $fileName,
+            ];
+            foreach ($globPatterns as $pattern) {
+                $hits = glob($pattern);
+                if (!empty($hits) && is_file($hits[0])) {
+                    return $hits[0];
+                }
+            }
+        }
+        if (preg_match('#\.\./images/([^/?\']+)$#', $relatedResource, $matches)) {
+            $fileName = $matches[1];
+            $globPatterns = [
+                $root . '/app/design/' . $area . '/*/*/web/images/' . $fileName,
+                $root . '/app/design/' . $area . '/*/web/images/' . $fileName,
+                $root . '/ee/app/design/' . $area . '/*/*/web/images/' . $fileName,
+                $root . '/lib/web/images/' . $fileName,
+            ];
+            foreach ($globPatterns as $pattern) {
+                $hits = glob($pattern);
+                if (!empty($hits) && is_file($hits[0])) {
+                    return $hits[0];
+                }
+            }
+        }
+        return false;
     }
 
     /**

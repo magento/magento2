@@ -10,6 +10,9 @@ namespace Magento\Weee\Model\Total\Quote;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Api\Data\TotalsInformationInterface;
 use Magento\Checkout\Model\TotalsInformationManagement;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as ConfigurableAttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Multishipping\Test\Fixture\AddAddressToCart as AddAddressToCartFixture;
 use Magento\Multishipping\Test\Fixture\ShippingAssignments as ShippingAssignmentsFixture;
@@ -30,6 +33,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Quote totals calculate tests class
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CalculateTest extends TestCase
 {
@@ -171,6 +176,73 @@ class CalculateTest extends TestCase
         $totals = $address->getTotals();
         $this->assertArrayHasKey('weee_tax', $totals);
         $this->assertEquals(0.8, $totals['weee_tax']['value']);
+    }
+
+    /**
+     * Verify that recalculateParent propagates base_weee_tax_applied_amount from child to parent quote item.
+     */
+    #[
+        Config('tax/weee/enable', '1', 'store', 'default'),
+        Config('tax/weee/apply_vat', '0', 'store', 'default'),
+        DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr'], 'fpt'),
+        DataFixture(ConfigurableAttributeFixture::class, ['attribute_code' => 'test_configurable'], 'conf_attr'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-with-fpt',
+                'price' => 100.0,
+                'fpt_attr' => [['website_id' => 0, 'country' => 'US', 'state' => 0, 'price' => 10.0]],
+            ],
+            'simple'
+        ),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            [
+                'sku' => 'configurable-with-fpt',
+                '_options' => ['$conf_attr$'],
+                '_links' => ['$simple$'],
+            ],
+            'configurable'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$configurable.id$',
+                'child_product_id' => '$simple.id$',
+            ]
+        ),
+    ]
+    public function testCollectSetsBaseWeeeTaxAppliedAmountOnConfigurableParentItem(): void
+    {
+        $cart = $this->fixtures->get('cart');
+        $cart = $this->cartRepository->get($cart->getId());
+        $cart->getShippingAddress()->setCountryId('US');
+        $cart->collectTotals();
+
+        $parentItem = null;
+        $childItem = null;
+        foreach ($cart->getAllItems() as $item) {
+            if ($item->getParentItem()) {
+                $childItem = $item;
+            } else {
+                $parentItem = $item;
+            }
+        }
+
+        $this->assertNotNull($parentItem, 'Configurable parent quote item must exist');
+        $this->assertNotNull($childItem, 'Simple child quote item must exist');
+        $this->assertGreaterThan(
+            0,
+            $childItem->getBaseWeeeTaxAppliedAmount(),
+            'Child item base_weee_tax_applied_amount must be set by the Weee collector'
+        );
+        $this->assertEquals(
+            $childItem->getBaseWeeeTaxAppliedAmount(),
+            $parentItem->getBaseWeeeTaxAppliedAmount(),
+            'Configurable parent item base_weee_tax_applied_amount must be propagated from the child item'
+        );
     }
 
     /**

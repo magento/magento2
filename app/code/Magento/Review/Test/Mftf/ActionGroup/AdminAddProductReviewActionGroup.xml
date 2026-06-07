@@ -18,8 +18,10 @@
         <!--Select Product by SKU and Create Review -->
         <fillField selector="{{AdminCreateNewReviewSection.filterName}}" userInput="{{sku}}" stepKey="fillValue"/>
         <pressKey parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" selector="{{AdminCreateNewReviewSection.filterName}}" stepKey="pressEnter"/>
-        <waitForElementClickable selector="{{AdminCreateNewReviewSection.firstRowReview}}" stepKey="waitForVisibleReviewButton"/>
-        <executeJS function="jQuery('{{AdminCreateNewReviewSection.firstRowReview}}').click()" stepKey="addNewReviewBySKU"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForProductGridAfterSkuFilter"/>
+        <waitForElementVisible selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="waitForFilteredSkuCellVisible"/>
+        <waitForElementClickable selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="waitForSkuCellClickable"/>
+        <click selector="{{AdminCreateNewReviewSection.addNewReviewBySKU(sku)}}" stepKey="addNewReviewBySKU"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminCreateNewReviewSection.select_stores}}" stepKey="waitForVisibleReviewDetails"/>
         <selectOption selector="{{AdminCreateNewReviewSection.select_stores}}" userInput="{{review.select_stores[0]}}" stepKey="visibilityField"/>
