@@ -252,14 +252,22 @@ class GridTest extends TestCase
     public function testGetItems()
     {
         $productId = 8;
-        $itemQty = 23;
+        $childItemQty = 23;
+        $parentItemQty = 1;
+        $expectedQty = $childItemQty * $parentItemQty;
         $layoutMock = $this->createMock(LayoutInterface::class);
         $blockMock = $this->createPartialMockWithReflection(AbstractBlock::class, ['getItems']);
 
-        $itemMock = $this->createPartialMock(
+        $parentItemMock = $this->createPartialMock(
             Item::class,
             ['getProduct', 'setHasError', 'setQty', 'getQty', 'getChildren']
         );
+
+        $childItemMock = $this->createPartialMock(
+            Item::class,
+            ['getProduct', 'getQty']
+        );
+
         $productMock = $this->createPartialMockWithReflection(
             Product::class,
             ['getStockItem', 'getStatus', 'getID']
@@ -271,11 +279,14 @@ class GridTest extends TestCase
         $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
             ->willReturn($blockMock);
 
-        $blockMock->expects($this->once())->method('getItems')->willReturn([$itemMock]);
+        $blockMock->expects($this->once())->method('getItems')->willReturn([$parentItemMock]);
 
-        $itemMock->expects($this->any())->method('getChildren')->willReturn([$itemMock]);
-        $itemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
-        $itemMock->expects($this->any())->method('getQty')->willReturn($itemQty);
+        $parentItemMock->expects($this->any())->method('getChildren')->willReturn([$childItemMock]);
+        $parentItemMock->expects($this->any())->method('getQty')->willReturn($parentItemQty);
+        $parentItemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+
+        $childItemMock->expects($this->any())->method('getQty')->willReturn($childItemQty);
+        $childItemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
 
         $productMock->expects($this->any())->method('getId')->willReturn($productId);
         $productMock->expects($this->any())->method('getStatus')
@@ -288,9 +299,9 @@ class GridTest extends TestCase
             ->method('checkQuoteItemQty')
             ->with(
                 $productId,
-                $itemQty,
-                $itemQty,
-                $itemQty,
+                $expectedQty,
+                $expectedQty,
+                $expectedQty,
                 null
             )
             ->willReturn($checkMock);
