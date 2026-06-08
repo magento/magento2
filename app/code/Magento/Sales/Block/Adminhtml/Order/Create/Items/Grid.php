@@ -132,21 +132,23 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $item->setQty($item->getQty());
 
             if (!$item->getMessage()) {
-                //Getting product ids for stock item last quantity validation before grid display
-                $stockItemToCheck = [];
-
                 $childItems = $item->getChildren();
                 if (count($childItems)) {
                     foreach ($childItems as $childItem) {
-                        $stockItemToCheck[] = $childItem->getProduct()->getId();
+                        $childQty = $childItem->getQty() * $item->getQty();
+                        $check = $this->stockState->checkQuoteItemQty(
+                            $childItem->getProduct()->getId(),
+                            $childQty,
+                            $childQty,
+                            $childQty,
+                            $this->getQuote()->getStore()->getWebsiteId()
+                        );
+                        $item->setMessage($check->getMessage());
+                        $item->setHasError($check->getHasError());
                     }
                 } else {
-                    $stockItemToCheck[] = $item->getProduct()->getId();
-                }
-
-                foreach ($stockItemToCheck as $productId) {
                     $check = $this->stockState->checkQuoteItemQty(
-                        $productId,
+                        $item->getProduct()->getId(),
                         $item->getQty(),
                         $item->getQty(),
                         $item->getQty(),
