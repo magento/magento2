@@ -526,7 +526,10 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         );
 
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore('store2');
         $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
+        $storeManager->setCurrentStore('default');
 
         $customer2CacheEntry = $this->graphQlResolverCache->load($customer2CacheKey);
         $customer2CacheEntryDecoded = json_decode($customer2CacheEntry, true);
