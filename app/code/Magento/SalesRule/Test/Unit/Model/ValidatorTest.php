@@ -791,4 +791,80 @@ class ValidatorTest extends TestCase
         );
         $this->assertInstanceOf(Validator::class, $this->model->reset($addressMock));
     }
+
+    /**
+     * @param bool $stopRulesProcessing
+     * @param bool $canProcessRule
+     * @param float $expectedShippingDiscount
+     * @return void
+     */
+    #[DataProvider('dataProviderNonShippingRuleStopProcessing')]
+    public function testProcessShippingAmountNonShippingRuleStopProcessing(
+        bool $stopRulesProcessing,
+        bool $canProcessRule,
+        float $expectedShippingDiscount
+    ): void {
+        $shippingAmount = 10.0;
+
+        $rule1 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount']
+        );
+        $rule1->method('getApplyToShipping')->willReturn(false);
+        $rule1->method('getStopRulesProcessing')->willReturn($stopRulesProcessing);
+
+        $rule2 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount']
+        );
+        $rule2->method('getApplyToShipping')->willReturn(true);
+        $rule2->method('getStopRulesProcessing')->willReturn(false);
+        $rule2->method('getSimpleAction')->willReturn(Rule::BY_PERCENT_ACTION);
+        $rule2->method('getDiscountAmount')->willReturn(100);
+
+        $iterator = new \ArrayIterator([$rule1, $rule2]);
+        $this->ruleCollection->method('getIterator')->willReturn($iterator);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturnCallback(function ($price) {
+                return round($price, 2);
+            });
+
+        if ($stopRulesProcessing) {
+            $this->utility->expects($this->exactly($canProcessRule ? 1 : 2))
+                ->method('canProcessRule')
+                ->willReturnCallback(function ($rule) use ($rule1, $canProcessRule) {
+                    return $rule === $rule1 ? $canProcessRule : true;
+                });
+        } else {
+            $this->utility->expects($this->once())
+                ->method('canProcessRule')
+                ->with($rule2, $this->anything())
+                ->willReturn(true);
+        }
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $addressMock = $this->setupAddressMock($shippingAmount);
+
+        $this->model->processShippingAmount($addressMock);
+
+        self::assertEquals($expectedShippingDiscount, $addressMock->getShippingDiscountAmount());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderNonShippingRuleStopProcessing(): array
+    {
+        return [
+            'stop processing honored when rule is valid' => [true, true, 0.0],
+            'stop processing ignored when rule is not valid' => [true, false, 10.0],
+            'no stop processing allows subsequent rules' => [false, true, 10.0],
+        ];
+    }
 }
