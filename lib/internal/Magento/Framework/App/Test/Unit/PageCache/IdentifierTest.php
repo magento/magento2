@@ -341,6 +341,48 @@ class IdentifierTest extends TestCase
     }
 
     /**
+     * Test expanded marketing parameters are stripped from the FPC cache key.
+     *
+     * @return void
+     */
+    public function testGetValueWithExpandedMarketingParameters(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn(
+                'http://example.com/path1/?abc=123&igshid=xyz&_ke=abc&mtm_campaign=spring'
+            );
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn(['abc' => '123']);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        'abc=123',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
      * Test get identifier value with invalid URL.
      *
      * @return void

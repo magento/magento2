@@ -65,33 +65,65 @@ class Identifier implements IdentifierInterface
     }
 
     /**
-     * Pattern detect marketing parameters
+     * Pattern detect marketing parameters.
+     *
+     * Keep in sync with PageCache etc/varnish*.vcl vcl_recv strip logic.
      *
      * @return array
      */
     public function getMarketingParameterPatterns(): array
     {
         return [
+            '/&?_branch_match_id\=[^&]+/',
+            '/&?_bta_[a-z]+\=[^&]+/',
+            '/&?_ga\=[^&]+/',
+            '/&?_gl\=[^&]+/',
+            '/&?_ke\=[^&]+/',
+            '/&?_kx\=[^&]+/',
+            '/&?campid\=[^&]+/',
+            '/&?ceneo_cid\=[^&]+/',
+            '/&?clickId\=[^&]+/',
+            '/&?cm\=[^&]+/',
+            '/&?cn\=[^&]+/',
+            '/&?cof\=[^&]+/',
+            '/&?cs\=[^&]+/',
+            '/&?customid\=[^&]+/',
+            '/&?cx\=[^&]+/',
+            '/&?dclid\=[^&]+/',
+            '/&?dm_i\=[^&]+/',
+            '/&?ef_id\=[^&]+/',
+            '/&?epik\=[^&]+/',
+            '/&?fbclid\=[^&]+/',
             '/&?gad_source\=[^&]+/',
             '/&?gbraid\=[^&]+/',
-            '/&?wbraid\=[^&]+/',
-            '/&?_gl\=[^&]+/',
-            '/&?dclid\=[^&]+/',
-            '/&?gclsrc\=[^&]+/',
-            '/&?srsltid\=[^&]+/',
-            '/&?msclkid\=[^&]+/',
-            '/&?_kx\=[^&]+/',
             '/&?gclid\=[^&]+/',
-            '/&?cx\=[^&]+/',
+            '/&?gclsrc\=[^&]+/',
+            '/&?gdf[a-z]+\=[^&]+/',
+            '/&?hsa_[a-z]+\=[^&]+/',
             '/&?ie\=[^&]+/',
-            '/&?cof\=[^&]+/',
-            '/&?siteurl\=[^&]+/',
-            '/&?zanpid\=[^&]+/',
+            '/&?igshid\=[^&]+/',
+            '/&?mc_[a-z]+\=[^&]+/',
+            '/&?mk[a-z]{3}\=[^&]+/',
+            '/&?msclkid\=[^&]+/',
+            '/&?(?:mtm|matomo)_[a-z]+\=[^&]+/',
             '/&?origin\=[^&]+/',
-            '/&?fbclid\=[^&]+/',
-            '/&?mc_(.*?)\=[^&]+/',
-            '/&?utm_(.*?)\=[^&]+/',
-            '/&?_bta_(.*?)\=[^&]+/',
+            '/&?pcrid\=[^&]+/',
+            '/&?p(?:iwi)?k_[a-z]+\=[^&]+/',
+            '/&?redirect(?:_log)?_mongo_id\=[^&]+/',
+            '/&?ref\=[^&]+/',
+            '/&?s_kwcid\=[^&]+/',
+            '/&?sb_referer_host\=[^&]+/',
+            '/&?ScCid\=[^&]+/',
+            '/&?si\=[^&]+/',
+            '/&?siteurl\=[^&]+/',
+            '/&?snrai_[a-z]+\=[^&]+/',
+            '/&?srsltid\=[^&]+/',
+            '/&?tduid\=[^&]+/',
+            '/&?tg\=[^&]+/',
+            '/&?trk_[a-z]+\=[^&]+/',
+            '/&?utm_[a-z]+\=[^&]+/',
+            '/&?wbraid\=[^&]+/',
+            '/&?zanpid\=[^&]+/',
         ];
     }
 
