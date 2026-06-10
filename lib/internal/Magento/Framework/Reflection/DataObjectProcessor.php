@@ -55,6 +55,13 @@ class DataObjectProcessor
     private $excludedMethodsClassMap;
 
     /**
+     * Cache of public properties per data object class name.
+     *
+     * @var array<string, \ReflectionProperty[]>
+     */
+    private $publicPropertiesCache = [];
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
@@ -199,8 +206,14 @@ class DataObjectProcessor
         array $outputData,
         array $methodFieldNames
     ): array {
-        $reflection = new \ReflectionObject($dataObject);
-        foreach ($reflection->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
+        if (!isset($this->publicPropertiesCache[$dataObjectType])) {
+            $reflectionClass = new \ReflectionClass($dataObjectType);
+            $this->publicPropertiesCache[$dataObjectType] = $reflectionClass->getProperties(
+                \ReflectionProperty::IS_PUBLIC
+            );
+        }
+
+        foreach ($this->publicPropertiesCache[$dataObjectType] as $property) {
             $propertyData = $this->getPublicPropertyOutputData(
                 $dataObject,
                 $dataObjectType,
@@ -355,19 +368,12 @@ class DataObjectProcessor
         $allowsNull = $type->allowsNull();
         $typeName = null;
 
-        if ($type instanceof \ReflectionUnionType) {
-            foreach ($type->getTypes() as $unionType) {
-                if ($unionType->getName() !== 'null') {
-                    $typeName = $unionType->getName();
-                    break;
-                }
-            }
-        } elseif ($type instanceof \ReflectionIntersectionType) {
-            $types = $type->getTypes();
-            $typeName = $types ? $types[0]->getName() : null;
-        } else {
-            $typeName = $type->getName();
-        }
+        $typeName = match (true) {
+            $type instanceof \ReflectionUnionType => $this->getUnionTypeName($type),
+            $type instanceof \ReflectionIntersectionType => null, // intersection types fall back to runtime class.
+            $type instanceof \ReflectionNamedType => $type->getName(),
+            default => null, // default to null for runtime class.
+        };
 
         $typeName = $this->normalizePropertyType($property, $typeName);
 
@@ -375,6 +381,50 @@ class DataObjectProcessor
             'type' => $typeName,
             'isRequired' => !$allowsNull,
         ];
+    }
+
+    /**
+     * Extract a single type name from a union type, preferring class/interface types over built-in types.
+     * @param \ReflectionUnionType $type
+     * @return string|null
+     */
+    private function getUnionTypeName(\ReflectionUnionType $type): ?string
+    {
+        $typeNames = [];
+        foreach ($type->getTypes() as $unionType) {
+            if ($unionType instanceof \ReflectionNamedType) {
+                $name = $unionType->getName();
+                if ($name !== 'null') {
+                    $typeNames[] = $name;
+                }
+            }
+        }
+
+        if (empty($typeNames)) {
+            return null;
+        }
+
+        if (count($typeNames) === 1) {
+            return $typeNames[0];
+        }
+
+        // Prefer a class/interface type when multiple union types are present
+        foreach ($typeNames as $name) {
+            if ($this->isObjectType($name)) {
+                return $name;
+            }
+        }
+
+        // Prefer non-builtin types if any (e.g., avoid scalar/array/mixed)
+        $builtin = ['int', 'float', 'string', 'bool', 'array', 'iterable', 'mixed', 'callable', 'object'];
+        foreach ($typeNames as $name) {
+            if (!in_array($name, $builtin, true)) {
+                return $name;
+            }
+        }
+
+        // Fallback to the first available non-null type
+        return $typeNames[0];
     }
 
     /**

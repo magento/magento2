@@ -17,7 +17,7 @@ class TestDataObjectWithGetterAndPublicProperty
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return 'getter-value';
     }
