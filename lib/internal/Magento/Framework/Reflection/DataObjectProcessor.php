@@ -511,7 +511,7 @@ class DataObjectProcessor
      */
     private function isObjectType(string $type): bool
     {
-        return interface_exists($type) || class_exists($type);
+        return interface_exists($type, false) || class_exists($type, false);
     }
 
     /**
