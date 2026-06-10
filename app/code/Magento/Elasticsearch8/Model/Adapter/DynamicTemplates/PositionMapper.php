@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch8\Model\Adapter\DynamicTemplates;
 
 /**
- * @inheridoc
+ * @inheritDoc
  * @deprecated Elasticsearch8 is no longer supported by Adobe
  * @see this class will be responsible for ES8 only
  */
