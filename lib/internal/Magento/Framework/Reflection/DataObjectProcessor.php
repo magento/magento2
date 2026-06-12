@@ -8,6 +8,7 @@ namespace Magento\Framework\Reflection;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\Phrase;
+use Magento\Framework\Reflection\DataObject\PropertyMetadataProvider;
 
 /**
  * Data object processor for array serialization using class reflection
@@ -20,72 +21,25 @@ use Magento\Framework\Phrase;
 class DataObjectProcessor
 {
     /**
-     * @var MethodsMap
-     */
-    private $methodsMapProcessor;
-
-    /**
-     * @var TypeCaster
-     */
-    private $typeCaster;
-
-    /**
-     * @var FieldNamer
-     */
-    private $fieldNamer;
-
-    /**
-     * @var ExtensionAttributesProcessor
-     */
-    private $extensionAttributesProcessor;
-
-    /**
-     * @var CustomAttributesProcessor
-     */
-    private $customAttributesProcessor;
-
-    /**
-     * @var array
-     */
-    private $processors;
-
-    /**
-     * @var array[]
-     */
-    private $excludedMethodsClassMap;
-
-    /**
-     * Cache of public properties per data object class name.
-     *
-     * @var array<string, \ReflectionProperty[]>
-     */
-    private $publicPropertiesCache = [];
-
-    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
+     * @param PropertyMetadataProvider $propertyMetadataProvider
      * @param array $processors
      * @param array $excludedMethodsClassMap
      */
     public function __construct(
-        MethodsMap $methodsMapProcessor,
-        TypeCaster $typeCaster,
-        FieldNamer $fieldNamer,
-        CustomAttributesProcessor $customAttributesProcessor,
-        ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = [],
-        array $excludedMethodsClassMap = []
+        private readonly MethodsMap $methodsMapProcessor,
+        private readonly TypeCaster $typeCaster,
+        private readonly FieldNamer $fieldNamer,
+        private readonly CustomAttributesProcessor $customAttributesProcessor,
+        private readonly ExtensionAttributesProcessor $extensionAttributesProcessor,
+        private readonly PropertyMetadataProvider $propertyMetadataProvider,
+        private readonly array $processors = [],
+        private readonly array $excludedMethodsClassMap = [],
     ) {
-        $this->methodsMapProcessor = $methodsMapProcessor;
-        $this->typeCaster = $typeCaster;
-        $this->fieldNamer = $fieldNamer;
-        $this->extensionAttributesProcessor = $extensionAttributesProcessor;
-        $this->customAttributesProcessor = $customAttributesProcessor;
-        $this->processors = $processors;
-        $this->excludedMethodsClassMap = $excludedMethodsClassMap;
     }
 
     /**
@@ -206,14 +160,9 @@ class DataObjectProcessor
         array $outputData,
         array $methodFieldNames
     ): array {
-        if (!isset($this->publicPropertiesCache[$dataObjectType])) {
-            $reflectionClass = new \ReflectionClass($dataObjectType);
-            $this->publicPropertiesCache[$dataObjectType] = $reflectionClass->getProperties(
-                \ReflectionProperty::IS_PUBLIC
-            );
-        }
+        $properties = $this->propertyMetadataProvider->getPublicProperties($dataObjectType);
 
-        foreach ($this->publicPropertiesCache[$dataObjectType] as $property) {
+        foreach ($properties as $property) {
             $propertyData = $this->getPublicPropertyOutputData(
                 $dataObject,
                 $dataObjectType,
@@ -254,12 +203,16 @@ class DataObjectProcessor
         }
 
         $value = $property->getValue($dataObject);
-        $propertyMetadata = $this->getPropertyMetadata($property);
+        $propertyMetadata = $this->propertyMetadataProvider->getPropertyMetadata($property);
         if ($this->shouldSkipPublicPropertyValue($key, $value, $propertyMetadata['isRequired'])) {
             return null;
         }
-
-        $returnType = $this->resolvePropertyReturnType($propertyMetadata['type'], $value, $property);
+        $returnType =
+            $this->propertyMetadataProvider->resolvePropertyReturnType(
+                $propertyMetadata['type'],
+                $value,
+                $property
+            );
         $value = $this->processPublicPropertyValue($dataObject, $dataObjectType, $key, $value, $returnType);
         if ($value === null) {
             return null;
@@ -350,168 +303,6 @@ class DataObjectProcessor
         }
 
         return $this->processValue($value, $returnType);
-    }
-
-    /**
-     * Resolve property type metadata for serialization.
-     *
-     * @param \ReflectionProperty $property
-     * @return array{type: string|null, isRequired: bool}
-     */
-    private function getPropertyMetadata(\ReflectionProperty $property): array
-    {
-        $type = $property->getType();
-        if ($type === null) {
-            return ['type' => null, 'isRequired' => false];
-        }
-
-        $allowsNull = $type->allowsNull();
-        $typeName = null;
-
-        $typeName = match (true) {
-            $type instanceof \ReflectionUnionType => $this->getUnionTypeName($type),
-            $type instanceof \ReflectionIntersectionType => null, // intersection types fall back to runtime class.
-            $type instanceof \ReflectionNamedType => $type->getName(),
-            default => null, // default to null for runtime class.
-        };
-
-        $typeName = $this->normalizePropertyType($property, $typeName);
-
-        return [
-            'type' => $typeName,
-            'isRequired' => !$allowsNull,
-        ];
-    }
-
-    /**
-     * Extract a single type name from a union type, preferring class/interface types over built-in types.
-     * @param \ReflectionUnionType $type
-     * @return string|null
-     */
-    private function getUnionTypeName(\ReflectionUnionType $type): ?string
-    {
-        $typeNames = [];
-        foreach ($type->getTypes() as $unionType) {
-            if ($unionType instanceof \ReflectionNamedType) {
-                $name = $unionType->getName();
-                if ($name !== 'null') {
-                    $typeNames[] = $name;
-                }
-            }
-        }
-
-        if (empty($typeNames)) {
-            return null;
-        }
-
-        if (count($typeNames) === 1) {
-            return $typeNames[0];
-        }
-
-        // Prefer a class/interface type when multiple union types are present
-        foreach ($typeNames as $name) {
-            if ($this->isObjectType($name)) {
-                return $name;
-            }
-        }
-
-        // Prefer non-builtin types if any (e.g., avoid scalar/array/mixed)
-        $builtin = ['int', 'float', 'string', 'bool', 'array', 'iterable', 'mixed', 'callable', 'object'];
-        foreach ($typeNames as $name) {
-            if (!in_array($name, $builtin, true)) {
-                return $name;
-            }
-        }
-
-        // Fallback to the first available non-null type
-        return $typeNames[0];
-    }
-
-    /**
-     * Normalize property type names for casting.
-     *
-     * @param \ReflectionProperty $property
-     * @param string|null $typeName
-     * @return string|null
-     */
-    private function normalizePropertyType(\ReflectionProperty $property, ?string $typeName): ?string
-    {
-        if ($typeName === null) {
-            return null;
-        }
-
-        if ($typeName === 'self' || $typeName === 'static') {
-            return $property->getDeclaringClass()->getName();
-        }
-
-        if ($typeName === 'parent') {
-            $parent = $property->getDeclaringClass()->getParentClass();
-            return $parent ? $parent->getName() : null;
-        }
-
-        if ($typeName === 'array' || $typeName === 'iterable' || $typeName === 'mixed') {
-            return TypeProcessor::UNSTRUCTURED_ARRAY;
-        }
-
-        return $typeName;
-    }
-
-    /**
-     * Ensure object values use a compatible return type.
-     *
-     * @param string|null $returnType
-     * @param mixed $value
-     * @param \ReflectionProperty $property
-     * @return string|null
-     */
-    private function resolvePropertyReturnType(?string $returnType, $value, \ReflectionProperty $property): ?string
-    {
-        if (is_array($value) && $returnType === null) {
-            return TypeProcessor::UNSTRUCTURED_ARRAY;
-        }
-
-        if (!is_object($value) || $value instanceof Phrase) {
-            return $returnType;
-        }
-
-        return $this->resolveObjectReturnType($returnType, $value, $property);
-    }
-
-    /**
-     * Resolve return types for object property values.
-     *
-     * @param string|null $returnType
-     * @param object $value
-     * @param \ReflectionProperty $property
-     * @return string|null
-     */
-    private function resolveObjectReturnType(?string $returnType, object $value, \ReflectionProperty $property): ?string
-    {
-        if ($returnType === null || !$this->isObjectType($returnType)) {
-            return get_class($value);
-        }
-
-        if ($returnType === 'self' || $returnType === 'static') {
-            return $property->getDeclaringClass()->getName();
-        }
-
-        if ($returnType === 'parent') {
-            $parent = $property->getDeclaringClass()->getParentClass();
-            return $parent ? $parent->getName() : get_class($value);
-        }
-
-        return $returnType;
-    }
-
-    /**
-     * Check whether the type maps to a class or interface.
-     *
-     * @param string $type
-     * @return bool
-     */
-    private function isObjectType(string $type): bool
-    {
-        return interface_exists($type, false) || class_exists($type, false);
     }
 
     /**

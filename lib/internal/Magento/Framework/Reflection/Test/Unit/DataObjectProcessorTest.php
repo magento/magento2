@@ -87,6 +87,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeCaster' => $objectManager->getObject(TypeCaster::class),
                 'fieldNamer' => $objectManager->getObject(FieldNamer::class),
                 'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(\Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class),
                 'excludedMethodsClassMap' => $excludedMethodsClassMap,
             ]
         );
@@ -180,13 +181,15 @@ class DataObjectProcessorTest extends TestCase
         $customAttributesProcessor = $objectManager->getObject(
             CustomAttributesProcessor::class
         );
+        $propertyMetadataProvider = $objectManager->getObject(\Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class);
 
         $this->dataObjectProcessor = new DataObjectProcessor(
             $this->methodsMapProcessor,
             $typeCaster,
             $fieldNamer,
             $customAttributesProcessor,
-            $this->extensionAttributesProcessorMock
+            $this->extensionAttributesProcessorMock,
+            $propertyMetadataProvider
         );
 
         $unstructuredArrayData = [
@@ -223,6 +226,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeCaster' => $objectManager->getObject(TypeCaster::class),
                 'fieldNamer' => $objectManager->getObject(FieldNamer::class),
                 'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(\Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class),
             ]
         );
 
@@ -253,6 +257,7 @@ class DataObjectProcessorTest extends TestCase
                 'typeCaster' => $objectManager->getObject(TypeCaster::class),
                 'fieldNamer' => $objectManager->getObject(FieldNamer::class),
                 'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(\Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class),
             ]
         );
 
