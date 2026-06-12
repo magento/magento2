@@ -222,7 +222,7 @@ class QuoteManagementTest extends TestCase
     private $quoteAddressValidatorMock;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
