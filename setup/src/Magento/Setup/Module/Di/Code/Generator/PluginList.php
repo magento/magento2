@@ -29,6 +29,7 @@ class PluginList extends Interception\PluginList\PluginList
         $this->_inherited = [];
         $this->_processed = null;
         $this->_pluginInstances = [];
+        $this->_loadedScopes = [];
         $this->_scopePriorityScheme = [Area::AREA_GLOBAL];
     }
 
