@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<!--
+    PHPMD fallback ruleset for GitHub Actions PR checks.
+
+    Used only when the CE sparse clone at /tmp/magento2-static is unavailable.
+    The primary ruleset is:
+      dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml
+    fetched from the CE repo by the "Fetch Magento static PHPMD framework" step.
+
+    Magento-specific rules (AllPurposeAction, CookieAndSessionMisuse,
+    custom UnusedFormalParameter) are omitted here because their rule classes
+    live in dev/tests/static/framework/Magento/CodeMessDetector/ which is only
+    available via the CE sparse clone. The primary ruleset includes them with
+    the php-includepath pointing to that framework directory.
+-->
+<ruleset name="Magento PHPMD rule set" xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>Magento Code Check Rules (standalone)</description>
+
+    <!-- Code Size Rules -->
+    <rule ref="rulesets/codesize.xml/CyclomaticComplexity" />
+    <rule ref="rulesets/codesize.xml/NPathComplexity" />
+    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength" />
+    <rule ref="rulesets/codesize.xml/ExcessiveParameterList" />
+    <rule ref="rulesets/codesize.xml/ExcessivePublicCount" />
+    <rule ref="rulesets/codesize.xml/TooManyFields" />
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
+        <properties>
+            <property name="maximum" value="100" />
+        </properties>
+    </rule>
+
+    <!-- Unused code rules -->
+    <rule ref="rulesets/unusedcode.xml">
+        <exclude name="UnusedFormalParameter"/>
+    </rule>
+
+    <!-- Code design rules -->
+    <rule ref="rulesets/design.xml/NumberOfChildren" />
+    <rule ref="rulesets/design.xml/DepthOfInheritance">
+        <properties>
+            <property name="minimum" value="8" />
+        </properties>
+    </rule>
+    <rule ref="rulesets/design.xml/CouplingBetweenObjects" />
+
+    <!-- Naming Rules -->
+    <rule ref="rulesets/naming.xml/ShortMethodName" />
+    <rule ref="rulesets/naming.xml/ConstantNamingConventions" />
+    <rule ref="rulesets/naming.xml/BooleanGetMethodName" />
+</ruleset>

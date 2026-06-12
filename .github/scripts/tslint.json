@@ -1,0 +1,12 @@
+{
+    "rules": {
+        "no-var-keyword": true,
+        "no-any": true,
+        "triple-equals": true,
+        "semicolon": [true, "always"],
+        "prefer-const": true,
+        "no-console": false,
+        "eofline": true,
+        "trailing-comma": [true, {"multiline": "never", "singleline": "never"}]
+    }
+}

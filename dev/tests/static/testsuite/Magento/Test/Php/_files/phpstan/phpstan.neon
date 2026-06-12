@@ -29,6 +29,10 @@ parameters:
         - '#Attribute class Magento\\TestFramework\\Fixture\\DataFixture is not repeatable#'
         # Ignore Config attribute class issues (Config is IS_REPEATABLE in framework)
         - '#Attribute class Magento\\TestFramework\\Fixture\\Config is not repeatable#'
+        # DataFixtureBeforeTransaction is IS_REPEATABLE; PHPStan still flags multiple per method
+        - '#Attribute class Magento\\TestFramework\\Fixture\\DataFixtureBeforeTransaction is not repeatable#'
+        # Ignore TestWith attribute class issues (TestWith is IS_REPEATABLE in PHPUnit)
+        - '#Attribute class PHPUnit\\Framework\\Attributes\\TestWith is not repeatable#'
         # Ignore setCustomErrorHandler function not found in bootstrap files
         - '#Function setCustomErrorHandler not found#'
         # Ignore 'return statement is missing' error when 'void' is present in return type list

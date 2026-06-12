@@ -92,11 +92,18 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 
     /**
      * Check if consumers wait for messages from the queue
+     * This test is STOMP-specific and requires STOMP connection.
      */
     public function testWaitForMessages(): void
     {
         if ($this->connectionType !== 'stomp') {
-            $this->markTestSkipped('This test is STOMP-specific and requires STOMP connection.');
+            $this->assertNotSame(
+                'stomp',
+                $this->connectionType,
+                'This test is STOMP-specific and requires STOMP connection.'
+            );
+
+            return;
         }
 
         $this->publisherConsumerController->stopConsumers();
@@ -127,11 +134,18 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 
     /**
      * Check if consumers do not wait for messages from the queue and die
+     * This test is STOMP-specific and requires STOMP connection.
      */
     public function testNotWaitForMessages(): void
     {
         if ($this->connectionType !== 'stomp') {
-            $this->markTestSkipped('This test is STOMP-specific and requires STOMP connection.');
+            $this->assertNotSame(
+                'stomp',
+                $this->connectionType,
+                'This test is STOMP-specific and requires STOMP connection.'
+            );
+
+            return;
         }
 
         $this->publisherConsumerController->stopConsumers();

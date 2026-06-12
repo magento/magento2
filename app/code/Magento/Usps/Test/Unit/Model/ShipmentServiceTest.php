@@ -1247,9 +1247,9 @@ class ShipmentServiceTest extends TestCase
     }
 
     /**
-     * Test getJsonQuotes with missing weight_pounds defaults to 1
+     * Test getJsonQuotes with only weight_ounces computes decimal weight (8 oz = 0.5 lb)
      */
-    public function testGetJsonQuotesWithMissingWeightPoundsDefaultsToOne(): void
+    public function testGetJsonQuotesWithWeightOuncesOnlyUsesComputedWeight(): void
     {
         $requestMock = new DataObject();
         $requestMock->setPackages([
@@ -1257,13 +1257,14 @@ class ShipmentServiceTest extends TestCase
                 'weight_ounces' => 8
             ]
         ]);
-        $this->getRequestParamMock($requestMock);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.5, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
-     * Test getJsonQuotes with weight_pounds = 0 defaults to 1
+     * Test getJsonQuotes with weight_pounds = 0 and weight_ounces = 0 uses minimum 0.01
      */
-    public function testGetJsonQuotesWithZeroWeightPoundsDefaultsToOne(): void
+    public function testGetJsonQuotesWithZeroWeightUsesMinimum(): void
     {
         $requestMock = new DataObject();
         $requestMock->setPackages([
@@ -1272,11 +1273,12 @@ class ShipmentServiceTest extends TestCase
                 'weight_ounces' => 0
             ]
         ]);
-        $this->getRequestParamMock($requestMock);
+        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
+        $this->assertEquals(0.01, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
-     * Test getJsonQuotes with valid weight_pounds uses the value
+     * Test getJsonQuotes with weight_pounds and weight_ounces uses combined decimal weight
      */
     public function testGetJsonQuotesWithValidWeightPounds(): void
     {
@@ -1288,20 +1290,8 @@ class ShipmentServiceTest extends TestCase
             ]
         ]);
         $capturedRequestParam = $this->getRequestParamHelper($requestMock);
-        $this->assertEquals(5, $capturedRequestParam['packageDescription']['weight']);
-    }
-
-    /**
-     * @param DataObject $requestMock
-     * @return mixed|null
-     * @throws LocalizedException
-     * @throws \PHPUnit\Framework\MockObject\Exception
-     */
-    private function getRequestParamMock(DataObject $requestMock): mixed
-    {
-        $capturedRequestParam = $this->getRequestParamHelper($requestMock);
-        $this->assertEquals(1, $capturedRequestParam['packageDescription']['weight']);
-        return $capturedRequestParam;
+        // 5 lb 8 oz = 5.5 lb
+        $this->assertEquals(5.5, $capturedRequestParam['packageDescription']['weight']);
     }
 
     /**
@@ -1323,9 +1313,8 @@ class ShipmentServiceTest extends TestCase
         $this->carrierModelMock->expects($this->once())
             ->method('getRawRequest')
             ->willReturn($requestMock);
-        $this->carrierModelMock->expects($this->exactly(2))
+        $this->carrierModelMock->expects($this->any())
             ->method('_isUSCountry')
-            ->with('US')
             ->willReturn(true);
         $this->carrierModelMock->expects($this->once())
             ->method('getOauthAccessRequest')
@@ -1363,5 +1352,159 @@ class ShipmentServiceTest extends TestCase
         $this->shipmentService->getJsonQuotes();
         $this->assertNotNull($capturedRequestParam);
         return $capturedRequestParam;
+    }
+
+    /**
+     * Multiple packages must produce separate REST payloads with distinct weights.
+     */
+    public function testBuildJsonQuotesRequestParamsListProducesOneRequestPerPackage(): void
+    {
+        $requestMock = new DataObject();
+        $requestMock->setPackages([
+            ['weight' => 1.0],
+            ['weight' => 0.25],
+        ]);
+        $requestMock->setOrigPostal('90034');
+        $requestMock->setDestCountryId('US');
+        $requestMock->setDestPostal('94545');
+        $requestMock->setLength(1);
+        $requestMock->setHeight(1);
+        $requestMock->setWidth(1);
+        $requestMock->setContainer('VARIABLE');
+        $requestMock->setGirth(1);
+
+        $this->carrierModelMock->method('getConfigData')
+            ->willReturnCallback(static function (string $key) {
+                return $key === 'price_type' ? 'COMMERCIAL' : null;
+            });
+        $this->carrierModelMock->method('_isUSCountry')->willReturn(true);
+
+        $method = new \ReflectionMethod(ShipmentService::class, 'buildJsonQuotesRequestParamsList');
+        /** @var array<int, array<string, mixed>> $list */
+        $list = $method->invoke($this->shipmentService, $requestMock);
+
+        $this->assertCount(2, $list);
+        $this->assertSame(1.0, $list[0]['packageDescription']['weight']);
+        $this->assertSame(0.25, $list[1]['packageDescription']['weight']);
+        $this->assertSame('90034', $list[0]['originZIPCode']);
+        $this->assertSame('94545', $list[0]['destinationZIPCode']);
+    }
+
+    /**
+     * Merged JSON quote parsing must sum the same carrier method across packages (ACP2E-4813).
+     */
+    public function testParseMergedJsonResponsesIntoResultSumsPricesPerMethod(): void
+    {
+        $rateRow = [
+            'description' => 'Priority Mail',
+            'price' => 3.5,
+        ];
+        $responseChunk = ['rates' => [$rateRow]];
+
+        $this->carrierModelMock->method('getConfigData')->willReturnCallback(
+            function (string $key) {
+                if ($key === 'rest_allowed_methods') {
+                    return 'PRIORITY_MAIL';
+                }
+                if ($key === 'title') {
+                    return 'USPS';
+                }
+                if ($key === 'specificerrmsg') {
+                    return 'Unavailable';
+                }
+                return null;
+            }
+        );
+        $this->carrierModelMock->method('getCode')->willReturnCallback(
+            function (string $type, string $code) {
+                if ($type === 'rest_method' && $code === 'PRIORITY_MAIL') {
+                    return 'Priority Mail';
+                }
+
+                return null;
+            }
+        );
+        $this->shippingMethodManagerMock->method('getMethodTitle')
+            ->with('PRIORITY_MAIL')
+            ->willReturn('Priority Mail Title');
+        $this->carrierModelMock->method('getMethodPrice')
+            ->willReturnCallback(static fn($cost) => (float) $cost);
+
+        $resultMock = $this->createMock(Result::class);
+        $this->rateFactoryMock->expects($this->once())->method('create')->willReturn($resultMock);
+
+        $methodEntity = $this->createMock(\Magento\Quote\Model\Quote\Address\RateResult\Method::class);
+        $methodEntity->expects($this->once())->method('setPrice')->with(7.0)->willReturnSelf();
+
+        $this->rateMethodFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($methodEntity);
+
+        $resultMock->expects($this->once())->method('append')->with($methodEntity);
+
+        $reflect = new \ReflectionMethod(ShipmentService::class, 'parseMergedJsonResponsesIntoResult');
+        $reflect->invoke($this->shipmentService, [$responseChunk, $responseChunk]);
+    }
+
+    /**
+     * Multi-package cached quotes envelope restores summed totals.
+     */
+    public function testCreateResultFromCachedJsonQuotesReadsMultiPackageEnvelope(): void
+    {
+        $rateRow = [
+            'description' => 'Priority Mail',
+            'price' => 2.0,
+        ];
+        $body = json_encode(['rates' => [$rateRow]]);
+
+        $multiFlag = (new \ReflectionClassConstant(
+            ShipmentService::class,
+            'MULTI_PACKAGE_CACHE_FLAG'
+        ))->getValue();
+        $cached = json_encode([
+            $multiFlag => true,
+            'bodies' => [$body, $body],
+        ]);
+
+        $this->carrierModelMock->method('getConfigData')->willReturnCallback(
+            function (string $key) {
+                if ($key === 'rest_allowed_methods') {
+                    return 'PRIORITY_MAIL';
+                }
+                if ($key === 'title') {
+                    return 'USPS';
+                }
+                if ($key === 'specificerrmsg') {
+                    return 'Unavailable';
+                }
+                return null;
+            }
+        );
+        $this->carrierModelMock->method('getCode')->willReturnCallback(
+            function (string $type, string $code) {
+                if ($type === 'rest_method' && $code === 'PRIORITY_MAIL') {
+                    return 'Priority Mail';
+                }
+
+                return null;
+            }
+        );
+        $this->shippingMethodManagerMock->method('getMethodTitle')
+            ->with('PRIORITY_MAIL')
+            ->willReturn('Priority Mail Title');
+        $this->carrierModelMock->method('getMethodPrice')
+            ->willReturnCallback(static fn($cost) => (float) $cost);
+
+        $resultMock = $this->createMock(Result::class);
+        $this->rateFactoryMock->expects($this->once())->method('create')->willReturn($resultMock);
+
+        $methodEntity = $this->createMock(\Magento\Quote\Model\Quote\Address\RateResult\Method::class);
+        $methodEntity->expects($this->once())->method('setPrice')->with(4.0)->willReturnSelf();
+
+        $this->rateMethodFactoryMock->expects($this->once())->method('create')->willReturn($methodEntity);
+        $resultMock->expects($this->once())->method('append')->with($methodEntity);
+
+        $reflect = new \ReflectionMethod(ShipmentService::class, 'createResultFromCachedJsonQuotes');
+        $reflect->invoke($this->shipmentService, $cached);
     }
 }

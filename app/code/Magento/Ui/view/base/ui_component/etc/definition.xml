@@ -126,7 +126,7 @@
         <settings>
             <elementTmpl>ui/content/content</elementTmpl>
             <validation>
-                <rule name="validate-no-utf8mb4-characters" xsi:type="boolean">true</rule>
+                <rule name="validate-wysiwyg-content-characters" xsi:type="boolean">true</rule>
             </validation>
         </settings>
     </wysiwyg>
