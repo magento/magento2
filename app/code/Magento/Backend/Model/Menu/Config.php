@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Menu;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -105,10 +108,7 @@ class Config
      * Build menu model from config
      *
      * @return \Magento\Backend\Model\Menu
-     * @throws \Exception|\InvalidArgumentException
-     * @throws \Exception
-     * @throws \BadMethodCallException|\Exception
-     * @throws \Exception|\OutOfRangeException
+     * @throws LocalizedException
      */
     public function getMenu()
     {
@@ -117,15 +117,47 @@ class Config
             return $this->_menu;
         } catch (\InvalidArgumentException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'Please check your menu.xml files for missing required attributes '
+                    . '(e.g. \'parent\' or \'action\'). Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\BadMethodCallException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'Please check your menu.xml files for missing required parameters. '
+                    . 'Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\OutOfRangeException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'A menu item references a non-existent parent item. '
+                    . 'Please check your menu.xml files. Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\Exception $e) {
-            throw $e;
+            $this->_logger->critical($e);
+            throw new LocalizedException(
+                new Phrase(
+                    'An unexpected error occurred while building the admin menu. '
+                    . 'Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         }
     }
 
