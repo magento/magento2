@@ -168,15 +168,19 @@ class Options extends \Magento\Framework\View\Element\Template
     protected function _getPriceConfiguration($option)
     {
         $optionPrice = $option->getPrice(true);
+        $optionOldPrice = $option->getRegularPrice();
         if ($option->getPriceType() !== Value::TYPE_PERCENT) {
-            $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
+            $optionPrice = $this->pricingHelper
+                ->currency($optionPrice, false, false);
+            $optionOldPrice = $this->pricingHelper
+                ->currency($optionOldPrice, false, false);
         }
         $data = [
             'prices' => [
                 'oldPrice' => [
                     'amount' => $this->_catalogData->getTaxPrice(
                         $option->getProduct(),
-                        $option->getRegularPrice(),
+                        $optionOldPrice,
                         true,
                         null,
                         null,
