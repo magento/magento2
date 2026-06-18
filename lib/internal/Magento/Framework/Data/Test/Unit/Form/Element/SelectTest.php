@@ -1,92 +1,76 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-use Magento\Framework\Data\Form\Element\Editablemultiselect;
-use Magento\Framework\DataObject;
+use Magento\Framework\Data\Form\AbstractForm;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Math\Random;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-class EditablemultiselectTest extends TestCase
+#[CoversClass(Select::class)]
+class SelectTest extends TestCase
 {
-    /**
-     * @var Editablemultiselect
-     */
-    protected $_model;
+    private const string ELEMENT_ID = 'test_select_element_id';
+    private const string ELEMENT_NAME = 'test_select_element_name';
 
     /**
-     * @inheritdoc
+     * @var Select
      */
+    private Select $element;
+
     protected function setUp(): void
     {
-        $testHelper = new ObjectManager($this);
-        $randomMock = $this->createMock(Random::class);
-        $randomMock->method('getRandomString')->willReturn('some-rando-string');
-        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
-        $secureRendererMock->method('renderEventListenerAsTag')
-            ->willReturnCallback(
-                function (string $event, string $listener, string $selector): string {
-                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
-                }
-            );
-        $secureRendererMock->method('renderTag')
-            ->willReturnCallback(
-                function (string $tag, array $attrs, ?string $content): string {
-                    $attrs = new DataObject($attrs);
+        $objectManager = new ObjectManager($this);
 
-                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-random-string');
+
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>{$selector} { {$style} }</style>";
                 }
-            );
-        $this->_model = $testHelper->getObject(
-            Editablemultiselect::class,
+            )
+        ;
+
+        /** @var Select $element */
+        $element = $objectManager->getObject(
+            Select::class,
             [
+                'factoryElement' => $this->createMock(Factory::class),
+                'factoryCollection' => $this->createMock(CollectionFactory::class),
+                '_escaper' => new Escaper(),
                 'random' => $randomMock,
                 'secureRenderer' => $secureRendererMock,
-                'escaper' => new Escaper()
             ]
         );
-        $values = [
-            ['value' => 1, 'label' => 'Value1'],
-            ['value' => 2, 'label' => 'Value2'],
-            ['value' => 3, 'label' => 'Value3'],
-        ];
-        $value = [1, 3];
-        $this->_model->setForm(new DataObject());
-        $this->_model->setData(['values' => $values, 'value' => $value]);
-    }
 
-    public function testGetElementHtmlRendersDataAttributesWhenDisabled()
-    {
-        $this->_model->setDisabled(true);
-        $elementHtml = $this->_model->getElementHtml();
-        $this->assertStringContainsString('disabled="disabled"', $elementHtml);
-        $this->assertStringContainsString('data-is-removable="no"', $elementHtml);
-        $this->assertStringContainsString('data-is-editable="no"', $elementHtml);
-    }
+        $element->setForm($this->createMock(AbstractForm::class));
+        $element->setId(self::ELEMENT_ID);
+        $element->setName(self::ELEMENT_NAME);
 
-    public function testGetElementHtmlRendersRelatedJsClassInitialization()
-    {
-        $this->_model->setElementJsClass('CustomSelect');
-        $elementHtml = $this->_model->getElementHtml();
-        $this->assertStringContainsString('ElementControl = new CustomSelect(', $elementHtml);
-        $this->assertStringContainsString('ElementControl.init();', $elementHtml);
+        $this->element = $element;
     }
 
     #[DataProvider('disabledOptionDataProvider')]
     public function testOptionDisabledStateIsRenderedCorrectly(array $option, bool $shouldBeDisabled): void
     {
-        $this->_model->setValues([$option]);
+        $this->element->setValues([$option]);
 
-        $optionHtml = $this->extractOptionHtmlByValue($this->_model->getElementHtml(), $option['value']);
+        $optionHtml = $this->extractOptionHtmlByValue($this->element->getElementHtml(), $option['value']);
 
         $this->assertNotEmpty($optionHtml);
 
@@ -100,14 +84,14 @@ class EditablemultiselectTest extends TestCase
     #[DataProvider('disabledOptionDataProvider')]
     public function testOptgroupOptionDisabledStateIsRenderedCorrectly(array $option, bool $shouldBeDisabled): void
     {
-        $this->_model->setValues([
+        $this->element->setValues([
             [
                 'label' => 'Group',
                 'value' => [$option],
             ],
         ]);
 
-        $optionHtml = $this->extractOptionHtmlByValue($this->_model->getElementHtml(), $option['value']);
+        $optionHtml = $this->extractOptionHtmlByValue($this->element->getElementHtml(), $option['value']);
 
         $this->assertNotEmpty($optionHtml);
 
