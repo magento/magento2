@@ -83,12 +83,12 @@ jobs:
 
       - name: Install + authenticate AI CLIs
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           AUGMENT_SESSION_JSON: ${{ secrets.AUGMENT_SESSION_JSON }}
         run: |
           set -uo pipefail
-          if [[ -n "${ANTHROPIC_API_KEY:-}" ]]; then
+          if [[ -n "${ANTHROPIC_AUTH_TOKEN:-}" ]]; then
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
           fi
           if [[ -n "${CURSOR_API_KEY:-}" ]]; then
@@ -111,7 +111,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           DEVX_REVIEWS_DIR: ${{ runner.temp }}/pr_reviews
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           set -uo pipefail
