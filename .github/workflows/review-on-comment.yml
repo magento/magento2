@@ -1,7 +1,7 @@
 name: review-quorum
 
 # PR-comment-triggered multi-tool review.
-# Comment "/review" on a pull request to run an aggregated Claude + Augment
+# Comment "/review" on a pull request to run an aggregated Claude + Augment + Codex
 # review (plus the Magento specialist on Magento repos) and post the
 # confidence-ranked result back as a single PR comment.
 #
@@ -17,7 +17,7 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  id-token: none   # defense-in-depth: workflow runs external code with API keys in scope
+  id-token: none
 
 # One review per PR at a time; cancel the stale run when a new /review arrives.
 concurrency:
@@ -70,21 +70,15 @@ jobs:
             core.setOutput('number', String(pr.number));
             core.setOutput('url', pr.html_url);
 
-      # S1 fix: pinned to an immutable commit SHA rather than the mutable `ref: main`.
-      # An unreviewed push to review-quorum@main would otherwise immediately affect
-      # this workflow while ANTHROPIC_AUTH_TOKEN / AUGMENT_SESSION_JSON /
-      # REVIEW_QUORUM_TOKEN / github.token are all in scope.
-      #
-      # REVIEW_QUORUM_TOKEN must be scoped to contents:read on magento-cia/review-quorum
-      # only (no write access, no access to other repos).
-      #
+      # Pinned to an immutable commit SHA.
+      # REVIEW_QUORUM_TOKEN must be scoped to contents:read on magento-cia/review-quorum only.
       # To update: change the SHA below after reviewing the review-quorum diff.
       - name: Checkout review-quorum tooling
         uses: actions/checkout@v4
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: 7be932c4be3601246f9a57ad3b97a17c6ab21290
+          ref: 9104814027613d10e0a6e77a086385f5ac85caea
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
@@ -95,19 +89,19 @@ jobs:
       - name: Install + authenticate AI CLIs
         env:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           AUGMENT_SESSION_JSON: ${{ secrets.AUGMENT_SESSION_JSON }}
         run: |
           set -uo pipefail
           if [[ -n "${ANTHROPIC_AUTH_TOKEN:-}" ]]; then
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
           fi
-          # S2: curl-pipe-to-bash Cursor install disabled — no integrity verification.
-          # Re-enable when Cursor publishes a versioned release asset with checksums.
+          if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+            npm install -g @openai/codex || echo "::warning::codex install failed"
+          fi
           if [[ -n "${AUGMENT_SESSION_JSON:-}" ]]; then
             npm install -g @augmentcode/auggie || echo "::warning::auggie install failed"
             mkdir -p "$HOME/.augment"
-            # Validate JSON before writing — catches a misconfigured secret early.
             if echo "$AUGMENT_SESSION_JSON" | jq empty 2>/dev/null; then
               printf '%s' "$AUGMENT_SESSION_JSON" > "$HOME/.augment/session.json"
             else
@@ -126,17 +120,13 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DEVX_REVIEWS_DIR: ${{ runner.temp }}/pr_reviews
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
-          # S3 fix: PR URL passed as env var (data), not interpolated into the
-          # run: script as ${{ }} (text splice). Pattern required by GitHub hardening guide.
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PR_URL: ${{ steps.pr.outputs.url }}
         run: |
           set -uo pipefail
           export PATH="$HOME/.agentic-devx/bin:$PATH"
           devx-review-all "$PR_URL"
 
-      # Guard on pr.outputs.number: if auth fails before Resolve PR runs,
-      # the output is empty and createComment would error on an undefined PR number.
       - name: Post aggregated review
         if: always() && steps.pr.outputs.number != ''
         uses: actions/github-script@v7
@@ -149,15 +139,16 @@ jobs:
             const n = process.env.PR_NUMBER;
             const path = `${process.env.DEVX_REVIEWS_DIR}/pr${n}/pr${n}_aggregated_review.md`;
             let body;
-            try {
-              body = fs.readFileSync(path, 'utf8');
-            } catch (e) {
-              body = '⚠️ review-quorum produced no aggregated report — check the Actions run logs.';
-            }
+            try { body = fs.readFileSync(path, 'utf8'); }
+            catch (e) { body = '⚠️ review-quorum produced no aggregated report — check the Actions run logs.'; }
             const MAX = 60000;
-            if (body.length > MAX) body = body.slice(0, MAX) + '\n\n…_(truncated)_';
+            if (body.length > MAX) body = body.slice(0, MAX) + '
+
+…_(truncated)_';
             await github.rest.issues.createComment({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: Number(n),
-              body: `### 🔍 review-quorum\n\n${body}`,
+              body: `### 🔍 review-quorum
+
+${body}`,
             });
