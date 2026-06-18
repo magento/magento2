@@ -78,7 +78,7 @@ jobs:
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: 9104814027613d10e0a6e77a086385f5ac85caea
+          ref: 6f57e16418398bcfbe76f83b6a57b19fe197fd04
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
@@ -142,13 +142,9 @@ jobs:
             try { body = fs.readFileSync(path, 'utf8'); }
             catch (e) { body = '⚠️ review-quorum produced no aggregated report — check the Actions run logs.'; }
             const MAX = 60000;
-            if (body.length > MAX) body = body.slice(0, MAX) + '
-
-…_(truncated)_';
+            if (body.length > MAX) body = body.slice(0, MAX) + '\n\n…_(truncated)_';
             await github.rest.issues.createComment({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: Number(n),
-              body: `### 🔍 review-quorum
-
-${body}`,
+              body: `### 🔍 review-quorum\n\n${body}`,
             });
