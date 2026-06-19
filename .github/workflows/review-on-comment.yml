@@ -78,7 +78,7 @@ jobs:
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: 8243d8825bd171eb9644dd44e218afc762bbb095
+          ref: cfe225fb7be517b2335439391d1df00e28e84e93
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
