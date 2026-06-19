@@ -70,6 +70,8 @@ class PluginList extends Interception\PluginList\PluginList
     }
 
     /**
+     * Sets intercepted classes.
+     *
      * @param array $interceptedClasses
      * @return void
      */
