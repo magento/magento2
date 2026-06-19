@@ -25,20 +25,14 @@ class PluginListTest extends TestCase
             {
             }
 
-            public function populateState(
-                array $data,
-                array $inherited,
-                ?array $processed,
-                array $pluginInstances,
-                array $loadedScopes,
-                array $scopePriorityScheme
-            ): void {
-                $this->_data = $data;
-                $this->_inherited = $inherited;
-                $this->_processed = $processed;
-                $this->_pluginInstances = $pluginInstances;
-                $this->_loadedScopes = $loadedScopes;
-                $this->_scopePriorityScheme = $scopePriorityScheme;
+            public function populateState(array $state): void
+            {
+                $this->_data = $state['data'];
+                $this->_inherited = $state['inherited'];
+                $this->_processed = $state['processed'];
+                $this->_pluginInstances = $state['pluginInstances'];
+                $this->_loadedScopes = $state['loadedScopes'];
+                $this->_scopePriorityScheme = $state['scopePriorityScheme'];
             }
 
             public function exportState(): array
@@ -58,12 +52,14 @@ class PluginListTest extends TestCase
     public function testResetClearsLoadedStateAndRestoresGlobalScope(): void
     {
         $this->pluginList->populateState(
-            ['type' => ['plugin' => []]],
-            ['type' => ['plugin' => ['instance' => 'TestPlugin']]],
-            ['type_method___self' => ['plugin' => []]],
-            ['type' => ['plugin' => new \stdClass()]],
-            ['global' => true, 'frontend' => true],
-            ['global', 'frontend']
+            [
+                'data' => ['type' => ['plugin' => []]],
+                'inherited' => ['type' => ['plugin' => ['instance' => 'TestPlugin']]],
+                'processed' => ['type_method___self' => ['plugin' => []]],
+                'pluginInstances' => ['type' => ['plugin' => new \stdClass()]],
+                'loadedScopes' => ['global' => true, 'frontend' => true],
+                'scopePriorityScheme' => ['global', 'frontend'],
+            ]
         );
 
         $this->pluginList->reset();
