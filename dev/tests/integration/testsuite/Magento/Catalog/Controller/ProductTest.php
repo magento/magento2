@@ -54,9 +54,6 @@ class ProductTest extends AbstractController
      */
     protected function setUp(): void
     {
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('Randomly fails due to known HHVM bug (DOMText mixed with DOMElement)');
-        }
         Bootstrap::getObjectManager()->configure([
             'preferences' => [
                 \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>

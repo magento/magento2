@@ -750,6 +750,11 @@ class JwkFactory
         return $this->createOct($password, Jwk::PUBLIC_KEY_USE_ENCRYPTION, Jwk::ALGORITHM_PBES2_HS512_A256KW, $kid);
     }
 
+    /**
+     * Create JWK with "none" algorithm (no signature/encryption).
+     *
+     * @return Jwk
+     */
     public function createNone(): Jwk
     {
         return new Jwk(
@@ -761,6 +766,15 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with octet sequence key type.
+     *
+     * @param string $key
+     * @param string $use
+     * @param string $algo
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createOct(string $key, string $use, string $algo, ?string $kid): Jwk
     {
         if (strlen($key) < 2048) {
@@ -781,11 +795,20 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with private RSA key.
+     *
+     * @param string $key
+     * @param string|null $pass
+     * @param string $use
+     * @param string $algorithm
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPrivateRsa(string $key, ?string $pass, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
-        $this->freeResource($resource);
         $keysMap = [
             'n' => 'n',
             'e' => 'e',
@@ -817,11 +840,19 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with public RSA key.
+     *
+     * @param string $key
+     * @param string $use
+     * @param string $algorithm
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPublicRsa(string $key, string $use, string $algorithm, ?string $kid): Jwk
     {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['rsa'];
-        $this->freeResource($resource);
         $keysMap = [
             'n' => 'n',
             'e' => 'e'
@@ -847,6 +878,17 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with private EC (Elliptic Curve) key.
+     *
+     * @param string $key
+     * @param string|null $pass
+     * @param int|null $validateCurveBits
+     * @param string $algorithm
+     * @param string $use
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPrivateEc(
         string $key,
         ?string $pass,
@@ -857,7 +899,6 @@ class JwkFactory
     ): Jwk {
         $resource = openssl_get_privatekey($key, (string)$pass);
         $keyData = openssl_pkey_get_details($resource)['ec'];
-        $this->freeResource($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
@@ -886,6 +927,16 @@ class JwkFactory
         );
     }
 
+    /**
+     * Create JWK with public EC (Elliptic Curve) key.
+     *
+     * @param string $key
+     * @param int|null $validateCurveBits
+     * @param string $algorithm
+     * @param string $use
+     * @param string|null $kid
+     * @return Jwk
+     */
     private function createPublicEc(
         string $key,
         ?int $validateCurveBits,
@@ -895,7 +946,6 @@ class JwkFactory
     ): Jwk {
         $resource = openssl_get_publickey($key);
         $keyData = openssl_pkey_get_details($resource)['ec'];
-        $this->freeResource($resource);
         if (!array_key_exists($keyData['curve_oid'], self::EC_CURVE_MAP)) {
             throw new \RuntimeException('Unsupported EC curve');
         }
@@ -948,17 +998,5 @@ class JwkFactory
         }
 
         return $value;
-    }
-
-    /**
-     * @param mixed $resource
-     *
-     * @return void
-     */
-    private function freeResource($resource): void
-    {
-        if (\is_resource($resource) && (version_compare(PHP_VERSION, '8.0') < 0)) {
-            openssl_free_key($resource);
-        }
     }
 }

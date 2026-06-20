@@ -28,9 +28,6 @@ class XsdTest extends TestCase
     #[DataProvider('mergedXmlDataProvider')]
     public function testMergedXml($fixtureXml, array $expectedErrors)
     {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
         $urnResolver = new UrnResolver();
         $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Email:etc/email_templates.xsd');
         $this->_testXmlAgainstXsd($fixtureXml, $schemaFile, $expectedErrors);
