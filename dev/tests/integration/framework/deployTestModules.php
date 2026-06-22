@@ -100,7 +100,7 @@ function findModuleLevelTestModuleFixtureDirectories(string $appCodeDir): array
         $appCodeDir . '/Magento/*/Test/_files/Magento/*',
         $appCodeDir . '/*/*/Test/_files/Magento/*',
     ];
-    $vendorMagentoDir = dirname($appCodeDir) . '/vendor/magento';
+    $vendorMagentoDir = dirname($appCodeDir, 2) . '/vendor/magento';
     if (is_dir($vendorMagentoDir)) {
         $patterns[] = $vendorMagentoDir . '/module-*/Test/_files/Magento/*';
     }

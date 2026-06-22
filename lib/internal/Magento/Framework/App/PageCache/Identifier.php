@@ -93,7 +93,7 @@ class Identifier implements IdentifierInterface
             '/&?ef_id\=[^&]+/',
             '/&?epik\=[^&]+/',
             '/&?fbclid\=[^&]+/',
-            '/&?gad_source\=[^&]+/',
+            '/&?gad_[a-z]+\=[^&]+/',
             '/&?gbraid\=[^&]+/',
             '/&?gclid\=[^&]+/',
             '/&?gclsrc\=[^&]+/',
