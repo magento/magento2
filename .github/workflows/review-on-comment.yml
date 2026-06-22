@@ -69,6 +69,16 @@ jobs:
             });
             core.setOutput('number', String(pr.number));
             core.setOutput('url', pr.html_url);
+            core.setOutput('head_sha', pr.head.sha);
+
+      # Checkout the PR head so reviewers have the full codebase, not just the diff.
+      # Assumption: non-fork PRs only — uses github.token which has contents:read on
+      # this repo. External-fork PRs (head in a different org) will fail this step.
+      - name: Checkout PR head for codebase context
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.head_sha }}
+          fetch-depth: 1
 
       # Pinned to an immutable commit SHA.
       # REVIEW_QUORUM_TOKEN must be scoped to contents:read on magento-cia/review-quorum only.
@@ -78,7 +88,7 @@ jobs:
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: cfe225fb7be517b2335439391d1df00e28e84e93
+          ref: 6581611687eeb985e667d9f167a93d42e2ae41b3
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
@@ -109,6 +119,26 @@ jobs:
             fi
           fi
 
+      # Provision the devx-evolve code-review runtime so the sub-reviewer agents
+      # (devx-pr-review-*, devx-consolidator-reviewer) are available to Claude.
+      # Uses a read-only deploy key scoped to sadmane_adobe/devx-evolve.
+      # DEVX_EVOLVE_REF is pinned alongside the review-quorum ref above.
+      - name: Provision devx-evolve code-review runtime
+        env:
+          DEVX_EVOLVE_DEPLOY_KEY: ${{ secrets.DEVX_EVOLVE_DEPLOY_KEY }}
+          DEVX_EVOLVE_REF: f49cb9c40d5e998bd979d235ac7b31d4a65cd658
+        run: |
+          set -euo pipefail
+          install -m 700 -d "$HOME/.ssh-devx"
+          printf '%s\n' "$DEVX_EVOLVE_DEPLOY_KEY" > "$HOME/.ssh-devx/id_ed25519"
+          chmod 600 "$HOME/.ssh-devx/id_ed25519"
+          export GIT_SSH_COMMAND="ssh -i $HOME/.ssh-devx/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+          git clone --depth 1 git@github.com:sadmane_adobe/devx-evolve.git "$RUNNER_TEMP/devx-evolve"
+          git -C "$RUNNER_TEMP/devx-evolve" fetch --depth 1 origin "$DEVX_EVOLVE_REF"
+          git -C "$RUNNER_TEMP/devx-evolve" checkout FETCH_HEAD
+          make -C "$RUNNER_TEMP/devx-evolve" code-review
+          rm -f "$HOME/.ssh-devx/id_ed25519"
+
       - name: Install review-quorum runtime
         run: |
           set -euo pipefail
@@ -122,6 +152,8 @@ jobs:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PR_URL: ${{ steps.pr.outputs.url }}
+          DEVX_REPO_PATH: ${{ github.workspace }}
+          DEVX_REQUIRE_AGENTS: "1"
         run: |
           set -uo pipefail
           export PATH="$HOME/.agentic-devx/bin:$PATH"
