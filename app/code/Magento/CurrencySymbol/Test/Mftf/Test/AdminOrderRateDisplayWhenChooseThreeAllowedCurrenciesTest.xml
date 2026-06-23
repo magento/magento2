@@ -32,7 +32,6 @@
             <!--Delete created product-->
             <comment userInput="Delete created product" stepKey="commentDeleteCreatedProduct"/>
             <deleteData createDataKey="createNewProduct" stepKey="deleteNewProduct"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Set currency rates-->
         <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>

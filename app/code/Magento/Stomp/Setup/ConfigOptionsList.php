@@ -12,6 +12,7 @@ use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\MessageQueue\Setup\ConfigOptionsList as MessageQueueConfigOptionsList;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -27,7 +28,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public const INPUT_KEY_QUEUE_STOMP_PASSWORD = 'stomp-password';
     public const INPUT_KEY_QUEUE_STOMP_SSL = 'stomp-ssl';
     public const INPUT_KEY_QUEUE_STOMP_SSL_OPTIONS = 'stomp-ssl-options';
-    public const INPUT_KEY_QUEUE_DEFAULT_CONNECTION ='queue-default-connection';
 
     /**
      * Path to the values in the deployment config
@@ -164,8 +164,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
-        $errors = [];
+        $defaultConnection = $options[MessageQueueConfigOptionsList::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] ?? null;
+        if ($defaultConnection && $defaultConnection !== 'stomp') {
+            return [];
+        }
 
+        $errors = [];
         if (isset($options[self::INPUT_KEY_QUEUE_STOMP_HOST])
             && $options[self::INPUT_KEY_QUEUE_STOMP_HOST] !== '') {
             if (!$this->isDataEmpty(
@@ -193,11 +197,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
             if (!$result) {
                 $errors[] = "Could not connect to the Stomp Server.";
-            }
-
-            if (isset($options[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION])
-                && $options[self::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] === 'amqp') {
-                $errors = [];
             }
         }
 

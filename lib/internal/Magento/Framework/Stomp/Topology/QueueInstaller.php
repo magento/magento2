@@ -26,7 +26,7 @@ class QueueInstaller
     /**
      * @var StompClientFactory
      */
-    private StompClientFactory $stompClient;
+    private StompClientFactory $stompClientFactory;
 
     /**
      * @var LoggerInterface
@@ -36,12 +36,7 @@ class QueueInstaller
     /**
      * @var StompClient
      */
-    private $stompProducerClient;
-
-    /**
-     * @var StompClient
-     */
-    private $stompConsumerClient;
+    private ?StompClient $stompClient = null;
 
     /**
      * Initialize dependencies.
@@ -53,7 +48,7 @@ class QueueInstaller
         StompClientFactory $stompClient,
         LoggerInterface $logger
     ) {
-        $this->stompClient = $stompClient;
+        $this->stompClientFactory = $stompClient;
         $this->logger = $logger;
     }
 
@@ -78,7 +73,7 @@ class QueueInstaller
             // Read and acknowledge the blank message to delete
             $stompConsumerClient = $this->getStompConsumerClient();
             $stompConsumerClient->subscribeQueue($queue->getName());
-            $stompConsumerClient->readMessage();
+            $stompConsumerClient->readMessage($queue->getName());
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Queue installation failed for "%s": %s', $queue->getName(), $e->getMessage()),
@@ -94,10 +89,10 @@ class QueueInstaller
      */
     private function getStompProducerClient(): StompClient
     {
-        if ($this->stompProducerClient === null) {
-            $this->stompProducerClient = $this->stompClient->create(['clientId' => 'producer']);
+        if ($this->stompClient === null) {
+            $this->stompClient = $this->stompClientFactory->create();
         }
-        return $this->stompProducerClient;
+        return $this->stompClient;
     }
 
     /**
@@ -107,9 +102,9 @@ class QueueInstaller
      */
     private function getStompConsumerClient(): StompClient
     {
-        if ($this->stompConsumerClient === null) {
-            $this->stompConsumerClient = $this->stompClient->create(['clientId' => 'consumer']);
+        if ($this->stompClient === null) {
+            $this->stompClient = $this->stompClientFactory->create();
         }
-        return $this->stompConsumerClient;
+        return $this->stompClient;
     }
 }

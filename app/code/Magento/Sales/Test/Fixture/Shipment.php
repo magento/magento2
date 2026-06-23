@@ -9,13 +9,41 @@ namespace Magento\Sales\Test\Fixture;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\DataObject;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\ShipOrderInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
+/**
+ * Shipment fixture
+ *
+ * Usage examples:
+ *
+ * 1. Create a shipment for an order using default data:
+ * <pre>
+ *  #[
+ *      DataFixture(ShipmentFixture::class, ['order_id' => '$order.id$'], 'shipment')
+ *  ]
+ * </pre>
+ *
+ * 2. Create a partial shipment for specific items (by SKU) with quantities
+ * <pre>
+ *  #[
+ *      DataFixture(
+ *          ShipmentFixture::class,
+ *          [
+ *              'order_id' => '$order.id$',
+ *              'items' => [
+ *                  ['sku' => '$p1.sku$', 'qty' => 4],
+ *                  ['sku' => '$p2.sku$', 'qty' => 7],
+ *              ]
+ *          ],
+ *          'shipment'
+ *      ),
+ *  ]
+ * </pre>
+ */
 class Shipment implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -35,7 +63,7 @@ class Shipment implements RevertibleDataFixtureInterface
     private $serviceFactory;
 
     /**
-     * @var InvoiceRepositoryInterface
+     * @var ShipmentRepositoryInterface
      */
     private $shipmentRepository;
 
@@ -62,15 +90,37 @@ class Shipment implements RevertibleDataFixtureInterface
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as Shipment::DEFAULT_DATA.
-     * Fields structure fields:
-     * - $data['items']: can be supplied in following formats:
-     *      - array of arrays [{"sku":"$product1.sku$","qty":1}, {"sku":"$product2.sku$","qty":1}]
-     *      - array of arrays [{"order_item_id":"$oItem1.sku$","qty":1}, {"order_item_id":"$oItem2.sku$","qty":1}]
-     *      - array of arrays [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
-     *      - array of arrays [{"quote_item_id":"$qItem1.id$","qty":1}, {"quote_item_id":"$qItem2.id$","qty":1}]
-     *      - array of SKUs ["$product1.sku$", "$product2.sku$"]
-     *      - array of order items IDs ["$oItem1.id$", "$oItem2.id$"]
-     *      - array of product instances ["$product1$", "$product2$"]
+     *
+     * Fields structure:
+     *
+     * - `$data['items']` as array of arrays with sku and qty:
+     * <pre>
+     * ['items' => [['sku' => '$p1.sku$', 'qty' => 1], ['sku' => '$p2.sku$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with order_item_id and qty:
+     * <pre>
+     * ['items' => [['order_item_id' => '$oItem1.id$', 'qty' => 1], ['order_item_id' => '$oItem2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with product_id and qty:
+     * <pre>
+     * ['items' => [['product_id' => '$p1.id$', 'qty' => 1], ['product_id' => '$p2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with quote_item_id and qty:
+     * <pre>
+     * ['items' => [['quote_item_id' => '$qItem1.id$', 'qty' => 1], ['quote_item_id' => '$qItem2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of SKUs:
+     * <pre>
+     * ['items' => ['$p1.sku$', '$p2.sku$']]
+     * </pre>
+     * - `$data['items']` as array of order item IDs:
+     * <pre>
+     * ['items' => ['$oItem1.id$', '$oItem2.id$']]
+     * </pre>
+     * - `$data['items']` as array of product instances:
+     * <pre>
+     * ['items' => ['$p1$', '$p2$']]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -132,7 +182,7 @@ class Shipment implements RevertibleDataFixtureInterface
             } elseif ($itemToShip instanceof ProductInterface) {
                 $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip->getSku()];
             } else {
-                $shipmentItem = array_intersect($itemToShip, $shipmentItem) + $shipmentItem;
+                $shipmentItem = array_intersect_key($itemToShip, $shipmentItem) + $shipmentItem;
                 if (isset($itemToShip['sku'])) {
                     $shipmentItem['order_item_id'] = $orderItemIdsBySku[$itemToShip['sku']];
                 } elseif (isset($itemToShip['product_id'])) {
