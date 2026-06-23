@@ -132,9 +132,12 @@ jobs:
           install -m 700 -d "$HOME/.ssh-devx"
           printf '%s\n' "$DEVX_EVOLVE_DEPLOY_KEY" > "$HOME/.ssh-devx/id_ed25519"
           chmod 600 "$HOME/.ssh-devx/id_ed25519"
-          cleanup() { rm -f "$HOME/.ssh-devx/id_ed25519"; }
+          cleanup() { rm -rf "$HOME/.ssh-devx"; }
           trap cleanup EXIT
-          export GIT_SSH_COMMAND="ssh -i $HOME/.ssh-devx/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+          # Pre-populate known_hosts with GitHub's host keys (avoids TOFU / accept-new).
+          mkdir -p "$HOME/.ssh"
+          ssh-keyscan github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i $HOME/.ssh-devx/id_ed25519 -o IdentitiesOnly=yes"
           git clone --depth 1 git@github.com:sadmane_adobe/devx-evolve.git "$RUNNER_TEMP/devx-evolve"
           git -C "$RUNNER_TEMP/devx-evolve" fetch --depth 1 origin "$DEVX_EVOLVE_REF"
           git -C "$RUNNER_TEMP/devx-evolve" checkout FETCH_HEAD
