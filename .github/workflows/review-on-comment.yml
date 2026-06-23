@@ -132,12 +132,13 @@ jobs:
           install -m 700 -d "$HOME/.ssh-devx"
           printf '%s\n' "$DEVX_EVOLVE_DEPLOY_KEY" > "$HOME/.ssh-devx/id_ed25519"
           chmod 600 "$HOME/.ssh-devx/id_ed25519"
+          cleanup() { rm -f "$HOME/.ssh-devx/id_ed25519"; }
+          trap cleanup EXIT
           export GIT_SSH_COMMAND="ssh -i $HOME/.ssh-devx/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
           git clone --depth 1 git@github.com:sadmane_adobe/devx-evolve.git "$RUNNER_TEMP/devx-evolve"
           git -C "$RUNNER_TEMP/devx-evolve" fetch --depth 1 origin "$DEVX_EVOLVE_REF"
           git -C "$RUNNER_TEMP/devx-evolve" checkout FETCH_HEAD
           make -C "$RUNNER_TEMP/devx-evolve" code-review
-          rm -f "$HOME/.ssh-devx/id_ed25519"
 
       - name: Install review-quorum runtime
         run: |
