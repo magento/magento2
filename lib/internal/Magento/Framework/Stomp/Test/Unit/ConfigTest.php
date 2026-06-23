@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Stomp\Network\Connection;
 
 class ConfigTest extends TestCase
@@ -168,9 +169,8 @@ class ConfigTest extends TestCase
     /**
      * @param array $config
      * @param array $expected
-     * @return void
-     * @dataProvider configDataProvider
-     */
+     * @return void     */
+    #[DataProvider('configDataProvider')]
     public function testCreateConnection(array $config, array $expected): void
     {
         $this->deploymentConfigMock->expects($this->once())

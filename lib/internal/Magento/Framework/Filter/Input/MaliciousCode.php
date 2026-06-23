@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,6 +53,19 @@ class MaliciousCode implements FilterInterface
     ];
 
     /**
+     * Regular expressions for path validation
+     *
+     * @var string
+     */
+    private const PATH_EXPRESSION =
+        '/(?:^|[\/\\\\])(' .
+        '(?:' .
+        '(?:\.\.|%2e%2e|%252e%252e|%c0%2e%2e|%c0%ae%c0%ae|%e0%40%ae%2e|%c0%2e%c0%2e)' .
+        '(?:[\/\\\\]|%2f|%5c|%255c)' .
+        ')' .
+        ')|\\x00|%00/i';
+
+    /**
      * Filter value
      *
      * @param string|array $value
@@ -92,5 +105,16 @@ class MaliciousCode implements FilterInterface
     {
         $this->_expressions = $expressions;
         return $this;
+    }
+
+    /**
+     * Check if the path is valid
+     *
+     * @param string $fileName
+     * @return bool
+     */
+    public function isValidPath(string $fileName): bool
+    {
+        return !preg_match(self::PATH_EXPRESSION, $fileName);
     }
 }

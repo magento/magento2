@@ -55,7 +55,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleNames = $input->getArgument('module-names');
         if (!empty($moduleNames)) {

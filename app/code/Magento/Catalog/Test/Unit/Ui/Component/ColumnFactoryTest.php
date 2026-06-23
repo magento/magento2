@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\Component;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Ui\Component\ColumnFactory;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
@@ -94,8 +95,8 @@ class ColumnFactoryTest extends TestCase
      * @param array $filterModifiers
      * @param null|string $filter
      * @return void
-     * @dataProvider filterModifiersProvider
      */
+    #[DataProvider('filterModifiersProvider')]
     public function testCreateWithNotFilterableInGridAttribute(array $filterModifiers, ?string $filter): void
     {
         $componentFactoryArgument = [
@@ -157,8 +158,8 @@ class ColumnFactoryTest extends TestCase
      * @param bool $showsTime
      * @param string $expectedDateFormat
      * @param string $expectedTimezone
-     * @dataProvider createDateColumnDataProvider
      */
+    #[DataProvider('createDateColumnDataProvider')]
     public function testCreateDateColumn(
         string $frontendInput,
         bool $showsTime,

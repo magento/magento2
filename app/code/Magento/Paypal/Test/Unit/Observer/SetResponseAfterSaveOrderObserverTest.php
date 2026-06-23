@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,16 +61,8 @@ class SetResponseAfterSaveOrderObserverTest extends TestCase
         $this->_observer->setEvent($this->_event);
 
         $this->coreRegistryMock = $this->createMock(Registry::class);
-        $this->paypalHssMock = $this->createPartialMock(Hss::class, ['getHssMethods']);
-        $this->viewMock = $this->getMockForAbstractClass(
-            ViewInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            []
-        );
+        $this->paypalHssMock = $this->createMock(Hss::class);
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $this->_model = $objectManagerHelper->getObject(
             SetResponseAfterSaveOrderObserver::class,
@@ -125,24 +117,12 @@ class SetResponseAfterSaveOrderObserverTest extends TestCase
     {
         $testData = $this->getSetResponseAfterSaveOrderTestData();
 
-        $observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $paymentMock = $this->getMockBuilder(Payment::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $layoutMock = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $blockMock = $this->getMockBuilder(BlockInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $observerMock = $this->createMock(Observer::class);
+        $orderMock = $this->createMock(Order::class);
+        $paymentMock = $this->createMock(Payment::class);
+        $resultMock = $this->createMock(DataObject::class);
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $blockMock = $this->createMock(BlockInterface::class);
 
         $this->coreRegistryMock->expects($this->once())
             ->method('registry')

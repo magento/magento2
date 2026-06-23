@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Schema;
 
 use Magento\Framework\GraphQl\ConfigInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema;
 use Magento\Framework\GraphQl\Schema\Type\TypeRegistry;
 use Magento\Framework\GraphQl\SchemaFactory;
@@ -57,7 +58,11 @@ class SchemaGenerator implements SchemaGeneratorInterface
                 'query' => $this->typeRegistry->get('Query'),
                 'mutation' => $this->typeRegistry->get('Mutation'),
                 'typeLoader' => function ($name) {
-                    return $this->typeRegistry->get($name);
+                    try {
+                        return $this->typeRegistry->get($name);
+                    } catch (GraphQlInputException) {
+                        return null;
+                    }
                 },
                 'types' => function () {
                     $typesImplementors = [];

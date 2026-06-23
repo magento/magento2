@@ -28,4 +28,12 @@
                 type="Magento\Quote\Plugin\Webapi\ValidateProductWebsiteAssignment"
                 sortOrder="100" />
     </type>
+    <virtualType name="Magento\Quote\Model\Quote\Item\CartItemValidatorChainOnSave" type="Magento\Quote\Model\Quote\Item\CartItemValidatorChain">
+        <arguments>
+            <argument name="breakChainOnFailure" xsi:type="boolean">true</argument>
+            <argument name="validators" xsi:type="array">
+                <item name="cart_item_custom_options_validator" xsi:type="object">Magento\Quote\Model\Quote\Item\CartItemCustomOptionsValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

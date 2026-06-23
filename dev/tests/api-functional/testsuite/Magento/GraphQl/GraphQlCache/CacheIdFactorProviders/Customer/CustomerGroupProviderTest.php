@@ -87,7 +87,7 @@ class CustomerGroupProviderTest extends GraphQlAbstract
         );
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
         $customer = $this->customerRepository->get($customerEmail);
         $customerGroupId = $this->customerGroup->load('Retailer', 'customer_group_code')->getId();
         // change the customer group of this customer from the default group
@@ -105,7 +105,7 @@ class CustomerGroupProviderTest extends GraphQlAbstract
         );
         $cacheIdCustomerGroupChange = $responseAfterCustomerGroupChange['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify that the cache id generated is a 64 character long
-        $this->assertTrue((boolean)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
+        $this->assertTrue((bool)preg_match('/^[0-9a-f]{64}$/i', $cacheId));
         // check that the cache ids generated before and after customer group changes are not equal
         $this->assertNotEquals($cacheId, $cacheIdCustomerGroupChange);
         //Change the customer groupId back to Default General

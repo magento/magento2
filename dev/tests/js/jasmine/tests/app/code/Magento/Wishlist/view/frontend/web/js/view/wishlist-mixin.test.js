@@ -25,9 +25,11 @@ define([
                 subscribeCallback = callback;
             }
 
-            wishlistDataMock = {
-                subscribe: jasmine.createSpy('subscribe').and.callFake(setupSubscribeCallback)
-            };
+            // Create wishlistDataMock as a function (KnockoutJS observable) with subscribe method
+            wishlistDataMock = jasmine.createSpy('wishlistObservable').and.returnValue({
+                counter: null // Default return value
+            });
+            wishlistDataMock.subscribe = jasmine.createSpy('subscribe').and.callFake(setupSubscribeCallback);
 
             customerDataMock.get.and.returnValue(wishlistDataMock);
 

@@ -17,9 +17,13 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Date
      */
@@ -50,7 +54,7 @@ class DateTest extends TestCase
         $this->factoryMock = $this->createMock(Factory::class);
         $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->escaperMock = $this->createMock(Escaper::class);
-        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
         $this->model = new Date(
             $this->factoryMock,
             $this->collectionFactoryMock,
@@ -72,8 +76,8 @@ class DateTest extends TestCase
 
     /**
      * @param $fieldName
-     * @dataProvider providerGetElementHtmlDateFormat
      */
+    #[DataProvider('providerGetElementHtmlDateFormat')]
     public function testGetElementHtmlDateFormat($fieldName)
     {
         $formMock = $this->getFormMock('once');
@@ -106,11 +110,10 @@ class DateTest extends TestCase
      */
     protected function getFormMock($exactly)
     {
-        $formMock = $this->getMockBuilder(\stdClass::class)->addMethods(
+        $formMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
             ['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix']
-        )
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
         foreach (['getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix'] as $method) {
             switch ($exactly) {
                 case 'once':
@@ -126,13 +129,13 @@ class DateTest extends TestCase
         return $formMock;
     }
 
-    /**
-     * @dataProvider providerGetValue
+    /** 
      * @param string|null $dateFormat
      * @param string|null $format
      * @param string|null $timeFormat
      * @param string $expectedFormat
      */
+    #[DataProvider('providerGetValue')]
     public function testGetValue(?string $dateFormat, ?string $format, ?string $timeFormat, string $expectedFormat)
     {
         $dateTime = new \DateTime('2025-10-13 10:36:00', new \DateTimeZone('America/Los_Angeles'));
@@ -156,7 +159,7 @@ class DateTest extends TestCase
         $this->model->getValue();
     }
 
-    public function providerGetValue()
+    public static function providerGetValue()
     {
         return [
             [null, 'yyyy-mm-dd', 'hh:mm:ss', 'yyyy-mm-dd hh:mm:ss'],

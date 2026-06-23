@@ -44,6 +44,7 @@
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
 
             <!-- Logout -->
+            <deleteData createDataKey="createCategory" stepKey="deletecreateCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

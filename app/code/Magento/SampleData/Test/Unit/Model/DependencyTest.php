@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types = 1);
 
@@ -19,6 +19,7 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Phrase;
 use Magento\SampleData\Model\Dependency;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,9 +38,8 @@ class DependencyTest extends TestCase
      * @param string[] $expectedPackages
      * @return void
      * @throws FileSystemException
-     *
-     * @dataProvider dataPackagesFromComposerSuggest
      */
+    #[DataProvider('dataPackagesFromComposerSuggest')]
     public function testPackagesFromComposerSuggest(
         array $moduleDirectories,
         callable $composerJsonGenerator,
@@ -47,39 +47,27 @@ class DependencyTest extends TestCase
         array $expectedPackages
     ): void {
         /** @var ComposerInformation|MockObject $composerInformation */
-        $composerInformation = $this->getMockBuilder(ComposerInformation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $composerInformation = $this->createMock(ComposerInformation::class);
         $composerInformation->method('getSuggestedPackages')
             ->willReturn($suggestionsFromLockFile);
 
         /** @var Filesystem|MockObject $filesystem */
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $filesystem = $this->createMock(Filesystem::class);
 
         /** @var PackageFactory|MockObject $packageFactory */
-        $packageFactory = $this->getMockBuilder(PackageFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $packageFactory = $this->createPartialMock(PackageFactory::class, ['create']);
         $packageFactory->method('create')
             ->willReturnCallback(function ($args) {
                 return new Package($args['json']);
             });
 
         /** @var ComponentRegistrarInterface|MockObject $componentRegistrar */
-        $componentRegistrar = $this->getMockBuilder(
-            ComponentRegistrarInterface::class
-        )->getMockForAbstractClass();
+        $componentRegistrar = $this->createMock(ComponentRegistrarInterface::class);
         $componentRegistrar->method('getPaths')
             ->with(ComponentRegistrar::MODULE)
             ->willReturn($moduleDirectories);
 
-        $directoryReadFactory = $this->getMockBuilder(ReadFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $directoryReadFactory = $this->createPartialMock(ReadFactory::class, ['create']);
         $directoryReadFactory->method('create')
             ->willReturnMap($composerJsonGenerator($this));
 
@@ -195,8 +183,7 @@ class DependencyTest extends TestCase
      */
     public function stubComposerJsonReader(array $composerJsonContent): MockObject
     {
-        $stub = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $stub = $this->createMock(ReadInterface::class);
         $stub->method('isExist')
             ->with('composer.json')
             ->willReturn(true);
@@ -214,8 +201,7 @@ class DependencyTest extends TestCase
      */
     public function stubFileNotFoundReader(): MockObject
     {
-        $stub = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $stub = $this->createMock(ReadInterface::class);
         $stub->method('isExist')
             ->with('composer.json')
             ->willReturn(false);

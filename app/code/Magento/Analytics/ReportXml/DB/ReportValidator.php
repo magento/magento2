@@ -10,7 +10,7 @@ use Magento\Analytics\ReportXml\QueryFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Validates report definitions by doing query to storage with limit 0
+ * Validates report definitions by doing query to storage with limit 1
  */
 class ReportValidator
 {
@@ -39,7 +39,7 @@ class ReportValidator
     }
 
     /**
-     * Tries to do query for provided report with limit 0 and return error information if it failed
+     * Tries to do query for provided report with limit 1 and return error information if it failed
      *
      * @param string $name
      * @param SearchCriteriaInterface $criteria
@@ -50,7 +50,7 @@ class ReportValidator
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
-        $query->getSelect()->limit(0);
+        $query->getSelect()->limit(1);
         try {
             $connection->query($query->getSelect());
         } catch (\Zend_Db_Statement_Exception $e) {

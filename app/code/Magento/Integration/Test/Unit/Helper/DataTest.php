@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Integration\Test\Unit\Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Helper\Data;
 use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -23,7 +24,7 @@ class DataTest extends TestCase
         $this->dataHelper = $helper->getObject(Data::class);
     }
 
-    public function testMapResources()
+    public function testMapResources(): void
     {
         $testData = require __DIR__ . '/_files/acl.php';
         $expectedData = require __DIR__ . '/_files/acl-map.php';
@@ -31,17 +32,19 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider integrationDataProvider
+     * @param array<string, mixed> $integrationsData
+     * @param bool $expectedResult
      */
-    public function testIsConfigType($integrationsData, $expectedResult)
+    #[DataProvider('integrationDataProvider')]
+    public function testIsConfigType(array $integrationsData, bool $expectedResult): void
     {
         $this->assertEquals($expectedResult, $this->dataHelper->isConfigType($integrationsData));
     }
 
     /**
-     * @return array
+     * @return array<int, array<int, mixed>>
      */
-    public static function integrationDataProvider()
+    public static function integrationDataProvider(): array
     {
         return [
             [

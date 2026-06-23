@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -39,5 +39,13 @@
     <entity name="SetDefaultMinimumOrderAmountConfigData">
         <data key="path">sales/minimum_order/amount</data>
         <data key="value">0</data>
+    </entity>
+    <entity name="SetMaximumNumberOfCouponsPerOrder1ConfigData">
+        <data key="path">sales/multicoupon/maximum_number_of_coupons_per_order</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SetMaximumNumberOfCouponsPerOrder10ConfigData">
+        <data key="path">sales/multicoupon/maximum_number_of_coupons_per_order</data>
+        <data key="value">10</data>
     </entity>
 </entities>

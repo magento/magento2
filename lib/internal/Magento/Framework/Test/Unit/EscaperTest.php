@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,18 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline;
 use Magento\Framework\ZendEscaper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
 
 /**
  * \Magento\Framework\Escaper test case
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class EscaperTest extends TestCase
 {
@@ -54,7 +60,7 @@ class EscaperTest extends TestCase
         $this->escaper = new Escaper();
         $this->zendEscaper = new ZendEscaper();
         $this->translateInline = $this->objectManagerHelper->getObject(Inline::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'escaper', $this->zendEscaper);
         $this->objectManagerHelper->setBackwardCompatibleProperty($this->escaper, 'logger', $this->loggerMock);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -123,8 +129,8 @@ class EscaperTest extends TestCase
     /**
      * @param string $data
      * @param string $expected
-     * @dataProvider escapeJsDataProvider
      */
+    #[DataProvider('escapeJsDataProvider')]
     public function testEscapeJs($data, $expected)
     {
         $this->assertEquals($expected, $this->escaper->escapeJs($data));
@@ -169,8 +175,8 @@ class EscaperTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
-     * @dataProvider escapeHtmlDataProvider
      */
+    #[DataProvider('escapeHtmlDataProvider')]
     public function testEscapeHtml($data, $expected, $allowedTags = [])
     {
         $actual = $this->escaper->escapeHtml($data, $allowedTags);
@@ -183,8 +189,8 @@ class EscaperTest extends TestCase
      * @param string $input
      * @param string $output
      * @return void
-     * @dataProvider escapeHtmlAttributeWithInlineTranslateEnabledDataProvider
      */
+    #[DataProvider('escapeHtmlAttributeWithInlineTranslateEnabledDataProvider')]
     public function testEscapeHtmlAttributeWithInlineTranslateEnabled(string $input, string $output): void
     {
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -230,8 +236,8 @@ class EscaperTest extends TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeHtml
-     * @dataProvider escapeHtmlInvalidDataProvider
      */
+    #[DataProvider('escapeHtmlInvalidDataProvider')]
     public function testEscapeHtmlWithInvalidData($data, $expected, $allowedTags = [])
     {
         $this->loggerMock->expects($this->once())
@@ -361,9 +367,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider escapeUrlDataProvider
      */
+    #[DataProvider('escapeUrlDataProvider')]
     public function testEscapeUrl(string $data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->escapeUrl($data));
@@ -376,9 +381,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider escapeCssDataProvider
      */
+    #[DataProvider('escapeCssDataProvider')]
     public function testEscapeCss($data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->escapeCss($data));
@@ -407,9 +411,8 @@ class EscaperTest extends TestCase
      * @param string $data
      * @param string $expected
      * @return void
-     *
-     * @dataProvider encodeUrlParamDataProvider
      */
+    #[DataProvider('encodeUrlParamDataProvider')]
     public function testEncodeUrlParam($data, string $expected): void
     {
         $this->assertEquals($expected, $this->escaper->encodeUrlParam($data));
@@ -490,8 +493,8 @@ class EscaperTest extends TestCase
      * @covers \Magento\Framework\Escaper::escapeXssInUrl
      * @param string $input
      * @param string $expected
-     * @dataProvider escapeDataProvider
      */
+    #[DataProvider('escapeDataProvider')]
     public function testEscapeXssInUrl($input, $expected)
     {
         $this->assertEquals($expected, $this->escaper->escapeXssInUrl($input));
@@ -559,5 +562,692 @@ class EscaperTest extends TestCase
                 'http://test.com/?test',
             ],
         ];
+    }
+
+    public function testEscapeXssInUrlWithMalformedUtf8ReturnsEmptyString(): void
+    {
+        // Invalid UTF-8 byte sequence followed by a script identifier
+        $bad = "\xC3\x28javascript:alert(1)";
+        $this->assertSame('', $this->escaper->escapeXssInUrl($bad));
+    }
+
+    public function testInlineSensitiveEscapeHtmlAttrWithTripleBraces(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'inlineSensitiveEscapeHtmlAttr');
+
+        $input = '{{{Search entire store here...}}}';
+        $expected = '{{{Search&#x20;entire&#x20;store&#x20;here...}}}';
+
+        $this->assertSame($expected, $method->invoke($this->escaper, $input));
+    }
+
+    public function testInlineSensitiveEscapeHtmlAttrWithoutTripleBracesFallsBack(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'inlineSensitiveEscapeHtmlAttr');
+
+        $input = 'Simple string';
+        $expected = 'Simple&#x20;string';
+
+        $this->assertSame($expected, $method->invoke($this->escaper, $input));
+    }
+
+    public function testEscapeScriptIdentifiersReplacesKnownIdentifiers(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'escapeScriptIdentifiers');
+
+        $input = 'prefix javascript:alert(1) and vbscript:and data:text/plain';
+        $expected = 'prefix :alert(1) and :and :text/plain';
+
+        $this->assertSame($expected, $method->invoke($this->escaper, $input));
+    }
+
+    public function testEscapeScriptIdentifiersReturnsEmptyOnSecondPregReplaceError(): void
+    {
+        $patternProp = new \ReflectionProperty(Escaper::class, 'xssFiltrationPattern');
+        $original = $patternProp->getValue();
+
+        // Force preg_replace to fail and return null using an invalid pattern
+        $patternProp->setValue($this->escaper, '/[/');
+
+        try {
+            // preg_replace compilation error emits a PHP warning; swallow it locally for this test
+            set_error_handler(function () {
+                return true; // suppress warning from invalid regex
+            });
+            $method = new \ReflectionMethod(Escaper::class, 'escapeScriptIdentifiers');
+
+            $this->assertSame('', $method->invoke($this->escaper, 'javascript:alert(1)'));
+        } finally {
+            restore_error_handler();
+            // Restore original pattern to avoid side effects on other tests
+            $patternProp->setValue($this->escaper, $original);
+        }
+    }
+
+    public function testEscapeScriptIdentifiersRecursiveReprocessing(): void
+    {
+        $patternProp = new \ReflectionProperty(Escaper::class, 'xssFiltrationPattern');
+        $original = $patternProp->getValue();
+
+        // Use a pattern that still matches after replacement to trigger recursion
+        $patternProp->setValue(null, '/::/');
+
+        try {
+            $method = new \ReflectionMethod(Escaper::class, 'escapeScriptIdentifiers');
+            $this->assertSame(':', $method->invoke($this->escaper, ':::'));
+        } finally {
+            $patternProp->setValue($this->escaper, $original);
+        }
+    }
+
+    public function testPrepareUnescapedCharactersReplacesAmpersands(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'prepareUnescapedCharacters');
+
+        $input = '& < & >';
+        $expected = '&amp; < &amp; >';
+
+        $this->assertSame($expected, $method->invoke($this->escaper, $input));
+    }
+
+    public function testPrepareUnescapedCharactersNoAmpersandNoOp(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'prepareUnescapedCharacters');
+
+        $input = 'Plain text without ampersands';
+
+        $this->assertSame($input, $method->invoke($this->escaper, $input));
+    }
+
+    public function testPrepareUnescapedCharactersReturnsNullOnMalformedUtf8(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'prepareUnescapedCharacters');
+
+        // Invalid UTF-8 sequence; with /u modifier preg_replace returns null
+        $bad = "\xC3\x28 &";
+
+        set_error_handler(function () {
+            return true; // Suppress preg_replace warning for invalid UTF-8 subject
+        });
+        try {
+            $this->assertNull($method->invoke($this->escaper, $bad));
+        } finally {
+            restore_error_handler();
+        }
+    }
+
+    public function testRemoveNotAllowedTagsStripsDisallowedAndKeepsAllowed(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $div = $doc->createElement('div');
+        $div->setAttribute('id', 'a');
+        $div->appendChild($doc->createTextNode('keep '));
+        $script = $doc->createElement('script', 'alert(1)');
+        $div->appendChild($script);
+        $div->appendChild($doc->createTextNode(' '));
+        $div2 = $doc->createElement('div', 'div content');
+        $div->appendChild($div2);
+        $div->appendChild($doc->createTextNode(' '));
+        $bold = $doc->createElement('b', 'bold');
+        $div->appendChild($bold);
+        $body->appendChild($div);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeNotAllowedTags');
+        $method->invoke($this->escaper, $doc, ['span', 'b']);
+
+        $xpath = new \DOMXPath($doc);
+        $this->assertSame(0, $xpath->query('//script')->length);
+        $this->assertSame(0, $xpath->query('//div')->length);
+        $this->assertSame(0, $xpath->query('//b')->length);
+
+        $bodyNode = $xpath->query('//body')->item(0);
+        $this->assertNotNull($bodyNode);
+        $bodyText = $bodyNode->textContent;
+        $this->assertStringContainsString('alert(1)', $bodyText);
+        $this->assertStringContainsString('div content', $bodyText);
+        $this->assertStringContainsString('bold', $bodyText);
+    }
+
+    public function testRemoveNotAllowedTagsNoAllowedLeavesOnlyText(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $div = $doc->createElement('div', 'with ');
+        $b = $doc->createElement('b', 'nested');
+        $div->appendChild($b);
+        $div->appendChild($doc->createTextNode(' tags'));
+        $body->appendChild($div);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeNotAllowedTags');
+        $method->invoke($this->escaper, $doc, []);
+
+        $xpath = new \DOMXPath($doc);
+        // Only html and body elements should remain; their children should be text nodes
+        $this->assertSame(0, $xpath->query('//*[name() != "html" and name() != "body"]')->length);
+        $body = $xpath->query('//body')->item(0);
+        $this->assertNotNull($body);
+        $this->assertStringContainsString('with nested tags', $body->textContent);
+    }
+
+    public function testRemoveNotAllowedAttributesKeepsAllowedOnNonAnchor(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $span = $doc->createElement('span');
+        $span->setAttribute('id', 'sid');
+        $span->setAttribute('class', 'c');
+        $span->setAttribute('style', 'color:red');
+        $span->setAttribute('title', 't');
+        $span->setAttribute('href', '#');
+        $span->setAttribute('data-x', '1');
+        $span->setAttribute('onclick', 'evil');
+        $body->appendChild($span);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeNotAllowedAttributes');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+        /** @var \DOMElement $span */
+        $span = $xpath->query('//span')->item(0);
+        $this->assertNotNull($span);
+        // Allowed globally
+        $this->assertTrue($span->hasAttribute('id'));
+        $this->assertTrue($span->hasAttribute('class'));
+        $this->assertTrue($span->hasAttribute('style'));
+        $this->assertTrue($span->hasAttribute('title'));
+        $this->assertTrue($span->hasAttribute('href'));
+        // Disallowed should be stripped
+        $this->assertFalse($span->hasAttribute('data-x'));
+        $this->assertFalse($span->hasAttribute('onclick'));
+    }
+
+    public function testRemoveNotAllowedAttributesRemovesStyleFromAnchor(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $a = $doc->createElement('a');
+        $a->setAttribute('id', 'aid');
+        $a->setAttribute('href', 'http://example.com');
+        $a->setAttribute('style', 'color:red');
+        $a->setAttribute('class', 'c');
+        $a->setAttribute('onclick', 'evil');
+        $body->appendChild($a);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeNotAllowedAttributes');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+        /** @var \DOMElement $a */
+        $a = $xpath->query('//a')->item(0);
+        $this->assertNotNull($a);
+        // Allowed globally and should remain
+        $this->assertTrue($a->hasAttribute('id'));
+        $this->assertTrue($a->hasAttribute('href'));
+        $this->assertTrue($a->hasAttribute('class'));
+        // Disallowed globally
+        $this->assertFalse($a->hasAttribute('onclick'));
+        // Special-case disallowed for <a>: style must be removed
+        $this->assertFalse($a->hasAttribute('style'));
+    }
+
+    public function testRemoveCommentsRemovesHtmlCommentsEverywhere(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $div = $doc->createElement('div', 'Before ');
+        $comment = $doc->createComment(' single comment ');
+        $div->appendChild($comment);
+        $div->appendChild($doc->createTextNode('text'));
+        $body->appendChild($div);
+
+        $div2 = $doc->createElement('div');
+        $div2->appendChild($doc->createComment(' inner comment '));
+        $div->appendChild($div2);
+
+        $script = $doc->createElement('script');
+        $script->appendChild($doc->createComment(' script inner '));
+        $div->appendChild($script);
+
+        $comment2 = $doc->createComment(' tail ');
+        $div->appendChild($comment2);
+        $body->appendChild($div);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeComments');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+        $this->assertSame(0, $xpath->query('//comment()')->length);
+        $body = $xpath->query('//body')->item(0);
+        $this->assertNotNull($body);
+        $this->assertStringNotContainsString('comment', $body->textContent);
+        $this->assertStringContainsString('Before', $body->textContent);
+        $this->assertStringContainsString('text', $body->textContent);
+    }
+
+    public function testRemoveCommentsHandlesMultiLineComments(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $div = $doc->createElement('div');
+        $div->appendChild($doc->createComment(" multi\nline\ncomment "));
+        $p = $doc->createElement('p', 'content');
+        $div->appendChild($p);
+        $div->appendChild($doc->createComment(" another\n"));
+        $body->appendChild($div);
+
+        $method = new \ReflectionMethod(Escaper::class, 'removeComments');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+        $this->assertSame(0, $xpath->query('//comment()')->length);
+        $body = $xpath->query('//body')->item(0);
+        $this->assertNotNull($body);
+        $this->assertStringContainsString('content', $body->textContent);
+        $this->assertStringNotContainsString('comment', $body->textContent);
+    }
+
+    public function testEscapeTextEscapesSpecialCharsInTextNodes(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $div = $doc->createElement('div');
+        $div->setAttribute('id', 'one');
+        $div->appendChild($doc->createTextNode('A < B & C > D " E \' F'));
+        $body->appendChild($div);
+
+        $span = $doc->createElement('span');
+        $span->setAttribute('id', 'two');
+        $span->setAttribute('data-x', '1 & 2');
+        $span->appendChild($doc->createTextNode('prefix '));
+        $bold = $doc->createElement('b', 'bold');
+        $span->appendChild($bold);
+        $span->appendChild($doc->createTextNode(' suffix & more'));
+        $body->appendChild($span);
+
+        $method = new \ReflectionMethod(Escaper::class, 'escapeText');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+
+        // Verify div text node has escaped characters now literally in text content
+        /** @var \DOMNodeList $nodes */
+        $nodes = $xpath->query('//*[@id="one"]/text()');
+        $this->assertGreaterThan(0, $nodes->length);
+        $divText = '';
+        foreach ($nodes as $n) {
+            $divText .= $n->textContent;
+        }
+        $this->assertStringContainsString('&lt;', $divText);
+        $this->assertStringContainsString('&gt;', $divText);
+        $this->assertStringContainsString('&amp;', $divText);
+        $this->assertStringContainsString('&quot;', $divText);
+        $this->assertStringContainsString('&#039;', $divText);
+
+        // Attributes must remain logically unchanged
+        /** @var \DOMNodeList $spanNodes */
+        $spanNodes = $xpath->query('//*[@id="two"]');
+        /** @var \DOMElement $span */
+        $span = $spanNodes->item(0);
+        $this->assertNotNull($span);
+        $this->assertSame('1 & 2', $span->getAttribute('data-x'));
+
+        // The trailing "& more" text node should be escaped to &amp;
+        /** @var \DOMNodeList $tailNodes */
+        $tailNodes = $xpath->query('//*[@id="two"]/text()[last()]');
+        $this->assertGreaterThan(0, $tailNodes->length);
+        $this->assertSame(' suffix &amp; more', $tailNodes->item(0)->textContent);
+    }
+
+    public function testEscapeAttributeValuesEscapesHrefAndHtmlAttributes(): void
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $html = $doc->createElement('html');
+        $body = $doc->createElement('body');
+        $doc->appendChild($html);
+        $html->appendChild($body);
+
+        $a = $doc->createElement('a', 'link');
+        $a->setAttribute('id', 'link1');
+        $a->setAttribute('href', 'http://test.com/?redirect=javascript:alert(1)&test=1');
+        $a->setAttribute('title', "He said \"Hi\" & 'ok' < >");
+        $a->setAttribute('data-x', 'alpha & beta');
+        $body->appendChild($a);
+
+        $method = new \ReflectionMethod(Escaper::class, 'escapeAttributeValues');
+        $method->invoke($this->escaper, $doc);
+
+        $xpath = new \DOMXPath($doc);
+        /** @var \DOMNodeList $linkNodes */
+        $linkNodes = $xpath->query('//*[@id="link1"]');
+        /** @var \DOMElement $el */
+        $el = $linkNodes->item(0);
+        $this->assertNotNull($el);
+
+        // href should be sanitized via escapeUrl (xss identifiers removed, ampersand encoded)
+        $this->assertSame(
+            'http://test.com/?redirect=:alert(1)&amp;test=1',
+            $el->getAttribute('href')
+        );
+
+        // title should be HTML-escaped
+        $title = $el->getAttribute('title');
+        $this->assertStringContainsString('&quot;Hi&quot;', $title);
+        $this->assertStringContainsString('&#039;ok&#039;', $title);
+        $this->assertStringContainsString('&amp;', $title);
+        $this->assertStringContainsString('&lt;', $title);
+        $this->assertStringContainsString('&gt;', $title);
+
+        // data-x should be HTML-escaped (ampersand only here)
+        $this->assertSame('alpha &amp; beta', $el->getAttribute('data-x'));
+    }
+
+    public function testEscapeAttributeValueHrefUsesEscapeUrl(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'escapeAttributeValue');
+
+        $name = 'href';
+        $value = 'http://test.com/?redirect=javascript:alert(1)&test=1';
+
+        $escaped = $method->invoke($this->escaper, $name, $value);
+
+        $this->assertSame('http://test.com/?redirect=:alert(1)&amp;test=1', $escaped);
+    }
+
+    public function testEscapeAttributeValueNonHrefUsesEscapeHtml(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'escapeAttributeValue');
+
+        $name = 'title';
+        $value = 'He said "Hi" & \'ok\' < >';
+
+        $escaped = $method->invoke($this->escaper, $name, $value);
+
+        $this->assertStringContainsString('&quot;Hi&quot;', $escaped);
+        $this->assertStringContainsString('&#039;ok&#039;', $escaped);
+        $this->assertStringContainsString('&amp;', $escaped);
+        $this->assertStringContainsString('&lt;', $escaped);
+        $this->assertStringContainsString('&gt;', $escaped);
+    }
+
+    public function testFilterProhibitedTagsRemovesDisallowedAndLogs(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'filterProhibitedTags');
+
+        // Expect a critical log mentioning the prohibited tag
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($this->stringContains('script'));
+
+        $input = ['span', 'script', 'a'];
+        $result = $method->invoke($this->escaper, $input);
+
+        $this->assertSame(['span', 'a'], array_values($result));
+    }
+
+    public function testFilterProhibitedTagsNoLogWhenClean(): void
+    {
+        $method = new \ReflectionMethod(Escaper::class, 'filterProhibitedTags');
+
+        // No prohibited tags, so no logging
+        $this->loggerMock->expects($this->never())
+            ->method('critical');
+
+        $input = ['span', 'a'];
+        $result = $method->invoke($this->escaper, $input);
+
+        $this->assertSame($input, $result);
+    }
+
+    public function testGetEscaperReturnsExistingInstance(): void
+    {
+        $existing = new ZendEscaper();
+        $prop = new \ReflectionProperty(Escaper::class, 'escaper');
+        $prop->setValue($this->escaper, $existing);
+
+        $method = new \ReflectionMethod(Escaper::class, 'getEscaper');
+        $result = $method->invoke($this->escaper);
+
+        $this->assertSame($existing, $result);
+    }
+
+    public function testGetEscaperFetchesFromObjectManagerWhenNull(): void
+    {
+        $prop = new \ReflectionProperty(Escaper::class, 'escaper');
+        $prop->setValue($this->escaper, null);
+
+        $zendEscaper = new ZendEscaper();
+
+        $rp = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $originalOm = $rp->getValue();
+        $stubOm = new class($zendEscaper) implements \Magento\Framework\ObjectManagerInterface
+        {
+            /**
+             * @var \Magento\Framework\ZendEscaper
+             */
+            private $instance;
+
+            public function __construct($instance)
+            {
+                $this->instance = $instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function get($type)
+            {
+                $unusedType = $type;
+                unset($unusedType);
+                return $this->instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function create($type, array $arguments = [])
+            {
+                $unusedType = $type;
+                $unusedArguments = $arguments;
+                unset($unusedType, $unusedArguments);
+                return $this->get($type);
+            }
+
+            public function configure(array $configuration)
+            {
+            }
+        };
+        \Magento\Framework\App\ObjectManager::setInstance($stubOm);
+
+        try {
+            $method = new \ReflectionMethod(Escaper::class, 'getEscaper');
+            $result = $method->invoke($this->escaper);
+            $this->assertSame($zendEscaper, $result);
+        } finally {
+            if ($originalOm) {
+                \Magento\Framework\App\ObjectManager::setInstance($originalOm);
+            } else {
+                $rp->setValue(null, null);
+            }
+        }
+    }
+
+    public function testGetTranslateInlineReturnsExistingInstance(): void
+    {
+        $existing = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+        $prop = new \ReflectionProperty(Escaper::class, 'translateInline');
+        $prop->setValue($this->escaper, $existing);
+
+        $method = new \ReflectionMethod(Escaper::class, 'getTranslateInline');
+        $result = $method->invoke($this->escaper);
+
+        $this->assertSame($existing, $result);
+    }
+
+    public function testGetTranslateInlineFetchesFromObjectManagerWhenNull(): void
+    {
+        $prop = new \ReflectionProperty(Escaper::class, 'translateInline');
+        $prop->setValue($this->escaper, null);
+
+        $inlineMock = $this->createMock(\Magento\Framework\Translate\InlineInterface::class);
+
+        $rp = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $originalOm = $rp->getValue();
+        $stubOm = new class($inlineMock) implements \Magento\Framework\ObjectManagerInterface
+        {
+            /**
+             * @var \Magento\Framework\Translate\InlineInterface
+             */
+            private $instance;
+
+            public function __construct($instance)
+            {
+                $this->instance = $instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function get($type)
+            {
+                $unusedType = $type;
+                unset($unusedType);
+                return $this->instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function create($type, array $arguments = [])
+            {
+                $unusedType = $type;
+                $unusedArguments = $arguments;
+                unset($unusedType, $unusedArguments);
+                return $this->get($type);
+            }
+
+            public function configure(array $configuration)
+            {
+            }
+        };
+        \Magento\Framework\App\ObjectManager::setInstance($stubOm);
+
+        try {
+            $method = new \ReflectionMethod(Escaper::class, 'getTranslateInline');
+            $result = $method->invoke($this->escaper);
+            $this->assertSame($inlineMock, $result);
+        } finally {
+            if ($originalOm) {
+                \Magento\Framework\App\ObjectManager::setInstance($originalOm);
+            } else {
+                $rp->setValue(null, null);
+            }
+        }
+    }
+
+    public function testGetLoggerFetchesFromObjectManagerWhenNull(): void
+    {
+        $refProp = new \ReflectionProperty(Escaper::class, 'logger');
+        $refProp->setValue($this->escaper, null);
+
+        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+
+        $rp = new \ReflectionProperty(\Magento\Framework\App\ObjectManager::class, '_instance');
+        $originalOm = $rp->getValue();
+        $stubOm = new class($loggerMock) implements \Magento\Framework\ObjectManagerInterface
+        {
+            /**
+             * @var \Psr\Log\LoggerInterface
+             */
+            private $instance;
+
+            public function __construct($instance)
+            {
+                $this->instance = $instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function get($type)
+            {
+                $unusedType = $type;
+                unset($unusedType);
+                return $this->instance;
+            }
+
+            /**
+             * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+             * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+             */
+            public function create($type, array $arguments = [])
+            {
+                $unusedType = $type;
+                $unusedArguments = $arguments;
+                unset($unusedType, $unusedArguments);
+                return $this->get($type);
+            }
+
+            public function configure(array $configuration)
+            {
+            }
+        };
+        \Magento\Framework\App\ObjectManager::setInstance($stubOm);
+
+        try {
+            $refMethod = new \ReflectionMethod(Escaper::class, 'getLogger');
+            $logger = $refMethod->invoke($this->escaper);
+            $this->assertSame($loggerMock, $logger);
+        } finally {
+            if ($originalOm) {
+                \Magento\Framework\App\ObjectManager::setInstance($originalOm);
+            } else {
+                $rp->setValue(null, null);
+            }
+        }
+    }
+
+    public function testGetLoggerReturnsExistingInstance(): void
+    {
+        $refProp = new \ReflectionProperty(Escaper::class, 'logger');
+        $refProp->setValue($this->escaper, $this->loggerMock);
+
+        $refMethod = new \ReflectionMethod(Escaper::class, 'getLogger');
+        $logger = $refMethod->invoke($this->escaper);
+
+        $this->assertSame($this->loggerMock, $logger);
     }
 }

@@ -1,21 +1,20 @@
 <?php
 /**
- * Customer address entity resource model
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Customer\Model\ResourceModel;
 
-use Magento\Customer\Controller\Adminhtml\Group\Delete;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address\DeleteRelation;
+use Magento\Eav\Model\ResourceModel\OrphanedMultiselectCleaner;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 
 /**
- * Class Address
+ * Customer address entity resource model
  *
- * @package Magento\Customer\Model\ResourceModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
@@ -31,12 +30,30 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     protected $customerRepository;
 
     /**
+     * @var OrphanedMultiselectCleaner
+     */
+    private $orphanedMultiselectCleaner;
+
+    /**
+     * @var DeleteRelation
+     */
+    private $deleteRelation;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param array $data
+     * @param OrphanedMultiselectCleaner|null $orphanedMultiselectCleaner
+     * @param DeleteRelation|null $deleteRelation
+     * @param CustomerRegistry|null $customerRegistry
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -44,10 +61,19 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
-        $data = []
+        $data = [],
+        ?OrphanedMultiselectCleaner $orphanedMultiselectCleaner = null,
+        ?DeleteRelation $deleteRelation = null,
+        ?CustomerRegistry $customerRegistry = null
     ) {
         $this->customerRepository = $customerRepository;
         $this->_validatorFactory = $validatorFactory;
+        $this->orphanedMultiselectCleaner = $orphanedMultiselectCleaner
+            ?? ObjectManager::getInstance()->get(OrphanedMultiselectCleaner::class);
+        $this->deleteRelation = $deleteRelation
+            ?? ObjectManager::getInstance()->get(DeleteRelation::class);
+        $this->customerRegistry = $customerRegistry
+            ?? ObjectManager::getInstance()->get(CustomerRegistry::class);
         parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
     }
 
@@ -78,11 +104,15 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Check customer address before saving
      *
-     * @param \Magento\Framework\DataObject $address
+     * @param DataObject $address
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\DataObject $address)
+    protected function _beforeSave(DataObject $address)
     {
+        if ($address->getId()) {
+            $this->cleanOrphanedMultiselectValues($address);
+        }
+
         parent::_beforeSave($address);
 
         $this->_validate($address);
@@ -93,7 +123,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Validate customer address entity
      *
-     * @param \Magento\Framework\DataObject $address
+     * @param DataObject $address
      * @return void
      * @throws \Magento\Framework\Validator\Exception When validation failed
      */
@@ -124,25 +154,14 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     }
 
     /**
-     * Get instance of DeleteRelation class
+     * Clean up orphaned multiselect attribute values before validation
      *
-     * @deprecated 101.0.0
-     * @return DeleteRelation
+     * @param DataObject $address
+     * @return void
      */
-    private function getDeleteRelation()
+    private function cleanOrphanedMultiselectValues(DataObject $address): void
     {
-        return ObjectManager::getInstance()->get(DeleteRelation::class);
-    }
-
-    /**
-     * Get instance of CustomerRegistry class
-     *
-     * @deprecated 101.0.0
-     * @return CustomerRegistry
-     */
-    private function getCustomerRegistry()
-    {
-        return ObjectManager::getInstance()->get(CustomerRegistry::class);
+        $this->orphanedMultiselectCleaner->cleanEntity($this, $address);
     }
 
     /**
@@ -151,11 +170,10 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
      * @param \Magento\Customer\Model\Address $address
      * @return $this
      */
-    protected function _afterDelete(\Magento\Framework\DataObject $address)
+    protected function _afterDelete(DataObject $address)
     {
-        $customer = $this->getCustomerRegistry()->retrieve($address->getCustomerId());
-
-        $this->getDeleteRelation()->deleteRelation($address, $customer);
+        $customer = $this->customerRegistry->retrieve($address->getCustomerId());
+        $this->deleteRelation->deleteRelation($address, $customer);
         return parent::_afterDelete($address);
     }
 }

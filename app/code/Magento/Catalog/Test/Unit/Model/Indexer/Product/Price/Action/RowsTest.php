@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Price\Action;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
@@ -137,7 +138,7 @@ class RowsTest extends TestCase
 
     public function testEmptyIds()
     {
-        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Bad value was supplied.');
         $this->actionRows->execute(null);
     }

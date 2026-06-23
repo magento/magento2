@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\Archive;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ArchiveTest extends TestCase
@@ -57,10 +58,10 @@ class ArchiveTest extends TestCase
     }
 
     /**
-     * @dataProvider isArchiveProvider
      * @param string $file
      * @param bool $isArchive
      */
+    #[DataProvider('isArchiveProvider')]
     public function testIsArchive($file, $isArchive)
     {
         $this->assertEquals($isArchive, $this->archive->isArchive($file));
@@ -94,10 +95,10 @@ class ArchiveTest extends TestCase
     }
 
     /**
-     * @dataProvider isTarProvider
      * @param string $file
      * @param bool $isArchive
      */
+    #[DataProvider('isTarProvider')]
     public function testIsTar($file, $isArchive)
     {
         $this->assertEquals($isArchive, $this->archive->isTar($file));
@@ -133,8 +134,8 @@ class ArchiveTest extends TestCase
     /**
      * @param string $destinationFile
      * @param string $extensionRequired
-     * @dataProvider destinationProvider
      */
+    #[DataProvider('destinationProvider')]
     public function testPackUnpackGzBz($destinationFile, $extensionRequired)
     {
         if ($extensionRequired && !extension_loaded($extensionRequired)) {
@@ -169,8 +170,8 @@ class ArchiveTest extends TestCase
     /**
      * @param string $destinationFile
      * @param string $extensionRequired
-     * @dataProvider tarProvider
      */
+    #[DataProvider('tarProvider')]
     public function testPackUnpackTar($destinationFile, $extensionRequired)
     {
         if ($extensionRequired && !extension_loaded($extensionRequired)) {
@@ -192,8 +193,8 @@ class ArchiveTest extends TestCase
     /**
      * @param string $destinationFile
      * @param string $extensionRequired
-     * @dataProvider tarProvider
      */
+    #[DataProvider('tarProvider')]
     public function testExtract($destinationFile, $extensionRequired)
     {
         if ($extensionRequired && !extension_loaded($extensionRequired)) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,7 +10,6 @@ namespace Magento\OfflinePayments\Test\Unit\Model;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\OfflinePayments\Model\Purchaseorder;
 use Magento\Payment\Helper\Data as PaymentHelper;
@@ -36,7 +35,7 @@ class PurchaseorderTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
-        $eventManager = $this->getMockForAbstractClass(EventManagerInterface::class);
+        $eventManager = $this->createMock(EventManagerInterface::class);
         $paymentDataMock = $this->createMock(PaymentHelper::class);
         $this->scopeConfigMock = $this->createPartialMock(
             ScopeConfigInterface::class,
@@ -68,10 +67,10 @@ class PurchaseorderTest extends TestCase
     {
         $data = new DataObject([]);
 
-        $addressMock = $this->getMockForAbstractClass(OrderAddressInterface::class);
+        $addressMock = $this->createMock(OrderAddressInterface::class);
         $addressMock->expects($this->once())->method('getCountryId')->willReturn('UY');
 
-        $orderMock = $this->getMockForAbstractClass(OrderInterface::class);
+        $orderMock = $this->createMock(OrderInterface::class);
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($addressMock);
 
         $instance = $this->createMock(Payment::class);

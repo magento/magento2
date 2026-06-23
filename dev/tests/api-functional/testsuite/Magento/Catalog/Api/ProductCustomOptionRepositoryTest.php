@@ -1,12 +1,12 @@
 <?php
 /**
- *
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -140,9 +140,9 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionDataProvider
      * @param array $optionData
      */
+    #[DataProvider('optionDataProvider')]
     public function testSave($optionData)
     {
         $productSku = 'simple';
@@ -198,8 +198,8 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_without_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionNegativeDataProvider
      */
+    #[DataProvider('optionNegativeDataProvider')]
     public function testAddNegative($optionData)
     {
         $productSku = 'simple';
@@ -306,10 +306,10 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider validOptionDataProvider
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('validOptionDataProvider')]
     public function testUpdateOptionAddingNewValue($optionType, $includedExisting, $expectedOptionValuesCount)
     {
         $fixtureOption = null;
@@ -417,11 +417,11 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      * @magentoAppIsolation enabled
-     * @dataProvider optionNegativeUpdateDataProvider
      * @param array $optionData
      * @param string $expectedMessage
      * @param int $exceptionCode
      */
+    #[DataProvider('optionNegativeUpdateDataProvider')]
     public function testUpdateNegative($optionData, $expectedMessage, $exceptionCode)
     {
         $this->_markTestAsRestOnly();

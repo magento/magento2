@@ -27,7 +27,7 @@ class PluginTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
         $this->plugin = new Plugin(
             $this->authorizationMock
         );

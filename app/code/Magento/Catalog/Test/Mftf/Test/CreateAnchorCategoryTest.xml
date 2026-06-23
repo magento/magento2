@@ -33,11 +33,8 @@
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="createProductA" stepKey="deleteProductA"/>
-            <deleteData createDataKey="createProductB" stepKey="deleteProductB"/>
-            <deleteData createDataKey="createProductC" stepKey="deleteProductC"/>
-            <deleteData createDataKey="createProductD" stepKey="deleteProductD"/>
-            <deleteData createDataKey="createProductE" stepKey="deleteProductE"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
         </after>
 

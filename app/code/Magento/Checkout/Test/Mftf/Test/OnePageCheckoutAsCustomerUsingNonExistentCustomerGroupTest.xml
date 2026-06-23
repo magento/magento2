@@ -82,7 +82,11 @@
         <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
+        <!-- Ensure Check / Money order is active so its billing-address UI (and checkbox id checkmo) is visible -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPaymentMethod"/>
+
         <!-- Select payment solution -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForBillingAddressSameAsShippingCheckboxClickable"/>
         <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution" />
 
         <!-- Check order summary in checkout -->

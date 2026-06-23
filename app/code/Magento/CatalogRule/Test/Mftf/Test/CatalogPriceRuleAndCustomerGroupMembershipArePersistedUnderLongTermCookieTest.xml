@@ -93,6 +93,13 @@
         <click selector="{{StorefrontPanelHeaderSection.notYouLink}}" stepKey="clickNotYouLink"/>
         <actionGroup ref="ReloadPageActionGroup" stepKey="waitFormReload"/>
         <actionGroup ref="AssertStorefrontDefaultWelcomeMessageActionGroup" stepKey="seeWelcomeMessageForJohnDoeCustomerAfterLogout"/>
+
+        <!--Clear cache and cookie to ensure fresh price calculation after customer group change-->
+        <resetCookie userInput="PHPSESSID" stepKey="resetCookieForCart"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheToEnsureFreshPriceCalculationAfterCustomerGroupChange">
+            <argument name="tags" value="full_page block_html"/>
+        </actionGroup>
+
         <actionGroup ref="AssertStorefrontProductPriceInCategoryPageActionGroup" stepKey="assertProductPriceInCategoryPageAfterLogout">
             <argument name="categoryUrl" value="$createCategory.custom_attributes[url_key]$"/>
             <argument name="productName" value="$createProduct.name$"/>

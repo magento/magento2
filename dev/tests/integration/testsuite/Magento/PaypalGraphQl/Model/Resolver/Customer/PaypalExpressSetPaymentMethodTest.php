@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test ExpressSetPaymentMethodTest graphql endpoint for customer
@@ -43,7 +44,6 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
      *
      * @param string $paymentMethod
      * @return void
-     * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -55,6 +55,7 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolve(string $paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class InvalidTest extends TestCase
 
         $this->indexerMock = $this->createPartialMock(Indexer::class, ['getStatus']);
 
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
 
         $collectionMock->expects($this->any())->method('getItems')->with()->willReturn([$this->indexerMock]);
 

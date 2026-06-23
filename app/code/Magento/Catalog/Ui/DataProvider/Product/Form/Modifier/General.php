@@ -65,7 +65,7 @@ class General extends AbstractModifier
     {
         $data = $this->customizeWeightFormat($data);
         $data = $this->customizeAdvancedPriceFormat($data);
-        $modelId = $this->locator->getProduct()->getId();
+        $modelId = $this->locator->getProduct()->getId() ?? '';
 
         $productStatus = $this->locator->getProduct()->getStatus();
         if (!empty($productStatus) && !empty($modelId)) {
@@ -92,7 +92,7 @@ class General extends AbstractModifier
     protected function customizeWeightFormat(array $data)
     {
         $model = $this->locator->getProduct();
-        $modelId = $model->getId();
+        $modelId = $model->getId() ?? '';
         $weightFields = [ProductAttributeInterface::CODE_WEIGHT];
 
         foreach ($weightFields as $fieldCode) {
@@ -116,7 +116,7 @@ class General extends AbstractModifier
      */
     protected function customizeAdvancedPriceFormat(array $data)
     {
-        $modelId = $this->locator->getProduct()->getId();
+        $modelId = $this->locator->getProduct()->getId() ?? '';
         $fieldCode = ProductAttributeInterface::CODE_TIER_PRICE;
 
         if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode])) {

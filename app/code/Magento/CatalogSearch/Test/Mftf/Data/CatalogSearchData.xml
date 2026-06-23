@@ -29,4 +29,7 @@
     <entity name="DefaultCatalogSearchEngine" type="enable">
         <data key="inherit">true</data>
     </entity>
+    <entity name="ErrorMessage">
+        <data key="message">Enter a search term and try again.</data>
+    </entity>
 </entities>

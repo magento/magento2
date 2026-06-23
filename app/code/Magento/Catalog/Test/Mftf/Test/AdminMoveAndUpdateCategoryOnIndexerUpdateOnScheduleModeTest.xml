@@ -257,7 +257,7 @@
         <!-- Step 14:- Create a store view for the new store in Admin > Stores > All Stores -->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreViewForTesting">
             <argument name="StoreGroup" value="customStore"/>
-            <argument name="customStore" value="customStoreView"/>
+            <argument name="customStore" value="customStoreView2"/>
         </actionGroup>
         <!-- Step 15:- Run cron twice to reindex -->
         <magentoCron groups="index" stepKey="runFirstCronAfterStoreCreation"/>
@@ -276,7 +276,7 @@
             <argument name="id" value="$createAnchorCategoryA.id$"/>
         </actionGroup>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
-            <argument name="storeView" value="customStoreView.name"/>
+            <argument name="storeView" value="customStoreView2.name"/>
         </actionGroup>
         <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameOnStoreView">
             <argument name="categoryName" value="Категория А"/>

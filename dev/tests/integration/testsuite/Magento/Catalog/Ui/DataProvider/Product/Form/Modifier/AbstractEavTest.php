@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -92,7 +92,7 @@ abstract class AbstractEavTest extends TestCase
             'gallery' => 'image'
         ];
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn(
             $this->objectManager->get(StoreInterface::class)
         );
