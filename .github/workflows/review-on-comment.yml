@@ -126,7 +126,7 @@ jobs:
       - name: Provision devx-evolve code-review runtime
         env:
           DEVX_EVOLVE_DEPLOY_KEY: ${{ secrets.DEVX_EVOLVE_DEPLOY_KEY }}
-          DEVX_EVOLVE_REF: f49cb9c40d5e998bd979d235ac7b31d4a65cd658
+          DEVX_EVOLVE_REF: 1227340b2288861d25413b01cd143f81ecfdce5a
         run: |
           set -euo pipefail
           install -m 700 -d "$HOME/.ssh-devx"
