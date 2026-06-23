@@ -108,7 +108,7 @@ jobs:
           fi
           if [[ -n "${OPENAI_API_KEY:-}" ]]; then
             npm install -g @openai/codex || echo "::warning::codex install failed"
-            printf '%s' "$OPENAI_API_KEY" | codex login --with-api-key || echo "::warning::codex login failed"
+            printenv OPENAI_API_KEY | codex login --with-api-key || echo "::warning::codex login failed"
           fi
           if [[ -n "${AUGMENT_SESSION_JSON:-}" ]]; then
             npm install -g @augmentcode/auggie || echo "::warning::auggie install failed"
@@ -185,4 +185,5 @@ jobs:
               issue_number: Number(n),
               body: `### 🔍 review-quorum\n\n${body}`,
             });
+
 
