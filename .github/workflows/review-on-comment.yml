@@ -118,6 +118,7 @@ jobs:
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
           fi
           if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+            sudo apt-get update -qq || echo "::warning::apt-get update failed"
             sudo apt-get install -y -qq bubblewrap || echo "::warning::bubblewrap install failed; codex sandbox may be unavailable"
             npm install -g @openai/codex || echo "::warning::codex install failed"
             printenv OPENAI_API_KEY | codex login --with-api-key || echo "::warning::codex login failed"
