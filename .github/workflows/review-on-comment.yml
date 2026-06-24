@@ -110,18 +110,19 @@ jobs:
       - name: Install + authenticate AI CLIs
         env:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
           AUGMENT_SESSION_JSON: ${{ secrets.AUGMENT_SESSION_JSON }}
         run: |
           set -uo pipefail
           if [[ -n "${ANTHROPIC_AUTH_TOKEN:-}" ]]; then
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
           fi
-          if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+          if [[ -n "${CODEX_AUTH_JSON:-}" ]]; then
             sudo apt-get update -qq || echo "::warning::apt-get update failed"
             sudo apt-get install -y -qq bubblewrap || echo "::warning::bubblewrap install failed; codex sandbox may be unavailable"
             npm install -g @openai/codex || echo "::warning::codex install failed"
-            printenv OPENAI_API_KEY | codex login --with-api-key || echo "::warning::codex login failed"
+            mkdir -p "$HOME/.codex"
+            printf '%s' "$CODEX_AUTH_JSON" > "$HOME/.codex/auth.json"
           fi
           if [[ -n "${AUGMENT_SESSION_JSON:-}" ]]; then
             npm install -g @augmentcode/auggie || echo "::warning::auggie install failed"
@@ -140,7 +141,7 @@ jobs:
       - name: Provision devx-evolve code-review runtime
         env:
           DEVX_EVOLVE_DEPLOY_KEY: ${{ secrets.DEVX_EVOLVE_DEPLOY_KEY }}
-          DEVX_EVOLVE_REF: 5605697d095d8e16abd62665e09eb1856ab2ec23
+          DEVX_EVOLVE_REF: 7a61aadfe4de4e05923c5d69c84ec6a5e26b06f2
         run: |
           set -euo pipefail
           install -m 700 -d "$HOME/.ssh-devx"
@@ -168,7 +169,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DEVX_REVIEWS_DIR: ${{ runner.temp }}/pr_reviews
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           PR_URL: ${{ steps.pr.outputs.url }}
           DEVX_REPO_PATH: ${{ github.workspace }}
           DEVX_REQUIRE_AGENTS: "1"
