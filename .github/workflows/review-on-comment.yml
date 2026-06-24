@@ -118,11 +118,10 @@ jobs:
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
           fi
           if [[ -n "${CODEX_AUTH_JSON:-}" ]]; then
-            mkdir -p "$HOME/.codex"
-            trap 'rm -rf "$HOME/.codex"' EXIT
             sudo apt-get update -qq || echo "::warning::apt-get update failed"
             sudo apt-get install -y -qq bubblewrap || echo "::warning::bubblewrap install failed; codex sandbox may be unavailable"
             npm install -g @openai/codex || echo "::warning::codex install failed"
+            mkdir -p "$HOME/.codex"
             printf '%s' "$CODEX_AUTH_JSON" > "$HOME/.codex/auth.json"
             chmod 600 "$HOME/.codex/auth.json"
           fi
