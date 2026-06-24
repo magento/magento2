@@ -48,6 +48,17 @@ jobs:
                 `@${context.payload.comment.user.login} (${assoc}) is not authorized to trigger /review.`
               );
             }
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner, repo: context.repo.repo,
+              pull_number: context.payload.issue.number,
+            });
+            if (pr.head.repo.full_name !== `${context.repo.owner}/${context.repo.repo}`) {
+              await github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                comment_id: context.payload.comment.id, content: 'confused',
+              });
+              core.setFailed('External-fork PRs are not eligible for automated review.');
+            }
 
       - name: Acknowledge
         uses: actions/github-script@v7
@@ -88,7 +99,7 @@ jobs:
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: ee00b541cd7ea5ced67d588caf180a6f699f2a36
+          ref: 336ce3f244d0c5c1ec268190282547872c216d7e
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
@@ -127,7 +138,7 @@ jobs:
       - name: Provision devx-evolve code-review runtime
         env:
           DEVX_EVOLVE_DEPLOY_KEY: ${{ secrets.DEVX_EVOLVE_DEPLOY_KEY }}
-          DEVX_EVOLVE_REF: 3af04043460cf48517f26d7cff1ac15522d60152
+          DEVX_EVOLVE_REF: 5605697d095d8e16abd62665e09eb1856ab2ec23
         run: |
           set -euo pipefail
           install -m 700 -d "$HOME/.ssh-devx"
@@ -186,4 +197,8 @@ jobs:
               body: `### 🔍 review-quorum\n\n${body}`,
             });
 
-
+      - name: Cleanup credential files
+        if: always()
+        run: |
+          rm -rf "$HOME/.codex"
+          rm -f "$HOME/.augment/session.json"
