@@ -92,4 +92,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Export\MandatoryAttributesProvider">
+        <arguments>
+            <argument name="systemColumnProviders" xsi:type="array">
+                <item name="catalog_row_customizer" xsi:type="object">Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
