@@ -123,6 +123,7 @@ jobs:
             npm install -g @openai/codex || echo "::warning::codex install failed"
             mkdir -p "$HOME/.codex"
             printf '%s' "$CODEX_AUTH_JSON" > "$HOME/.codex/auth.json"
+            chmod 600 "$HOME/.codex/auth.json"
           fi
           if [[ -n "${AUGMENT_SESSION_JSON:-}" ]]; then
             npm install -g @augmentcode/auggie || echo "::warning::auggie install failed"
