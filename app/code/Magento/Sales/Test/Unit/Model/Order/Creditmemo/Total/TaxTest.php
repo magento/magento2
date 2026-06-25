@@ -921,6 +921,189 @@ class TaxTest extends TestCase
     }
 
     /**
+     * Test that invoice-based credit memo with zero base shipping amount does not throw DivisionByZeroError
+     *
+     * @see https://github.com/magento/magento2/issues/40492
+     */
+    public function testCollectWithInvoiceAndZeroBaseShippingAmountDoesNotThrowDivisionByZero(): void
+    {
+        $orderData = [
+            'base_shipping_amount' => 0,
+            'shipping_amount' => 0,
+            'shipping_tax_amount' => 0,
+            'base_shipping_tax_amount' => 0,
+            'shipping_discount_tax_compensation_amount' => 0,
+            'base_shipping_discount_tax_compensation_amount' => 0,
+            'tax_invoiced' => 10.00,
+            'base_tax_invoiced' => 10.00,
+            'tax_refunded' => 0,
+            'base_tax_refunded' => 0,
+        ];
+
+        $invoiceMock = $this->createInvoiceMock([
+            'tax_amount' => 10.00,
+            'base_tax_amount' => 10.00,
+            'shipping_tax_amount' => 0,
+            'base_shipping_tax_amount' => 0,
+            'shipping_discount_tax_compensation_amount' => 0,
+            'base_shipping_discount_tax_compensation_amount' => 0,
+        ]);
+
+        $this->resourceInvoice->expects($this->any())
+            ->method('calculateRefundedAmount')
+            ->willReturn(0.0);
+
+        $creditmemoData = [
+            'items' => [
+                'item_1' => [
+                    'order_item' => [
+                        'qty_invoiced' => 1,
+                        'tax_invoiced' => 10.00,
+                        'tax_refunded' => 0,
+                        'base_tax_invoiced' => 10.00,
+                        'base_tax_refunded' => 0,
+                        'discount_tax_compensation_amount' => 0,
+                        'base_discount_tax_compensation_amount' => 0,
+                        'qty_refunded' => 0,
+                    ],
+                    'is_last' => true,
+                    'qty' => 1,
+                ],
+            ],
+            'is_last' => true,
+            'data_fields' => [
+                'grand_total' => 100.00,
+                'base_grand_total' => 100.00,
+                'base_shipping_amount' => 0,
+                'shipping_amount' => 0,
+                'tax_amount' => 0,
+                'base_tax_amount' => 0,
+                'invoice' => $invoiceMock,
+            ],
+        ];
+
+        foreach ($orderData as $key => $value) {
+            $this->order->setData($key, $value);
+        }
+
+        $creditmemoItems = [];
+        foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
+            $creditmemoItems[$itemKey] = $this->getCreditmemoItem($creditmemoItemData);
+        }
+        $this->creditmemo->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn($creditmemoItems);
+        $this->creditmemo->expects($this->any())
+            ->method('isLast')
+            ->willReturn($creditmemoData['is_last']);
+        $this->creditmemo->expects($this->any())
+            ->method('getInvoice')
+            ->willReturn($invoiceMock);
+        foreach ($creditmemoData['data_fields'] as $key => $value) {
+            if ($key !== 'invoice') {
+                $this->creditmemo->setData($key, $value);
+            }
+        }
+        $this->creditmemo->expects($this->any())
+            ->method('roundPrice')
+            ->willReturnArgument(0);
+
+        $this->model->collect($this->creditmemo);
+
+        $this->assertEqualsWithDelta(0, $this->creditmemo->getShippingTaxAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(0, $this->creditmemo->getBaseShippingTaxAmount(), self::EPSILON);
+    }
+
+    /**
+     * Test that order-based credit memo with zero base shipping amount does not throw DivisionByZeroError
+     *
+     * Covers the non-invoice code path where $baseOrderShippingAmount is used as divisor.
+     *
+     * @see https://github.com/magento/magento2/issues/40492
+     */
+    public function testCollectWithoutInvoiceAndZeroBaseShippingAmountDoesNotThrowDivisionByZero(): void
+    {
+        $orderData = [
+            'base_shipping_amount' => 0,
+            'shipping_amount' => 0,
+            'shipping_tax_amount' => 0,
+            'base_shipping_tax_amount' => 0,
+            'base_shipping_refunded' => 0,
+            'shipping_discount_tax_compensation_amount' => 0,
+            'base_shipping_discount_tax_compensation_amount' => 0,
+            'shipping_discount_tax_compensation_refunded' => 0,
+            'base_shipping_discount_tax_compensation_refunded' => 0,
+            'tax_invoiced' => 10.00,
+            'base_tax_invoiced' => 10.00,
+            'tax_refunded' => 0,
+            'base_tax_refunded' => 0,
+            'discount_tax_compensation_invoiced' => 0,
+            'base_discount_tax_compensation_invoiced' => 0,
+            'discount_tax_compensation_refunded' => 0,
+            'base_discount_tax_compensation_refunded' => 0,
+        ];
+
+        $creditmemoData = [
+            'items' => [
+                'item_1' => [
+                    'order_item' => [
+                        'qty_invoiced' => 1,
+                        'tax_invoiced' => 10.00,
+                        'tax_refunded' => 0,
+                        'base_tax_invoiced' => 10.00,
+                        'base_tax_refunded' => 0,
+                        'discount_tax_compensation_amount' => 0,
+                        'base_discount_tax_compensation_amount' => 0,
+                        'qty_refunded' => 0,
+                    ],
+                    'is_last' => true,
+                    'qty' => 1,
+                ],
+            ],
+            'is_last' => true,
+            'data_fields' => [
+                'grand_total' => 100.00,
+                'base_grand_total' => 100.00,
+                'base_shipping_amount' => 0,
+                'shipping_amount' => 0,
+                'tax_amount' => 0,
+                'base_tax_amount' => 0,
+            ],
+        ];
+
+        foreach ($orderData as $key => $value) {
+            $this->order->setData($key, $value);
+        }
+
+        $creditmemoItems = [];
+        foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
+            $creditmemoItems[$itemKey] = $this->getCreditmemoItem($creditmemoItemData);
+        }
+        $this->creditmemo->expects($this->once())
+            ->method('getAllItems')
+            ->willReturn($creditmemoItems);
+        $this->creditmemo->expects($this->any())
+            ->method('isLast')
+            ->willReturn($creditmemoData['is_last']);
+        $this->creditmemo->expects($this->any())
+            ->method('getInvoice')
+            ->willReturn(null);
+        foreach ($creditmemoData['data_fields'] as $key => $value) {
+            $this->creditmemo->setData($key, $value);
+        }
+        $this->creditmemo->expects($this->any())
+            ->method('roundPrice')
+            ->willReturnArgument(0);
+
+        $this->model->collect($this->creditmemo);
+
+        $this->assertEqualsWithDelta(0, $this->creditmemo->getShippingTaxAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(0, $this->creditmemo->getBaseShippingTaxAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(10.00, $this->creditmemo->getTaxAmount(), self::EPSILON);
+        $this->assertEqualsWithDelta(10.00, $this->creditmemo->getBaseTaxAmount(), self::EPSILON);
+    }
+
+    /**
      * Test that invoice-based credit memo correctly accounts for tax refunded in order based credit memo
      */
     public function testInvoiceBasedCreditMemoAccountsForOrderBasedRefund()
