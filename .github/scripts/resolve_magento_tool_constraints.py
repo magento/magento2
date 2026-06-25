@@ -54,21 +54,8 @@ def resolve(
     """
     Returns (php_version, source_ref, composer_json_data, raw_php_constraint_or_empty).
     """
-    # Normalize known repo-name aliases used across forks/exceptions.
-    repo_alias_map = {
-        "magento2inventory": "inventory",
-    }
-    normalized_repo_name = repo_alias_map.get(repo_name, repo_name)
-
-    repo_package_map = {
-        "magento2ce": "magento/magento2-base",
-        "inventory": "magento/inventory-metapackage",
-        "magento2-page-builder": "magento/module-page-builder",
-        "security-package": "magento/security-package",
-    }
-
     selected_release = ""
-    package_key = repo_package_map.get(normalized_repo_name, "")
+    package_key = os.environ.get("REPO_PACKAGE_KEY", "")
     base_ref = (base_ref or "").strip()
 
     def base_ref_candidates(ref: str) -> list[str]:

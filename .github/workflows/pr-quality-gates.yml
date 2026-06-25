@@ -254,6 +254,7 @@ jobs:
         env:
           REPO_NAME: ${{ github.event.repository.name }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
+          REPO_PACKAGE_KEY: magento/magento2-base
         run: python3 .github/scripts/resolve_magento_tool_constraints.py
 
       - name: Setup PHP
