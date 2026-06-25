@@ -1,39 +1,42 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /**
  * @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
  */
-$elementNameEscaped = $block->escapeHtmlAttr($block->getElement()->getName()) . '[images]';
-$formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
+$elementNameEscaped = $escaper->escapeHtmlAttr($block->getElement()->getName()) . '[images]';
+$formNameEscaped = $escaper->escapeHtmlAttr($block->getFormName());
+$blockIdEscaped = $escaper->escapeHtmlAttr($block->getHtmlId());
 $isEditEnabled = $block->isEditEnabled();
-
+$showUseDefault = $block->hasUseDefault();
+$imagesJson = $block->getImagesJson();
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
 
 $message = 'Restricted admin is allowed to perform actions with images or videos, ' .
-    'only when the admin has rights to all websites which the product is assigned to.';
+        'only when the admin has rights to all websites which the product is assigned to.';
 ?>
 
 <div class="row">
     <?php if (!$isEditEnabled): ?>
-        <span> <?=  /* @noEscape */ $message ?></span>
+        <span> <?= /* @noEscape */ $message ?></span>
     <?php endif; ?>
     <div class="add-video-button-container">
         <button id="add_video_button"
-                title="<?= $block->escapeHtmlAttr(__('Add Video')) ?>"
+                title="<?= $escaper->escapeHtmlAttr(__('Add Video')) ?>"
                 data-role="add-video-button"
                 type="button"
                 class="action-secondary"
                 data-ui-id="widget-button-1"
                 <?= ($block->isEditEnabled()) ? '' : 'disabled="disabled"' ?>
         >
-            <span><?= $block->escapeHtml(__('Add Video')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Add Video')) ?></span>
         </button>
     </div>
 </div>
@@ -41,14 +44,14 @@ $message = 'Restricted admin is allowed to perform actions with images or videos
 <?php
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $element = $block->getElement();
-$elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
-    'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
+$elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() :
+        'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
-<div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"
+<div id="<?=  /* @noEscape */ $blockIdEscaped ?>"
      class="gallery <?= $isEditEnabled ? '' : ' disabled' ?>"
      data-mage-init='{"openVideoModal":{}}'
-     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
+     data-parent-component="<?= $escaper->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $escaper->escapeHtmlAttr($imagesJson) ?>"
      data-types='<?= /* @noEscape */ $jsonHelper->jsonEncode($block->getImageTypes()) ?>'
 >
     <?php if (!$block->getElement()->getReadonly() && $isEditEnabled): ?>
@@ -56,20 +59,29 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
             <?= $block->getUploaderHtml(); ?>
             <div class="product-image-wrapper">
                 <p class="image-placeholder-text">
-                    <?= $block->escapeHtml(__('Browse to find or drag image here')); ?>
+                    <?= $escaper->escapeHtml(__('Browse to find or drag image here')); ?>
                 </p>
             </div>
         </div>
         <?= $block->getChildHtml('additional_buttons') ?>
     <?php endif; ?>
     <?php foreach ($block->getImageTypes() as $typeData): ?>
-        <input name="<?= $block->escapeHtmlAttr($typeData['name']) ?>"
+        <input name="<?= $escaper->escapeHtmlAttr($typeData['name']) ?>"
                data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
-               class="image-<?= $block->escapeHtmlAttr($typeData['code']) ?>"
+               class="image-<?= $escaper->escapeHtmlAttr($typeData['code']) ?>"
                type="hidden"
-               value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
+               value="<?= $escaper->escapeHtmlAttr($typeData['value']) ?>"/>
     <?php endforeach; ?>
-    <script id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>-template" data-template="image"
+    <?php foreach ($block->getMediaAttributes() as $attribute): ?>
+        <?php if ($showUseDefault && !$attribute->isScopeGlobal()): ?>
+            <input type="hidden"
+                   data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
+                   name="use_default[<?= $escaper->escapeHtmlAttr($attribute->getAttributeCode()) ?>]"
+                   value="<?= $escaper->escapeHtmlAttr($block->getElement()->usedDefault($attribute) ? '1' : '0') ?>"/>
+        <?php endif; ?>
+    <?php endforeach; ?>
+    <script id="<?=  /* @noEscape */ $blockIdEscaped ?>-template"
+            data-template="image"
             type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>
                 <% if (data.video_url) { %>video-item<% } %>"
@@ -79,6 +91,13 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                    value="<%- data.position %>"
                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
                    class="position"/>
+            <?php if ($showUseDefault): ?>
+                <input type="hidden"
+                       data-role="position-use-default"
+                       name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][position_use_default]"
+                       value="<%- data.position_use_default %>"
+                       data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php endif; ?>
             <% if (data.media_type !== 'external-video') {%>
             <input type="hidden"
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][media_type]"
@@ -106,10 +125,22 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label]"
                    value="<%- data.label %>"
                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php if ($showUseDefault): ?>
+                <input type="hidden"
+                       name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label_use_default]"
+                       value="<%- data.label_use_default %>"
+                       data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php endif; ?>
             <input type="hidden"
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][disabled]"
                    value="<%- data.disabled %>"
                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php if ($showUseDefault): ?>
+                <input type="hidden"
+                       name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][disabled_use_default]"
+                       value="<%- data.disabled_use_default %>"
+                       data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php endif; ?>
             <input type="hidden"
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][removed]"
                    value="" class="is-removed"
@@ -122,10 +153,23 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][video_title]"
                    value="<%- data.video_title %>"
                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php if ($showUseDefault): ?>
+                <input type="hidden"
+                       name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][video_title_use_default]"
+                       value="<%- data.video_title_use_default %>"
+                       data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php endif; ?>
             <input type="hidden"
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][video_description]"
                    value="<%- data.video_description %>"
                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php if ($showUseDefault): ?>
+                <input type="hidden"
+                       name="<?=
+                       /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][video_description_use_default]"
+                       value="<%- data.video_description_use_default %>"
+                       data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"/>
+            <?php endif; ?>
             <input type="hidden"
                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][video_metadata]"
                    value="<%- data.video_metadata %>"
@@ -144,28 +188,28 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
                 <div class="actions">
                     <div class="tooltip">
                         <span class="delete-tooltiptext">
-                            <?= $block->escapeHtml(__('Delete image in all store views')); ?>
+                            <?= $escaper->escapeHtml(__('Delete image in all store views')); ?>
                         </span>
                         <button type="button"
                                 class="action-remove"
                                 data-role="delete-button"
                                 title="<% if (data.media_type == 'external-video') {%>
-                                <?= $block->escapeHtmlAttr(__('Delete video')); ?>
+                                <?= $escaper->escapeHtmlAttr(__('Delete video')); ?>
                             <%} else {%>
-                                <?= $block->escapeHtmlAttr(__('Delete image')); ?>
+                                <?= $escaper->escapeHtmlAttr(__('Delete image')); ?>
                             <%}%>">
                         <span>
                             <% if (data.media_type == 'external-video') { %>
-                            <?= $block->escapeHtml(__('Delete video')); ?>
+                            <?= $escaper->escapeHtml(__('Delete video')); ?>
                             <% } else {%>
-                            <?= $block->escapeHtml(__('Delete image')); ?>
+                            <?= $escaper->escapeHtml(__('Delete image')); ?>
                             <%} %>
                         </span>
                         </button>
                     </div>
                     <div class="draggable-handle"></div>
                 </div>
-                <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')); ?></span></div>
+                <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')); ?></span></div>
             </div>
 
             <div class="item-description">
@@ -181,9 +225,9 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
 
             <ul class="item-roles" data-role="roles-labels">
                 <?php foreach ($block->getImageTypes() as $typeData): ?>
-                    <li data-role-code="<?= $block->escapeHtmlAttr($typeData['code']) ?>"
-                        class="item-role item-role-<?= $block->escapeHtmlAttr($typeData['code']) ?>">
-                        <?= $block->escapeHtml($typeData['label']) ?>
+                    <li data-role-code="<?= $escaper->escapeHtmlAttr($typeData['code']) ?>"
+                        class="item-role item-role-<?= $escaper->escapeHtmlAttr($typeData['code']) ?>">
+                        <?= $escaper->escapeHtml($typeData['label']) ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
@@ -196,83 +240,157 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
     </script>
 
     <script data-role="img-dialog-tmpl" type="text/x-magento-template">
+        <% if (typeof context !== 'undefined' && context.showSpinner === true) {%>
+        <div class="admin__data-grid-loading-mask"
+             data-role="spinner">
+            <div class="spinner">
+                <span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span>
+            </div>
+        </div>
+        <% } %>
         <div class="image-panel-preview">
-            <img src="<%- data.url %>" alt="<%- data.label %>" />
+            <img src="<%- data.url %>" alt="<%- data.label %>"/>
         </div>
         <div class="image-panel-controls">
             <strong class="image-name"><%- data.label %></strong>
 
             <fieldset class="admin__fieldset fieldset-image-panel">
-                <div class="admin__field field-image-description">
+                <?php $classEscaped = $escaper->escapeHtml('admin__field field field-image-description') ?>
+                <div class="<?=/* @noEscape */ $classEscaped ?><% if (data.label_use_default) { %> _disabled<% } %>">
                     <label class="admin__field-label" for="image-description">
-                        <span><?= $block->escapeHtml(__('Alt Text')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Alt Text')) ?></span>
                     </label>
 
                     <div class="admin__field-control">
                             <textarea data-role="image-description"
                                       rows="3"
                                       class="admin__control-textarea"
-                                      name="<?= /* @noEscape */ $elementNameEscaped
-                                        ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                      name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label]"
+                        <% if (data.label_use_default == 1) { %> disabled<% } %>><%- data.label %></textarea>
+                        <?php if ($showUseDefault): ?>
+                        <div class="admin__field-service">
+                            <input id="<?=  /* @noEscape */ $blockIdEscaped ?>-label-use_default"
+                                   class="admin__control-checkbox"
+                                   type="checkbox"
+                                   data-role="use-default"
+                                   name="<?=
+                                   /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][label_use_default]"
+                                   value="1"
+                            <% if (data.label_use_default == 1) { %> checked<% } %>>
+                            <label class="admin__field-label"
+                                   for="<?=  /* @noEscape */ $blockIdEscaped ?>-label-use_default">
+                                <?= $escaper->escapeHtml(__('Use Default Value')); ?>
+                            </label>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
-                <div class="admin__field field-image-role">
-                    <label class="admin__field-label">
-                            <span><?= $block->escapeHtml(__('Role')); ?></span>
-                    </label>
-                    <div class="admin__field-control">
-                        <ul class="multiselect-alt">
-                            <?php
-                            foreach ($block->getMediaAttributes() as $attribute):
-                                ?>
-                                <li class="item">
-                                    <label>
-                                        <input class="image-type"
-                                               data-role="type-selector"
-                                               data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
-                                               type="checkbox"
-                                               value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
-                                        />
-                                        <?= $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                <fieldset class="admin__fieldset">
+                    <legend>
+                        <strong><?= $escaper->escapeHtml(__('Role')); ?></strong>
+                    </legend>
+                    <?php foreach ($block->getMediaAttributes() as $attribute):?>
+                        <?php
+                        $attributeCodeEscaped = $escaper->escapeHtmlAttr($attribute->getAttributeCode());
+                        $roleSelectorIdEscaped = $attributeCodeEscaped . '-type-selector-<%- data.file_id %>';
+                        ?>
+                        <div class="admin__field field field-image-role">
+                            <div class="admin__field-label">
+                                <label for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                    <span data-config-scope="<?= $escaper->escapeHtmlAttr(__('[STORE VIEW]')) ?>">
+                                        <?= $escaper->escapeHtml($attribute->getFrontendLabel()) ?>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="admin__field-control">
+                                <div class="admin__actions-switch" data-role="switcher">
+                                    <input class="admin__actions-switch-checkbox image-type"
+                                           id="<?= /* @noEscape */ $roleSelectorIdEscaped ?>"
+                                           data-role="type-selector"
+                                           data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
+                                           type="checkbox"
+                                           value="<?= /* @noEscape */ $attributeCodeEscaped ?>"/>
+                                    <label class="admin__actions-switch-label"
+                                           for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>">
+                                                <span class="admin__actions-switch-text"
+                                                      data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                                                      data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>"></span>
                                     </label>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                </div>
+                                </div>
+                                <?php if ($showUseDefault && !$attribute->isScopeGlobal()): ?>
+                                    <div class="admin__field-service">
+                                        <input id="<?= /* @noEscape */ $roleSelectorIdEscaped ?>-use_default"
+                                               class="admin__control-checkbox"
+                                               type="checkbox"
+                                               data-role="use-default"
+                                               name="use_default[<?= /* @noEscape */ $attributeCodeEscaped ?>]"
+                                               value="1"/>
+
+                                        <label class="admin__field-label"
+                                               for="<?= /* @noEscape */ $roleSelectorIdEscaped ?>-use_default">
+                                            <?= $escaper->escapeHtml(__('Use Default Value')); ?>
+                                        </label>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </fieldset>
 
                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                     <label class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Image Size')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Image Size')) ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(__('{size}')) ?>"></div>
+                    <div class="admin__field-value" data-message="<?= $escaper->escapeHtmlAttr(__('{size}')) ?>"></div>
                 </div>
 
                 <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
                     <label class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Image Resolution')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Image Resolution')) ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(__('{width}^{height} px'))
-                    ?>"></div>
+                    <div class="admin__field-value"
+                         data-message="<?= $escaper->escapeHtmlAttr(__('{width}^{height} px')) ?>">
+                    </div>
                 </div>
 
-                <div class="admin__field field-image-hide">
+                <div class="admin__field field field-image-hide<% if (data.disabled_use_default) { %> _disabled<% } %>">
+                    <label class="admin__field-label" for="hide-from-product-page">
+                        <span><?= $escaper->escapeHtml(__('Hide from Product Page')); ?></span>
+                    </label>
                     <div class="admin__field-control">
-                        <div class="admin__field admin__field-option">
+                        <div class="admin__actions-switch" data-role="switcher">
                             <input type="checkbox"
                                    id="hide-from-product-page"
                                    data-role="visibility-trigger"
                                    data-form-part="<?= /* @noEscape */ $formNameEscaped ?>"
                                    value="1"
-                                   class="admin__control-checkbox"
+                                   class="admin__actions-switch-checkbox"
                                    name="<?= /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][disabled]"
                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-
-                            <label for="hide-from-product-page" class="admin__field-label">
-                                <?= $block->escapeHtml(__('Hide from Product Page')); ?>
+                            <label class="admin__actions-switch-label" for="hide-from-product-page">
+                                <span class="admin__actions-switch-text"
+                                      data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
+                                      data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>"></span>
                             </label>
                         </div>
+                        <?php if ($showUseDefault): ?>
+                        <div class="admin__field-service">
+                            <input id="<?=  /* @noEscape */ $blockIdEscaped ?>-disabled-use_default"
+                                   class="admin__control-checkbox"
+                                   type="checkbox"
+                                   data-role="use-default"
+                                   name="<?=
+                                   /* @noEscape */ $elementNameEscaped ?>[<%- data.file_id %>][disabled_use_default]"
+                                   value="1"
+                            <% if (data.disabled_use_default == 1) { %> checked<% } %>>
+                            <label class="admin__field-label"
+                                   for="<?=  /* @noEscape */ $blockIdEscaped ?>-disabled-use_default">
+                                <?= $escaper->escapeHtml(__('Use Default Value')); ?>
+                            </label>
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </fieldset>
@@ -284,24 +402,79 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>
             <div class="video-information title">
-                <label><?= $block->escapeHtml(__('Title:')); ?> </label><span></span>
+                <label><?= $escaper->escapeHtml(__('Title:')); ?> </label><span></span>
             </div>
             <div class="video-information uploaded">
-                <label><?= $block->escapeHtml(__('Uploaded:')); ?> </label><span></span>
+                <label><?= $escaper->escapeHtml(__('Uploaded:')); ?> </label><span></span>
             </div>
             <div class="video-information uploader">
-                <label><?= $block->escapeHtml(__('Uploader:')); ?> </label><span></span>
+                <label><?= $escaper->escapeHtml(__('Uploader:')); ?> </label><span></span>
             </div>
             <div class="video-information duration">
-                <label><?= $block->escapeHtml(__('Duration:')); ?> </label><span></span>
+                <label><?= $escaper->escapeHtml(__('Duration:')); ?> </label><span></span>
             </div>
         </div>
     </div>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        'display:none',
-        'div#' . $videoBlockId
-    ) ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'div#' . $videoBlockId) ?>
 
     <?= $block->getChildHtml('new-video') ?>
+    <?php if ($showUseDefault): ?>
+        <?php
+        $useDefaultHtmlId = $block->getHtmlId() . '-position-use_default';
+        $useDefaultHtmlIdEscapedHtmlAttr = $escaper->escapeHtmlAttr($useDefaultHtmlId);
+        $galleryHtmlIdEscapedJs = $escaper->escapeJs($block->getHtmlId());
+        $useDefaultHtmlIdEscapedJS = $escaper->escapeJs($useDefaultHtmlId);
+        $images = $jsonHelper->jsonDecode($imagesJson);
+        $positionUseDefault = $images && (current($images)['position_use_default'] ?? false);
+        $script =<<<JS
+(function () {
+    'use strict';
+    require(['jquery'], function($) {
+        const gallery = $('#$galleryHtmlIdEscapedJs'),
+              useDefaultSortOrderCheckbox = $('#$useDefaultHtmlIdEscapedJS');
+        useDefaultSortOrderCheckbox.on('change', function() {
+            if (gallery.sortable) {
+                gallery.sortable('option', 'disabled', useDefaultSortOrderCheckbox.is(':checked'));
+            }
+            gallery.find('[data-role="position-use-default"]').each(function (index, element) {
+                $(element).val(useDefaultSortOrderCheckbox.is(':checked') ? '1' : '0');
+            });
+        });
+        gallery.on('addItem', function(event, imageData) {
+            if (imageData && imageData.position_use_default === undefined) {
+                imageData.position_use_default = useDefaultSortOrderCheckbox.is(':checked') ? 1 : 0;
+                // update the hidden input directly if the item is already rendered
+                gallery.find('[data-role="position-use-default"]:last').each(function (index, element) {
+                    $(element).val(useDefaultSortOrderCheckbox.is(':checked') ? '1' : '0');
+                });
+            }
+        });
+        gallery.on('productgallerycreate', function() {
+            if (gallery.sortable) {
+                gallery.sortable('option', 'disabled', useDefaultSortOrderCheckbox.is(':checked'));
+            }
+        });
+    });
+}());
+JS;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $script, false) ?>
+    <fieldset class="admin__fieldset">
+        <div class="admin__field field field-sort-order-use_default">
+            <div class="admin__field-control">
+                <div class="admin__field-service">
+                    <input id="<?= /* @noEscape */  $useDefaultHtmlIdEscapedHtmlAttr ?>"
+                           class="admin__control-checkbox"
+                           type="checkbox"
+                           value="1" <?= $escaper->escapeHtmlAttr($positionUseDefault ? 'checked' : '') ?>/>
+                    <label class="admin__field-label"
+                           for="<?= /* @noEscape */  $useDefaultHtmlIdEscapedHtmlAttr ?>">
+                        <?= $escaper->escapeHtml(__('Use Default Order')); ?>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <?php endif; ?>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], "jQuery('body').trigger('contentUpdated');", false) ?>

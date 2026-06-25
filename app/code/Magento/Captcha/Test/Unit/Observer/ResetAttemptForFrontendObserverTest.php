@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -13,7 +13,7 @@ use Magento\Captcha\Model\ResourceModel\LogFactory;
 use Magento\Captcha\Observer\ResetAttemptForFrontendObserver;
 use Magento\Customer\Model\Customer;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,6 +22,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ResetAttemptForFrontendObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Test that the method resets attempts for Frontend
      */
@@ -36,20 +38,16 @@ class ResetAttemptForFrontendObserverTest extends TestCase
             ->willReturn($logMock);
 
         /** @var MockObject|Observer $eventObserverMock */
-        $eventObserverMock = $this->getMockBuilder(Observer::class)
-            ->addMethods(['getModel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventObserverMock = $this->createPartialMockWithReflection(
+            Observer::class,
+            ['getModel']
+        );
         $eventObserverMock->expects($this->once())
             ->method('getModel')
             ->willReturn($this->createMock(Customer::class));
 
-        $objectManager = new ObjectManagerHelper($this);
         /** @var ResetAttemptForFrontendObserver $observer */
-        $observer = $objectManager->getObject(
-            ResetAttemptForFrontendObserver::class,
-            ['resLogFactory' => $resLogFactoryMock]
-        );
+        $observer = new ResetAttemptForFrontendObserver($resLogFactoryMock);
         $this->assertInstanceOf(Log::class, $observer->execute($eventObserverMock));
     }
 }

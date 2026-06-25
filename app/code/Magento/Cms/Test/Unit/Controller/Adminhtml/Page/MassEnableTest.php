@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,12 @@ use Magento\Cms\Controller\Adminhtml\Page\MassEnable;
 use Magento\Cms\Model\ResourceModel\Page\Collection;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 
 class MassEnableTest extends AbstractMassActionTestCase
 {
+    use MockCreationTrait;
     /**
      * @var MassEnable
      */
@@ -92,11 +94,10 @@ class MassEnableTest extends AbstractMassActionTestCase
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setIsActive'])
-            ->onlyMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $pageMock = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setIsActive', 'save']
+        );
         $pageMock->expects($this->once())->method('setIsActive')->with(true)->willReturn(true);
         $pageMock->expects($this->once())->method('save')->willReturn(true);
 

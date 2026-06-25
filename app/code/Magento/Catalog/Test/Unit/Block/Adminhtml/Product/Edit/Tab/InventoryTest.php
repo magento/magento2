@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,21 +16,28 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Source\Backorders;
 use Magento\CatalogInventory\Model\Source\Stock;
+use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[CoversClass(Inventory::class)]
 class InventoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Manager|MockObject
      */
@@ -101,28 +108,13 @@ class InventoryTest extends TestCase
             Context::class,
             ['getRequest', 'getStoreManager']
         );
-        $this->stockConfigurationMock = $this->getMockForAbstractClass(
-            StockConfigurationInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->stockRegistryMock =  $this->getMockForAbstractClass(
-            StockRegistryInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->stockConfigurationMock = $this->createMock(StockConfigurationInterface::class);
+        $this->stockRegistryMock = $this->createMock(StockRegistryInterface::class);
         $this->backordersMock = $this->createMock(Backorders::class);
         $this->stockMock = $this->createMock(Stock::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
         $this->moduleManager = $this->createMock(Manager::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->contextMock->expects($this->once())
             ->method('getStoreManager')
@@ -147,9 +139,8 @@ class InventoryTest extends TestCase
      *
      * @param bool $moduleEnabled
      * @return void
-     *
-     * @dataProvider dataProviderModuleEnabled
      */
+    #[DataProvider('dataProviderModuleEnabled')]
     public function testGetBackordersOption($moduleEnabled)
     {
         $this->moduleManager->expects($this->once())
@@ -171,9 +162,8 @@ class InventoryTest extends TestCase
      *
      * @param bool $moduleEnabled
      * @return void
-     *
-     * @dataProvider dataProviderModuleEnabled
      */
+    #[DataProvider('dataProviderModuleEnabled')]
     public function testGetStockOption($moduleEnabled)
     {
         $this->moduleManager->expects($this->once())
@@ -246,19 +236,18 @@ class InventoryTest extends TestCase
      * @param array $methods
      * @param string $result
      * @return void
-     *
-     * @dataProvider dataProviderGetFieldValue
      */
+    #[DataProvider('dataProviderGetFieldValue')]
     public function testGetFieldValue($stockId, $methods, $result)
     {
         $productId = 10;
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-                            ->disableOriginalConstructor()
-                            ->addMethods($methods)
-                            ->getMockForAbstractClass();
+        $stockItemMock = $this->createPartialMockWithReflection(
+            StockItem::class,
+            array_merge(['getItemId'], $methods)
+        );
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -304,19 +293,18 @@ class InventoryTest extends TestCase
      * @param array $methods
      * @param string $result
      * @return void
-     *
-     * @dataProvider dataProviderGetConfigFieldValue
      */
+    #[DataProvider('dataProviderGetConfigFieldValue')]
     public function testGetConfigFieldValue($stockId, $methods, $result)
     {
         $productId = 10;
         $websiteId = 15;
         $fieldName = 'field';
 
-        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods($methods)
-            ->getMockForAbstractClass();
+        $stockItemMock = $this->createPartialMockWithReflection(
+            StockItem::class,
+            array_merge(['getItemId'], $methods)
+        );
         $productMock = $this->createMock(Product::class);
         $storeMock = $this->createMock(Store::class);
         $productMock->expects($this->once())
@@ -378,10 +366,10 @@ class InventoryTest extends TestCase
      */
     public function testIsReadonly()
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->addMethods(['getInventoryReadonly'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getInventoryReadonly']
+        );
         $this->coreRegistryMock->expects($this->once())
             ->method('registry')
             ->with('product')
@@ -401,9 +389,8 @@ class InventoryTest extends TestCase
      * @param int|null $id
      * @param bool $result
      * @return void
-     *
-     * @dataProvider dataProviderGetId
      */
+    #[DataProvider('dataProviderGetId')]
     public function testIsNew($id, $result)
     {
         $productMock = $this->createPartialMock(Product::class, ['getId']);
@@ -438,14 +425,9 @@ class InventoryTest extends TestCase
     public function testCanUseQtyDecimals()
     {
         $productMock = $this->createPartialMock(Product::class, ['getTypeInstance']);
-        $typeMock = $this->getMockForAbstractClass(
+        $typeMock = $this->createPartialMockWithReflection(
             AbstractType::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['canUseQtyDecimals']
+            ['canUseQtyDecimals', 'deleteTypeSpecificData']
         );
         $this->coreRegistryMock->expects($this->once())
             ->method('registry')

@@ -19,7 +19,7 @@ class Http extends LaminasHttp
         return self::encodePath(
             self::decodeUrlEncodedChars(
                 self::removePathDotSegments($path),
-                '/[' . self::CHAR_UNRESERVED . ':@&=\+\$,;%]/'
+                '/[' . self::CHAR_UNRESERVED . ']/'
             )
         );
     }

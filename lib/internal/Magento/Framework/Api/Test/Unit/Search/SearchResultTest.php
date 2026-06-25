@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,8 +34,8 @@ class SearchResultTest extends TestCase
      */
     protected function setUp(): void
     {
-        $document1 = $this->getMockForAbstractClass(DocumentInterface::class);
-        $document2 = $this->getMockForAbstractClass(DocumentInterface::class);
+        $document1 = $this->createMock(DocumentInterface::class);
+        $document2 = $this->createMock(DocumentInterface::class);
 
         $this->items = [ $document1,  $document2];
         $document1->expects($this->any())

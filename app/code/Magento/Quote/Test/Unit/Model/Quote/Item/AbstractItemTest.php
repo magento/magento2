@@ -1,17 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Quote\Item;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractItemTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Test the getTotalDiscountAmount function
      *
@@ -19,50 +22,33 @@ class AbstractItemTest extends TestCase
      * @param array     $children
      * @param bool      $calculated
      * @param float|int $myDiscountAmount
-     * @dataProvider    dataProviderGetTotalDiscountAmount
      */
+    #[DataProvider('dataProviderGetTotalDiscountAmount')]
     public function testGetTotalDiscountAmount($expectedDiscountAmount, $children, $calculated, $myDiscountAmount)
     {
         $finalChildMock = [];
         foreach ($children as $child) {
             $finalChildMock[] = $child($this);
         }
-        $abstractItemMock = $this->getMockForAbstractClass(
+        $abstractItemMock = $this->createPartialMockWithReflection(
             AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getChildren', 'isChildrenCalculated', 'getDiscountAmount']
+            ['getQuote', 'getAddress', 'getOptionByCode', 'isChildrenCalculated', 'getChildren', 'getDiscountAmount']
         );
-        $abstractItemMock->expects($this->any())
-            ->method('getChildren')
-            ->willReturn($finalChildMock);
-        $abstractItemMock->expects($this->any())
-            ->method('isChildrenCalculated')
-            ->willReturn($calculated);
-        $abstractItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($myDiscountAmount);
+        $abstractItemMock->method('isChildrenCalculated')->willReturn($calculated);
+        $abstractItemMock->method('getChildren')->willReturn($finalChildMock);
+        $abstractItemMock->method('getDiscountAmount')->willReturn($myDiscountAmount);
 
         $totalDiscountAmount = $abstractItemMock->getTotalDiscountAmount();
         $this->assertEquals($expectedDiscountAmount, $totalDiscountAmount);
     }
 
-    protected function getMockForAbstractItem($childDiscountAmount) {
-        $childItemMock = $this->getMockForAbstractClass(
+    protected function getMockForAbstractItem($childDiscountAmount)
+    {
+        $childItemMock = $this->createPartialMockWithReflection(
             AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getDiscountAmount']
+            ['getQuote', 'getAddress', 'getOptionByCode', 'getDiscountAmount']
         );
-        $childItemMock->expects($this->any())
-            ->method('getDiscountAmount')
-            ->willReturn($childDiscountAmount);
+        $childItemMock->method('getDiscountAmount')->willReturn($childDiscountAmount);
 
         return $childItemMock;
     }
@@ -82,6 +68,7 @@ class AbstractItemTest extends TestCase
         $testCase->getMockForAbstractItem($childTwoDiscountAmount);
 
         $valueHasNoEffect = 0;
+        $parentDiscountAmount = 10;
 
         $data = [
             'no_children' => [
@@ -97,10 +84,10 @@ class AbstractItemTest extends TestCase
                 10,
             ],
             'one_kid' => [
-                $childOneDiscountAmount,
+                $childOneDiscountAmount + $parentDiscountAmount,
                 [$childOneItemMock],
                 true,
-                $valueHasNoEffect,
+                $parentDiscountAmount,
             ],
             'two_kids' => [
                 $childOneDiscountAmount + $childTwoDiscountAmount,

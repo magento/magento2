@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,7 +41,7 @@ class CleanExpiredOrders
     public function __construct(
         StoresConfig $storesConfig,
         CollectionFactory $collectionFactory,
-        OrderManagementInterface $orderManagement = null
+        ?OrderManagementInterface $orderManagement = null
     ) {
         $this->storesConfig = $storesConfig;
         $this->orderCollectionFactory = $collectionFactory;

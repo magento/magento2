@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -109,15 +109,15 @@ class AddAttributeToTemplate extends Product implements HttpPostActionInterface
         Context $context,
         Builder $productBuilder,
         JsonFactory $resultJsonFactory,
-        AttributeGroupInterfaceFactory $attributeGroupFactory = null,
-        AttributeRepositoryInterface $attributeRepository = null,
-        AttributeSetRepositoryInterface $attributeSetRepository = null,
-        AttributeGroupRepositoryInterface $attributeGroupRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        AttributeManagementInterface $attributeManagement = null,
-        LoggerInterface $logger = null,
-        ExtensionAttributesFactory $extensionAttributesFactory = null,
-        CacheInterface $cache = null
+        ?AttributeGroupInterfaceFactory $attributeGroupFactory = null,
+        ?AttributeRepositoryInterface $attributeRepository = null,
+        ?AttributeSetRepositoryInterface $attributeSetRepository = null,
+        ?AttributeGroupRepositoryInterface $attributeGroupRepository = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?AttributeManagementInterface $attributeManagement = null,
+        ?LoggerInterface $logger = null,
+        ?ExtensionAttributesFactory $extensionAttributesFactory = null,
+        ?CacheInterface $cache = null
     ) {
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;

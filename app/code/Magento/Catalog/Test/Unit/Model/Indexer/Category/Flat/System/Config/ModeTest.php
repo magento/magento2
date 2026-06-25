@@ -1,16 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Flat\System\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Category\Flat\System\Config\Mode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Indexer\Model\Indexer\State;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class ModeTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Mode
      */
@@ -45,18 +48,17 @@ class ModeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
             ['loadByIndexer', 'setStatus', 'save']
         );
-        $this->indexerRegistry = $this->getMockBuilder(IndexerRegistry::class)
-            ->addMethods(['load', 'setScheduled'])
-            ->onlyMethods(['get'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->indexerRegistry = $this->createPartialMockWithReflection(
+            IndexerRegistry::class,
+            ['get', 'load', 'setScheduled']
+        );
 
-        $this->flatIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $this->flatIndexer = $this->createMock(IndexerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -80,8 +82,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueEqual
      */
+    #[DataProvider('dataProviderProcessValueEqual')]
     public function testProcessValueEqual($oldValue, $value)
     {
         $this->configMock->expects(
@@ -118,8 +120,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueOn
      */
+    #[DataProvider('dataProviderProcessValueOn')]
     public function testProcessValueOn($oldValue, $value)
     {
         $this->configMock->expects(
@@ -168,8 +170,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueOff
      */
+    #[DataProvider('dataProviderProcessValueOff')]
     public function testProcessValueOff($oldValue, $value)
     {
         $this->configMock->expects(

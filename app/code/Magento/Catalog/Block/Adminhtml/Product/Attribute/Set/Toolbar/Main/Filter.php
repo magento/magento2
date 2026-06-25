@@ -1,12 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar\Main;
 
 use Magento\Backend\Block\Widget\Form;
@@ -37,6 +34,8 @@ class Filter extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Prepare the form
+     *
      * @return void
      */
     protected function _prepareForm()

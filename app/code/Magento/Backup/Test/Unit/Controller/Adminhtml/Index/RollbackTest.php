@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,6 +24,7 @@ use Magento\Framework\Backup\Factory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RollbackTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -104,21 +107,24 @@ class RollbackTest extends TestCase
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['initForward', 'setDispatched', 'isAjax'])
-            ->getMockForAbstractClass();
-        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect', 'representJson'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createPartialMockWithReflection(
+            RequestInterface::class,
+            ['getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+             'getParam', 'setParams', 'getParams', 'getCookie', 'isSecure',
+             'initForward', 'setDispatched', 'isAjax']
+        );
+        $this->responseMock = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setRedirect', 'representJson']
+        );
         $this->backupModelFactoryMock = $this->getMockBuilder(BackupFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->backupModelMock = $this->getMockBuilder(Backup::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['exists', 'getSize', 'output', 'validateUserPassword'])
-            ->addMethods(['getTime'])
-            ->getMock();
+        $this->backupModelMock = $this->createPartialMockWithReflection(
+            Backup::class,
+            ['exists', 'getSize', 'output', 'validateUserPassword', 'getTime']
+        );
         $this->backupResourceModelMock = $this->getMockBuilder(Db::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -133,9 +139,11 @@ class RollbackTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->backupManagerMock = $this->getMockBuilder(BackupInterface::class)
-            ->addMethods(['setName'])
-            ->getMockForAbstractClass();
+        $this->backupManagerMock = $this->createPartialMockWithReflection(
+            BackupInterface::class,
+            ['create', 'rollback', 'setBackupExtension', 'setResourceModel',
+             'setTime', 'getType', 'setBackupsDir', 'setName']
+        );
         $this->objectManager = new ObjectManager($this);
         $this->context = $this->objectManager->getObject(
             Context::class,

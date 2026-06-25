@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\AdminOrder;
@@ -12,6 +12,8 @@ use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\Checks\SpecificationFactory;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\CustomAttributeListInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -272,6 +274,26 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $request;
 
     /**
+     * @var SpecificationFactory
+     */
+    private $paymentMethodSpecificationFactory;
+
+    /**
+     * List of payment method specifications
+     *
+     * array(
+     *    array(
+     *       'type' => 'zero_total',
+     *       'sortOrder' => 100,
+     *       'disabled' => false
+     *   )
+     * )
+     *
+     * @var array
+     */
+    private $paymentMethodSpecifications;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -306,6 +328,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param CustomAttributeListInterface|null $customAttributeList
      * @param OrderRepositoryInterface|null $orderRepositoryInterface
      * @param HttpRequest|null $request
+     * @param SpecificationFactory|null $paymentMethodSpecificationFactory
+     * @param array $paymentMethodSpecifications
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -337,12 +361,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         \Magento\Sales\Api\OrderManagementInterface $orderManagement,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        ExtensibleDataObjectConverter $dataObjectConverter = null,
-        StoreManagerInterface $storeManager = null,
-        CustomAttributeListInterface $customAttributeList = null,
-        OrderRepositoryInterface $orderRepositoryInterface = null,
-        HttpRequest $request = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?ExtensibleDataObjectConverter $dataObjectConverter = null,
+        ?StoreManagerInterface $storeManager = null,
+        ?CustomAttributeListInterface $customAttributeList = null,
+        ?OrderRepositoryInterface $orderRepositoryInterface = null,
+        ?HttpRequest $request = null,
+        ?SpecificationFactory $paymentMethodSpecificationFactory = null,
+        array $paymentMethodSpecifications = []
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -383,6 +409,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             ->get(OrderRepositoryInterface::class);
         $this->request = $request ?: ObjectManager::getInstance()
             ->get(HttpRequest::class);
+        $this->paymentMethodSpecificationFactory = $paymentMethodSpecificationFactory ?: ObjectManager::getInstance()
+            ->get(SpecificationFactory::class);
+        $this->paymentMethodSpecifications = $paymentMethodSpecifications;
     }
 
     /**
@@ -516,6 +545,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     {
         if (!$this->_quote) {
             $this->_quote = $this->getSession()->getQuote();
+            $customerId = (int) $this->_quote->getCustomerId();
+            if ($customerId > 0) {
+                $customerData = $this->customerRepository->getById($customerId);
+                $this->_quote->updateCustomerData($customerData);
+            }
         }
 
         return $this->_quote;
@@ -679,6 +713,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item|string|$this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws LocalizedException
      */
     public function initFromOrderItem(\Magento\Sales\Model\Order\Item $orderItem, $qty = null)
     {
@@ -704,9 +739,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
             $this->formattedOptions($product, $buyRequest, $productOptions);
 
-            $item = $this->getQuote()->addProduct($product, $buyRequest);
-            if (is_string($item)) {
-                return $item;
+            try {
+                $item = $this->getQuote()->addProduct($product, $buyRequest);
+                if (is_string($item)) {
+                    return $item;
+                }
+            } catch (LocalizedException $e) {
+                $this->messageManager->addErrorMessage(__($e->getMessage()));
+                return $this;
             }
 
             if ($additionalOptions = $orderItem->getProductOptionByCode('additional_options')) {
@@ -902,7 +942,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $cartItems = $cart->getAllVisibleItems();
                         $cartItemsToRestore = [];
                         foreach ($cartItems as $cartItem) {
-                            $cartItemsToRestore[$cartItem->getItemId()] = $cartItem->getItemId();
+                            $itemId = $cartItem->getItemId();
+                            if ($itemId !== null) {
+                                $cartItemsToRestore[$itemId] = $itemId;
+                            }
                         }
                         $canBeRestored = $this->restoreTransferredItem('cart', $cartItemsToRestore);
 
@@ -1154,7 +1197,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function addProducts(array $products)
     {
         foreach ($products as $productId => $config) {
-            $config['qty'] = isset($config['qty']) ? (double)$config['qty'] : 1;
+            $config['qty'] = isset($config['qty']) ? (float)$config['qty'] : 1;
             try {
                 $this->addProduct($productId, $config);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -1184,13 +1227,13 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
                     $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
-                    $info['qty'] = (double)$item->getQty();
+                    $info['qty'] = (float)$item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
                     if (!$item) {
                         continue;
                     }
-                    $info['qty'] = (double)$info['qty'];
+                    $info['qty'] = (float)$info['qty'];
                 }
                 $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {
@@ -2056,10 +2099,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private function beforeSubmit(Quote $quote)
     {
         $orderData = [];
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $originalId = $oldOrder->getOriginalIncrementId();
             if (!$originalId) {
                 $originalId = $oldOrder->getIncrementId();
@@ -2086,16 +2127,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      */
     private function afterSubmit(Order $order)
     {
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
+        if ($this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
-            $oldOrder = $oldOrder->getId() ?
-                $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            if ($this->getSession()->getOrder()->getId()) {
-                $this->orderManagement->cancel($oldOrder->getEntityId());
-            }
+            $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
     }
@@ -2185,7 +2222,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->_errors[] = __("The payment method isn't selected. Enter the payment method and try again.");
         } else {
             $method = $this->getQuote()->getPayment()->getMethodInstance();
-            if (!$method->isAvailable($this->getQuote())) {
+            if (!$this->isPaymentMethodApplicable($method, $this->getQuote())) {
                 $this->_errors[] = __('This payment method is not available.');
             } else {
                 try {
@@ -2324,25 +2361,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Remove cart from transferred items and update the qty.
+     * Remove cart from transferred items
      *
      * @param int|null|Item $cartItem
      * @param int $itemId
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see AC-14442
      */
     private function removeCartTransferredItemsAndUpdateQty(int|null|Item $cartItem, int $itemId)
     {
         $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
         if (isset($removeCartTransferredItems['cart'])) {
             $removeTransferredItemKey = array_search($cartItem->getId(), $removeCartTransferredItems['cart']);
-            if ($removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
+            if ($removeTransferredItemKey !== false && $removeCartTransferredItems['cart'][$removeTransferredItemKey]) {
                 $cartItem->clearMessage();
                 $cartItem->setHasError(false);
-                if (isset($this->request->get('item')[$itemId]['qty'])) {
-                    $qty = $this->request->get('item')[$itemId]['qty'];
-                    $cartItem->setQty($qty);
-                }
-
                 if ($cartItem->getHasError()) {
                     throw new LocalizedException(__($cartItem->getMessage()));
                 }
@@ -2350,5 +2384,50 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
             $this->getSession()->setTransferredItems($removeCartTransferredItems);
         }
+    }
+
+    /**
+     * Check if payment method is applicable to quote
+     *
+     * @param MethodInterface $method
+     * @param Quote $quote
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isPaymentMethodApplicable(MethodInterface $method, Quote $quote): bool
+    {
+        if (!$method->isAvailable($this->getQuote())) {
+            return false;
+        }
+
+        $specifications = $this->getPaymentMethodSpecifications();
+
+        if (!empty($specifications)) {
+            return $this->paymentMethodSpecificationFactory->create($specifications)->isApplicable($method, $quote);
+        }
+
+        return true;
+    }
+
+    /**
+     * Get payment method specifications
+     *
+     * @return array
+     */
+    private function getPaymentMethodSpecifications(): array
+    {
+        $specifications = array_filter(
+            $this->paymentMethodSpecifications,
+            fn (array $spec) => !isset($spec['disabled']) || $spec['disabled'] === false
+        );
+
+        usort(
+            $specifications,
+            fn (array $a, array $b) => ($a['sortOrder'] ?? 0) <=> ($b['sortOrder'] ?? 0)
+        );
+
+        $specifications = array_column($specifications, 'type', 'type');
+
+        return array_values($specifications);
     }
 }

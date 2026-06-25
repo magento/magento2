@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Vault\Observer;
@@ -117,7 +117,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
      * @param OrderPaymentExtensionInterface|null $extensionAttributes
      * @return PaymentTokenInterface | null
      */
-    protected function getPaymentToken(OrderPaymentExtensionInterface $extensionAttributes = null)
+    protected function getPaymentToken(?OrderPaymentExtensionInterface $extensionAttributes = null)
     {
         if (null === $extensionAttributes) {
             return null;

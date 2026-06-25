@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\Advanced;
 
@@ -32,7 +32,7 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
      */
     public function __construct(
         Config $catalogConfig,
-        Visibility $catalogProductVisibility = null
+        ?Visibility $catalogProductVisibility = null
     ) {
         $this->catalogConfig = $catalogConfig;
         $this->catalogProductVisibility = $catalogProductVisibility

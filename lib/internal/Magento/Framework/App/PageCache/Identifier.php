@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\PageCache;
 
@@ -36,7 +36,7 @@ class Identifier implements IdentifierInterface
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->request = $request;
         $this->context = $context;
@@ -50,13 +50,77 @@ class Identifier implements IdentifierInterface
      */
     public function getValue()
     {
+        $pattern = $this->getMarketingParameterPatterns();
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
+        list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
-            $this->request->getUriString(),
+            $baseUrl,
+            $query,
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
-
         return sha1($this->serializer->serialize($data));
+    }
+
+    /**
+     * Pattern detect marketing parameters
+     *
+     * @return array
+     */
+    public function getMarketingParameterPatterns(): array
+    {
+        return [
+            '/&?gbraid\=[^&]+/',
+            '/&?wbraid\=[^&]+/',
+            '/&?_gl\=[^&]+/',
+            '/&?dclid\=[^&]+/',
+            '/&?gclsrc\=[^&]+/',
+            '/&?srsltid\=[^&]+/',
+            '/&?msclkid\=[^&]+/',
+            '/&?_kx\=[^&]+/',
+            '/&?gclid\=[^&]+/',
+            '/&?cx\=[^&]+/',
+            '/&?ie\=[^&]+/',
+            '/&?cof\=[^&]+/',
+            '/&?siteurl\=[^&]+/',
+            '/&?zanpid\=[^&]+/',
+            '/&?origin\=[^&]+/',
+            '/&?fbclid\=[^&]+/',
+            '/&?mc_(.*?)\=[^&]+/',
+            '/&?utm_(.*?)\=[^&]+/',
+            '/&?_bta_(.*?)\=[^&]+/',
+            '/&?gad_(.*?)\=[^&]+/',
+        ];
+    }
+
+    /**
+     * Reconstruct url and sort query
+     *
+     * @param string $url
+     * @return array
+     */
+    public function reconstructUrl(string $url): array
+    {
+        if (empty($url)) {
+            return [$url, ''];
+        }
+
+        $baseUrl = strtok($url, '?');
+        $queryString = parse_url($url, PHP_URL_QUERY) ?: '';
+
+        $queryArray = [];
+        if ($queryString !== '') {
+            parse_str($queryString, $queryArray);
+        }
+
+        if (!empty($queryArray)) {
+            ksort($queryArray);
+            $query = http_build_query($queryArray);
+        } else {
+            $query = '';
+        }
+
+        return [$baseUrl, $query];
     }
 }

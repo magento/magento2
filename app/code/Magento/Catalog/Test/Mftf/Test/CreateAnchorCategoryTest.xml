@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -33,11 +33,8 @@
             </createData>
         </before>
         <after>
-            <deleteData createDataKey="createProductA" stepKey="deleteProductA"/>
-            <deleteData createDataKey="createProductB" stepKey="deleteProductB"/>
-            <deleteData createDataKey="createProductC" stepKey="deleteProductC"/>
-            <deleteData createDataKey="createProductD" stepKey="deleteProductD"/>
-            <deleteData createDataKey="createProductE" stepKey="deleteProductE"/>
+            <!-- Delete all products via API -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
         </after>
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All rights reserved.
  */
 declare(strict_types=1);
 
@@ -42,23 +42,25 @@ class MysqlTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->getMockForAbstractClass(
-            \Zend_Db_Adapter_Abstract::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getConnection', 'getProfiler']
-        );
         $this->pdoMock = $this->createMock(\PDO::class);
-        $this->adapterMock->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($this->pdoMock);
         $this->zendDbProfilerMock = $this->createMock(\Zend_Db_Profiler::class);
-        $this->adapterMock->expects($this->once())
-            ->method('getProfiler')
-            ->willReturn($this->zendDbProfilerMock);
+        $this->zendDbProfilerMock->method('queryStart')->willReturn(1);
+        $this->zendDbProfilerMock->method('queryEnd')->willReturn(null);
+
+        $this->adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getConnection', 'getProfiler', '_connect', 'quote'])
+            ->getMock();
+        $this->adapterMock->method('getConnection')->willReturn($this->pdoMock);
+        $this->adapterMock->method('getProfiler')->willReturn($this->zendDbProfilerMock);
+        $this->adapterMock->method('quote')->willReturnCallback(fn($v) => "'$v'");
+
+        (function () {
+            $this->_profiler = $this->getProfiler();
+            $this->_connection = $this->getConnection();
+            $this->_config = ['username' => '', 'password' => '', 'dbname' => '', 'driver_options' => []];
+        })->call($this->adapterMock);
+
         $this->pdoStatementMock = $this->createMock(\PDOStatement::class);
     }
 
@@ -110,6 +112,11 @@ class MysqlTest extends TestCase
         (new Mysql($this->adapterMock, $query))->_execute($params);
     }
 
+    /**
+     * Test execute method when params are passed as Parameter objects.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function testExecuteWhenParamsAsParameterObject()
     {
         $param1 = $this->createMock(Parameter::class);
@@ -189,10 +196,7 @@ class MysqlTest extends TestCase
         /*
          * In PHP 8.1 $queryString is a Typed property, thus it should be initialized before the 1st call.
          * But it's not automatically initialized in case of Mocking, so we do it here.
-         * Note: In PHP < 8.1 such assignment prohibited.
          */
-        if (PHP_VERSION_ID >= 80100) {
-            $this->pdoStatementMock->queryString = $query;
-        }
+        $this->pdoStatementMock->queryString = $query;
     }
 }

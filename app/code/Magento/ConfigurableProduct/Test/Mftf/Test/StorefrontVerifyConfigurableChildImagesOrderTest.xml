@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyConfigurableChildImagesOrderTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Admin adds images to a configurable child and verifies storefront order"/>
+            <title value="Verify configurable child images order on product page"/>
+            <description value="This test case verifies the order of the images in the frontend of the configurable product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-8347"/>
+            <group value="configurableProduct"/>
+        </annotations>
+        <before>
+            <!-- Step 2,3,4: Create color attribute (dropdown) with options and add to default set -->
+            <createData entity="productDropDownAttribute" stepKey="createColorAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createColorOption1">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createColorOption2">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addColorToDefaultSet">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getColorOption1">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getColorOption2">
+                <requiredEntity createDataKey="createColorAttribute"/>
+            </getData>
+            <!-- Step 2,3,4: Create size attribute (dropdown) with options and add to default set -->
+            <createData entity="productDropDownAttribute" stepKey="createSizeAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createSizeOption1">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSizeOption2">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addSizeToDefaultSet">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getSizeOption1">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSizeOption2">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </getData>
+            <!-- Precondition 1: Create configurable product -->
+            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
+            <!-- Create two child products with both attributes assigned -->
+            <createData entity="ApiSimpleOne" stepKey="createChildOne">
+                <requiredEntity createDataKey="createColorAttribute"/>
+                <requiredEntity createDataKey="getColorOption1"/>
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleOne" stepKey="createChildTwo">
+                <requiredEntity createDataKey="createColorAttribute"/>
+                <requiredEntity createDataKey="getColorOption2"/>
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeOption2"/>
+            </createData>
+            <!-- Add both attributes as configurable options to the parent -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="addColorOptionsToConfig">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createColorAttribute"/>
+                <requiredEntity createDataKey="getColorOption1"/>
+                <requiredEntity createDataKey="getColorOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="addSizeOptionsToConfig">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeOption1"/>
+                <requiredEntity createDataKey="getSizeOption2"/>
+            </createData>
+            <!-- Associate children to configurable -->
+            <createData entity="ConfigurableProductAddChild" stepKey="attachChildOneToConfig">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createChildOne"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="attachChildTwoToConfig">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createChildTwo"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete products, attributes and logout from admin-->
+            <deleteData createDataKey="createChildOne" stepKey="deleteChildOne"/>
+            <deleteData createDataKey="createChildTwo" stepKey="deleteChildTwo"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createColorAttribute" stepKey="deleteColorAttribute"/>
+            <deleteData createDataKey="createSizeAttribute" stepKey="deleteSizeAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutAfter"/>
+        </after>
+        <!-- Login to admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLoginBefore"/>
+        <!--Step 6: Open child product to upload images -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openChildProductById">
+            <argument name="productId" value="$createChildOne.id$"/>
+        </actionGroup>
+        <!-- Step 7: Add 10 images to the child product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage1">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage2">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage3">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage4">
+            <argument name="image" value="AdobeSmallImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage5">
+            <argument name="image" value="AdobeThumbImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage6">
+            <argument name="image" value="JpgImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage7">
+            <argument name="image" value="LargeImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage8">
+            <argument name="image" value="MagentoImage"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage9">
+            <argument name="image" value="Magento2"/>
+        </actionGroup>
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImage10">
+            <argument name="image" value="Magento3"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitToSaveChildProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveChildProduct"/>
+        <!-- Step 8,9: Go to storefront, open the configurable product and select size and color in which image you have upload -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOptionValue">
+            <argument name="attributeLabel" value="$$createColorAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getColorOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOptionValueInDropDown2">
+            <argument name="attributeLabel" value="$$createSizeAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getSizeOption1.label$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.gallery}}" stepKey="waitGalleryOnPdp"/>
+        <!--  Step 10: Verify the order of the images in the frontend -->
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('5')}}" stepKey="waitForImagesToVisible"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage1">
+            <argument name="image" value="{{MagentoLogo.filename}}"/>
+            <argument name="extension" value="{{MagentoLogo.file_extension}}"/>
+            <argument name="position" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage2">
+            <argument name="image" value="{{TestImageNew.filename}}"/>
+            <argument name="extension" value="{{TestImageNew.file_extension}}"/>
+            <argument name="position" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage3">
+            <argument name="image" value="{{TestImageAdobe.filename}}"/>
+            <argument name="extension" value="{{TestImageAdobe.file_extension}}"/>
+            <argument name="position" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage4">
+            <argument name="image" value="{{AdobeSmallImage.filename}}"/>
+            <argument name="extension" value="{{AdobeSmallImage.file_extension}}"/>
+            <argument name="position" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage5">
+            <argument name="image" value="{{AdobeThumbImage.filename}}"/>
+            <argument name="extension" value="{{AdobeThumbImage.file_extension}}"/>
+            <argument name="position" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage6">
+            <argument name="image" value="{{JpgImage.filename}}"/>
+            <argument name="extension" value="{{JpgImage.file_extension}}"/>
+            <argument name="position" value="6"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage7">
+            <argument name="image" value="{{LargeImage.filename}}"/>
+            <argument name="extension" value="{{LargeImage.file_extension}}"/>
+            <argument name="position" value="7"/>
+        </actionGroup>
+        <!-- Shift ribbon then assert remaining images-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="waitToShiftRibbonNext"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="shiftRibbonNext"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber('10')}}" stepKey="waitForTheImagesToVisible"/>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage8">
+            <argument name="image" value="{{MagentoImage.filename}}"/>
+            <argument name="extension" value="{{MagentoImage.file_extension}}"/>
+            <argument name="position" value="8"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage9">
+            <argument name="image" value="{{Magento2.filename}}"/>
+            <argument name="extension" value="{{Magento2.file_extension}}"/>
+            <argument name="position" value="9"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertImage10">
+            <argument name="image" value="{{Magento3.filename}}"/>
+            <argument name="extension" value="{{Magento3.file_extension}}"/>
+            <argument name="position" value="10"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
@@ -42,7 +42,7 @@ class DefaultValueProvider
     public function __construct(
         $connection = 'db',
         $exchange = 'magento',
-        DeploymentConfig $config = null
+        ?DeploymentConfig $config = null
     ) {
         $this->connection = $connection;
         $this->exchange = $exchange;
@@ -61,6 +61,8 @@ class DefaultValueProvider
         if (isset($this->config)) {
             if ($this->config->get('queue/default_connection')) {
                 $this->connection = $this->config->get('queue/default_connection');
+            } elseif ($this->config->get('queue/stomp') && count($this->config->get('queue/stomp')) > 0) {
+                $this->connection = 'stomp';
             } elseif ($this->config->get('queue/amqp') && count($this->config->get('queue/amqp')) > 0) {
                 $this->connection = 'amqp';
             }

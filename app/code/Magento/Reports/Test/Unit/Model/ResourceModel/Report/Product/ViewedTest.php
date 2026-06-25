@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,11 +15,13 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\Flag;
 use Magento\Reports\Model\FlagFactory;
 use Magento\Reports\Model\ResourceModel\Helper;
 use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +33,8 @@ use Psr\Log\LoggerInterface;
  */
 class ViewedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Viewed
      */
@@ -160,11 +164,10 @@ class ViewedTest extends TestCase
         )->getMock();
         $this->timezoneMock->expects($this->any())->method('scopeDate')->willReturn($dateTime);
 
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'save'])
-            ->addMethods(['setLastUpdate'])
-            ->getMock();
+        $this->flagMock = $this->createPartialMockWithReflection(
+            Flag::class,
+            ['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'save', 'setLastUpdate']
+        );
 
         $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
             ->disableOriginalConstructor()
@@ -210,10 +213,28 @@ class ViewedTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @dataProvider intervalsDataProvider
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testAggregate($from, $to, InvokedCount $truncateCount, InvokedCount $deleteCount): void
+    #[DataProvider('intervalsDataProvider')]
+    public function testAggregate($from, $to, $truncateCount, $deleteCount): void
     {
+        // Convert string matcher to actual matcher
+        if ($truncateCount === 'never') {
+            $truncateCount = $this->never();
+        } elseif ($truncateCount === 'once') {
+            $truncateCount = $this->once();
+        }
+        if ($deleteCount === 'never') {
+            $deleteCount = $this->never();
+        } elseif ($deleteCount === 'once') {
+            $deleteCount = $this->once();
+        }
+        if ($from === null) {
+            $this->zendDbMock->expects($this->never())->method('fetchAll');
+        } else {
+            $this->zendDbMock->expects($this->any())->method('fetchAll')->willReturn([]);
+        }
+
         $this->connectionMock->expects($truncateCount)->method('truncateTable');
         $this->connectionMock->expects($deleteCount)->method('delete');
 
@@ -259,14 +280,14 @@ class ViewedTest extends TestCase
             [
                 'from' => new \DateTime('+3 day'),
                 'to' => new \DateTime('-3 day'),
-                'truncateCount' => self::never(),
-                'deleteCount' => self::once()
+                'truncateCount' => 'never',
+                'deleteCount' => 'once'
             ],
             [
                 'from' => null,
                 'to' => null,
-                'truncateCount' => self::once(),
-                'deleteCount' => self::never()
+                'truncateCount' => 'once',
+                'deleteCount' => 'never'
             ]
         ];
     }

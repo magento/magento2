@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Layer\Category;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Category\AvailabilityFlag;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
@@ -14,6 +16,7 @@ use Magento\Catalog\Model\Layer\State;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(\Magento\Catalog\Model\Layer\Category\AvailabilityFlag::class)]
 class AvailabilityFlagTest extends TestCase
 {
     /**
@@ -54,15 +57,12 @@ class AvailabilityFlagTest extends TestCase
      * @param int $itemsCount
      * @param array $filters
      * @param bool $expectedResult
-     *
-     * @dataProvider isEnabledDataProvider
-     * @covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::isEnabled
-     * @covers \Magento\Catalog\Model\Layer\Category\AvailabilityFlag::canShowOptions
      */
+    #[DataProvider('isEnabledDataProvider')]
     public function testIsEnabled($itemsCount, $filters, $expectedResult)
     {
-        $this->layerMock->expects($this->any())->method('getState')->willReturn($this->stateMock);
-        $this->stateMock->expects($this->any())->method('getFilters')->willReturn($filters);
+        $this->layerMock->method('getState')->willReturn($this->stateMock);
+        $this->stateMock->method('getFilters')->willReturn($filters);
         $this->filterMock->expects($this->once())->method('getItemsCount')->willReturn($itemsCount);
 
         $this->assertEquals($expectedResult, $this->model->isEnabled($this->layerMock, $this->filters));

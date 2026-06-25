@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
@@ -164,18 +164,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $requestBuilder = null,
         $searchEngine = null,
         $temporaryStorageFactory = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container',
-        SearchResultFactory $searchResultFactory = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
-        \Magento\Search\Api\SearchInterface $search = null,
-        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder = null,
-        SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
-        SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
+        ?SearchResultFactory $searchResultFactory = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null,
+        ?\Magento\Search\Api\SearchInterface $search = null,
+        ?\Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?\Magento\Framework\Api\FilterBuilder $filterBuilder = null,
+        ?SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
+        ?SearchResultApplierFactory $searchResultApplierFactory = null,
+        ?TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        ?DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
         $this->searchResultFactory = $searchResultFactory
             ?? ObjectManager::getInstance()->get(SearchResultFactory::class);
@@ -581,7 +581,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
          * for the same requests and products with the same relevance
          * NOTE: this does not replace existing orders but ADDs one more
          */
-        $this->setOrder('entity_id');
+        $defaultSortOrder = $this->_scopeConfig->getValue(
+            'catalog/frontend/default_sort_by_order',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        $sortOrder = ($defaultSortOrder == self::SORT_ORDER_ASC) ? Select::SQL_ASC : Select::SQL_DESC;
+        $this->setOrder('entity_id', $sortOrder);
         return parent::_beforeLoad();
     }
 

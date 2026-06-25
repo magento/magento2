@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Session\Generic;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Multishipping\Helper\Data;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
@@ -37,6 +38,7 @@ use Magento\Payment\Model\Method\SpecificationInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartExtension;
 use Magento\Quote\Api\Data\CartExtensionFactory;
+use Magento\Quote\Model\CartMutexInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -58,10 +60,12 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -74,6 +78,8 @@ use Psr\Log\LoggerInterface;
  */
 class MultishippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Multishipping
      */
@@ -190,6 +196,11 @@ class MultishippingTest extends TestCase
     private $scopeConfigMock;
 
     /**
+     * @var CartMutexInterface
+     */
+    private $cartMutex;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -243,6 +254,8 @@ class MultishippingTest extends TestCase
             ->getMock();
         $logger = $this->createSimpleMock(LoggerInterface::class);
 
+        $this->cartMutex = $this->createMock(CartMutexInterface::class);
+
         $this->model = new Multishipping(
             $this->checkoutSessionMock,
             $this->customerSessionMock,
@@ -270,7 +283,8 @@ class MultishippingTest extends TestCase
             $allowedCountryReaderMock,
             $this->placeOrderFactoryMock,
             $logger,
-            $this->dataObjectHelperMock
+            $this->dataObjectHelperMock,
+            $this->cartMutex
         );
 
         $this->shippingAssignmentProcessorMock = $this->createSimpleMock(ShippingAssignmentProcessor::class);
@@ -476,11 +490,10 @@ class MultishippingTest extends TestCase
     {
         $methodsArray = [1 => 'flatrate_flatrate', 2 => 'tablerate_bestway'];
         $addressId = 1;
-        $addressMock = $this->getMockBuilder(QuoteAddress::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['setShippingMethod', 'setCollectShippingRates'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $addressMock = $this->createPartialMockWithReflection(
+            QuoteAddress::class,
+            ['getId', 'setShippingMethod', 'setCollectShippingRates']
+        );
 
         $addressMock->expects($this->once())->method('getId')->willReturn($addressId);
         $this->quoteMock->expects($this->once())->method('getAllShippingAddresses')->willReturn([$addressMock]);
@@ -547,7 +560,7 @@ class MultishippingTest extends TestCase
         $storeMock->method('getCurrentCurrencyCode')->willReturn($currencyCode);
         $orderAddressMock = $this->createSimpleMock(OrderAddressInterface::class);
         $orderPaymentMock = $this->createSimpleMock(OrderPaymentInterface::class);
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(OrderItem::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getQuoteItemId'])
             ->getMock();
@@ -593,6 +606,8 @@ class MultishippingTest extends TestCase
         $this->placeOrderFactoryMock->method('create')->with($paymentProviderCode)->willReturn($placeOrderServiceMock);
         $this->quoteRepositoryMock->method('save')->with($this->quoteMock);
 
+        $this->assertMutexIsInvoked();
+
         $this->model->createOrders();
     }
 
@@ -600,11 +615,10 @@ class MultishippingTest extends TestCase
      * Create orders verify exception message
      *
      * @param array $config
-     *
      * @return void
-     * @dataProvider getConfigCreateOrders
      * @throws \Exception
      */
+    #[DataProvider('getConfigCreateOrders')]
     public function testCreateOrdersWithThrowsException(array $config): void
     {
         $simpleProductTypeMock = $this->getMockBuilder(Simple::class)
@@ -613,7 +627,7 @@ class MultishippingTest extends TestCase
             ->getMock();
         $orderAddressMock = $this->createSimpleMock(OrderAddressInterface::class);
         $orderPaymentMock = $this->createSimpleMock(OrderPaymentInterface::class);
-        $orderItemMock = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $orderItemMock = $this->createMock(OrderItem::class);
         $productMock = $this->getProductMock($simpleProductTypeMock);
         $orderMock = $this->getOrderMock(
             $orderAddressMock,
@@ -696,6 +710,8 @@ class MultishippingTest extends TestCase
 
         $this->expectExceptionMessage('Quote address for failed order ID "1" not found.');
 
+        $this->assertMutexIsInvoked();
+
         $this->model->createOrders();
     }
 
@@ -757,7 +773,7 @@ class MultishippingTest extends TestCase
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isAvailable'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $abstractMethod->method('isAvailable')->willReturn(true);
 
         $paymentMock = $this->getMockBuilder(Payment::class)
@@ -796,7 +812,7 @@ class MultishippingTest extends TestCase
      */
     private function getQuoteItemMock($productType, $productMock): MockObject
     {
-        $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
+        $quoteItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getProductType', 'getProduct'])
             ->getMock();
@@ -816,11 +832,10 @@ class MultishippingTest extends TestCase
      */
     private function getQuoteAddressItemMock($quoteItemMock, string $productType, array $infoBuyRequest): MockObject
     {
-        $quoteAddressItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Item::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQuoteItem', 'setProductType', 'setProductOptions'])
-            ->onlyMethods(['getParentItem'])
-            ->getMock();
+        $quoteAddressItemMock = $this->createPartialMockWithReflection(
+            AddressItem::class,
+            ['getQuoteItem', 'setProductType', 'setProductOptions', 'getParentItem']
+        );
         $quoteAddressItemMock->method('getQuoteItem')->willReturn($quoteItemMock);
         $quoteAddressItemMock->method('setProductType')->with($productType)->willReturnSelf();
         $quoteAddressItemMock->method('setProductOptions')->willReturn($infoBuyRequest);
@@ -831,24 +846,24 @@ class MultishippingTest extends TestCase
 
     /**
      * Return Quote Addresses Mock
-     * @param \Magento\Quote\Model\Quote\Address\Item|MockObject $quoteAddressItemMock
+     * @param AddressItem|MockObject $quoteAddressItemMock
      * @param int $addressTotal
      * @return array
      */
     private function getQuoteAddressesMock($quoteAddressItemMock, int $addressTotal): array
     {
-        $shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getAddressType', 'getGrandTotal'])
-            ->onlyMethods(
-                [
-                    'validate',
-                    'getShippingMethod',
-                    'getShippingRateByCode',
-                    'getCountryId',
-                    'getAllItems',
-                ]
-            )->getMock();
+        $shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getAddressType',
+                'getGrandTotal',
+                'validate',
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getCountryId',
+                'getAllItems',
+            ]
+        );
         $shippingAddressMock->method('validate')->willReturn(true);
         $shippingAddressMock->method('getShippingMethod')->willReturn('carrier');
         $shippingAddressMock->method('getCountryId')->willReturn('EN');
@@ -856,10 +871,7 @@ class MultishippingTest extends TestCase
         $shippingAddressMock->method('getAddressType')->willReturn('shipping');
         $shippingAddressMock->method('getGrandTotal')->willReturn($addressTotal);
 
-        $shippingRateMock = $this->getMockBuilder(Rate::class)
-            ->disableOriginalConstructor()
-            ->addMethods([ 'getPrice' ])
-            ->getMock();
+        $shippingRateMock = $this->createPartialMockWithReflection(Rate::class, ['getPrice']);
         $shippingRateMock->method('getPrice')->willReturn('0.00');
         $shippingAddressMock->method('getShippingRateByCode')->willReturn($shippingRateMock);
 
@@ -908,26 +920,25 @@ class MultishippingTest extends TestCase
      */
     private function getOrderMock($orderAddressMock, $orderPaymentMock, $orderItemMock): MockObject
     {
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setQuote'])
-            ->onlyMethods(
-                [
-                    'setBillingAddress',
-                    'setShippingAddress',
-                    'setPayment',
-                    'addItem',
-                    'getIncrementId',
-                    'getId',
-                    'getEntityId',
-                    'getCanSendNewEmailFlag',
-                    'getItems',
-                    'setShippingMethod',
-                    'getStore',
-                    'setShippingAmount',
-                    'setBaseShippingAmount'
-                ]
-            )->getMock();
+        $orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            [
+                'setQuote',
+                'setBillingAddress',
+                'setShippingAddress',
+                'setPayment',
+                'addItem',
+                'getIncrementId',
+                'getId',
+                'getEntityId',
+                'getCanSendNewEmailFlag',
+                'getItems',
+                'setShippingMethod',
+                'getStore',
+                'setShippingAmount',
+                'setBaseShippingAmount'
+            ]
+        );
         $orderMock->method('setQuote')->with($this->quoteMock);
         $orderMock->method('setBillingAddress')->with($orderAddressMock)->willReturnSelf();
         $orderMock->method('setShippingAddress')->with($orderAddressMock)->willReturnSelf();
@@ -956,7 +967,7 @@ class MultishippingTest extends TestCase
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isAvailable'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $abstractMethod->method('isAvailable')
             ->willReturn(true);
 
@@ -986,6 +997,8 @@ class MultishippingTest extends TestCase
             ->willReturn([$shippingAddressMock]);
         $this->expectExceptionMessage($exceptionMessage);
 
+        $this->assertMutexIsInvoked();
+
         $this->model->createOrders();
     }
 
@@ -996,7 +1009,7 @@ class MultishippingTest extends TestCase
      */
     public function testValidateMinimumAmountMultiAddressFalse(): void
     {
-        $addressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $addressMock = $this->createMock(Address::class);
 
         $this->scopeConfigMock->expects($this->exactly(2))
             ->method('isSetFlag')
@@ -1074,9 +1087,10 @@ class MultishippingTest extends TestCase
      */
     private function getExtensionAttributesMock(ShippingAssignment $shippingAssignmentMock): MockObject
     {
-        $extensionAttributesMock = $this->getMockBuilder(CartExtension::class)
-            ->addMethods(['setShippingAssignments'])
-            ->getMock();
+        $extensionAttributesMock = $this->createPartialMockWithReflection(
+            CartExtension::class,
+            ['setShippingAssignments']
+        );
 
         $extensionAttributesMock
             ->expects($this->once())
@@ -1212,5 +1226,24 @@ class MultishippingTest extends TestCase
                 ]
             ]
         ];
+    }
+
+    private function assertMutexIsInvoked(): void
+    {
+        $this->cartMutex
+            ->expects($this->once())
+            ->method('execute')
+            ->with(
+                $this->quoteMock->getId(),
+                $this->callback(is_callable(...))
+            )
+            ->willReturnCallback(
+                function ($arg1, $callback) {
+                    if ($arg1 != $this->quoteMock->getId()) {
+                        throw new \Exception('Quote ID does not match.');
+                    }
+                    return $callback();
+                }
+            );
     }
 }

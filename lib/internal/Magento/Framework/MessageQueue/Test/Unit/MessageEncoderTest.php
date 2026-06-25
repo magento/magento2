@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,9 +80,7 @@ class MessageEncoderTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')
@@ -101,9 +99,7 @@ class MessageEncoderTest extends TestCase
         $this->communicationConfigMock->expects($this->any())->method('getTopic')->willReturn(
             $this->getQueueConfigData()
         );
-        $object = $this->getMockBuilder(CustomerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $object = $this->createMock(CustomerInterface::class);
         $this->dataObjectEncoderMock
             ->expects($this->once())
             ->method('convertValue')

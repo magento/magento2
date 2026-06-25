@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -31,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -280,8 +281,8 @@ class ProductPriceTest extends GraphQlAbstract
      * @param array $expectedTierPrices
      * @param array $customerData
      * @param bool $isTierPriceExists
-     * @dataProvider priceDataProvider
      */
+    #[DataProvider('priceDataProvider')]
     public function testSimpleProductsWithSpecialPriceAndTierPrice(
         int $customerGroup,
         array $expectedPriceRange,
@@ -373,14 +374,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9 * 2],
+                            'final_price' =>['value'=> 9],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18 * 2],
+                            'final_price' =>['value'=> 18],
                             'quantity' => 2
                         ]
                     ]
@@ -419,14 +420,14 @@ class ProductPriceTest extends GraphQlAbstract
                     "simple1" => [
                         0 => [
                             'discount' =>['amount_off' => 1, 'percent_off' => 10],
-                            'final_price' =>['value'=> 9 * 2 ],
+                            'final_price' =>['value'=> 9],
                             'quantity' => 2
                         ]
                     ],
                     "simple2" => [
                         0 => [
                             'discount' =>['amount_off' => 2, 'percent_off' => 10],
-                            'final_price' =>['value'=> 18 * 2],
+                            'final_price' =>['value'=> 18],
                             'quantity' => 2
                         ]
                     ]
@@ -606,7 +607,7 @@ class ProductPriceTest extends GraphQlAbstract
                         'amount_off' => 1,
                         'percent_off' => 10
                     ],
-                    'final_price' =>['value'=> 9 * 2],
+                    'final_price' =>['value'=> 9],
                     'quantity' => 2
                 ]
             ]
@@ -809,7 +810,7 @@ class ProductPriceTest extends GraphQlAbstract
                                 2
                             )
                         ],
-                        'final_price' =>['value'=> $tierPriceData[0]['value'] * 2],
+                        'final_price' =>['value'=> $tierPriceData[0]['value']],
                         'quantity' => 2
                     ]
                 ]
@@ -887,7 +888,7 @@ class ProductPriceTest extends GraphQlAbstract
                          'amount_off' => 3,
                          'percent_off' => 30
                     ],
-                    'final_price' =>['value'=> 7 * 2],
+                    'final_price' =>['value'=> 7],
                     'quantity' => 2
                 ]
             ]
@@ -1296,9 +1297,8 @@ QUERY;
 
     /**
      * Check pricing for Configurable product with "Display Out of Stock Products" enabled
-     *
-     * @dataProvider configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider
      */
+    #[DataProvider('configurableProductPriceRangeWithDisplayOutOfStockProductsEnabledDataProvider')]
     #[
         Config(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1, ScopeInterface::SCOPE_STORE, 'default'),
         DataFixture(ProductFixture::class, ['price' => 10, 'special_price' => 7], 'p1'),

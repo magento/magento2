@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
@@ -254,8 +254,8 @@ class Full
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
         $indexIteratorFactory = null,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
-        DataProvider $dataProvider = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
+        ?DataProvider $dataProvider = null,
         $batchSize = 1000,
         ?DeploymentConfig $deploymentConfig = null
     ) {

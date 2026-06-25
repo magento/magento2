@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -74,8 +75,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param array $options
      * @param string $expectedError
-     * @dataProvider validateInvalidDataProvider
      */
+    #[DataProvider('validateInvalidDataProvider')]
     public function testValidateInvalid(array $options, $expectedError)
     {
         $errors = $this->object->validate($options, $this->deploymentConfig);

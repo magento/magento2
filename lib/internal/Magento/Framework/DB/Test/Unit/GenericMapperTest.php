@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,7 +65,7 @@ class GenericMapperTest extends TestCase
      */
     public function testMapCriteriaList()
     {
-        $criteriaMock = $this->getMockForAbstractClass(
+        $criteriaMock = $this->createMock(
             CriteriaInterface::class,
             [],
             '',
@@ -74,7 +74,7 @@ class GenericMapperTest extends TestCase
             true,
             ['getMapperInterfaceName']
         );
-        $mapperInstanceMock = $this->getMockForAbstractClass(
+        $mapperInstanceMock = $this->createMock(
             MapperInterface::class,
             [],
             '',
@@ -128,7 +128,7 @@ class GenericMapperTest extends TestCase
             ],
         ];
 
-        $connectionMock = $this->getMockForAbstractClass(
+        $connectionMock = $this->createMock(
             AdapterInterface::class,
             [],
             '',

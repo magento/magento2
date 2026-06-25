@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe.
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Validator\HTML;
@@ -12,10 +11,55 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator;
 use Magento\Framework\Validator\HTML\AttributeValidatorInterface;
 use Magento\Framework\Validator\HTML\TagValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableWYSIWYGValidatorTest extends TestCase
 {
+    /**
+     * @var ConfigurableWYSIWYGValidator
+     */
+    private ConfigurableWYSIWYGValidator $validator;
+
+    protected function setUp(): void
+    {
+        $allowedTags = ['p', 'a', 'div'];
+        $allowedAttributes = ['href', 'title'];
+        $attributesAllowedByTags = ['a' => ['href', 'title']];
+        $attributeValidators = [];
+        $tagValidators = [];
+
+        $this->validator = new ConfigurableWYSIWYGValidator(
+            $allowedTags,
+            $allowedAttributes,
+            $attributesAllowedByTags,
+            $attributeValidators,
+            $tagValidators
+        );
+    }
+
+    /**
+     * Test that the validator error message does not contain duplicated tags body and html.
+     *
+     * @return void
+     * @throws ValidationException
+     */
+    public function testValidateThrowsExceptionForDisallowedTags()
+    {
+        $this->expectException(ValidationException::class);
+        $this->expectExceptionMessageMatches('/^(Allowed HTML tags are: p, a, div, body, html)*$/');
+
+        $validHtml = '<html><body>test1</body></html>';
+        $this->validator->validate($validHtml);
+        $validHtml = '<html><body>test2</body></html>';
+        $this->validator->validate($validHtml);
+        $validHtml = '<html><body>test3</body></html>';
+        $this->validator->validate($validHtml);
+        $invalidHtml = '<html><body><script>alert("XSS")</script></body></html>';
+        $this->validator->validate($invalidHtml);
+    }
+
     /**
      * Configurations to test.
      *
@@ -26,8 +70,8 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
     public static function getConfigurations(): array
     {
         return [
-            'no-html' => [['div'], [], [], 'just text', true, [], []],
-            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', true, [], []],
+            'no-html' => [['div'], [], [], 'just text', false, [], []],
+            'allowed-tag' => [['div'], [], [], 'just text and <div>a div</div>', false, [], []],
             'restricted-tag' => [
                 ['div', 'p'],
                 [],
@@ -165,6 +209,24 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 true,
                 [],
                 ['div' => ['src' => false]]
+            ],
+            'invalid-allowed-tag-attributes' => [
+                ['a'],
+                ['href'],
+                ['a' => ['href']],
+                '<a href="javascript:alert(1)">a</a>',
+                false,
+                [],
+                []
+            ],
+            'allowed-empty-tag' => [
+                [],
+                [],
+                [],
+                '',
+                false,
+                [],
+                []
             ]
         ];
     }
@@ -181,9 +243,9 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      * @param bool[][] $tagValidators
      * @return void
      *
-     * @dataProvider getConfigurations
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('getConfigurations')]
     public function testConfigurations(
         array $allowedTags,
         array $allowedAttr,
@@ -193,7 +255,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         array $attributeValidityMap,
         array $tagValidators
     ): void {
-        $attributeValidator = $this->getMockForAbstractClass(AttributeValidatorInterface::class);
+        $attributeValidator = $this->createMock(AttributeValidatorInterface::class);
         $attributeValidator->method('validate')
             ->willReturnCallback(
                 function (string $tag, string $attribute) use ($attributeValidityMap): void {
@@ -208,7 +270,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         }
         $tagValidatorsMocks = [];
         foreach ($tagValidators as $tag => $allowedAttributes) {
-            $mock = $this->getMockForAbstractClass(TagValidatorInterface::class);
+            $mock = $this->createMock(TagValidatorInterface::class);
             $mock->method('validate')
                 ->willReturnCallback(
                     function (string $givenTag, array $attrs) use ($tag, $allowedAttributes): void {
@@ -224,20 +286,23 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 );
             $tagValidatorsMocks[$tag] = [$mock];
         }
-        $validator = new ConfigurableWYSIWYGValidator(
-            $allowedTags,
-            $allowedAttr,
-            $allowedTagAttrs,
-            $attrValidators,
-            $tagValidatorsMocks
-        );
-        $valid = true;
         try {
-            $validator->validate($html);
-        } catch (ValidationException $exception) {
+            $validator = new ConfigurableWYSIWYGValidator(
+                $allowedTags,
+                $allowedAttr,
+                $allowedTagAttrs,
+                $attrValidators,
+                $tagValidatorsMocks
+            );
+            $valid = true;
+            try {
+                $validator->validate($html);
+            } catch (ValidationException $exception) {
+                $valid = false;
+            }
+        } catch (\InvalidArgumentException $exception) {
             $valid = false;
         }
-
         self::assertEquals($isValid, $valid);
     }
 }

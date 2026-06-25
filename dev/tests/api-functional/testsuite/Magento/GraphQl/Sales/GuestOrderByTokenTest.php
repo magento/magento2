@@ -137,7 +137,7 @@ QUERY;
                 '%token' => Bootstrap::getObjectManager()->get(Token::class)->encrypt(
                     $order->getIncrementId(),
                     $order->getBillingAddress()->getEmail(),
-                    $order->getBillingAddress()->getPostcode()
+                    $order->getBillingAddress()->getLastname()
                 )
             ]
         );

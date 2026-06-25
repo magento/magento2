@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Console;
 
@@ -45,7 +45,7 @@ class UnlockAdminAccountCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $adminUserName = $input->getArgument(self::ARGUMENT_ADMIN_USERNAME);
         $userData = $this->adminUser->loadByUsername($adminUserName);

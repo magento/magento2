@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -109,7 +109,7 @@ class ConsumerTest extends TestCase
         $this->configuration = $this
             ->getMockBuilder(ConsumerConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -119,18 +119,12 @@ class ConsumerTest extends TestCase
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
 
         $objectManager = new ObjectManager($this);
-        $this->poisonPillCompare = $this->getMockBuilder(PoisonPillCompareInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->poisonPillRead = $this->getMockBuilder(PoisonPillReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->poisonPillCompare = $this->createMock(PoisonPillCompareInterface::class);
+        $this->poisonPillRead = $this->createMock(PoisonPillReadInterface::class);
         //Hard dependency used because CallbackInvoker invokes closure logic defined inside of Customer class.
         $this->callbackInvoker = new CallbackInvoker(
             $this->poisonPillRead,
@@ -140,18 +134,16 @@ class ConsumerTest extends TestCase
         $this->consumer = $objectManager->getObject(
             Consumer::class,
             [
-                'configuration' => $this->configuration,
-                'messageEncoder' => $this->messageEncoder,
-                'queueRepository' => $this->queueRepository,
                 'invoker' => $this->callbackInvoker,
+                'messageEncoder' => $this->messageEncoder,
                 'resource' => $this->resource,
-                'logger' => $this->logger
+                'configuration' => $this->configuration,
+                'logger' => $this->logger,
+                'queueRepository' => $this->queueRepository
             ]
         );
 
-        $this->consumerConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->consumerConfig = $this->createMock(ConfigInterface::class);
         $objectManager->setBackwardCompatibleProperty(
             $this->consumer,
             'consumerConfig',
@@ -182,24 +174,22 @@ class ConsumerTest extends TestCase
     public function testProcessWithNotFoundException()
     {
         $properties = ['topic_name' => 'topic.name'];
-        $topicConfig = [];
+        $topicConfig = ['is_synchronous' => true];
         $numberOfMessages = 1;
         $consumerName = 'consumer.name';
         $exceptionPhrase = new Phrase('Exception successfully thrown');
         $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion')->willReturn('version-1');
         $this->poisonPillCompare->expects($this->atLeastOnce())->method('isLatestVersion')->willReturn(true);
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->deploymentConfig->expects($this->any())->method('get')
+            ->with('queue/consumers_wait_for_messages', 1)->willReturn(1);
+        $queue = $this->createMock(QueueInterface::class);
         $this->configuration->expects($this->once())->method('getQueue')->willReturn($queue);
-        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $envelope = $this->createMock(EnvelopeInterface::class);
         $queue->expects($this->atLeastOnce())->method('dequeue')->willReturn($envelope);
         $envelope->expects($this->once())->method('getProperties')->willReturn($properties);
         $this->communicationConfig->expects($this->once())->method('getTopic')->with($properties['topic_name'])
             ->willReturn($topicConfig);
-        $this->configuration->expects($this->once())->method('getConsumerName')->willReturn($consumerName);
+        $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $this->messageController->expects($this->once())->method('lock')->with($envelope, $consumerName)
             ->willThrowException(
                 new NotFoundException(
@@ -220,7 +210,10 @@ class ConsumerTest extends TestCase
     public function testProcessWithGetMaxIdleTimeAndGetSleepConsumerConfigurations()
     {
         $numberOfMessages = 1;
-        $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion');
+        $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion')->willReturn('version-1');
+        $this->poisonPillCompare->expects($this->any())->method('isLatestVersion')->willReturn(true);
+        $this->deploymentConfig->expects($this->any())->method('get')
+            ->with('queue/consumers_wait_for_messages', 1)->willReturn(1);
         $queue = $this->getMockBuilder(\Magento\Framework\MessageQueue\QueueInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->configuration->expects($this->once())->method('getQueue')->willReturn($queue);

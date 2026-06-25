@@ -1,14 +1,15 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Currency\Data;
 
 use Magento\Framework\Currency\Data\Currency;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,9 +23,8 @@ class CurrencyTest extends TestCase
      * @param string $expectedResult
      * @return void
      * @throws \Magento\Framework\Currency\Exception\CurrencyException
-     *
-     * @dataProvider optionsDataProvider
      */
+    #[DataProvider('optionsDataProvider')]
     public function testToCurrencyWithOptions(float|int|null $value, array $options, string $expectedResult): void
     {
         $currency = new Currency();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,9 +24,7 @@ class CustomerMetadataManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeResolverMock = $this->getMockBuilder(AttributeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->attributeResolverMock = $this->createMock(AttributeResolver::class);
 
         $this->model = new CustomerMetadataManagement(
             $this->attributeResolverMock
@@ -36,13 +34,10 @@ class CustomerMetadataManagementTest extends TestCase
     public function testCanBeSearchableInGrid()
     {
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
 
         /** @var Attribute|MockObject $modelMock */
-        $modelMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelMock = $this->createMock(Attribute::class);
 
         $this->attributeResolverMock->expects($this->once())
             ->method('getModelByAttribute')
@@ -59,13 +54,10 @@ class CustomerMetadataManagementTest extends TestCase
     public function testCanBeFilterableInGrid()
     {
         /** @var AttributeMetadataInterface|MockObject $attributeMock */
-        $attributeMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMock = $this->createMock(AttributeMetadataInterface::class);
 
         /** @var Attribute|MockObject $modelMock */
-        $modelMock = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelMock = $this->createMock(Attribute::class);
 
         $this->attributeResolverMock->expects($this->once())
             ->method('getModelByAttribute')

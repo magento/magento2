@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\ResourceModel;
 
@@ -44,6 +44,11 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     protected $eavConfig;
 
     /**
+     * @var array
+     */
+    private $loadedCategoriesCache = [];
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
@@ -64,8 +69,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
@@ -138,13 +143,28 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         $categoryPositions = $this->getCategoryProductIndexData($storeId, $productIds);
         $categoryData = [];
 
+        // Create cache key that includes store ID
+        $cacheKeyPrefix = 'store_' . $storeId . '_cat_';
+
         foreach ($categoryPositions as $productId => $positions) {
             foreach ($positions as $categoryId => $position) {
-                try {
-                    $category = $this->categoryRepository->get($categoryId, $storeId);
-                } catch (NoSuchEntityException $e) {
+                $cacheKey = $cacheKeyPrefix . $categoryId;
+
+                // Check instance cache first to avoid repeated repository calls (persists across multiple method calls)
+                if (!isset($this->loadedCategoriesCache[$cacheKey])) {
+                    try {
+                        $this->loadedCategoriesCache[$cacheKey] = $this->categoryRepository->get($categoryId, $storeId);
+                    } catch (NoSuchEntityException $e) {
+                        $this->loadedCategoriesCache[$cacheKey] = null;
+                        continue;
+                    }
+                }
+
+                $category = $this->loadedCategoriesCache[$cacheKey];
+                if ($category === null) {
                     continue;
                 }
+
                 $categoryName = $category->getName();
                 $categoryData[$productId][] = [
                     'id' => $categoryId,

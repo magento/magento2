@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,11 +24,11 @@ use PHPUnit\Framework\TestCase;
  */
 class ManagementTest extends TestCase
 {
-    const STUB_PRODUCT_SKU_1 = 'Simple Product 1';
-    const STUB_PRODUCT_SKU_2 = 'Simple Product 2';
-    const STUB_PRODUCT_TYPE = 'simple';
-    const STUB_LINK_TYPE = 'related';
-    const STUB_BAD_TYPE = 'bad type';
+    private const STUB_PRODUCT_SKU_1 = 'Simple Product 1';
+    private const STUB_PRODUCT_SKU_2 = 'Simple Product 2';
+    private const STUB_PRODUCT_TYPE = 'simple';
+    private const STUB_LINK_TYPE = 'related';
+    private const STUB_BAD_TYPE = 'bad type';
 
     /**
      * @var Management
@@ -289,13 +289,13 @@ class ManagementTest extends TestCase
             ->method('get')
             ->willThrowException(
                 new NoSuchEntityException(
-                    __("The product that was requested doesn't exist. Verify the product and try again.")
+                    __('The product with SKU "' . $productSku . '" does not exist.')
                 )
             );
 
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage(
-            "The product that was requested doesn't exist. Verify the product and try again."
+            'The product with SKU "' . $productSku . '" does not exist.'
         );
 
         $this->model->setProductLinks($productSku, $links);

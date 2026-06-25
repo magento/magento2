@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Pricing\Price;
 
@@ -54,7 +54,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         CalculatorInterface $calculator,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         $excludeAdjustment = null,
-        CustomOptionPriceCalculator $customOptionPriceCalculator = null
+        ?CustomOptionPriceCalculator $customOptionPriceCalculator = null
     ) {
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
         $this->excludeAdjustment = $excludeAdjustment;

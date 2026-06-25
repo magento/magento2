@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
@@ -71,7 +71,7 @@ class Tax extends CommonTaxCollector
         CustomerAddressFactory $customerAddressFactory,
         CustomerAddressRegionFactory $customerAddressRegionFactory,
         \Magento\Tax\Helper\Data $taxData,
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;

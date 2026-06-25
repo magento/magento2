@@ -2,8 +2,8 @@
 /**
  * Interface of Magento filesystem driver
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filesystem;
 
@@ -150,7 +150,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null);
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null);
 
     /**
      * Copy source into destination
@@ -161,7 +161,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null);
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null);
 
     /**
      * Create symlink on source and place it into destination
@@ -172,7 +172,7 @@ interface DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null);
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null);
 
     /**
      * Delete file

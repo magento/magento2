@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class PhpScanner implements ScannerInterface
      * @param Log $log
      * @param TypeProcessor|null $typeProcessor
      */
-    public function __construct(Log $log, TypeProcessor $typeProcessor = null)
+    public function __construct(Log $log, ?TypeProcessor $typeProcessor = null)
     {
         $this->_log = $log;
         $this->typeProcessor = $typeProcessor

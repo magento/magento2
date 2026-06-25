@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -134,7 +123,7 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                     "currency" => "USD"
                                 ],
                                 "original_item_price" => [
-                                    "value" => 25,
+                                    "value" => 40,
                                     "currency" => "USD"
                                 ]
                             ]
@@ -219,7 +208,7 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                     "currency" => "USD"
                                 ],
                                 "original_item_price" => [
-                                    "value" => 16.5,
+                                    "value" => 33,
                                     "currency" => "USD"
                                 ]
                             ]
@@ -304,7 +293,7 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                     "currency" => "USD"
                                 ],
                                 "original_item_price" => [
-                                    "value" => 66.5,
+                                    "value" => 83,
                                     "currency" => "USD"
                                 ]
                             ]
@@ -449,7 +438,7 @@ class ProductsWithCustomOptionsCartPricesTest extends GraphQlAbstract
                                     "currency" => "USD"
                                 ],
                                 "original_item_price" => [
-                                    "value" => 22,
+                                    "value" => 46,
                                     "currency" => "USD"
                                 ]
                             ]

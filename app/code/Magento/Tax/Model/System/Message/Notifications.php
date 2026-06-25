@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Model\System\Message;
 
@@ -72,7 +72,7 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Tax\Model\Config $taxConfig,
         $notifications = [],
-        \Magento\Framework\Escaper $escaper = null
+        ?\Magento\Framework\Escaper $escaper = null
     ) {
         $this->storeManager = $storeManager;
         $this->urlBuilder = $urlBuilder;

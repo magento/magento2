@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model;
@@ -152,12 +152,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\SalesRule\Model\Validator\Pool $validators,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         ?CartFixedDiscount $cartFixedDiscount = null,
-        StoreManagerInterface $storeManager = null,
-        ValidateCouponCode $validateCouponCode = null
+        ?StoreManagerInterface $storeManager = null,
+        ?ValidateCouponCode $validateCouponCode = null
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_catalogData = $catalogData;
@@ -248,7 +248,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return RulesCollection
      * @throws \Zend_Db_Select_Exception
      */
-    protected function _getRules(Address $address = null)
+    protected function _getRules(?Address $address = null)
     {
         return $this->getRules($address);
     }
@@ -260,7 +260,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return RulesCollection
      * @throws \Zend_Db_Select_Exception
      */
-    public function getRules(Address $address = null)
+    public function getRules(?Address $address = null)
     {
         $addressId = $this->getAddressId($address);
         $key = $this->getCacheKey($addressId);
@@ -471,10 +471,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                     $cartRules = $address->getCartFixedRules();
                     $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $quote->getStore());
                     $isAppliedToShipping = (int) $rule->getApplyToShipping();
-                    if (!isset($cartRules[$rule->getId()])) {
-                        $cartRules[$rule->getId()] = $rule->getDiscountAmount();
+                    $ruleId = $rule->getId() ?? '';
+                    if (!isset($cartRules[$ruleId])) {
+                        $cartRules[$ruleId] = $rule->getDiscountAmount();
                     }
-                    if ($cartRules[$rule->getId()] > 0) {
+                    if ($cartRules[$ruleId] > 0) {
                         $shippingQuoteAmount = (float) $address->getShippingAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
@@ -497,10 +498,10 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                             $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(
                                 $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
-                                $cartRules[$rule->getId()]
+                                $cartRules[$ruleId]
                             );
                         }
-                        $cartRules[$rule->getId()] -= $baseDiscountAmount;
+                        $cartRules[$ruleId] -= $baseDiscountAmount;
                     }
                     $address->setCartFixedRules($cartRules);
                     break;
@@ -530,7 +531,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             );
             $address->setShippingDiscountAmount($this->priceCurrency->roundPrice($discountAmount));
             $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
-            $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
+            $ruleId = $rule->getRuleId() ?? '';
+            $appliedRuleIds[$ruleId] = $ruleId;
 
             $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
             $this->rulesApplier->addDiscountDescription(
@@ -576,6 +578,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $ruleTotalBaseItemsDiscountAmount = 0;
             $validItemsCount = 0;
 
+            $affectedItems = [];
             /** @var Quote\Item $item */
             foreach ($items as $item) {
                 if (!$this->isValidItemForRule($item, $rule)) {
@@ -587,6 +590,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                 $ruleTotalItemsDiscountAmount += $item->getDiscountAmount();
                 $ruleTotalBaseItemsDiscountAmount += $item->getBaseDiscountAmount();
                 $validItemsCount++;
+                $affectedItems[] = $item;
             }
 
             $this->_rulesItemTotals[$rule->getId()] = [
@@ -595,6 +599,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
                 'base_items_price' => $ruleTotalBaseItemsPrice,
                 'base_items_discount_amount' => $ruleTotalBaseItemsDiscountAmount,
                 'items_count' => $validItemsCount,
+                'affected_items' => $affectedItems
             ];
         }
 
@@ -740,13 +745,14 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      * @return array $items
      * @throws \Zend_Db_Select_Exception
      */
-    public function sortItemsByPriority($items, Address $address = null)
+    public function sortItemsByPriority($items, ?Address $address = null)
     {
         $itemsSorted = [];
         /** @var $rule Rule */
         foreach ($this->getRules($address) as $rule) {
+            $actions = $rule->getActions();
             foreach ($items as $itemKey => $itemValue) {
-                if ($rule->getActions()->validate($itemValue)) {
+                if ($actions->validate($itemValue)) {
                     unset($items[$itemKey]);
                     $itemsSorted[] = $itemValue;
                 }

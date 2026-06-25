@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,8 @@ use Magento\Framework\Validator\Constraint;
 use Magento\Framework\Validator\Constraint\Property;
 use Magento\Framework\Validator\Test\Unit\Test\IsTrue;
 use Magento\Framework\Validator\ValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -45,14 +47,13 @@ class ValidatorTest extends TestCase
     /**
      * Test isValid method
      *
-     * @dataProvider isValidDataProvider
-     *
      * @param mixed $value
      * @param array $validatorsClosure
      * @param boolean $expectedResult
      * @param array $expectedMessages
      * @param boolean $breakChainOnFailure
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid(
         $value,
         $validatorsClosure,
@@ -115,7 +116,7 @@ class ValidatorTest extends TestCase
 
     public function getValidatorMock($data, $value)
     {
-        $validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->once())->method('isValid')->with($value)->willReturn(false);
         $validatorMock->expects($this->once())->method('getMessages')->willReturn($data);
         return $validatorMock;
@@ -123,14 +124,14 @@ class ValidatorTest extends TestCase
 
     public function getValidatorMockWithExpectsNever()
     {
-        $validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->never())->method('isValid');
         return $validatorMock;
     }
 
     public function getValidatorMockWithValidatorsSucceed($value)
     {
-        $validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $validatorMock->expects($this->never())->method('getMessages');
         return $validatorMock;
@@ -149,7 +150,7 @@ class ValidatorTest extends TestCase
         /** @var AbstractAdapter $translator */
         $translator = $this->getMockBuilder(
             AbstractAdapter::class
-        )->getMockForAbstractClass();
+        )->getMock();
         AbstractValidator::setDefaultTranslator($translator);
 
         $this->_validator->addValidator($classConstraint);
@@ -172,7 +173,7 @@ class ValidatorTest extends TestCase
         /** @var AbstractAdapter $translator */
         $translator = $this->getMockBuilder(
             AbstractAdapter::class
-        )->getMockForAbstractClass();
+        )->getMock();
         $this->_validator->setTranslator($translator);
         $this->assertEquals($translator, $fooValidator->getTranslator());
         $this->assertEquals($translator, $this->_validator->getTranslator());

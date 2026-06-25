@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Multishipping checkout state
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Multishipping\Block\Checkout;
 
@@ -33,6 +31,8 @@ class State extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retrieve available checkout steps
+     *
      * @return array
      */
     public function getSteps()

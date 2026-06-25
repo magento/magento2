@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,15 @@ use Magento\Customer\Model\ResourceModel\Address\Relation;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RelationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var  CustomerFactory|MockObject */
     protected $customerFactoryMock;
 
@@ -42,59 +46,45 @@ class RelationTest extends TestCase
     /**
      * @param $addressId
      * @param $isDefaultBilling
-     * @param $isDefaultShipping
-     * @dataProvider getRelationDataProvider
-     */
+     * @param $isDefaultShipping */
+    #[DataProvider('getRelationDataProvider')]
     public function testProcessRelation($addressId, $isDefaultBilling, $isDefaultShipping)
     {
-        $addressModel = $this->getMockBuilder(Address::class)
-            ->addMethods(['getIsDefaultBilling', 'getIsDefaultShipping', 'getIsCustomerSaveTransaction'])
-            ->onlyMethods(
-                [
-                    '__wakeup',
-                    'getId',
-                    'getEntityTypeId',
-                    'hasDataChanges',
-                    'validateBeforeSave',
-                    'beforeSave',
-                    'afterSave',
-                    'isSaveAllowed'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerModel = $this->getMockBuilder(Customer::class)
-            ->addMethods(['setDefaultBilling', 'setDefaultShipping'])
-            ->onlyMethods(
-                [
-                    '__wakeup',
-                    'save',
-                    'load',
-                    'getResource',
-                    'getId',
-                    'getDefaultShippingAddress',
-                    'getDefaultBillingAddress'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customerResource = $this->getMockForAbstractClass(
-            AbstractDb::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getConnection', 'getTable']
+        $addressModel = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getIsDefaultBilling',
+                'getIsDefaultShipping',
+                'getIsCustomerSaveTransaction',
+                '__wakeup',
+                'getId',
+                'getEntityTypeId',
+                'hasDataChanges',
+                'validateBeforeSave',
+                'beforeSave',
+                'afterSave',
+                'isSaveAllowed'
+            ]
         );
-        $connectionMock = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['update', 'quoteInto']
+        $customerModel = $this->createPartialMockWithReflection(
+            Customer::class,
+            [
+                'setDefaultBilling',
+                'setDefaultShipping',
+                '__wakeup',
+                'save',
+                'load',
+                'getResource',
+                'getId',
+                'getDefaultShippingAddress',
+                'getDefaultBillingAddress'
+            ]
+        );
+        $customerResource = $this->createMock(
+            AbstractDb::class
+        );
+        $connectionMock = $this->createMock(
+            AdapterInterface::class
         );
         $customerModel->expects($this->any())->method('getResource')->willReturn($customerResource);
         $addressModel->expects($this->any())->method('getId')->willReturn($addressId);

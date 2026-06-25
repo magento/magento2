@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe
+# All Rights Reserved.
 
 type Query {
     products (
@@ -229,6 +229,7 @@ interface MediaGalleryInterface @doc(description: "Contains basic information ab
     label: String @doc(description: "The label of the product image or video.")
     position: Int @doc(description: "The media item's position after it has been sorted.")
     disabled: Boolean @doc(description: "Indicates whether the image is hidden from view.")
+    types: [String] @doc(description: "Array of image types. It can have the following values: image, small_image, thumbnail.")
 }
 
 type ProductImage implements MediaGalleryInterface @doc(description: "Contains product image information, including the image URL and label.") {
