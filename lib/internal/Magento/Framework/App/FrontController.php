@@ -6,6 +6,7 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\Request\ValidatorInterface as RequestValidator;
@@ -208,9 +209,12 @@ class FrontController implements FrontControllerInterface
 
         // Validation did not produce a result to replace the action's.
         if (!$result) {
-            $this->dispatchPreDispatchEvents($actionInstance, $request);
+            $isForwardAction = $actionInstance instanceof Forward;
+            if (!$isForwardAction) {
+                $this->dispatchPreDispatchEvents($actionInstance, $request);
+            }
             $result = $this->getActionResponse($actionInstance, $request);
-            if (!$this->isSetActionNoPostDispatchFlag()) {
+            if (!$isForwardAction && !$this->isSetActionNoPostDispatchFlag()) {
                 $this->dispatchPostDispatchEvents($actionInstance, $request);
             }
         }

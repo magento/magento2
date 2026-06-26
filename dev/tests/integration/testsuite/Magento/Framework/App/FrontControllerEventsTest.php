@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
+use Magento\Cms\Test\Fixture\Page as PageFixture;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager as FixtureManager;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Request as TestHttpRequest;
 use Magento\TestFramework\Response;
@@ -61,6 +64,25 @@ class FrontControllerEventsTest extends TestCase
         $frontController->dispatch($this->request);
 
         $this->assertPreAndPostDispatchEventsAreDispatched();
+    }
+
+    /**
+     * Test if frontend controller dispatches events once for forwarded CMS pages
+     *
+     * @magentoAppArea frontend
+     *
+     * @return void
+     */
+    #[DataFixture(PageFixture::class, ['identifier' => 'front-controller-forward'], 'page')]
+    public function testFrontendControllerDispatchesEventsOnceForForwardedCmsPage(): void
+    {
+        /** @var FrontControllerInterface $frontController */
+        $frontController = ObjectManager::getInstance()->create(FrontControllerInterface::class);
+        $this->configureRequestForPage('front-controller-forward');
+        $frontController->dispatch($this->request);
+
+        $this->assertEventDispatchCount('controller_action_predispatch', 1);
+        $this->assertEventDispatchCount('controller_action_postdispatch', 1);
     }
 
     /**
@@ -161,6 +183,22 @@ class FrontControllerEventsTest extends TestCase
         $request->setActionName($actionName);
         $request->setDispatched();
         $request->setRequestUri("$route/$actionPath/$actionName");
+    }
+
+    /**
+     * Prepare request for CMS page URL
+     *
+     * @param string $identifier
+     *
+     * @return void
+     */
+    private function configureRequestForPage(string $identifier): void
+    {
+        $request = $this->request;
+        $page = FixtureManager::getStorage()->get('page');
+
+        $request->setPathInfo($identifier);
+        $request->setRequestUri($page->getIdentifier());
     }
 
     /**

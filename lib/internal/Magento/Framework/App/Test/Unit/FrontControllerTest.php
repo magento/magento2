@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Forward;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaInterface;
@@ -89,6 +90,11 @@ class FrontControllerTest extends TestCase
     private $areaMock;
 
     /**
+     * @var MockObject|EventManager
+     */
+    private $eventManagerMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -110,7 +116,7 @@ class FrontControllerTest extends TestCase
         $this->areaListMock = $this->createMock(AreaList::class);
         $this->areaMock = $this->createMock(AreaInterface::class);
         $actionFlagMock = $this->createMock(ActionFlag::class);
-        $eventManagerMock = $this->createMock(EventManager::class);
+        $this->eventManagerMock = $this->createMock(EventManager::class);
         $requestMock = $this->createMock(RequestInterface::class);
         $this->model = new FrontController(
             $this->routerList,
@@ -121,7 +127,7 @@ class FrontControllerTest extends TestCase
             $this->appStateMock,
             $this->areaListMock,
             $actionFlagMock,
-            $eventManagerMock,
+            $this->eventManagerMock,
             $requestMock
         );
     }
@@ -284,6 +290,89 @@ class FrontControllerTest extends TestCase
             ->with(true);
 
         $this->assertEquals($response, $this->model->dispatch($this->request));
+    }
+
+    /**
+     * @return void
+     */
+    public function testForwardActionDoesNotDispatchEvents(): void
+    {
+        $this->routerList->expects($this->any())
+            ->method('valid')
+            ->willReturn(true);
+
+        $response = $this->createMock(Http::class);
+        $forwardInstance = $this->getMockBuilder(Forward::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $forwardInstance->expects($this->any())
+            ->method('dispatch')
+            ->with($this->request)
+            ->willReturn($response);
+        $controllerInstance = $this->getMockBuilder(Action::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $controllerInstance->expects($this->any())
+            ->method('dispatch')
+            ->with($this->request)
+            ->willReturn($response);
+        $this->router
+            ->method('match')
+            ->willReturnCallback(
+                function ($arg1) use ($forwardInstance, $controllerInstance) {
+                    static $callCount = 0;
+                    if ($callCount == 0 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $forwardInstance;
+                    } elseif ($callCount == 1 && $arg1 == $this->request) {
+                        $callCount++;
+                        return $controllerInstance;
+                    }
+                }
+            );
+
+        $this->routerList->expects($this->any())
+            ->method('current')
+            ->willReturn($this->router);
+
+        $this->appStateMock->expects($this->any())->method('getAreaCode')->willReturn('frontend');
+        $this->areaMock
+            ->method('load')
+            ->willReturnCallback(
+                function ($arg1) {
+                    if ($arg1 == Area::PART_DESIGN) {
+                        return $this->areaMock;
+                    } elseif ($arg1 == Area::PART_TRANSLATE) {
+                        return $this->areaMock;
+                    }
+                }
+            );
+        $this->areaListMock->expects($this->any())->method('getArea')->willReturn($this->areaMock);
+        $this->request
+            ->method('isDispatched')
+            ->willReturnOnConsecutiveCalls(false, false, true);
+        $this->request
+            ->method('setDispatched')
+            ->with(true);
+
+        $dispatchedEvents = [];
+        $this->eventManagerMock->expects($this->exactly(2))
+            ->method('dispatch')
+            ->willReturnCallback(
+                function ($eventName, array $data = []) use (&$dispatchedEvents) {
+                    $dispatchedEvents[] = $eventName;
+                }
+            );
+
+        $this->assertEquals($response, $this->model->dispatch($this->request));
+        $this->assertCount(
+            1,
+            array_filter($dispatchedEvents, fn ($eventName) => $eventName === 'controller_action_predispatch')
+        );
+        $this->assertCount(
+            1,
+            array_filter($dispatchedEvents, fn ($eventName) => $eventName === 'controller_action_postdispatch')
+        );
     }
 
     /**
