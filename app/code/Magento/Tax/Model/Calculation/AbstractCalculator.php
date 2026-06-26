@@ -348,7 +348,7 @@ abstract class AbstractCalculator
         $appliedTaxes = [];
         $totalAppliedAmount = 0;
         foreach ($appliedRates as $appliedRate) {
-            $appliedAmount = $totalTaxRate ? $rowTax / $totalTaxRate * $appliedRate['percent'] : 0;
+            $appliedAmount = $totalTaxRate > 0.0 ? $rowTax / $totalTaxRate * $appliedRate['percent'] : 0;
             //Use delta rounding to split tax amounts for each tax rates between items
             $appliedAmount = $this->deltaRound(
                 $appliedAmount,
