@@ -90,15 +90,61 @@ class ConfigurableVariationAttributePriority implements ResetAfterRequestInterfa
             return $result;
         }
 
-        if (!array_key_exists($childId, $this->parentIdsByChild)) {
-            $this->parentIdsByChild[$childId] = $this->configurable->getParentIdsByChild($childId);
-        }
-        $parentIds = $this->parentIdsByChild[$childId];
-
+        $parentIds = $this->getParentIds($childId);
         if (empty($parentIds)) {
             return $result;
         }
 
+        $parentResult = $this->resolveParentWeeeAttributes(
+            $subject,
+            $parentIds,
+            $shipping,
+            $billing,
+            $website,
+            $calculateTax,
+            $round
+        );
+
+        return $parentResult ?? $result;
+    }
+
+    /**
+     * Resolve and cache the parent ids for a given child product id.
+     *
+     * @param int $childId
+     * @return int[]
+     */
+    private function getParentIds(int $childId): array
+    {
+        if (!array_key_exists($childId, $this->parentIdsByChild)) {
+            $this->parentIdsByChild[$childId] = $this->configurable->getParentIdsByChild($childId);
+        }
+
+        return $this->parentIdsByChild[$childId];
+    }
+
+    /**
+     * Return the first non-empty parent weee attribute set, caching parent lookups per scope.
+     *
+     * @param Tax $subject
+     * @param int[] $parentIds
+     * @param DataObject|null $shipping
+     * @param DataObject|null $billing
+     * @param string|null $website
+     * @param bool|null $calculateTax
+     * @param bool $round
+     * @return array|null
+     * @SuppressWarnings(PHPMD.LongVariable)
+     */
+    private function resolveParentWeeeAttributes(
+        Tax $subject,
+        array $parentIds,
+        $shipping,
+        $billing,
+        $website,
+        $calculateTax,
+        $round
+    ): ?array {
         $cacheSuffix = $this->buildScopeKey(
             $shipping,
             $billing,
@@ -125,7 +171,7 @@ class ConfigurableVariationAttributePriority implements ResetAfterRequestInterfa
             }
         }
 
-        return $result;
+        return null;
     }
 
     /**
