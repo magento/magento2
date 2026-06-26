@@ -51,7 +51,7 @@ class FrontControllerEventsTest extends AbstractController
      *
      * @return void
      */
-    #[DataFixture(PageFixture::class, ['identifier' => 'front-controller-forward', 'store_id' => 0], 'page')]
+    #[DataFixture(PageFixture::class, ['identifier' => 'front-controller-forward'], 'page')]
     public function testFrontendControllerDispatchesEventsOnceForForwardedCmsPage(): void
     {
         $this->dispatch('/front-controller-forward');
