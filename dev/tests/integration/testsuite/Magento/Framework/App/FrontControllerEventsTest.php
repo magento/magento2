@@ -10,58 +10,35 @@ namespace Magento\Framework\App;
 use Magento\Cms\Test\Fixture\Page as PageFixture;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\TestFramework\Fixture\DataFixture;
-use Magento\TestFramework\Fixture\DataFixtureStorageManager as FixtureManager;
-use Magento\TestFramework\ObjectManager;
-use Magento\TestFramework\Request as TestHttpRequest;
-use Magento\TestFramework\Response;
-use PHPUnit\Framework\TestCase;
+use Magento\TestFramework\TestCase\AbstractController;
 
 /**
  * @magentoAppIsolation enabled
  */
-class FrontControllerEventsTest extends TestCase
+class FrontControllerEventsTest extends AbstractController
 {
     /**
      * @var ManagerInterface
      */
-    private $eventManager;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var TestHttpRequest
-     */
-    private $request;
+    private $eventManagerSpy;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = ObjectManager::getInstance();
-        $this->setupEventManagerSpy();
-        $this->eventManager = $this->objectManager->get(ManagerInterface::class);
-        $this->request = $this->objectManager->get(TestHttpRequest::class);
+        parent::setUp();
+        $this->eventManagerSpy = $this->setupEventManagerSpy();
     }
 
     /**
-     * Test if frontend controller dispatches events
-     *
-     * @magentoAppArea frontend
+     * Test if frontend controller dispatches events for a regular action
      *
      * @return void
      */
     public function testFrontendControllerDispatchesEvents(): void
     {
-        $this->setupEventManagerSpy();
-
-        /** @var FrontControllerInterface $frontController */
-        $frontController = ObjectManager::getInstance()->create(FrontControllerInterface::class);
-        $this->configureRequestForAction('cms', 'index', 'index');
-        $frontController->dispatch($this->request);
+        $this->dispatch('/cms/index/index');
 
         $this->assertPreAndPostDispatchEventsAreDispatched();
     }
@@ -69,71 +46,55 @@ class FrontControllerEventsTest extends TestCase
     /**
      * Test if frontend controller dispatches events once for forwarded CMS pages
      *
-     * @magentoAppArea frontend
+     * A CMS page request is forwarded by \Magento\Cms\Controller\Router to "cms/page/view".
+     * Pre/post-dispatch events must be triggered only for the resulting action and not for the forward itself.
      *
      * @return void
      */
-    #[DataFixture(PageFixture::class, ['identifier' => 'front-controller-forward'], 'page')]
+    #[DataFixture(PageFixture::class, ['identifier' => 'front-controller-forward', 'store_id' => 0], 'page')]
     public function testFrontendControllerDispatchesEventsOnceForForwardedCmsPage(): void
     {
-        /** @var FrontControllerInterface $frontController */
-        $frontController = ObjectManager::getInstance()->create(FrontControllerInterface::class);
-        $this->configureRequestForPage('front-controller-forward');
-        $frontController->dispatch($this->request);
+        $this->dispatch('/front-controller-forward');
 
         $this->assertEventDispatchCount('controller_action_predispatch', 1);
         $this->assertEventDispatchCount('controller_action_postdispatch', 1);
     }
 
     /**
-     * Test if no dispatch flag prevents dispatching action
-     *
-     * @magentoAppArea frontend
+     * Test if no dispatch flag prevents execution and post-dispatch events
      *
      * @return void
      */
     public function testSettingTheNoDispatchActionFlagProhibitsExecuteAndPostdispatchEvents(): void
     {
-        $this->setupEventManagerSpy();
-
-        /** @var FrontControllerInterface $frontController */
-        $frontController = ObjectManager::getInstance()->create(FrontControllerInterface::class);
-        $this->configureRequestForAction('cms', 'index', 'index');
-
         /** @var ActionFlag $actionFlag */
-        $actionFlag = ObjectManager::getInstance()->get(ActionFlag::class);
+        $actionFlag = $this->_objectManager->get(ActionFlag::class);
         $actionFlag->set('', ActionInterface::FLAG_NO_DISPATCH, true);
 
-        $result1 = $frontController->dispatch($this->request);
-        $this->assertTrue($result1 instanceof Response, 'Action was dispatched!');
+        $this->dispatch('/cms/index/index');
+
         $this->assertPreDispatchEventsAreDispatched();
     }
 
     /**
-     * Prepare spy on event manager
+     * Register a spy that records every dispatched event while delegating to the real event manager
      *
-     * @return void
+     * @return ManagerInterface
      */
-    public function setupEventManagerSpy(): void
+    private function setupEventManagerSpy(): ManagerInterface
     {
-        $eventManager = $this->objectManager->get(ManagerInterface::class);
+        $eventManager = $this->_objectManager->get(ManagerInterface::class);
         $eventManagerSpy = new class($eventManager) implements ManagerInterface {
             /**
-             * @var ManagerInterface
+             * @var array[]
              */
-            private $delegate;
-
-            /**
-             * @var array[];
-             */
-            private $dispatchedEvents;
+            private $dispatchedEvents = [];
 
             /**
              * @param ManagerInterface $delegate
              */
-            public function __construct(ManagerInterface $delegate)
+            public function __construct(private ManagerInterface $delegate)
             {
-                $this->delegate = $delegate;
             }
 
             public function dispatch($eventName, array $data = [])
@@ -148,7 +109,9 @@ class FrontControllerEventsTest extends TestCase
             }
         };
 
-        $this->objectManager->addSharedInstance($eventManagerSpy, get_class($eventManager));
+        $this->_objectManager->addSharedInstance($eventManagerSpy, get_class($eventManager));
+
+        return $eventManagerSpy;
     }
 
     /**
@@ -162,43 +125,7 @@ class FrontControllerEventsTest extends TestCase
     private function assertEventDispatchCount(string $eventName, int $expectedCount): void
     {
         $message = sprintf('Event %s was expected to be dispatched %d time(s).', $eventName, $expectedCount);
-        $this->assertCount($expectedCount, $this->eventManager->spyOnDispatchedEvent($eventName), $message);
-    }
-
-    /**
-     * Prepare request for test action
-     *
-     * @param string $route
-     * @param string $actionPath
-     * @param string $actionName
-     *
-     * @return void
-     */
-    private function configureRequestForAction(string $route, string $actionPath, string $actionName): void
-    {
-        $request = $this->request;
-
-        $request->setRouteName($route);
-        $request->setControllerName($actionPath);
-        $request->setActionName($actionName);
-        $request->setDispatched();
-        $request->setRequestUri("$route/$actionPath/$actionName");
-    }
-
-    /**
-     * Prepare request for CMS page URL
-     *
-     * @param string $identifier
-     *
-     * @return void
-     */
-    private function configureRequestForPage(string $identifier): void
-    {
-        $request = $this->request;
-        $page = FixtureManager::getStorage()->get('page');
-
-        $request->setPathInfo($identifier);
-        $request->setRequestUri($page->getIdentifier());
+        $this->assertCount($expectedCount, $this->eventManagerSpy->spyOnDispatchedEvent($eventName), $message);
     }
 
     /**

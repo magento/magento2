@@ -359,7 +359,7 @@ class FrontControllerTest extends TestCase
         $this->eventManagerMock->expects($this->exactly(2))
             ->method('dispatch')
             ->willReturnCallback(
-                function ($eventName, array $data = []) use (&$dispatchedEvents) {
+                function ($eventName) use (&$dispatchedEvents) {
                     $dispatchedEvents[] = $eventName;
                 }
             );
