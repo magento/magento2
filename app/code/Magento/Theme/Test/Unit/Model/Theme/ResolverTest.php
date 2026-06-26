@@ -378,4 +378,68 @@ class ResolverTest extends TestCase
         $this->assertNull($this->model->get());
         $this->assertNull($this->model->get());
     }
+
+    public function testGetWithNullAreaCodeDoesNotTriggerDeprecation()
+    {
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getDesignTheme'
+        )->willReturn(
+            $this->themeMock
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getArea'
+        )->willReturn(
+            'design_area'
+        );
+        $this->designMock->expects(
+            $this->once()
+        )->method(
+            'getConfigurationDesignTheme'
+        )->with(
+            null
+        )->willReturn(
+            'some_theme'
+        );
+
+        $this->themeMock->expects(
+            $this->once()
+        )->method(
+            'getArea'
+        )->willReturn(
+            'theme_area'
+        );
+
+        $this->themeCollectionFactoryMock->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->willReturn(
+            $this->themeCollectionMock
+        );
+
+        $this->themeCollectionMock->expects(
+            $this->once()
+        )->method(
+            'getThemeByFullPath'
+        )->with(
+            ThemeInterface::PATH_SEPARATOR . 'some_theme'
+        )->willReturn(
+            $this->themeMock
+        );
+
+        $this->appStateMock->expects(
+            $this->exactly(2)
+        )->method(
+            'getAreaCode'
+        )->willReturn(
+            null
+        );
+
+        $this->assertSame($this->themeMock, $this->model->get());
+        $this->assertSame($this->themeMock, $this->model->get());
+    }
 }

@@ -58,8 +58,9 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     public function get()
     {
         $area = $this->appState->getAreaCode();
-        if ($this->isThemeResolved[$area] ?? false) {
-            return $this->resolvedThemes[$area];
+        $cacheKey = (string)$area;
+        if ($this->isThemeResolved[$cacheKey] ?? false) {
+            return $this->resolvedThemes[$cacheKey];
         }
 
         $designTheme = $this->design->getDesignTheme();
@@ -79,8 +80,8 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
             }
         }
 
-        $this->resolvedThemes[$area] = $result;
-        $this->isThemeResolved[$area] = true;
+        $this->resolvedThemes[$cacheKey] = $result;
+        $this->isThemeResolved[$cacheKey] = true;
 
         return $result;
     }
