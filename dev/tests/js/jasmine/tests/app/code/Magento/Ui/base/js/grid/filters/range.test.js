@@ -70,5 +70,24 @@ define([
             group.elems.push(elem, elem);
             expect(group.getPreview()).toEqual([true, true]);
         });
+        it('Applies the locale date format provided under options.', function () {
+            // The locale-aware date format is supplied by the server under
+            // config.options.dateFormat; it must be used as the date picker default
+            // so non-US locales (e.g. dd/MM/y) are parsed correctly.
+            group = new Group({
+                elems: [],
+                index: 'index',
+                name: 'name',
+                indexField: 'id',
+                dataScope: 'scope',
+                provider: 'provider',
+                options: {
+                    dateFormat: 'dd/MM/y'
+                }
+            });
+
+            expect(group).toBeDefined();
+            expect(Group.defaults.templates.date.pickerDefaultDateFormat).toEqual('dd/MM/y');
+        });
     });
 });

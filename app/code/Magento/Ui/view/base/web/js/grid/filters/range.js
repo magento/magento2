@@ -60,8 +60,10 @@ define([
          * @returns {Range} Chainable.
          */
         initialize: function (config) {
-            if (config.dateFormat) {
-                this.constructor.defaults.templates.date.pickerDefaultDateFormat = config.dateFormat;
+            var dateFormat = config.dateFormat || (config.options && config.options.dateFormat);
+
+            if (dateFormat) {
+                this.constructor.defaults.templates.date.pickerDefaultDateFormat = dateFormat;
             }
             this._super()
                 .initChildren();
