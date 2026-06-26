@@ -99,7 +99,13 @@ class ConfigurableVariationAttributePriority implements ResetAfterRequestInterfa
             return $result;
         }
 
-        $cacheSuffix = $this->buildScopeKey($shipping, $billing, $website, $calculateTax, $round);
+        $cacheSuffix = $this->buildScopeKey(
+            $shipping,
+            $billing,
+            $website === null ? null : (string)$website,
+            $calculateTax === null ? null : (bool)$calculateTax,
+            (bool)$round
+        );
 
         foreach ($parentIds as $parentId) {
             $cacheKey = $parentId . '|' . $cacheSuffix;

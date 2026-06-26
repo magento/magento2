@@ -55,6 +55,32 @@ class ConfigurableVariationAttributePriorityTest extends TestCase
         $this->assertSame($weeeAttrs, $second);
     }
 
+    public function testHandlesNonBooleanScopeArgumentsWithoutTypeError(): void
+    {
+        $parentProduct = $this->createMock(ProductInterface::class);
+
+        $productRepository = $this->createMock(ProductRepositoryInterface::class);
+        $productRepository->method('getById')->with(100)->willReturn($parentProduct);
+
+        $configurable = $this->createMock(Configurable::class);
+        $configurable->method('getParentIdsByChild')->with(1)->willReturn([100]);
+
+        $weeeAttrs = [['code' => 'tax', 'amount' => 5]];
+
+        $subject = $this->createMock(Tax::class);
+        $subject->method('getProductWeeeAttributes')->willReturn($weeeAttrs);
+
+        $plugin = new ConfigurableVariationAttributePriority($productRepository, $configurable);
+
+        $child = $this->createMock(ProductInterface::class);
+        $child->method('getId')->willReturn(1);
+
+        // $calculateTax and $round arrive as ints from untyped Tax::getProductWeeeAttributes callers.
+        $result = $plugin->afterGetProductWeeeAttributes($subject, [], $child, null, null, 1, 1, 0);
+
+        $this->assertSame($weeeAttrs, $result);
+    }
+
     public function testReturnsExistingResultWithoutLookupWhenNotEmpty(): void
     {
         $productRepository = $this->createMock(ProductRepositoryInterface::class);
