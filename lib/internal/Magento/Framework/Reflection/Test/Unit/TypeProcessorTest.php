@@ -164,7 +164,7 @@ class TypeProcessorTest extends TestCase
     {
         $this->assertEquals(
             'TestModule1V1EntityItem',
-            $this->typeProcessor->translateTypeName(\Magento\TestModule1\Service\V1\Entity\Item::class)
+            $this->typeProcessor->translateTypeName('Magento\TestModule1\Service\V1\Entity\Item')
         );
         $this->assertEquals(
             'TestModule3V1EntityParameter[]',
