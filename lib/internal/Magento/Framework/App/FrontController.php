@@ -91,6 +91,7 @@ class FrontController implements FrontControllerInterface
      * @param ActionFlag|null $actionFlag
      * @param EventManagerInterface|null $eventManager
      * @param RequestInterface|null $request
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         RouterListInterface $routerList,
