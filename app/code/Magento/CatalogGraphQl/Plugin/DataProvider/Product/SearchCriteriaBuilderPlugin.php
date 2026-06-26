@@ -18,7 +18,8 @@ use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Config as TaxConfig;
 
 /**
- * Adjust GraphQL price filter values to match indexed catalog prices when tax display differs from catalog prices.
+ * Adjust GraphQL price filter values to match indexed
+ * catalog prices when tax display differs from catalog prices.
  */
 class SearchCriteriaBuilderPlugin
 {
@@ -61,6 +62,8 @@ class SearchCriteriaBuilderPlugin
     }
 
     /**
+     * Adjust GraphQL price filter values
+     *
      * @param array $priceFilter
      * @return array
      */
