@@ -123,8 +123,9 @@ class ConfigurableVariationAttributePriority implements ResetAfterRequestInterfa
     }
 
     /**
-     * Build a stable string signature for the scope arguments so the
-     * cache key collapses identical lookups across child variants.
+     * Build a stable string signature for the scope arguments.
+     *
+     * The cache key collapses identical lookups across child variants.
      *
      * @param DataObject|null $shipping
      * @param DataObject|null $billing
