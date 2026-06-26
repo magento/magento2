@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Model\Wishlist\BuyRequest;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Model\Wishlist\BuyRequest\ChildSkuDataProvider;
 use Magento\Wishlist\Model\Wishlist\Data\SelectedOption;
@@ -19,15 +21,12 @@ use PHPUnit\Framework\TestCase;
 
 class ChildSkuDataProviderTest extends TestCase
 {
+    private const CONFIGURABLE_TYPE = 'configurable';
+
     /**
      * @var ProductRepositoryInterface|MockObject
      */
     private ProductRepositoryInterface $productRepository;
-
-    /**
-     * @var Configurable|MockObject
-     */
-    private Configurable $configurableType;
 
     /**
      * @var ChildSkuDataProvider
@@ -37,11 +36,9 @@ class ChildSkuDataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
-        $this->configurableType = $this->createMock(Configurable::class);
 
         $this->provider = new ChildSkuDataProvider(
-            $this->productRepository,
-            $this->configurableType
+            $this->productRepository
         );
     }
 
@@ -96,9 +93,7 @@ class ChildSkuDataProviderTest extends TestCase
     {
         $wishlistItem = new WishlistItem(1.0, 'child-sku', 'parent-sku');
 
-        /** @var Product|MockObject $childProduct */
         $childProduct = $this->createMock(Product::class);
-        /** @var Product|MockObject $parentProduct */
         $parentProduct = $this->createMock(Product::class);
 
         $this->productRepository->expects($this->exactly(2))
@@ -112,7 +107,7 @@ class ChildSkuDataProviderTest extends TestCase
             ->method('getTypeId')
             ->willReturn('simple');
 
-        $this->configurableType->expects($this->never())->method('getConfigurableAttributesAsArray');
+        $parentProduct->expects($this->never())->method('getExtensionAttributes');
 
         $result = $this->provider->execute($wishlistItem, null);
 
@@ -124,10 +119,8 @@ class ChildSkuDataProviderTest extends TestCase
         $wishlistItem = new WishlistItem(1.0, 'child-sku', 'parent-sku');
         $productId = 42;
 
-        /** @var Product|MockObject $childProduct */
         $childProduct = $this->createMock(Product::class);
-        /** @var Product|MockObject $parentProduct */
-        $parentProduct = $this->createMock(Product::class);
+        $parentProduct = $this->createConfigurableParent(['93', '157']);
 
         $this->productRepository->expects($this->exactly(2))
             ->method('get')
@@ -136,16 +129,11 @@ class ChildSkuDataProviderTest extends TestCase
                 ['parent-sku', false, null, true, $parentProduct],
             ]);
 
-        $parentProduct->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-
-        $this->configurableType->expects($this->once())
-            ->method('getConfigurableAttributesAsArray')
-            ->with($parentProduct)
+        $childProduct->expects($this->once())
+            ->method('getAttributes')
             ->willReturn([
-                ['attribute_id' => '93', 'attribute_code' => 'color'],
-                ['attribute_id' => '157', 'attribute_code' => 'size'],
+                $this->createAttribute('93', 'color'),
+                $this->createAttribute('157', 'size'),
             ]);
 
         $childProduct->expects($this->exactly(2))
@@ -173,10 +161,8 @@ class ChildSkuDataProviderTest extends TestCase
     {
         $wishlistItem = new WishlistItem(1.0, 'child-sku', 'parent-sku');
 
-        /** @var Product|MockObject $childProduct */
         $childProduct = $this->createMock(Product::class);
-        /** @var Product|MockObject $parentProduct */
-        $parentProduct = $this->createMock(Product::class);
+        $parentProduct = $this->createConfigurableParent(['93']);
 
         $this->productRepository->expects($this->exactly(2))
             ->method('get')
@@ -185,16 +171,9 @@ class ChildSkuDataProviderTest extends TestCase
                 ['parent-sku', false, null, true, $parentProduct],
             ]);
 
-        $parentProduct->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-
-        $this->configurableType->expects($this->once())
-            ->method('getConfigurableAttributesAsArray')
-            ->with($parentProduct)
-            ->willReturn([
-                ['attribute_id' => '93', 'attribute_code' => 'color'],
-            ]);
+        $childProduct->expects($this->once())
+            ->method('getAttributes')
+            ->willReturn([$this->createAttribute('93', 'color')]);
 
         $childProduct->expects($this->once())
             ->method('getData')
@@ -212,10 +191,8 @@ class ChildSkuDataProviderTest extends TestCase
     {
         $wishlistItem = new WishlistItem(1.0, 'child-sku', 'parent-sku');
 
-        /** @var Product|MockObject $childProduct */
         $childProduct = $this->createMock(Product::class);
-        /** @var Product|MockObject $parentProduct */
-        $parentProduct = $this->createMock(Product::class);
+        $parentProduct = $this->createConfigurableParent(['93', '157']);
 
         $this->productRepository->expects($this->exactly(2))
             ->method('get')
@@ -224,16 +201,11 @@ class ChildSkuDataProviderTest extends TestCase
                 ['parent-sku', false, null, true, $parentProduct],
             ]);
 
-        $parentProduct->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-
-        $this->configurableType->expects($this->once())
-            ->method('getConfigurableAttributesAsArray')
-            ->with($parentProduct)
+        $childProduct->expects($this->once())
+            ->method('getAttributes')
             ->willReturn([
-                ['attribute_id' => '93', 'attribute_code' => 'color'],
-                ['attribute_id' => '157', 'attribute_code' => 'size'],
+                $this->createAttribute('93', 'color'),
+                $this->createAttribute('157', 'size'),
             ]);
 
         $childProduct->expects($this->exactly(2))
@@ -249,5 +221,50 @@ class ChildSkuDataProviderTest extends TestCase
         $result = $this->provider->execute($wishlistItem, null);
 
         $this->assertSame([], $result);
+    }
+
+    /**
+     * Build a configurable parent product mock exposing the given configurable axis attribute IDs.
+     *
+     * @param string[] $attributeIds
+     * @return Product|MockObject
+     */
+    private function createConfigurableParent(array $attributeIds): Product
+    {
+        $parentProduct = $this->createMock(Product::class);
+        $parentProduct->method('getTypeId')->willReturn(self::CONFIGURABLE_TYPE);
+
+        $options = [];
+        foreach ($attributeIds as $attributeId) {
+            $option = $this->createMock(OptionInterface::class);
+            $option->method('getAttributeId')->willReturn($attributeId);
+            $options[] = $option;
+        }
+
+        $extensionAttributes = $this->createMock(ProductExtensionInterface::class);
+        $extensionAttributes->method('getConfigurableProductOptions')->willReturn($options);
+
+        $parentProduct->method('getExtensionAttributes')->willReturn($extensionAttributes);
+
+        return $parentProduct;
+    }
+
+    /**
+     * Build an EAV attribute mock with the given ID and code.
+     *
+     * @param string $attributeId
+     * @param string $attributeCode
+     * @return AbstractAttribute|MockObject
+     */
+    private function createAttribute(string $attributeId, string $attributeCode): AbstractAttribute
+    {
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAttributeId', 'getAttributeCode'])
+            ->getMockForAbstractClass();
+        $attribute->method('getAttributeId')->willReturn($attributeId);
+        $attribute->method('getAttributeCode')->willReturn($attributeCode);
+
+        return $attribute;
     }
 }
