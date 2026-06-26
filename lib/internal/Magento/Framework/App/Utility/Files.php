@@ -1057,6 +1057,7 @@ class Files
      * Parse meta-info of a static file in module
      *
      * @deprecated 102.0.4 Replaced with method accumulateStaticFiles()
+     * @see Files::accumulateStaticFiles()
      *
      * @param string $file
      * @return array
