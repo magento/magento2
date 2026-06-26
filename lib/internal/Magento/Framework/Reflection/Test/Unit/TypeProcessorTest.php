@@ -10,6 +10,8 @@ namespace Magento\Framework\Reflection\Test\Unit;
 
 use Laminas\Code\Reflection\ClassReflection;
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Reflection\Test\Unit\Fixture\ReturnTypeSample;
+use Magento\Framework\Reflection\Test\Unit\Fixture\ReturnTypeSampleProperty;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSampleInterface;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleOne;
@@ -402,6 +404,33 @@ class TypeProcessorTest extends TestCase
         $methodReflection = $classReflection->getMethod('getWithNull');
 
         self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
+    }
+
+    /**
+     * Checks that getter return annotation class names are resolved to FQNs.
+     *
+     * @param string $methodName
+     * @param string $expectedType
+     */
+    #[DataProvider('getReturnTypeResolvesFullyQualifiedClassNameDataProvider')]
+    public function testGetReturnTypeResolvesFullyQualifiedClassName(string $methodName, string $expectedType)
+    {
+        $classReflection = new ClassReflection(ReturnTypeSample::class);
+        $methodReflection = $classReflection->getMethod($methodName);
+        $result = $this->typeProcessor->getGetterReturnType($methodReflection);
+
+        self::assertEquals($expectedType, $result['type']);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getReturnTypeResolvesFullyQualifiedClassNameDataProvider(): array
+    {
+        return [
+            ['getReturnTypeSampleProperty', '\\' . ReturnTypeSampleProperty::class],
+            ['getImportedSampleOne', '\\' . SampleOne::class],
+        ];
     }
 
     /**
