@@ -102,6 +102,7 @@ class OptionManagementTest extends TestCase
         $labelMock = $this->getAttributeOptionLabel();
         /** @var SourceInterface|MockObject $sourceMock */
         $sourceMock = $this->createMock(EavAttributeSource::class);
+        $sourceMock->method('getAllOptions')->willReturn([]);
         $sourceMock->method('getOptionId')
             ->willReturnMap(
                 [
@@ -226,6 +227,7 @@ class OptionManagementTest extends TestCase
         $attributeMock->method('usesSource')->willReturn(true);
         $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
         $attributeMock->expects($this->once())->method('setOption')->with($option);
+        $sourceMock->method('getAllOptions')->willReturn([]);
         $attributeMock->method('getSource')->willReturn($sourceMock);
         $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
         $this->attributeRepositoryMock->expects($this->once())
@@ -241,6 +243,111 @@ class OptionManagementTest extends TestCase
 
         $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock)
             ->willThrowException(new \Exception());
+        $this->model->add($entityType, $attributeCode, $optionMock);
+    }
+
+    /**
+     * A numeric label must not be rejected just because an unrelated option's value (id)
+     * equals that number. Only a matching label may be treated as a duplicate.
+     */
+    public function testAddWithNumericLabelCollidingWithExistingOptionValue(): void
+    {
+        $entityType = 42;
+        $storeId = 4;
+        $attributeCode = 'atrCde';
+        $label = '123';
+        $storeLabel = 'labelLabel';
+        $sortOder = 'optionSortOrder';
+        $newOptionId = 10;
+        $option = [
+            'value' => [
+                'id_new_option' => [
+                    0 => $label,
+                    $storeId => $storeLabel,
+                ],
+            ],
+            'order' => [
+                'id_new_option' => $sortOder,
+            ],
+            'is_default' => [
+                'id_new_option' => true,
+            ]
+        ];
+
+        $optionMock = $this->getAttributeOption();
+        $labelMock = $this->getAttributeOptionLabel();
+        /** @var SourceInterface|MockObject $sourceMock */
+        $sourceMock = $this->createMock(EavAttributeSource::class);
+        // An existing option whose value equals the numeric label being added.
+        $sourceMock->method('getAllOptions')
+            ->willReturn([['label' => 'Existing option', 'value' => $label]]);
+        $sourceMock->method('getOptionId')
+            ->willReturnMap(
+                [
+                    [$label, null],
+                    [$storeLabel, $newOptionId],
+                    [$newOptionId, $newOptionId],
+                ]
+            );
+
+        /** @var EavAbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->createPartialMockWithReflection(
+            EavAbstractAttribute::class,
+            ['setDefault', 'setOption', 'usesSource', 'getSource']
+        );
+        $attributeMock->method('usesSource')->willReturn(true);
+        $attributeMock->expects($this->once())->method('setDefault')->with(['id_new_option']);
+        $attributeMock->expects($this->once())->method('setOption')->with($option);
+        $attributeMock->method('getSource')->willReturn($sourceMock);
+        $this->attributeRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($entityType, $attributeCode)
+            ->willReturn($attributeMock);
+        $optionMock->method('getLabel')->willReturn($label);
+        $optionMock->method('getSortOrder')->willReturn($sortOder);
+        $optionMock->method('getIsDefault')->willReturn(true);
+        $optionMock->method('getStoreLabels')->willReturn([$labelMock]);
+        $labelMock->method('getStoreId')->willReturn($storeId);
+        $labelMock->method('getLabel')->willReturn($storeLabel);
+        $this->resourceModelMock->expects($this->once())->method('save')->with($attributeMock);
+
+        $this->assertEquals(
+            $newOptionId,
+            $this->model->add($entityType, $attributeCode, $optionMock)
+        );
+    }
+
+    /**
+     * A duplicate label (case-insensitive) must still be rejected.
+     */
+    public function testAddThrowsWhenLabelAlreadyExists(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Admin store attribute option label "optionlabel" already exists.');
+
+        $entityType = 42;
+        $attributeCode = 'atrCde';
+        $label = 'optionlabel';
+
+        $optionMock = $this->getAttributeOption();
+        /** @var SourceInterface|MockObject $sourceMock */
+        $sourceMock = $this->createMock(EavAttributeSource::class);
+        $sourceMock->method('getAllOptions')
+            ->willReturn([['label' => 'OptionLabel', 'value' => 5]]);
+
+        /** @var EavAbstractAttribute|MockObject $attributeMock */
+        $attributeMock = $this->createPartialMockWithReflection(
+            EavAbstractAttribute::class,
+            ['usesSource', 'getSource']
+        );
+        $attributeMock->method('usesSource')->willReturn(true);
+        $attributeMock->method('getSource')->willReturn($sourceMock);
+        $this->attributeRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($entityType, $attributeCode)
+            ->willReturn($attributeMock);
+        $optionMock->method('getLabel')->willReturn($label);
+
         $this->model->add($entityType, $attributeCode, $optionMock);
     }
 
@@ -294,9 +401,8 @@ class OptionManagementTest extends TestCase
             ->willReturn($label);
 
         $sourceMock->expects($this->once())
-            ->method('getOptionId')
-            ->with($label)
-            ->willReturn($optionId);
+            ->method('getAllOptions')
+            ->willReturn([['label' => $label, 'value' => $optionId]]);
 
         /** @var EavAbstractAttribute|MockObject $attributeMock */
         $attributeMock = $this->createPartialMockWithReflection(
