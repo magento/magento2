@@ -1,8 +1,7 @@
 <?php
 /**
- * Copyright 2024 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +13,8 @@ use Magento\Analytics\Model\FileInfoManager;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class FileInfoManagerTest extends TestCase
@@ -119,8 +120,8 @@ class FileInfoManagerTest extends TestCase
     /**
      * @param string|null $path
      * @param string|null $initializationVector
-     * @dataProvider saveWithLocalizedExceptionDataProvider
      */
+    #[DataProvider('saveWithLocalizedExceptionDataProvider')]
     public function testSaveWithLocalizedException($path, $initializationVector)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -150,9 +151,9 @@ class FileInfoManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider loadDataProvider
      * @param array|null $parameters
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($parameters)
     {
         $this->flagManagerMock

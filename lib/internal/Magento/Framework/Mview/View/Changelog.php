@@ -8,7 +8,6 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\ConnectionException;
-use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
@@ -36,6 +35,11 @@ class Changelog implements ChangelogInterface
      * Column name for Version ID
      */
     public const VERSION_ID_COLUMN_NAME = 'version_id';
+
+    /**
+     * Batch size for changelog cleaning operation
+     */
+    private const CHANGELOG_CLEAR_BATCH_SIZE = 10000;
 
     /**
      * Database connection
@@ -81,13 +85,15 @@ class Changelog implements ChangelogInterface
      * @param Config $mviewConfig
      * @param ProcessorFactory $additionalColumnsProcessorFactory
      * @param DtoFactoriesTable|null $dtoFactoriesTable
+     * @param int $batchSize
      * @throws ConnectionException
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         Config $mviewConfig,
         ProcessorFactory $additionalColumnsProcessorFactory,
-        ?DtoFactoriesTable $dtoFactoriesTable = null
+        ?DtoFactoriesTable $dtoFactoriesTable = null,
+        private readonly int $batchSize = self::CHANGELOG_CLEAR_BATCH_SIZE,
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
@@ -126,7 +132,7 @@ class Changelog implements ChangelogInterface
                 $changelogTableName
             )->addColumn(
                 self::VERSION_ID_COLUMN_NAME,
-                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
                 'Version ID'
@@ -149,6 +155,7 @@ class Changelog implements ChangelogInterface
         } else {
             // change the charset to utf8mb4
             $getTableSchema = $this->connection->getCreateTable($changelogTableName) ?? '';
+            $this->changeVersionIdToBigInt($getTableSchema, $changelogTableName);
             if (preg_match('/\b('. self::OLDCHARSET .')\b/', $getTableSchema)) {
                 $charset = $this->columnConfig->getDefaultCharset();
                 $collate = $this->columnConfig->getDefaultCollation();
@@ -161,6 +168,32 @@ class Changelog implements ChangelogInterface
                     )
                 );
             }
+        }
+    }
+
+    /**
+     * Change version_id from int to bigint
+     *
+     * @param string $getTableSchema
+     * @param string $changelogTableName
+     * @return void
+     */
+    private function changeVersionIdToBigInt(string $getTableSchema, string $changelogTableName): void
+    {
+        $pattern = '/`version_id`\s+int\b/i';
+        if (preg_match($pattern, $getTableSchema)) {
+            $this->connection->modifyColumn(
+                $changelogTableName,
+                self::VERSION_ID_COLUMN_NAME,
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                    'nullable' => false,
+                    'identity' => true,
+                    'unsigned' => true,
+                    'primary' => true,
+                    'comment' => 'Version ID'
+                ]
+            );
         }
     }
 
@@ -222,7 +255,15 @@ class Changelog implements ChangelogInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
-        $this->connection->delete($changelogTableName, ['version_id < ?' => (int)$versionId]);
+        $query = sprintf(
+            'DELETE FROM `%s` WHERE %s LIMIT %d',
+            $changelogTableName,
+            'version_id < ' . (int) $versionId,
+            $this->batchSize
+        );
+        do {
+            $stmt = $this->connection->query($query);
+        } while ($stmt->rowCount());
 
         return true;
     }

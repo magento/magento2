@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,9 +14,11 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Statement_Interface;
 
 class GetAssetKeywordsTest extends TestCase
 {
@@ -44,7 +46,7 @@ class GetAssetKeywordsTest extends TestCase
     {
         $this->resourceConnectionStub = $this->createMock(ResourceConnection::class);
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->sut = new GetAssetKeywords(
             $this->resourceConnectionStub,
@@ -56,10 +58,10 @@ class GetAssetKeywordsTest extends TestCase
     /**
      * Posive test for the main case
      *
-     * @dataProvider casesProvider
      * @param array $databaseQueryResult
      * @param int $expectedNumberOfFoundKeywords
      */
+    #[DataProvider('casesProvider')]
     public function testFind(array $databaseQueryResult, int $expectedNumberOfFoundKeywords): void
     {
         $randomAssetId = 12345;
@@ -123,7 +125,7 @@ class GetAssetKeywordsTest extends TestCase
      */
     private function configureResourceConnectionStub(array $queryResult): void
     {
-        $statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
+        $statementMock = $this->createMock(Zend_Db_Statement_Interface::class);
         $statementMock
             ->method('fetchAll')
             ->willReturn($queryResult);
@@ -133,8 +135,7 @@ class GetAssetKeywordsTest extends TestCase
         $selectStub->method('join')->willReturnSelf();
         $selectStub->method('where')->willReturnSelf();
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMock();
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock
             ->method('select')
             ->willReturn($selectStub);
@@ -149,8 +150,7 @@ class GetAssetKeywordsTest extends TestCase
 
     private function configureAssetKeywordFactoryStub(): void
     {
-        $keywordStub = $this->getMockBuilder(KeywordInterface::class)
-            ->getMock();
+        $keywordStub = $this->createMock(KeywordInterface::class);
         $this->assetKeywordFactoryStub
             ->method('create')
             ->willReturn($keywordStub);

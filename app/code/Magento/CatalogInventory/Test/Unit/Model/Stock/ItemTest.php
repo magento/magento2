@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as StockItemResource;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Customer\Model\Session;
@@ -18,17 +19,24 @@ use Magento\Framework\Event\Manager;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ItemTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
@@ -73,7 +81,7 @@ class ItemTest extends TestCase
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|MockObject
+     * @var StockItemResource|MockObject
      */
     protected $resource;
 
@@ -97,29 +105,25 @@ class ItemTest extends TestCase
         $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->context = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $this->context->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventDispatcher);
+        $this->context->method('getEventDispatcher')->willReturn($this->eventDispatcher);
 
         $this->registry = $this->createMock(Registry::class);
 
         $this->customerSession = $this->createMock(Session::class);
 
         $store = $this->createPartialMock(Store::class, ['getId', '__wakeup']);
-        $store->expects($this->any())->method('getId')->willReturn(self::$storeId);
-        $this->storeManager = $this->getMockForAbstractClass(
-            StoreManagerInterface::class
-        );
-        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $store->method('getId')->willReturn(self::$storeId);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager->method('getStore')->willReturn($store);
 
-        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
 
-        $this->stockItemRepository = $this->getMockForAbstractClass(
-            StockItemRepositoryInterface::class
-        );
+        $this->stockItemRepository = $this->createMock(StockItemRepositoryInterface::class);
 
-        $this->resource = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
+        $this->resource = $this->createMock(StockItemResource::class);
 
         $this->resourceCollection = $this->createMock(
             Collection::class
@@ -149,9 +153,7 @@ class ItemTest extends TestCase
 
     public function testSave()
     {
-        $this->stockItemRepository->expects($this->any())
-            ->method('save')
-            ->willReturn($this->item);
+        $this->stockItemRepository->method('save')->willReturn($this->item);
         $this->assertEquals($this->item, $this->item->save());
     }
 
@@ -162,7 +164,6 @@ class ItemTest extends TestCase
     protected function setDataArrayValue($key, $value)
     {
         $property = new \ReflectionProperty($this->item, '_data');
-        $property->setAccessible(true);
         $dataArray = $property->getValue($this->item);
         $dataArray[$key] = $value;
         $property->setValue($this->item, $dataArray);
@@ -170,24 +171,23 @@ class ItemTest extends TestCase
 
     public function testSetProduct()
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->addMethods(['getIsChangedWebsites'])
-            ->onlyMethods(['getId', 'getName', 'getStoreId', 'getTypeId', 'dataHasChangedFor', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $productId = 2;
         $productName = 'Some Name';
         $storeId = 3;
         $typeId = 'simple';
         $status = 1;
         $isChangedWebsites = false;
-        $product->expects($this->once())->method('getId')->willReturn($productId);
-        $product->expects($this->once())->method('getName')->willReturn($productName);
-        $product->expects($this->once())->method('getStoreId')->willReturn($storeId);
-        $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
-        $product->expects($this->once())->method('dataHasChangedFor')
-            ->with('status')->willReturn($status);
-        $product->expects($this->once())->method('getIsChangedWebsites')->willReturn($isChangedWebsites);
+        
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getIsChangedWebsites','getId', 'getName', 'getStoreId', 'getTypeId', 'dataHasChangedFor', '__wakeup']
+        );
+        
+        $product->expects($this->any())->method('getId')->willReturn($productId);
+        $product->expects($this->any())->method('getName')->willReturn($productName);
+        $product->expects($this->any())->method('getTypeId')->willReturn($typeId);
+        $product->expects($this->any())->method('dataHasChangedFor')->with('status')->willReturn($status);
+        $product->expects($this->any())->method('getIsChangedWebsites')->willReturn($isChangedWebsites);
 
         $this->assertSame($this->item, $this->item->setProduct($product));
         $this->assertSame(
@@ -205,8 +205,8 @@ class ItemTest extends TestCase
     /**
      * @param array $config
      * @param float $expected
-     * @dataProvider getMaxSaleQtyDataProvider
      */
+    #[DataProvider('getMaxSaleQtyDataProvider')]
     public function testGetMaxSaleQty($config, $expected)
     {
         $useConfigMaxSaleQty = $config['use_config_max_sale_qty'];
@@ -214,9 +214,7 @@ class ItemTest extends TestCase
 
         $this->setDataArrayValue('use_config_max_sale_qty', $useConfigMaxSaleQty);
         if ($useConfigMaxSaleQty) {
-            $this->stockConfiguration->expects($this->any())
-                ->method('getMaxSaleQty')
-                ->willReturn($maxSaleQty);
+            $this->stockConfiguration->method('getMaxSaleQty')->willReturn($maxSaleQty);
         } else {
             $this->setDataArrayValue('max_sale_qty', $maxSaleQty);
         }
@@ -256,7 +254,6 @@ class ItemTest extends TestCase
             ->willReturn($groupId);
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
-        $property->setAccessible(true);
 
         $this->assertNull($property->getValue($this->item));
         $this->assertSame($groupId, $this->item->getCustomerGroupId());
@@ -274,8 +271,8 @@ class ItemTest extends TestCase
     /**
      * @param array $config
      * @param float $expected
-     * @dataProvider getMinSaleQtyDataProvider
      */
+    #[DataProvider('getMinSaleQtyDataProvider')]
     public function testGetMinSaleQty($config, $expected)
     {
         $groupId = $config['customer_group_id'];
@@ -283,7 +280,6 @@ class ItemTest extends TestCase
         $minSaleQty = $config['min_sale_qty'];
 
         $property = new \ReflectionProperty($this->item, 'customerGroupId');
-        $property->setAccessible(true);
         $property->setValue($this->item, $groupId);
 
         $this->setDataArrayValue('use_config_min_sale_qty', $useConfigMinSaleQty);
@@ -334,15 +330,13 @@ class ItemTest extends TestCase
     /**
      * @param bool $useConfigMinQty
      * @param float $minQty
-     * @dataProvider setMinQtyDataProvider
      */
+    #[DataProvider('setMinQtyDataProvider')]
     public function testSetMinQty($useConfigMinQty, $minQty)
     {
         $this->setDataArrayValue('use_config_min_qty', $useConfigMinQty);
         if ($useConfigMinQty) {
-            $this->stockConfiguration->expects($this->any())
-                ->method('getMinQty')
-                ->willReturn($minQty);
+            $this->stockConfiguration->method('getMinQty')->willReturn($minQty);
         } else {
             $this->setDataArrayValue('min_qty', $minQty);
         }
@@ -364,13 +358,12 @@ class ItemTest extends TestCase
     /**
      * @param int $storeId
      * @param int $expected
-     * @dataProvider getStoreIdDataProvider
      */
+    #[DataProvider('getStoreIdDataProvider')]
     public function testGetStoreId($storeId, $expected)
     {
         if ($storeId) {
             $property = new \ReflectionProperty($this->item, 'storeId');
-            $property->setAccessible(true);
             $property->setValue($this->item, $storeId);
         }
         $this->assertSame($expected, $this->item->getStoreId());
@@ -398,8 +391,8 @@ class ItemTest extends TestCase
     /**
      * @param array $config
      * @param mixed $expected
-     * @dataProvider getQtyIncrementsDataProvider(
      */
+    #[DataProvider('getQtyIncrementsDataProvider')]
     public function testGetQtyIncrements($config, $expected)
     {
         $this->setDataArrayValue('qty_increments', $config['qty_increments']);
@@ -477,9 +470,8 @@ class ItemTest extends TestCase
      * @param $eventName
      * @param $methodName
      * @param $objectName
-     *
-     * @dataProvider eventsDataProvider
      */
+    #[DataProvider('eventsDataProvider')]
     public function testDispatchEvents($eventName, $methodName, $objectName)
     {
         $isCalledWithRightPrefix = 0;

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,7 +54,9 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
         <see userInput="{{_defaultCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
-
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Check on storefront that category was created -->
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
             <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>

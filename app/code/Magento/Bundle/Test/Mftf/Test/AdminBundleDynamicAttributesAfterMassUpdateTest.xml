@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,6 +22,7 @@
             <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteFixedBundleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

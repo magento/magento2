@@ -1,21 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\DataProvider\Modifier;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\DataProvider\Modifier\ModifierFactory;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Ui\DataProvider\Modifier\Pool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PoolTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ObjectManager
      */
@@ -39,13 +43,13 @@ class PoolTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->factoryMock = $this->getMockBuilder(ModifierFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dataProviderMockOne =
-            $this->getMockBuilder(ModifierInterface::class)
-                ->addMethods(['getData', 'getMeta', 'setData', 'setMeta'])
-                ->getMockForAbstractClass();
+        $this->objectManager->prepareObjectManager();
+
+        $this->factoryMock = $this->createMock(ModifierFactory::class);
+        $this->dataProviderMockOne = $this->createPartialMockWithReflection(
+            ModifierInterface::class,
+            ['modifyData', 'modifyMeta', 'getData', 'getMeta', 'setData', 'setMeta']
+        );
         $this->dataProviderMockTwo = clone $this->dataProviderMockOne;
 
         $this->factoryMock->expects($this->any())
@@ -136,8 +140,8 @@ class PoolTest extends TestCase
     /**
      * @param array $modifiers
      * @param array $expectedResult
-     * @dataProvider getModifiersDataProvider
      */
+    #[DataProvider('getModifiersDataProvider')]
     public function testGetModifiers($modifiers, $expectedResult)
     {
         /** @var Pool $model */

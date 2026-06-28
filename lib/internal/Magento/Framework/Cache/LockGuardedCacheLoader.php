@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Framework\Cache;
 
 use Magento\Framework\App\ObjectManager;
@@ -66,17 +65,16 @@ class LockGuardedCacheLoader
      *
      * @var string
      */
-    private const CONFIG_NAME_ALLOW_PARALLEL_CACHE_GENERATION = 'allow_parallel_generation';
+    private const CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION = 'cache/allow_parallel_generation';
 
     /**
      * Config value of parallel generation.
      *
-     * @var bool
+     * @var bool|null
      */
-    private $allowParallelGenerationConfigValue;
+    private ?bool $allowParallelGenerationConfigValue;
 
     /**
-     * LockGuardedCacheLoader constructor.
      * @param LockManagerInterface $locker
      * @param int $lockTimeout
      * @param int $delayTimeout
@@ -119,11 +117,8 @@ class LockGuardedCacheLoader
         $deadline = microtime(true) + $this->loadTimeout / 1000;
 
         if (empty($this->allowParallelGenerationConfigValue)) {
-            $cacheConfig = $this
-                ->deploymentConfig
-                ->getConfigData('cache');
-            $this->allowParallelGenerationConfigValue = $cacheConfig[self::CONFIG_NAME_ALLOW_PARALLEL_CACHE_GENERATION]
-                ?? false;
+            $this->allowParallelGenerationConfigValue = (bool) $this->deploymentConfig
+                ->get(self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION);
         }
 
         while ($cachedData === false) {
@@ -139,7 +134,7 @@ class LockGuardedCacheLoader
                 } finally {
                     $this->locker->unlock($lockName);
                 }
-            } elseif ($this->allowParallelGenerationConfigValue === true) {
+            } elseif ($this->allowParallelGenerationConfigValue) {
                 return $dataCollector();
             }
 

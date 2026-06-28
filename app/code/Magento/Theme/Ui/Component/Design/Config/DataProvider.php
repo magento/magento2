@@ -126,8 +126,10 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private function getCoreConfigData(): array
     {
         $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName('core_config_data');
+
         return $connection->fetchAll(
-            $connection->select()->from($connection->getTableName('core_config_data'))
+            $connection->select()->from($tableName)
                 ->where('path = ?', 'design/theme/theme_id')
         );
     }

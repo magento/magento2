@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,11 +18,18 @@ use Magento\Indexer\Model\Indexer\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
 use Magento\Indexer\Model\Processor;
 use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Processor|MockObject
      */
@@ -58,15 +65,7 @@ class ProcessorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(
-            ConfigInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getIndexers']
-        );
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->indexerFactoryMock = $this->createPartialMock(
             IndexerInterfaceFactory::class,
             ['create']
@@ -75,12 +74,7 @@ class ProcessorTest extends TestCase
             CollectionFactory::class,
             ['create']
         );
-        $this->viewProcessorMock = $this->getMockForAbstractClass(
-            ProcessorInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->viewProcessorMock = $this->createMock(ProcessorInterface::class);
 
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
@@ -166,8 +160,8 @@ class ProcessorTest extends TestCase
      * @param array $executedSharedIndexers
      *
      * @return void
-     * @dataProvider sharedIndexDataProvider
      */
+    #[DataProvider('sharedIndexDataProvider')]
     public function testReindexAllInvalidWithSharedIndex(
         array $indexers,
         array $indexerStates,
@@ -193,7 +187,8 @@ class ProcessorTest extends TestCase
 
             $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
             $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
-            $indexerMock->expects($expectedReindexAllCalls[$indexerData['indexer_id']])->method('reindexAll');
+            $matcher = $expectedReindexAllCalls[$indexerData['indexer_id']];
+            $indexerMock->expects($this->{$matcher}())->method('reindexAll');
             $indexerMocks[] = $indexerMock;
         }
         $this->indexerFactoryMock
@@ -235,8 +230,8 @@ class ProcessorTest extends TestCase
      * @param array $expectedReindexAllCalls
      *
      * @return void
-     * @dataProvider suspendedIndexDataProvider
      */
+    #[DataProvider('suspendedIndexDataProvider')]
     public function testReindexAllInvalidWithSuspendedStatus(
         array $indexers,
         array $indexerStates,
@@ -261,7 +256,8 @@ class ProcessorTest extends TestCase
 
             $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
             $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
-            $indexerMock->expects($expectedReindexAllCalls[$indexerData['indexer_id']])->method('reindexAll');
+            $matcher = $expectedReindexAllCalls[$indexerData['indexer_id']];
+            $indexerMock->expects($this->{$matcher}())->method('reindexAll');
             $indexerMocks[] = $indexerMock;
         }
         $this->indexerFactoryMock
@@ -361,9 +357,9 @@ class ProcessorTest extends TestCase
                     'indexer_3' => [StateInterface::STATUS_VALID]
                 ],
                 'expectedReindexAllCalls' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::never()
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'never'
                 ],
                 'executedSharedIndexers' => []
             ],
@@ -409,10 +405,10 @@ class ProcessorTest extends TestCase
                     'indexer_4' => [StateInterface::STATUS_VALID]
                 ],
                 'expectedReindexAllCalls' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::once(),
-                    'indexer_4' => self::never()
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'once',
+                    'indexer_4' => 'never'
                 ],
                 'executedSharedIndexers' => [['indexer_2'], ['indexer_3']]
             ]
@@ -464,9 +460,9 @@ class ProcessorTest extends TestCase
                     ]
                 ],
                 'expectedReindexAllCalls' => [
-                    'indexer_1' => self::once(),
-                    'indexer_2' => self::never(),
-                    'indexer_3' => self::never()
+                    'indexer_1' => 'once',
+                    'indexer_2' => 'never',
+                    'indexer_3' => 'never'
                 ]
             ]
         ];
@@ -484,12 +480,8 @@ class ProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $emptyIndexer = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
-        /** @var MockObject|StateInterface $state */
-        $state = $this->getMockBuilder(StateInterface::class)
-            ->onlyMethods(['setStatus'])
-            ->addMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        /** @var MockObject|State $state */
+        $state = $this->createPartialMock(State::class, ['setStatus', 'getStatus', 'save']);
         $state->method('getStatus')
             ->willReturn(StateInterface::STATUS_INVALID);
         $emptyIndexer->method('getState')->willReturn($state);

@@ -291,4 +291,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Controller\Payflow\ReturnUrl">
+        <plugin name="payflow_silentpost" type="Magento\Paypal\Plugin\PayflowSilentPost"/>
+    </type>
 </config>

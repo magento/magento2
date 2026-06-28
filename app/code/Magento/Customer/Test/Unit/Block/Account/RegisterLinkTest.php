@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,9 +47,9 @@ class RegisterLinkTest extends TestCase
      * @param bool $isAuthenticated
      * @param bool $isRegistrationAllowed
      * @param bool $result
-     * @dataProvider dataProviderToHtml
      * @return void
      */
+    #[DataProvider('dataProviderToHtml')]
     public function testToHtml($isAuthenticated, $isRegistrationAllowed, $result)
     {
         $context = $this->_objectManager->getObject(\Magento\Framework\View\Element\Template\Context::class);

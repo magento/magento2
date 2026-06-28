@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,10 +18,13 @@ use Magento\Setup\Fixtures\FixtureModel;
 use Magento\Setup\Fixtures\OrdersFixture;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class OrdersFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
 
     /**
      * @var MockObject|FixtureModel
@@ -37,7 +40,7 @@ class OrdersFixtureTest extends TestCase
     {
         $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $productCollectionFactoryMock = $this->getMockBuilder(
             CollectionFactory::class
@@ -47,19 +50,19 @@ class OrdersFixtureTest extends TestCase
 
         $productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $optionRepositoryMock = $this->getMockBuilder(OptionRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $linkManagementMock = $this->getMockBuilder(LinkManagementInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
@@ -75,11 +78,10 @@ class OrdersFixtureTest extends TestCase
             $this->fixtureModelMock
         );
 
-        $orderMock = $this->getMockBuilder(Order::class)
-            ->addMethods(['getTableName', 'query', 'fetchColumn'])
-            ->onlyMethods(['getTable', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $orderMock = $this->createPartialMockWithReflection(
+            Order::class,
+            ['getTable', 'getConnection', 'query', 'getTableName', 'fetchColumn']
+        );
 
         $path = explode('\\', Order::class);
         $name = array_pop($path);

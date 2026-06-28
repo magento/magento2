@@ -1,7 +1,6 @@
 <?php
 /**
- *
- * Copyright 2024 Adobe
+ * Copyright 2014 Adobe
  * All Rights Reserved.
  */
 
@@ -149,10 +148,12 @@ class Save extends Attribute implements HttpPostActionInterface
         }
 
         $data = $this->getRequest()->getPostValue();
+
         $data = array_replace_recursive(
             $data,
             $optionData
         );
+        $this->synchronizeOptionsWithPresentationRows($data);
 
         if ($data) {
             $setId = $this->getRequest()->getParam('set');
@@ -272,6 +273,16 @@ class Save extends Attribute implements HttpPostActionInterface
             if (array_key_exists('reset_is-default_option', $data) && $data['reset_is-default_option']) {
                 unset($data['reset_is-default_option']);
                 $data['default_value'] = null;
+            } elseif (isset($data['default'])) {
+                $defaultOptions = [];
+                foreach ((array)$data['default'] as $defaultValue) {
+                    if ((int)$defaultValue > 0) {
+                        $defaultOptions[] = $defaultValue;
+                    }
+                }
+                if (!empty($defaultOptions)) {
+                    $data['default_value'] = implode(",", $defaultOptions);
+                }
             }
 
             $model->addData($data);
@@ -364,6 +375,112 @@ class Save extends Attribute implements HttpPostActionInterface
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
         return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+    }
+
+    /**
+     * Rebuilds legacy option[] payload from UI dynamicRows when present.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function synchronizeOptionsWithPresentationRows(array &$data): void
+    {
+        if (!empty($data['attribute_options_select']) && is_array($data['attribute_options_select'])) {
+            $this->hydrateOptionDataFromDynamicRows($data, 'attribute_options_select');
+            unset($data['attribute_options_select']);
+
+            return;
+        }
+
+        if (!empty($data['attribute_options_multiselect']) && is_array($data['attribute_options_multiselect'])) {
+            $this->hydrateOptionDataFromDynamicRows($data, 'attribute_options_multiselect');
+            unset($data['attribute_options_multiselect']);
+        }
+    }
+
+    /**
+     * Overwrites $data['option'] (and default keys when applicable) from dynamic row data.
+     *
+     * @param array $data
+     * @param string $rowsKey attribute_options_select|attribute_options_multiselect
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function hydrateOptionDataFromDynamicRows(array &$data, string $rowsKey): void
+    {
+        $previousValues = isset($data['option']['value']) && is_array($data['option']['value'])
+            ? $data['option']['value']
+            : [];
+        $previousDefault = $data['default'] ?? null;
+
+        $rows = $data[$rowsKey];
+        usort(
+            $rows,
+            static function (array $a, array $b): int {
+                return (int)($a['position'] ?? 0) <=> (int)($b['position'] ?? 0);
+            }
+        );
+
+        $option = [
+            'order' => [],
+            'value' => [],
+            'delete' => [],
+        ];
+        $defaultKeys = [];
+
+        foreach ($rows as $index => $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $optionId = 'option_' . $index;
+            $option['order'][$optionId] = (string)($row['position'] ?? ($index + 1));
+            $option['delete'][$optionId] = !empty($row['delete']) ? '1' : '';
+
+            $storeValues = [];
+            foreach ($row as $columnName => $cellValue) {
+                if (preg_match('/^value_option_(\d+)$/', (string)$columnName, $matches)) {
+                    $storeValues[(int)$matches[1]] = $cellValue;
+                }
+            }
+            ksort($storeValues);
+            $option['value'][$optionId] = $storeValues;
+
+            if (!empty($row['is_default'])) {
+                $defaultKeys[] = $optionId;
+            }
+        }
+
+        if ($defaultKeys === [] && is_array($previousDefault)) {
+            foreach ($previousDefault as $oldKey) {
+                $oldKey = (string)$oldKey;
+                if ($oldKey === '' || !isset($previousValues[$oldKey]) || !is_array($previousValues[$oldKey])) {
+                    continue;
+                }
+                $adminLabel = $previousValues[$oldKey][0] ?? null;
+                if ($adminLabel === null || $adminLabel === '') {
+                    continue;
+                }
+                foreach ($option['value'] as $newKey => $vals) {
+                    if (!is_array($vals)) {
+                        continue;
+                    }
+                    if (($vals[0] ?? '') === $adminLabel) {
+                        $defaultKeys[] = $newKey;
+                        break;
+                    }
+                }
+            }
+            $defaultKeys = array_values(array_unique($defaultKeys));
+        }
+
+        $data['option'] = $option;
+
+        if ($defaultKeys !== []) {
+            $data['default'] = $defaultKeys;
+        } else {
+            unset($data['default']);
+        }
     }
 
     /**

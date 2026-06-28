@@ -115,7 +115,8 @@ class Processor
     private function lockLoadedCoupon(Coupon $coupon, UpdateInfo $updateInfo, array $incrementedCouponIds): void
     {
         $isIncrement = $updateInfo->isIncrement();
-        $lockName = self::LOCK_NAME . $coupon->getCode();
+        // Lock name based on coupon id, rather than coupon code that may contain illegal symbols for file based lock
+        $lockName = self::LOCK_NAME . $coupon->getId();
         if ($this->lockManager->lock($lockName, self::LOCK_TIMEOUT)) {
             try {
                 $coupon = $this->couponRepository->getById($coupon->getId());
@@ -126,7 +127,7 @@ class Processor
                     if (!empty($incrementedCouponIds)) {
                         $this->revertCouponTimesUsed($incrementedCouponIds);
                     }
-                    throw new CouldNotSaveException(__(sprintf('%s %s', $coupon->getCode(), self::ERROR_MESSAGE)));
+                    throw new CouldNotSaveException(__('%1 %2', $coupon->getCode(), self::ERROR_MESSAGE));
                 }
 
                 if ($updateInfo->isIncrement() || $coupon->getTimesUsed() > 0) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
@@ -11,35 +11,26 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * Adminhtml sales order create totals block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 {
     /**
-     * Total renderers
-     *
      * @var array
      */
     protected $_totalRenderers;
 
     /**
-     * Default renderer
-     *
      * @var string
      */
     protected $_defaultRenderer = \Magento\Sales\Block\Adminhtml\Order\Create\Totals\DefaultTotals::class;
 
     /**
-     * Sales data
-     *
      * @var \Magento\Sales\Helper\Data
      */
     protected $_salesData = null;
 
     /**
-     * Sales config
-     *
      * @var \Magento\Sales\Model\Config
      */
     protected $_salesConfig;
@@ -165,6 +156,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Render totals
      *
+     * phpcs:disable
      * @param null $area
      * @param int $colspan
      * @return string

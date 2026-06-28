@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
@@ -33,6 +33,7 @@ use Zend_Db;
  * @since 100.0.2
  *
  * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @see 4bdbf6b6ebc4b53dbde9483df745cfca7e864a36
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
  * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
@@ -333,7 +334,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
                 'product_id' => (int)$row['entity_id'],
                 'website_id' => (int)$row['website_id'],
                 'stock_id' => Stock::DEFAULT_STOCK_ID,
-                'qty' => (double)$row['qty'],
+                'qty' => (float)$row['qty'],
                 'stock_status' => (int)$row['status'],
             ];
             $savedEntityIds[] = (int)$row['entity_id'];
@@ -415,6 +416,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      *
      * @deprecated 100.1.0
      * @since 100.1.0
+     * @see 4b5626478af59cc427d76024c459bd3109ec91b9
      */
     protected function getStockConfiguration()
     {

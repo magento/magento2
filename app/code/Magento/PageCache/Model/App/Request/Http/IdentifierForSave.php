@@ -46,14 +46,17 @@ class IdentifierForSave implements IdentifierInterface
     {
         $pattern = $this->identifier->getMarketingParameterPatterns();
         $replace = array_fill(0, count($pattern), '');
+        $url = preg_replace($pattern, $replace, (string)$this->request->getUriString());
+        list($baseUrl, $query) = $this->identifier->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
-            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
-            $this->context->getVaryString()
+            $baseUrl,
+            $query,
+            $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
+                ?: $this->context->getVaryString()
         ];
 
         $data = $this->identifierStoreReader->getPageTagsWithStoreCacheTags($data);
-
         return sha1($this->serializer->serialize($data));
     }
 }

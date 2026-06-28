@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Controller\Adminhtml;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -46,8 +47,8 @@ class NewsletterQueueTest extends \Magento\TestFramework\TestCase\AbstractBacken
 
     /**
      * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
-     * @dataProvider postValuesForRequest
      */
+    #[DataProvider('postValuesForRequest')]
     public function testSaveActionQueueTemplateAndVerifySuccessMessage(array $postForQueue)
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);

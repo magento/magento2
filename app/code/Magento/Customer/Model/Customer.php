@@ -345,13 +345,14 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
         $regularAddresses = $defaultAddresses = [];
         /** @var \Magento\Customer\Model\Address $address */
         foreach ($this->getAddresses() as $address) {
-            if (!isset($this->storedAddress[$address->getId()])) {
-                $this->storedAddress[$address->getId()] = $address->getDataModel();
+            $addressId = $address->getId() ?? '';
+            if (!isset($this->storedAddress[$addressId])) {
+                $this->storedAddress[$addressId] = $address->getDataModel();
             }
-            if ($this->storedAddress[$address->getId()]->isDefaultShipping()) {
-                $defaultAddresses[] = $this->storedAddress[$address->getId()];
+            if ($this->storedAddress[$addressId]->isDefaultShipping()) {
+                $defaultAddresses[] = $this->storedAddress[$addressId];
             } else {
-                $regularAddresses[] = $this->storedAddress[$address->getId()];
+                $regularAddresses[] = $this->storedAddress[$addressId];
             }
         }
         $customerDataObject = $this->customerDataFactory->create();
@@ -1126,7 +1127,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
      */
     public function reindex()
     {
-        $this->getIndexer()->reindexRow($this->getId());
+        if (!$this->getIndexer()->isScheduled()) {
+            $this->getIndexer()->reindexRow($this->getId());
+        }
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,25 +22,13 @@ use Magento\SendFriendGraphQl\Model\SendFriend\SendEmail;
 class SendEmailToFriend implements ResolverInterface
 {
     /**
-     * @var SendFriendHelper
-     */
-    private $sendFriendHelper;
-
-    /**
-     * @var SendEmail
-     */
-    private $sendEmail;
-
-    /**
      * @param SendEmail $sendEmail
      * @param SendFriendHelper $sendFriendHelper
      */
     public function __construct(
-        SendEmail $sendEmail,
-        SendFriendHelper $sendFriendHelper
+        private readonly SendEmail $sendEmail,
+        private readonly SendFriendHelper $sendFriendHelper
     ) {
-        $this->sendEmail = $sendEmail;
-        $this->sendFriendHelper = $sendFriendHelper;
     }
 
     /**

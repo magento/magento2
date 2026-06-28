@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Shopping Cart reports admin controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 declare(strict_types=1);
 
@@ -25,7 +23,7 @@ abstract class Shopcart extends \Magento\Backend\App\Action
     /**
      * Authorization of a shop cart report
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::shopcart';
+    public const ADMIN_RESOURCE = 'Magento_Reports::shopcart';
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */

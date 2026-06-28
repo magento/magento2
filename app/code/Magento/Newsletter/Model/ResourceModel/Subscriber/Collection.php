@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model\ResourceModel\Subscriber;
 
@@ -9,8 +9,6 @@ use Magento\Newsletter\Model\Queue as ModelQueue;
 
 /**
  * Newsletter subscribers collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  *
  * @api
  * @since 100.0.2

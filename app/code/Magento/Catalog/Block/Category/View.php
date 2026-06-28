@@ -5,66 +5,81 @@
  */
 namespace Magento\Catalog\Block\Category;
 
+use Magento\Catalog\Block\Breadcrumbs;
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Helper\Category as CategoryHelper;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Framework\App\ObjectManager;
+use Magento\Cms\Block\Block;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+
 /**
  * Category View Block class
  * @api
  * @since 100.0.2
  */
-class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class View extends Template implements IdentityInterface
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Catalog\Model\Layer
+     * @var Layer
      */
     protected $_catalogLayer;
 
     /**
-     * @var \Magento\Catalog\Helper\Category
+     * @var CategoryHelper
      */
     protected $_categoryHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|null
+     * @var Data|null
      */
     private $catalogData;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Helper\Category $categoryHelper
+     * @param Context $context
+     * @param Resolver $layerResolver
+     * @param Registry $registry
+     * @param CategoryHelper $categoryHelper
      * @param array $data
-     * @param \Magento\Catalog\Helper\Data|null $catalogData
+     * @param Data|null $catalogData
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Helper\Category $categoryHelper,
-        array $data = [],
-        ?\Magento\Catalog\Helper\Data $catalogData = null
+        Context        $context,
+        Resolver       $layerResolver,
+        Registry       $registry,
+        CategoryHelper $categoryHelper,
+        array          $data = [],
+        ?Data          $catalogData = null
     ) {
         $this->_categoryHelper = $categoryHelper;
         $this->_catalogLayer = $layerResolver->get();
         $this->_coreRegistry = $registry;
-        $this->catalogData = $catalogData ?? \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Catalog\Helper\Data::class);
+        $this->catalogData = $catalogData ?? ObjectManager::getInstance()
+            ->get(Data::class);
         parent::__construct($context, $data);
     }
 
     /**
      * @inheritdoc
      * @return $this
+     * @throws LocalizedException
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $block = $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
+        $block = $this->getLayout()->createBlock(Breadcrumbs::class);
 
         $category = $this->getCurrentCategory();
         if ($category) {
@@ -88,7 +103,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
             }
             if ($this->_categoryHelper->canUseCanonicalTag()) {
                 $this->pageConfig->addRemotePageAsset(
-                    $category->getUrl(),
+                    $this->_categoryHelper->getCanonicalUrl($category->getUrl()),
                     'canonical',
                     ['attributes' => ['rel' => 'canonical']]
                 );
@@ -116,7 +131,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     /**
      * Retrieve current category model object
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     public function getCurrentCategory()
     {
@@ -135,7 +150,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         if (!$this->getData('cms_block_html')) {
             $html = $this->getLayout()->createBlock(
-                \Magento\Cms\Block\Block::class
+                Block::class
             )->setBlockId(
                 $this->getCurrentCategory()->getLandingPage()
             )->toHtml();
@@ -151,7 +166,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      */
     public function isProductMode()
     {
-        return $this->getCurrentCategory()->getDisplayMode() == \Magento\Catalog\Model\Category::DM_PRODUCT;
+        return $this->getCurrentCategory()->getDisplayMode() == Category::DM_PRODUCT;
     }
 
     /**
@@ -161,7 +176,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
      */
     public function isMixedMode()
     {
-        return $this->getCurrentCategory()->getDisplayMode() == \Magento\Catalog\Model\Category::DM_MIXED;
+        return $this->getCurrentCategory()->getDisplayMode() == Category::DM_MIXED;
     }
 
     /**
@@ -175,7 +190,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     {
         $category = $this->getCurrentCategory();
         $res = false;
-        if ($category->getDisplayMode() == \Magento\Catalog\Model\Category::DM_PAGE) {
+        if ($category->getDisplayMode() == Category::DM_PAGE) {
             $res = true;
             if ($category->getIsAnchor()) {
                 $state = $this->_catalogLayer->getState();

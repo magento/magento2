@@ -51,14 +51,15 @@ class Identifier implements IdentifierInterface
     public function getValue()
     {
         $pattern = $this->getMarketingParameterPatterns();
-        $replace = array_fill(0, count($pattern), '');
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
+        list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
-            preg_replace($pattern, $replace, (string)$this->request->getUriString()),
+            $baseUrl,
+            $query,
             $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
                 ?: $this->context->getVaryString()
         ];
-
         return sha1($this->serializer->serialize($data));
     }
 
@@ -70,7 +71,6 @@ class Identifier implements IdentifierInterface
     public function getMarketingParameterPatterns(): array
     {
         return [
-            '/&?gad_source\=[^&]+/',
             '/&?gbraid\=[^&]+/',
             '/&?wbraid\=[^&]+/',
             '/&?_gl\=[^&]+/',
@@ -90,6 +90,37 @@ class Identifier implements IdentifierInterface
             '/&?mc_(.*?)\=[^&]+/',
             '/&?utm_(.*?)\=[^&]+/',
             '/&?_bta_(.*?)\=[^&]+/',
+            '/&?gad_(.*?)\=[^&]+/',
         ];
+    }
+
+    /**
+     * Reconstruct url and sort query
+     *
+     * @param string $url
+     * @return array
+     */
+    public function reconstructUrl(string $url): array
+    {
+        if (empty($url)) {
+            return [$url, ''];
+        }
+
+        $baseUrl = strtok($url, '?');
+        $queryString = parse_url($url, PHP_URL_QUERY) ?: '';
+
+        $queryArray = [];
+        if ($queryString !== '') {
+            parse_str($queryString, $queryArray);
+        }
+
+        if (!empty($queryArray)) {
+            ksort($queryArray);
+            $query = http_build_query($queryArray);
+        } else {
+            $query = '';
+        }
+
+        return [$baseUrl, $query];
     }
 }

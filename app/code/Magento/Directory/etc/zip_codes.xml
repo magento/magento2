@@ -341,6 +341,11 @@
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
+    <zip countryCode="IE">
+        <codes>
+            <code id="pattern_1" active="true" example="A65 F4E2">^([AC-FHKNPRTV-Y]{1}[0-9]{2}|D6W)[ ]?[0-9AC-FHKNPRTV-Y]{4}$</code>
+        </codes>
+    </zip>
     <zip countryCode="IL">
         <codes>
             <code id="pattern_1" active="true" example="6687865">^[0-9]{7}$</code>
