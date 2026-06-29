@@ -17,10 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-37344"/>
             <group value="ConfigurableProduct"/>
-            <skip>
-                <issueId value="MC-33903"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -124,19 +120,19 @@
             <argument name="product" value="$$baseConfigProductHandle$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontSelectSimpleProductOfConfigurableProductPageActionGroup" stepKey="assertSimpleProductIsAccessibleInStorefrontProductPageActionGroup" >
-            <argument name="urlKey" value="$$baseConfigProductHandle.custom_attributes[url_key]$$" />
-            <argument name="productAttribute" value="$$productAttributeHandle.default_value$$"/>
-            <argument name="productOption" value="$$getAttributeOption1Handle.value$$"/>
-        </actionGroup>
+        <!-- Select configurable option to load child variant (image/video) on storefront -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="waitForConfigurableAttributeSelect"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$productAttributeOption1Handle.option[store_labels][0][label]$$" stepKey="fillDropDownAttributeOption"/>
+        <waitForPageLoad stepKey="waitForConfigurableOptionSelection"/>
+        <waitForAjaxLoad stepKey="waitForGalleryAjaxLoad"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitForGallerySpinnerDisappear"/>
+
+        <!-- Assert product video in storefront product page (video is usually the active slide after option select) -->
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage"/>
 
         <!-- Assert product image in storefront product page -->
-        <actionGroup ref="AssertProductImageStorefrontProductPage2ActionGroup" stepKey="assertProductImageStorefrontProductPageActionGroup">
-            <argument name="product" value="$$baseConfigProductHandle$$"/>
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
-
-        <!-- Assert product video in storefront product page -->
-        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="waitForGalleryNextButton"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="clickGalleryNextButton"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="assertProductImageInGallery"/>
     </test>
 </tests>
