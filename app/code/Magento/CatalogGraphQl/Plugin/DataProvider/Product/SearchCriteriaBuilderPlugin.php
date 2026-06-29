@@ -66,6 +66,8 @@ class SearchCriteriaBuilderPlugin
      *
      * @param array $priceFilter
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function adjustPriceFilterForTax(array $priceFilter): array
     {
