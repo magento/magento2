@@ -10,6 +10,7 @@ namespace Magento\GraphQl\CatalogGraphQl;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Indexer\Test\Fixture\Indexer;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Test\Fixture\TaxRate as TaxRateFixture;
 use Magento\Tax\Test\Fixture\TaxRule as TaxRuleFixture;
 use Magento\TestFramework\Fixture\Config;
@@ -21,14 +22,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  * Verify GraphQL price filter uses displayed (incl. tax) values when catalog prices exclude tax.
  */
 #[
-    Config('tax/calculation/price_includes_tax', 0),
-    Config('tax/display/type', 2),
-    Config('tax/defaults/country', 'US'),
-    Config('tax/defaults/region', '12'),
-    Config('tax/defaults/postcode', '*'),
-    Config('shipping/origin/country_id', 'US'),
-    Config('shipping/origin/region_id', '12'),
-    Config('shipping/origin/postcode', '90001'),
     DataFixture(
         TaxRateFixture::class,
         [
@@ -94,6 +87,16 @@ class ProductPriceFilterWithTaxTest extends GraphQlAbstract
 }
 QUERY;
 
+    #[
+        Config('tax/calculation/price_includes_tax', 0, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/display/type', 2, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/country', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/region', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/postcode', '*', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/country_id', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/region_id', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/postcode', '90001', ScopeInterface::SCOPE_STORE, 'default'),
+    ]
     public function testPriceFilterIncludesProductWithDisplayedPriceAtLowerBound(): void
     {
         $response = $this->graphQlQuery(
@@ -101,12 +104,30 @@ QUERY;
         );
 
         self::assertCount(2, $response['products']['items']);
-        self::assertSame('graphql_price_filter_a', $response['products']['items'][0]['sku']);
-        self::assertEquals(10, $response['products']['items'][0]['price_range']['minimum_price']['final_price']['value']);
-        self::assertSame('graphql_price_filter_b', $response['products']['items'][1]['sku']);
-        self::assertEquals(10.75, $response['products']['items'][1]['price_range']['minimum_price']['final_price']['value']);
+        self::assertSame(
+            'graphql_price_filter_a',
+            $response['products']['items'][0]['sku']
+        );
+        self::assertEquals(
+            10.7,
+            $response['products']['items'][0]['price_range']['minimum_price']['final_price']['value']
+        );
+        self::assertSame(
+            'graphql_price_filter_b',
+            $response['products']['items'][1]['sku']
+        );
     }
 
+    #[
+        Config('tax/calculation/price_includes_tax', 0, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/display/type', 2, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/country', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/region', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/postcode', '*', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/country_id', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/region_id', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/postcode', '90001', ScopeInterface::SCOPE_STORE, 'default'),
+    ]
     public function testPriceFilterExcludesProductBelowDisplayedFromValue(): void
     {
         $response = $this->graphQlQuery(
@@ -114,18 +135,37 @@ QUERY;
         );
 
         self::assertCount(1, $response['products']['items']);
-        self::assertSame('graphql_price_filter_a', $response['products']['items'][0]['sku']);
-        self::assertEquals(10, $response['products']['items'][0]['price_range']['minimum_price']['final_price']['value']);
+        self::assertSame(
+            'graphql_price_filter_a',
+            $response['products']['items'][0]['sku']
+        );
+        self::assertEquals(
+            10.7,
+            $response['products']['items'][0]['price_range']['minimum_price']['final_price']['value']
+        );
     }
 
+    #[
+        Config('tax/calculation/price_includes_tax', 0, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/display/type', 2, ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/country', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/region', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('tax/defaults/postcode', '*', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/country_id', 'US', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/region_id', '12', ScopeInterface::SCOPE_STORE, 'default'),
+        Config('shipping/origin/postcode', '90001', ScopeInterface::SCOPE_STORE, 'default'),
+    ]
     public function testPriceFilterExcludesProductAboveDisplayedToValue(): void
     {
         $response = $this->graphQlQuery(
-            sprintf(self::QUERY, '9', '9.99', $this->getCategoryUid())
+            sprintf(self::QUERY, '10', '10.7', $this->getCategoryUid())
         );
 
         self::assertCount(1, $response['products']['items']);
-        self::assertSame('graphql_price_filter_a', $response['products']['items'][0]['sku']);
+        self::assertSame(
+            'graphql_price_filter_a',
+            $response['products']['items'][0]['sku']
+        );
     }
 
     private function getCategoryUid(): string

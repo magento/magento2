@@ -47,6 +47,9 @@ class SearchCriteriaBuilderPluginTest extends TestCase
     /** @var SearchCriteriaBuilder&MockObject */
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
+    /**
+     * @var SearchCriteriaBuilderPlugin
+     */
     private SearchCriteriaBuilderPlugin $plugin;
 
     protected function setUp(): void
