@@ -67,7 +67,6 @@ class NavigationTest extends TestCase
         $this->catalogLayerMock = $this->createMock(Layer::class);
         $this->filterListMock = $this->createMock(FilterList::class);
         $this->visibilityFlagMock = $this->createMock(AvailabilityFlagInterface::class);
-        $this->visibilityFlagMock = $this->getMockForAbstractClass(AvailabilityFlagInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getRouteName'])
