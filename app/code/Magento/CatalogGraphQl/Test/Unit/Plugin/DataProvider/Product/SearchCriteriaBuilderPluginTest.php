@@ -24,6 +24,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ *  Unit Test for plugin Search Criteria Builder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SearchCriteriaBuilderPluginTest extends TestCase
 {
     /** @var TaxConfig&MockObject */
