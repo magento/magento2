@@ -3,19 +3,26 @@
  * Copyright 2026 Adobe
  * All Rights Reserved.
  *
+ * @var Escaper $escaper
  * @var \Magento\CatalogImportExport\Block\Adminhtml\Export\MandatoryAttributesNotice $block
  */
+
+use Magento\Framework\Escaper;
+
 ?>
 <?php $mandatoryAttributes = $block->getSystemMandatoryAttributes(); ?>
 <?php if ($mandatoryAttributes): ?>
 <div class="message message-notice notice mandatory-attributes-notice">
     <div data-ui-id="messages-message-notice">
-        <strong><?= $block->escapeHtml(__('Note:')) ?></strong>
-        <?= $block->escapeHtml(
-            __('The following system columns are automatically appended during the export process and cannot be excluded:')
+        <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
+        <?= $escaper->escapeHtml(
+            __(
+                'The following system columns are automatically appended ' .
+                'during the export process and cannot be excluded:'
+            )
         ) ?>
         <br/>
-        <span class="mandatory-system-fields"><?= $block->escapeHtml($mandatoryAttributes) ?></span>
+        <span class="mandatory-system-fields"><?= $escaper->escapeHtml($mandatoryAttributes) ?></span>
     </div>
 </div>
 <?php endif; ?>
