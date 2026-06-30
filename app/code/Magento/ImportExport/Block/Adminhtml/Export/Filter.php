@@ -478,7 +478,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 
                     $currentLabel = $item->getFrontendLabel();
                     $item->setFrontendLabel(
-                        $currentLabel . ' [Mandatory]',
+                        $currentLabel . ' [' . __('Mandatory') . ']',
                     );
                 }
             }
@@ -491,37 +491,6 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         return parent::_afterLoadCollection();
-    }
-
-    /**
-     * Override _toHtml to inject the System Attributes Notice inside the grid wrapper.
-     *
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        $html = parent::_toHtml();
-        $filterParams = $this->getRequest()->getParams();
-
-        // Only inject the notice if we are exporting Products
-        if (isset($filterParams['entity']) && $filterParams['entity'] === 'catalog_product') {
-            if (!empty($this->getMandatoryAttributes())) {
-                $systemFieldsList = implode(', ', $this->getMandatoryAttributes());
-                $notice = '<div class="message message-notice notice" style="margin-bottom: 20px;">'
-                    . '<div data-ui-id="messages-message-notice">'
-                    . '<strong>Note:</strong> The following system columns are automatically'
-                    . ' appended during the export process and cannot be excluded:'
-                    . '<br/><span style="font-family: monospace; font-size: 12px; color: #555;">'
-                    . $this->escapeHtml($systemFieldsList)
-                    . '</span></div></div>';
-
-                // Use regex to safely find the table tag regardless of its CSS classes
-                $tableId = preg_quote($this->getId() . '_table', '/');
-                $html = preg_replace('/(<table[^>]*id="' . $tableId . '"[^>]*>)/i', $notice . '$1', $html, 1);
-            }
-        }
-
-        return $html;
     }
 
     /**
