@@ -10,6 +10,7 @@ use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -103,7 +104,11 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
         if ($saveInAddressBook &&
-            !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
+            !$this->scopeConfig->getValue(
+                Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY,
+                ScopeInterface::SCOPE_STORE,
+                $quote->getStoreId()
+            )) {
             $address->setCompany(null);
         }
 
