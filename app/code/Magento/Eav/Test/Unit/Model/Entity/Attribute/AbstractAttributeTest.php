@@ -14,9 +14,11 @@ use Magento\Eav\Api\Data\AttributeOptionInterfaceFactory;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -116,6 +118,40 @@ class AbstractAttributeTest extends TestCase
         $dataFactoryMock->expects($this->once())->method('create')->willReturn($attributeOptionMock);
 
         $this->assertEquals([$attributeOptionMock], $model->getOptions());
+    }
+
+    public function testGetSourceThrowsLocalizedExceptionWhenSourceModelClassDoesNotExist()
+    {
+        $sourceModel = 'Non\\Existent\\SourceModel';
+        $attributeCode = 'missing_source_attribute';
+
+        $universalFactoryMock = $this->createMock(UniversalFactory::class);
+        $universalFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($sourceModel)
+            ->willThrowException(new \ReflectionException('Class "' . $sourceModel . '" does not exist'));
+
+        $modelClassName = AbstractAttribute::class;
+        $model = $this->getMockBuilder($modelClassName)
+            ->disableOriginalConstructor()
+            ->onlyMethods([])
+            ->getMock();
+
+        $reflection = new \ReflectionClass($modelClassName);
+        $reflectionProperty = $reflection->getProperty('_universalFactory');
+        $reflectionProperty->setValue($model, $universalFactoryMock);
+
+        $model->setAttributeCode($attributeCode);
+        $model->setSourceModel($sourceModel);
+
+        try {
+            $model->getSource();
+            $this->fail('Expected LocalizedException was not thrown.');
+        } catch (LocalizedException $exception) {
+            $this->assertStringContainsString($sourceModel, $exception->getMessage());
+            $this->assertStringContainsString($attributeCode, $exception->getMessage());
+            $this->assertInstanceOf(\ReflectionException::class, $exception->getPrevious());
+        }
     }
 
     public function testGetValidationRulesWhenRuleIsArray()
