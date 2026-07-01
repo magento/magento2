@@ -125,6 +125,33 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
+     * Storing the full address book in session causes the admin session to exceed the configured Max Session
+     * Size on customers with large address books, logging the admin user out.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     */
+    public function testEditActionDoesNotSerializeAddressesIntoSession()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+
+        $sessionCustomerData = $this->_objectManager->get(Session::class)->getCustomerData();
+
+        $this->assertIsArray($sessionCustomerData);
+        $this->assertArrayHasKey('account', $sessionCustomerData);
+        $this->assertNotEmpty($sessionCustomerData['account']);
+        $this->assertSame(1, (int)$sessionCustomerData['customer_id']);
+        $this->assertArrayHasKey('address', $sessionCustomerData);
+        $this->assertSame(
+            [],
+            $sessionCustomerData['address'],
+            'Customer Edit admin action must not serialize the address collection into the admin session.'
+        );
+    }
+
+    /**
      * Test new customer form page.
      */
     public function testNewAction()

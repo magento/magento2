@@ -127,4 +127,101 @@ class UpdatedIdListProviderTest extends TestCase
 
         self::assertSame([], $actual);
     }
+
+    public function testGetIdsKeepsCursorAtMaxWhenAlreadyCaughtUp(): void
+    {
+        $maxEntitySelect = $this->createMock(Select::class);
+
+        $this->connection->expects($this->once())
+            ->method('select')
+            ->willReturn($maxEntitySelect);
+        $maxEntitySelect->expects($this->once())
+            ->method('from')
+            ->with(['main_table' => 'sales_order'], $this->anything())
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($maxEntitySelect)
+            ->willReturn(50000);
+
+        $this->flagManager->expects($this->once())
+            ->method('getFlagData')
+            ->with('sales_grid_async_last_entity_id_sales_order_grid')
+            ->willReturn(50000);
+        $this->idListBuilder->expects($this->never())->method('build');
+        $this->connection->expects($this->never())->method('fetchAll');
+        $this->flagManager->expects($this->never())->method('saveFlag');
+
+        $provider = new UpdatedIdListProvider($this->resourceConnection, $this->idListBuilder, $this->flagManager);
+        $actual = $provider->getIds('sales_order', 'sales_order_grid');
+
+        self::assertSame([], $actual);
+    }
+
+    public function testGetIdsClampsStaleCursorAboveMaxToMax(): void
+    {
+        $maxEntitySelect = $this->createMock(Select::class);
+
+        $this->connection->expects($this->once())
+            ->method('select')
+            ->willReturn($maxEntitySelect);
+        $maxEntitySelect->expects($this->once())
+            ->method('from')
+            ->with(['main_table' => 'sales_order'], $this->anything())
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($maxEntitySelect)
+            ->willReturn(50000);
+
+        $this->flagManager->expects($this->once())
+            ->method('getFlagData')
+            ->with('sales_grid_async_last_entity_id_sales_order_grid')
+            ->willReturn(60000);
+        $this->idListBuilder->expects($this->never())->method('build');
+        $this->connection->expects($this->never())->method('fetchAll');
+        $this->flagManager->expects($this->never())->method('saveFlag');
+
+        $provider = new UpdatedIdListProvider($this->resourceConnection, $this->idListBuilder, $this->flagManager);
+        $actual = $provider->getIds('sales_order', 'sales_order_grid');
+
+        self::assertSame([], $actual);
+    }
+
+    public function testGetIdsAdvancesOneStepWhenNewEntityArrives(): void
+    {
+        $maxEntitySelect = $this->createMock(Select::class);
+        $idSelect = $this->createStub(Select::class);
+
+        $this->connection->expects($this->once())
+            ->method('select')
+            ->willReturn($maxEntitySelect);
+        $maxEntitySelect->expects($this->once())
+            ->method('from')
+            ->with(['main_table' => 'sales_order'], $this->anything())
+            ->willReturnSelf();
+        $this->connection->expects($this->once())
+            ->method('fetchOne')
+            ->with($maxEntitySelect)
+            ->willReturn(50001);
+
+        $this->flagManager->expects($this->once())
+            ->method('getFlagData')
+            ->with('sales_grid_async_last_entity_id_sales_order_grid')
+            ->willReturn(50000);
+        $this->idListBuilder->expects($this->once())
+            ->method('build')
+            ->with('sales_order', 'sales_order_grid', 50000, 50001)
+            ->willReturn($idSelect);
+        $this->connection->expects($this->once())
+            ->method('fetchAll')
+            ->with($idSelect, [], \Zend_Db::FETCH_COLUMN)
+            ->willReturn([50001]);
+        $this->flagManager->expects($this->never())->method('saveFlag');
+
+        $provider = new UpdatedIdListProvider($this->resourceConnection, $this->idListBuilder, $this->flagManager);
+        $actual = $provider->getIds('sales_order', 'sales_order_grid');
+
+        self::assertSame([50001], $actual);
+    }
 }

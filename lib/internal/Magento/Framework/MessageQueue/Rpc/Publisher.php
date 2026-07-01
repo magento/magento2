@@ -9,7 +9,9 @@ namespace Magento\Framework\MessageQueue\Rpc;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\ExchangeRepository;
+use Magento\Framework\MessageQueue\MessageDeliveryMode;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageIdGeneratorInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
 use Magento\Framework\MessageQueue\PublisherInterface;
@@ -52,6 +54,11 @@ class Publisher implements PublisherInterface
     private $publisherConfig;
 
     /**
+     * @var MessageIdGeneratorInterface
+     */
+    private $messageIdGenerator;
+
+    /**
      * Initialize dependencies.
      *
      * @param ExchangeRepository $exchangeRepository
@@ -62,6 +69,7 @@ class Publisher implements PublisherInterface
      * @param MessageValidator|null $messageValidator
      * @param ResponseQueueNameBuilder|null $responseQueueNameBuilder
      * @param PublisherConfig|null $publisherConfig
+     * @param MessageIdGeneratorInterface|null $messageIdGenerator
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -73,7 +81,8 @@ class Publisher implements PublisherInterface
         ?MessageEncoder $messageEncoder = null,
         ?MessageValidator $messageValidator = null,
         ?ResponseQueueNameBuilder $responseQueueNameBuilder = null,
-        ?PublisherConfig $publisherConfig = null
+        ?PublisherConfig $publisherConfig = null,
+        ?MessageIdGeneratorInterface $messageIdGenerator = null,
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
@@ -86,6 +95,8 @@ class Publisher implements PublisherInterface
             ?? $objectManager->get(ResponseQueueNameBuilder::class);
         $this->publisherConfig = $publisherConfig
             ?? $objectManager->get(PublisherConfig::class);
+        $this->messageIdGenerator = $messageIdGenerator
+            ?? $objectManager->get(MessageIdGeneratorInterface::class);
     }
 
     /**
@@ -101,11 +112,9 @@ class Publisher implements PublisherInterface
                 'body' => $data,
                 'properties' => [
                     'reply_to' => $replyTo,
-                    'delivery_mode' => 2,
+                    'delivery_mode' => MessageDeliveryMode::PERSISTENT->value,
                     'correlation_id' => rand(),
-                    // md5() here is not for cryptographic use.
-                    // phpcs:ignore Magento2.Security.InsecureFunction
-                    'message_id' => md5(uniqid($topicName))
+                    'message_id' => $this->messageIdGenerator->generate($topicName),
                 ]
             ]
         );

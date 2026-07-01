@@ -184,6 +184,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     private $cartMutex;
 
     /**
+     * @var QuoteAddressValidator
+     */
+    private $quoteAddressValidator;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -210,6 +215,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @param RemoteAddress|null $remoteAddress
      * @param LockManagerInterface $lockManager
      * @param CartMutexInterface|null $cartMutex
+     * @param QuoteAddressValidator|null $quoteAddressValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -239,7 +245,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         ?RequestInterface $request = null,
         ?RemoteAddress $remoteAddress = null,
         ?LockManagerInterface $lockManager = null,
-        ?CartMutexInterface $cartMutex = null
+        ?CartMutexInterface $cartMutex = null,
+        ?QuoteAddressValidator $quoteAddressValidator = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -271,6 +278,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ->get(RemoteAddress::class);
         $this->cartMutex = $cartMutex
             ?? ObjectManager::getInstance()->get(CartMutexInterface::class);
+        $this->quoteAddressValidator = $quoteAddressValidator
+            ?? ObjectManager::getInstance()->get(QuoteAddressValidator::class);
     }
 
     /**
@@ -624,6 +633,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if ($quote->getReservedOrderId()) {
             $order->setIncrementId($quote->getReservedOrderId());
         }
+        $this->validateQuoteAddressesOwnership($quote);
         $this->submitQuoteValidator->validateOrder($order);
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
@@ -649,6 +659,23 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             throw $e;
         }
         return $order;
+    }
+
+    /**
+     * Validates final quote addresses ownership before order placement.
+     *
+     * @param QuoteEntity $quote
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function validateQuoteAddressesOwnership(QuoteEntity $quote): void
+    {
+        $this->quoteAddressValidator->validateForCart($quote, $quote->getBillingAddress());
+
+        if (!$quote->isVirtual()) {
+            $this->quoteAddressValidator->validateForCart($quote, $quote->getShippingAddress());
+        }
     }
 
     /**

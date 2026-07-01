@@ -233,4 +233,7 @@
         <data key="name" unique="suffix">Abc</data>
         <data key="code" unique="suffix">abc</data>
     </entity>
+    <entity name="storeViewCode" type="data">
+        <data key="code" unique="suffix">storeview_main</data>
+    </entity>
 </entities>
