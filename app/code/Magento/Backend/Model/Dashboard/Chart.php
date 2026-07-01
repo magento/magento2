@@ -68,11 +68,8 @@ class Chart
         $this->orderHelper->setParam('website', $website);
         $this->orderHelper->setParam('group', $group);
 
-        $availablePeriods = array_keys($this->period->getDatePeriods());
-        $this->orderHelper->setParam(
-            'period',
-            $period && in_array($period, $availablePeriods, false) ? $period : Period::PERIOD_24_HOURS
-        );
+        $period = $this->period->resolvePeriod($period !== '' ? $period : null);
+        $this->orderHelper->setParam('period', $period);
 
         $dates = $this->dateRetriever->getByPeriod($period);
         $collection = $this->orderHelper->getCollection();

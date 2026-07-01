@@ -278,20 +278,17 @@ foreach ($changedFiles as $filePath) {
         continue;
     }
 
-    // ── Missing copyright entirely ────────────────────────────────────────────
-    if ($currentHeader === '') {
-        $issues[] = [
-            'file'   => $filePath,
-            'reason' => 'Missing copyright header',
-            'new'    => $isNew,
-        ];
-        continue;
-    }
-
-    $currentNorm = normalizeHeader($currentHeader);
-
     if ($isNew) {
-        // ── New file: must match the template with the current year ───────────
+        // ── New file: must have a copyright header in current-year format ─────
+        if ($currentHeader === '') {
+            $issues[] = [
+                'file'   => $filePath,
+                'reason' => 'Missing copyright header',
+                'new'    => true,
+            ];
+            continue;
+        }
+        $currentNorm  = normalizeHeader($currentHeader);
         $expected     = buildExpectedHeader($template, $filePath, $currentYear);
         $expectedNorm = normalizeHeader($expected);
         if ($expectedNorm !== '' && strpos($currentNorm, $expectedNorm) === false) {
@@ -302,30 +299,33 @@ foreach ($changedFiles as $filePath) {
             ];
         }
     } else {
-        // ── Existing file: copyright must not have changed ────────────────────
+        // ── Existing file: compare against base; skip if base had no copyright ─
         $baseContent = getBaseContent($filePath, $baseDir);
 
         if ($baseContent === null) {
-            // File not found in base — treat as new
-            $expected     = buildExpectedHeader($template, $filePath, $currentYear);
-            $expectedNorm = normalizeHeader($expected);
-            if ($expectedNorm !== '' && strpos($currentNorm, $expectedNorm) === false) {
-                $issues[] = [
-                    'file'   => $filePath,
-                    'reason' => "New file (not in base branch): copyright header must use year {$currentYear}",
-                    'new'    => true,
-                ];
-            }
+            // Modified file but base blob unavailable (partial clone fetch failure).
+            // Skip rather than emit a false positive.
+            echo "  [SKIP] {$filePath} — base content unavailable (partial clone fetch failure)\n";
+            $skipped++;
             continue;
         }
 
         $baseHeader = extractCopyrightBlock($baseContent);
         if ($baseHeader === '') {
-            // No copyright in base — skip (migrating old files is a separate task)
             continue;
         }
 
-        $baseNorm = normalizeHeader($baseHeader);
+        if ($currentHeader === '') {
+            $issues[] = [
+                'file'   => $filePath,
+                'reason' => 'Copyright header was removed in this PR',
+                'new'    => false,
+            ];
+            continue;
+        }
+
+        $baseNorm    = normalizeHeader($baseHeader);
+        $currentNorm = normalizeHeader($currentHeader);
         if ($baseNorm !== $currentNorm) {
             $issues[] = [
                 'file'   => $filePath,
