@@ -85,6 +85,10 @@ class FileLock implements LockManagerInterface
     {
         try {
             $lockFile = $this->getLockPath($name);
+            if (isset($this->locks[$lockFile])) {
+                return true;
+            }
+
             $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
             $skipDeadline = $timeout < 0;
             $deadline = microtime(true) + $timeout;

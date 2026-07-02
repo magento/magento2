@@ -43,10 +43,13 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
 
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->isLocked($name));
-        $this->assertFalse($this->model->lock($name, 2));
+        $this->assertTrue($this->model->lock($name, 2));
 
         $this->assertTrue($this->model->unlock($name));
         $this->assertFalse($this->model->isLocked($name));
+
+        $this->assertTrue($this->model->lock($name));
+        $this->assertTrue($this->model->unlock($name));
     }
 
     public function testUnlockWithoutExistingLock()
