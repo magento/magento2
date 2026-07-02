@@ -372,9 +372,7 @@ abstract class AbstractModel extends DataObject
             }
             $this->_data = $key;
         } else {
-            $this->checkAndConvertNumericValue($key, $value);
-            $key = $key ?? '';
-            if (!array_key_exists($key, $this->_data) || $this->_data[$key] !== $value) {
+            if (!array_key_exists($key, $this->_data) || !$this->isDataEqual($this->_data[$key], $value)) {
                 $this->_hasDataChanges = true;
             }
             $this->_data[$key] = $value;
@@ -1032,25 +1030,26 @@ abstract class AbstractModel extends DataObject
     }
 
     /**
-     * Check and Convert Numeric Value for Proper Type Matching
+     * Check whether the current and the new value are equal for change detection.
      *
-     * @param mixed $key
-     * @param mixed $value
-     * @return void
+     * Values loaded from the database are always strings, while setters frequently pass int or
+     * float values (and vice versa). A strict comparison would treat numerically identical values
+     * of different types as a change, marking the object as modified and triggering redundant
+     * UPDATE queries on save. When both values are numeric they are compared by numeric value;
+     * otherwise a strict comparison is used to preserve type safety.
+     *
+     * @param mixed $currentValue
+     * @param mixed $newValue
+     * @return bool
      */
-    private function checkAndConvertNumericValue(mixed $key, mixed $value): void
+    private function isDataEqual(mixed $currentValue, mixed $newValue): bool
     {
-        $key = $key ?? '';
-        if (array_key_exists($key, $this->_data) && is_numeric($this->_data[$key])
-            && $value !== null
-        ) {
-            if (is_float($value) ||
-                (is_string($value) && preg_match('/^-?\d*\.\d+$/', $value))
-            ) {
-                $this->_data[$key] = (float) $this->_data[$key];
-            } elseif (is_int($value)) {
-                $this->_data[$key] = (int) $this->_data[$key];
-            }
+        if ($currentValue === $newValue) {
+            return true;
         }
+        if (is_numeric($currentValue) && is_numeric($newValue)) {
+            return (float) $currentValue === (float) $newValue;
+        }
+        return false;
     }
 }
