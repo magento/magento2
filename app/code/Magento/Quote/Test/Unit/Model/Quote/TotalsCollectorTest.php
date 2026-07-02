@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total;
@@ -56,16 +55,10 @@ class TotalsCollectorTest extends TestCase
     private QuantityCollector $quantityCollectorMock;
 
     /**
-     * @var ObjectManagerHelper
-     */
-    private ObjectManagerHelper $objectManagerHelper;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->totalFactoryMock = $this->createMock(TotalFactory::class);
         $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->quoteValidatorMock = $this->createMock(QuoteValidator::class);
@@ -121,38 +114,28 @@ class TotalsCollectorTest extends TestCase
             }
         };
 
-        $shippingAddressTotal = $this->createMock(Total::class);
-        $shippingAddressTotal->method('getShippingAmount')->willReturn($shippingAmount);
-        $shippingAddressTotal->method('getBaseShippingAmount')->willReturn($shippingAmount);
-        $shippingAddressTotal->method('getShippingDescription')->willReturn($shippingDescription);
-        $shippingAddressTotal->method('getSubtotal')->willReturn(100.0);
-        $shippingAddressTotal->method('getBaseSubtotal')->willReturn(100.0);
-        $shippingAddressTotal->method('getSubtotalWithDiscount')->willReturn(100.0);
-        $shippingAddressTotal->method('getBaseSubtotalWithDiscount')->willReturn(100.0);
-        $shippingAddressTotal->method('getGrandTotal')->willReturn(110.0);
-        $shippingAddressTotal->method('getBaseGrandTotal')->willReturn(110.0);
+        // Use real Total instances — Total extends DataObject and all its get/set
+        // methods are magic, which PHPUnit cannot configure via method stubs.
+        $shippingAddressTotal = new Total([
+            'shipping_amount'              => $shippingAmount,
+            'base_shipping_amount'         => $shippingAmount,
+            'shipping_description'         => $shippingDescription,
+            'subtotal'                     => 100.0,
+            'base_subtotal'                => 100.0,
+            'subtotal_with_discount'       => 100.0,
+            'base_subtotal_with_discount'  => 100.0,
+            'grand_total'                  => 110.0,
+            'base_grand_total'             => 110.0,
+        ]);
 
-        $billingAddressTotal = $this->createMock(Total::class);
-        $billingAddressTotal->method('getShippingAmount')->willReturn(0.0);
-        $billingAddressTotal->method('getBaseShippingAmount')->willReturn(0.0);
-        $billingAddressTotal->method('getShippingDescription')->willReturn('');
-        $billingAddressTotal->method('getSubtotal')->willReturn(0.0);
-        $billingAddressTotal->method('getBaseSubtotal')->willReturn(0.0);
-        $billingAddressTotal->method('getSubtotalWithDiscount')->willReturn(0.0);
-        $billingAddressTotal->method('getBaseSubtotalWithDiscount')->willReturn(0.0);
-        $billingAddressTotal->method('getGrandTotal')->willReturn(0.0);
-        $billingAddressTotal->method('getBaseGrandTotal')->willReturn(0.0);
+        $billingAddressTotal = new Total();
 
         $quoteMock = $this->createMock(Quote::class);
         // Billing address comes AFTER shipping address (triggering the bug)
         $quoteMock->method('getAllAddresses')->willReturn([$shippingAddress, $billingAddress]);
-        $quoteMock->method('getGrandTotal')->willReturn(110.0);
-        $quoteMock->method('getBaseGrandTotal')->willReturn(110.0);
         $quoteMock->method('getData')->with('coupon_code')->willReturn(null);
 
-        /** @var Total $aggregateTotal */
-        $aggregateTotal = $this->objectManagerHelper->getObject(Total::class);
-
+        $aggregateTotal = new Total();
         $this->totalFactoryMock->method('create')->willReturn($aggregateTotal);
 
         $this->model->method('collectAddressTotals')
