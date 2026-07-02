@@ -692,12 +692,12 @@ define([
 
         it('Check ajaxSubmit method', function () {
             var options = {
-                data: {}
-            },
-            config = {
-                ajaxSaveType: 'default'
-            },
-            d = new $.Deferred();
+                    data: {}
+                },
+                config = {
+                    ajaxSaveType: 'default'
+                },
+                d = new $.Deferred();
 
             spyOn($, 'ajax').and.callFake(function () {
                 d.reject();
