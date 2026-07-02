@@ -8,6 +8,7 @@
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
@@ -155,9 +156,11 @@ class TotalsCollector
         foreach ($quote->getAllAddresses() as $address) {
             $addressTotal = $this->collectAddressTotals($quote, $address);
 
-            $total->setShippingAmount($addressTotal->getShippingAmount());
-            $total->setBaseShippingAmount($addressTotal->getBaseShippingAmount());
-            $total->setShippingDescription($addressTotal->getShippingDescription());
+            if ($address->getAddressType() !== Address::ADDRESS_TYPE_BILLING) {
+                $total->setShippingAmount($addressTotal->getShippingAmount());
+                $total->setBaseShippingAmount($addressTotal->getBaseShippingAmount());
+                $total->setShippingDescription($addressTotal->getShippingDescription());
+            }
 
             $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
             $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
