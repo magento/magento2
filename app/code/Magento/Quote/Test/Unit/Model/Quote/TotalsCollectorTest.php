@@ -25,6 +25,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TotalsCollectorTest extends TestCase
 {
     /**
@@ -93,7 +96,7 @@ class TotalsCollectorTest extends TestCase
      */
     public function testCollectPreservesShippingAmountWhenBillingAddressComesAfter(): void
     {
-        $shippingAmount     = 10.0;
+        $shippingAmount = 10.0;
         $shippingDescription = 'Flat Rate - Fixed';
 
         $shippingAddress = $this->createMock(Address::class);
@@ -137,15 +140,10 @@ class TotalsCollectorTest extends TestCase
         $this->totalFactoryMock->method('create')->willReturn($aggregateTotal);
 
         $this->model->method('collectAddressTotals')
-            ->willReturnCallback(
-                static function (Quote $quote, Address $address) use (
-                    $shippingAddress,
-                    $shippingAddressTotal,
-                    $billingAddressTotal
-                ): Total {
-                    return $address === $shippingAddress ? $shippingAddressTotal : $billingAddressTotal;
-                }
-            );
+            ->willReturnMap([
+                [$quoteMock, $shippingAddress, $shippingAddressTotal],
+                [$quoteMock, $billingAddress, $billingAddressTotal],
+            ]);
 
         $this->eventManagerMock->method('dispatch');
         $this->quantityCollectorMock->method('collectItemsQtys');
@@ -156,17 +154,17 @@ class TotalsCollectorTest extends TestCase
         $this->assertEquals(
             $shippingAmount,
             $result->getShippingAmount(),
-            'Shipping amount must come from the shipping address and must not be overwritten by the billing address'
+            'Shipping amount must not be overwritten by the billing address'
         );
         $this->assertEquals(
             $shippingAmount,
             $result->getBaseShippingAmount(),
-            'Base shipping amount must come from the shipping address and must not be overwritten by the billing address'
+            'Base shipping amount must not be overwritten by the billing address'
         );
         $this->assertEquals(
             $shippingDescription,
             $result->getShippingDescription(),
-            'Shipping description must come from the shipping address and must not be overwritten by the billing address'
+            'Shipping description must not be overwritten by the billing address'
         );
     }
 }
