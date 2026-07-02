@@ -131,7 +131,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_checkoutSession->clearQuote();
-            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            $this->resetCustomerSession();
             return;
         }
 
@@ -145,8 +145,26 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
-            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            $this->resetCustomerSession();
         }
+    }
+
+    /**
+     * Reset emulated customer data on the customer session back to the guest state.
+     *
+     * Also clears the tax destination data left by persistent emulation
+     * (EmulateCustomerObserver) so guest price rendering is not calculated against
+     * the expired customer's tax address.
+     *
+     * @return void
+     */
+    private function resetCustomerSession(): void
+    {
+        $this->_customerSession->setCustomerId(null)
+            ->setCustomerGroupId(null)
+            ->setDefaultTaxBillingAddress(null)
+            ->setDefaultTaxShippingAddress(null)
+            ->setCustomerTaxClassId(null);
     }
 
     /**
