@@ -88,8 +88,8 @@ sub vcl_recv {
 
     # Remove tracking query string parameters used by analytics and marketing tools.
     # Keep in sync with Magento\Framework\App\PageCache\Identifier::getMarketingParameterPatterns().
-    if (req.url ~ "(\?|&)(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cm|cn|cof|cs|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|ie|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|origin|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|ref|s_kwcid|sb_referer_host|ScCid|si|siteurl|snrai_[a-z]+|srsltid|tduid|tg|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=") {
-        set req.url = regsuball(req.url, "(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cm|cn|cof|cs|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|ie|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|origin|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|ref|s_kwcid|sb_referer_host|ScCid|si|siteurl|snrai_[a-z]+|srsltid|tduid|tg|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=[-_A-z0-9+()%.]+&?", "");
+    if (req.url ~ "(\?|&)(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cof|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|s_kwcid|sb_referer_host|ScCid|siteurl|snrai_[a-z]+|srsltid|tduid|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=") {
+        set req.url = regsuball(req.url, "(_branch_match_id|_bta_[a-z]+|_ga|_gl|_ke|_kx|campid|ceneo_cid|clickId|cof|customid|cx|dclid|dm_i|ef_id|epik|fbclid|gad_[a-z]+|gbraid|gclid|gclsrc|gdf[a-z]+|hsa_[a-z]+|igshid|mc_[a-z]+|mk[a-z]{3}|msclkid|(mtm|matomo)_[a-z]+|pcrid|p(iwi)?k_[a-z]+|redirect(_log)?_mongo_id|s_kwcid|sb_referer_host|ScCid|siteurl|snrai_[a-z]+|srsltid|tduid|trk_[a-z]+|utm_[a-z]+|wbraid|zanpid)=[-_A-z0-9+()%.]+&?", "");
         set req.url = regsub(req.url, "[?|&]+$", "");
     }
 

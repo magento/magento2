@@ -383,6 +383,51 @@ class IdentifierTest extends TestCase
     }
 
     /**
+     * Test ambiguous short parameters are kept in the FPC cache key.
+     *
+     * Params like "ref", "cm" or "si" are commonly used by extensions
+     * for content-affecting purposes, so they must not be stripped.
+     *
+     * @return void
+     */
+    public function testGetValueRetainsAmbiguousShortParameters(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn(
+                'http://example.com/path1/?abc=123&ref=header&cm=filter&si=2&tg=summer'
+            );
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn(['abc' => '123']);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com/path1/',
+                        'abc=123&cm=filter&ref=header&si=2&tg=summer',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
      * Test get identifier value with invalid URL.
      *
      * @return void
