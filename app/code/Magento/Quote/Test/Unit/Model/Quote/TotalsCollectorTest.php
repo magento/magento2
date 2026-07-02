@@ -99,10 +99,16 @@ class TotalsCollectorTest extends TestCase
         $shippingAmount = 10.0;
         $shippingDescription = 'Flat Rate - Fixed';
 
-        $shippingAddress = $this->createMock(Address::class);
+        $shippingAddress = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getAddressType'])
+            ->getMock();
         $shippingAddress->method('getAddressType')->willReturn(Address::ADDRESS_TYPE_SHIPPING);
 
-        $billingAddress = $this->createMock(Address::class);
+        $billingAddress = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getAddressType'])
+            ->getMock();
         $billingAddress->method('getAddressType')->willReturn(Address::ADDRESS_TYPE_BILLING);
 
         $shippingAddressTotal = $this->createMock(Total::class);
