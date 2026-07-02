@@ -59,6 +59,14 @@
                 <argument name="conditionsOperator" value="is one of"/>
                 <argument name="conditionParameter" value="$createFirstSimpleProduct.sku$,$createSecondSimpleProduct.sku$"/>
             </actionGroup>
+            <!--Reindex so newly created products are visible in the storefront catalog index-->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterProductAndWidgetCreation">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Flush full page cache so the storefront serves fresh content, not a cached empty category page-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterProductAndWidgetCreation">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Set currency options to default-->

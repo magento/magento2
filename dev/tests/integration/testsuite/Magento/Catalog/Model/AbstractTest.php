@@ -10,7 +10,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Stub class name for class under test
      */
-    const STUB_CLASS = 'Magento_Catalog_Model_AbstractModel_Stub';
+    public const STUB_CLASS = \Magento\Catalog\Model\AbstractModel\ConcreteStub::class;
 
     /**
      * @var \Magento\Catalog\Model\AbstractModel
@@ -27,12 +27,6 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         if (!self::$_isStubClass) {
-            $this->getMockForAbstractClass(
-                \Magento\Catalog\Model\AbstractModel\Stub::class,
-                [],
-                self::STUB_CLASS,
-                false
-            );
             self::$_isStubClass = true;
         }
 

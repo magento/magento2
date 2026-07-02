@@ -20,6 +20,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
@@ -661,7 +662,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
         // @codingStandardsIgnoreEnd
 
         $attributeId = $attribute->getId() ?? '';
-        
+
         if (!isset($this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attributeId][$expectedValue])) {
             $linkField = $this->getLinkField();
             $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
@@ -1023,6 +1024,29 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
         $category->unsetData('path_ids');
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validate($object)
+    {
+        $errors = parent::validate($object);
+        $currentId = $object->getId();
+        $newParentId = $object->getParentId();
+        if ($parentPath = $this->getCategoryPathById($newParentId)) {
+            $parentPathIds = explode("/", $parentPath);
+        } else {
+             $parentPathIds = [];
+        }
+
+        if ($currentId && !empty($parentPathIds) && in_array($currentId, $parentPathIds)) {
+            throw new LocalizedException(
+                __('A category cannot be assigned to one of its own descendants.')
+            );
+        }
+
+        return $errors;
     }
 
     /**

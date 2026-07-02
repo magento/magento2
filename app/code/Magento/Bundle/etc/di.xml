@@ -17,6 +17,7 @@
     <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
     <preference for="Magento\Bundle\Pricing\Adjustment\SelectionPriceListProviderInterface" type="Magento\Bundle\Pricing\Adjustment\DefaultSelectionPriceListProvider" />
     <preference for="Magento\Bundle\Model\ResourceModel\Indexer\StockStatusQueryProcessorInterface" type="Magento\Bundle\Model\ResourceModel\Indexer\DefaultInventoryStockStatusQueryProcessor" />
+    <preference for="Magento\Bundle\Model\ResourceModel\Indexer\SelectionPriceModifierInterface" type="Magento\Bundle\Model\ResourceModel\Indexer\CompositeSelectionPriceModifier" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -288,6 +289,18 @@
     <type name="Magento\Quote\Model\Quote\Address\Total\Subtotal">
         <plugin name="update_bundle_quote_item_base_original_price"
                 type="Magento\Bundle\Plugin\Quote\UpdateBundleQuoteItemBaseOriginalPrice"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Bundle\Model\ResourceModel\Indexer\CompositeSelectionPriceModifier">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="inventory" xsi:type="object">Magento\Bundle\Model\ResourceModel\Indexer\SelectionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Tax\Block\Item\Price\Renderer">
+        <plugin name="bundle_get_block_item_price"
+                type="Magento\Bundle\Plugin\Tax\BlockItemPriceRenderer"
                 sortOrder="10"/>
     </type>
 </config>

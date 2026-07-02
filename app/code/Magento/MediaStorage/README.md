@@ -38,4 +38,4 @@ Extension developers can interact with the Magento_MediaStorage module. For more
 More information can get at articles:
 
 - [Learn how to configure Media Storage Database](https://experienceleague.adobe.com/en/docs/commerce-admin/content-design/wysiwyg/storage/media-storage-database).
-- [Learn how to Resize catalog images](https://developer.adobe.com/commerce/frontend-core/guide/themes/configure/#resize-catalog-images)
+- [Learn how to Resize catalog images](https://developer.adobe.com/commerce/frontend-core/guide/themes/configure#resize-catalog-images)

@@ -12,6 +12,7 @@
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-customer": "*",
+        "magento/module-downloadable": "*",
         "magento/module-eav": "*",
         "magento/module-import-export": "*",
         "magento/module-media-storage": "*",

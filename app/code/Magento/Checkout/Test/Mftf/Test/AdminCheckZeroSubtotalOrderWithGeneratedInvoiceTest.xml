@@ -54,6 +54,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
+            <actionGroup ref="ClearInvoicesGridFiltersActionGroup" stepKey="clearInvoicesGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

@@ -32,7 +32,7 @@ class CacheTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontendCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 

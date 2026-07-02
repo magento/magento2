@@ -57,18 +57,17 @@ class AbstractTypeTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $catalogProductOption = $this->objectManager->get(Option::class);
-        $catalogProductType = $this->createMock(Type::class);
-        $eventManager = $this->createPartialMock(ManagerInterface::class, ['dispatch']);
-        $fileStorageDb = $this->createMock(Database::class);
-        $filesystem = $this->createMock(Filesystem::class);
-        $registry = $this->createMock(Registry::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $catalogProductType = $this->createStub(Type::class);
+        $eventManager = $this->createStub(ManagerInterface::class);
+        $fileStorageDb = $this->createStub(Database::class);
+        $filesystem = $this->createStub(Filesystem::class);
+        $registry = $this->createStub(Registry::class);
+        $logger = $this->createStub(LoggerInterface::class);
         $serializer = $this->objectManager->get(
             Json::class
         );
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractType::class,
-            [
+        $this->_model = $this->getMockBuilder(AbstractType::class)
+            ->setConstructorArgs([
                 $catalogProductOption,
                 $this->objectManager->get(Config::class),
                 $catalogProductType,
@@ -79,8 +78,10 @@ class AbstractTypeTest extends TestCase
                 $logger,
                 $this->productRepository,
                 $serializer
-            ]
-        );
+            ])
+            ->onlyMethods(['deleteTypeSpecificData'])
+            ->getMock();
+        $this->_model->expects($this->never())->method('deleteTypeSpecificData');
     }
 
     public function testGetRelationInfo()
@@ -377,8 +378,6 @@ class AbstractTypeTest extends TestCase
 
     public function testHasOptions()
     {
-        $this->markTestSkipped('Bug MAGE-2814');
-
         $product = new DataObject();
         $this->assertFalse($this->_model->hasOptions($product));
 

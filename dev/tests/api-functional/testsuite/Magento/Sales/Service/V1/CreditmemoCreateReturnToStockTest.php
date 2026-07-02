@@ -37,6 +37,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use RuntimeException;
 
 /**
@@ -117,6 +118,7 @@ class CreditmemoCreateReturnToStockTest extends WebapiAbstract
         DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], as: 'invoice'),
         DataFixture(ShipmentFixture::class, ['order_id' => '$order.id$'], as: 'shipment'),
     ]
+    #[DataProvider('returnToStockDataProvider')]
     public function testReturnToStockScenarios(
         array   $requestData,
         float   $expectedFinalQty,

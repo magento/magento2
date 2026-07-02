@@ -15,9 +15,11 @@ use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ImageTest extends TestCase
 {
+    use MockCreationTrait;
+    
     /**
      * Base URL for media files
      */
@@ -90,10 +94,7 @@ class ImageTest extends TestCase
      */
     private function createFormMock(): Form|MockObject
     {
-        $form = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
-            ->getMock();
+        $form = $this->createPartialMockWithReflection(Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
         $form->method('getHtmlIdPrefix')->willReturn('');
         $form->method('getHtmlIdSuffix')->willReturn('');
 
@@ -124,7 +125,7 @@ class ImageTest extends TestCase
         $this->factoryElement = $this->createMock(Factory::class);
         $this->factoryCollection = $this->createMock(CollectionFactory::class);
         $this->escaper = $this->createMock(Escaper::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
         $this->secureRenderer = $this->createMock(SecureHtmlRenderer::class);
 
         $this->objectManager = new ObjectManager($this);
@@ -157,10 +158,10 @@ class ImageTest extends TestCase
      * @param mixed $value
      * @param bool $shouldCallGetBaseUrl
      * @param mixed $expectedResult
-     * @dataProvider getUrlDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image::_getUrl
      * @return void
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl($value, bool $shouldCallGetBaseUrl, $expectedResult): void
     {
         $this->model->setValue($value);
@@ -222,10 +223,10 @@ class ImageTest extends TestCase
      * @param string|null $imageValue
      * @param bool $expectsHiddenField
      * @param array $expectedContains
-     * @dataProvider getDeleteCheckboxDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Image::_getDeleteCheckbox
      * @return void
      */
+    #[DataProvider('getDeleteCheckboxDataProvider')]
     public function testGetDeleteCheckbox(
         ?bool $isRequired,
         ?string $htmlId,

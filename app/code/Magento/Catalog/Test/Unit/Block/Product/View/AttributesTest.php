@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Unit\Block\Product\View;
 
 use Magento\Catalog\Block\Product\View\Attributes as AttributesBlock;
 use Magento\Catalog\Model\Product;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend;
 use Magento\Framework\Phrase;
@@ -61,6 +62,11 @@ class AttributesTest extends TestCase
     private $priceCurrencyInterface;
 
     /**
+     * @var MockObject|DirectoryHelper
+     */
+    private $directoryHelper;
+
+    /**
      * @var \Magento\Catalog\Block\Product\View\Attributes
      */
     private $attributesBlock;
@@ -87,10 +93,13 @@ class AttributesTest extends TestCase
         $this->registry
             ->method('registry')->willReturn($this->product);
         $this->priceCurrencyInterface = $this->createMock(PriceCurrencyInterface::class);
+        $this->directoryHelper = $this->createMock(DirectoryHelper::class);
         $this->attributesBlock = new AttributesBlock(
             $this->context,
             $this->registry,
-            $this->priceCurrencyInterface
+            $this->priceCurrencyInterface,
+            [],
+            $this->directoryHelper
         );
     }
 
@@ -118,5 +127,41 @@ class AttributesTest extends TestCase
         $this->assertNotEmpty($attributes['phrase']);
         $this->assertNotEmpty($attributes['phrase']['value']);
         $this->assertEquals('Yes', $attributes['phrase']['value']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetWeightAttributeAppendsUnit()
+    {
+        $weightAttribute = $this->createMock(AbstractAttribute::class);
+        $weightAttribute->method('getIsVisibleOnFront')->willReturn(true);
+        $weightAttribute->method('getAttributeCode')->willReturn('weight');
+        $weightAttribute->method('getFrontendInput')->willReturn('text');
+        $weightFrontend = $this->createMock(AbstractFrontend::class);
+        $weightFrontend->method('getValue')->willReturn('10.000000');
+        $weightAttribute->method('getFrontend')->willReturn($weightFrontend);
+
+        $product = $this->createMock(Product::class);
+        $product->method('getAttributes')->willReturn([$weightAttribute]);
+        $product->method('hasData')->willReturn(true);
+
+        $registry = $this->createMock(Registry::class);
+        $registry->method('registry')->willReturn($product);
+
+        $directoryHelper = $this->createMock(DirectoryHelper::class);
+        $directoryHelper->method('getWeightUnit')->willReturn('lbs');
+
+        $block = new AttributesBlock(
+            $this->context,
+            $registry,
+            $this->priceCurrencyInterface,
+            [],
+            $directoryHelper
+        );
+
+        $attributes = $block->getAdditionalData();
+        $this->assertNotEmpty($attributes['weight']);
+        $this->assertEquals('10.000000 lbs', $attributes['weight']['value']);
     }
 }

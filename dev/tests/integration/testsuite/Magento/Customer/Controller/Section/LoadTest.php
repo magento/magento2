@@ -47,7 +47,7 @@ class LoadTest extends AbstractController
      */
     protected function tearDown(): void
     {
-        $this->customerSession->setCustomerId(null);
+        $this->customerSession->logout();
 
         parent::tearDown();
     }
@@ -73,7 +73,7 @@ class LoadTest extends AbstractController
      */
     public function testWishListCounterUseQty(): void
     {
-        $this->customerSession->setCustomerId(1);
+        $this->customerSession->loginById(1);
         $response = $this->performWishListSectionRequest();
         $this->assertEquals('3 items', $response['wishlist']['counter']);
     }
@@ -86,7 +86,7 @@ class LoadTest extends AbstractController
      */
     public function testWishListCounterNotUseQty(): void
     {
-        $this->customerSession->setCustomerId(1);
+        $this->customerSession->loginById(1);
         $response = $this->performWishListSectionRequest();
         $this->assertEquals('1 item', $response['wishlist']['counter']);
     }

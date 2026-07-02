@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
 use Magento\TestFramework\Fixture\Cache as CacheAlias;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -74,8 +75,8 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      * @param bool $isCustomerEmulated
      *
      * @return void
-     * @dataProvider getIsLoggedInDataProvider
      */
+    #[DataProvider('getIsLoggedInDataProvider')]
     public function testIsLoggedIn(
         bool $expectedResult,
         bool $isCustomerIdValid,

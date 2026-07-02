@@ -31,7 +31,7 @@ class NotProtectedExtensionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->_scopeConfig->expects(
             $this->atLeastOnce()
         )->method(

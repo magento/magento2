@@ -20,6 +20,7 @@ use Magento\TestFramework\Application;
 use Magento\TestFramework\Helper\Bootstrap as TestFrameworkBootstrap;
 use Magento\TestFramework\Db\Mysql;
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for \Magento\TestFramework\Application.
@@ -145,8 +146,8 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
      * @param string|null $postInstallSetupCommandsFilePath
      * @param array $expectedShellExecutionCalls
      * @param bool $isExceptionExpected
-     * @dataProvider installDataProvider
      */
+    #[DataProvider('installDataProvider')]
     public function testInstall(
         string $installConfigFilePath,
         string $globalConfigFilePath,
@@ -317,11 +318,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test \Magento\TestFramework\Application will correctly load specified areas.
-     *
-     * @dataProvider partialLoadAreaDataProvider
      * @param string $areaCode
      * @return void
      */
+    #[DataProvider('partialLoadAreaDataProvider')]
     public function testPartialLoadArea(string $areaCode)
     {
         $configScope = $this->getMockBuilder(Scope::class)
@@ -357,7 +357,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManager->expects($this->once())
             ->method('configure')
             ->with($this->identicalTo([]));

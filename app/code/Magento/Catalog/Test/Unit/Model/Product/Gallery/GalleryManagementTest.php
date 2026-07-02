@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\DefaultValueProcessor;
 use Magento\Catalog\Model\Product\Gallery\DeleteValidator;
 use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -102,6 +103,11 @@ class GalleryManagementTest extends TestCase
     private $file;
 
     /**
+     * @var DefaultValueProcessor|MockObject
+     */
+    private $defaultValueProcessor;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -130,6 +136,7 @@ class GalleryManagementTest extends TestCase
         );
         $this->mediaGalleryEntryMock =
             $this->createMock(ProductAttributeMediaGalleryEntryInterface::class);
+        $this->defaultValueProcessor = $this->createMock(DefaultValueProcessor::class);
         $this->model = new GalleryManagement(
             $this->productRepositoryMock,
             $this->contentValidatorMock,
@@ -139,10 +146,11 @@ class GalleryManagementTest extends TestCase
             $this->filesystem,
             $this->mime,
             $this->file,
+            $this->defaultValueProcessor
         );
         $this->attributeValueMock = $this->createMock(AttributeValue::class);
 
-        $this->newProductMock = $this->createMock(ProductInterface::class);
+        $this->newProductMock = $this->createMock(Product::class);
 
         $this->productInterfaceFactory->method('create')
             ->willReturn($this->newProductMock);
@@ -185,6 +193,8 @@ class GalleryManagementTest extends TestCase
 
         $this->productMock->method('getMediaAttributes')->willReturn(['small_image' => $attributeMock]);
 
+        $this->defaultValueProcessor->expects($this->once())->method('process')
+            ->with($this->newProductMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->create($productSku, $this->mediaGalleryEntryMock);
@@ -270,7 +280,9 @@ class GalleryManagementTest extends TestCase
             ->willReturn([$existingEntryMock]);
         $existingEntryMock->expects($this->once())->method('getTypes')->willReturn([]);
         $entryMock->expects($this->once())->method('getTypes')->willReturn([]);
-        $entryMock->expects($this->once())->method('getId')->willReturn($entryId);
+        $entryMock->expects($this->any())->method('getId')->willReturn($entryId);
+        $this->defaultValueProcessor->expects($this->once())->method('process')
+            ->with($this->newProductMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock)
             ->willThrowException(new \Exception());
         $this->model->update($productSku, $entryMock);
@@ -305,12 +317,14 @@ class GalleryManagementTest extends TestCase
         $this->productMock->expects($this->once())->method('getMediaGalleryEntries')
             ->willReturn([$existingEntryMock, $existingSecondEntryMock]);
 
-        $entryMock->expects($this->exactly(2))->method('getId')->willReturn($entryId);
+        $entryMock->expects($this->any())->method('getId')->willReturn($entryId);
         $entryMock->expects($this->once())->method('getTypes')->willReturn(['image']);
 
         $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([$entryMock, $existingSecondEntryMock])
             ->willReturnSelf();
+        $this->defaultValueProcessor->expects($this->once())->method('process')
+            ->with($this->newProductMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
 
         $this->assertTrue($this->model->update($productSku, $entryMock));
@@ -354,6 +368,8 @@ class GalleryManagementTest extends TestCase
             ->willReturn([$existingEntryMock]);
         $this->newProductMock->expects($this->once())->method('setMediaGalleryEntries')
             ->with([]);
+        $this->defaultValueProcessor->expects($this->once())->method('process')
+            ->with($this->newProductMock);
         $this->productRepositoryMock->expects($this->once())->method('save')->with($this->newProductMock);
         $this->assertTrue($this->model->remove($productSku, $entryId));
     }

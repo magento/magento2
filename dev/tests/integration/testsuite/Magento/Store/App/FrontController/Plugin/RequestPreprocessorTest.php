@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Response;
 use Laminas\Stdlib\Parameters;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests \Magento\Store\App\FrontController\Plugin\RequestPreprocessor.
@@ -91,8 +92,8 @@ class RequestPreprocessorTest extends \Magento\TestFramework\TestCase\AbstractCo
      * @param string $requestUrl
      * @param string $redirectUrl
      * @magentoAppArea frontend
-     * @dataProvider autoRedirectToBaseURLDataProvider
      */
+    #[DataProvider('autoRedirectToBaseURLDataProvider')]
     public function testAutoRedirectToBaseURL(array $config, string $requestUrl, string $redirectUrl)
     {
         $request = [

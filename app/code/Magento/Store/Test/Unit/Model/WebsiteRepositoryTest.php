@@ -84,10 +84,7 @@ class WebsiteRepositoryTest extends TestCase
      */
     public function testGetDefault(): void
     {
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')
@@ -116,10 +113,7 @@ class WebsiteRepositoryTest extends TestCase
     public function testGetDefaultIsSeveral(): void
     {
         $this->expectException(DomainException::class);
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')
@@ -149,10 +143,7 @@ class WebsiteRepositoryTest extends TestCase
     {
         $this->expectException(DomainException::class);
         $this->expectExceptionMessage('The default website isn\'t defined. Set the website and try again.');
-        $websiteMock = $this->getMockBuilder(WebsiteInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods([])
-            ->getMockForAbstractClass();
+        $websiteMock = $this->createMock(WebsiteInterface::class);
         $this->appConfigMock->expects($this->once())
             ->method('get')
             ->with('scopes', 'websites')

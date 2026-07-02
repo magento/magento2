@@ -13,7 +13,9 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Base test cases for delete product custom option with type "field".
@@ -30,15 +32,13 @@ class DeleteCustomOptionsTest extends AbstractBackendController
      */
     protected $productSku = 'simple';
 
-
     /**
      * Test delete custom option with type "field".
-     *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForCreateOptions
      *
      * @param array $optionData
      * @return void
      */
+    #[DataProviderExternal(Field::class, 'getDataForCreateOptions')]
     public function testDeleteCustomOptionWithTypeField(array $optionData): void
     {
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);

@@ -10,6 +10,7 @@ namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 use Magento\Framework\ObjectManager\Config\Compiled;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CompiledTest extends TestCase
 {
@@ -174,9 +175,8 @@ class CompiledTest extends TestCase
      *
      * @param $data
      * @param array $expectedResult
-     *
-     * @dataProvider constructorFieldsValidation
-     */
+     *     */
+    #[DataProvider('constructorFieldsValidation')]
     public function testConstructorFieldsValidation($data, $expectedResult)
     {
         /** @var Compiled $compiled */
@@ -231,9 +231,8 @@ class CompiledTest extends TestCase
      *
      * @param $data
      * @param array $expectedResult
-     *
-     * @dataProvider extendFieldsValidation
-     */
+     *     */
+    #[DataProvider('extendFieldsValidation')]
     public function testExtendFieldsValidation($data, $expectedResult)
     {
         /** @var Compiled $compiled */
