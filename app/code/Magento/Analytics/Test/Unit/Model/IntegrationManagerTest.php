@@ -14,10 +14,15 @@ use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Api\OauthServiceInterface;
 use Magento\Integration\Model\Integration;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class IntegrationManagerTest extends TestCase
 {
+
+    use MockCreationTrait;
+
     /**
      * @var IntegrationServiceInterface|MockObject
      */
@@ -49,13 +54,13 @@ class IntegrationManagerTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->integrationServiceMock = $this->getMockForAbstractClass(IntegrationServiceInterface::class);
+        $this->integrationServiceMock = $this->createMock(IntegrationServiceInterface::class);
         $this->configMock = $this->createMock(Config::class);
-        $this->oauthServiceMock = $this->getMockForAbstractClass(OauthServiceInterface::class);
-        $this->integrationMock = $this->getMockBuilder(Integration::class)->disableOriginalConstructor()
-            ->onlyMethods(['getId'])
-            ->addMethods(['getConsumerId'])
-            ->getMock();
+        $this->oauthServiceMock = $this->createMock(OauthServiceInterface::class);
+        $this->integrationMock = $this->createPartialMockWithReflection(
+            Integration::class,
+            ['getId', 'getConsumerId']
+        );
         $this->integrationManager = $objectManagerHelper->getObject(
             IntegrationManager::class,
             [
@@ -134,8 +139,8 @@ class IntegrationManagerTest extends TestCase
      * @param int|null $integrationId If null integration is absent.
      *
      * @return void
-     * @dataProvider integrationIdDataProvider
      */
+    #[DataProvider('integrationIdDataProvider')]
     public function testGetTokenNewIntegration(?int $integrationId): void
     {
         $this->configMock->expects($this->atLeastOnce())
@@ -181,8 +186,8 @@ class IntegrationManagerTest extends TestCase
      * @param int|null $integrationId If null integration is absent.
      *
      * @return void
-     * @dataProvider integrationIdDataProvider
      */
+    #[DataProvider('integrationIdDataProvider')]
     public function testGetTokenExistingIntegration(?int $integrationId): void
     {
         $this->configMock->expects($this->atLeastOnce())

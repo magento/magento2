@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,17 +9,39 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for Zend cache frontend adapter
+ *
+ * @deprecated Tests deprecated class Zend
+ * @see \Magento\Framework\Cache\Frontend\Adapter\Zend
+ * @group legacy
+ * @group disabled
+ */
 class ZendTest extends TestCase
 {
+    /**
+     * Skip all tests as the class being tested is deprecated
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->markTestSkipped(
+            'Test skipped: Zend frontend adapter is deprecated. Use Symfony cache adapter instead.'
+        );
+    }
+
     /**
      * @param string $method
      * @param array $params
      * @param array $expectedParams
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+     #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $expectedParams, $expectedResult)
     {
         if (is_callable($expectedResult)) {
@@ -93,8 +115,8 @@ class ZendTest extends TestCase
     /**
      * @param string $cleaningMode
      * @param string $expectedErrorMessage
-     * @dataProvider cleanExceptionDataProvider
      */
+     #[DataProvider('cleanExceptionDataProvider')]
     public function testCleanException($cleaningMode, $expectedErrorMessage)
     {
         $this->expectException('InvalidArgumentException');

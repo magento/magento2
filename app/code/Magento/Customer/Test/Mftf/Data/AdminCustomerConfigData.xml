@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,6 +22,14 @@
         <data key="no">No</data>
         <data key="optional">Optional</data>
         <data key="required">Required</data>
+    </entity>
+    <entity name="ShowCompanyRequiredConfigData">
+        <data key="path">customer/address/company_show</data>
+        <data key="value">req</data>
+    </entity>
+    <entity name="ShowCompanyOptionalConfigData">
+        <data key="path">customer/address/company_show</data>
+        <data key="value">opt</data>
     </entity>
     <entity name="CustomerConfigurationSectionNameAndAddressOptions">
         <data key="id">customer_address-head</data>

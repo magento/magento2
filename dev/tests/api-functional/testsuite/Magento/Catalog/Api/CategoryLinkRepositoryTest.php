@@ -1,30 +1,33 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CategoryLinkRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_WRITE_NAME = 'catalogCategoryLinkRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH_SUFFIX = '/V1/categories';
-    const RESOURCE_PATH_PREFIX = 'products';
+    public const SERVICE_WRITE_NAME = 'catalogCategoryLinkRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH_SUFFIX = '/V1/categories';
+    public const RESOURCE_PATH_PREFIX = 'products';
 
+    /**
+     * @var int
+     */
     private static $categoryId = 333;
 
     /**
-     * @dataProvider saveDataProvider
      * @magentoApiDataFixture Magento/Catalog/_files/products_in_category.php
      * @param int $productId
      * @param string[] $productLink
      * @param int $productPosition
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave($productLink, $productId, $productPosition = 0)
     {
         $serviceInfo = [
@@ -61,12 +64,12 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @dataProvider updateProductProvider
      * @magentoApiDataFixture Magento/Catalog/_files/products_in_category.php
      * @param int $productId
      * @param string[] $productLink
      * @param int $productPosition
      */
+    #[DataProvider('updateProductProvider')]
     public function testUpdateProduct($productLink, $productId, $productPosition = 0)
     {
         $serviceInfo = [

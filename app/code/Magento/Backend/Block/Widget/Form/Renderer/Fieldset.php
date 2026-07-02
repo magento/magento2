@@ -13,7 +13,6 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
  * Form fieldset default renderer
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Fieldset extends \Magento\Backend\Block\Template implements RendererInterface

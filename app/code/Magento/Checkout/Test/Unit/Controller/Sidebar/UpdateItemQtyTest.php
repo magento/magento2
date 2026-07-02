@@ -11,10 +11,11 @@ use Magento\Checkout\Controller\Sidebar\UpdateItemQty;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Checkout\Model\Sidebar;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -24,6 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 class UpdateItemQtyTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var UpdateItemQty
      */
@@ -55,7 +57,7 @@ class UpdateItemQtyTest extends TestCase
     protected $requestMock;
 
     /**
-     * @var ResponseInterface|MockObject
+     * @var Http|MockObject
      */
     protected $responseMock;
 
@@ -70,19 +72,14 @@ class UpdateItemQtyTest extends TestCase
     protected function setUp(): void
     {
         $this->sidebarMock = $this->createMock(Sidebar::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->jsonHelperMock = $this->createMock(Data::class);
         $this->quantityProcessor = $this->createMock(RequestQuantityProcessor::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->responseMock = $this->getMockForAbstractClass(
-            ResponseInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['representJson']
-        );
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->responseMock = $this->createPartialMockWithReflection(Http::class, ['representJson']);
+        $this->responseMock->method('representJson')->willReturnCallback(function ($json) {
+            return $json === 'json encoded' ? 'json represented' : $json;
+        });
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->updateItemQty = $this->objectManagerHelper->getObject(
@@ -151,12 +148,6 @@ class UpdateItemQtyTest extends TestCase
             ->method('prepareQuantity')
             ->with(2)
             ->willReturn(2);
-
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
-
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
@@ -199,11 +190,6 @@ class UpdateItemQtyTest extends TestCase
                 ]
             )
             ->willReturn('json encoded');
-
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
 
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
@@ -254,11 +240,6 @@ class UpdateItemQtyTest extends TestCase
             )
             ->willReturn('json encoded');
 
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
-
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
@@ -290,10 +271,6 @@ class UpdateItemQtyTest extends TestCase
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
             ->with($error)
-            ->willReturn($jsonResult);
-
-        $this->responseMock->expects($this->once())
-            ->method('representJson')
             ->willReturn($jsonResult);
 
         $this->assertEquals($jsonResult, $this->updateItemQty->execute());

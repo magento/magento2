@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -91,10 +91,9 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
     protected function _loadGroupCollection()
     {
         $this->_groupCollection = [];
-        foreach ($this->_storeManager->getWebsites() as $website) {
-            foreach ($website->getGroups() as $group) {
-                $this->_groupCollection[$group->getId()] = $group;
-            }
+        $groups = $this->_storeManager->getGroups();
+        foreach ($groups as $group) {
+            $this->_groupCollection[$group->getId()] = $group;
         }
         return $this;
     }

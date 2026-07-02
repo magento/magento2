@@ -47,7 +47,7 @@ class DismissTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
 
         $this->jsonResultMock = $this->createMock(Json::class);

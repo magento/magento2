@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV;
@@ -244,7 +244,7 @@ class RowParser
     {
         $result = false;
         if (is_numeric($value)) {
-            $value = (double)sprintf('%.4F', $value);
+            $value = (float)sprintf('%.4F', $value);
             if ($value >= 0.0000) {
                 $result = $value;
             }

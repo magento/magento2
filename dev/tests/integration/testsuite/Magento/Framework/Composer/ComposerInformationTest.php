@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Composer;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -66,9 +67,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRequiredPhpVersion($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -84,9 +84,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRequiredExtensions($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -106,9 +105,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetSuggestedPackages($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -122,9 +120,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -173,9 +170,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testGetRootRepositories($composerDir)
     {
         $this->setupDirectory($composerDir);
@@ -194,9 +190,8 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $composerDir string Directory under _files that contains composer files
-     *
-     * @dataProvider getRequiredPhpVersionDataProvider
      */
+    #[DataProvider('getRequiredPhpVersionDataProvider')]
     public function testIsMagentoRoot($composerDir)
     {
         $this->setupDirectory($composerDir);

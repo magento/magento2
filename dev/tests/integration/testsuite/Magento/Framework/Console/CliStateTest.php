@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright 2025 Adobe.
- * All rights reserved.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Shell\ComplexParameter;
 use Magento\TestFramework\Helper\Bootstrap as TestBootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -61,8 +62,8 @@ class CliStateTest extends TestCase
      *
      * @param string $mode
      * @return void
-     * @dataProvider modeDataProvider
      */
+    #[DataProvider('modeDataProvider')]
     public function testStateGetModeWithMagentoInitParams(string $mode)
     {
         // Set up test argv with --magento-init-params
@@ -79,10 +80,10 @@ class CliStateTest extends TestCase
 
         // Get the ObjectManager from the test framework
         $objectManager = TestBootstrap::getObjectManager();
-        
+
         // Extract the mode from the parsed parameters
         $extractedMode = $this->extractModeFromParams($params, $mode);
-        
+
         // Create a new State object with the correct mode
         $state = $objectManager->create(State::class, ['mode' => $extractedMode]);
 
@@ -120,7 +121,7 @@ class CliStateTest extends TestCase
 
         // Get the ObjectManager from the test framework
         $objectManager = TestBootstrap::getObjectManager();
-        
+
         // Extract the mode from the parsed parameters
         $extractedMode = $this->extractModeFromParams($params, $mode);
 
@@ -170,11 +171,11 @@ class CliStateTest extends TestCase
         if (isset($params[State::PARAM_MODE])) {
             return $params[State::PARAM_MODE];
         }
-        
+
         if (isset($params['MAGE_MODE'])) {
             return $params['MAGE_MODE'];
         }
-        
+
         // If we can't find it in params, return the expected mode
         return $expectedMode;
     }

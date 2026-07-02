@@ -42,8 +42,8 @@ class SetManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attrSetManagementMock = $this->getMockForAbstractClass(AttributeSetManagementInterface::class);
-        $this->attributeSetRepository = $this->getMockForAbstractClass(AttributeSetRepositoryInterface::class);
+        $this->attrSetManagementMock = $this->createMock(AttributeSetManagementInterface::class);
+        $this->attributeSetRepository = $this->createMock(AttributeSetRepositoryInterface::class);
         $this->eavConfig = $this->createMock(Config::class);
         $this->model = new SetManagement(
             $this->attrSetManagementMock,
@@ -55,8 +55,8 @@ class SetManagementTest extends TestCase
     public function testCreate()
     {
         $skeletonId = 1;
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
-        $skeletonSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $skeletonSetMock = $this->createMock(AttributeSetInterface::class);
 
         $this->attributeSetRepository->expects($this->once())
             ->method('get')
@@ -85,8 +85,8 @@ class SetManagementTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\StateException');
         $skeletonId = 1;
-        $attributeSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
-        $skeletonSetMock = $this->getMockForAbstractClass(AttributeSetInterface::class);
+        $attributeSetMock = $this->createMock(AttributeSetInterface::class);
+        $skeletonSetMock = $this->createMock(AttributeSetInterface::class);
         $this->attributeSetRepository->expects($this->once())
             ->method('get')
             ->with($skeletonId)

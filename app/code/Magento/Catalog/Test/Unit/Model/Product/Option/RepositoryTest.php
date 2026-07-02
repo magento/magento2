@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Catalog\Model\Product\Option\Converter;
 use Magento\Catalog\Model\Product\Option\Repository;
 use Magento\Catalog\Model\Product\OptionFactory;
@@ -64,20 +65,13 @@ class RepositoryTest extends TestCase
         $this->productRepositoryMock = $this->createMock(ProductRepository::class);
         $this->optionResourceMock = $this->createMock(Option::class);
         $converterMock = $this->createMock(Converter::class);
-        $this->optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
+        $this->optionMock = $this->createMock(ProductOption::class);
         $this->productMock = $this->createMock(Product::class);
         $optionFactory = $this->createPartialMock(OptionFactory::class, ['create']);
-        $this->optionCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadata = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->optionCollectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $metadataPool = $this->createMock(MetadataPool::class);
+        $metadata = $this->createMock(EntityMetadata::class);
+        $metadataPool->method('getMetadata')->willReturn($metadata);
 
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
@@ -254,8 +248,8 @@ class RepositoryTest extends TestCase
             ->with($productSku)
             ->willReturn($this->productMock);
         $productOption = clone $this->optionMock;
-        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
-        $productOption->expects($this->any())->method('getOptionId')->willReturn($productOptionId);
+        $this->optionMock->method('getOptionId')->willReturn($optionId);
+        $productOption->method('getOptionId')->willReturn($productOptionId);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn([$productOption]);
         $this->optionRepository->save($this->optionMock);
     }
@@ -267,9 +261,7 @@ class RepositoryTest extends TestCase
     {
         $productSku = 'simple_product';
         $optionId = 1;
-        $originalValue1 = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $originalValue1 = $this->createMock(ProductOption::class);
         $originalValue2 = clone $originalValue1;
         $originalValue3 = clone $originalValue1;
 
@@ -291,15 +283,13 @@ class RepositoryTest extends TestCase
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
-        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->optionMock->method('getOptionId')->willReturn($optionId);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
         $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
             ['option_type_id' => 4],
             ['option_type_id' => 5]
         ]);
-        $optionCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionCollection = $this->createMock(Collection::class);
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
         $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn([
@@ -323,15 +313,13 @@ class RepositoryTest extends TestCase
             ->method('get')
             ->with($productSku)
             ->willReturn($this->productMock);
-        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn($optionId);
+        $this->optionMock->method('getOptionId')->willReturn($optionId);
         $this->productMock->expects($this->once())->method('getOptions')->willReturn([]);
         $this->optionMock->expects($this->once())->method('getData')->with('values')->willReturn([
             ['option_type_id' => 4],
             ['option_type_id' => 5]
         ]);
-        $optionCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $optionCollection = $this->createMock(Collection::class);
         $optionCollection->expects($this->once())->method('getProductOptions')->willReturn([$this->optionMock]);
         $this->optionCollectionFactory->expects($this->once())->method('create')->willReturn($optionCollection);
         $this->optionMock->expects($this->exactly(2))->method('getValues')->willReturn(null);

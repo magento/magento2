@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture\Applier;
 
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\DataFixture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Fixture\Applier\DataFixture
@@ -55,18 +56,16 @@ class DataFixtureTest extends TestCase
             ['data_set_config'],
         ];
         $reflectionMethod = new \ReflectionMethod(DataFixture::class, 'getPrioritizedConfig');
-        $reflectionMethod->setAccessible(true);
         $this->assertEquals($expectedResult, $reflectionMethod->invoke($this->object));
     }
 
     /**
-     * @dataProvider fixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('fixturesProvider')]
     public function testSortFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -148,13 +147,12 @@ class DataFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider removeFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('removeFixturesProvider')]
     public function testRemoveFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -217,13 +215,12 @@ class DataFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider replaceFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('replaceFixturesProvider')]
     public function testReplaceFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);

@@ -1,0 +1,15 @@
+#
+# Copyright 2026 Adobe
+# All Rights Reserved.
+#
+# Lines matching any of these patterns are stripped from PHPCS output.
+# Used by run-phpcs.sh via: grep -vEf phpcs-noise-filter.txt
+^DEPRECATED:
+^WARNING: The Magento2 standard
+has been deprecated since
+^Deprecated sniffs are still
+^ +Squiz\.
+^The Magento2\.
+Support for scanning
+^future\.$
+^-  Squiz\.

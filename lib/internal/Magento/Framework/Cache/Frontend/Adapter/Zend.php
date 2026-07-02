@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Cache\Frontend\Adapter;
 
 /**
  * Adapter for Magento -> Zend cache frontend interfaces
+ *
+ * @deprecated No longer used in production. All cache operations now use Symfony cache adapter.
+ * @see \Magento\Framework\Cache\Frontend\Adapter\Symfony
  */
 class Zend implements \Magento\Framework\Cache\FrontendInterface
 {

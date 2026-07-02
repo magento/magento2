@@ -31,12 +31,8 @@ class AttributeSetTextTest extends AbstractColumnTestCase
     {
         parent::setUp();
 
-        $this->attributeSetRepositoryMock = $this->getMockBuilder(AttributeSetRepositoryInterface::class)
-            ->onlyMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->attributeSetMock = $this->getMockBuilder(AttributeSetInterface::class)
-            ->onlyMethods(['getAttributeSetName'])
-            ->getMockForAbstractClass();
+        $this->attributeSetRepositoryMock = $this->createMock(AttributeSetRepositoryInterface::class);
+        $this->attributeSetMock = $this->createMock(AttributeSetInterface::class);
     }
 
     /**

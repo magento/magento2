@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
 use Magento\Theme\Model\Theme\StoreDefaultThemeResolver;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -73,8 +74,8 @@ class StoreDefaultThemeResolverTest extends TestCase
      *
      * @param string|null $defaultTheme
      * @param array $expected
-     * @dataProvider getThemesDataProvider
      */
+    #[DataProvider('getThemesDataProvider')]
     public function testGetThemes(?string $defaultTheme, array $expected): void
     {
         $store = $this->createMock(StoreInterface::class);

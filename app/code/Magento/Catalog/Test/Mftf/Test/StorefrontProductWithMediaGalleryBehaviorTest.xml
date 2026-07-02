@@ -11,17 +11,14 @@
     <test name="StorefrontProductWithMediaGalleryBehaviorTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Storefront Gallery behaviour for Product with media"/>
-            <title value="Assert media behaviour for product with different media on storefront"/>
-            <description value="Assert media behaviour for product with different media on storefront"/>
+            <stories value="Storefront Gallery behaviour for Product with images and video"/>
+            <title value="Assert gallery navigation and fullscreen behaviour for product with images and video"/>
+            <description value="Assert gallery navigation and fullscreen behaviour for product with images and video"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-26305"/>
             <group value="catalog"/>
             <group value="productVideo"/>
             <group value="pr_exclude"/>
-            <skip>
-                <issueId value="AC-2668"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -182,7 +179,7 @@
         <actionGroup ref="StorefrontAssertActiveProductImageActionGroup" stepKey="seeActiveBaseImage">
             <argument name="fileName" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
-        <dontSeeElement selector="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}" stepKey="dontSeeFullscreenProductImage"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}" stepKey="dontSeeFullscreenProductImage"/>
         <!--Assert thumbnail drag actions. Steps 3-4-->
         <actionGroup ref="AssertStorefrontProductPageGalleryThumbnailDragActionGroup" stepKey="assertThumbnailDragAction">
             <argument name="dragPointImage" value="{{TestImageNew.filename}}"/>
@@ -190,19 +187,23 @@
             <argument name="firstImage" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
         <!--Verify if looping is unavailable. Step 5-->
-        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="seeNextButton"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButton"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="seeNextButton"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="waitForFirstClickNextFotorama"/>
         <click selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="firstClickNextFotorama"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="see9thImageInRibbon"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="see9thImageInRibbon"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="waitForSecondClickNextFotorama"/>
         <click selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="secondClickNextFotorama"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="seeLastImageInRibbon"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDontChangeAfterClickNext"/>
-        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="dontSeeNextButtonAfterClickNext"/>
+        <waitForElement selector="{{StorefrontProductMediaSection.productImageInFotorama(MagentoImage.filename)}}" stepKey="seeLastImageInRibbon"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDontChangeAfterClickNext"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.fotoramaNextButton}}" stepKey="dontSeeNextButtonAfterClickNext"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="waitForFirstClickPrevFotorama"/>
         <click selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="firstClickPrevFotorama"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="waitForSecondClickPrevFotorama"/>
         <click selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="secondClickPrevFotorama"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDefaultStay2"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(TestImageAdobe.filename)}}" stepKey="seeFirstImageInRibbon"/>
-        <dontSeeElement selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButtonAfterClick"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImage(TestImageAdobe.filename)}}" stepKey="seeActiveImageDefaultStay2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageInFotorama(TestImageAdobe.filename)}}" stepKey="seeFirstImageInRibbon"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.fotoramaPrevButton}}" stepKey="dontSeePrevButtonAfterClick"/>
         <!--Change image by thumbnail ribbon. Step 6-->
         <actionGroup ref="AssertStorefrontProductPageGalleryChangingMainImageByRibbonActionGroup" stepKey="assertThumbnailClicking">
             <argument name="startImage" value="{{TestImageAdobe.filename}}"/>
@@ -221,38 +222,55 @@
         </actionGroup>
         <!--Check that images <= that image section. Step 7.4-->
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions0"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert0"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert0"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions1"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert1"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert1"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions2"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert2"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert2"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions3"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert3"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert3"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions4"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert4"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert4"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions5"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert5"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert5"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions6"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert6"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert6"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions7"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert7"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert7"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions8"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert8"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert8"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions9"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert9"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert9"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions10"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert10"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert10"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions11"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert11"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert11"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions12"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert12"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert12"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions13"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert13"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert13"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions14"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert14"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert14"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions15"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert15"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert15"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertImageDimensions16"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForNextButtonDimensionsAssert16"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickOnNextImageButtonDimensionsAssert16"/>
         <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoop">
             <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
@@ -268,18 +286,22 @@
             <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
         <!--Assert the image looping by image buttons. Step 9-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="waitForLoopBack"/>
         <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="loopBack"/>
         <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoopBack">
             <argument name="productImage" value="{{Magento3.filename}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForLoopForward"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="loopForward"/>
         <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeImageAfterLoopForward">
             <argument name="productImage" value="{{TestImageAdobe.filename}}"/>
         </actionGroup>
         <!--Open the fullscreen image. Steps 10-11-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="waitForSetNonDefaultImage"/>
         <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="setNonDefaultImage"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="waitForOpenFullscreenImage"/>
         <click selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="openFullscreenImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(AdobeSmallImage.filename)}}" stepKey="assertFullscreenImage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(AdobeSmallImage.filename)}}" stepKey="assertFullscreenImage"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.fotoramaAnyMedia}}" stepKey="waitForThumbnailsFullscreen"/>
         <!--Assert positioning images in the ribbon Step 11.3-->
         <actionGroup ref="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup" stepKey="assertFullscreenThumbnailImagePosition1">
@@ -368,95 +390,121 @@
             <argument name="position" value="17"/>
         </actionGroup>
         <!--Assert the fullscreen thumbnail ribbon drag actions step 12-->
-        <actionGroup ref="AssertStorefrontProductPageGalleryFullscreenThumbnailDragActionGroup" stepKey="assertFullscreenThumbnailDragAction">
-            <argument name="dragPointImage" value="{{TestImageNew.filename}}"/>
-            <argument name="currentImage" value="{{AdobeSmallImage.filename}}"/>
-            <argument name="firstImage" value="{{TestImageAdobe.filename}}"/>
-        </actionGroup>
+        <!--Narrow the window so 17 thumbnails no longer fit in the ribbon, making it scrollable-->
+        <resizeWindow width="1024" height="768" stepKey="narrowWindowForFullscreenDrag"/>
+            <actionGroup ref="AssertStorefrontProductPageGalleryFullscreenThumbnailDragActionGroup" stepKey="assertFullscreenThumbnailDragAction">
+                <argument name="dragPointImage" value="{{TestImageNew.filename}}"/>
+                <argument name="currentImage" value="{{AdobeSmallImage.filename}}"/>
+                <argument name="firstImage" value="{{TestImageAdobe.filename}}"/>
+            </actionGroup>
+        <resizeWindow width="1920" height="1080" stepKey="restoreWindowAfterFullscreenDrag"/>
         <!--Change fullscreen image by clicking on thumbnail ribbon. Step 15-->
         <actionGroup ref="AssertStorefrontProductPageGalleryChangingFullscreenImageByRibbonActionGroup" stepKey="assertThumbnailClickFullscreen">
             <argument name="startImage" value="{{AdobeSmallImage.filename}}"/>
             <argument name="expectedImage" value="{{LargeImage.filename}}"/>
         </actionGroup>
         <!--Change fullscreen image using the image buttons. Steps 16 and 18-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="waitForGoToFirstImage"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="goToFirstImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="seeFirstFullscreenImage"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="seeFirstFullscreenImage"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="waitForLoopToLastImage"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="loopToLastImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(Magento3.filename)}}" stepKey="assertLastImageAfterLoop"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(Magento3.filename)}}" stepKey="assertLastImageAfterLoop"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForLoopToFirstImage"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="loopToFirstImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="assertFirstImageAfterLoop"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="assertFirstImageAfterLoop"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert0"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert0"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions0">
-            <argument name="source" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
+            <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
         <!--        Check that images <= that image section. Step 16.5-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert1"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert1"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions1">
-            <argument name="source" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
+            <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert2"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert2"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="waitForSkipVideo"/>
         <click selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="skipVideo"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions3">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert4"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert4"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions4">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert5"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert5"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions5">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert6"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert6"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions6">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert7"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert7"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions7">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert8"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert8"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions8">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert9"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert9"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions9">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert10"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert10"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions10">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert11"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert11"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions11">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert12"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert12"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions12">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert13"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert13"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions13">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert14"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert14"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions14">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert15"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert15"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions15">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="waitForFullscreenDimensionsAssert16"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenNextButton}}" stepKey="clickOnNextImageButtonFullscreenDimensionsAssert16"/>
         <actionGroup ref="AssertStorefrontProductPageGalleryImageDimensionsActionGroup" stepKey="assertFullscreenImageDimensions16">
             <argument name="imageSource" value="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="assertFirstImageAfterSecondLoop"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(TestImageAdobe.filename)}}" stepKey="assertFirstImageAfterSecondLoop"/>
         <!-- TODO: Change fullscreen image by drag/swipe action: after  MQE-2333 implementation  -->
         <!--Steps 19-20-->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="waitForSelectLastImage"/>
         <click selector="{{StorefrontProductMediaSection.imageFullscreenPrevButton}}" stepKey="selectLastImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(Magento3.filename)}}" stepKey="assertLastImageFullscreen"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(Magento3.filename)}}" stepKey="assertLastImageFullscreen"/>
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.closeFullscreenImage}}" stepKey="waitForCloseFullScreenImage"/>
         <click selector="{{StorefrontProductMediaSection.closeFullscreenImage}}" stepKey="closeFullScreenImage"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.mainImageForJsActionsFullscreen}}" stepKey="waitForFullscreenToClose"/>
         <actionGroup ref="AssertStorefrontProductImageAppearsOnProductPagePreviewActionGroup" stepKey="seeLastImageAfterFullscreen">
             <argument name="productImage" value="{{Magento3.filename}}"/>
         </actionGroup>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2013 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Form;
@@ -13,7 +13,8 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  * Backend form container block
  *
  * @api
- * @deprecated 100.2.0 in favour of UI component implementation
+ * @deprecated 100.2.0 Use UI components for form rendering instead of this legacy form container
+ * @see \Magento\Ui\Component\Form
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
@@ -45,14 +46,14 @@ class Container extends \Magento\Backend\Block\Widget\Container
     protected $_blockGroup = 'Magento_Backend';
 
     /**
-     *  @var string
+     * @var string
      */
-    const PARAM_BLOCK_GROUP = 'block_group';
+    public const PARAM_BLOCK_GROUP = 'block_group';
 
     /**
-     *  @var string
+     * @var string
      */
-    const PARAM_MODE = 'mode';
+    public const PARAM_MODE = 'mode';
 
     /**
      * @var string
@@ -111,14 +112,17 @@ class Container extends \Magento\Backend\Block\Widget\Container
         $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
+            $confirmMessage = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to do this?'))
+            );
+            $deleteOnClick = 'deleteConfirm(\'' . $confirmMessage . '\', \'' .
+                $this->getDeleteUrl() . '\', {data: {}})';
             $this->addButton(
                 'delete',
                 [
                     'label' => __('Delete'),
                     'class' => 'delete',
-                    'onclick' => 'deleteConfirm(\'' . __(
-                        'Are you sure you want to do this?'
-                    ) . '\', \'' . $this->getDeleteUrl() . '\', {data: {}})'
+                    'onclick' => $deleteOnClick
                 ]
             );
         }

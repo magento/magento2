@@ -14,6 +14,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\PasswordResetRequestEvent;
 use Magento\Security\Model\SecurityManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -60,23 +61,23 @@ class AccountManagementTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->request =  $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
 
         $this->securityManager = $this->createPartialMock(
             SecurityManager::class,
             ['performSecurityCheck']
         );
 
-        $this->accountManagement =  $this->createMock(AccountManagement::class);
-        $this->scope =  $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->accountManagement = $this->createMock(AccountManagement::class);
+        $this->scope = $this->createMock(ScopeInterface::class);
     }
 
     /**
      * @param $area
      * @param $passwordRequestEvent
      * @param $expectedTimes
-     * @dataProvider beforeInitiatePasswordResetDataProvider
      */
+    #[DataProvider('beforeInitiatePasswordResetDataProvider')]
     public function testBeforeInitiatePasswordReset($area, $passwordRequestEvent, $expectedTimes)
     {
         $email = 'test@example.com';

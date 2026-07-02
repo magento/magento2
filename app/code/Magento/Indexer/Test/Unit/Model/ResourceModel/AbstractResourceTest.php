@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\Table\StrategyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,7 +40,7 @@ class AbstractResourceTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->_tableStrategyInterface = $this->getMockForAbstractClass(StrategyInterface::class);
+        $this->_tableStrategyInterface = $this->createMock(StrategyInterface::class);
         $objectManager = new ObjectManager($this);
         $arguments = $objectManager->getConstructArguments(
             AbstractResourceStub::class,
@@ -69,7 +70,7 @@ class AbstractResourceTest extends TestCase
 
     public function testClearTemporaryIndexTable()
     {
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $connectionMock->expects($this->once())->method('delete')->willReturnSelf();
         $this->model->clearTemporaryIndexTable();
@@ -82,7 +83,7 @@ class AbstractResourceTest extends TestCase
         $describeTable = ['column' => 'column'];
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
@@ -106,7 +107,7 @@ class AbstractResourceTest extends TestCase
     {
         $this->expectException('Exception');
         $describeTable = ['column' => 'column'];
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($describeTable);
         $connectionMock->expects($this->any())->method('select')->willThrowException(new \Exception());
         $this->_resourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
@@ -117,8 +118,8 @@ class AbstractResourceTest extends TestCase
 
     /**
      * @param bool $readToIndex
-     * @dataProvider insertFromTableData
      */
+    #[DataProvider('insertFromTableData')]
     public function testInsertFromTable($readToIndex)
     {
         $sourceTable = 'catalog_category_flat';
@@ -127,18 +128,14 @@ class AbstractResourceTest extends TestCase
         $tableColumns = ['column' => 'column'];
 
         $selectMock = $this->createMock(Select::class);
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $connectionMock->expects($this->any())->method('describeTable')->willReturn($tableColumns);
         $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
 
         if ($readToIndex) {
-            $connectionCustomMock = $this->getMockBuilder(AdapterInterface::class)
-                ->onlyMethods(['describeTable', 'query', 'select', 'insertArray'])
-                ->getMockForAbstractClass();
+            $connectionCustomMock = $this->createMock(AdapterInterface::class);
             $pdoMock = $this->createMock(\Zend_Db_Statement_Pdo::class);
             $connectionCustomMock->expects($this->any())->method('query')->willReturn($selectMock);
             $connectionCustomMock->expects($this->any())->method('select')->willReturn($selectMock);

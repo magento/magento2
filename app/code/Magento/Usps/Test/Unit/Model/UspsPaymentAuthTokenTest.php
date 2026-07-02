@@ -15,6 +15,7 @@ use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Usps\Model\UspsPaymentAuthToken;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +47,6 @@ class UspsPaymentAuthTokenTest extends TestCase
     }
 
     /**
-     * @dataProvider getPaymentAuthTokenDataProvider
      * @param $token
      * @param $clientUrl
      * @param $accountInfo
@@ -54,6 +54,7 @@ class UspsPaymentAuthTokenTest extends TestCase
      * @return void
      * @throws Throwable
      */
+    #[DataProvider('getPaymentAuthTokenDataProvider')]
     public function testGetPaymentAuthTokenSuccess($token, $clientUrl, $accountInfo): void
     {
         $requestPayload = json_encode([
@@ -78,12 +79,8 @@ class UspsPaymentAuthTokenTest extends TestCase
             'Authorization' => 'Bearer ' . $token,
         ];
 
-        $asyncResponseMock = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $responseResult = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $asyncResponseMock = $this->createMock(HttpResponseDeferredInterface::class);
+        $responseResult = $this->createMock(Response::class);
 
         $asyncResponseMock->expects($this->once())
             ->method('get')
@@ -108,21 +105,17 @@ class UspsPaymentAuthTokenTest extends TestCase
     }
 
     /**
-     * @dataProvider getPaymentAuthTokenDataProvider
      * @param string $token,
      * @param string $clientUrl,
      * @param array $accountInfo
      * @return void
      * @throws Throwable
      */
+    #[DataProvider('getPaymentAuthTokenDataProvider')]
     public function testGetPaymentAuthTokenMissingToken(string $token, string $clientUrl, array $accountInfo): void
     {
-        $asyncResponseMock = $this->getMockBuilder(HttpResponseDeferredInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $responseResult = $this->getMockBuilder(Response::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $asyncResponseMock = $this->createMock(HttpResponseDeferredInterface::class);
+        $responseResult = $this->createMock(Response::class);
 
         $asyncResponseMock->expects($this->once())
             ->method('get')
@@ -146,13 +139,13 @@ class UspsPaymentAuthTokenTest extends TestCase
     }
 
     /**
-     * @dataProvider getPaymentAuthTokenDataProvider
      * @param string $token
      * @param string $clientUrl
      * @param array $accountInfo
      * @return void
      * @throws Throwable
      */
+    #[DataProvider('getPaymentAuthTokenDataProvider')]
     public function testGetPaymentAuthTokenHttpException(string $token, string $clientUrl, array $accountInfo): void
     {
         $httpExceptionMessage = 'HTTP error occurred';
@@ -161,10 +154,8 @@ class UspsPaymentAuthTokenTest extends TestCase
             ->method('request')
             ->willThrowException(new HttpException($httpExceptionMessage));
 
-        $uspsPaymentAuthTokenMock = $this->getMockBuilder(UspsPaymentAuthToken::class)
-            ->setConstructorArgs(['asyncHttpClient' => $this->asyncHttpClientMock])
-            ->onlyMethods(['_debug'])
-            ->getMock();
+        $uspsPaymentAuthTokenMock = $this->createPartialMock(UspsPaymentAuthToken::class, ['_debug']);
+        $uspsPaymentAuthTokenMock->__construct($this->asyncHttpClientMock);
 
         $uspsPaymentAuthTokenMock->expects($this->once())
             ->method('_debug')

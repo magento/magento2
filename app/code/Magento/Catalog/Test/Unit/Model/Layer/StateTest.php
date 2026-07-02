@@ -27,9 +27,7 @@ class StateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->item = $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->item = $this->createMock(Item::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(State::class);

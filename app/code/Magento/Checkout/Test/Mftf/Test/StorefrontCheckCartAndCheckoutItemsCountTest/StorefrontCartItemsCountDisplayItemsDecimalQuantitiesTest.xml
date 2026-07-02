@@ -27,6 +27,7 @@
             </createData>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
             <magentoCLI command="config:set {{DisplayItemsQuantities.path}} {{DisplayItemsQuantities.value}}" stepKey="resetDisplayCartSummary"/>
