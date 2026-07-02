@@ -19,7 +19,7 @@ class Curl extends CurlLibrary
      * @param array|string $params
      * @return void
      *
-     * @deprecated Replace with the core `delete` implementation
+     * @deprecated Use \Magento\Framework\HTTP\Client\Curl::delete instead
      * @see \Magento\Framework\HTTP\Client\Curl::delete
      */
     public function delete($uri, $params = []): void
