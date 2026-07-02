@@ -122,11 +122,11 @@ class QuoteAdapter implements OrderAdapterInterface
     /**
      * Returns order grand total amount
      *
-     * @return null
+     * @return float
      */
     public function getGrandTotalAmount()
     {
-        return null;
+        return $this->quote->getBaseGrandTotal();
     }
 
     /**
