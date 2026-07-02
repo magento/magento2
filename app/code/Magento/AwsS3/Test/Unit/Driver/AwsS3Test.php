@@ -12,6 +12,7 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use Magento\AwsS3\Driver\AwsS3;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -44,9 +45,9 @@ class AwsS3Test extends TestCase
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->getMockForAbstractClass(FilesystemAdapter::class);
-        $this->metadataProviderMock = $this->getMockForAbstractClass(MetadataProviderInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->adapterMock = $this->createMock(FilesystemAdapter::class);
+        $this->metadataProviderMock = $this->createMock(MetadataProviderInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
 
         $this->driver = new AwsS3($this->adapterMock, $loggerMock, self::URL, $this->metadataProviderMock);
     }
@@ -55,9 +56,8 @@ class AwsS3Test extends TestCase
      * @param string|null $basePath
      * @param string|null $path
      * @param string $expected
-     *
-     * @dataProvider getAbsolutePathDataProvider
      */
+    #[DataProvider('getAbsolutePathDataProvider')]
     public function testGetAbsolutePath($basePath, $path, string $expected): void
     {
         self::assertSame($expected, $this->driver->getAbsolutePath($basePath, $path));
@@ -172,9 +172,8 @@ class AwsS3Test extends TestCase
      * @param string $basePath
      * @param string $path
      * @param string $expected
-     *
-     * @dataProvider getRelativePathDataProvider
      */
+    #[DataProvider('getRelativePathDataProvider')]
     public function testGetRelativePath(string $basePath, string $path, string $expected): void
     {
         self::assertSame($expected, $this->driver->getRelativePath($basePath, $path));
@@ -214,8 +213,8 @@ class AwsS3Test extends TestCase
      * @param iterable $listContents
      * @param \Exception|null $metadataException
      * @throws FileSystemException
-     * @dataProvider isDirectoryDataProvider
      */
+    #[DataProvider('isDirectoryDataProvider')]
     public function testIsDirectory(
         string $path,
         string $normalizedPath,
@@ -301,9 +300,8 @@ class AwsS3Test extends TestCase
      * @param array $metadata
      * @param bool $expected
      * @throws FileSystemException
-     *
-     * @dataProvider isFileDataProvider
      */
+    #[DataProvider('isFileDataProvider')]
     public function testIsFile(
         string $path,
         string $normalizedPath,
@@ -380,9 +378,8 @@ class AwsS3Test extends TestCase
     /**
      * @param string $path
      * @param string $expected
-     *
-     * @dataProvider getRealPathSafetyDataProvider
      */
+    #[DataProvider('getRealPathSafetyDataProvider')]
     public function testGetRealPathSafety(string $path, string $expected): void
     {
         self::assertSame($expected, $this->driver->getRealPathSafety($path));
@@ -515,6 +512,72 @@ class AwsS3Test extends TestCase
         self::assertFalse($this->driver->createDirectory(self::URL . 'test/test2/'));
     }
 
+    /**
+     * Verify that createDirectory resolves '.' path components when parent exists.
+     */
+    public function testCreateDirectoryStripsDotComponent(): void
+    {
+        $this->metadataProviderMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturnCallback(function ($param) {
+                if ($param === 'import_export') {
+                    return ['type' => AwsS3::TYPE_DIR];
+                }
+                throw new UnableToRetrieveMetadata('');
+            });
+        $this->adapterMock->expects($this->any())
+            ->method('listContents')
+            ->willReturn(new \EmptyIterator());
+        // The adapter must not be called with a path containing '.'
+        $this->adapterMock->expects(self::never())
+            ->method('createDirectory');
+
+        self::assertTrue($this->driver->createDirectory(self::URL . 'import_export/.'));
+    }
+
+    /**
+     * Verify that createDirectory with '.' creates the resolved path without literal '.'.
+     */
+    public function testCreateDirectoryStripsDotComponentAndCreatesResolved(): void
+    {
+        $createdDirs = [];
+        $this->metadataProviderMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturnCallback(function ($param) use (&$createdDirs) {
+                if (in_array($param, $createdDirs, true)) {
+                    return ['type' => AwsS3::TYPE_DIR];
+                }
+                throw new UnableToRetrieveMetadata('');
+            });
+        $this->adapterMock->expects($this->any())
+            ->method('listContents')
+            ->willReturn(new \EmptyIterator());
+        $this->adapterMock->expects(self::atLeastOnce())
+            ->method('createDirectory')
+            ->willReturnCallback(function (string $path) use (&$createdDirs): void {
+                self::assertStringNotContainsString('/.', $path, 'Adapter must not receive path with "."');
+                self::assertNotEquals('.', $path, 'Adapter must not receive bare "."');
+                $createdDirs[] = $path;
+            });
+
+        self::assertTrue($this->driver->createDirectory(self::URL . 'import_export/.'));
+    }
+
+    /**
+     * Verify that filePutContents strips '.' from paths before passing to the adapter.
+     */
+    public function testFilePutContentsStripsDotComponent(): void
+    {
+        $this->adapterMock->expects(self::once())
+            ->method('write')
+            ->with('import_export/test.txt');
+        $this->adapterMock->expects(self::once())
+            ->method('fileSize')
+            ->willReturn(new \League\Flysystem\FileAttributes('import_export/test.txt', 5));
+
+        $this->driver->filePutContents(self::URL . 'import_export/./test.txt', 'hello');
+    }
+
     public function testRename(): void
     {
         $this->adapterMock->expects(self::once())
@@ -556,9 +619,7 @@ class AwsS3Test extends TestCase
         $this->assertEquals(false, $this->driver->fileClose(false));
     }
 
-    /**
-     * @dataProvider fileOpenModesDataProvider
-     */
+    #[DataProvider('fileOpenModesDataProvider')]
     public function testFileOppenedMode($mode, $expected): void
     {
         $this->adapterMock->method('fileExists')->willReturn(true);

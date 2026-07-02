@@ -14,17 +14,21 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory as OptionCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Eav\Model\Config;
+use Magento\ImportExport\Model\Export\Config as ExportConfig;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Export\ConfigInterface;
 use Magento\Store\Model\Store;
@@ -39,6 +43,8 @@ use Psr\Log\LoggerInterface;
  */
 class AdvancedPricingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Timezone|MockObject
      */
@@ -157,49 +163,36 @@ class AdvancedPricingTest extends TestCase
         $this->localeDate = $this->createMock(Timezone::class);
         $this->config = $this->createPartialMock(Config::class, ['getEntityType']);
         $type = $this->createMock(Type::class);
-        $this->config->expects($this->once())->method('getEntityType')->willReturn($type);
+        $this->config->method('getEntityType')->willReturn($type);
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->storeManager = $this->createMock(StoreManager::class);
         $this->logger = $this->createMock(Monolog::class);
         $this->collection = $this->createMock(CollectionFactory::class);
-        $this->abstractCollection = $this->getMockForAbstractClass(
+        $this->abstractCollection = $this->createPartialMockWithReflection(
             AbstractCollection::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             [
-                'count',
                 'setOrder',
                 'setStoreId',
-                'getCurPage',
-                'getLastPageNumber',
+                'getAllIds',
+                'clear',
             ]
         );
-        $this->exportConfig = $this->createMock(\Magento\ImportExport\Model\Export\Config::class);
-        $this->productFactory = $this->getMockBuilder(ProductFactory::class)
-            ->addMethods(['getTypeId'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
-            ->addMethods(['setEntityTypeFilter'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
-            ->addMethods(['addNameToResult'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->exportConfig = $this->createMock(ExportConfig::class);
+        $this->productFactory = $this->createPartialMockWithReflection(
+            ProductFactory::class,
+            ['getTypeId', 'create']
+        );
+        $this->attrSetColFactory = $this->createPartialMockWithReflection(
+            AttributeSetCollectionFactory::class,
+            ['setEntityTypeFilter', 'create']
+        );
+        $this->categoryColFactory = $this->createPartialMockWithReflection(
+            CategoryCollectionFactory::class,
+            ['addNameToResult', 'create']
+        );
         $this->itemFactory = $this->createMock(ItemFactory::class);
-        $this->optionColFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory::class
-        );
-        $this->attributeColFactory = $this->createMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class
-        );
+        $this->optionColFactory = $this->createMock(OptionCollectionFactory::class);
+        $this->attributeColFactory = $this->createMock(AttributeCollectionFactory::class);
         $this->typeFactory = $this->createMock(Factory::class);
         $this->linkTypeProvider = $this->createMock(LinkTypeProvider::class);
         $this->rowCustomizer = $this->createMock(
@@ -208,7 +201,7 @@ class AdvancedPricingTest extends TestCase
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );
-        $this->groupRepository = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->writer = $this->createPartialMock(
             AbstractAdapter::class,
             [
@@ -242,36 +235,31 @@ class AdvancedPricingTest extends TestCase
             '_getCustomerGroupById',
             'correctExportData'
         ]);
-        $this->advancedPricing = $this->getMockBuilder(
-            AdvancedPricing::class
-        )
-            ->addMethods($mockAddMethods)
-            ->onlyMethods($mockMethods)
-            ->disableOriginalConstructor()
-            ->getMock();
-        foreach ($constructorMethods as $method) {
-            $this->advancedPricing->expects($this->once())->method($method)->willReturnSelf();
-        }
-        $this->advancedPricing->__construct(
-            $this->localeDate,
-            $this->config,
-            $this->resource,
-            $this->storeManager,
-            $this->logger,
-            $this->collection,
-            $this->exportConfig,
-            $this->productFactory,
-            $this->attrSetColFactory,
-            $this->categoryColFactory,
-            $this->itemFactory,
-            $this->optionColFactory,
-            $this->attributeColFactory,
-            $this->typeFactory,
-            $this->linkTypeProvider,
-            $this->rowCustomizer,
-            $this->storeResolver,
-            $this->groupRepository
+        $this->advancedPricing = $this->createPartialMockWithReflection(
+            AdvancedPricing::class,
+            array_merge($mockAddMethods, $mockMethods)
         );
+
+        // Configure constructor methods to return self
+        foreach ($constructorMethods as $method) {
+            $this->advancedPricing->method($method)->willReturnSelf();
+        }
+
+        // Set properties directly using reflection instead of calling constructor
+        // to avoid parent constructor that needs ObjectManager
+        $reflection = new \ReflectionClass($this->advancedPricing);
+
+        $storeResolverProperty = $reflection->getProperty('_storeResolver');
+        $storeResolverProperty->setValue($this->advancedPricing, $this->storeResolver);
+
+        $groupRepositoryProperty = $reflection->getProperty('_groupRepository');
+        $groupRepositoryProperty->setValue($this->advancedPricing, $this->groupRepository);
+
+        $resourceProperty = $reflection->getProperty('_resource');
+        $resourceProperty->setValue($this->advancedPricing, $this->resource);
+
+        $loggerProperty = $reflection->getProperty('_logger');
+        $loggerProperty->setValue($this->advancedPricing, $this->logger);
     }
 
     /**
@@ -279,12 +267,11 @@ class AdvancedPricingTest extends TestCase
      */
     public function testExportZeroConditionCalls()
     {
-        $page = 1;
         $itemsPerPage = 10;
 
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
         $this->advancedPricing
-            ->expects($this->exactly(1))
+            ->expects($this->once())
             ->method('_getEntityCollection')
             ->willReturn($this->abstractCollection);
         $this->advancedPricing
@@ -292,12 +279,9 @@ class AdvancedPricingTest extends TestCase
             ->method('_prepareEntityCollection')
             ->with($this->abstractCollection);
         $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
+        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
         $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(0);
-        $this->abstractCollection->expects($this->never())->method('getCurPage');
-        $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
+        $this->abstractCollection->expects($this->once())->method('getAllIds')->with($itemsPerPage, 0)->willReturn([]);
         $this->advancedPricing->expects($this->never())->method('_getHeaderColumns');
         $this->writer->expects($this->never())->method('setHeaderCols');
         $this->writer->expects($this->never())->method('writeRow');
@@ -312,27 +296,44 @@ class AdvancedPricingTest extends TestCase
      */
     public function testExportCurrentPageCalls()
     {
-        $curPage = $lastPage = $page = 1;
         $itemsPerPage = 10;
         $this->advancedPricing->expects($this->once())->method('getWriter')->willReturn($this->writer);
         $this->advancedPricing
-            ->expects($this->exactly(1))
+            ->expects($this->exactly(2))
             ->method('_getEntityCollection')
             ->willReturn($this->abstractCollection);
         $this->advancedPricing
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('_prepareEntityCollection')
             ->with($this->abstractCollection);
-        $this->advancedPricing->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->advancedPricing->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('has_options', 'asc');
-        $this->abstractCollection->expects($this->once())->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
-        $this->abstractCollection->expects($this->once())->method('count')->willReturn(1);
-        $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
-        $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
-        $headers = ['headers'];
-        $this->advancedPricing->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->method('setHeaderCols')->with($headers);
+        $this->advancedPricing->expects($this->exactly(2))->method('getItemsPerPage')->willReturn($itemsPerPage);
+        $this->abstractCollection->expects($this->exactly(2))->method('setOrder')->with('entity_id', 'asc');
+        $this->abstractCollection->expects($this->exactly(2))->method('setStoreId')->with(Store::DEFAULT_STORE_ID);
+        $this->abstractCollection
+            ->expects($this->exactly(2))
+            ->method('getAllIds')
+            ->willReturnCallback(function (int $limit, int $offset) use ($itemsPerPage) {
+                static $calls = 0;
+                ++$calls;
+                if ($calls === 1) {
+                    $this->assertSame($itemsPerPage, $limit);
+                    $this->assertSame(0, $offset);
+                    return [1];
+                }
+
+                $this->assertSame($itemsPerPage, $limit);
+                $this->assertSame($itemsPerPage, $offset);
+                return [];
+            });
+        $headers = [
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_SKU,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_WEBSITE,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_QTY,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE,
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::COL_TIER_PRICE_TYPE,
+        ];
+        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
         $webSite = 'All Websites [USD]';
         $userGroup = 'General';
         $this->advancedPricing->method('_getWebsiteCode')->willReturn($webSite);
@@ -382,7 +383,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         return $reflectionProperty->getValue($object);
     }
 
@@ -399,7 +399,6 @@ class AdvancedPricingTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
     }

@@ -18,6 +18,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
@@ -509,7 +510,7 @@ QUERY;
         for ($i = 1; $i <= 3; $i++) {
             $orderNumber = $this->fixtures->get('or' . $i)->getIncrementId();
             $orderCreatedAt = $this->timezone->date($this->fixtures->get('or' . $i)->getCreatedAt())
-                ->format(DateTime::DATETIME_PHP_FORMAT);
+                ->format(DateTime::DATETIME_SLASH_PHP_FORMAT);
             $orderNumberCreatedAtExpected[$orderNumber] = $orderCreatedAt;
         }
 
@@ -701,10 +702,10 @@ QUERY;
     /**
      * @param String $orderNumber
      * @throws AuthenticationException
-     * @dataProvider dataProviderIncorrectOrder
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
+    #[DataProvider('dataProviderIncorrectOrder')]
     public function testGetCustomerNonExistingOrderQuery(string $orderNumber)
     {
         $query =
@@ -825,10 +826,10 @@ QUERY;
      * @param String $store
      * @param int $expectedCount
      * @throws AuthenticationException
-     * @dataProvider dataProviderMultiStores
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
      */
+    #[DataProvider('dataProviderMultiStores')]
     public function testGetCustomerOrdersTwoStoreViewQuery(string $orderNumber, string $store, int $expectedCount)
     {
         $query =

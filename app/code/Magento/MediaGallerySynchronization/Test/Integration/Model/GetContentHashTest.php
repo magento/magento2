@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGallerySynchronization\Model\GetContentHash;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for GetContentHash.
@@ -39,13 +40,12 @@ class GetContentHashTest extends TestCase
 
     /**
      * Test for GetContentHash::execute
-     *
-     * @dataProvider filesProvider
      * @param string $firstFile
      * @param string $secondFile
      * @param bool $isEqual
      * @throws FileSystemException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         string $firstFile,
         string $secondFile,

@@ -5,11 +5,12 @@
  */
 namespace Magento\Amqp\Setup;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\App\DeploymentConfig;
+use Magento\MessageQueue\Setup\ConfigOptionsList as MessageQueueConfigOptionsList;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -172,8 +173,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
-        $errors = [];
+        $defaultConnection = $options[MessageQueueConfigOptionsList::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] ?? null;
+        if ($defaultConnection && $defaultConnection !== 'amqp') {
+            return [];
+        }
 
+        $errors = [];
         if (isset($options[self::INPUT_KEY_QUEUE_AMQP_HOST])
             && $options[self::INPUT_KEY_QUEUE_AMQP_HOST] !== '') {
             if (!$this->isDataEmpty(

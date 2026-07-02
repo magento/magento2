@@ -10,6 +10,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\CartMutexInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
@@ -181,6 +182,11 @@ class Multishipping extends \Magento\Framework\DataObject
     private $dataObjectHelper;
 
     /**
+     * @var CartMutexInterface
+     */
+    private $cartMutex;
+
+    /**
      * @param Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -208,6 +214,7 @@ class Multishipping extends \Magento\Framework\DataObject
      * @param Multishipping\PlaceOrderFactory|null $placeOrderFactory
      * @param LoggerInterface|null $logger
      * @param \Magento\Framework\Api\DataObjectHelper|null $dataObjectHelper
+     * @param CartMutexInterface|null $cartMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -237,7 +244,8 @@ class Multishipping extends \Magento\Framework\DataObject
         ?AllowedCountries $allowedCountryReader = null,
         ?Multishipping\PlaceOrderFactory $placeOrderFactory = null,
         ?LoggerInterface $logger = null,
-        ?\Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null
+        ?\Magento\Framework\Api\DataObjectHelper $dataObjectHelper = null,
+        ?CartMutexInterface $cartMutex = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
@@ -270,6 +278,8 @@ class Multishipping extends \Magento\Framework\DataObject
             ->get(LoggerInterface::class);
         $this->dataObjectHelper = $dataObjectHelper ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->cartMutex = $cartMutex ?: ObjectManager::getInstance()
+            ->get(CartMutexInterface::class);
         parent::__construct($data);
         $this->_init();
     }
@@ -856,6 +866,18 @@ class Multishipping extends \Magento\Framework\DataObject
      */
     public function createOrders()
     {
+        return $this->cartMutex->execute((int)$this->getQuote()->getId(), $this->createOrdersMutexCallback(...));
+    }
+
+    /**
+     * Mutex callback for createOrders()
+     *
+     * @see createOrders
+     * @return Multishipping
+     * @throws \Exception
+     */
+    private function createOrdersMutexCallback()
+    {
         $orderIds = [];
         $this->_validate();
         $shippingAddresses = $this->getQuote()->getAllShippingAddresses();
@@ -895,7 +917,10 @@ class Multishipping extends \Magento\Framework\DataObject
 
             $placedAddressItems = [];
             foreach ($successfulOrders as $order) {
-                $orderIds[$order->getId()] = $order->getIncrementId();
+                $orderId = $order->getId();
+                if ($orderId !== null) {
+                    $orderIds[$orderId] = $order->getIncrementId();
+                }
                 if ($order->getCanSendNewEmailFlag()) {
                     $this->orderSender->send($order);
                 }

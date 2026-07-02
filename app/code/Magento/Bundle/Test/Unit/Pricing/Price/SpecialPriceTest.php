@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Pricing\Price\SpecialPrice;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\RegularPrice;
@@ -55,22 +56,18 @@ class SpecialPriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->saleable = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->saleable = $this->createMock(Product::class);
 
-        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
         $this->priceInfo = $this->createMock(Base::class);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($this->priceInfo);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
-        $this->specialPriceService = $this->getMockBuilder(SpecialPriceService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->specialPriceService = $this->createMock(SpecialPriceService::class);
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -90,8 +87,8 @@ class SpecialPriceTest extends TestCase
      * @param $isScopeDateInInterval
      * @param $value
      * @param $percent
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($regularPrice, $specialPrice, $isScopeDateInInterval, $value, $percent)
     {
         $specialFromDate =  'some date from';
@@ -122,7 +119,7 @@ class SpecialPriceTest extends TestCase
             ->method('convertAndRound');
 
         if ($isScopeDateInInterval) {
-            $price = $this->getMockForAbstractClass(PriceInterface::class);
+            $price = $this->createMock(PriceInterface::class);
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
                 ->with(RegularPrice::PRICE_CODE)

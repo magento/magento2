@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductChangeImageSortOrderActionGroup">
+        <annotations>
+            <description>Expands "Images And Videos" section, drag provided image into provided position</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="ProductImage"/>
+            <argument name="position" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
+        <waitForPageLoad stepKey="waitForImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
+        <conditionalClick selector="{{AdminProductImagesSection.sortOrderUseDefault}}" dependentSelector="{{AdminProductImagesSection.isSortOrderUseDefaultSelected}}" visible="true" stepKey="uncheckUseDefault"/>
+        <waitForJS function="const gallery = jQuery('{{AdminProductImagesSection.imagesContainer}}'); return gallery.sortable &amp;&amp; gallery.sortable('option', 'disabled') === false;" stepKey="waitForImagesToBeSortable"/>
+        <dragAndDrop selector1="{{AdminProductImagesSection.imageContainer(image.fileName)}}" selector2="{{AdminProductImagesSection.nthImageContainer(position)}}" stepKey="dragDrop"/>
+        <waitForPageLoad stepKey="waitForDragDrop"/>
+        <grabAttributeFrom selector="{{AdminProductImagesSection.nthProductImage(position)}}" userInput="src" stepKey="getImageSrc"/>
+        <assertStringContainsString stepKey="assertImageAtPosition">
+            <actualResult type="variable">getImageSrc</actualResult>
+            <expectedResult type="string">{{image.fileName}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

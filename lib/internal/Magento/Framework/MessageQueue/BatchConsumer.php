@@ -1,16 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue;
 
-use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
 /**
- * Class BatchConsumer
+ * BatchConsumer to consume massages from queue and process
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BatchConsumer implements ConsumerInterface
@@ -74,11 +75,10 @@ class BatchConsumer implements ConsumerInterface
      * @param ConsumerConfigurationInterface $configuration
      * @param int $interval [optional]
      * @param int $batchSize [optional]
-     * @param MessageProcessorLoader $messageProcessorLoader [optional]
-     * @param MessageController $messageController [optional]
-     * @param ConsumerConfig $consumerConfig [optional]
-     *
+     * @param MessageProcessorLoader|null $messageProcessorLoader [optional]
+     * @param ConsumerConfig|null $consumerConfig
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         MessageQueueConfig $messageQueueConfig,
@@ -89,7 +89,8 @@ class BatchConsumer implements ConsumerInterface
         ConsumerConfigurationInterface $configuration,
         $interval = 5,
         $batchSize = 0,
-        ?MessageProcessorLoader $messageProcessorLoader = null
+        ?MessageProcessorLoader $messageProcessorLoader = null,
+        ?ConsumerConfig $consumerConfig = null
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
@@ -100,16 +101,17 @@ class BatchConsumer implements ConsumerInterface
         $this->configuration = $configuration;
         $this->messageProcessorLoader = $messageProcessorLoader
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(MessageProcessorLoader::class);
+        $this->consumerConfig = $consumerConfig ?: ObjectManager::getInstance()->get(ConsumerConfig::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
         $queueName = $this->configuration->getQueueName();
         $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->getConsumerConfig()->getConsumer($consumerName)->getConnection();
+        $connectionName = $this->consumerConfig->getConsumer($consumerName)->getConnection();
 
         $queue = $this->queueRepository->get($connectionName, $queueName);
         $merger = $this->mergerFactory->create($consumerName);
@@ -180,7 +182,6 @@ class BatchConsumer implements ConsumerInterface
         while ($message = $queue->dequeue()) {
             $messages[] = $message;
         }
-
         return $messages;
     }
 
@@ -269,30 +270,14 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * Get consumer config.
-     *
-     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
-     *
-     * @return ConsumerConfig
-     *
-     * @deprecated 103.0.0
-     */
-    private function getConsumerConfig()
-    {
-        if ($this->consumerConfig === null) {
-            $this->consumerConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(ConsumerConfig::class);
-        }
-        return $this->consumerConfig;
-    }
-
-    /**
      * Get message controller.
      *
      * This getter serves as a workaround to add this dependency to this class without breaking constructor structure
      *
      * @return MessageController
      *
-     * @deprecated 103.0.0
+     * @deprecated 103.0.0 Use constructor injection instead.
+     * @see \Magento\Framework\MessageQueue\MessageController
      */
     private function getMessageController()
     {

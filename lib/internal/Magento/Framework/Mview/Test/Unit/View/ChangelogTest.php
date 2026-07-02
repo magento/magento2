@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Mview\View\Changelog;
 use Magento\Framework\Mview\View\ChangelogInterface;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoFactoriesTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,24 +29,29 @@ class ChangelogTest extends TestCase
     /**
      * @var Changelog
      */
-    protected $model;
+    private $model;
 
     /**
      * Mysql PDO DB adapter mock
      *
-     * @var MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var MockObject|Mysql
      */
-    protected $connectionMock;
+    private $connectionMock;
 
     /**
      * @var MockObject|ResourceConnection
      */
-    protected $resourceMock;
+    private $resourceMock;
 
     /**
      * @var ProcessorFactory|MockObject
      */
-    protected $processorFactory;
+    private $processorFactory;
+
+    /**
+     * @var DtoFactoriesTable|MockObject
+     */
+    private $dtoFactoriesTableMock;
 
     protected function setUp(): void
     {
@@ -53,8 +59,14 @@ class ChangelogTest extends TestCase
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->mockGetConnection($this->connectionMock);
         $this->processorFactory = $this->createMock(ProcessorFactory::class);
+        $this->dtoFactoriesTableMock = $this->createMock(DtoFactoriesTable::class);
 
-        $this->model = new Changelog($this->resourceMock, $this->getMviewConfigMock(), $this->processorFactory);
+        $this->model = new Changelog(
+            $this->resourceMock,
+            $this->getMviewConfigMock(),
+            $this->processorFactory,
+            $this->dtoFactoriesTableMock,
+        );
     }
 
     /**
@@ -73,11 +85,7 @@ class ChangelogTest extends TestCase
 
     public function testInstanceOf()
     {
-        $resourceMock =
-            $this->createMock(ResourceConnection::class);
-        $resourceMock->expects($this->once())->method('getConnection')->willReturn(true);
-        $model = new Changelog($resourceMock, $this->getMviewConfigMock(), $this->processorFactory);
-        $this->assertInstanceOf(ChangelogInterface::class, $model);
+        $this->assertInstanceOf(ChangelogInterface::class, $this->model);
     }
 
     public function testCheckConnectionException()
@@ -306,6 +314,21 @@ class ChangelogTest extends TestCase
         $this->expectExceptionMessage("Table {$changelogTableName} does not exist");
         $this->model->setViewId('viewIdtest');
         $this->model->getList(random_int(1, 200), random_int(201, 400));
+    }
+
+    public function testClear()
+    {
+        $versionId = 100;
+        $tableName = 'viewIdtest_cl';
+        $this->resourceMock->expects(self::once())->method('getTableName')->willReturn($tableName);
+        $this->connectionMock->expects(self::once())->method('isTableExists')->with($tableName)->willReturn(true);
+
+        $stmtMock = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $stmtMock->expects(self::exactly(3))->method('rowCount')->willReturnOnConsecutiveCalls(10000, 5000, 0);
+        $this->connectionMock->expects(self::exactly(3))->method('query')->willReturn($stmtMock);
+
+        $this->model->setViewId('viewIdtest');
+        $this->model->clear($versionId);
     }
 
     public function testClearWithException()

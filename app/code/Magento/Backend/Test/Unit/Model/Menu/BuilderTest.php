@@ -14,12 +14,14 @@ use Magento\Backend\Model\Menu\Builder\Command\Remove;
 use Magento\Backend\Model\Menu\Builder\Command\Update;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu\Item\Factory;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class BuilderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Builder
      */
@@ -36,18 +38,23 @@ class BuilderTest extends TestCase
     private $factoryMock;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
+        $this->objectManager = new ObjectManager($this);
         $this->factoryMock = $this->createMock(Factory::class);
-        $this->menuMock = $this->getMockBuilder(Menu::class)
-            ->addMethods(['addChild'])
-            ->onlyMethods(['add'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->menuMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['addChild', 'add']
+        );
 
-        $this->model = (new ObjectManager($this))->getObject(
+        $this->model = $this->objectManager->getObject(
             Builder::class,
             [
                 'menuItemFactory' => $this->factoryMock

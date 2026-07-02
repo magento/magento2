@@ -73,7 +73,7 @@ class ConfigSetCommand extends AbstractSetupCommand
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOptions = $input->getOptions();
         $optionCollection = $this->configModel->getAvailableOptions();

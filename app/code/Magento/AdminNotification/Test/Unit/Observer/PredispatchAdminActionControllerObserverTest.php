@@ -66,20 +66,20 @@ class PredispatchAdminActionControllerObserverTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->observerMock = $this->createMock(Observer::class);
 
-        $this->backendAuthSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn'])
-            ->getMock();
+        $this->backendAuthSessionMock = $this->createPartialMock(
+            Session::class,
+            ['isLoggedIn']
+        );
 
-        $this->feedMock = $this->getMockBuilder(Feed::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['checkUpdate'])
-            ->getMock();
+        $this->feedMock = $this->createPartialMock(
+            Feed::class,
+            ['checkUpdate']
+        );
 
-        $this->feedFactoryMock = $this->getMockBuilder(FeedFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->feedFactoryMock = $this->createPartialMock(
+            FeedFactory::class,
+            ['create']
+        );
 
         $this->observer = $this->objectManager->getObject(
             PredispatchAdminActionControllerObserver::class,

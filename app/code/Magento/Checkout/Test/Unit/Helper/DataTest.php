@@ -128,9 +128,7 @@ class DataTest extends TestCase
             );
 
         $this->checkoutSession = $arguments['checkoutSession'];
-        $arguments['localeDate']->expects($this->any())
-            ->method('formatDateTime')
-            ->willReturn('Oct 02, 2013');
+        $arguments['localeDate']->method('formatDateTime')->willReturn('Oct 02, 2013');
 
         $this->transportBuilder = $arguments['transportBuilder'];
 
@@ -148,7 +146,7 @@ class DataTest extends TestCase
             ->onlyMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $quoteMock->expects($this->any())->method('getId')->willReturn(1);
+        $quoteMock->method('getId')->willReturn(1);
 
         $this->assertSame($this->helper, $this->helper->sendPaymentFailedEmail($quoteMock, 'test message'));
     }
@@ -169,10 +167,7 @@ class DataTest extends TestCase
     {
         $price = 5.5;
         $quoteMock = $this->createMock(Quote::class);
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->addMethods(['formatPrice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
         $this->checkoutSession->expects($this->once())->method('getQuote')->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('getStore')->willReturn($storeMock);
         $this->priceCurrency->expects($this->once())->method('format')->willReturn('5.5');
@@ -222,12 +217,8 @@ class DataTest extends TestCase
 
     public function testGetPriceInclTax()
     {
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getPriceInclTax'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->exactly(2))->method('getPriceInclTax')->willReturn(5.5);
-        $this->assertEquals(5.5, $this->helper->getPriceInclTax($itemMock));
+        $item = new DataObject(['price_incl_tax' => 5.5]);
+        $this->assertEquals(5.5, $this->helper->getPriceInclTax($item));
     }
 
     public function testGetPriceInclTaxWithoutTax()
@@ -238,7 +229,7 @@ class DataTest extends TestCase
         $rowTotal = 15;
         $roundPrice = 17;
         $expected = 17;
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,
@@ -247,26 +238,12 @@ class DataTest extends TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(
-                [
-                    'getPriceInclTax',
-                    'getQty',
-                    'getTaxAmount',
-                    'getDiscountTaxCompensation',
-                    'getRowTotal',
-                    'getQtyOrdered'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->once())->method('getPriceInclTax')->willReturn(false);
-        $itemMock->expects($this->exactly(2))->method('getQty')->willReturn($qty);
-        $itemMock->expects($this->never())->method('getQtyOrdered');
-        $itemMock->expects($this->once())->method('getTaxAmount')->willReturn($taxAmount);
-        $itemMock->expects($this->once())
-            ->method('getDiscountTaxCompensation')->willReturn($discountTaxCompensation);
-        $itemMock->expects($this->once())->method('getRowTotal')->willReturn($rowTotal);
+        $itemMock = new DataObject([
+            'qty' => $qty,
+            'tax_amount' => $taxAmount,
+            'discount_tax_compensation' => $discountTaxCompensation,
+            'row_total' => $rowTotal,
+        ]);
         $this->priceCurrency->expects($this->once())->method('round')->with($roundPrice)->willReturn($roundPrice);
         $this->assertEquals($expected, $helper->getPriceInclTax($itemMock));
     }
@@ -275,11 +252,7 @@ class DataTest extends TestCase
     {
         $rowTotalInclTax = 5.5;
         $expected = 5.5;
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getRowTotalInclTax'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->exactly(2))->method('getRowTotalInclTax')->willReturn($rowTotalInclTax);
+        $itemMock = new DataObject(['row_total_incl_tax' => $rowTotalInclTax]);
         $this->assertEquals($expected, $this->helper->getSubtotalInclTax($itemMock));
     }
 
@@ -289,21 +262,17 @@ class DataTest extends TestCase
         $discountTaxCompensation = 1;
         $rowTotal = 15;
         $expected = 17;
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getRowTotalInclTax', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->once())->method('getRowTotalInclTax')->willReturn(false);
-        $itemMock->expects($this->once())->method('getTaxAmount')->willReturn($taxAmount);
-        $itemMock->expects($this->once())
-            ->method('getDiscountTaxCompensation')->willReturn($discountTaxCompensation);
-        $itemMock->expects($this->once())->method('getRowTotal')->willReturn($rowTotal);
+        $itemMock = new DataObject([
+            'tax_amount' => $taxAmount,
+            'discount_tax_compensation' => $discountTaxCompensation,
+            'row_total' => $rowTotal,
+        ]);
         $this->assertEquals($expected, $this->helper->getSubtotalInclTax($itemMock));
     }
 
     public function testGetBasePriceInclTaxWithoutQty()
     {
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,
@@ -312,18 +281,19 @@ class DataTest extends TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getQty'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->once())->method('getQty');
+        $itemMock = new DataObject([
+            'qty' => 1,
+            'tax_amount' => 0,
+            'discount_tax_compensation' => 0,
+            'row_total' => 0,
+        ]);
         $this->priceCurrency->expects($this->once())->method('round');
         $helper->getPriceInclTax($itemMock);
     }
 
     public function testGetBasePriceInclTax()
     {
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
         $objectManagerHelper = new ObjectManager($this);
         $helper = $objectManagerHelper->getObject(
             Data::class,
@@ -332,26 +302,25 @@ class DataTest extends TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getQty', 'getQtyOrdered'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->once())->method('getQty')->willReturn(false);
-        $itemMock->expects($this->exactly(2))->method('getQtyOrdered')->willReturn(5.5);
+        $itemMock = new DataObject([
+            'qty' => false,
+            'qty_ordered' => 1,
+            'base_tax_amount' => 0,
+            'base_discount_tax_compensation' => 0,
+            'base_row_total' => 0,
+        ]);
         $this->priceCurrency->expects($this->once())->method('round');
         $helper->getBasePriceInclTax($itemMock);
     }
 
     public function testGetBaseSubtotalInclTax()
     {
-        $itemMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getBaseTaxAmount', 'getBaseDiscountTaxCompensation', 'getBaseRowTotal'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $itemMock->expects($this->once())->method('getBaseTaxAmount');
-        $itemMock->expects($this->once())->method('getBaseDiscountTaxCompensation');
-        $itemMock->expects($this->once())->method('getBaseRowTotal');
-        $this->helper->getBaseSubtotalInclTax($itemMock);
+        $item = new DataObject([
+            'base_tax_amount' => 0,
+            'base_discount_tax_compensation' => 0,
+            'base_row_total' => 0,
+        ]);
+        $this->helper->getBaseSubtotalInclTax($item);
     }
 
     public function testIsAllowedGuestCheckoutWithoutStore()

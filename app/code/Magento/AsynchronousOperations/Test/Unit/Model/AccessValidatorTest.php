@@ -12,6 +12,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Model\AccessValidator;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\EntityManager\EntityManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,7 +40,7 @@ class AccessValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->entityManagerMock = $this->createMock(EntityManager::class);
         $this->bulkSummaryFactoryMock = $this->createPartialMock(
             BulkSummaryInterfaceFactory::class,
@@ -54,15 +55,15 @@ class AccessValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider summaryDataProvider
      * @param string $bulkUserId
      * @param bool $expectedResult
      */
+    #[DataProvider('summaryDataProvider')]
     public function testIsAllowed($bulkUserId, $expectedResult)
     {
         $adminId = 1;
         $uuid = 'test-001';
-        $bulkSummaryMock = $this->getMockForAbstractClass(BulkSummaryInterface::class);
+        $bulkSummaryMock = $this->createMock(BulkSummaryInterface::class);
 
         $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($bulkSummaryMock);
         $this->entityManagerMock->expects($this->once())

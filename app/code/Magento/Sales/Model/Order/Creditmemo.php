@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Model\Order;
@@ -542,7 +542,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     private function setAdjustmentAmount(string $amount, string $baseAdjustmentField, string $adjustmentField): self
     {
         if (substr($amount, -1) == '%') {
-            $amount = (double) substr($amount, 0, -1);
+            $amount = (float) substr($amount, 0, -1);
             $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
         }
 

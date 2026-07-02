@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResults;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterfaceFactory;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenFactory;
@@ -27,7 +28,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PaymentTokenRepositoryTest extends TestCase
 {
-    const PUBLIC_HASH = 'hash';
+    private const PUBLIC_HASH = 'hash';
 
     /**
      * @var PaymentTokenRepository|MockObject resourceModelMock
@@ -94,63 +95,38 @@ class PaymentTokenRepositoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->resourceModelMock = $this->getMockBuilder(PaymentTokenResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceModelMock = $this->createMock(PaymentTokenResourceModel::class);
 
-        $this->paymentTokenMock = $this->getMockBuilder(PaymentToken::class)
-            ->onlyMethods(['save', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentTokenMock = $this->createPartialMock(PaymentToken::class, ['save', 'load']);
         $this->paymentTokenMock->setIsActive(true);
         $this->paymentTokenMock->setPublicHash(PaymentTokenRepositoryTest::PUBLIC_HASH);
-        $this->paymentTokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentTokenFactoryMock = $this->createMock(PaymentTokenFactory::class);
 
-        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
 
-        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
 
-        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
 
-        $this->searchResultsFactoryMock = $this->getMockBuilder(PaymentTokenSearchResultsInterfaceFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->searchResultsFactoryMock = $this->createMock(PaymentTokenSearchResultsInterfaceFactory::class);
 
         $this->searchResults = new SearchResults();
 
-        $this->collectionMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionMock = $this->createMock(Collection::class);
 
-        $this->collectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $this->collectionProcessor = $this->createMock(
             CollectionProcessorInterface::class
         );
-        $this->repositoryModel = $this->getMockBuilder(PaymentTokenRepository::class)
-            ->setConstructorArgs([
-                'resourceModel' => $this->resourceModelMock,
-                'paymentTokenFactory' => $this->paymentTokenFactoryMock,
-                'filterBuilder' => $this->filterBuilderMock,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-                'searchResultsFactory' => $this->searchResultsFactoryMock,
-                'collectionFactory' => $this->collectionFactoryMock,
-                'collectionProcessor' => $this->collectionProcessor
-            ])
-            ->onlyMethods([])
-            ->getMock();
+        $this->repositoryModel = new PaymentTokenRepository(
+            $this->resourceModelMock,
+            $this->paymentTokenFactoryMock,
+            $this->filterBuilderMock,
+            $this->searchCriteriaBuilderMock,
+            $this->searchResultsFactoryMock,
+            $this->collectionFactoryMock,
+            $this->collectionProcessor
+        );
     }
 
     public function testRepositoryGetList()

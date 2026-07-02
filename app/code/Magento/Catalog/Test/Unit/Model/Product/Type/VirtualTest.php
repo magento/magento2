@@ -27,13 +27,11 @@ class VirtualTest extends TestCase
     protected function setUp(): void
     {
         $objectHelper = new ObjectManager($this);
-        $eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManager = $this->createMock(ManagerInterface::class);
         $coreRegistryMock = $this->createMock(Registry::class);
         $fileStorageDbMock = $this->createMock(Database::class);
-        $filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $productFactoryMock = $this->createMock(ProductFactory::class);
         $this->_model = $objectHelper->getObject(
             Virtual::class,

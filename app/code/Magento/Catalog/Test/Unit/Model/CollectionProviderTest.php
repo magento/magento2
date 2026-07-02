@@ -46,8 +46,8 @@ class CollectionProviderTest extends TestCase
     {
         $this->productMock = $this->createMock(Product::class);
         $this->converterPoolMock = $this->createMock(ConverterPool::class);
-        $this->providerMock = $this->getMockForAbstractClass(CollectionProviderInterface::class);
-        $this->converterMock = $this->getMockForAbstractClass(ConverterInterface::class);
+        $this->providerMock = $this->createMock(CollectionProviderInterface::class);
+        $this->converterMock = $this->createMock(ConverterInterface::class);
 
         $this->model = new CollectionProvider($this->converterPoolMock, ['crosssell' => $this->providerMock]);
     }

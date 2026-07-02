@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -165,7 +165,6 @@ class PageTest extends ResolverCacheAbstract
         $page = $this->getPageByTitle('Page with 1column layout');
 
         $getGraphQlClient = new \ReflectionMethod($this, 'getGraphQlClient');
-        $getGraphQlClient->setAccessible(true);
 
         $query = $this->getQuery($page->getIdentifier());
         $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);

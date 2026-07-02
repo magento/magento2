@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order;
 
@@ -19,7 +19,9 @@ class StatusResolver
         $paymentMethodOrderStatus = $order->getPayment()->getMethodInstance()
             ->getConfigData('order_status');
 
-        return array_key_exists($paymentMethodOrderStatus, $order->getConfig()->getStateStatuses($state))
+        // PHP 8.5 Compatibility: Check for null before using in array_key_exists
+        return ($paymentMethodOrderStatus !== null 
+                && array_key_exists($paymentMethodOrderStatus, $order->getConfig()->getStateStatuses($state)))
             ? $paymentMethodOrderStatus
             : $order->getConfig()->getStateDefaultStatus($state);
     }

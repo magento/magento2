@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Setup\Module\I18n\Parser\AbstractParser;
 use Magento\Setup\Module\I18n\Parser\AdapterInterface;
 use Magento\Setup\Module\I18n\Parser as Parser;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -50,8 +51,8 @@ class ParserTest extends TestCase
      * @param array $jsMap
      * @param array $phraseFactoryMap
      * @param array $expectedResult
-     * @dataProvider addPhraseDataProvider
      */
+    #[DataProvider('addPhraseDataProvider')]
     public function testAddPhrase($options, $phpFiles, $jsFiles, $phpMap, $jsMap, $phraseFactoryMap, $expectedResult)
     {
         foreach ($phraseFactoryMap as &$phrase) {

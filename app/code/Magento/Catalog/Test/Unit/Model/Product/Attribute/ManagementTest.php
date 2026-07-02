@@ -27,7 +27,7 @@ class ManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attrManagementMock = $this->getMockForAbstractClass(AttributeManagementInterface::class);
+        $this->attrManagementMock = $this->createMock(AttributeManagementInterface::class);
         $this->model = new Management($this->attrManagementMock);
     }
 
@@ -66,7 +66,7 @@ class ManagementTest extends TestCase
     public function testGetAttributes()
     {
         $attributeSetId = 1;
-        $attributeMock = $this->getMockForAbstractClass(ProductAttributeInterface::class);
+        $attributeMock = $this->createMock(ProductAttributeInterface::class);
 
         $this->attrManagementMock->expects($this->once())
             ->method('getAttributes')

@@ -27,10 +27,7 @@ class TypeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->productOptionConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->onlyMethods(['getAll'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productOptionConfig = $this->createMock(ConfigInterface::class);
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
@@ -64,7 +61,7 @@ class TypeTest extends TestCase
             ],
         ];
 
-        $this->productOptionConfig->expects($this->any())->method('getAll')->willReturn($allOptions);
+        $this->productOptionConfig->method('getAll')->willReturn($allOptions);
 
         $this->assertEquals($expect, $this->model->toOptionArray());
     }

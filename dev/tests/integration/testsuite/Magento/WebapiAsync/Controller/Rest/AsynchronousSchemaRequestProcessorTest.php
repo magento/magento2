@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\WebapiAsync\Controller\Rest;
 
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AsynchronousSchemaRequestProcessorTest extends AbstractController
 {
@@ -15,8 +16,8 @@ class AsynchronousSchemaRequestProcessorTest extends AbstractController
      *
      * @param string $path
      * @magentoAppArea webapi_rest
-     * @dataProvider schemaRequestProvider
      */
+    #[DataProvider('schemaRequestProvider')]
     public function testSchemaRequest($path)
     {
         ob_start();

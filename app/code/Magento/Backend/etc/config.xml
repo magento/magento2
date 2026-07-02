@@ -11,11 +11,17 @@
             <dashboard>
                 <enable_charts>0</enable_charts>
             </dashboard>
+            <security>
+                <minimum_password_length>7</minimum_password_length>
+            </security>
         </admin>
         <dev>
             <template>
                 <minify_html>0</minify_html>
             </template>
+            <js>
+                <defer_non_critical>0</defer_non_critical>
+            </js>
         </dev>
         <system>
             <media_storage_configuration>

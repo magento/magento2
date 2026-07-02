@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,17 +45,12 @@ class RelationCompositeTest extends TestCase
                     'getEventPrefix'
                 ]
             )
-            ->getMockForAbstractClass();
-        $this->relationProcessorMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->relationProcessorMock = $this->getMockBuilder(
+            ->getMock();
+        $this->relationProcessorMock = $this->createMock(AbstractModel::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->relationProcessorMock = $this->createMock(
             RelationInterface::class
-        )->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        );
 
         $this->entityRelationComposite = new RelationComposite(
             $this->eventManagerMock,

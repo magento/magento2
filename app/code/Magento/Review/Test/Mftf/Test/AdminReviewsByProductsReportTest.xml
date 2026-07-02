@@ -55,6 +55,10 @@
             <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByProducts.dataUiId}}"/>
         </actionGroup>
+        <!-- Filter by product name to isolate test data before grabbing review count -->
+        <actionGroup ref="AdminFilterProductReviewByNameActionGroup" stepKey="filterByProductName">
+            <argument name="productName" value="$$createProduct1.name$$"/>
+        </actionGroup>
         <!--Sort Review Column -->
         <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabReviewQuantity"/>
         <actionGroup ref="AdminFilterProductReviewActionGroup" stepKey="navigateToReportsReview">

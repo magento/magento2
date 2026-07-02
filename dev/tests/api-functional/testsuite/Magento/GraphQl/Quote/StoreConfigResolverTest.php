@@ -48,21 +48,57 @@ class StoreConfigResolverTest extends GraphQlAbstract
     {
         $this->assertEquals(
             [
-              'storeConfig' => [
-                  'is_guest_checkout_enabled' => true,
-                  'is_one_page_checkout_enabled' => true,
-                  'max_items_in_order_summary' => self::MAX_ITEMS_TO_DISPLAY,
-                  'cart_summary_display_quantity' => self::CART_SUMMARY_DISPLAY_TOTAL,
-                  'minicart_display' => true,
-                  'minicart_max_items' => self::MINICART_MAX_ITEMS,
-                  'cart_expires_in_days' => self::CART_EXPIRES_IN_DAYS,
-                  'grouped_product_image' => 'PARENT',
-                  'configurable_product_image' => 'ITSELF',
-                  'is_checkout_agreements_enabled' => true,
-              ],
+                'storeConfig' => [
+                    'is_guest_checkout_enabled' => true,
+                    'is_one_page_checkout_enabled' => true,
+                    'max_items_in_order_summary' => self::MAX_ITEMS_TO_DISPLAY,
+                    'cart_summary_display_quantity' => self::CART_SUMMARY_DISPLAY_TOTAL,
+                    'minicart_display' => true,
+                    'minicart_max_items' => self::MINICART_MAX_ITEMS,
+                    'cart_expires_in_days' => self::CART_EXPIRES_IN_DAYS,
+                    'grouped_product_image' => 'PARENT',
+                    'configurable_product_image' => 'ITSELF',
+                    'is_checkout_agreements_enabled' => true,
+                ],
             ],
             $this->graphQlQuery($this->getStoreConfigQuery())
         );
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'guest')
+    ]
+    public function testStoreConfigForMergePreferenceGuestPriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'guest'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'customer')
+    ]
+    public function testStoreConfigForMergePreferenceCustomerPriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'customer'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
+    }
+
+    #[
+        ConfigFixture('checkout/cart/cart_merge_preference', 'merge')
+    ]
+    public function testStoreConfigForMergePreferenceMergePriority(): void
+    {
+        $this->assertEquals([
+            'storeConfig' => [
+                'cart_merge_preference' => 'merge'
+            ]
+        ], $this->graphQlQuery($this->getStoreConfigQueryForMergePreference()));
     }
 
     /**
@@ -85,6 +121,22 @@ class StoreConfigResolverTest extends GraphQlAbstract
                 grouped_product_image
                 configurable_product_image
                 is_checkout_agreements_enabled
+              }
+            }
+        QUERY;
+    }
+
+    /**
+     * Generates storeConfig query with newly added configurations
+     *
+     * @return string
+     */
+    private function getStoreConfigQueryForMergePreference(): string
+    {
+        return <<<QUERY
+            {
+              storeConfig {
+                cart_merge_preference
               }
             }
         QUERY;
