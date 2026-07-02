@@ -22,6 +22,9 @@ use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AbstractAttributeTest extends TestCase
 {
     use MockCreationTrait;
