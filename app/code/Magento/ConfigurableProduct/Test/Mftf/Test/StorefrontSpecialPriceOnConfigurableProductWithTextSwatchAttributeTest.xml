@@ -82,13 +82,9 @@
         <!-- remove the Filter From the product page-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
-        <!-- step3: Go to category page -->
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openStorefrontCategoryPage">
-            <argument name="categoryName" value="$category1.name$"/>
-        </actionGroup>
-        <!-- step4: Select configurable product (with special price) -->
+        <!-- step3&4: Open configurable product (with special price) directly via URL -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="selectConfigurableProductP1">
-            <argument name="product" value="$createConfigurableProduct$"/>
+            <argument name="product" value="$$createConfigurableProduct$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontProductDetailPageFinalPriceActionGroup" stepKey="assertProductFinalPriceTextForP1">
             <argument name="finalProductPrice" value="90.00"/>
