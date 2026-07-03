@@ -166,4 +166,62 @@ class TotalsCollectorTest extends TestCase
             'Shipping description must not be overwritten by the billing address'
         );
     }
+
+    /**
+     * Verifies that shipping amount is 0 (not null) for virtual-only quotes
+     * that have only a billing address.
+     *
+     * @see https://github.com/magento/magento2/issues/26209
+     */
+    public function testCollectSetsZeroShippingAmountForVirtualOnlyQuote(): void
+    {
+        $billingAddress = new class extends Address {
+            public function __construct()
+            {
+            }
+
+            public function getAddressType(): string
+            {
+                return self::ADDRESS_TYPE_BILLING;
+            }
+        };
+
+        $billingAddressTotal = new Total([
+            'subtotal'                    => 50.0,
+            'base_subtotal'               => 50.0,
+            'subtotal_with_discount'      => 50.0,
+            'base_subtotal_with_discount' => 50.0,
+            'grand_total'                 => 50.0,
+            'base_grand_total'            => 50.0,
+        ]);
+
+        $quoteMock = $this->createMock(Quote::class);
+        $quoteMock->method('getAllAddresses')->willReturn([$billingAddress]);
+        $quoteMock->method('getData')->with('coupon_code')->willReturn(null);
+
+        $aggregateTotal = new Total();
+        $this->totalFactoryMock->method('create')->willReturn($aggregateTotal);
+
+        $this->model->method('collectAddressTotals')
+            ->willReturnMap([
+                [$quoteMock, $billingAddress, $billingAddressTotal],
+            ]);
+
+        $this->eventManagerMock->method('dispatch');
+        $this->quantityCollectorMock->method('collectItemsQtys');
+        $this->quoteValidatorMock->method('validateQuoteAmount');
+
+        $result = $this->model->collect($quoteMock);
+
+        $this->assertSame(
+            0,
+            $result->getShippingAmount(),
+            'Shipping amount must be 0 (not null) for virtual-only quotes'
+        );
+        $this->assertSame(
+            0,
+            $result->getBaseShippingAmount(),
+            'Base shipping amount must be 0 (not null) for virtual-only quotes'
+        );
+    }
 }

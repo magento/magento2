@@ -152,6 +152,9 @@ class TotalsCollector
         $total->setGrandTotal(0);
         $total->setBaseGrandTotal(0);
 
+        $total->setShippingAmount(0);
+        $total->setBaseShippingAmount(0);
+
         /** @var \Magento\Quote\Model\Quote\Address $address */
         foreach ($quote->getAllAddresses() as $address) {
             $addressTotal = $this->collectAddressTotals($quote, $address);
