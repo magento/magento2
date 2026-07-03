@@ -17,9 +17,11 @@ class GraphQlTaxData extends TaxData
     /**
      * Intentionally skip the parent helper dependency graph.
      */
+    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
     public function __construct()
     {
     }
+    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
      * @inheritDoc

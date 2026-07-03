@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Process the "Currency" header entry
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class CurrencyProcessor implements HttpHeaderProcessorInterface
 {
@@ -32,7 +34,6 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
 
     /**
      * @var SessionManagerInterface
-     * @deprecated
      */
     private $session;
 

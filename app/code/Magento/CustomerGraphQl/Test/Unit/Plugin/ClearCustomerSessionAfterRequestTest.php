@@ -11,7 +11,7 @@ namespace Magento\CustomerGraphQl\Test\Unit\Plugin;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Model\Session\Proxy;
+use Magento\Customer\Model\Session;
 use Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext;
 use Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest;
 use Magento\Framework\App\ResponseInterface;
@@ -40,9 +40,9 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
     private CustomerRepository $customerRepositoryMock;
 
     /**
-     * @var Proxy|MockObject
+     * @var Session|MockObject
      */
-    private Proxy $sessionMock;
+    private Session $sessionMock;
 
     /**
      * @var AddUserInfoToContext|MockObject
@@ -68,7 +68,7 @@ class ClearCustomerSessionAfterRequestTest extends TestCase
     {
         $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->customerRepositoryMock = $this->createMock(CustomerRepository::class);
-        $this->sessionMock = $this->createMock(Proxy::class);
+        $this->sessionMock = $this->createMock(Session::class);
         $this->addUserInfoToContextMock = $this->createMock(AddUserInfoToContext::class);
         $this->graphQlMock = $this->createMock(GraphQl::class);
         $this->responseMock = $this->createMock(ResponseInterface::class);
