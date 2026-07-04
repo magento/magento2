@@ -150,7 +150,7 @@ class Plugin
      */
     private function isAttributeValuable(
         \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute,
-        Product $configProduct
+        $configProduct
     ): bool {
         return !$attribute->getIsUnique() &&
             $attribute->getFrontend()->getInputType() != 'gallery' &&
