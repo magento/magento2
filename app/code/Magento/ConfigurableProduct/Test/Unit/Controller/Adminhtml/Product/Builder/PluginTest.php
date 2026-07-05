@@ -82,7 +82,7 @@ class PluginTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->productMock = $this->createPartialMockWithReflection(
             Product::class,
-            ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds', 'getOrigData']
+            ['setTypeId', 'getAttributes', 'addData', 'setWebsiteIds']
         );
         $this->attributeMock = $this->createPartialMock(
             Attribute::class,
@@ -261,7 +261,7 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testAfterBuildPreservesConfigurableTypeWhenAttributesAreEmpty()
+    public function testAfterBuildPreservesTypeWhenAttributesParamIsNull()
     {
         $valueMap = [
             ['attributes', null, null],
@@ -271,16 +271,12 @@ class PluginTest extends TestCase
         ];
         $this->requestMock->expects($this->once())->method('has')->with('attributes')->willReturn(true);
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap($valueMap);
-        
-        // Product is originally configurable
-        $this->productMock->expects($this->once())->method('getOrigData')->with('type_id')
-            ->willReturn(Configurable::TYPE_CODE);
-        
-        // setTypeId should NOT be called when the product is already configurable
+
+        // When attributes param is null (not an array), setTypeId must not be called
         $this->productMock->expects($this->never())->method('setTypeId');
-        
+
         $this->productFactoryMock->expects($this->never())->method('create');
-        
+
         $this->assertEquals(
             $this->productMock,
             $this->plugin->afterBuild($this->subjectMock, $this->productMock, $this->requestMock)
