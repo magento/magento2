@@ -16,15 +16,9 @@ class Account implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        $configData = [
-            'EPS' => __('EPS'),
-            'PERMIT' => __('PERMIT')
+        return [
+            ['value' => 'EPS', 'label' => __('EPS')],
+            ['value' => 'PERMIT', 'label' => __('PERMIT')]
         ];
-
-        $arr = [];
-        foreach ($configData as $code => $title) {
-            $arr[] = ['value' => $code, 'label' => __($title)];
-        }
-        return $arr;
     }
 }

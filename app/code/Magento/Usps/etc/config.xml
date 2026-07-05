@@ -28,6 +28,7 @@
                 <methods></methods>
                 <model>Magento\Usps\Model\Carrier</model>
                 <size>REGULAR</size>
+                <account_type>EPS</account_type>
                 <price_type>COMMERCIAL</price_type>
                 <title>United States Postal Service</title>
                 <userid backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
