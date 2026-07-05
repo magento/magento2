@@ -54,5 +54,48 @@ define([
             expect(uppyInstance.use).toHaveBeenCalledWith(window.Uppy.DropTarget, jasmine.any(Object));
             expect(uppyInstance.use).toHaveBeenCalledWith(window.Uppy.XHRUpload, jasmine.any(Object));
         });
+
+        it('File with extension outside the default list should be rejected', function () {
+            const onBeforeFileAdded = window.Uppy.Uppy.calls.mostRecent().args[0].onBeforeFileAdded;
+
+            expect(onBeforeFileAdded({
+                id: '1',
+                name: 'document.pdf',
+                size: 1024,
+                extension: 'pdf'
+            })).toBe(false);
+        });
+
+        it('File matching the allowedExtensions option should be accepted', function () {
+            let onBeforeFileAdded, result;
+
+            $('<div>').mediaUploader({
+                allowedExtensions: ['PDF']
+            });
+
+            onBeforeFileAdded = window.Uppy.Uppy.calls.mostRecent().args[0].onBeforeFileAdded;
+            result = onBeforeFileAdded({
+                id: '1',
+                name: 'document.pdf',
+                size: 1024,
+                extension: 'pdf'
+            });
+
+            expect(result).not.toBe(false);
+            expect(result.tempFileId).toEqual(jasmine.any(String));
+        });
+
+        it('File outside the allowedExtensions option should be rejected', function () {
+            $('<div>').mediaUploader({
+                allowedExtensions: ['pdf']
+            });
+
+            expect(window.Uppy.Uppy.calls.mostRecent().args[0].onBeforeFileAdded({
+                id: '1',
+                name: 'image.jpg',
+                size: 1024,
+                extension: 'jpg'
+            })).toBe(false);
+        });
     });
 });
