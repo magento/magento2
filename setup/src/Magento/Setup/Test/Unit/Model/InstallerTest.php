@@ -532,6 +532,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     'logMessages' => [
                         ['File permissions check...'],
                         ['Required extensions check...'],
+                        ['Reset installation date...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
@@ -561,33 +562,34 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 23]'],
-                        ['[Progress: 2 / 23]'],
-                        ['[Progress: 3 / 23]'],
-                        ['[Progress: 4 / 23]'],
+                        ['[Progress: 1 / 24]'],
+                        ['[Progress: 2 / 24]'],
+                        ['[Progress: 3 / 24]'],
+                        ['[Progress: 4 / 24]'],
+                        ['[Progress: 5 / 24]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 23]'],
-                        ['[Progress: 6 / 23]'],
+                        ['[Progress: 6 / 24]'],
+                        ['[Progress: 7 / 24]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 23]'],
-                        ['[Progress: 8 / 23]'],
-                        ['[Progress: 9 / 23]'],
-                        ['[Progress: 10 / 23]'],
-                        ['[Progress: 11 / 23]'],
-                        ['[Progress: 12 / 23]'],
-                        ['[Progress: 13 / 23]'],
+                        ['[Progress: 8 / 24]'],
+                        ['[Progress: 9 / 24]'],
+                        ['[Progress: 10 / 24]'],
+                        ['[Progress: 11 / 24]'],
+                        ['[Progress: 12 / 24]'],
+                        ['[Progress: 13 / 24]'],
+                        ['[Progress: 14 / 24]'],
                         ['Data install/update:'],
-                        ['[Progress: 14 / 23]'],
-                        ['[Progress: 15 / 23]'],
+                        ['[Progress: 15 / 24]'],
+                        ['[Progress: 16 / 24]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 23]'],
-                        ['[Progress: 17 / 23]'],
-                        ['[Progress: 18 / 23]'],
-                        ['[Progress: 19 / 23]'],
-                        ['[Progress: 20 / 23]'],
-                        ['[Progress: 21 / 23]'],
-                        ['[Progress: 22 / 23]'],
-                        ['[Progress: 23 / 23]'],
+                        ['[Progress: 17 / 24]'],
+                        ['[Progress: 18 / 24]'],
+                        ['[Progress: 19 / 24]'],
+                        ['[Progress: 20 / 24]'],
+                        ['[Progress: 21 / 24]'],
+                        ['[Progress: 22 / 24]'],
+                        ['[Progress: 23 / 24]'],
+                        ['[Progress: 24 / 24]'],
                     ],
                 ],
                 [
@@ -606,6 +608,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     'logMessages' => [
                         ['File permissions check...'],
                         ['Required extensions check...'],
+                        ['Reset installation date...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
@@ -636,34 +639,35 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 24]'],
-                        ['[Progress: 2 / 24]'],
-                        ['[Progress: 3 / 24]'],
-                        ['[Progress: 4 / 24]'],
+                        ['[Progress: 1 / 25]'],
+                        ['[Progress: 2 / 25]'],
+                        ['[Progress: 3 / 25]'],
+                        ['[Progress: 4 / 25]'],
+                        ['[Progress: 5 / 25]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 24]'],
-                        ['[Progress: 6 / 24]'],
+                        ['[Progress: 6 / 25]'],
+                        ['[Progress: 7 / 25]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 24]'],
-                        ['[Progress: 8 / 24]'],
-                        ['[Progress: 9 / 24]'],
-                        ['[Progress: 10 / 24]'],
-                        ['[Progress: 11 / 24]'],
-                        ['[Progress: 12 / 24]'],
-                        ['[Progress: 13 / 24]'],
+                        ['[Progress: 8 / 25]'],
+                        ['[Progress: 9 / 25]'],
+                        ['[Progress: 10 / 25]'],
+                        ['[Progress: 11 / 25]'],
+                        ['[Progress: 12 / 25]'],
+                        ['[Progress: 13 / 25]'],
+                        ['[Progress: 14 / 25]'],
                         ['Data install/update:'],
-                        ['[Progress: 14 / 24]'],
-                        ['[Progress: 15 / 24]'],
+                        ['[Progress: 15 / 25]'],
+                        ['[Progress: 16 / 25]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 24]'],
-                        ['[Progress: 17 / 24]'],
-                        ['[Progress: 18 / 24]'],
-                        ['[Progress: 19 / 24]'],
-                        ['[Progress: 20 / 24]'],
-                        ['[Progress: 21 / 24]'],
-                        ['[Progress: 22 / 24]'],
-                        ['[Progress: 23 / 24]'],
-                        ['[Progress: 24 / 24]'],
+                        ['[Progress: 17 / 25]'],
+                        ['[Progress: 18 / 25]'],
+                        ['[Progress: 19 / 25]'],
+                        ['[Progress: 20 / 25]'],
+                        ['[Progress: 21 / 25]'],
+                        ['[Progress: 22 / 25]'],
+                        ['[Progress: 23 / 25]'],
+                        ['[Progress: 24 / 25]'],
+                        ['[Progress: 25 / 25]'],
                     ],
                 ],
             ];
@@ -877,6 +881,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     'logMessages' => [
                         ['File permissions check...'],
                         ['Required extensions check...'],
+                        ['Reset installation date...'],
                         ['Enabling Maintenance Mode...'],
                         ['Installing deployment configuration...'],
                         ['Installing database schema:'],
@@ -907,34 +912,35 @@ use PHPUnit\Framework\Attributes\DataProvider;
                     ],
                     'logMetaMessages' => [
                         ['Starting Magento installation:'],
-                        ['[Progress: 1 / 24]'],
-                        ['[Progress: 2 / 24]'],
-                        ['[Progress: 3 / 24]'],
-                        ['[Progress: 4 / 24]'],
+                        ['[Progress: 1 / 25]'],
+                        ['[Progress: 2 / 25]'],
+                        ['[Progress: 3 / 25]'],
+                        ['[Progress: 4 / 25]'],
+                        ['[Progress: 5 / 25]'],
                         ['Schema creation/updates:'],
-                        ['[Progress: 5 / 24]'],
-                        ['[Progress: 6 / 24]'],
+                        ['[Progress: 6 / 25]'],
+                        ['[Progress: 7 / 25]'],
                         ['Schema post-updates:'],
-                        ['[Progress: 7 / 24]'],
-                        ['[Progress: 8 / 24]'],
-                        ['[Progress: 9 / 24]'],
-                        ['[Progress: 10 / 24]'],
-                        ['[Progress: 11 / 24]'],
-                        ['[Progress: 12 / 24]'],
-                        ['[Progress: 13 / 24]'],
+                        ['[Progress: 8 / 25]'],
+                        ['[Progress: 9 / 25]'],
+                        ['[Progress: 10 / 25]'],
+                        ['[Progress: 11 / 25]'],
+                        ['[Progress: 12 / 25]'],
+                        ['[Progress: 13 / 25]'],
+                        ['[Progress: 14 / 25]'],
                         ['Data install/update:'],
-                        ['[Progress: 14 / 24]'],
-                        ['[Progress: 15 / 24]'],
+                        ['[Progress: 15 / 25]'],
+                        ['[Progress: 16 / 25]'],
                         ['Data post-updates:'],
-                        ['[Progress: 16 / 24]'],
-                        ['[Progress: 17 / 24]'],
-                        ['[Progress: 18 / 24]'],
-                        ['[Progress: 19 / 24]'],
-                        ['[Progress: 20 / 24]'],
-                        ['[Progress: 21 / 24]'],
-                        ['[Progress: 22 / 24]'],
-                        ['[Progress: 23 / 24]'],
-                        ['[Progress: 24 / 24]'],
+                        ['[Progress: 17 / 25]'],
+                        ['[Progress: 18 / 25]'],
+                        ['[Progress: 19 / 25]'],
+                        ['[Progress: 20 / 25]'],
+                        ['[Progress: 21 / 25]'],
+                        ['[Progress: 22 / 25]'],
+                        ['[Progress: 23 / 25]'],
+                        ['[Progress: 24 / 25]'],
+                        ['[Progress: 25 / 25]'],
                     ],
                 ],
             ];
@@ -958,6 +964,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $logMessages = [
                 ['File permissions check...'],
                 ['Required extensions check...'],
+                ['Reset installation date...'],
                 ['Enabling Maintenance Mode...'],
                 ['Installing deployment configuration...'],
                 ['Installing database schema:'],
@@ -971,18 +978,19 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
             $logMetaMessages = [
                 ['Starting Magento installation:'],
-                ['[Progress: 1 / 23]'],
-                ['[Progress: 2 / 23]'],
-                ['[Progress: 3 / 23]'],
-                ['[Progress: 4 / 23]'],
+                ['[Progress: 1 / 24]'],
+                ['[Progress: 2 / 24]'],
+                ['[Progress: 3 / 24]'],
+                ['[Progress: 4 / 24]'],
+                ['[Progress: 5 / 24]'],
                 ['Schema creation/updates:'],
-                ['[Progress: 5 / 23]'],
-                ['[Progress: 6 / 23]'],
+                ['[Progress: 6 / 24]'],
+                ['[Progress: 7 / 24]'],
                 ['Schema post-updates:'],
-                ['[Progress: 7 / 23]'],
-                ['[Progress: 8 / 23]'],
-                ['[Progress: 9 / 23]'],
-                ['[Progress: 10 / 23]'],
+                ['[Progress: 8 / 24]'],
+                ['[Progress: 9 / 24]'],
+                ['[Progress: 10 / 24]'],
+                ['[Progress: 11 / 24]'],
             ];
 
             $this->config->expects(static::atLeastOnce())
@@ -1377,6 +1385,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $logMessages = [
                 ['File permissions check...'],
                 ['Required extensions check...'],
+                ['Reset installation date...'],
                 ['Enabling Maintenance Mode...'],
                 ['Installing deployment configuration...'],
                 ['Installing database schema:'],
@@ -1384,10 +1393,11 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
             $logMetaMessages = [
                 ['Starting Magento installation:'],
-                ['[Progress: 1 / 23]'],
-                ['[Progress: 2 / 23]'],
-                ['[Progress: 3 / 23]'],
-                ['[Progress: 4 / 23]'],
+                ['[Progress: 1 / 24]'],
+                ['[Progress: 2 / 24]'],
+                ['[Progress: 3 / 24]'],
+                ['[Progress: 4 / 24]'],
+                ['[Progress: 5 / 24]'],
                 ['Schema creation/updates:'],
             ];
 
@@ -1629,6 +1639,77 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $this->logger->expects($this->once())->method('log')->with($expectedMessage);
             $this->object->checkApplicationFilePermissions();
             $this->assertSame(['message' => [$expectedMessage]], $this->object->getInstallInfo());
+        }
+
+        /**
+         * Test that resetInstallationDate removes the install date from config when present
+         */
+        public function testResetInstallationDateWhenDateExists(): void
+        {
+            $configData = [
+                'db' => ['connection' => ['default' => ['host' => 'localhost']]],
+                'install' => ['date' => 'Wed, 24 Jun 2026 04:59:28 +0000']
+            ];
+            $expectedConfig = [
+                'db' => ['connection' => ['default' => ['host' => 'localhost']]],
+                'install' => []
+            ];
+
+            $this->configReader->expects($this->once())
+                ->method('load')
+                ->with(ConfigFilePool::APP_ENV)
+                ->willReturn($configData);
+            $this->configWriter->expects($this->once())
+                ->method('saveConfig')
+                ->with([ConfigFilePool::APP_ENV => $expectedConfig], true);
+            $this->config->expects($this->once())
+                ->method('resetData');
+
+            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
+            $reflectionMethod->setAccessible(true);
+            $reflectionMethod->invoke($this->object);
+        }
+
+        /**
+         * Test that resetInstallationDate does nothing when the installation date is not present
+         */
+        public function testResetInstallationDateWhenDateDoesNotExist(): void
+        {
+            $configData = [
+                'db' => ['connection' => ['default' => ['host' => 'localhost']]]
+            ];
+
+            $this->configReader->expects($this->once())
+                ->method('load')
+                ->with(ConfigFilePool::APP_ENV)
+                ->willReturn($configData);
+            $this->configWriter->expects($this->never())
+                ->method('saveConfig');
+            $this->config->expects($this->once())
+                ->method('resetData');
+
+            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
+            $reflectionMethod->setAccessible(true);
+            $reflectionMethod->invoke($this->object);
+        }
+
+        /**
+         * Test that resetInstallationDate does nothing when config is empty (fresh installation)
+         */
+        public function testResetInstallationDateWithEmptyConfig(): void
+        {
+            $this->configReader->expects($this->once())
+                ->method('load')
+                ->with(ConfigFilePool::APP_ENV)
+                ->willReturn([]);
+            $this->configWriter->expects($this->never())
+                ->method('saveConfig');
+            $this->config->expects($this->once())
+                ->method('resetData');
+
+            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
+            $reflectionMethod->setAccessible(true);
+            $reflectionMethod->invoke($this->object);
         }
 
         public function testUpdateModulesSequence()
