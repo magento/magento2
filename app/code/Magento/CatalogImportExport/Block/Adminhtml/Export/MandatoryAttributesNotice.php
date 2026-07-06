@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Block\Adminhtml\Export;
 
-use Magento\Backend\Block\Template;
-use Magento\Backend\Block\Template\Context;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\ImportExport\Model\Export\MandatoryAttributesProvider;
 
 /**
  * Renders a notice listing mandatory (non-excludable) export columns.
+ *
+ * @api
  */
 class MandatoryAttributesNotice extends Template
 {
