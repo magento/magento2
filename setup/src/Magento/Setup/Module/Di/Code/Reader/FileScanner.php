@@ -76,13 +76,6 @@ class FileScanner
             throw new RuntimeException('No tokens were provided');
         }
 
-        /**
-         * Define PHP 5.4 'trait' token constant.
-         */
-        if (!defined('T_TRAIT')) {
-            define('T_TRAIT', 42001);
-        }
-
         $namespaceContentTokenTypes = [
             T_NS_SEPARATOR => T_NS_SEPARATOR,
             T_STRING => T_STRING,
