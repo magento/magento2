@@ -612,6 +612,22 @@ class AwsS3Test extends TestCase
         $this->driver->fileClose($resource);
     }
 
+    public function testFileCloseSucceedsWhenAdapterAlreadyClosedTheStream(): void
+    {
+        $resource = $this->driver->fileOpen('test/path', 'w');
+        $this->driver->fileWrite($resource, 'abc');
+        $this->adapterMock->method('fileExists')->willReturn(false);
+        // Emulate aws-sdk-php/Guzzle behavior: writeStream() closes the underlying stream resource.
+        $this->adapterMock->expects($this->once())
+            ->method('writeStream')
+            ->willReturnCallback(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
+                static fn ($path, $stream) => fclose($stream)
+            );
+
+        self::assertTrue($this->driver->fileClose($resource));
+    }
+
     public function testFileCloseShouldReturnFalseIfTheArgumentIsNotAResource(): void
     {
         $this->assertEquals(false, $this->driver->fileClose(''));

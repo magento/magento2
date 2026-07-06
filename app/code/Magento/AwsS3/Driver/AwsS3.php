@@ -882,8 +882,10 @@ class AwsS3 implements RemoteDriverInterface
                 // Remove path from streams after
                 unset($this->streams[$path]);
 
+                // The adapter's writeStream() may already close the underlying stream resource
+                // (Guzzle Psr7\Stream::close()), so guard against fclose() on a closed resource.
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
-                return fclose($stream);
+                return is_resource($stream) ? fclose($stream) : true;
             }
         }
 
