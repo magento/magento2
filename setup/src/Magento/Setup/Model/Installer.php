@@ -468,7 +468,7 @@ class Installer
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function resetInstallationDate()
+    public function resetInstallationDate()
     {
         $configData = $this->deploymentConfigReader->load(ConfigFilePool::APP_ENV);
         if (isset($configData[ConfigOptionsListConstants::CONFIG_PATH_INSTALL]['date'])) {

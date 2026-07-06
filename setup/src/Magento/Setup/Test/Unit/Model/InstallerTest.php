@@ -68,7 +68,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Setup\Validator\DbValidator;
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+    use PHPUnit\Framework\Attributes\DataProvider;
     use ReflectionException;
 
     /**
@@ -355,7 +355,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @param array $logMetaMessages
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installDataProvider')]
+        #[DataProvider('installDataProvider')]
         public function testInstall(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -684,7 +684,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws LocalizedException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
+        #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
         public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -956,7 +956,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
             $request = self::$request;
@@ -1377,7 +1377,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
             $request = self::$request;
@@ -1643,6 +1643,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
         /**
          * Test that resetInstallationDate removes the install date from config when present
+         *
+         * @return void
          */
         public function testResetInstallationDateWhenDateExists(): void
         {
@@ -1665,13 +1667,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
-            $reflectionMethod->setAccessible(true);
-            $reflectionMethod->invoke($this->object);
+            $this->object->resetInstallationDate();
         }
 
         /**
          * Test that resetInstallationDate does nothing when the installation date is not present
+         *
+         * @return void
          */
         public function testResetInstallationDateWhenDateDoesNotExist(): void
         {
@@ -1688,13 +1690,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
-            $reflectionMethod->setAccessible(true);
-            $reflectionMethod->invoke($this->object);
+            $this->object->resetInstallationDate();
         }
 
         /**
          * Test that resetInstallationDate does nothing when config is empty (fresh installation)
+         *
+         * @return void
          */
         public function testResetInstallationDateWithEmptyConfig(): void
         {
@@ -1707,9 +1709,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $this->config->expects($this->once())
                 ->method('resetData');
 
-            $reflectionMethod = new \ReflectionMethod($this->object, 'resetInstallationDate');
-            $reflectionMethod->setAccessible(true);
-            $reflectionMethod->invoke($this->object);
+            $this->object->resetInstallationDate();
         }
 
         public function testUpdateModulesSequence()
