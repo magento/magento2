@@ -9,13 +9,8 @@ namespace Magento\Developer\Console\Command;
 
 use Magento\Developer\Test\Fixture\LockedTemplateHintsConfig;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\DeploymentConfig\FileReader;
-use Magento\Framework\App\DeploymentConfig\Writer;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -39,21 +34,6 @@ class TemplateHintsCommandTest extends TestCase
     private ObjectManagerInterface $objectManager;
 
     /**
-     * @var Writer
-     */
-    private Writer $writer;
-
-    /**
-     * @var Filesystem
-     */
-    private Filesystem $filesystem;
-
-    /**
-     * @var ConfigFilePool
-     */
-    private ConfigFilePool $configFilePool;
-
-    /**
      * @var ReinitableConfigInterface
      */
     private ReinitableConfigInterface $appConfig;
@@ -63,33 +43,13 @@ class TemplateHintsCommandTest extends TestCase
      */
     private ResourceConnection $resourceConnection;
 
-    /**
-     * @var array
-     */
-    private array $envConfig;
-
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $reader = $this->objectManager->get(FileReader::class);
-        $this->writer = $this->objectManager->get(Writer::class);
-        $this->filesystem = $this->objectManager->get(Filesystem::class);
-        $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
         $this->appConfig = $this->objectManager->get(ReinitableConfigInterface::class);
         $this->resourceConnection = $this->objectManager->get(ResourceConnection::class);
 
-        $this->envConfig = $reader->load(ConfigFilePool::APP_ENV);
         $this->deleteConfigValue();
-        $this->appConfig->reinit();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
-            $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
-            "<?php\n return array();\n"
-        );
-        $this->writer->saveConfig([ConfigFilePool::APP_ENV => $this->envConfig]);
         $this->appConfig->reinit();
     }
 
