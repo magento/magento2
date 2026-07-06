@@ -56,11 +56,6 @@ class Bestsellers extends AbstractReport
     protected $storeManager;
 
     /**
-     * @var array
-     */
-    private array $rangesByQuery = [];
-
-    /**
      * @param Context $context
      * @param LoggerInterface $logger
      * @param TimezoneInterface $localeDate
@@ -135,6 +130,7 @@ class Bestsellers extends AbstractReport
             'product_name' => new \Zend_Db_Expr('MIN(product_name)'),
             'product_price' => new \Zend_Db_Expr('MIN(product_price)'),
             'qty_ordered' => new \Zend_Db_Expr('SUM(qty_ordered)'),
+            'period_month' => 'period_month'
         ];
 
         $select = $connection->select();
@@ -174,66 +170,7 @@ class Bestsellers extends AbstractReport
     private function clearByDateRange($from = null, $to = null): void
     {
         $subSelect = $this->getRangeSubSelect($from, $to);
-        $this->clearTableRanges($this->getMainTable(), $from, $to, $subSelect);
-    }
-
-    /**
-     * Clear table by date range
-     *
-     * @param string $table
-     * @param ?string $from
-     * @param ?string $to
-     * @param null|Select|string $subSelect
-     * @return void
-     */
-    private function clearTableRanges($table, $from = null, $to = null, $subSelect = null): void
-    {
-        if ($from === null && $to === null) {
-            $this->_truncateTable($table);
-            return;
-        }
-
-        if ($subSelect !== null) {
-            $dataRange = $this->getRange($subSelect);
-            $deleteCondition = $this->getConnection()->prepareSqlCondition('period', ['in' => $dataRange]);
-            $this->getConnection()->delete($table, $deleteCondition);
-            return;
-        } else {
-            $condition = [];
-            if ($from !== null) {
-                $condition[] = $this->getConnection()->quoteInto('period >= ?', $from);
-            }
-
-            if ($to !== null) {
-                $condition[] = $this->getConnection()->quoteInto('period <= ?', $to);
-            }
-            $deleteCondition = implode(' AND ', $condition);
-        }
-        $this->getConnection()->delete($table, $deleteCondition);
-    }
-
-    /**
-     * Get dates range to clear the table
-     *
-     * @param Select $select
-     * @return array
-     */
-    private function getRange(Select $select): array
-    {
-        $queryHash = sha1($select->__toString());
-        if (!isset($this->rangesByQuery[$queryHash])) {
-
-            $connection = $this->getConnection();
-            try {
-                $query = $connection->query($select);
-                $range = $query->fetchAll(\Zend_Db::FETCH_COLUMN);
-            } catch (\Exception) {
-                $range = [];
-            }
-
-            $this->rangesByQuery[$queryHash] = $range;
-        }
-        return $this->rangesByQuery[$queryHash];
+        $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
     }
 
     /**
@@ -301,6 +238,7 @@ class Bestsellers extends AbstractReport
                 '* MIN(source_table.base_to_global_rate)'
             ),
             'qty_ordered' => new \Zend_Db_Expr('SUM(order_item.qty_ordered)'),
+            'period_month' => 'DATE_SUB(' . $periodExpr . ', INTERVAL DAYOFMONTH(' . $periodExpr . ')-1 DAY)'
         ];
 
         $select->from(

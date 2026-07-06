@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Filesystem;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for the \Magento\Framework\App\Filesystem\DirectoryResolver verification.
@@ -43,11 +44,11 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $directoryConfig
      * @param bool $expectation
-     * @dataProvider validatePathDataProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      * @magentoAppIsolation enabled
      * @return void
      */
+    #[DataProvider('validatePathDataProvider')]
     public function testValidatePath($path, $directoryConfig, $expectation)
     {
         $directory = $this->filesystem
@@ -74,11 +75,11 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $directoryConfig
      * @param bool $expectation
-     * @dataProvider validatePathDataProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      * @magentoAppIsolation enabled
      * @return void
      */
+    #[DataProvider('validatePathDataProvider')]
     public function testValidatePathWithSymlink($path, $directoryConfig, $expectation)
     {
         $directory = $this->filesystem

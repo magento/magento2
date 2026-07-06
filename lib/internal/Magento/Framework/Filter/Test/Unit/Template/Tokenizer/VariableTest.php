@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit\Template\Tokenizer;
 
 use Magento\Framework\Filter\Template\Tokenizer\Variable;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VariableTest extends TestCase
 {
@@ -24,9 +25,8 @@ class VariableTest extends TestCase
 
     /**
      * @param string $string String to tokenize
-     * @param string $expectedValue
-     * @dataProvider sampleTokenizeStringProvider
-     */
+     * @param string $expectedValue     */
+    #[DataProvider('sampleTokenizeStringProvider')]
     public function testTokenize($string, $expectedValue)
     {
         $this->_filter->setString($string);

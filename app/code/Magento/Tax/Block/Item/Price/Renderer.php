@@ -208,7 +208,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
      */
     public function getItemDisplayPriceExclTax()
     {
-        return $this->getItem()->getPrice();
+        return $this->priceCurrency->convertAndRound($this->getItem()->getPrice());
     }
 
     /**

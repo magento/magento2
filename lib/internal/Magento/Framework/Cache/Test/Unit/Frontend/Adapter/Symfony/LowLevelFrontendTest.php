@@ -11,6 +11,7 @@ use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelBackend;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontend;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
@@ -20,6 +21,7 @@ use Psr\Cache\CacheItemPoolInterface;
  */
 class LowLevelFrontendTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CacheItemPoolInterface|MockObject
      */
@@ -49,7 +51,7 @@ class LowLevelFrontendTest extends TestCase
 
         $this->cacheMock = $this->createMock(CacheItemPoolInterface::class);
         $this->symfonyMock = $this->createMock(FrontendInterface::class);
-        $this->adapterMock = $this->createMock(TagAdapterInterface::class);
+        $this->adapterMock = $this->createStub(TagAdapterInterface::class);
 
         $this->lowLevelFrontend = new LowLevelFrontend(
             $this->cacheMock,
@@ -106,9 +108,10 @@ class LowLevelFrontendTest extends TestCase
             'mtime' => 1234567000
         ];
 
-        $symfonyMock = $this->getMockBuilder(FrontendInterface::class)
-            ->addMethods(['getMetadatas'])
-            ->getMockForAbstractClass();
+        $symfonyMock = $this->createPartialMockWithReflection(
+            FrontendInterface::class,
+            ['getMetadatas', 'test', 'load', 'save', 'remove', 'clean', 'getBackend', 'getLowLevelFrontend']
+        );
 
         $symfonyMock
             ->expects($this->once())
@@ -133,9 +136,10 @@ class LowLevelFrontendTest extends TestCase
      */
     public function testGetMetadatasReturnsFalseForMissingKey(): void
     {
-        $symfonyMock = $this->getMockBuilder(FrontendInterface::class)
-            ->addMethods(['getMetadatas'])
-            ->getMockForAbstractClass();
+        $symfonyMock = $this->createPartialMockWithReflection(
+            FrontendInterface::class,
+            ['getMetadatas', 'test', 'load', 'save', 'remove', 'clean', 'getBackend', 'getLowLevelFrontend']
+        );
 
         $symfonyMock
             ->expects($this->once())
@@ -206,9 +210,7 @@ class LowLevelFrontendTest extends TestCase
         $tags = ['tag1', 'tag2'];
         $expectedIds = ['id1', 'id2', 'id3'];
 
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['getIdsMatchingTags'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -246,9 +248,7 @@ class LowLevelFrontendTest extends TestCase
      */
     public function testGetIdsMatchingTagsWithEmptyTags(): void
     {
-        $adapterMock = $this->getMockBuilder(TagAdapterInterface::class)
-            ->onlyMethods(['getIdsMatchingTags'])
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(TagAdapterInterface::class);
 
         $adapterMock
             ->expects($this->once())
@@ -429,9 +429,10 @@ class LowLevelFrontendTest extends TestCase
      */
     public function testFullWorkflow(): void
     {
-        $symfonyMock = $this->getMockBuilder(FrontendInterface::class)
-            ->addMethods(['getMetadatas'])
-            ->getMockForAbstractClass();
+        $symfonyMock = $this->createPartialMockWithReflection(
+            FrontendInterface::class,
+            ['getMetadatas', 'test', 'load', 'save', 'remove', 'clean', 'getBackend', 'getLowLevelFrontend']
+        );
 
         $symfonyMock
             ->expects($this->once())

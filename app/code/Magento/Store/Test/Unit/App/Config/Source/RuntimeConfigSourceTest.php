@@ -44,7 +44,7 @@ class RuntimeConfigSourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

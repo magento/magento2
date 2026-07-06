@@ -52,7 +52,7 @@ class UploadTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        if (file_exists($this->fileToRemove)) {
+        if ($this->fileToRemove !== null && file_exists($this->fileToRemove)) {
             unlink($this->fileToRemove);
         }
 

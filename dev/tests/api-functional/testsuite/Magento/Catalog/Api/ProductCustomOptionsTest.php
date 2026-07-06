@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
 use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
@@ -97,7 +98,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
 
     /**
      * Test to verify customizable options honour `use default value` checkbox check
-     * @dataProvider optionDataProvider
+
      * @param array $optionData
      * @return void
      * @throws NoSuchEntityException
@@ -119,6 +120,7 @@ class ProductCustomOptionsTest extends WebapiAbstract
             'cp1'
         ),
     ]
+    #[DataProvider('optionDataProvider')]
     public function testModifyData(array $optionData): void
     {
         $childProduct = $this->fixtures->get('p2');

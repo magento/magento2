@@ -18,6 +18,7 @@ use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -71,9 +72,7 @@ class ElementTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
         // Preserve real methods on AbstractElement so magic __call and setData work
-        $this->elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->elementMock = $this->createPartialMock(AbstractElement::class, []);
 
         $this->dataObjectMock = $this->createMock(Product::class);
         $this->attributeMock = $this->createMock(Attribute::class);
@@ -262,7 +261,6 @@ class ElementTest extends TestCase
 
     /**
      * Test usedDefault returns true when no store value flag is set.
-     * @dataProvider usedDefaultDataProvider
      * @param bool $existsStoreValueFlag
      * @param int|null $storeId
      * @param mixed $elementValue
@@ -270,6 +268,7 @@ class ElementTest extends TestCase
      * @param bool $expected
      * @return void
      */
+    #[DataProvider('usedDefaultDataProvider')]
     public function testUsedDefaultReturnsTrueWhenNoStoreValueFlag(
         bool $existsStoreValueFlag,
         ?int $storeId,
@@ -387,9 +386,8 @@ class ElementTest extends TestCase
 
     /**
      * Validate getScopeLabel returns correct label across scenarios.
-     *
-     * @dataProvider getScopeLabelDataProvider
      */
+    #[DataProvider('getScopeLabelDataProvider')]
     public function testGetScopeLabelScenarios(
         bool $isSingleStoreMode,
         bool $attributePresent,

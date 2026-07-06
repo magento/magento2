@@ -12,7 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\Grid\LastUpdateTimeCache;
 use Magento\Sales\Model\ResourceModel\Grid;
-use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface;
+use Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderWithCutoffInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,13 +21,15 @@ use PHPUnit\Framework\TestCase;
  */
 class GridTest extends TestCase
 {
+    private const MAX_REFRESH_ITERATIONS = 1000;
+
     /**
      * @var Grid
      */
     private $grid;
 
     /**
-     * @var NotSyncedDataProviderInterface|MockObject
+     * @var NotSyncedDataProviderWithCutoffInterface|MockObject
      */
     private $notSyncedDataProvider;
 
@@ -66,9 +68,16 @@ class GridTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderInterface::class);
+        $this->notSyncedDataProvider = $this->createMock(NotSyncedDataProviderWithCutoffInterface::class);
         $this->connection = $this->createMock(ConnectionAdapterInterface::class);
         $this->lastUpdateTimeCache = $this->createMock(LastUpdateTimeCache::class);
+
+        $resourceConnection = $this->createStub(\Magento\Framework\App\ResourceConnection::class);
+        $transactionManager =
+            $this->createStub(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class);
+        $objectRelationProcessor = $this->createStub(
+            \Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class
+        );
 
         $this->grid = $objectManager->getObject(
             Grid::class,
@@ -77,6 +86,9 @@ class GridTest extends TestCase
                 'mainTableName' => $this->mainTable,
                 'gridTableName' => $this->gridTable,
                 'connection' => $this->connection,
+                'resource' => $resourceConnection,
+                'transactionManager' => $transactionManager,
+                'objectRelationProcessor' => $objectRelationProcessor,
                 '_tables' => ['sales_order' => $this->mainTable, 'sales_order_grid' => $this->gridTable],
                 'columns' => $this->columns,
                 'lastUpdateTimeCache' => $this->lastUpdateTimeCache,
@@ -101,8 +113,24 @@ class GridTest extends TestCase
         $fetchResult[50]['updated_at'] = '2021-02-03 01:02:03';
         $fetchResult[150]['updated_at'] = '2021-03-04 01:02:03';
 
+        $expectedCutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->sub(new \DateInterval('PT1S'))
+            ->format('Y-m-d H:i:s');
+        $expectedRowsForInsert = array_map(
+            static function (array $row) use ($expectedCutoff): array {
+                return array_merge($row, ['updated_at' => $expectedCutoff]);
+            },
+            $fetchResult
+        );
+
+        $cutoffMatcher = static function ($cutoff): bool {
+            return is_string($cutoff)
+                && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
+        };
+
         $this->notSyncedDataProvider->expects($this->atLeastOnce())
-            ->method('getIds')
+            ->method('getIdsWithCutoff')
+            ->with($this->mainTable, $this->gridTable, $this->callback($cutoffMatcher))
             ->willReturnOnConsecutiveCalls($notSyncedIds, []);
         $select = $this->createMock(Select::class);
         $select->expects($this->atLeastOnce())
@@ -126,12 +154,68 @@ class GridTest extends TestCase
             ->willReturn($fetchResult);
         $this->connection->expects($this->atLeastOnce())
             ->method('insertOnDuplicate')
-            ->with($this->gridTable, $fetchResult, array_keys($this->columns))
+            ->with($this->gridTable, $expectedRowsForInsert, array_keys($this->columns))
             ->willReturn(array_count_values($notSyncedIds));
 
         $this->lastUpdateTimeCache->expects($this->once())
             ->method('save')
-            ->with($this->gridTable, '2021-03-04 01:02:03');
+            ->with($this->gridTable, $expectedCutoff);
+
+        $this->grid->refreshBySchedule();
+    }
+
+    public function testRefreshByScheduleStopsAfterMaxIterationsWhenIdsAreAlwaysPresent(): void
+    {
+        $notSyncedIds = ['1'];
+        $fetchResult = [[
+            'entity_id' => 1,
+            'status' => 1,
+            'updated_at' => '2021-01-01 01:02:03',
+        ]];
+        $expectedCutoff = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->sub(new \DateInterval('PT1S'))
+            ->format('Y-m-d H:i:s');
+        $expectedRowsForInsert = [
+            [
+                'entity_id' => 1,
+                'status' => 1,
+                'updated_at' => $expectedCutoff,
+            ],
+        ];
+        $cutoffMatcher = static function ($cutoff): bool {
+            return is_string($cutoff)
+                && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $cutoff) === 1;
+        };
+        $select = $this->createMock(Select::class);
+        $select->expects($this->atLeastOnce())
+            ->method('from')
+            ->willReturnSelf();
+        $select->expects($this->atLeastOnce())
+            ->method('columns')
+            ->willReturnSelf();
+        $select->expects($this->atLeastOnce())
+            ->method('where')
+            ->with($this->mainTable . '.entity_id IN (?)', $notSyncedIds)
+            ->willReturnSelf();
+
+        $this->notSyncedDataProvider->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
+            ->method('getIdsWithCutoff')
+            ->with($this->mainTable, $this->gridTable, $this->callback($cutoffMatcher))
+            ->willReturn($notSyncedIds);
+        $this->connection->expects($this->atLeastOnce())
+            ->method('select')
+            ->willReturn($select);
+        $this->connection->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->with($select)
+            ->willReturn($fetchResult);
+        $this->connection->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
+            ->method('insertOnDuplicate')
+            ->with($this->gridTable, $expectedRowsForInsert, array_keys($this->columns))
+            ->willReturn(1);
+        $this->lastUpdateTimeCache->expects($this->exactly(self::MAX_REFRESH_ITERATIONS))
+            ->method('save')
+            ->with($this->gridTable, $expectedCutoff);
 
         $this->grid->refreshBySchedule();
     }

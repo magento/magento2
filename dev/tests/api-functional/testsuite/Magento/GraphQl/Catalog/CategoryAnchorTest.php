@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test is categories anchor or not
@@ -72,8 +73,8 @@ class CategoryAnchorTest extends GraphQlAbstract
      * @param array $category
      * @return void
      * @throws \Exception
-     * @dataProvider categoryAnchorDataProvider
      */
+    #[DataProvider('categoryAnchorDataProvider')]
     public function testCategoryAnchor(string $query, string $storeCode, array $category): void
     {
         $response = $this->graphQlQuery($query, [], '', ['store' => $storeCode]);

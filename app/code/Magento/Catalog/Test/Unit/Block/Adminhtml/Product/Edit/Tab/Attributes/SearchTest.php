@@ -18,8 +18,10 @@ use Magento\Framework\DB\Helper;
 use Magento\Framework\Escaper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class SearchTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Search
      */
@@ -94,8 +98,8 @@ class SearchTest extends TestCase
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->registryMock = $this->createMock(Registry::class);
         $this->jsonHelperMock = $this->createMock(JsonHelper::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->escaperMock = $this->createMock(Escaper::class);
 
         $this->contextMock->expects($this->any())
@@ -142,10 +146,10 @@ class SearchTest extends TestCase
      * Test getSelectorOptions returns array with required key
      *
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search::getSelectorOptions
-     * @dataProvider selectorOptionsRequiredKeysDataProvider
      * @param string $expectedKey
      * @return void
      */
+    #[DataProvider('selectorOptionsRequiredKeysDataProvider')]
     public function testGetSelectorOptionsReturnsArrayWithRequiredKey(string $expectedKey): void
     {
         $templateId = 4;
@@ -327,13 +331,13 @@ class SearchTest extends TestCase
      * Test getSuggestedAttributes method returns expected attributes
      *
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes\Search::getSuggestedAttributes
-     * @dataProvider suggestedAttributesDataProvider
      * @param string $labelPart
      * @param string $escapedLabelPart
      * @param int $templateId
      * @param array $expectedAttributes
      * @return void
      */
+    #[DataProvider('suggestedAttributesDataProvider')]
     public function testGetSuggestedAttributesReturnsExpectedAttributes(
         string $labelPart,
         string $escapedLabelPart,
@@ -515,11 +519,10 @@ class SearchTest extends TestCase
         // Create attribute mocks
         $attributeMocks = [];
         foreach ($attributesData as $attrData) {
-            $attributeMock = $this->getMockBuilder(Attribute::class)
-                ->disableOriginalConstructor()
-                ->addMethods(['getFrontendLabel'])
-                ->onlyMethods(['getId', 'getAttributeCode'])
-                ->getMock();
+            $attributeMock = $this->createPartialMockWithReflection(
+                Attribute::class,
+                ['getId', 'getAttributeCode', 'getFrontendLabel']
+            );
             $attributeMock->expects($this->once())
                 ->method('getId')
                 ->willReturn($attrData['id']);
