@@ -56,6 +56,15 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
     private array $globalScopePluginData = [];
 
     /**
+     * Reversed map of plugins to their target types.
+     * Built during config merge (i.e. during di.xml / plugin config load).
+     * pluginClass => [targetClass => true, ...]
+     *
+     * @var array<string, array<string, true>>
+     */
+    private array $pluginToTargets = [];
+
+    /**
      * @param ReaderInterface $reader
      * @param ScopeInterface $scopeConfig
      * @param ConfigInterface $omConfig
@@ -332,6 +341,20 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
                 } else {
                     $pluginData[$type] = $typeConfig['plugins'];
                 }
+
+                // Build reversed plugin map during the normal config load / merge.
+                // This allows downstream consumers (e.g. definition collection) to
+                // know which plugin classes are attached to real targets without
+                // re-parsing di.xml files.
+                foreach ($typeConfig['plugins'] as $pluginConfig) {
+                    if (isset($pluginConfig['instance'])) {
+                        $pluginInstance = ltrim($pluginConfig['instance'], '\\');
+                        if (!isset($this->pluginToTargets[$pluginInstance])) {
+                            $this->pluginToTargets[$pluginInstance] = [];
+                        }
+                        $this->pluginToTargets[$pluginInstance][$type] = true;
+                    }
+                }
             }
         }
 
@@ -364,5 +387,31 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
         if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
             mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
         }
+    }
+
+    /**
+     * Returns whether the given class is a plugin that is declared only against targets that do not exist.
+     *
+     * This information is derived from the reversed map built during config load.
+     * Used to avoid unnecessary (and failing) constructor reflection for plugins
+     * that can never be activated.
+     *
+     * @param string $pluginClass
+     * @return bool
+     */
+    public function isOrphanedPlugin(string $pluginClass): bool
+    {
+        $pluginClass = ltrim($pluginClass, '\\');
+        if (!isset($this->pluginToTargets[$pluginClass])) {
+            return false;
+        }
+
+        foreach (array_keys($this->pluginToTargets[$pluginClass]) as $target) {
+            if (class_exists($target) || interface_exists($target)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

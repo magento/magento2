@@ -9,6 +9,7 @@ namespace Magento\Setup\Module\Di\Code\Reader\Decorator;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Interception\PluginListGenerator;
 
 class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
@@ -25,10 +26,12 @@ class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterfa
     /**
      * @param ClassesScanner $classesScanner
      * @param ClassReaderDecorator $classReaderDecorator
+     * @param PluginListGenerator $pluginListGenerator
      */
     public function __construct(
         ClassesScanner $classesScanner,
-        ClassReaderDecorator $classReaderDecorator
+        ClassReaderDecorator $classReaderDecorator,
+        private readonly PluginListGenerator $pluginListGenerator
     ) {
         $this->classReaderDecorator = $classReaderDecorator;
         $this->classesScanner = $classesScanner;
@@ -46,6 +49,12 @@ class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterfa
     {
         $classes = [];
         foreach ($this->classesScanner->getList($path) as $className) {
+            if ($this->pluginListGenerator->isOrphanedPlugin($className)) {
+                // Skip constructor resolution for plugins that are only attached
+                // to non-existing target classes. Their DI will never be exercised
+                // because no interceptor is generated for missing targets.
+                continue;
+            }
             $classes[$className] = (array) $this->classReaderDecorator->getConstructor($className);
         }
 
