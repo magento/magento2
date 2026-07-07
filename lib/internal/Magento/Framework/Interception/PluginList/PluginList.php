@@ -170,6 +170,10 @@ class PluginList extends Scoped implements InterceptionPluginList
     public function getPlugin($type, $code)
     {
         if (!isset($this->_pluginInstances[$type][$code])) {
+            $this->_loadScopedData();
+            if (!isset($this->_inherited[$type]) && !array_key_exists($type, $this->_inherited)) {
+                $this->_inheritPlugins($type);
+            }
             $this->_pluginInstances[$type][$code] = $this->_objectManager->get(
                 $this->_inherited[$type][$code]['instance']
             );
