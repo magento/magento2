@@ -5,7 +5,8 @@
 
 'use strict';
 
-var svgo = require('imagemin-svgo');
+var imageminSvgo = require('imagemin-svgo'),
+    svgo = imageminSvgo.default || imageminSvgo;
 
 /**
  * Images optimization.
