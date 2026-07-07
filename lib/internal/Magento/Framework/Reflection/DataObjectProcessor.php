@@ -36,10 +36,13 @@ class DataObjectProcessor
         private readonly FieldNamer $fieldNamer,
         private readonly CustomAttributesProcessor $customAttributesProcessor,
         private readonly ExtensionAttributesProcessor $extensionAttributesProcessor,
-        private readonly PropertyMetadataProvider $propertyMetadataProvider,
         private readonly array $processors = [],
         private readonly array $excludedMethodsClassMap = [],
+        private PropertyMetadataProvider $propertyMetadataProvider = null,
     ) {
+        if ($propertyMetadataProvider === null) {
+            $this->propertyMetadataProvider = \Magento\Framework\App\ObjectManager::getInstance()->get(PropertyMetadataProvider::class);
+        }
     }
 
     /**
