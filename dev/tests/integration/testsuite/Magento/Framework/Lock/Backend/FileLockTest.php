@@ -35,10 +35,11 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testLockAndUnlock()
+    /**
+     * @dataProvider lockNameProvider
+     */
+    public function testLockAndUnlock(string $name)
     {
-        $name = 'test_lock';
-
         $this->assertFalse($this->model->isLocked($name));
 
         $this->assertTrue($this->model->lock($name));
@@ -49,35 +50,53 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($this->model->isLocked($name));
     }
 
-    public function testUnlockWithoutExistingLock()
+    /**
+     * @dataProvider lockNameProvider
+     */
+    public function testUnlockWithoutExistingLock(string $name)
     {
-        $name = 'test_lock';
-
         $this->assertFalse($this->model->isLocked($name));
         $this->assertFalse($this->model->unlock($name));
     }
 
-    public function testCleanupOldFile()
+    /**
+     * @dataProvider lockNameProvider
+     */
+    public function testCleanupOldFile(string $name)
     {
-        $name = 'test_lock';
-
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->unlock($name));
 
-        touch(sprintf('%s/%s', $this->lockPath, $name), strtotime('30 hours ago'));
+        touch($this->getFilePath($name), strtotime('30 hours ago'));
 
         $this->assertEquals(1, $this->model->cleanupOldLocks());
     }
 
-    public function testDontCleanupNewFile()
+    /**
+     * @dataProvider lockNameProvider
+     */
+    public function testDontCleanupNewFile(string $name)
     {
-        $name = 'test_lock';
-
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->unlock($name));
 
-        touch(sprintf('%s/%s', $this->lockPath, $name), strtotime('1 hour ago'));
+        touch($this->getFilePath($name), strtotime('1 hour ago'));
 
         $this->assertEquals(0, $this->model->cleanupOldLocks());
+    }
+
+    private function getFilePath(string $name): string
+    {
+        return $this->lockPath . '/' . rawurlencode($name);
+    }
+
+    public static function lockNameProvider(): array
+    {
+        return [
+            'standard_alphanumeric' => ['test_lock_name'],
+            'with_unix_forbidden_chars' => ['test/lock/name'],
+            'with_windows_forbidden_chars' => ['*t<e>s:t"l/o\\c|k?_name'],
+            'with_spaces' => ['test lock name']
+        ];
     }
 }
