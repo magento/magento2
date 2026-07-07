@@ -43,7 +43,7 @@ class TransportTest extends TestCase
     private $transport;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws Exception
      */
     protected function setUp(): void

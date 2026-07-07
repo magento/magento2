@@ -14,6 +14,11 @@ require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
 
 error_reporting(E_ALL);
+
+if (extension_loaded('xdebug')) {
+    ini_set('xdebug.max_nesting_level', '200');
+}
+
 // phpcs:ignore Magento2.Functions.DiscouragedFunction
 $testsBaseDir = dirname(__DIR__);
 $fixtureBaseDir = $testsBaseDir. '/testsuite';
@@ -129,38 +134,50 @@ try {
 }
 
 /**
+ * PHPUnit error handler (set_error_handler callback; named for PHPMD).
+ *
+ * @param int $errNo
+ * @param string $errStr
+ * @param string $errFile
+ * @param int $errLine
+ * @return bool
+ */
+function magentoIntegrationTestsPhpErrorHandler(int $errNo, string $errStr, string $errFile, int $errLine): bool
+{
+    $errLevel = error_reporting();
+    if (($errLevel & $errNo) !== 0) {
+        $errorNames = [
+            E_ERROR => 'Error',
+            E_WARNING => 'Warning',
+            E_PARSE => 'Parse',
+            E_NOTICE => 'Notice',
+            E_CORE_ERROR => 'Core Error',
+            E_CORE_WARNING => 'Core Warning',
+            E_COMPILE_ERROR => 'Compile Error',
+            E_COMPILE_WARNING => 'Compile Warning',
+            E_USER_ERROR => 'User Error',
+            E_USER_WARNING => 'User Warning',
+            E_USER_NOTICE => 'User Notice',
+            E_RECOVERABLE_ERROR => 'Recoverable Error',
+            E_DEPRECATED => 'Deprecated',
+            E_USER_DEPRECATED => 'User Deprecated',
+        ];
+
+        $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : '';
+
+        throw new \PHPUnit\Framework\Exception(
+            sprintf('%s: %s in %s:%s.', $errName, $errStr, $errFile, $errLine),
+            $errNo
+        );
+    }
+
+    return false;
+}
+
+/**
  * Set custom error handler
  */
 function setCustomErrorHandler()
 {
-    set_error_handler(
-        function ($errNo, $errStr, $errFile, $errLine) {
-            $errLevel = error_reporting();
-            if (($errLevel & $errNo) !== 0) {
-                $errorNames = [
-                    E_ERROR => 'Error',
-                    E_WARNING => 'Warning',
-                    E_PARSE => 'Parse',
-                    E_NOTICE => 'Notice',
-                    E_CORE_ERROR => 'Core Error',
-                    E_CORE_WARNING => 'Core Warning',
-                    E_COMPILE_ERROR => 'Compile Error',
-                    E_COMPILE_WARNING => 'Compile Warning',
-                    E_USER_ERROR => 'User Error',
-                    E_USER_WARNING => 'User Warning',
-                    E_USER_NOTICE => 'User Notice',
-                    E_RECOVERABLE_ERROR => 'Recoverable Error',
-                    E_DEPRECATED => 'Deprecated',
-                    E_USER_DEPRECATED => 'User Deprecated',
-                ];
-
-                $errName = isset($errorNames[$errNo]) ? $errorNames[$errNo] : "";
-
-                throw new \PHPUnit\Framework\Exception(
-                    sprintf("%s: %s in %s:%s.", $errName, $errStr, $errFile, $errLine),
-                    $errNo
-                );
-            }
-        }
-    );
+    set_error_handler('magentoIntegrationTestsPhpErrorHandler');
 }

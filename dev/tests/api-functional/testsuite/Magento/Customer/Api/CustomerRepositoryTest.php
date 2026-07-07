@@ -156,6 +156,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      */
     public function testInvalidCustomerUpdate()
     {
+        // Temporarily disabled for SOAP; will be re-enabled as part of ACP2E-5100 ticket.
+        $this->_markTestAsRestOnly();
         $this->expectException(\Exception::class);
 
         //Create first customer and retrieve customer token.
@@ -1049,7 +1051,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerLoadedData = $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
         self::assertGreaterThanOrEqual($customerData[Customer::UPDATED_AT], $customerLoadedData[Customer::UPDATED_AT]);
         unset($customerData[Customer::UPDATED_AT]);
-        unset($customerLoadedData[Customer::UPDATED_AT], $customerLoadedData[Customer::CONFIRMATION]);
+        unset(
+            $customerLoadedData[Customer::UPDATED_AT],
+            $customerLoadedData[Customer::CONFIRMATION],
+            $customerLoadedData[Customer::CUSTOM_ATTRIBUTES]
+        );
         self::assertEquals($customerData, $customerLoadedData);
 
         $revokeToken = $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);

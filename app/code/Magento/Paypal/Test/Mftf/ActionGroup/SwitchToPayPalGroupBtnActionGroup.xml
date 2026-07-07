@@ -15,6 +15,8 @@
             <argument name="elementNumber" type="string" defaultValue="0"/>
             <argument name="frameName" type="string" defaultValue="myFrame"/>
         </arguments>
+        <!--wait until the targeted PayPal group button iframe is present AND rendered (offsetWidth>0 filters out PayPal Zoid setup iframes that get injected first but stay empty)-->
+        <waitForJS function="return (function(){var f=document.getElementsByClassName('component-frame');return f.length>{{elementNumber}}&amp;&amp;f[{{elementNumber}}].offsetWidth>0;})();" time="30" stepKey="waitForPayPalGroupBtnIframe"/>
         <!--set ID for iframe of PayPal group button-->
         <executeJS function="document.getElementsByClassName('component-frame')[{{elementNumber}}].setAttribute('name', '{{frameName}}');" stepKey="setIDForIframe"/>
         <!--switch to iframe of PayPal group button-->
