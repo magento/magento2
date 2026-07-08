@@ -7,8 +7,6 @@
 /**
  * Catalog product form gallery content
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @method \Magento\Framework\Data\Form\Element\AbstractElement getElement()
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
