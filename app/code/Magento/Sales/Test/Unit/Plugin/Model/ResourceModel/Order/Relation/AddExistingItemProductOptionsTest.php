@@ -9,7 +9,6 @@ namespace Magento\Sales\Test\Unit\Plugin\Model\ResourceModel\Order\Relation;
 
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Catalog\Api\Data\CustomOptionInterface;
-use Magento\Catalog\Api\Data\ProductOptionExtensionInterface;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -44,6 +43,7 @@ class AddExistingItemProductOptionsTest extends TestCase
     /** @var ProductRepositoryInterface&MockObject */
     private ProductRepositoryInterface $productRepository;
 
+    /** @var AddExistingItemProductOptions */
     private AddExistingItemProductOptions $plugin;
 
     protected function setUp(): void
@@ -319,19 +319,42 @@ class AddExistingItemProductOptionsTest extends TestCase
 
     /**
      * @param array $config
-     * @return ProductOptionExtensionInterface&MockObject
+     * @return object
      */
-    private function createProductOptionExtensionMock(array $config): ProductOptionExtensionInterface
+    private function createProductOptionExtensionMock(array $config): object
     {
-        $extensionAttributes = $this->createMock(ProductOptionExtensionInterface::class);
-        $extensionAttributes->method('getCustomOptions')
-            ->willReturn($config['custom_options'] ?? []);
-        $extensionAttributes->method('getConfigurableItemOptions')
-            ->willReturn($config['configurable_item_options'] ?? []);
-        $extensionAttributes->method('getBundleOptions')
-            ->willReturn($config['bundle_options'] ?? []);
+        return new class ($config) {
+            /**
+             * @param array $config
+             */
+            public function __construct(private readonly array $config)
+            {
+            }
 
-        return $extensionAttributes;
+            /**
+             * @return CustomOptionInterface[]
+             */
+            public function getCustomOptions(): array
+            {
+                return $this->config['custom_options'] ?? [];
+            }
+
+            /**
+             * @return ConfigurableItemOptionValueInterface[]
+             */
+            public function getConfigurableItemOptions(): array
+            {
+                return $this->config['configurable_item_options'] ?? [];
+            }
+
+            /**
+             * @return BundleOptionInterface[]
+             */
+            public function getBundleOptions(): array
+            {
+                return $this->config['bundle_options'] ?? [];
+            }
+        };
     }
 
     private static function createCustomOption(string $optionId, string $optionValue): CustomOptionInterface

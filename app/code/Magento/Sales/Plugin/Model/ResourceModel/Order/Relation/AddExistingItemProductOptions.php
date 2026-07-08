@@ -108,6 +108,23 @@ class AddExistingItemProductOptions
      */
     private function getBuyRequest(OrderItemInterface $item): DataObject
     {
+        $requestData = $this->getInitialBuyRequestData($item);
+        $extensionAttributes = $item->getProductOption()?->getExtensionAttributes();
+        if ($extensionAttributes) {
+            $requestData = $this->applyExtensionAttributesToBuyRequest($requestData, $extensionAttributes);
+        }
+
+        return $this->dataObjectFactory->create($requestData);
+    }
+
+    /**
+     * Build initial buy request data from persisted product options and quantity.
+     *
+     * @param OrderItemInterface $item
+     * @return array
+     */
+    private function getInitialBuyRequestData(OrderItemInterface $item): array
+    {
         $requestData = [];
         $productOptions = $item->getProductOptions();
         if (!empty($productOptions['info_buyRequest']) && is_array($productOptions['info_buyRequest'])) {
@@ -118,36 +135,93 @@ class AddExistingItemProductOptions
             $requestData['qty'] = $item->getQtyOrdered();
         }
 
-        $productOption = $item->getProductOption();
-        $extensionAttributes = $productOption?->getExtensionAttributes();
-        if (!$extensionAttributes) {
-            return $this->dataObjectFactory->create($requestData);
-        }
+        return $requestData;
+    }
 
+    /**
+     * Merge product option extension attributes into buy request data.
+     *
+     * @param array $requestData
+     * @param object $extensionAttributes
+     * @return array
+     */
+    private function applyExtensionAttributesToBuyRequest(array $requestData, object $extensionAttributes): array
+    {
         if (method_exists($extensionAttributes, 'getCustomOptions')) {
-            foreach ($extensionAttributes->getCustomOptions() ?: [] as $option) {
-                $requestData['options'][$option->getOptionId()] = $option->getOptionValue();
-            }
+            $requestData = $this->applyCustomOptionsToBuyRequest(
+                $requestData,
+                $extensionAttributes->getCustomOptions() ?: []
+            );
         }
 
         if (method_exists($extensionAttributes, 'getConfigurableItemOptions')) {
-            foreach ($extensionAttributes->getConfigurableItemOptions() ?: [] as $option) {
-                $requestData['super_attribute'][$option->getOptionId()] = (string)$option->getOptionValue();
-            }
+            $requestData = $this->applyConfigurableOptionsToBuyRequest(
+                $requestData,
+                $extensionAttributes->getConfigurableItemOptions() ?: []
+            );
         }
 
         if (method_exists($extensionAttributes, 'getBundleOptions')) {
-            foreach ($extensionAttributes->getBundleOptions() ?: [] as $option) {
-                foreach ($option->getOptionSelections() ?: [] as $selection) {
-                    $requestData['bundle_option'][$option->getOptionId()][] = $selection;
-                }
-                if ($option->getOptionQty() !== null) {
-                    $requestData['bundle_option_qty'][$option->getOptionId()] = $option->getOptionQty();
-                }
+            $requestData = $this->applyBundleOptionsToBuyRequest(
+                $requestData,
+                $extensionAttributes->getBundleOptions() ?: []
+            );
+        }
+
+        return $requestData;
+    }
+
+    /**
+     * Merge custom options into buy request data.
+     *
+     * @param array $requestData
+     * @param array $customOptions
+     * @return array
+     */
+    private function applyCustomOptionsToBuyRequest(array $requestData, array $customOptions): array
+    {
+        foreach ($customOptions as $option) {
+            $requestData['options'][$option->getOptionId()] = $option->getOptionValue();
+        }
+
+        return $requestData;
+    }
+
+    /**
+     * Merge configurable options into buy request data.
+     *
+     * @param array $requestData
+     * @param array $configurableOptions
+     * @return array
+     */
+    private function applyConfigurableOptionsToBuyRequest(array $requestData, array $configurableOptions): array
+    {
+        foreach ($configurableOptions as $option) {
+            $requestData['super_attribute'][$option->getOptionId()] = (string)$option->getOptionValue();
+        }
+
+        return $requestData;
+    }
+
+    /**
+     * Merge bundle options into buy request data.
+     *
+     * @param array $requestData
+     * @param array $bundleOptions
+     * @return array
+     */
+    private function applyBundleOptionsToBuyRequest(array $requestData, array $bundleOptions): array
+    {
+        foreach ($bundleOptions as $option) {
+            foreach ($option->getOptionSelections() ?: [] as $selection) {
+                $requestData['bundle_option'][$option->getOptionId()][] = $selection;
+            }
+            if ($option->getOptionQty() !== null) {
+                $requestData['bundle_option_qty'][$option->getOptionId()] = $option->getOptionQty();
             }
         }
 
-        return $this->dataObjectFactory->create($requestData);
+        return $requestData;
     }
 
     /**
