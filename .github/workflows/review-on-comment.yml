@@ -112,10 +112,19 @@ jobs:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
           AUGMENT_SESSION_JSON: ${{ secrets.AUGMENT_SESSION_JSON }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           set -uo pipefail
           if [[ -n "${ANTHROPIC_AUTH_TOKEN:-}" ]]; then
             npm install -g @anthropic-ai/claude-code || echo "::warning::claude-code install failed"
+          fi
+          if [[ -n "${CURSOR_API_KEY:-}" ]]; then
+            curl -fsSL https://cursor.com/install | bash || echo "::warning::cursor install failed"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+            # The installer provides `agent`/`cursor-agent`, not `cursor`.
+            # Bridge the name so `cursor agent ...` calls resolve on the runner.
+            printf '#!/bin/sh\n[ "$1" = agent ] && shift\nexec "$HOME/.local/bin/agent" "$@"\n' > "$HOME/.local/bin/cursor"
+            chmod +x "$HOME/.local/bin/cursor"
           fi
           if [[ -n "${CODEX_AUTH_JSON:-}" ]]; then
             sudo apt-get update -qq || echo "::warning::apt-get update failed"
@@ -170,6 +179,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DEVX_REVIEWS_DIR: ${{ runner.temp }}/pr_reviews
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.ANTHROPIC_AUTH_TOKEN }}
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
           PR_URL: ${{ steps.pr.outputs.url }}
           DEVX_REPO_PATH: ${{ github.workspace }}
           DEVX_REQUIRE_AGENTS: "1"
