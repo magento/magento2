@@ -20,7 +20,6 @@ use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Item as OrderItemResource;
@@ -45,9 +44,6 @@ class AddExistingItemProductOptionsTest extends TestCase
     /** @var ProductRepositoryInterface&MockObject */
     private ProductRepositoryInterface $productRepository;
 
-    /**
-     * @var AddExistingItemProductOptions
-     */
     private AddExistingItemProductOptions $plugin;
 
     protected function setUp(): void
@@ -63,18 +59,19 @@ class AddExistingItemProductOptionsTest extends TestCase
     }
 
     /**
-     * @param ProductOptionExtensionInterface $extensionAttributes
+     * @param array $extensionConfig
      * @param array $expectedBuyRequest
      * @param array $generatedOptions
      * @param array $expectedProductOptions
      */
     #[DataProvider('newOrderItemDataProvider')]
     public function testBeforeProcessRelationAddsGeneratedProductOptionsForNewItems(
-        ProductOptionExtensionInterface $extensionAttributes,
+        array $extensionConfig,
         array $expectedBuyRequest,
         array $generatedOptions,
         array $expectedProductOptions
     ): void {
+        $extensionAttributes = $this->createProductOptionExtensionMock($extensionConfig);
         $productOption = $this->createMock(ProductOptionInterface::class);
         $productOption->method('getExtensionAttributes')->willReturn($extensionAttributes);
 
@@ -150,9 +147,9 @@ class AddExistingItemProductOptionsTest extends TestCase
 
     public function testBeforeProcessRelationKeepsInfoBuyRequestWhenProductOptionsCannotBeGenerated(): void
     {
-        $extensionAttributes = $this->createProductOptionExtension(
-            customOptions: [$this->createCustomOption('1', '3')]
-        );
+        $extensionAttributes = $this->createProductOptionExtensionMock([
+            'custom_options' => [self::createCustomOption('1', '3')],
+        ]);
         $productOption = $this->createMock(ProductOptionInterface::class);
         $productOption->method('getExtensionAttributes')->willReturn($extensionAttributes);
 
@@ -175,13 +172,38 @@ class AddExistingItemProductOptionsTest extends TestCase
         );
     }
 
+    public function testBeforeProcessRelationSkipsEnrichmentWithoutProductOptionPayload(): void
+    {
+        $item = $this->createOrderItemMock();
+        $item->method('getItemId')->willReturn(null);
+        $item->method('getProductOption')->willReturn(null);
+        $item->method('getProductOptions')->willReturn([
+            'info_buyRequest' => [
+                'qty' => 1,
+                'options' => [
+                    '7' => [
+                        'year' => '2024',
+                        'month' => '12',
+                        'day' => '25',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->productRepository->expects($this->never())->method('getById');
+        $item->expects($this->never())->method('setProductOptions');
+
+        $this->plugin->beforeProcessRelation(
+            $this->createMock(Relation::class),
+            $this->createOrder([$item])
+        );
+    }
+
     public static function newOrderItemDataProvider(): array
     {
         return [
             'simple custom option' => [
-                self::createProductOptionExtension(
-                    customOptions: [self::createCustomOption('1', '3')]
-                ),
+                ['custom_options' => [self::createCustomOption('1', '3')]],
                 ['qty' => 1, 'options' => ['1' => '3']],
                 [
                     'options' => [
@@ -212,9 +234,7 @@ class AddExistingItemProductOptionsTest extends TestCase
                 ],
             ],
             'configurable option' => [
-                self::createProductOptionExtension(
-                    configurableItemOptions: [self::createConfigurableOption('93', 13)]
-                ),
+                ['configurable_item_options' => [self::createConfigurableOption('93', 13)]],
                 ['qty' => 1, 'super_attribute' => ['93' => '13']],
                 [
                     'attributes_info' => [
@@ -233,9 +253,12 @@ class AddExistingItemProductOptionsTest extends TestCase
                 ],
             ],
             'bundle option' => [
-                self::createProductOptionExtension(
-                    bundleOptions: [self::createBundleOption(3, 1, [6]), self::createBundleOption(4, 1, [8])]
-                ),
+                [
+                    'bundle_options' => [
+                        self::createBundleOption(3, 1, [6]),
+                        self::createBundleOption(4, 1, [8]),
+                    ],
+                ],
                 ['qty' => 1, 'bundle_option' => [3 => [6], 4 => [8]], 'bundle_option_qty' => [3 => 1, 4 => 1]],
                 [
                     'bundle_options' => [
@@ -262,6 +285,10 @@ class AddExistingItemProductOptionsTest extends TestCase
         ];
     }
 
+    /**
+     * @param array $items
+     * @return Order
+     */
     private function createOrder(array $items): Order
     {
         $order = $this->createPartialMock(Order::class, ['getId', 'getItems']);
@@ -272,8 +299,6 @@ class AddExistingItemProductOptionsTest extends TestCase
     }
 
     /**
-     * Create an order item mock exposing concrete product option accessors.
-     *
      * @return Item&MockObject
      */
     private function createOrderItemMock(): Item
@@ -292,15 +317,19 @@ class AddExistingItemProductOptionsTest extends TestCase
             ->getMock();
     }
 
-    private static function createProductOptionExtension(
-        array $customOptions = [],
-        array $configurableItemOptions = [],
-        array $bundleOptions = []
-    ): ProductOptionExtensionInterface {
-        $extensionAttributes = new \Magento\Catalog\Api\Data\ProductOptionExtension();
-        $extensionAttributes->setCustomOptions($customOptions);
-        $extensionAttributes->setConfigurableItemOptions($configurableItemOptions);
-        $extensionAttributes->setBundleOptions($bundleOptions);
+    /**
+     * @param array $config
+     * @return ProductOptionExtensionInterface&MockObject
+     */
+    private function createProductOptionExtensionMock(array $config): ProductOptionExtensionInterface
+    {
+        $extensionAttributes = $this->createMock(ProductOptionExtensionInterface::class);
+        $extensionAttributes->method('getCustomOptions')
+            ->willReturn($config['custom_options'] ?? []);
+        $extensionAttributes->method('getConfigurableItemOptions')
+            ->willReturn($config['configurable_item_options'] ?? []);
+        $extensionAttributes->method('getBundleOptions')
+            ->willReturn($config['bundle_options'] ?? []);
 
         return $extensionAttributes;
     }

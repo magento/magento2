@@ -180,6 +180,36 @@ class AddExistingItemProductOptions
     }
 
     /**
+     * Whether the order item carries a direct Web API product_option payload.
+     *
+     * @param OrderItemInterface $item
+     * @return bool
+     */
+    private function hasProductOptionExtensionPayload(OrderItemInterface $item): bool
+    {
+        $extensionAttributes = $item->getProductOption()?->getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return false;
+        }
+
+        if (method_exists($extensionAttributes, 'getCustomOptions') && $extensionAttributes->getCustomOptions()) {
+            return true;
+        }
+
+        if (method_exists($extensionAttributes, 'getConfigurableItemOptions')
+            && $extensionAttributes->getConfigurableItemOptions()
+        ) {
+            return true;
+        }
+
+        if (method_exists($extensionAttributes, 'getBundleOptions') && $extensionAttributes->getBundleOptions()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Add existing item product options to the order items before processing the relation.
      *
      * @param Relation $subject
@@ -196,6 +226,10 @@ class AddExistingItemProductOptions
                     if (count($productOptions)) {
                         $item->setProductOptions($productOptions);
                     }
+                    continue;
+                }
+
+                if (!$this->hasProductOptionExtensionPayload($item)) {
                     continue;
                 }
 
