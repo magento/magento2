@@ -284,7 +284,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     private function getExpirationDate(Payment $payment)
     {
-        $expDate = new \DateTime(
+        $cardExpDate = new \DateTime(
             $payment->getCcExpYear()
             . '-'
             . $payment->getCcExpMonth()
@@ -294,8 +294,13 @@ class Transparent extends Payflowpro implements TransparentInterface
             . '00:00:00',
             new \DateTimeZone('UTC')
         );
-        $expDate->add(new \DateInterval('P1M'));
-        return $expDate->format('Y-m-d 00:00:00');
+        $cardExpDate->add(new \DateInterval('P1M'));
+        $oneYearFromNow = new \DateTime('now', new \DateTimeZone('UTC'));
+        $oneYearFromNow->add(new \DateInterval('P1Y'));
+        if ($cardExpDate <= $oneYearFromNow) {
+            return $cardExpDate->format('Y-m-d 00:00:00');
+        }
+        return $oneYearFromNow->format('Y-m-d 00:00:00');
     }
 
     /**

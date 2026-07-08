@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,8 +62,8 @@ class CollectionTest extends TestCase
             ]
         );
 
-        $this->saleableItemMock = $this->getMockForAbstractClass(SaleableInterface::class);
-        $this->priceMock = $this->getMockForAbstractClass(PriceInterface::class);
+        $this->saleableItemMock = $this->createMock(SaleableInterface::class);
+        $this->priceMock = $this->createMock(PriceInterface::class);
         $this->factoryMock = $this->createMock(Factory::class);
 
         $this->collection = new Collection(

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontEditBundleProductUserDefinedQtyFromCartTest">
+        <annotations>
+            <features value="Bundle Product"/>
+            <stories value="Editing bundle product from cart with user-defined quantities"/>
+            <title value="Edit bundle product from cart with user-defined quantities"/>
+            <description value="Test verifies that user-defined are retained when editing a bundle product from the shopping cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4271"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Precondition1: Create two simple product with category -->
+            <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct2"/>
+            <!-- Precondition2: Create bundle product with radio option -->
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createSubCategory"/>
+            </createData>
+            <createData entity="RadioButtonsOption" stepKey="bundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">true</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct1"/>
+                <field key="qty">3</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="bundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct2"/>
+                <field key="qty">3</field>
+            </createData>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openBundleEditPage">
+                <argument name="productId" value="$$createBundleProduct.id$$"/>
+            </actionGroup>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantityOption0Product0"/>
+            <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantityOption0Product1"/>
+            <!-- Save product -->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step1: Open Bundled product on storefront -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="navigateToBundleProductDetailsPage">
+            <argument name="product" value="$createBundleProduct$"/>
+        </actionGroup>
+        <!-- Step2: Click on Customize and Add to cart-->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickButtonToCustomize"/>
+        <checkOption selector="{{StorefrontBundledSection.radioButton('$$createSimpleProduct1.name$$', '1')}}" stepKey="selectOption1"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.radioOptionQty}}" stepKey="waitForUpdateQty"/>
+        <!-- Step3: Update qty and add product to cart -->
+        <fillField selector="{{StorefrontBundledSection.radioOptionQty}}" userInput="10" stepKey="updateQty"/>
+        <actionGroup ref="StorefrontAddToTheCartButtonActionGroup" stepKey="addToTheCartBundleProduct"/>
+        <!-- Step4: Open Mini Cart and click on edit item icon and verify qty -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.editMiniCartItem}}" stepKey="clickEditCartItem"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeInField selector="{{StorefrontBundledSection.radioOptionQty}}" userInput="010" stepKey="VerifyQty"/>
+    </test>
+</tests>

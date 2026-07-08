@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -95,11 +95,11 @@ class SaveTest extends TestCase
     {
         /* Intermediary mocks */
         $this->adapterMock = $this->createMock(Mysql::class);
-        $this->mediaAssetMock = $this->getMockForAbstractClass(AssetInterface::class);
+        $this->mediaAssetMock = $this->createMock(AssetInterface::class);
 
         /* Save constructor mocks */
         $this->objectProcessor = $this->createMock(DataObjectProcessor::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->resourceConnectionMock = $this->createConfiguredMock(
             ResourceConnection::class,
             [

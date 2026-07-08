@@ -137,6 +137,7 @@ Download,Download
 "Something went wrong while saving the new password.","Something went wrong while saving the new password."
 "You deleted the address.","You deleted the address."
 "We can't delete the address right now.","We can't delete the address right now."
+"Invalid file path.","Invalid file path."
 "You saved the address.","You saved the address."
 "We can't save the address.","We can't save the address."
 "No customer ID defined.","No customer ID defined."
@@ -549,3 +550,8 @@ Addresses,Addresses
 T,T
 F,F
 VAT,VAT
+"Something went wrong while logging out customer.","Something went wrong while logging out customer."
+"Invalid City. The city name is too long. Enter no more than %1 characters.","Invalid City. The city name is too long. Enter no more than %1 characters."
+"Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )","Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )"
+"Invalid Street Address. The street address is too long. Enter no more than %1 characters.","Invalid Street Address. The street address is too long. Enter no more than %1 characters."
+"Invalid Street Address. The street address contains invalid characters.","Invalid Street Address. The street address contains invalid characters."

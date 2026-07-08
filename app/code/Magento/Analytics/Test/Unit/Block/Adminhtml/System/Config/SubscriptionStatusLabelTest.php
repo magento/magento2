@@ -15,10 +15,12 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class SubscriptionStatusLabelTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SubscriptionStatusLabel
      */
@@ -48,17 +50,15 @@ class SubscriptionStatusLabelTest extends TestCase
     {
         $this->subscriptionStatusProviderMock = $this->createMock(SubscriptionStatusProvider::class);
         $this->contextMock = $this->createMock(Context::class);
-        $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getComment'])
-            ->onlyMethods(['getElementHtml'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->abstractElementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getComment', 'getElementHtml']
+        );
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->abstractElementMock);
         $reflection_property = $reflection->getProperty('_escaper');
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
         $this->formMock = $this->createMock(Form::class);

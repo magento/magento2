@@ -11,4 +11,7 @@
     <entity name="sidebarTabMenu">
         <data key="my_orders">My Orders</data>
     </entity>
+    <entity name="customerSavedSuccessfullyMessage">
+        <data key="value">Thank you for registering with Main Website Store.</data>
+    </entity>
 </entities>

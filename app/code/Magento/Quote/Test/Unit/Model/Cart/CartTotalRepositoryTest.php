@@ -1,14 +1,14 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\Cart;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -22,6 +22,7 @@ use Magento\Quote\Model\Cart\TotalsConverter;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,6 +33,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CartTotalRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
     private const STUB_CART_ID = 12;
 
     private const STUB_ITEMS_QTY = 100;
@@ -99,20 +101,19 @@ class CartTotalRepositoryTest extends TestCase
                 'create'
             ]
         );
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getBaseCurrencyCode', 'getQuoteCurrencyCode'])
-            ->onlyMethods(
-                [
-                    'isVirtual',
-                    'getShippingAddress',
-                    'getBillingAddress',
-                    'getAllVisibleItems',
-                    'getItemsQty',
-                    'collectTotals'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getBillingAddress',
+                'getShippingAddress',
+                'getAllVisibleItems',
+                'getBaseCurrencyCode',
+                'getQuoteCurrencyCode',
+                'getItemsQty',
+                'isVirtual',
+                'collectTotals'
+            ]
+        );
         $this->quoteRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
@@ -153,10 +154,10 @@ class CartTotalRepositoryTest extends TestCase
      *
      * @param bool $isVirtual
      * @param string $getAddressType
-     * @dataProvider getDataProvider
      *
      * @return void
      */
+    #[DataProvider('getDataProvider')]
     public function testGetCartTotal($isVirtual, $getAddressType): void
     {
         $addressTotals = ['address' => 'totals'];
@@ -175,6 +176,11 @@ class CartTotalRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')
             ->willReturn($isVirtual);
+        if ($isVirtual) {
+            $this->quoteMock->expects($this->once())
+                ->method('collectTotals')
+                ->willReturnSelf();
+        }
         $this->quoteMock->expects($this->exactly(2))
             ->method($getAddressType)
             ->willReturn($this->addressMock);
@@ -190,14 +196,12 @@ class CartTotalRepositoryTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getItemsQty')
             ->willReturn(self::STUB_ITEMS_QTY);
-        $this->addressMock->expects($this->any())
-            ->method('getData')
-            ->willReturn($addressTotals);
+        $this->addressMock->method('getData')->willReturn($addressTotals);
         $this->addressMock->expects($this->once())
             ->method('getTotals')
             ->willReturn($addressTotals);
 
-        $totalsMock = $this->getMockForAbstractClass(QuoteTotalsInterface::class);
+        $totalsMock = $this->createMock(QuoteTotalsInterface::class);
         $this->totalsFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($totalsMock);
@@ -207,7 +211,7 @@ class CartTotalRepositoryTest extends TestCase
             ->with($itemMock)
             ->willReturn($itemArray);
 
-        $totalSegmentsMock = $this->getMockForAbstractClass(TotalSegmentInterface::class);
+        $totalSegmentsMock = $this->createMock(TotalSegmentInterface::class);
         $this->totalsConverterMock->expects($this->once())
             ->method('process')
             ->with($addressTotals)

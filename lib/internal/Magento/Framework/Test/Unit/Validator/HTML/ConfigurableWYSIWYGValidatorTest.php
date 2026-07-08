@@ -11,6 +11,8 @@ use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator;
 use Magento\Framework\Validator\HTML\AttributeValidatorInterface;
 use Magento\Framework\Validator\HTML\TagValidatorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class ConfigurableWYSIWYGValidatorTest extends TestCase
@@ -241,9 +243,9 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      * @param bool[][] $tagValidators
      * @return void
      *
-     * @dataProvider getConfigurations
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    #[DataProvider('getConfigurations')]
     public function testConfigurations(
         array $allowedTags,
         array $allowedAttr,
@@ -253,7 +255,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         array $attributeValidityMap,
         array $tagValidators
     ): void {
-        $attributeValidator = $this->getMockForAbstractClass(AttributeValidatorInterface::class);
+        $attributeValidator = $this->createMock(AttributeValidatorInterface::class);
         $attributeValidator->method('validate')
             ->willReturnCallback(
                 function (string $tag, string $attribute) use ($attributeValidityMap): void {
@@ -268,7 +270,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         }
         $tagValidatorsMocks = [];
         foreach ($tagValidators as $tag => $allowedAttributes) {
-            $mock = $this->getMockForAbstractClass(TagValidatorInterface::class);
+            $mock = $this->createMock(TagValidatorInterface::class);
             $mock->method('validate')
                 ->willReturnCallback(
                     function (string $givenTag, array $attrs) use ($tag, $allowedAttributes): void {

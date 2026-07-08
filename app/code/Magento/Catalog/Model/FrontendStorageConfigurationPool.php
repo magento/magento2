@@ -3,6 +3,7 @@
  * Copyright 2017 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
@@ -18,17 +19,11 @@ use Magento\Framework\Exception\LocalizedException;
 class FrontendStorageConfigurationPool
 {
     /**
-     * @var array
-     */
-    private $storageConfigurations;
-
-    /**
      * StorageConfigurationPool constructor.
      * @param array $storageConfigurations
      */
-    public function __construct(array $storageConfigurations = [])
+    public function __construct(private array $storageConfigurations = [])
     {
-        $this->storageConfigurations = $storageConfigurations;
     }
 
     /**
@@ -40,16 +35,16 @@ class FrontendStorageConfigurationPool
      */
     public function get($namespace)
     {
-        if (isset($this->storageConfigurations[$namespace])) {
-            if (!$this->storageConfigurations[$namespace] instanceof FrontendStorageConfigurationInterface) {
-                throw new LocalizedException(
-                    __(sprintf("Invalid pool type with namespace: %s", $namespace))
-                );
-            }
-        } else {
+        $storageConfiguration = $this->storageConfigurations[$namespace] ?? null;
+        if ($storageConfiguration === null) {
             return false;
         }
+        if (!$storageConfiguration instanceof FrontendStorageConfigurationInterface) {
+            throw new LocalizedException(
+                __("Invalid pool type with namespace: %1", $namespace)
+            );
+        }
 
-        return $this->storageConfigurations[$namespace];
+        return $storageConfiguration;
     }
 }

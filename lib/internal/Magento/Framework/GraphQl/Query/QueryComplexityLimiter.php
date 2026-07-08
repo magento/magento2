@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
 use GraphQL\Language\AST\DocumentNode;
+use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\NodeKind;
+use GraphQL\Language\AST\SelectionSetNode;
+use GraphQL\Language\Printer;
 use GraphQL\Language\Visitor;
 use GraphQL\Validator\DocumentValidator;
 use GraphQL\Validator\Rules\DisableIntrospection;
@@ -50,6 +53,16 @@ class QueryComplexityLimiter
     private $queryParser;
 
     /**
+     * @var MaximumAliasConfiguration
+     */
+    private $maximumAliasConfiguration;
+
+    /**
+     * @var QueryLengthConfiguration
+     */
+    private $queryLengthConfiguration;
+
+    /**
      * @var array
      */
     private $rules = [];
@@ -61,17 +74,25 @@ class QueryComplexityLimiter
      * @param int $queryComplexity
      * @param IntrospectionConfiguration $introspectionConfig
      * @param QueryParser|null $queryParser
+     * @param MaximumAliasConfiguration|null $maximumAliasConfiguration
+     * @param QueryLengthConfiguration|null $queryLengthConfiguration
      */
     public function __construct(
         int $queryDepth,
         int $queryComplexity,
         IntrospectionConfiguration $introspectionConfig,
-        ?QueryParser $queryParser = null
+        ?QueryParser $queryParser = null,
+        ?MaximumAliasConfiguration $maximumAliasConfiguration = null,
+        ?QueryLengthConfiguration $queryLengthConfiguration = null
     ) {
         $this->queryDepth = $queryDepth;
         $this->queryComplexity = $queryComplexity;
         $this->introspectionConfig = $introspectionConfig;
         $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+        $this->maximumAliasConfiguration = $maximumAliasConfiguration ?:
+            ObjectManager::getInstance()->get(MaximumAliasConfiguration::class);
+        $this->queryLengthConfiguration = $queryLengthConfiguration ?:
+            ObjectManager::getInstance()->get(QueryLengthConfiguration::class);
     }
 
     /**
@@ -137,5 +158,87 @@ class QueryComplexityLimiter
                 ));
             }
         }
+    }
+
+    /**
+     * Performs a preliminary Alias count check before performing more extensive query validation.
+     *
+     * This is necessary for performance optimization, as extremely large number of alias in a request
+     * require a substantial amount of resource can affect server performance.
+     *
+     * @param DocumentNode $query
+     * @return void
+     * @throws GraphQlInputException
+     */
+    public function validateAliasCount(DocumentNode $query): void
+    {
+        if ($this->maximumAliasConfiguration->isMaximumAliasLimitEnabled()) {
+            $aliasCount = 0;
+            foreach ($query->definitions as $definition) {
+                if (property_exists($definition, 'selectionSet')) {
+                    $aliasCount += $this->countAliasesInSelectionSet($definition->selectionSet);
+                }
+            }
+            $allowedAliasCount = $this->maximumAliasConfiguration->getMaximumAliasAllowed();
+            if ($aliasCount > $allowedAliasCount) {
+                throw new GraphQlInputException(__(
+                    'Max Aliases in query should be %1 but got %2.',
+                    $allowedAliasCount,
+                    $aliasCount
+                ));
+            }
+        }
+    }
+
+    /**
+     * This is necessary to make sure that the length of input query is within specified limits.
+     *
+     * @param DocumentNode $query
+     * @return void
+     * @throws GraphQlInputException
+     */
+    public function validateQueryLength(DocumentNode $query): void
+    {
+        if ($this->queryLengthConfiguration->isQueryLengthLimitEnabled()) {
+            $allowedQueryLength = $this->queryLengthConfiguration->getQueryLengthLimitAllowed();
+            $queryString = Printer::doPrint($query);
+            $actualQueryLength = strlen($queryString);
+            if ($actualQueryLength > $allowedQueryLength) {
+                throw new GraphQlInputException(__(
+                    'Query length exceeds maximum allowed length of %1 characters. Actual length: %2 characters.',
+                    $allowedQueryLength,
+                    $actualQueryLength
+                ));
+            }
+        }
+    }
+
+    /**
+     * Performs counting of aliases in a graphql request
+     *
+     * @param ?SelectionSetNode $selectionSet
+     * @return int
+     */
+    private function countAliasesInSelectionSet(?SelectionSetNode $selectionSet): int
+    {
+        if ($selectionSet === null) {
+            return 0;
+        }
+
+        $aliasCount = 0;
+
+        foreach ($selectionSet->selections as $selection) {
+            if ($selection instanceof FieldNode) {
+                if ($selection->alias !== null) {
+                    $aliasCount++;
+                }
+
+                if ($selection->selectionSet !== null) {
+                    $aliasCount += $this->countAliasesInSelectionSet($selection->selectionSet);
+                }
+            }
+        }
+
+        return $aliasCount;
     }
 }

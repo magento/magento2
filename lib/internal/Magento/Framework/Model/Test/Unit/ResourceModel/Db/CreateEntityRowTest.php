@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,14 +11,17 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\CreateEntityRow;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Unit test for CreateEntityRow class.
  */
 class CreateEntityRowTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Subject of testing.
      *
@@ -38,15 +41,12 @@ class CreateEntityRowTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = $this->getMockForAbstractClass(
-            AdapterInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['lastInsertId']
-        );
+        // Use concrete Pdo\Mysql which has lastInsertId() method
+        // Cannot use AdapterInterface as lastInsertId() is not part of the interface
+        $this->connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['lastInsertId', 'insert', 'describeTable'])
+            ->getMock();
 
         $this->connection->expects($this->any())
             ->method('lastInsertId')
@@ -91,8 +91,8 @@ class CreateEntityRowTest extends TestCase
      * @param $tableData
      * @param $preparedData
      * @param $finalData
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($inputData, $tableData, $preparedData, $finalData)
     {
         $this->connection->expects($this->any())

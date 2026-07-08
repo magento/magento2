@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Test\Unit\Model\Resolver\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\Entry;
@@ -47,35 +48,28 @@ class MediaGalleryTest extends TestCase
     protected function setUp(): void
     {
         $this->fieldMock = $this->createMock(Field::class);
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->infoMock = $this->createMock(ResolveInfo::class);
-        $this->productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productMock = $this->createMock(Product::class);
         $this->mediaGallery = new MediaGallery();
     }
 
     /**
-     * @dataProvider dataProviderForResolve
      * @param $expected
      * @param $productName
      * @return void
      * @throws Exception
      */
+    #[DataProvider('dataProviderForResolve')]
     public function testResolve($expected, $productName): void
     {
-        $existingEntryMock = $this->getMockBuilder(Entry::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getName'])
-            ->onlyMethods(['getData', 'getExtensionAttributes'])
-            ->getMock();
-        $existingEntryMock->expects($this->any())->method('getData')->willReturn($expected);
-        $existingEntryMock->expects($this->any())->method(
-            'getExtensionAttributes'
-        )->willReturn(false);
-        $this->productMock->expects($this->any())->method('getName')->willReturn($productName);
-        $this->productMock->expects($this->any())->method('getMediaGalleryEntries')
-            ->willReturn([$existingEntryMock]);
+        // Create a mock for Entry with getExtensionAttributes method
+        $existingEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $existingEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $existingEntryMock->setData($expected);
+        
+        $this->productMock->method('getName')->willReturn($productName);
+        $this->productMock->method('getMediaGalleryEntries')->willReturn([$existingEntryMock]);
         $result = $this->mediaGallery->resolve(
             $this->fieldMock,
             $this->contextMock,
@@ -126,5 +120,56 @@ class MediaGalleryTest extends TestCase
                 "HelloWorld"
             ]
         ];
+    }
+
+    /**
+     * Test that media gallery entries with disabled attribute are excluded from result.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function testResolveExcludesDisabledMediaEntries(): void
+    {
+        $enabledEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $enabledEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $enabledEntryMock->setData(
+            [
+                'file' => '/e/enabled.jpg',
+                'media_type' => 'image',
+                'label' => null,
+                'position' => '1',
+                'disabled' => '0',
+                'id' => '1',
+            ]
+        );
+
+        $disabledEntryMock = $this->createPartialMock(Entry::class, ['getExtensionAttributes']);
+        $disabledEntryMock->method('getExtensionAttributes')->willReturn(false);
+        $disabledEntryMock->setData(
+            [
+                'file' => '/d/disabled.jpg',
+                'media_type' => 'image',
+                'label' => 'Disabled',
+                'position' => '2',
+                'disabled' => '1',
+                'id' => '2',
+            ]
+        );
+
+        $this->productMock->method('getName')->willReturn('Product');
+        $this->productMock->method('getMediaGalleryEntries')
+            ->willReturn([$enabledEntryMock, $disabledEntryMock]);
+
+        $result = $this->mediaGallery->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->infoMock,
+            ['model' => $this->productMock],
+            []
+        );
+
+        $this->assertCount(1, $result);
+        $this->assertEquals('/e/enabled.jpg', $result[0]['file']);
+        $this->assertEquals('1', $result[0]['id']);
     }
 }

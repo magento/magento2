@@ -19,6 +19,9 @@
         </annotations>
 
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Delete old products -->
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="_defaultProduct" stepKey="createPreReqProduct1">
                 <requiredEntity createDataKey="createPreReqCategory"/>
@@ -26,7 +29,6 @@
             <createData entity="_defaultProduct" stepKey="createPreReqProduct2">
                 <requiredEntity createDataKey="createPreReqCategory"/>
             </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <!--Main test-->

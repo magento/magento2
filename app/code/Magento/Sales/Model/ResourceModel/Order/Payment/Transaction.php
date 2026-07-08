@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright 2011 Adobe
- * All rights reserved.
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Payment;
 
@@ -141,22 +141,16 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
         $orderId = $transaction->getData('order_id');
         $paymentId = $transaction->getData('payment_id');
         $idFieldName = $this->getIdFieldName();
-        $txnType = $transaction->getData('txn_type');
-        if ($parentTxnId) {
+
+        if ($parentTxnId && $parentTxnId !== $txnId) {
             if (!$txnId || !$orderId || !$paymentId) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('We don\'t have enough information to save the parent transaction ID.')
                 );
             }
             $parentId = (int)$this->_lookupByTxnId($orderId, $paymentId, $parentTxnId, $idFieldName);
-            if ($parentId && $txnType == 'authorization') {
+            if ($parentId) {
                 $transaction->setData('parent_id', $parentId);
-            }
-        } else {
-            $result = $this->getParentId($orderId);
-            if ($result) {
-                $transaction->setData('parent_id', $result[0]['transaction_id']);
-                $transaction->setData('parent_txn_id', $result[0]['parent_txn_id']);
             }
         }
 
@@ -218,24 +212,5 @@ class Transaction extends EntityAbstract implements TransactionResourceInterface
             'txn_id = ?',
             $txnId
         );
-    }
-
-    /**
-     * Retrieve transaction by the unique key of order_id
-     *
-     * @param int $orderId
-     * @return array
-     */
-    protected function getParentId(int $orderId): array
-    {
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            $this->getMainTable(),
-            ['transaction_id','parent_txn_id']
-        )->where(
-            'order_id = ?',
-            $orderId
-        )->order('transaction_id', 'ASC')->limit(1);
-        return $connection->fetchAll($select);
     }
 }

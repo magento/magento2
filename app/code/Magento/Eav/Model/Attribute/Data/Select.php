@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * EAV Entity Attribute Select Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -32,6 +31,9 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return bool|array
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function validateValue($value)
     {
@@ -41,6 +43,10 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
         if ($value === false) {
             // try to load original value and validate it
             $value = $this->getEntity()->getData($attribute->getAttributeCode());
+        }
+
+        if ((!$attribute->getIsRequired() || ($this->getEntity()?->getSkipRequiredValidation())) && empty($value)) {
+            return true;
         }
 
         if ($attribute->getIsRequired() && empty($value) && $value != '0') {

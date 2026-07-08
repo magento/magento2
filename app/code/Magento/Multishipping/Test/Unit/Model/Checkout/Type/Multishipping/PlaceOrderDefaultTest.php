@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class PlaceOrderDefaultTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $this->orderManagement = $this->createMock(OrderManagementInterface::class);
 
         $this->placeOrderDefault = new PlaceOrderDefault($this->orderManagement);
     }
@@ -42,7 +42,7 @@ class PlaceOrderDefaultTest extends TestCase
     {
         $incrementId = '000000001';
 
-        $order = $this->getMockForAbstractClass(OrderInterface::class);
+        $order = $this->createMock(OrderInterface::class);
         $order->method('getIncrementId')->willReturn($incrementId);
         $orderList = [$order];
 
@@ -59,7 +59,7 @@ class PlaceOrderDefaultTest extends TestCase
     {
         $incrementId = '000000001';
 
-        $order = $this->getMockForAbstractClass(OrderInterface::class);
+        $order = $this->createMock(OrderInterface::class);
         $order->method('getIncrementId')->willReturn($incrementId);
         $orderList = [$order];
 

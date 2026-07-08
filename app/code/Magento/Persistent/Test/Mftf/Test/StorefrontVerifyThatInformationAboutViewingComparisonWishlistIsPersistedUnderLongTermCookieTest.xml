@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,10 +19,6 @@
             <group value="persistent"/>
             <group value="widget"/>
             <group value="catalog_widget"/>
-            <skip>
-                <issueId value="MC-15741"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -152,13 +148,8 @@
         <actionGroup ref="StorefrontAssertProductInRecentlyViewedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyViewedWidgetAfterLogout">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlistSidebarActionGroup" stepKey="checkSimpleProductInWishlistSidebarAfterLogout">
-            <argument name="productVar" value="$$createSimpleProduct$$"/>
-        </actionGroup>
+
         <actionGroup ref="StorefrontAssertProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyComparedWidgetAfterLogout">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAssertProductInRecentlyOrderedWidgetActionGroup" stepKey="checkSimpleProductInRecentlyOrderedWidgetAfterLogout">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 

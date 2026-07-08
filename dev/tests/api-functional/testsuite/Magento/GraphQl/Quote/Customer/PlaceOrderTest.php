@@ -522,6 +522,39 @@ QUERY;
         return $headerMap;
     }
 
+    #[
+        Config('carriers/flatrate/active', '1', 'store', 'default'),
+        Config('payment/checkmo/active', '1', 'store', 'default'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Indexer::class, as: 'indexer'),
+        DataFixture(Customer::class, ['email' => 'customer@example.com'], as: 'customer'),
+        DataFixture(
+            CustomerCart::class,
+            [
+                'customer_id' => '$customer.id$',
+                'reserved_order_id' => 'test_quote'
+            ],
+            'cart'
+        ),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        Config('carriers/flatrate/active', '0', 'store', 'default'),
+    ]
+    public function testPlaceOrderWithDisabledShippingMethod()
+    {
+        $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
+        $query = $this->getQuery($maskedQuoteId);
+
+        self::expectExceptionMessage(
+            'Unable to place order: The shipping method is missing. Select the shipping method and try again'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
     /**
      * @inheritdoc
      */

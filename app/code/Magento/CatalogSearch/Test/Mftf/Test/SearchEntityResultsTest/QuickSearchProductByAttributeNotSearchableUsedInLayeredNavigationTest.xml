@@ -70,6 +70,10 @@
             <argument name="useInLayeredNavigationValue" value="Filterable (no results)"/>
         </actionGroup>
         <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveMultiSelectAttribute"/>
+        <!-- Run reindex to index invalidated indices after changes to the attribute -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Perform search with attribute value -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>

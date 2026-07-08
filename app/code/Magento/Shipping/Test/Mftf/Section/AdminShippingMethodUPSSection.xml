@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
-* Copyright 2025 Adobe
-* All Rights Reserved.
-*/
+ /**
+  * Copyright 2019 Adobe
+  * All Rights Reserved.
+  */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,5 +43,6 @@
         <element name="handlingFee" type="input" selector="//tr[@id='row_carriers_ups_handling_fee']//td//input[@id='carriers_ups_handling_fee']"/>
         <element name="showMethodIfNotApplicableSelect" type="select" selector="//tr[@id='row_carriers_ups_showmethod']//td//select[@id='carriers_ups_showmethod']"/>
         <element name="debugSelect" type="select" selector="//tr[@id='row_carriers_ups_debug']//td//select[@id='carriers_ups_debug']"/>
+        <element name="upsShippingNotAvailableAlertInAdmin" type="text" selector="//div[@class='message message-error error']"/>
     </section>
 </sections>

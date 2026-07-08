@@ -10,7 +10,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.2.0||~8.3.0||~8.4.0",
+        "php": "~8.3.0||~8.4.0||~8.5.0",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -25,39 +25,40 @@
         "ext-xsl": "*",
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "^2.0",
-        "composer/composer": "^2.0, !=2.2.16",
+        "composer/composer": "^2.2",
         "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-code": "^4.13",
         "laminas/laminas-escaper": "^2.13",
         "laminas/laminas-filter": "^2.33",
-        "laminas/laminas-http": "^2.15",
+        "laminas/laminas-http": "^2.23",
         "laminas/laminas-i18n": "^2.17",
-        "laminas/laminas-permissions-acl": "^2.10",
+        "laminas/laminas-permissions-acl": "^2.18",
         "laminas/laminas-stdlib": "^3.11",
-        "laminas/laminas-uri": "^2.9",
+        "laminas/laminas-uri": "^2.14",
         "laminas/laminas-validator": "^2.23",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
-        "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
         "monolog/monolog": "^3.6",
         "psr/log": "^2 || ^3",
         "ramsey/uuid": "^4.2",
-        "symfony/console": "^6.4",
-        "symfony/intl": "^6.4",
-        "symfony/process": "^6.4",
-        "symfony/mailer": "^6.4",
-        "symfony/mime": "^6.4",
+        "symfony/cache": "^7.4",
+        "symfony/console": "^7.4",
+        "symfony/intl": "^7.4",
+        "symfony/process": "^7.4",
+        "symfony/mailer": "^7.4",
+        "symfony/mime": "^7.4",
         "tedivm/jshrink": "^1.4",
         "webonyx/graphql-php": "^15.0",
-        "wikimedia/less.php": "^5.0"
+        "wikimedia/less.php": "^5.5"
     },
     "archive": {
         "exclude": [
             "Amqp",
             "Bulk",
-            "MessageQueue"
+            "MessageQueue",
+            "Stomp"
         ]
     },
     "suggest": {
