@@ -99,7 +99,7 @@ jobs:
         with:
           repository: magento-cia/review-quorum
           path: .review-quorum
-          ref: ba6688924d2d8b792a6fb7a935756ab7bc8a9b71
+          ref: c418bfdd3e208e06b055c813b4f4cf498dfab0ad
           token: ${{ secrets.REVIEW_QUORUM_TOKEN }}
 
       - name: Set up Python
@@ -142,7 +142,7 @@ jobs:
       - name: Provision devx-evolve code-review runtime
         env:
           DEVX_EVOLVE_DEPLOY_KEY: ${{ secrets.DEVX_EVOLVE_DEPLOY_KEY }}
-          DEVX_EVOLVE_REF: 0ec85c2245e1f4292dab2ff6e1dddb61188fa725
+          DEVX_EVOLVE_REF: a26724a929506af450a712779d0df5d4310e95a1
         run: |
           set -euo pipefail
           install -m 700 -d "$HOME/.ssh-devx"
