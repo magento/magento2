@@ -21,7 +21,6 @@ define([
         beforeEach(function () {
             wdContainer = $('<input type="hidden" class="bundle-option-11  product bundle option" \n' +
                 'name="bundle_option[11]" value="15" aria-required="true"/>');
-            // qty input required so multi-element validation loop runs
             qtyInput = $('<input type="number" class="input-text qty" name="qty" value="1"/>');
             $('body').append(qtyInput);
             wishlistWidget = new Widget();
