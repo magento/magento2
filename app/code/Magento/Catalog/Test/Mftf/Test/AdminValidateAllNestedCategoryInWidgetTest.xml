@@ -21,24 +21,39 @@
         <before>
             <!-- Create six level nested category -->
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
-            <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
+            <createData entity="SubCategoryWithParent" stepKey="createTwoLevelNestedCategories">
                 <requiredEntity createDataKey="createDefaultCategory"/>
+                <field key="name">SubCategoryLvl-2</field>
             </createData>
-            <createData entity="Three_nested_categories" stepKey="createThreeLevelNestedCategories">
+            <createData entity="SubCategoryWithParent" stepKey="createThreeLevelNestedCategories">
                 <requiredEntity createDataKey="createTwoLevelNestedCategories"/>
+                <field key="name">SubCategoryLvl-3</field>
             </createData>
-            <createData entity="Four_nested_categories" stepKey="createFourLevelNestedCategories">
+            <createData entity="SubCategoryWithParent" stepKey="createFourLevelNestedCategories">
                 <requiredEntity createDataKey="createThreeLevelNestedCategories"/>
+                <field key="name">SubCategoryLvl-4</field>
             </createData>
-            <createData entity="Five_nested_categories" stepKey="createFiveLevelNestedCategories">
+            <createData entity="SubCategoryWithParent" stepKey="createFiveLevelNestedCategories">
                 <requiredEntity createDataKey="createFourLevelNestedCategories"/>
+                <field key="name">SubCategoryLvl-5</field>
             </createData>
-            <createData entity="Six_nested_categories" stepKey="createSixLevelNestedCategories">
+            <createData entity="SubCategoryWithParent" stepKey="createSixLevelNestedCategories">
                 <requiredEntity createDataKey="createFiveLevelNestedCategories"/>
+                <field key="name">SubCategoryLvl-6</field>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFiveSubCategory">
+                <requiredEntity createDataKey="createFiveLevelNestedCategories"/>
+                <field key="name">SubCategoryLvl-5-1</field>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createLevelFiveOneSubCategory">
+                <requiredEntity createDataKey="createLevelFiveSubCategory"/>
+                <field key="name">SubCategoryLvl-5-1-1</field>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <deleteData createDataKey="createLevelFiveOneSubCategory" stepKey="deleteLevelFiveOneSubCategory"/>
+            <deleteData createDataKey="createLevelFiveSubCategory" stepKey="deleteLevelFiveSubCategory"/>
             <deleteData createDataKey="createSixLevelNestedCategories" stepKey="deleteSixNestedCategories"/>
             <deleteData createDataKey="createFiveLevelNestedCategories" stepKey="deleteFiveNestedCategories"/>
             <deleteData createDataKey="createFourLevelNestedCategories" stepKey="deleteFourNestedCategories"/>
@@ -48,20 +63,47 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Main test-->
-        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
-            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
-            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        <comment userInput="Start creating a new widget. note that we don't need to save it for the cause of the test." stepKey="commentCreatingWidget"/>
+        <actionGroup ref="AdminCreateSpecificEntityWidgetActionGroup" stepKey="startCreatingWidget">
+            <argument name="widget" value="CatalogCategoryLinkSpecifiedCategory"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenCreateNewWidgetsOfCMSStaticBlockActionGroup" stepKey="createWidget">
-            <argument name="WidgetType" value="CMS Static Block"/>
-            <argument name="WidgetTheme" value="Magento Luma"/>
-            <argument name="WidgetDisplayOn" value="Anchor Categories"/>
-            <argument name="RootCat" value="Default Category"/>
-            <argument name="FirstSubCat" value="$createDefaultCategory.name$"/>
-            <argument name="SecondSubCat" value="$createTwoLevelNestedCategories.name$"/>
-            <argument name="ThirdSubCat" value="$createThreeLevelNestedCategories.name$"/>
-            <argument name="FourthSubCat" value="$createFourLevelNestedCategories.name$"/>
-            <argument name="FifthSubCat" value="$createFiveLevelNestedCategories.name$"/>
+        <click selector="#widget_instace_tabs_main_section" stepKey="clickStorefrontProperties"/>
+        <comment userInput="Expand all previously created categories one by one." stepKey="commentExpandCategories"/>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandDefaultCategoryTree">
+            <argument name="CategoryName" value="Default Category"/>
         </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFirstLevelCategoryTree">
+            <argument name="CategoryName" value="$createDefaultCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandSecondLevelCategoryTree">
+            <argument name="CategoryName" value="$createTwoLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandThirdLevelCategoryTree">
+            <argument name="CategoryName" value="$createThreeLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFourthLevelCategoryTree">
+            <argument name="CategoryName" value="$createFourLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthLevelCategoryTree">
+            <argument name="CategoryName" value="$createFiveLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandSixthLevelCategoryTree">
+            <argument name="CategoryName" value="$createSixLevelNestedCategories.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthSubCategoryTree">
+            <argument name="CategoryName" value="$createLevelFiveSubCategory.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandCategoryTreeWidgetActionGroup" stepKey="expandFifthOneSubCategoryTree">
+            <argument name="CategoryName" value="$createLevelFiveOneSubCategory.name$"/>
+        </actionGroup>
+        <comment userInput="Check the total number of expanded categories in the category tree widget ensuring all of them are loaded." stepKey="commentCheckCategories"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createDefaultCategory.name$', ' '))]" time="60" stepKey="waitForBaseCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createTwoLevelNestedCategories.name$', ' '))]" time="60" stepKey="waitForLevelTwoCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createThreeLevelNestedCategories.name$', ' '))]" time="60" stepKey="waitForLevelThreeCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createFourLevelNestedCategories.name$', ' '))]" time="60" stepKey="waitForLevelFourCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createFiveLevelNestedCategories.name$', ' '))]" time="60" stepKey="waitForLevelFiveCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createSixLevelNestedCategories.name$', ' '))]" time="60" stepKey="waitForLevelSixCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createLevelFiveSubCategory.name$', ' '))]" time="60" stepKey="waitForLevelFiveSubCategoryVisible"/>
+        <waitForElementVisible selector="(//*[contains(@class, 'jstree-node') and contains(@class, 'jstree-last')])//a[contains(@class, 'jstree-anchor') and contains(normalize-space(text()), concat('$createLevelFiveOneSubCategory.name$', ' '))]" time="60" stepKey="waitForLevelFiveOneSubCategoryVisible"/>
     </test>
 </tests>
