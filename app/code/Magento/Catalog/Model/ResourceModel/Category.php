@@ -99,6 +99,11 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     private $metadataPool;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CategoryLink
+     */
+    private $productCategoryLink;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -111,6 +116,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
      * @param MetadataPool|null $metadataPool
      * @param EntityManager|null $entityManager
      * @param Category\AggregateCount|null $aggregateCount
+     * @param Product\CategoryLink|null $productCategoryLink
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,7 +131,8 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
         ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?MetadataPool $metadataPool = null,
         ?\Magento\Framework\EntityManager\EntityManager $entityManager = null,
-        ?\Magento\Catalog\Model\ResourceModel\Category\AggregateCount $aggregateCount = null
+        ?\Magento\Catalog\Model\ResourceModel\Category\AggregateCount $aggregateCount = null,
+        ?\Magento\Catalog\Model\ResourceModel\Product\CategoryLink $productCategoryLink = null
     ) {
         parent::__construct(
             $context,
@@ -145,6 +152,8 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
             ->get(\Magento\Framework\EntityManager\EntityManager::class);
         $this->aggregateCount = $aggregateCount ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
+        $this->productCategoryLink = $productCategoryLink ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ResourceModel\Product\CategoryLink::class);
     }
 
     /**
@@ -484,6 +493,7 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
 
         if (!empty($insert) || !empty($update) || !empty($delete)) {
             $category->setIsChangedProductList(true);
+            $this->productCategoryLink->resetCategoryLinksCache();
 
             /**
              * Setting affected products to category for third party engine index refresh
