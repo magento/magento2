@@ -97,6 +97,7 @@ class ExtractQuoteAddressDataTest extends TestCase
             ->expects($this->exactly(3))
             ->method('execute')
             ->willReturnCallback(function ($entity, $code, $value) use ($expectedValues) {
+                $this->assertSame('customer_address', $entity);
                 $this->assertSame($expectedValues[$code], $value);
                 return [
                     'code' => $code,

@@ -764,6 +764,7 @@ class ProductCustomAttributesTest extends TestCase
             ->expects($this->once())
             ->method('execute')
             ->willReturnCallback(function ($entityType, $code, $value) {
+                $this->assertSame(ProductAttributeInterface::ENTITY_TYPE_CODE, $entityType);
                 $this->assertSame('123', $value);
                 return [
                     'code' => $code,

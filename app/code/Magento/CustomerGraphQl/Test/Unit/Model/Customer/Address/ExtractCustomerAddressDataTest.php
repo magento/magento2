@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Test\Unit\Model\Customer\Address;
 
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
@@ -114,6 +115,7 @@ class ExtractCustomerAddressDataTest extends TestCase
             ->expects($this->exactly(3))
             ->method('execute')
             ->willReturnCallback(function ($entity, $code, $value) use ($expectedValues) {
+                $this->assertSame(AddressMetadataInterface::ENTITY_TYPE_ADDRESS, $entity);
                 $this->assertSame($expectedValues[$code], $value);
                 return [
                     'code' => $code,
