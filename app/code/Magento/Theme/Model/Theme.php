@@ -290,7 +290,9 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getFullPath()
     {
-        return $this->getThemePath() ? $this->getArea() . self::PATH_SEPARATOR . $this->getThemePath() : null;
+        return $this->getThemePath()
+            ? ($this->getData('area') ?: $this->getArea()) . self::PATH_SEPARATOR . $this->getThemePath()
+            : null;
     }
 
     /**

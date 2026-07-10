@@ -530,6 +530,22 @@ class ThemeTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testGetFullPathUsesThemeAreaWhenAreaCodeIsEmulated(): void
+    {
+        $this->appState->method('isAreaCodeEmulated')
+            ->willReturn(true);
+        $this->appState->method('getAreaCode')
+            ->willReturn('adminhtml');
+
+        $this->_model->setData('area', 'frontend');
+        $this->_model->setThemePath('Magento/luma');
+
+        $this->assertEquals('frontend/Magento/luma', $this->_model->getFullPath());
+    }
+
+    /**
      * @test
      * @return void
      */

@@ -91,4 +91,35 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
             $expected
         );
     }
+
+    /**
+     * Regression test for GitHub issue #17673 stale sales email sending crash.
+     *
+     * @magentoAppIsolation enabled
+     */
+    public function testFrontendThemeFullPathDuringFrontendEnvironmentEmulationInAdminhtmlArea()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\App\State $state */
+        $state = $objectManager->get(\Magento\Framework\App\State::class);
+        /** @var \Magento\Store\Model\App\Emulation $emulation */
+        $emulation = $objectManager->get(\Magento\Store\Model\App\Emulation::class);
+        /** @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider */
+        $themeProvider = $objectManager->get(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
+
+        $state->emulateAreaCode(
+            \Magento\Framework\App\Area::AREA_ADMINHTML,
+            function () use ($emulation, $themeProvider) {
+                try {
+                    $emulation->startEnvironmentEmulation(1, \Magento\Framework\App\Area::AREA_FRONTEND, true);
+                    $theme = $themeProvider->getThemeByFullPath('frontend/Magento/luma');
+
+                    $this->assertNotEmpty($theme->getId());
+                    $this->assertStringStartsWith('frontend/', $theme->getFullPath());
+                } finally {
+                    $emulation->stopEnvironmentEmulation();
+                }
+            }
+        );
+    }
 }
