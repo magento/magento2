@@ -39,11 +39,8 @@ define([
         });
 
         afterEach(function () {
-            try {
-                injector.clean();
-                injector.remove();
-            } catch (e) {
-            }
+            injector.clean();
+            injector.remove();
         });
 
         describe('"onPageSizeChange" method', function () {
