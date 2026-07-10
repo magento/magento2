@@ -13,7 +13,6 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\GroupedProduct\Test\Fixture\Product as GroupedProductFixture;
-use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -86,7 +85,7 @@ class GroupedProductWebsiteChildrenTest extends TestCase
             Collection::class,
             ['searchRequestName' => 'catalog_view_container']
         );
-        $collection->setStoreId(Store::DISTRO_STORE_ID);
+        $collection->setStoreId(1);
         $collection->addFieldToFilter(
             'category_ids',
             DataFixtureStorageManager::getStorage()->get('category')->getId()
