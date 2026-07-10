@@ -14,7 +14,6 @@ use Magento\Payment\Gateway\Data\Quote\QuoteAdapter;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CurrencyInterface;
-use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,16 +34,16 @@ class QuoteAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
+        $this->quoteMock = $this->getMockBuilder(QuoteAdapterTestQuote::class)
             ->disableOriginalConstructor()
             ->onlyMethods([
+                'getBaseGrandTotal',
                 'getBillingAddress',
                 'getCurrency',
                 'getCustomer',
                 'getReservedOrderId',
                 'getShippingAddress',
             ])
-            ->addMethods(['getBaseGrandTotal'])
             ->getMock();
 
         $this->addressAdapterFactoryMock =
