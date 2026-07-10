@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Model\Wishlist\BuyRequest;
 
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
@@ -241,10 +240,7 @@ class ChildSkuDataProviderTest extends TestCase
             $options[] = $option;
         }
 
-        $extensionAttributes = $this->createMock(ProductExtensionInterface::class);
-        $extensionAttributes->method('getConfigurableProductOptions')->willReturn($options);
-
-        $parentProduct->method('getExtensionAttributes')->willReturn($extensionAttributes);
+        $parentProduct->method('getExtensionAttributes')->willReturn(new ProductExtensionAttributesStub($options));
 
         return $parentProduct;
     }
