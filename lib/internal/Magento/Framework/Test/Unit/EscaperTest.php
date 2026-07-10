@@ -265,6 +265,16 @@ class EscaperTest extends TestCase
                 'expected' => '&amp;<br>&quot;&#039;&amp;&lt;&gt;&quot;&#039;&#9;',
                 'allowedTags' => ['br'],
             ],
+            'text with stray less-than and allowed tag' => [
+                'data' => 'Speed < 10m/s',
+                'expected' => 'Speed &lt; 10m/s',
+                'allowedTags' => ['b'],
+            ],
+            'text with allowed tag and stray less-than' => [
+                'data' => '<b>Bold</b> Speed < 10m/s',
+                'expected' => '<b>Bold</b> Speed &lt; 10m/s',
+                'allowedTags' => ['b'],
+            ],
             'text with multiple allowed tags, includes self closing tag' => [
                 'data' => '<span>some text in tags<br /></span>',
                 'expected' => '<span>some text in tags<br></span>',
@@ -645,7 +655,7 @@ class EscaperTest extends TestCase
         $method = new \ReflectionMethod(Escaper::class, 'prepareUnescapedCharacters');
 
         $input = '& < & >';
-        $expected = '&amp; < &amp; >';
+        $expected = '&amp; &lt; &amp; >';
 
         $this->assertSame($expected, $method->invoke($this->escaper, $input));
     }
