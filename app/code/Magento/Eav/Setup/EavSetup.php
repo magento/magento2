@@ -935,26 +935,11 @@ class EavSetup
             );
         }
 
-        $attributeFields = $this->_getAttributeTableFields();
-        if (is_array($field)) {
-            $bind = [];
-            foreach ($field as $k => $v) {
-                if (isset($attributeFields[$k])) {
-                    $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
-                        $attributeFields[$k],
-                        $v
-                    );
-                }
-            }
-            if (!$bind) {
-                return $this;
-            }
-            $field = $bind;
-        } else {
-            if (!isset($attributeFields[$field])) {
-                return $this;
-            }
+        $field = $this->prepareAttributeDataField($field);
+        if ($field === null) {
+            return $this;
         }
+
         $attributeId = $this->getAttributeId($entityTypeId, $id);
         if (false === $attributeId) {
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
@@ -988,6 +973,32 @@ class EavSetup
         }
 
         return $this;
+    }
+
+    /**
+     * Prepare attribute data field for update
+     *
+     * @param string|array $field
+     * @return string|array|null
+     */
+    private function prepareAttributeDataField($field)
+    {
+        $attributeFields = $this->_getAttributeTableFields();
+        if (!is_array($field)) {
+            return isset($attributeFields[$field]) ? $field : null;
+        }
+
+        $bind = [];
+        foreach ($field as $k => $v) {
+            if (isset($attributeFields[$k])) {
+                $bind[$k] = $this->setup->getConnection()->prepareColumnValue(
+                    $attributeFields[$k],
+                    $v
+                );
+            }
+        }
+
+        return $bind ?: null;
     }
 
     /**
