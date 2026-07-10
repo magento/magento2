@@ -284,7 +284,8 @@ class RowCustomizer implements RowCustomizerInterface
      * @param string $optionValues
      * @param SelectionCollection $selections
      * @return string
-     * @deprecared Not used anymore
+     * @deprecated Bundle export now builds selection rows in getFormattedBundleOptionValues() to avoid duplicate logic.
+     * @see \Magento\BundleImportExport\Model\Export\RowCustomizer::getFormattedBundleOptionValues()
      */
     protected function getFormattedBundleSelections($optionValues, SelectionCollection $selections)
     {
