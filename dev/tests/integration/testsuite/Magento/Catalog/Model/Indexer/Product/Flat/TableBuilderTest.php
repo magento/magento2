@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Helper\Product\Flat\Indexer as FlatIndexerHelper;
-use Magento\Catalog\Model\Product\Action as ProductAction;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Store\Model\ScopeInterface;
@@ -61,8 +58,7 @@ class TableBuilderTest extends TestCase
         $productWithOverrideId = (int)$fixtures->get('product_with_override')->getId();
         $productWithoutOverrideId = (int)$fixtures->get('product_without_override')->getId();
 
-        /** @var ProductAction $productAction */
-        $productAction = $objectManager->get(ProductAction::class);
+        $productAction = $objectManager->get('Magento\Catalog\Model\Product\Action');
         $productAction->updateAttributes(
             [$productWithOverrideId, $productWithoutOverrideId],
             [$attributeCode => 'default scope value'],
@@ -72,8 +68,7 @@ class TableBuilderTest extends TestCase
 
         $this->assertStoreValueRowExists($productWithOverrideId, (int)$attribute->getAttributeId(), $storeId);
 
-        /** @var Processor $processor */
-        $processor = $objectManager->get(Processor::class);
+        $processor = $objectManager->get('Magento\Catalog\Model\Indexer\Product\Flat\Processor');
         $processor->reindexAll();
 
         $flatValues = $this->fetchFlatValues($attributeCode, $storeId);
@@ -100,8 +95,7 @@ class TableBuilderTest extends TestCase
      */
     private function assertStoreValueRowExists(int $productId, int $attributeId, int $storeId): void
     {
-        /** @var ProductResource $productResource */
-        $productResource = Bootstrap::getObjectManager()->get(ProductResource::class);
+        $productResource = Bootstrap::getObjectManager()->get('Magento\Catalog\Model\ResourceModel\Product');
         $connection = $productResource->getConnection();
         $select = $connection->select()
             ->from($productResource->getTable('catalog_product_entity_varchar'), ['value_id', 'value'])
@@ -124,10 +118,8 @@ class TableBuilderTest extends TestCase
     private function fetchFlatValues(string $attributeCode, int $storeId): array
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var FlatIndexerHelper $flatHelper */
-        $flatHelper = $objectManager->get(FlatIndexerHelper::class);
-        /** @var ProductResource $productResource */
-        $productResource = $objectManager->get(ProductResource::class);
+        $flatHelper = $objectManager->get('Magento\Catalog\Helper\Product\Flat\Indexer');
+        $productResource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
         $connection = $productResource->getConnection();
         $select = $connection->select()
             ->from($productResource->getTable($flatHelper->getFlatTableName($storeId)), ['entity_id', $attributeCode]);
