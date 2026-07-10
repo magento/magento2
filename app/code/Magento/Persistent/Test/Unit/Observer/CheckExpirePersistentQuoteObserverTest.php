@@ -94,13 +94,17 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
     protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(Session::class);
-        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn', 'setCustomerId', 'setCustomerGroupId'])
-            ->addMethods(
-                ['setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setCustomerTaxClassId']
-            )
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            [
+                'isLoggedIn',
+                'setCustomerId',
+                'setCustomerGroupId',
+                'setDefaultTaxBillingAddress',
+                'setDefaultTaxShippingAddress',
+                'setCustomerTaxClassId'
+            ]
+        );
         $this->persistentHelperMock = $this->createMock(Data::class);
         $this->observerMock = $this->createPartialMockWithReflection(
             Observer::class,

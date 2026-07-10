@@ -16,8 +16,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
 {
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     private $customerSession;
@@ -30,8 +28,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
     private $persistenceSessionHelper;
 
     /**
-     * Quote manager
-     *
      * @var \Magento\Persistent\Model\QuoteManager
      */
     private $quoteManager;
@@ -44,8 +40,6 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
     private $persistenceDataHelper;
 
     /**
-     * Cart Repository
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface $cartRepository
      */
     private $cartRepository;

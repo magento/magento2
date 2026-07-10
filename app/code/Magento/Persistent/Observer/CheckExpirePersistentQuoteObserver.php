@@ -19,15 +19,11 @@ use Magento\Quote\Model\Quote;
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -40,8 +36,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $_eventManager = null;
 
     /**
-     * Persistent session
-     *
      * @var \Magento\Persistent\Helper\Session
      */
     protected $_persistentSession = null;
@@ -52,22 +46,16 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $quoteManager;
 
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData = null;
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     private $request;
 
     /**
-     * Checkout Page path
-     *
      * @var string
      */
     private $checkoutPagePath = 'checkout';

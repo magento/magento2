@@ -71,13 +71,17 @@ class RemoveGuestPersistenceOnEmptyCartObserverTest extends TestCase
         $this->persistentHelperMock = $this->createMock(SessionHelper::class);
         $this->sessionModelMock = $this->createMock(PersistentSession::class);
         $this->persistentDataMock = $this->createMock(PersistentHelper::class);
-        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isLoggedIn', 'setCustomerId', 'setCustomerGroupId'])
-            ->addMethods(
-                ['setDefaultTaxBillingAddress', 'setDefaultTaxShippingAddress', 'setCustomerTaxClassId']
-            )
-            ->getMock();
+        $this->customerSessionMock = $this->createPartialMockWithReflection(
+            CustomerSession::class,
+            [
+                'isLoggedIn',
+                'setCustomerId',
+                'setCustomerGroupId',
+                'setDefaultTaxBillingAddress',
+                'setDefaultTaxShippingAddress',
+                'setCustomerTaxClassId'
+            ]
+        );
         $this->quoteManagerMock = $this->createMock(QuoteManager::class);
         $this->observerMock = $this->createMock(Observer::class);
         $this->cartRepositoryMock = $this->createMock(
