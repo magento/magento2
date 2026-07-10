@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Model\Wishlist\BuyRequest;
 
-final class ProductExtensionAttributesStub
+/**
+ * Deterministic stand-in for the generated ProductExtensionInterface used by ChildSkuDataProviderTest.
+ */
+class ProductExtensionAttributesStub
 {
     /**
      * @param array $options
@@ -16,6 +19,11 @@ final class ProductExtensionAttributesStub
     {
     }
 
+    /**
+     * Return the configured configurable product options.
+     *
+     * @return array
+     */
     public function getConfigurableProductOptions(): array
     {
         return $this->options;
