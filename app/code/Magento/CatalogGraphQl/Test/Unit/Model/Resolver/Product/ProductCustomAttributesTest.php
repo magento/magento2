@@ -727,4 +727,60 @@ class ProductCustomAttributesTest extends TestCase
         $this->assertCount(1, $result['items']);
         $this->assertSame('42', $result['items'][0]['value']);
     }
+
+    /**
+     * Test resolve casts non-string scalar attribute values to string
+     *
+     * @return void
+     */
+    public function testResolveCastsNonStringScalarValueToString(): void
+    {
+        $productId = 1;
+        $attributeCode = 'int_attribute';
+
+        $attributeMock = $this->createMock(AttributeInterface::class);
+        $attributeMock->method('getAttributeCode')->willReturn($attributeCode);
+
+        $this->productMock->method('getId')->willReturn($productId);
+
+        $this->getFilteredAttributesMock
+            ->method('execute')
+            ->willReturn([
+                'items' => [$attributeMock],
+                'errors' => []
+            ]);
+
+        $this->filterCustomAttributeMock
+            ->method('execute')
+            ->willReturn([$attributeCode => 0]);
+
+        $this->productDataProviderMock
+            ->method('getProductDataById')
+            ->willReturn([
+                $attributeCode => 123 // Integer value
+            ]);
+
+        $this->getAttributeValueMock
+            ->expects($this->once())
+            ->method('execute')
+            ->willReturnCallback(function ($entityType, $code, $value) {
+                $this->assertSame('123', $value);
+                return [
+                    'code' => $code,
+                    'value' => $value
+                ];
+            });
+
+        $result = $this->resolver->resolve(
+            $this->fieldMock,
+            $this->contextMock,
+            $this->resolveInfoMock,
+            ['model' => $this->productMock],
+            []
+        );
+
+        $this->assertArrayHasKey('items', $result);
+        $this->assertCount(1, $result['items']);
+        $this->assertSame('123', $result['items'][0]['value']);
+    }
 }
