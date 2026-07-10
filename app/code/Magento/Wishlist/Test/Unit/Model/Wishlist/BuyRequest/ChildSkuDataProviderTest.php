@@ -261,7 +261,7 @@ class ChildSkuDataProviderTest extends TestCase
         $attribute = $this->getMockBuilder(AbstractAttribute::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getAttributeId', 'getAttributeCode'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $attribute->method('getAttributeId')->willReturn($attributeId);
         $attribute->method('getAttributeCode')->willReturn($attributeCode);
 
