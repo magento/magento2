@@ -50,6 +50,30 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify that renamed attribute code cache does not prevent re-adding the original code.
+     */
+    public function testAddAttributeAfterAttributeCodeRename()
+    {
+        $entity = \Magento\Catalog\Model\Product::ENTITY;
+        $attributeCode = 'eav_setup_rename_test';
+        $renamedAttributeCode = 'eav_setup_rename_test_old';
+
+        $this->eavSetup->addAttribute($entity, $attributeCode, $this->getRenameAttributeData());
+        $originalId = (int)$this->eavSetup->getAttributeId($entity, $attributeCode);
+
+        $this->eavSetup->updateAttribute($entity, $attributeCode, ['attribute_code' => $renamedAttributeCode]);
+        $this->eavSetup->addAttribute($entity, $attributeCode, $this->getRenameAttributeData());
+
+        $renamedId = (int)$this->eavSetup->getAttributeId($entity, $renamedAttributeCode);
+        $newId = (int)$this->eavSetup->getAttributeId($entity, $attributeCode);
+
+        $this->assertNotFalse($this->eavSetup->getAttributeId($entity, $renamedAttributeCode));
+        $this->assertNotFalse($this->eavSetup->getAttributeId($entity, $attributeCode));
+        $this->assertNotSame($renamedId, $newId);
+        $this->assertSame($originalId, $renamedId);
+    }
+
+    /**
      * Data provider for testAddAttributeThrowException().
      *
      * @return array
@@ -134,6 +158,35 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             'backend' => '',
             'frontend' => '',
             'label' => 'Eav Setup Test',
+            'input' => 'text',
+            'class' => '',
+            'source' => '',
+            'global' => \Magento\Catalog\Model\ResourceModel\Eav\Attribute::SCOPE_STORE,
+            'visible' => 0,
+            'required' => 0,
+            'user_defined' => 1,
+            'default' => 'none',
+            'searchable' => 0,
+            'filterable' => 0,
+            'comparable' => 0,
+            'visible_on_front' => 0,
+            'unique' => 0,
+            'apply_to' => 'category',
+        ];
+
+        return $attributeData;
+    }
+
+    /**
+     * Get attribute data for rename regression test.
+     */
+    private function getRenameAttributeData()
+    {
+        $attributeData = [
+            'type' => 'varchar',
+            'backend' => '',
+            'frontend' => '',
+            'label' => 'Eav Setup Rename Test',
             'input' => 'text',
             'class' => '',
             'source' => '',

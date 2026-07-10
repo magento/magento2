@@ -960,6 +960,14 @@ class EavSetup
             throw new LocalizedException(__('Attribute with ID: "%1" does not exist', $id));
         }
 
+        $resolvedEntityTypeId = $this->getEntityTypeId($entityTypeId);
+        $mainTable = $this->setup->getTable('eav_attribute');
+        $setupCache = $this->setup->getSetupCache();
+        $cachedRow = $setupCache->has($mainTable, $resolvedEntityTypeId, $attributeId)
+            ? $setupCache->get($mainTable, $resolvedEntityTypeId, $attributeId)
+            : [];
+        $cachedCode = $cachedRow['attribute_code'] ?? null;
+
         $this->setup->updateTableRow(
             'eav_attribute',
             'attribute_id',
@@ -967,8 +975,17 @@ class EavSetup
             $field,
             $value,
             'entity_type_id',
-            $this->getEntityTypeId($entityTypeId)
+            $resolvedEntityTypeId
         );
+
+        // updateTableRow() only refreshes the attribute_id-keyed cache entry; purge
+        // the attribute_code-keyed entries so an attribute_code change is not masked
+        // by stale cache data on a subsequent getAttribute()/addAttribute() call.
+        $setupCache->remove($mainTable, $resolvedEntityTypeId, $attributeId);
+        $setupCache->remove($mainTable, $resolvedEntityTypeId, $id);
+        if ($cachedCode !== null) {
+            $setupCache->remove($mainTable, $resolvedEntityTypeId, $cachedCode);
+        }
 
         return $this;
     }
