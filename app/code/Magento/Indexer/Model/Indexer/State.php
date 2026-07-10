@@ -86,7 +86,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function getIndexerId()
     {
-        return parent::getIndexerId();
+        return $this->getData('indexer_id');
     }
 
     /**
@@ -97,7 +97,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function setIndexerId($value)
     {
-        return parent::setIndexerId($value);
+        return $this->setData('indexer_id', $value);
     }
 
     /**
@@ -108,8 +108,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
     public function getStatus()
     {
         if ($this->isUseApplicationLock()) {
-            if (
-                parent::getStatus() == StateInterface::STATUS_WORKING &&
+            if (parent::getStatus() == StateInterface::STATUS_WORKING &&
                 !$this->lockManager->isLocked($this->lockPrefix . $this->getIndexerId())
             ) {
                 return StateInterface::STATUS_INVALID;
@@ -126,7 +125,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function getUpdated()
     {
-        return parent::getUpdated();
+        return $this->getData('updated');
     }
 
     /**
@@ -137,7 +136,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements StateInter
      */
     public function setUpdated($value)
     {
-        return parent::setUpdated($value);
+        return $this->setData('updated', $value);
     }
 
     /**
