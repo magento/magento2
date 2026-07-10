@@ -10,7 +10,8 @@ use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 
 /**
- * Class ConfigurableAttributeData
+ * Provides configurable product attribute data for frontend configuration.
+ *
  * @api
  * @since 100.0.2
  */
@@ -49,6 +50,8 @@ class ConfigurableAttributeData
     }
 
     /**
+     * Get options data for a configurable attribute.
+     *
      * @param Attribute $attribute
      * @param array $config
      * @return array
@@ -100,6 +103,8 @@ class ConfigurableAttributeData
     }
 
     /**
+     * Get configured attribute value from preconfigured product data.
+     *
      * @param int $attributeId
      * @param Product $product
      * @return mixed|null
