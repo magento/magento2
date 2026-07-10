@@ -105,7 +105,7 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
      */
     public function beforeSave()
     {
-        $this->setUpdated(time());
+        $this->setUpdated((new \DateTimeImmutable())->format('Y-m-d H:i:s'));
         return parent::beforeSave();
     }
 
