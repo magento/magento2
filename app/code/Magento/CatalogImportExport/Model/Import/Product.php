@@ -12,6 +12,7 @@ use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
@@ -799,6 +800,11 @@ class Product extends AbstractEntity
     private ?DomainValidator $domainValidator;
 
     /**
+     * @var CategoryLink
+     */
+    private CategoryLink $categoryLink;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -850,6 +856,7 @@ class Product extends AbstractEntity
      * @param StockItemProcessorInterface|null $stockItemProcessor
      * @param SkuStorage|null $skuStorage
      * @param DomainValidator|null $domainValidator
+     * @param CategoryLink|null $categoryLink
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -907,7 +914,8 @@ class Product extends AbstractEntity
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
         ?SkuStorage $skuStorage = null,
-        ?DomainValidator $domainValidator = null
+        ?DomainValidator $domainValidator = null,
+        ?CategoryLink $categoryLink = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -979,6 +987,8 @@ class Product extends AbstractEntity
             ->get(File::class);
         $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()
             ->get(DomainValidator::class);
+        $this->categoryLink = $categoryLink ?? ObjectManager::getInstance()
+            ->get(CategoryLink::class);
     }
 
     /**
@@ -1501,6 +1511,7 @@ class Product extends AbstractEntity
             if ($categoriesIn) {
                 $this->_connection->insertOnDuplicate($tableName, $categoriesIn, ['product_id', 'category_id']);
             }
+            $this->categoryLink->resetCategoryLinksCache();
         }
         return $this;
     }
