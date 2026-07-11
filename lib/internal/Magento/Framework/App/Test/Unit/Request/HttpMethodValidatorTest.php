@@ -21,6 +21,9 @@ use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class HttpMethodValidatorTest extends TestCase
 {
     /**

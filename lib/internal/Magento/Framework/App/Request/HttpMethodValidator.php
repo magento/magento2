@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Make sure that a request's method can be processed by an action.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HttpMethodValidator implements ValidatorInterface
 {
