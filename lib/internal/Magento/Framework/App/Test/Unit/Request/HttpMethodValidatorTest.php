@@ -11,13 +11,11 @@ namespace Magento\Framework\App\Test\Unit\Request;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Action\HttpPutActionInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\HttpMethodMap;
 use Magento\Framework\App\Request\HttpMethodValidator;
 use Magento\Framework\App\Request\InvalidRequestException;
-use Magento\Framework\App\Response\HttpInterface;
-use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\NotFoundException;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +48,16 @@ class HttpMethodValidatorTest extends TestCase
     public function testRestrictedActionReturnsMethodNotAllowedWithAllowHeader(): void
     {
         $action = $this->createRestrictedAction();
-        $raw = new Raw();
+        $raw = $this->createMock(ResultInterface::class);
+        $raw->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(405)
+            ->willReturnSelf();
+        $raw->expects($this->once())
+            ->method('setHeader')
+            ->with('Allow', 'GET, POST', true)
+            ->willReturnSelf();
+
         $this->rawFactory->expects($this->once())
             ->method('create')
             ->willReturn($raw);
@@ -69,21 +76,6 @@ class HttpMethodValidatorTest extends TestCase
             $this->fail('Invalid request exception was not thrown.');
         } catch (InvalidRequestException $exception) {
             $this->assertSame($raw, $exception->getReplaceResult());
-
-            $response = $this->createMock(HttpInterface::class);
-            $response->expects($this->once())
-                ->method('setHttpResponseCode')
-                ->with(405);
-            $response->expects($this->once())
-                ->method('setHeader')
-                ->with('Allow', 'GET, POST', true)
-                ->willReturnSelf();
-            $response->expects($this->once())
-                ->method('setBody')
-                ->with(null)
-                ->willReturnSelf();
-
-            $exception->getReplaceResult()->renderResult($response);
         }
     }
 
@@ -119,7 +111,7 @@ class HttpMethodValidatorTest extends TestCase
                 [
                     'GET' => HttpGetActionInterface::class,
                     'POST' => HttpPostActionInterface::class,
-                    'PUT' => HttpPutActionInterface::class,
+                    'PUT' => 'Magento\Framework\App\Action\HttpPutActionInterface',
                 ]
             ),
             $this->logger,

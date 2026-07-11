@@ -14,7 +14,6 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Interception\InterceptorInterface;
-use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -92,7 +91,7 @@ class HttpMethodValidator implements ValidatorInterface
         }
 
         throw new InvalidRequestException(
-            new NotFoundException(new Phrase('Page not found.'))
+            new NotFoundException(__('Page not found.'))
         );
     }
 
