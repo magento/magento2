@@ -149,6 +149,8 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
+     * Get theme customization model
+     *
      * @return \Magento\Framework\View\Design\Theme\Customization
      */
     public function getCustomization()
@@ -244,7 +246,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getParentTheme()
     {
@@ -261,7 +263,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getArea()
     {
@@ -273,7 +275,7 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getThemePath()
     {
@@ -290,13 +292,11 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
      */
     public function getFullPath()
     {
-        return $this->getThemePath()
-            ? ($this->getData('area') ?: $this->getArea()) . self::PATH_SEPARATOR . $this->getThemePath()
-            : null;
+        return $this->getThemePath() ? $this->getArea() . self::PATH_SEPARATOR . $this->getThemePath() : null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCode()
     {

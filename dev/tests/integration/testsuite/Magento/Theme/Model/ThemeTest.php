@@ -97,7 +97,7 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      */
-    public function testFrontendThemeFullPathDuringFrontendEnvironmentEmulationInAdminhtmlArea()
+    public function testFrontendThemeTemplateResolutionDuringFrontendEnvironmentEmulationInAdminhtmlArea()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\App\State $state */
@@ -106,16 +106,26 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
         $emulation = $objectManager->get(\Magento\Store\Model\App\Emulation::class);
         /** @var \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider */
         $themeProvider = $objectManager->get(\Magento\Framework\View\Design\Theme\ThemeProviderInterface::class);
+        /** @var \Magento\Framework\View\FileSystem $viewFileSystem */
+        $viewFileSystem = $objectManager->get(\Magento\Framework\View\FileSystem::class);
 
         $state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_ADMINHTML,
-            function () use ($emulation, $themeProvider) {
+            function () use ($emulation, $themeProvider, $viewFileSystem) {
                 try {
                     $emulation->startEnvironmentEmulation(1, \Magento\Framework\App\Area::AREA_FRONTEND, true);
                     $theme = $themeProvider->getThemeByFullPath('frontend/Magento/luma');
 
                     $this->assertNotEmpty($theme->getId());
-                    $this->assertStringStartsWith('frontend/', $theme->getFullPath());
+                    $this->assertNotEmpty(
+                        $viewFileSystem->getTemplateFileName(
+                            'Magento_Theme::html/title.phtml',
+                            [
+                                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                                'themeModel' => $theme
+                            ]
+                        )
+                    );
                 } finally {
                     $emulation->stopEnvironmentEmulation();
                 }
