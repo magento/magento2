@@ -253,7 +253,8 @@ class AbstractModelTest extends TestCase
      *
      * Covers the change-detection flag (hasDataChanges()) used by the resource model save() to
      * skip redundant UPDATE queries. Values loaded from the database are strings, while setters
-     * pass int/float/string values; only a real numeric change must set the flag.
+     * pass int/float values. Numeric strings with different representations must still set the
+     * flag so string-backed identifiers and codes are not conflated.
      *
      * @param mixed $storedValue
      * @param mixed $newValue
@@ -280,15 +281,19 @@ class AbstractModelTest extends TestCase
     {
         return [
             'db decimal string vs equal float' => ['2.9900', 2.99, false],
-            'db decimal string vs equal decimal string' => ['2.9900', '2.99', false],
-            'db decimal string vs equal integer string' => ['1.0000', '1', false],
+            'db decimal string vs different representation decimal string' => ['2.9900', '2.99', true],
+            'db decimal string vs different representation integer string' => ['1.0000', '1', true],
             'db decimal string vs equal int' => ['1.0000', 1, false],
             'db zero decimal string vs equal int' => ['0.0000', 0, false],
-            'db zero decimal string vs equal integer string' => ['0.0000', '0', false],
+            'db zero decimal string vs different representation integer string' => ['0.0000', '0', true],
             'db integer string vs equal int' => ['10', 10, false],
+            'db zero-padded string vs equal int' => ['007', 7, false],
             'float vs equal integer string' => [1.0, '1', false],
             'db decimal string vs different float' => ['2.9900', 3.99, true],
             'db decimal string vs different decimal string' => ['2.9900', '3.99', true],
+            'zero-padded string vs integer string' => ['007', '7', true],
+            'scientific notation string vs decimal string' => ['1e3', '1000', true],
+            'decimal precision string vs decimal string' => ['1.10', '1.1', true],
             'non-numeric strings differ' => ['abc', 'def', true],
             'numeric vs non-numeric' => ['1.0000', 'abc', true],
             'numeric vs null' => ['0.0000', null, true],

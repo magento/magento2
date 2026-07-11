@@ -1035,8 +1035,9 @@ abstract class AbstractModel extends DataObject
      * Values loaded from the database are always strings, while setters frequently pass int or
      * float values (and vice versa). A strict comparison would treat numerically identical values
      * of different types as a change, marking the object as modified and triggering redundant
-     * UPDATE queries on save. When both values are numeric they are compared by numeric value;
-     * otherwise a strict comparison is used to preserve type safety.
+     * UPDATE queries on save. Numeric comparison is only used when at least one value is a native
+     * int or float. Two numeric strings with different representations, such as "007" and "7",
+     * must still count as a change.
      *
      * @param mixed $currentValue
      * @param mixed $newValue
@@ -1047,7 +1048,9 @@ abstract class AbstractModel extends DataObject
         if ($currentValue === $newValue) {
             return true;
         }
-        if (is_numeric($currentValue) && is_numeric($newValue)) {
+        $hasNativeNumeric = is_int($currentValue) || is_float($currentValue)
+            || is_int($newValue) || is_float($newValue);
+        if ($hasNativeNumeric && is_numeric($currentValue) && is_numeric($newValue)) {
             return (float) $currentValue === (float) $newValue;
         }
         return false;
