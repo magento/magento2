@@ -9,11 +9,11 @@ namespace Magento\Customer\Controller\Adminhtml;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Session;
-use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Address\Mapper as AddressMapper;
 use Magento\Customer\Model\EmailNotification;
+use Magento\Customer\Test\Fixture\CustomerWithAddresses;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Area;
 use Magento\Framework\Mail\Template\TransportBuilder;
@@ -21,6 +21,8 @@ use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Bootstrap;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\TestCase\AbstractBackendController;
@@ -163,29 +165,26 @@ class IndexTest extends AbstractBackendController
      * Regression test for ACP2E-4875 / ACQE-9909: the admin session payload built by the Customer
      * Edit dispatch must stay smaller than it would be when the mapped address book is merged into
      * the session (see removed code in Edit::execute()).
-     *
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      */
-    public function testEditActionSessionPayloadStaysUnderConfiguredMaxSessionSize()
+    #[DataFixture(CustomerWithAddresses::class, as: 'customer')]
+    public function testEditActionSessionPayloadStaysUnderConfiguredMaxSessionSize(): void
     {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $customerId = (int)$customer->getId();
         $serializer = $this->_objectManager->get(SerializerInterface::class);
+        $addressMapper = $this->_objectManager->get(AddressMapper::class);
 
-        $this->getRequest()->setParam('id', 1);
+        $this->getRequest()->setParam('id', $customerId);
         $this->dispatch($this->baseControllerUrl . 'edit');
 
         $sessionCustomerData = $this->_objectManager->get(Session::class)->getCustomerData();
         $this->assertIsArray($sessionCustomerData);
         $actualPayloadSize = strlen($serializer->serialize($sessionCustomerData));
 
-        // Reconstruct the pre-fix payload: merge the mapped address book back into the session
-        // data the same way the removed code in Edit::execute() used to.
-        $addressRepository = $this->_objectManager->get(AddressRepositoryInterface::class);
-        $addressMapper = $this->_objectManager->get(AddressMapper::class);
+        $customerEntity = $this->customerRepository->getById($customerId);
         $preFixSessionData = $sessionCustomerData;
-        foreach ([1, 2] as $addressId) {
-            $address = $addressRepository->getById($addressId);
+        foreach ($customerEntity->getAddresses() as $address) {
+            $addressId = (int)$address->getId();
             $preFixSessionData['address'][$addressId] = $addressMapper->toFlatArray($address);
             $preFixSessionData['address'][$addressId]['id'] = $addressId;
         }
