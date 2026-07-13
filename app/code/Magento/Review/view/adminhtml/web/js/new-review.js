@@ -5,8 +5,12 @@
 define([
     'jquery',
     'Magento_Review/js/rating',
-    'prototype'
-], function (jQuery) {
+    'prototype',
+    'Magento_Ui/js/modal/alert'
+], function (jQuery,
+             rating,
+             prototype,
+             alert) {
     'use strict';
 
     window.review = {
@@ -61,7 +65,7 @@ define([
                 type: 'GET',
                 url: this.productInfoUrl,
                 data: {
-                    form_key: FORM_KEY
+                    form_key: window.FORM_KEY
                 },
                 showLoader: true,
                 success: this.reqSuccess.bind(this),
@@ -91,7 +95,8 @@ define([
          * @return {void}
          */
         updateRating: function () {
-            var elements = [$('select_stores'), $('rating_detail').getElementsBySelector('input[type=\'radio\']')].flatten(),
+            var elements = [$('select_stores'),
+                    $('rating_detail').getElementsBySelector('input[type=\'radio\']')].flatten(),
                 params;
 
             $('save_button').disabled = true;
@@ -102,7 +107,7 @@ define([
             }
 
             if (!params.form_key) {
-                params.form_key = FORM_KEY;
+                params.form_key = window.FORM_KEY;
             }
 
             new Ajax.Updater('rating_detail', this.ratingItemsUrl, {
@@ -139,7 +144,9 @@ define([
          * @return {void}
          */
         reqFailure: function () {
-            alert('We can\'t retrieve the product ID.');
+            alert({
+                content: $.mage.__("We can't retrieve the product ID.")
+            });
         }
     };
 
