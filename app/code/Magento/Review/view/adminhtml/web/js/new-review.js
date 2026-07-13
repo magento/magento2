@@ -7,10 +7,7 @@ define([
     'Magento_Review/js/rating',
     'prototype',
     'Magento_Ui/js/modal/alert'
-], function (jQuery,
-             rating,
-             prototype,
-             alert) {
+], function (jQuery, rating, prototype, alert) {
     'use strict';
 
     window.review = {
@@ -77,10 +74,10 @@ define([
          * @return {void}
          */
         showForm: function () {
-            toggleParentVis('add_review_form');
-            toggleVis('productGrid');
-            toggleVis('save_button');
-            toggleVis('reset_button');
+            window.toggleParentVis('add_review_form');
+            window.toggleVis('productGrid');
+            window.toggleVis('save_button');
+            window.toggleVis('reset_button');
         },
 
         /**
@@ -145,7 +142,7 @@ define([
          */
         reqFailure: function () {
             alert({
-                content: $.mage.__("We can't retrieve the product ID.")
+                content: $.mage.__('We can\'t retrieve the product ID.')
             });
         }
     };
