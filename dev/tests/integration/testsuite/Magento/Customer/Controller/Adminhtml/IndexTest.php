@@ -6,16 +6,20 @@
 
 namespace Magento\Customer\Controller\Adminhtml;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Session;
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Address\Mapper as AddressMapper;
 use Magento\Customer\Model\EmailNotification;
 use Magento\Framework\Acl\Builder;
 use Magento\Framework\App\Area;
 use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Mail\TransportInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Bootstrap;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -31,7 +35,7 @@ class IndexTest extends AbstractBackendController
     /**
      * @var string
      */
-    private $baseControllerUrl = 'backend/customer/index/';
+    private $baseControllerUrl;
 
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
@@ -45,6 +49,8 @@ class IndexTest extends AbstractBackendController
     protected function setUp(): void
     {
         parent::setUp();
+        $this->baseControllerUrl = $this->_objectManager->get(FrontNameResolver::class)->getFrontName()
+            . '/customer/index/';
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
         $this->customerViewHelper = $this->_objectManager->get(CustomerNameGenerationInterface::class);
     }
@@ -63,6 +69,8 @@ class IndexTest extends AbstractBackendController
          * Unset messages
          */
         $this->_objectManager->get(Session::class)->getMessages(true);
+
+        parent::tearDown();
     }
 
     /**
@@ -103,7 +111,7 @@ class IndexTest extends AbstractBackendController
         $this->getRequest()->setParam('ajax', true)->setParam('isAjax', true);
         $this->getRequest()->setPostValue($post)->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/inlineEdit');
+        $this->dispatch($this->baseControllerUrl . 'inlineEdit');
 
         /**
          * Check that no errors were generated and set to session
@@ -117,7 +125,7 @@ class IndexTest extends AbstractBackendController
     public function testEditAction()
     {
         $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/edit');
+        $this->dispatch($this->baseControllerUrl . 'edit');
         $body = $this->getResponse()->getBody();
 
         // verify
@@ -135,7 +143,7 @@ class IndexTest extends AbstractBackendController
     public function testEditActionDoesNotSerializeAddressesIntoSession()
     {
         $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/edit');
+        $this->dispatch($this->baseControllerUrl . 'edit');
 
         $sessionCustomerData = $this->_objectManager->get(Session::class)->getCustomerData();
 
@@ -152,11 +160,50 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
+     * Regression test for ACP2E-4875 / ACQE-9909: the admin session payload built by the Customer
+     * Edit dispatch must stay smaller than it would be when the mapped address book is merged into
+     * the session (see removed code in Edit::execute()).
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     */
+    public function testEditActionSessionPayloadStaysUnderConfiguredMaxSessionSize()
+    {
+        $serializer = $this->_objectManager->get(SerializerInterface::class);
+
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch($this->baseControllerUrl . 'edit');
+
+        $sessionCustomerData = $this->_objectManager->get(Session::class)->getCustomerData();
+        $this->assertIsArray($sessionCustomerData);
+        $actualPayloadSize = strlen($serializer->serialize($sessionCustomerData));
+
+        // Reconstruct the pre-fix payload: merge the mapped address book back into the session
+        // data the same way the removed code in Edit::execute() used to.
+        $addressRepository = $this->_objectManager->get(AddressRepositoryInterface::class);
+        $addressMapper = $this->_objectManager->get(AddressMapper::class);
+        $preFixSessionData = $sessionCustomerData;
+        foreach ([1, 2] as $addressId) {
+            $address = $addressRepository->getById($addressId);
+            $preFixSessionData['address'][$addressId] = $addressMapper->toFlatArray($address);
+            $preFixSessionData['address'][$addressId]['id'] = $addressId;
+        }
+        $preFixPayloadSize = strlen($serializer->serialize($preFixSessionData));
+
+        $this->assertGreaterThan(
+            $actualPayloadSize,
+            $preFixPayloadSize,
+            'Customer Edit admin session payload must stay smaller than the pre-fix payload with addresses.'
+        );
+    }
+
+    /**
      * Test new customer form page.
      */
     public function testNewAction()
     {
-        $this->dispatch('backend/customer/index/edit');
+        $this->dispatch($this->baseControllerUrl . 'edit');
         $body = $this->getResponse()->getBody();
 
         // verify
@@ -166,7 +213,7 @@ class IndexTest extends AbstractBackendController
     /**
      * Test the editing of a new customer that has not been saved but the page has been reloaded
      */
-    public function te1stNewActionWithCustomerData()
+    public function testNewActionWithCustomerData()
     {
         $customerData = [
             'customer_id' => 0,
@@ -193,7 +240,7 @@ class IndexTest extends AbstractBackendController
     {
         // No customer ID in post, will just get redirected to base
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
-        $this->dispatch('backend/customer/index/resetPassword');
+        $this->dispatch($this->baseControllerUrl . 'resetPassword');
         $this->assertRedirect($this->stringContains($this->baseControllerUrl));
     }
 
@@ -205,7 +252,7 @@ class IndexTest extends AbstractBackendController
         // Bad customer ID in post, will just get redirected to base
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
         $this->getRequest()->setPostValue(['customer_id' => '789']);
-        $this->dispatch('backend/customer/index/resetPassword');
+        $this->dispatch($this->baseControllerUrl . 'resetPassword');
         $this->assertRedirect($this->stringContains($this->baseControllerUrl));
     }
 
@@ -216,7 +263,7 @@ class IndexTest extends AbstractBackendController
     {
         $this->getRequest()->setPostValue(['customer_id' => '1']);
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
-        $this->dispatch('backend/customer/index/resetPassword');
+        $this->dispatch($this->baseControllerUrl . 'resetPassword');
         $this->assertSessionMessages(
             $this->equalTo(['The customer will receive an email with a link to reset password.']),
             MessageInterface::TYPE_SUCCESS
@@ -230,7 +277,7 @@ class IndexTest extends AbstractBackendController
     public function testAclDeleteActionAllow()
     {
         $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/edit');
+        $this->dispatch($this->baseControllerUrl . 'edit');
         $body = $this->getResponse()->getBody();
         $this->assertStringContainsString('Delete Customer', $body);
     }
@@ -245,7 +292,7 @@ class IndexTest extends AbstractBackendController
             ->getAcl()
             ->deny(Bootstrap::ADMIN_ROLE_ID, $resource);
         $this->getRequest()->setParam('id', 1);
-        $this->dispatch('backend/customer/index/edit');
+        $this->dispatch($this->baseControllerUrl . 'edit');
         $body = $this->getResponse()->getBody();
         $this->assertStringNotContainsString('Delete Customer', $body);
     }
