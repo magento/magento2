@@ -47,9 +47,14 @@
             <argument name="customerAccountManagement" xsi:type="object">Magento\Customer\Model\AccountManagement\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Helper\Data">
+        <arguments>
+            <argument name="catalogHelper" xsi:type="object">Magento\Catalog\Helper\Data\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Tax\Model\ResourceModel\Calculation">
         <arguments>
-            <argument name="taxData" xsi:type="object">Magento\CustomerGraphQl\Model\Tax\GraphQlTaxData</argument>
+            <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest">

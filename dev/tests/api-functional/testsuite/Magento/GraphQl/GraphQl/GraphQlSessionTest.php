@@ -104,6 +104,25 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture graphql/session/disable 0
+     */
+    public function testGetCustomerQueryWithCustomerTokenKeepsCustomerIdentity(): void
+    {
+        $query = <<<QUERY
+{
+    customer {
+        email
+    }
+}
+QUERY;
+        $result = $this->graphQlClient->getWithResponseHeaders($query, [], '', $this->getAuthHeaders(), true);
+
+        $this->assertSame('customer@example.com', $result['body']['customer']['email']);
+        $this->assertNoCookiesMatchRegex('/PHPSESSID=[a-z0-9]+;/', $result['cookies']);
+    }
+
+    /**
      * Test for checking if graphQL query does not set session cookies when session is disabled
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
