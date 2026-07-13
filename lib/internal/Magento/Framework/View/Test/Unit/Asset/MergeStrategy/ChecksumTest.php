@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,9 +53,9 @@ class ChecksumTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mergerMock = $this->getMockForAbstractClass(MergeStrategyInterface::class);
-        $this->sourceDir = $this->getMockForAbstractClass(ReadInterface::class);
-        $this->targetDir = $this->getMockForAbstractClass(
+        $this->mergerMock = $this->createMock(MergeStrategyInterface::class);
+        $this->sourceDir = $this->createMock(ReadInterface::class);
+        $this->targetDir = $this->createMock(
             WriteInterface::class
         );
         $filesystem = $this->createMock(Filesystem::class);
@@ -74,7 +74,6 @@ class ChecksumTest extends TestCase
 
         $reflection = new \ReflectionClass(Checksum::class);
         $reflectionProperty = $reflection->getProperty('assetSource');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->checksum, $this->assetSource);
 
         $this->resultAsset = $this->createMock(File::class);
@@ -156,9 +155,12 @@ class ChecksumTest extends TestCase
                 }
             );
 
+        $callCount = 0;
         $this->sourceDir->expects($this->exactly(2))
             ->method('getRelativePath')
-            ->will($this->onConsecutiveCalls('file/one.txt', 'file/two.txt'));
+            ->willReturnCallback(function () use (&$callCount) {
+                return ++$callCount === 1 ? 'file/one.txt' : 'file/two.txt';
+            });
         $this->sourceDir->expects($this->exactly(2))->method('stat')->willReturn(['mtime' => '1']);
         $this->resultAsset->expects($this->once())
             ->method('getPath')

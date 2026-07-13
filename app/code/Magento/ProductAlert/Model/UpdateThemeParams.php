@@ -37,7 +37,7 @@ class UpdateThemeParams
      * Update theme params for multi store email templates
      *
      * @param Resolver $subject
-     * @param string $template
+     * @param string|null $template
      * @param array $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -45,7 +45,7 @@ class UpdateThemeParams
      */
     public function beforeGetTemplateFileName(
         Resolver $subject,
-        string $template,
+        string|null $template,
         array $params = []
     ): array {
         if ($template === $this->stock->getTemplate() && !isset($params['themeId'])) {

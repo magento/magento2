@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\InputType;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save\AbstractSaveAttributeTest;
+use Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Test cases related to create attribute with input type media image.
@@ -20,12 +22,11 @@ class MediaImageTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute and compare attribute data and input data.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getAttributeDataWithCheckArray
-     *
      * @param array $attributePostData
      * @param array $checkArray
      * @return void
      */
+    #[DataProviderExternal(MediaImage::class, 'getAttributeDataWithCheckArray')]
     public function testCreateAttribute(array $attributePostData, array $checkArray): void
     {
         $this->createAttributeUsingDataAndAssert($attributePostData, $checkArray);
@@ -34,12 +35,11 @@ class MediaImageTest extends AbstractSaveAttributeTest
     /**
      * Test create attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Attribute\DataProvider\MediaImage::getAttributeDataWithErrorMessage
-     *
      * @param array $attributePostData
      * @param string $errorMessage
      * @return void
      */
+    #[DataProviderExternal(MediaImage::class, 'getAttributeDataWithErrorMessage')]
     public function testCreateAttributeWithError(array $attributePostData, string $errorMessage): void
     {
         $this->createAttributeUsingDataWithErrorAndAssert($attributePostData, $errorMessage);

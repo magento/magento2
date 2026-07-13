@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\Listing\Column;
 use Magento\AsynchronousOperations\Model\BulkSummary;
 use Magento\AsynchronousOperations\Ui\Component\Listing\Column\NotificationActions;
 use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationActionsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ContextInterface|MockObject
      */
@@ -39,12 +42,12 @@ class NotificationActionsTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
+        $this->context = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
-        $processor = $this->getMockBuilder(Processor::class)
-            ->addMethods(['getProcessor'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createPartialMockWithReflection(
+            Processor::class,
+            ['getProcessor']
+        );
         $this->context->expects($this->never())->method('getProcessor')->willReturn($processor);
         $objectManager = new ObjectManager($this);
         $this->actionColumn = $objectManager->getObject(

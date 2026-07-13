@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2018 Adobe
+ * Copyright 2025 Adobe
  * All Rights Reserved.
  */
 -->
@@ -13,5 +13,9 @@
     </entity>
     <entity name="WebdriverKey">
         <data key="tabKey">[\Facebook\WebDriver\WebDriverKeys::TAB]</data>
+    </entity>
+    <entity name="productAttributeColour" type="productAttribute">
+        <data key="gold">gold</data>
+        <data key="black">black</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Framework\File\Uploader
@@ -47,9 +48,9 @@ class UploaderTest extends TestCase
     }
 
     /**
-     * @dataProvider uploadDataProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      */
+    #[DataProvider('uploadDataProvider')]
     public function testUpload(string $expectedFile, ?string $newImageName = null): void
     {
         $this->mediaDirectory->delete('customer_address');
@@ -93,5 +94,18 @@ class UploaderTest extends TestCase
                 'new_magento.jpg',
             ]
         ];
+    }
+}
+
+/**
+ * Mocking of std function to test validation
+ *
+ * @param string $name
+ * @return bool
+ */
+if (!function_exists(__NAMESPACE__ . '\is_uploaded_file')) {
+    function is_uploaded_file($name)
+    {
+        return ($name == 'magento.jpg') ? false : true;
     }
 }

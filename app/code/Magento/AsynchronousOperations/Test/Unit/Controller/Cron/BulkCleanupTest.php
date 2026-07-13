@@ -52,7 +52,7 @@ class BulkCleanupTest extends TestCase
     protected function setUp(): void
     {
         $this->dateTimeMock = $this->createMock(DateTime::class);
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->timeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
@@ -72,8 +72,8 @@ class BulkCleanupTest extends TestCase
         $bulkLifetimeMultiplier = 10;
         $bulkLifetime = 3600 * 24 * $bulkLifetimeMultiplier;
 
-        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
-        $entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $adapterMock = $this->createMock(AdapterInterface::class);
+        $entityMetadataMock = $this->createMock(EntityMetadataInterface::class);
 
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->with($this->stringContains($entityType))
             ->willReturn($entityMetadataMock);

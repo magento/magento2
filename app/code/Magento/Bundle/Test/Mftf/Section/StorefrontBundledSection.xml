@@ -11,6 +11,9 @@
     <section name="StorefrontBundledSection">
         <element name="productCheckbox" type="select" selector="//*[@id='customizeTitle']/following-sibling::div[{{arg1}}]//div[{{arg2}}][@class='field choice']/input" parameterized="true"/>
         <element name="bundleProductsPrice" type="text" selector="//*[@class='bundle-info']//*[contains(@id,'product-price')]/span"/>
+        <element name="customizationExcludingTaxPrice" type="text" selector="#bundleSummary .price-excluding-tax .price"/>
+        <element name="customizationChildExcludingTaxPrice" type="text" parameterized="true" selector="//*[@id='product-options-wrapper']//span[contains(@class,'product-name')][contains(.,'{{productName}}')]/../span[contains(@class,'price-notice')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'price')]"/>
+        <element name="cartItemSubtotalExcludingTaxByName" type="text" parameterized="true" selector="//a[contains(text(),'{{productName}}')]/ancestor::tr//td[contains(@class, 'subtotal')]//span[contains(@class,'price-excluding-tax')]//span[contains(@class,'price')]"/>
         <element name="bundleSummary" type="text" selector="#bundle-summary"/>
         <element name="nthBundledOption" type="input" selector=".option:nth-of-type({{numOption}}) .choice:nth-of-type({{numOptionSelect}}) input" parameterized="true"/>
         <element name="addToCart" type="button" selector="#bundle-slide" timeout="30"/>
@@ -51,5 +54,8 @@
         <element name="dropDownQuantityValidation" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="radioButtonQuantityValidation" type="input" selector="//label//span[contains(text(), '{{productName}}')]/../..//div[@class='control']//div[@class='field qty qty-holder']//input/following-sibling::div[@class='mage-error']" parameterized="true"/>
         <element name="dropDrownOptionQuantity" type="input" selector="//span[contains(text(), '{{productName}}')]/../..//input/following-sibling::div//div//div//input" parameterized="true"/>
+        <element name="selectOptionError" type="text" selector="//div[contains(@class, 'field')]//div[contains(@class, 'mage-error')]"/>
+        <element name="radioButton" type="select" selector="//label//span[contains(text(), '{{productName}}')]/ancestor::div//div[@class='control']//div[@class='field choice'][{{productNumber}}]/input" parameterized="true"/>
+        <element name="radioOptionQty" type="input" selector="//div[@class='control']//div[@class='field qty qty-holder']//input"/>
     </section>
 </sections>

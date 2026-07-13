@@ -22,6 +22,7 @@
         <data key="pageTitle">Dashboard</data>
         <data key="title">Dashboard</data>
         <data key="dataUiId">magento-backend-dashboard</data>
+        <data key="message">Chart is disabled</data>
     </entity>
     <entity name="AdminMenuStores">
         <data key="pageTitle">Stores</data>

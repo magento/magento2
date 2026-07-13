@@ -447,4 +447,36 @@
         <requiredEntity type="product_option_value">ProductValueCheckbox1</requiredEntity>
         <requiredEntity type="product_option_value">ProductValueCheckbox2</requiredEntity>
     </entity>
+    <entity name="ProductRadioButtonType" type="product_option">
+        <data key="type">Radio Buttons</data>
+    </entity>
+    <entity name="ProductOptionTextFile" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku" />
+        <data key="title">OptionFile</data>
+        <data key="type">file</data>
+        <data key="is_require">true</data>
+        <data key="sort_order">3</data>
+        <data key="price">9.99</data>
+        <data key="price_type">fixed</data>
+        <data key="file_extension">txt</data>
+    </entity>
+    <entity name="EmptyFiles">
+        <data key="file1">emptyTxtFile.txt</data>
+        <data key="file2">emptyPngFile.png</data>
+    </entity>
+    <entity name="EmptyFileValidationMessage">
+        <data key="fileValidationMessage">The file is empty. Select another file and try again.</data>
+    </entity>
+    <entity name="ProductOptionFileUpload" type="product_option">
+        <var key="product_sku" entityType="product" entityKey="sku"/>
+        <data key="title">File upload</data>
+        <data key="type">file</data>
+        <data key="is_require">false</data>
+        <data key="sort_order">1</data>
+        <data key="price">0.00</data>
+        <data key="price_type">fixed</data>
+        <data key="file_extension">png, jpg</data>
+        <data key="image_size_x">0</data>
+        <data key="image_size_y">0</data>
+    </entity>
 </entities>

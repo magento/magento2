@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,10 +16,14 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MultiselectTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Multiselect
      */
@@ -27,9 +31,9 @@ class MultiselectTest extends TestCase
 
     protected function setUp(): void
     {
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
 
         $this->model = new Multiselect(
             $timezoneMock,
@@ -43,11 +47,11 @@ class MultiselectTest extends TestCase
      *
      * @param mixed $param
      * @param mixed $expectedResult
-     * @dataProvider extractValueDataProvider
      */
+    #[DataProvider('extractValueDataProvider')]
     public function testExtractValue($param, $expectedResult)
     {
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         $attributeMock = $this->createMock(Attribute::class);
 
         $requestMock->expects($this->once())->method('getParam')->willReturn($param);
@@ -83,8 +87,8 @@ class MultiselectTest extends TestCase
      *
      * @param string $format
      * @param mixed $expectedResult
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $expectedResult)
     {
         $entityMock = $this->createMock(AbstractModel::class);
@@ -114,6 +118,59 @@ class MultiselectTest extends TestCase
             [
                 'format' => AttributeDataFactory::OUTPUT_FORMAT_ONELINE,
                 'expectedResult' => 'value1, value2'
+            ]
+        ];
+    }
+
+    /**
+     * @covers \Magento\Eav\Model\Attribute\Data\Select::validateValue
+     *
+     * @param mixed $value
+     * @param mixed $originalValue
+     * @param bool $isRequired
+     * @param bool $skipRequiredValidation
+     * @param array $expectedResult
+     */
+    #[DataProvider('validateValueDataProvider')]
+    public function testValidateValue($value, $originalValue, $isRequired, $skipRequiredValidation, $expectedResult)
+    {
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData']
+        );
+        $entityMock->expects($this->any())->method('getData')->willReturn($originalValue);
+        $entityMock->expects($this->any())
+            ->method('getSkipRequiredValidation')
+            ->willReturn($skipRequiredValidation);
+
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Test');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn($isRequired);
+
+        $this->model->setEntity($entityMock);
+        $this->model->setAttribute($attributeMock);
+        $this->assertEquals($expectedResult, $this->model->validateValue($value));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateValueDataProvider()
+    {
+        return [
+            [
+                'value' => false,
+                'originalValue' => 'value',
+                'isRequired' => false,
+                'skipRequiredValidation' => true,
+                'expectedResult' => true,
+            ],
+            [
+                'value' => false,
+                'originalValue' => null,
+                'isRequired' => true,
+                'skipRequiredValidation' => false,
+                'expectedResult' => ['"Test" is a required value.'],
             ]
         ];
     }

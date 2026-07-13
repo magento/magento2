@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -31,8 +33,8 @@ class FrontTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $attributeCode
-     * @dataProvider toHtmlDataProvider
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml($attributeCode)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
@@ -44,7 +46,10 @@ class FrontTest extends \PHPUnit\Framework\TestCase
         $coreRegistry->unregister('entity_attribute');
         $coreRegistry->register('entity_attribute', $model);
 
-        $this->assertMatchesRegularExpression('/<select\sid="is_searchable".*disabled="disabled"/', $this->block->toHtml());
+        $this->assertMatchesRegularExpression(
+            '/<select\sid="is_searchable".*disabled="disabled"/',
+            $this->block->toHtml()
+        );
     }
 
     /**

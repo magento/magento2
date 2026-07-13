@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement;
 
@@ -14,7 +14,7 @@ namespace Magento\Paypal\Block\Adminhtml\Billing\Agreement;
 class View extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
+     * Application data storage
      *
      * @var \Magento\Framework\Registry
      */
@@ -67,7 +67,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         $agreement = $this->_getBillingAgreement();
         if ($agreement && $agreement->canCancel() && $this->_isAllowed('Magento_Paypal::actions_manage')) {
-            $confirmText = __('Are you sure you want to do this?');
+            $confirmText = $this->escapeJs(
+                $this->escapeHtml(__('Are you sure you want to do this?'))
+            );
             $this->buttonList->add(
                 'cancel',
                 [

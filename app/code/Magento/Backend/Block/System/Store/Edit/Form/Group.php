@@ -8,8 +8,6 @@ namespace Magento\Backend\Block\System\Store\Edit\Form;
 /**
  * Adminhtml store edit form for group
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Group extends \Magento\Backend\Block\System\Store\Edit\AbstractForm

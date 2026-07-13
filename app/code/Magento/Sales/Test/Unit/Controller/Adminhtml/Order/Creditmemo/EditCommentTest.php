@@ -51,10 +51,8 @@ class EditCommentTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->forward = $this->getMockBuilder(Forward::class)->disableOriginalConstructor()->getMock();
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->forward = $this->createMock(Forward::class);
+        $this->context = $this->createMock(Context::class);
 
         $objectManager = new ObjectManager($this);
         $this->controller = $objectManager->getObject(

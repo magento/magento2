@@ -1,12 +1,14 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 /* eslint-disable no-useless-escape */
 // jscs:disable no-useless-escape
 /**
  * @api
  */
+
+/* eslint-disable no-useless-escape */
 define([
     'jquery',
     'underscore',
@@ -17,6 +19,61 @@ define([
     'mage/translate'
 ], function ($, _, utils, moment, tinycolor) {
     'use strict';
+
+    function validateNoInvalidUnicodeCharacters(value, validator) {
+        var message = $.mage.__('Please remove invalid characters: {0}.'),
+            matches = [],
+            uniqueMatches = [],
+            seenMatches = {},
+            index,
+            code,
+            nextCode;
+
+        for (index = 0; index < value.length; index++) {
+            code = value.charCodeAt(index);
+
+            if (code >= 0xD800 && code <= 0xDBFF) {
+                nextCode = value.charCodeAt(index + 1);
+
+                // eslint-disable-next-line max-depth
+                if (!(nextCode >= 0xDC00 && nextCode <= 0xDFFF)) {
+                    matches.push('U+' + code.toString(16).toUpperCase());
+                } else {
+                    index++;
+                }
+            } else if (code >= 0xDC00 && code <= 0xDFFF) {
+                matches.push('U+' + code.toString(16).toUpperCase());
+            }
+        }
+
+        if (matches.length) {
+            matches.forEach(function (match) {
+                if (!seenMatches[match]) {
+                    seenMatches[match] = true;
+                    uniqueMatches.push(match);
+                }
+            });
+
+            validator.charErrorMessage = message.replace('{0}', uniqueMatches.join(', '));
+
+            return false;
+        }
+
+        return true;
+    }
+
+    function validateNoUtf8mb4Characters(value, validator) {
+        var message = $.mage.__('Please remove invalid characters: {0}.'),
+            matches = value.match(/(?:[\uD800-\uDBFF][\uDC00-\uDFFF])/g);
+
+        if (matches !== null) {
+            validator.charErrorMessage = message.replace('{0}', matches.join());
+
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * validate credit card number using mod10
@@ -660,10 +717,16 @@ define([
         ],
         'validate-number-range': [
             function (value, param) {
-                var numValue, dataAttrRange, result, range, m;
+                var numValue, isNumeric, dataAttrRange, result, range, m;
 
                 if (utils.isEmptyNoTrim(value)) {
                     return true;
+                }
+
+                isNumeric = /^(?:\d+\.?\d*|\.\d+)$/.test(value);
+
+                if (!isNumeric) {
+                    return false;
                 }
 
                 numValue = utils.parseNumber(value);
@@ -887,11 +950,11 @@ define([
                 if (utils.isEmpty(value)) {
                     return true;
                 }
-                validRegexp = /^[a-z0-9\._-]{1,30}@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i;
+                validRegexp = /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i; //eslint-disable-line max-len
                 emails = value.split(/[\s\n\,]+/g);
 
                 for (i = 0; i < emails.length; i++) {
-                    if (!validRegexp.test(emails[i].strip())) {
+                    if (!validRegexp.test(emails[i].trim())) {
                         return false;
                     }
                 }
@@ -1104,18 +1167,33 @@ define([
             },
             $.mage.__('The Date of Birth should not be greater than today.')
         ],
-        'validate-no-utf8mb4-characters': [
-            function (value) {
-                var validator = this,
-                    message = $.mage.__('Please remove invalid characters: {0}.'),
-                    matches = value.match(/(?:[\uD800-\uDBFF][\uDC00-\uDFFF])/g),
-                    result = matches === null;
+        'validate-wysiwyg-content-characters': [
+            function (value, params, additionalParams) {
+                var allowUtf8mb4 = additionalParams &&
+                    additionalParams.allowUtf8mb4 === true;
 
-                if (!result) {
-                    validator.charErrorMessage = message.replace('{0}', matches.join());
+                if (!allowUtf8mb4) {
+                    allowUtf8mb4 = window.wysiwygValidationConfig &&
+                        window.wysiwygValidationConfig.allowUtf8mb4 === true;
                 }
 
-                return result;
+                return allowUtf8mb4 ?
+                    validateNoInvalidUnicodeCharacters(value, this) :
+                    validateNoUtf8mb4Characters(value, this);
+            }, function () {
+                return this.charErrorMessage;
+            }
+        ],
+        'validate-no-invalid-unicode-characters': [
+            function (value) {
+                return validateNoInvalidUnicodeCharacters(value, this);
+            }, function () {
+                return this.charErrorMessage;
+            }
+        ],
+        'validate-no-utf8mb4-characters': [
+            function (value) {
+                return validateNoUtf8mb4Characters(value, this);
             }, function () {
                 return this.charErrorMessage;
             }

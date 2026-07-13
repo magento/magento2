@@ -22,6 +22,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -58,27 +59,19 @@ class SuccessTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $this->orderConfig = $this->createMock(Config::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $this->layout = $this->getMockBuilder(LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->layout = $this->createMock(LayoutInterface::class);
 
         $this->checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $eventManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $eventManager = $this->createMock(ManagerInterface::class);
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
 
-        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $scopeConfig->expects($this->any())
             ->method('getValue')
             ->with(
@@ -93,11 +86,11 @@ class SuccessTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getLayout', 'getEventManager', 'getUrlBuilder', 'getScopeConfig', 'getStoreManager'])
             ->getMock();
-        $context->expects($this->any())->method('getLayout')->willReturn($this->layout);
-        $context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
-        $context->expects($this->any())->method('getUrlBuilder')->willReturn($urlBuilder);
-        $context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
-        $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManagerMock);
+        $context->method('getLayout')->willReturn($this->layout);
+        $context->method('getEventManager')->willReturn($eventManager);
+        $context->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->method('getScopeConfig')->willReturn($scopeConfig);
+        $context->method('getStoreManager')->willReturn($this->storeManagerMock);
 
         $this->block = $objectManager->getObject(
             Success::class,
@@ -111,7 +104,7 @@ class SuccessTest extends TestCase
 
     public function testGetAdditionalInfoHtml()
     {
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects(
             $this->once()
         )->method(
@@ -126,11 +119,10 @@ class SuccessTest extends TestCase
     }
 
     /**
-     * @dataProvider invisibleStatusesProvider
-     *
      * @param array $invisibleStatuses
      * @param bool $expectedResult
      */
+    #[DataProvider('invisibleStatusesProvider')]
     public function testToHtmlOrderVisibleOnFront(array $invisibleStatuses, $expectedResult)
     {
         $orderId = 5;
@@ -154,9 +146,7 @@ class SuccessTest extends TestCase
             ->method('getStatus')
             ->willReturn($status);
 
-        $this->orderConfig->expects($this->any())
-            ->method('getInvisibleOnFrontStatuses')
-            ->willReturn($invisibleStatuses);
+        $this->orderConfig->method('getInvisibleOnFrontStatuses')->willReturn($invisibleStatuses);
 
         $this->block->toHtml();
 

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Pricing\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
@@ -20,6 +21,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FinalPriceTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var FinalPrice
      */
@@ -95,11 +98,10 @@ class FinalPriceTest extends TestCase
      */
     protected function prepareMock()
     {
-        $this->saleableInterfaceMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPriceType'])
-            ->onlyMethods(['getPriceInfo'])
-            ->getMock();
+        $this->saleableInterfaceMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getPriceType', 'getPriceInfo']
+        );
         $this->bundleCalculatorMock = $this->createMock(
             BundleCalculatorInterface::class
         );
@@ -108,13 +110,9 @@ class FinalPriceTest extends TestCase
         $this->basePriceMock->method('getValue')
             ->willReturn($this->baseAmount);
 
-        $this->bundleOptionMock = $this->getMockBuilder(BundleOptionPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->bundleOptionMock = $this->createMock(BundleOptionPrice::class);
 
-        $this->customOptionPriceMock = $this->getMockBuilder(CustomOptionPrice::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->customOptionPriceMock = $this->createMock(CustomOptionPrice::class);
 
         $this->priceInfoMock = $this->createMock(Base::class);
 
@@ -132,10 +130,8 @@ class FinalPriceTest extends TestCase
             ->method('getPriceInfo')
             ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
-        $this->productOptionRepositoryMock = $this->getMockForAbstractClass(
-            ProductCustomOptionRepositoryInterface::class
-        );
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->productOptionRepositoryMock = $this->createMock(ProductCustomOptionRepositoryInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->finalPrice = $this->objectManagerHelper->getObject(
@@ -154,8 +150,8 @@ class FinalPriceTest extends TestCase
      * @param $baseAmount
      * @param $optionsValue
      * @param $result
-     * @dataProvider getValueDataProvider
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($baseAmount, $optionsValue, $result)
     {
         $this->baseAmount = $baseAmount;
@@ -181,9 +177,12 @@ class FinalPriceTest extends TestCase
 
     /**
      * @param $baseAmount
-     * @dataProvider getValueDataProvider
+     * @param $optionsValue
+     * @param $expectedValue
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGetMaximalPrice($baseAmount)
+    #[DataProvider('getValueDataProvider')]
+    public function testGetMaximalPrice($baseAmount, $optionsValue, $expectedValue)
     {
         $result = 3;
         $this->baseAmount = $baseAmount;
@@ -229,9 +228,10 @@ class FinalPriceTest extends TestCase
         $result = 7;
         $this->prepareMock();
         $customOptions = [
-            $this->getMockBuilder(ProductCustomOptionInterface::class)
-                ->addMethods(['setProduct'])
-                ->getMockForAbstractClass()
+            $this->createPartialMock(
+                \Magento\Catalog\Model\Product\Option::class,
+                ['setProduct']
+            )
         ];
 
         $this->productOptionRepositoryMock->expects(static::once())
@@ -257,9 +257,13 @@ class FinalPriceTest extends TestCase
     }
 
     /**
-     * @dataProvider getValueDataProvider
+     * @param $baseAmount
+     * @param $optionsValue
+     * @param $expectedValue
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testGetMinimalPrice($baseAmount)
+    #[DataProvider('getValueDataProvider')]
+    public function testGetMinimalPrice($baseAmount, $optionsValue, $expectedValue)
     {
         $result = 5;
         $this->baseAmount = $baseAmount;

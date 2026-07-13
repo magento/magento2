@@ -17,7 +17,7 @@ class ConfigTest extends TestCase
     public function testIsActive()
     {
         $result = 'result';
-        $backendConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $backendConfig = $this->createMock(ConfigInterface::class);
         $backendConfig->expects(
             $this->once()
         )->method(

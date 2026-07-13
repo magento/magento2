@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -76,8 +76,7 @@ class CollectorTest extends TestCase
         $this->moduleManager = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->source = $this->getMockBuilder(SourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->source = $this->createMock(SourceInterface::class);
         $this->fileWithName = $this->getMockBuilder(PackageFile::class)
             ->disableOriginalConstructor()
             ->getMock();

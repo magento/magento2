@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,12 +11,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\WeeeGraphQl\Model\Resolver\Quote\FixedProductTax;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FixedProductTaxResolverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|ContextInterface
      */
@@ -114,22 +118,24 @@ class FixedProductTaxResolverTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->addMethods(['getExtensionAttributes'])
-            ->getMockForAbstractClass();
+        $this->contextMock = $this->createPartialMockWithReflection(
+            ContextInterface::class,
+            ['getExtensionAttributes']
+        );
 
-        $this->weeeHelperMock = $this->getMockBuilder(WeeeHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isEnabled', 'getApplied'])
-            ->getMock();
-        $this->taxHelperMock = $this->getMockBuilder(TaxHelper::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getPriceDisplayType'])
-            ->getMock();
+        $this->weeeHelperMock = $this->createPartialMock(
+            WeeeHelper::class,
+            ['isEnabled', 'getApplied']
+        );
+        $this->taxHelperMock = $this->createPartialMock(
+            TaxHelper::class,
+            ['getPriceDisplayType']
+        );
 
-        $this->contextExtensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->addMethods(['getStore'])
-            ->getMockForAbstractClass();
+        $this->contextExtensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->cartItemMock = $this->createMock(CartItemInterface::class);
         $this->fieldMock = $this->createMock(Field::class);
@@ -186,8 +192,8 @@ class FixedProductTaxResolverTest extends TestCase
      * @param array $expected
      *
      * @return void
-     * @dataProvider shouldReturnResultDataProvider
      */
+    #[DataProvider('shouldReturnResultDataProvider')]
     public function testShouldReturnResult(int $displayType, array $expected): void
     {
         $this->contextExtensionAttributesMock->method('getStore')

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
-use Exception;
 use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -16,20 +15,30 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class CustomerStoreConfigTest extends GraphQlAbstract
 {
-    /**
-     * @throws Exception
-     */
     #[
-        Config('customer/account_information/graphql_share_all_customer_groups', 1),
-        Config('customer/account_information/graphql_share_customer_group', 1)
+        Config('customer/account_information/graphql_share_customer_group', true)
     ]
     public function testCustomerGroupsGraphQlStoreConfig(): void
     {
         $this->assertEquals(
             [
                 'storeConfig' => [
-                    'graphql_share_all_customer_groups' => 1,
-                    'graphql_share_customer_group' => 1
+                    'graphql_share_customer_group' => true
+                ]
+            ],
+            $this->graphQlQuery($this->getStoreConfigQuery())
+        );
+    }
+
+    #[
+        Config('customer/account_information/graphql_share_customer_group', false)
+    ]
+    public function testCustomerGroupsGraphQlStoreConfigDisabled(): void
+    {
+        $this->assertEquals(
+            [
+                'storeConfig' => [
+                    'graphql_share_customer_group' => false
                 ]
             ],
             $this->graphQlQuery($this->getStoreConfigQuery())
@@ -46,7 +55,6 @@ class CustomerStoreConfigTest extends GraphQlAbstract
         return <<<QUERY
         {
             storeConfig {
-                graphql_share_all_customer_groups
                 graphql_share_customer_group
             }
         }

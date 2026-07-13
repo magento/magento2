@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Ups\Helper;
 
@@ -23,12 +23,14 @@ class Config
     public function getCode($type, $code = '')
     {
         $codes = $this->getCodes();
+        $type = $type ?? '';
         if (!isset($codes[$type])) {
             return false;
         } elseif ('' === $code) {
             return $codes[$type];
         }
 
+        $code = $code ?? '';
         if (!isset($codes[$type][$code])) {
             return false;
         } else {
