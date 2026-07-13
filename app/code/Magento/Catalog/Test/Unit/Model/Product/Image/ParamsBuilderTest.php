@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Image;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\Image;
 use Magento\Catalog\Model\Product\Image\ParamsBuilder;
 use Magento\Framework\App\Area;
@@ -65,13 +66,11 @@ class ParamsBuilderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->viewConfig = $this->getMockForAbstractClass(ConfigInterface::class);
-        $this->design = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->viewConfig = $this->createMock(ConfigInterface::class);
+        $this->design = $this->createMock(DesignInterface::class);
         $this->themeFactory = $this->createMock(FlyweightFactory::class);
-        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->theme = $this->createMock(ThemeInterface::class);
 
         $this->model = $objectManager->getObject(
             ParamsBuilder::class,
@@ -86,6 +85,7 @@ class ParamsBuilderTest extends TestCase
         $this->scopeConfig->method('getValue')
             ->willReturnCallback(
                 function ($path, $scopeType, $scopeCode) {
+                    $scopeCode = $scopeCode ?? '';
                     return $this->scopeConfigData[$path][$scopeType][$scopeCode] ?? null;
                 }
             );
@@ -100,8 +100,8 @@ class ParamsBuilderTest extends TestCase
      * @param array $config
      * @param array $imageArguments
      * @param array $expected
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild(
         int $scopeId,
         string $themeId,
@@ -110,7 +110,7 @@ class ParamsBuilderTest extends TestCase
         array $imageArguments,
         array $expected
     ) {
-        $this->scopeConfigData[Image::XML_PATH_JPEG_QUALITY][ScopeConfigInterface::SCOPE_TYPE_DEFAULT][null] = 80;
+        $this->scopeConfigData[Image::XML_PATH_JPEG_QUALITY][ScopeConfigInterface::SCOPE_TYPE_DEFAULT][''] = 80;
         foreach ($config as $path => $value) {
             $this->scopeConfigData[$path][ScopeInterface::SCOPE_STORE][$scopeId] = $value;
         }

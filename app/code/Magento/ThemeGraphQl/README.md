@@ -1,4 +1,3 @@
-# ThemeGraphQl
+# Magento_ThemeGraphQl module
 
-**ThemeGraphQl** provides type information for the GraphQl module
-to generate theme fields information endpoints.
+This module provides type information for the GraphQL module to generate theme fields information endpoints.

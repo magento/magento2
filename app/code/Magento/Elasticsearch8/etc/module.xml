@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magento_Elasticsearch8">
+        <sequence>
+            <module name="Magento_AdvancedSearch"/>
+            <module name="Magento_Elasticsearch"/>
+        </sequence>
+    </module>
+</config>

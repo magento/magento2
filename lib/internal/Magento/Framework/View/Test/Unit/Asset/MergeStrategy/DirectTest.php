@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -50,13 +50,13 @@ class DirectTest extends TestCase
     private $resultAssetMock;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->cssUrlResolverMock = $this->createMock(CssResolver::class);
-        $this->staticDirMock = $this->getMockForAbstractClass(WriteInterface::class);
-        $tmpDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->staticDirMock = $this->createMock(WriteInterface::class);
+        $tmpDir = $this->createMock(WriteInterface::class);
 
         $filesystemMock = $this->createMock(Filesystem::class);
         $filesystemMock->expects($this->any())
@@ -123,9 +123,12 @@ class DirectTest extends TestCase
             ->method('getContentType')
             ->willReturn('css');
         $assets = $this->prepareAssetsToMerge(['one', 'two']);
+        $callCount = 0;
         $this->cssUrlResolverMock->expects($this->exactly(2))
             ->method('relocateRelativeUrls')
-            ->will($this->onConsecutiveCalls('1', '2'));
+            ->willReturnCallback(function () use (&$callCount) {
+                return ++$callCount === 1 ? '1' : '2';
+            });
         $this->cssUrlResolverMock->expects($this->once())
             ->method('aggregateImportDirectives')
             ->with('12')
@@ -153,7 +156,7 @@ class DirectTest extends TestCase
     {
         $result = [];
         foreach ($data as $content) {
-            $asset = $this->getMockForAbstractClass(LocalInterface::class);
+            $asset = $this->createMock(LocalInterface::class);
             $asset->expects($this->once())->method('getContent')->willReturn($content);
             $result[] = $asset;
         }

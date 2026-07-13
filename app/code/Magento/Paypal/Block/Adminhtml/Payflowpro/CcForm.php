@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Block\Adminhtml\Payflowpro;
 
@@ -31,6 +31,7 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
      * @param Config $paymentConfig
      * @param Session $checkoutSession
      * @param array $data
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(
         Context $context,
@@ -38,11 +39,13 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
         Session $checkoutSession,
         array $data = []
     ) {
+        //phpcs:enable Generic.CodeAnalysis.UselessOverridingMethod
         parent::__construct($context, $paymentConfig, $checkoutSession, $data);
     }
 
     /**
      * Check if vault enabled
+     *
      * @return bool
      */
     public function isVaultEnabled()
@@ -63,15 +66,18 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
     }
 
     /**
-     * {inheritdoc}
+     * @inheritDoc
      */
     protected function initializeMethod()
     {
+        // @codingStandardsIgnoreStart
         return;
+        // @codingStandardsIgnoreEnd
     }
 
     /**
      * Get configured vault payment for PayflowPro
+     *
      * @return VaultPaymentInterface
      */
     private function getVaultPayment()
@@ -81,8 +87,10 @@ class CcForm extends \Magento\Payment\Block\Transparent\Form
 
     /**
      * Get payment data helper instance
+     *
      * @return Data
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getPaymentDataHelper()
     {

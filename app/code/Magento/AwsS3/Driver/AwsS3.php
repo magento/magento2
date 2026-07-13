@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,7 @@ class AwsS3 implements RemoteDriverInterface
         FilesystemAdapter $adapter,
         LoggerInterface $logger,
         string $objectUrl,
-        MetadataProviderInterface $metadataProvider = null
+        ?MetadataProviderInterface $metadataProvider = null
     ) {
         $this->adapter = $adapter;
         $this->logger = $logger;
@@ -188,7 +188,9 @@ class AwsS3 implements RemoteDriverInterface
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
-            $this->createDirectoryRecursively($parentDir);
+            if (!$this->createDirectoryRecursively($parentDir)) {
+                return false;
+            }
         }
 
         if (!$this->isDirectory($path)) {
@@ -207,7 +209,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function copy($source, $destination, DriverInterface $targetDriver = null): bool
+    public function copy($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         try {
             $this->adapter->copy(
@@ -526,7 +528,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
+    public function rename($oldPath, $newPath, ?DriverInterface $targetDriver = null): bool
     {
         if ($oldPath === $newPath) {
             return true;
@@ -636,7 +638,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function symlink($source, $destination, DriverInterface $targetDriver = null): bool
+    public function symlink($source, $destination, ?DriverInterface $targetDriver = null): bool
     {
         return $this->copy($source, $destination, $targetDriver);
     }
@@ -777,7 +779,7 @@ class AwsS3 implements RemoteDriverInterface
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return fputcsv($resource, $data, $delimiter, $enclosure);
+        return fputcsv($resource, $data, $delimiter, $enclosure, '\\');
     }
 
     /**
@@ -921,14 +923,18 @@ class AwsS3 implements RemoteDriverInterface
     }
 
     /**
-     * Removes slashes in path.
+     * Normalizes path for S3 operations by trimming slashes and removing '.' components.
      *
      * @param string $path
      * @return string
      */
     private function fixPath(string $path): string
     {
-        return trim($path, '/');
+        $parts = explode('/', trim($path, '/'));
+        $parts = array_values(array_filter($parts, static function (string $part): bool {
+            return $part !== '.' && $part !== '';
+        }));
+        return implode('/', $parts);
     }
 
     /**

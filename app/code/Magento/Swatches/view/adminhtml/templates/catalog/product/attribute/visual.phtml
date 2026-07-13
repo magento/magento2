@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 // phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
@@ -37,6 +37,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <th colspan="<?= (int)$colTotal ?>">
                     <input type="hidden" class="required-visual-swatch-entry" name="visual_swatch_validation"/>
                     <input type="hidden" class="required-visual-swatch-unique" name="visual_swatch_validation_unique"/>
+                    <input type="hidden" name="reset_is-default_option"/>
                 </th>
             </tr>
             <tr>
@@ -46,6 +47,12 @@ $stores = $block->getStoresSortedBySortOrder();
                                 title="<?= $escaper->escapeHtml(__('Add Swatch')) ?>"
                                 type="button" class="action- scalable add">
                             <span><?= $escaper->escapeHtml(__('Add Swatch')) ?></span>
+                        </button>
+
+                        <button id="reset_default_swatch_visual_option_button"
+                                title="<?= $escaper->escapeHtml(__('Reset Is Default')) ?>"
+                                type="button" class="action- scalable reset">
+                            <span><?= $escaper->escapeHtml(__('Reset Is Default')) ?></span>
                         </button>
                     <?php endif; ?>
                 </th>

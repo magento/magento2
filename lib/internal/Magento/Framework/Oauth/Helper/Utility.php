@@ -1,23 +1,28 @@
 <?php
 /**
- * Copyright 2024 Adobe
+ * Copyright 2015 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Oauth\Helper;
 
-use Laminas\OAuth\Http\Utility as LaminasUtility;
-use Magento\Framework\Oauth\Helper\Signature\HmacFactory;
+use Magento\Framework\Oauth\Helper\Signature\HmacInterface;
 
 class Utility
 {
     /**
-     * @param LaminasUtility $httpUtility
-     * @param HmacFactory $hmacFactory
+     * @var HmacInterface
      */
-    public function __construct(private readonly LaminasUtility $httpUtility, private readonly HmacFactory $hmacFactory)
-    {
+    private HmacInterface $hmac;
+
+    /**
+     * @param HmacInterface $hmac
+     */
+    public function __construct(
+        HmacInterface $hmac
+    ) {
+        $this->hmac = $hmac;
     }
 
     /**
@@ -32,40 +37,21 @@ class Utility
      * @return string
      */
     public function sign(
-        array  $params,
+        array $params,
         string $signatureMethod,
         string $consumerSecret,
         ?string $tokenSecret = null,
         ?string $method = null,
         ?string $url = null
     ): string {
-        if ($this->isHmac256($signatureMethod)) {
-            $hmac = $this->hmacFactory->create(
-                ['consumerSecret' => $consumerSecret,
-                    'tokenSecret' => $tokenSecret,
-                    'hashAlgo' => 'sha256'
-                ]
-            );
-
-            return $hmac->sign($params, $method, $url);
-        } else {
-            return $this->httpUtility->sign($params, $signatureMethod, $consumerSecret, $tokenSecret, $method, $url);
-        }
-    }
-
-    /**
-     * Check if signature method is HMAC-SHA256
-     *
-     * @param string $signatureMethod
-     * @return bool
-     */
-    private function isHmac256(string $signatureMethod): bool
-    {
-        if (strtoupper(preg_replace('/[\W]/', '', $signatureMethod)) === 'HMACSHA256') {
-            return true;
-        }
-
-        return false;
+        return $this->hmac->sign(
+            $url ?? '',
+            $params,
+            $consumerSecret,
+            $tokenSecret ?? '',
+            $signatureMethod,
+            $method ?? 'POST'
+        );
     }
 
     /**
@@ -74,10 +60,22 @@ class Utility
      * @param array $params
      * @param string|null $realm
      * @param bool $excludeCustomParams
+     * @return string
      */
     public function toAuthorizationHeader(array $params, ?string $realm = null, bool $excludeCustomParams = true)
     {
-        $authorizationHeader = $this->httpUtility->toAuthorizationHeader($params, $realm, $excludeCustomParams);
-        return str_replace('realm="",', '', $authorizationHeader);
+        $header = 'OAuth ';
+        if ($realm) {
+            $header .= 'realm="' . rawurlencode($realm) . '", ';
+        }
+        $values = [];
+        foreach ($params as $key => $value) {
+            if ($excludeCustomParams && substr($key, 0, 6) !== 'oauth_') {
+                continue;
+            }
+            $values[] = rawurlencode($key) . '="' . rawurlencode($value) . '"';
+        }
+        $header .= implode(', ', $values);
+        return $header;
     }
 }

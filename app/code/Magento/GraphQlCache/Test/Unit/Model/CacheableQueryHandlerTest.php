@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\GraphQlCache\Model\CacheableQueryHandler;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,12 +21,24 @@ use PHPUnit\Framework\TestCase;
  */
 class CacheableQueryHandlerTest extends TestCase
 {
+    /**
+     * @var CacheableQueryHandler
+     */
     private $cacheableQueryHandler;
 
+    /**
+     * @var CacheableQuery
+     */
     private $cacheableQueryMock;
 
+    /**
+     * @var Http
+     */
     private $requestMock;
 
+    /**
+     * @var IdentityPool
+     */
     private $identityPoolMock;
 
     protected function setup(): void
@@ -47,8 +60,8 @@ class CacheableQueryHandlerTest extends TestCase
     /**
      * @param array $resolvedData
      * @param array $identities
-     * @dataProvider resolvedDataProvider
      */
+    #[DataProvider('resolvedDataProvider')]
     public function testhandleCacheFromResolverResponse(
         array $resolvedData,
         array $identities,
@@ -58,9 +71,10 @@ class CacheableQueryHandlerTest extends TestCase
             'cacheIdentity' => IdentityInterface::class,
             'cacheTag' => 'cat_p'
         ];
-        $mockIdentity = $this->getMockBuilder($cacheData['cacheIdentity'])
-            ->onlyMethods(['getIdentities'])
-            ->getMockForAbstractClass();
+        $mockIdentity = $this->createPartialMock(
+            IdentityInterface::class,
+            ['getIdentities']
+        );
 
         $this->requestMock->expects($this->once())->method('isGet')->willReturn(true);
         $this->identityPoolMock->expects($this->once())->method('get')->willReturn($mockIdentity);

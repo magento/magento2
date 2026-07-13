@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\Dataset;
 use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Class consist of dataFixtures base logic
@@ -65,9 +65,8 @@ abstract class AbstractDataFixture
         } catch (\Throwable $exception) {
             ExceptionHandler::handle(
                 'Unable to parse fixtures',
-                get_class($test),
-                $test->name(),
-                $exception
+                $exception,
+                $test
             );
         }
 
@@ -109,6 +108,35 @@ abstract class AbstractDataFixture
         $testsIsolation = $objectManager->get(TestsIsolation::class);
         $dbIsolationState = $this->getDbIsolationState($test);
         $testsIsolation->createDbSnapshot($test, $dbIsolationState);
+        if ($test->usesDataProvider()) {
+            /**
+             * The TestCase instance passed here is a dummy instance; it is not the one used for the
+             * actual test execution.
+             *
+             * Currently, $test->providedData() always returns [''] and not the actual dataset from the data provider.
+             *
+             * @see ConfigFixture::startTest
+             *
+             * We intentionally keep this behavior for now. Resolving the real dataset at this stage is
+             * non-trivial. Currently, the only reliable way is to use the event metadata:
+             * $event->test()->metadata()->isDataProvider() and $event->test()->metadata()->isTestWith().
+             *
+             * @see \Magento\TestFramework\Event\TestPreprationStartedSubscriber::notify
+             *
+             * However, accessing that metadata can trigger execution of the data provider callback, which
+             * may be expensive. Since fixtures only need the dataset when it is explicitly referenced, we
+             * defer resolving the actual dataset until that point.
+             */
+            DataFixtureStorageManager::getStorage()
+                ->persist(
+                    'dataset',
+                    new Dataset(
+                        get_class($test),
+                        $test->name(),
+                        $test->dataName()
+                    )
+                );
+        }
         $dataFixtureSetup = $objectManager->get(DataFixtureSetup::class);
         /* Execute fixture scripts */
         foreach ($fixtures as $fixture) {
@@ -125,9 +153,8 @@ abstract class AbstractDataFixture
             } catch (\Throwable $exception) {
                 ExceptionHandler::handle(
                     'Unable to apply fixture: ' . $this->getFixtureReference($fixture),
-                    $fixture['test']['class'],
-                    $fixture['test']['method'],
-                    $exception
+                    $exception,
+                    $test
                 );
             }
             $this->_appliedFixtures[] = $fixture;
@@ -155,9 +182,8 @@ abstract class AbstractDataFixture
             } catch (\Throwable $exception) {
                 ExceptionHandler::handle(
                     'Unable to revert fixture: ' . $this->getFixtureReference($fixture),
-                    $fixture['test']['class'],
-                    $fixture['test']['method'],
-                    $exception
+                    $exception,
+                    $test
                 );
             }
         }

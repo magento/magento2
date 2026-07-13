@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use Magento\Setup\Model\ConfigOptionsList\Cache;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +41,9 @@ class CacheTest extends TestCase
         $this->validatorMock = $this->createMock(RedisConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
-        $this->configOptionsList = new CacheConfigOptionsList($this->validatorMock);
+        $this->configOptionsList = new CacheConfigOptionsList(
+            $this->validatorMock
+        );
     }
 
     /**
@@ -48,8 +51,12 @@ class CacheTest extends TestCase
      */
     public function testGetOptions()
     {
+        $this->deploymentConfigMock->method('get')
+            ->with(Cache::CONFIG_PATH_CACHE_BACKEND)
+            ->willReturn(Cache::CONFIG_VALUE_CACHE_REDIS);
+
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(10, $options);
+        $this->assertCount(21, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -81,15 +88,59 @@ class CacheTest extends TestCase
 
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
-        $this->assertEquals('cache-backend-redis-use-lua', $options[7]->getName());
+        $this->assertEquals('cache-backend-redis-serializer', $options[7]->getName());
 
         $this->assertArrayHasKey(8, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[8]);
-        $this->assertEquals('cache-id-prefix', $options[8]->getName());
+        $this->assertEquals('cache-backend-redis-use-lua', $options[8]->getName());
 
         $this->assertArrayHasKey(9, $options);
-        $this->assertInstanceOf(FlagConfigOption::class, $options[9]);
-        $this->assertEquals('allow-parallel-generation', $options[9]->getName());
+        $this->assertInstanceOf(TextConfigOption::class, $options[9]);
+        $this->assertEquals('cache-backend-redis-use-lua-on-gc', $options[9]->getName());
+
+        $this->assertArrayHasKey(10, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[10]);
+        $this->assertEquals('cache-backend-valkey-server', $options[10]->getName());
+
+        $this->assertArrayHasKey(11, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[11]);
+        $this->assertEquals('cache-backend-valkey-db', $options[11]->getName());
+
+        $this->assertArrayHasKey(12, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[12]);
+        $this->assertEquals('cache-backend-valkey-port', $options[12]->getName());
+
+        $this->assertArrayHasKey(13, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[13]);
+        $this->assertEquals('cache-backend-valkey-password', $options[13]->getName());
+
+        $this->assertArrayHasKey(14, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[14]);
+        $this->assertEquals('cache-backend-valkey-compress-data', $options[14]->getName());
+
+        $this->assertArrayHasKey(15, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[15]);
+        $this->assertEquals('cache-backend-valkey-compression-lib', $options[15]->getName());
+
+        $this->assertArrayHasKey(16, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[16]);
+        $this->assertEquals('cache-backend-valkey-serializer', $options[16]->getName());
+
+        $this->assertArrayHasKey(17, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[17]);
+        $this->assertEquals('cache-backend-valkey-use-lua', $options[17]->getName());
+
+        $this->assertArrayHasKey(18, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[18]);
+        $this->assertEquals('cache-backend-valkey-use-lua-on-gc', $options[18]->getName());
+
+        $this->assertArrayHasKey(19, $options);
+        $this->assertInstanceOf(TextConfigOption::class, $options[19]);
+        $this->assertEquals('cache-id-prefix', $options[19]->getName());
+
+        $this->assertArrayHasKey(20, $options);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[20]);
+        $this->assertEquals('allow-parallel-generation', $options[20]->getName());
     }
 
     /**
@@ -97,27 +148,29 @@ class CacheTest extends TestCase
      */
     public function testCreateConfigCacheRedis()
     {
-        $this->deploymentConfigMock->method('get')->willReturn('');
+        // Return default value for all config options
+        $this->deploymentConfigMock->method('get')->willReturnArgument(1);
 
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
-                            'server' => '',
-                            'port' => '',
-                            'database' => '',
+                            'server' => '127.0.0.1',
+                            'port' => '6379',
+                            'database' => '0',
                             'password' => '',
-                            'compress_data' => '',
+                            'compress_data' => '1',
                             'compression_lib' => '',
-                            '_useLua' => '',
-                            'use_lua' => ''
+                            'use_lua' => '0',
+                            'use_lua_on_gc' => '1',
+                            'serializer' => 'igbinary'
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
-                'allow_parallel_generation' => '',
+                'allow_parallel_generation' => 'false',
             ]
         ];
 
@@ -137,27 +190,8 @@ class CacheTest extends TestCase
                 function ($arg1, $arg2 = null) {
                     if ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_ID_PREFIX) {
                         return 'XXX_';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_SERVER &&
-                        $arg2 === '127.0.0.1') {
-                        return '127.0.0.1';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_DATABASE &&
-                        $arg2 === '0') {
-                        return '0';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PORT &&
-                        $arg2 === '6379') {
-                        return '6379';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_PASSWORD &&
-                        $arg2 === '') {
-                        return '';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA &&
-                        $arg2 === '1') {
-                        return '1';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB &&
-                        $arg2 === '') {
-                        return '';
-                    } elseif ($arg1 === CacheConfigOptionsList::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION &&
-                        $arg2 === 'false') {
-                        return null;
+                    } else {
+                        return $arg2;
                     }
                 }
             );
@@ -166,7 +200,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'backend' => 'redis',
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -174,12 +208,13 @@ class CacheTest extends TestCase
                             'password' => '',
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
-                            '_useLua' => null,
-                            'use_lua' => null
+                            'use_lua' => '0',
+                            'use_lua_on_gc' => '1',
+                            'serializer' => 'igbinary'
                         ],
                     ]
                 ],
-                'allow_parallel_generation' => null,
+                'allow_parallel_generation' => 'false',
             ]
         ];
 
@@ -209,6 +244,9 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $this->expectedIdPrefix(),
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]
@@ -232,6 +270,9 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $explicitPrefix,
+                        'backend_options' => [
+                            'serializer' => 'igbinary'
+                        ]
                     ]
                 ]
             ]
@@ -246,13 +287,14 @@ class CacheTest extends TestCase
     }
 
     /**
-     * testValidateWithValidInput
+     * testValidateWithValidRedisInput
      */
-    public function testValidateWithValidInput()
+    public function testValidateWithValidRedisInput()
     {
         $options = [
             'cache-backend' => 'redis',
             'cache-backend-redis-server' => 'localhost',
+            'page-cache' => 'redis'
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
@@ -261,8 +303,31 @@ class CacheTest extends TestCase
                 'db' => '',
                 'port' => '',
                 'password' => '',
-                '_useLua' => null,
-                'use_lua' => null
+            ])
+            ->willReturn(true);
+
+        $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);
+
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * testValidateWithValidValkyInput
+     */
+    public function testValidateWithValidValkyInput()
+    {
+        $options = [
+            'cache-backend' => 'valkey',
+            'cache-backend-valkey-server' => 'localhost',
+            'page-cache' => 'valkey'
+        ];
+        $this->validatorMock->expects($this->once())
+            ->method('isValidConnection')
+            ->with([
+                'host' => 'localhost',
+                'db' => '',
+                'port' => '',
+                'password' => '',
             ])
             ->willReturn(true);
 

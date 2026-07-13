@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,6 +41,7 @@ use Magento\Webapi\Test\Unit\Service\Entity\SimpleArrayData;
 use Magento\Webapi\Test\Unit\Service\Entity\SimpleData;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Api\Data\AddressInterface;
@@ -107,9 +108,7 @@ class ServiceInputProcessorTest extends TestCase
             AddressInterface::class => $this->addressMock
         ];
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->objectManagerMock->expects($this->any())
             ->method('create')
             ->willReturnCallback(
@@ -160,7 +159,7 @@ class ServiceInputProcessorTest extends TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
@@ -415,9 +414,10 @@ class ServiceInputProcessorTest extends TestCase
     }
 
     /**
-     * @doesNotPerformAssertions
+     * @return void
+     * @throws Exception
      */
-    public function testDefaultPageSizeSetterIsInvoked()
+    public function testDefaultPageSizeSetterIsInvoked(): void
     {
         $this->defaultPageSizeSetter->expects(self::once())
             ->method('processSearchCriteria')
@@ -512,12 +512,11 @@ class ServiceInputProcessorTest extends TestCase
 
     /**
      * Covers object with custom attributes
-     *
-     * @dataProvider customAttributesDataProvider
-     * @param $customAttributeType
+     *     * @param $customAttributeType
      * @param $inputData
      * @param $expectedObject
      */
+    #[DataProvider('customAttributesDataProvider')]
     public function testCustomAttributesProperties($customAttributeType, $inputData, $expectedObject)
     {
         if (is_callable($expectedObject)) {
@@ -674,9 +673,8 @@ class ServiceInputProcessorTest extends TestCase
 
     /**
      * Cover invalid custom attribute data
-     *
-     * @dataProvider invalidCustomAttributesDataProvider
-     */
+     *     */
+    #[DataProvider('invalidCustomAttributesDataProvider')]
     public function testCustomAttributesExceptions($inputData)
     {
         $this->expectException('Magento\Framework\Webapi\Exception');
@@ -766,9 +764,8 @@ class ServiceInputProcessorTest extends TestCase
      * @param array $payload
      * @param int $exception
      * @return void
-     * @throws Exception
-     * @dataProvider payloadDataProvider
-     */
+     * @throws Exception     */
+    #[DataProvider('payloadDataProvider')]
     public function testValidateApiPayload(array $payload, int $exception): void
     {
         if ($exception) {

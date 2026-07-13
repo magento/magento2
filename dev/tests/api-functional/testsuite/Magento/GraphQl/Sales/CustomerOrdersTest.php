@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,9 +28,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * GraphQl tests for @see \Magento\SalesGraphQl\Model\Resolver\CustomerOrders.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerOrdersTest extends GraphQlAbstract
 {
@@ -45,7 +48,7 @@ class CustomerOrdersTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      * @throws LocalizedException
      */
     protected function setUp(): void
@@ -161,9 +164,8 @@ class CustomerOrdersTest extends GraphQlAbstract
 
     /**
      * Test graphql customer orders when customer doesn't have access to custom website in Multi-Store setup.
-
-     * @dataProvider dataProviderScope
      */
+    #[DataProvider('dataProviderScope')]
     #[
         DataFixture(WebsiteFixture::class, as: 'website2'),
         DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
@@ -280,7 +282,7 @@ MUTATION;
      *
      * @return array
      */
-    public function dataProviderScope()
+    public static function dataProviderScope()
     {
         return [
             'store scope' => ['STORE'],

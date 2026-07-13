@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
@@ -10,7 +10,13 @@ use Magento\Backend\App\Action;
 use Magento\Sales\Helper\Data as SalesData;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Catalog\Model\Product\Type;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
     /**
@@ -18,7 +24,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      *
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
@@ -52,7 +58,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         CreditmemoSender $creditmemoSender,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        SalesData $salesData = null
+        ?SalesData $salesData = null
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
         $this->creditmemoSender = $creditmemoSender;
@@ -155,6 +161,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         $parentQuantities = [];
         foreach ($items as $item) {
             if ($parentId = $item->getOrderItem()->getParentItemId()) {
+                if ($this->shouldSkipQuantityAccumulation($item)) {
+                    continue;
+                }
                 if (empty($parentQuantities[$parentId])) {
                     $parentQuantities[$parentId] = $item->getQty();
                 } else {
@@ -170,5 +179,22 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
                 }
             }
         }
+    }
+
+    /**
+     * Check if the quantity adjustment should be skipped
+     *
+     * @param Item $item
+     * @return bool
+     */
+    private function shouldSkipQuantityAccumulation(Item $item): bool
+    {
+        $parentOrderItem = $item->getOrderItem()->getParentItem();
+        if (!$parentOrderItem || $parentOrderItem->getProductType() !== Type::TYPE_BUNDLE) {
+            return false;
+        }
+        $parentOptions = $parentOrderItem->getProductOptions();
+        return isset($parentOptions['product_calculations']) &&
+            $parentOptions['product_calculations'] === AbstractType::CALCULATE_PARENT;
     }
 }

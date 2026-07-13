@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -132,7 +132,19 @@ define([
                         $('body').trigger(self.options.processStop);
                     }
 
-                    if (res.backUrl) {
+                    if (res.messages) {
+                        $(self.options.messagesSelector).html(res.messages);
+                    }
+
+                    if (res.product && res.product.statusText) {
+                        $(self.options.productStatusSelector)
+                            .removeClass('available')
+                            .addClass('unavailable')
+                            .find('span')
+                            .html(res.product.statusText);
+                    }
+
+                    if (res.backUrl && !res.displayMessages) {
                         eventData = {
                             'form': form,
                             'redirectParameters': []
@@ -153,22 +165,11 @@ define([
                         return;
                     }
 
-                    if (res.messages) {
-                        $(self.options.messagesSelector).html(res.messages);
-                    }
-
                     if (res.minicart) {
                         $(self.options.minicartSelector).replaceWith(res.minicart);
                         $(self.options.minicartSelector).trigger('contentUpdated');
                     }
 
-                    if (res.product && res.product.statusText) {
-                        $(self.options.productStatusSelector)
-                            .removeClass('available')
-                            .addClass('unavailable')
-                            .find('span')
-                            .html(res.product.statusText);
-                    }
                     self.enableAddToCartButton(form);
                 },
 

@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Api;
 
 use Magento\Authorization\Test\Fixture\Role as RoleFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -150,8 +152,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Validate update by invalid customer.
-     *
+     * Validate update operation by invalid customer
      */
     public function testInvalidCustomerUpdate()
     {
@@ -160,9 +161,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 
-        // get customer ID token
+        //Get customer ID token
         /** @var \Magento\Integration\Api\CustomerTokenServiceInterface $customerTokenService */
-        //$customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
         $customerTokenService = Bootstrap::getObjectManager()->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
@@ -246,11 +246,9 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'DeleteById',
             ],
         ];
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $response = $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']]);
-        } else {
-            $response = $this->_webApiCall($serviceInfo);
-        }
+        $response = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
+            ? $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']])
+            : $this->_webApiCall($serviceInfo);
 
         $this->assertTrue($response);
 
@@ -261,7 +259,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Check that non authorized consumer can`t delete customer.
+     * Check that non-authorized consumer can`t delete customer.
      *
      * @return void
      */
@@ -355,10 +353,10 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testUpdateCustomer(): void
     {
         $customerId = 1;
-        $updatedLastname = 'Updated lastname';
+        $updatedLastName = 'Updated lastname';
         $customer = $this->getCustomerData($customerId);
         $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, Customer::class);
-        $customerData[Customer::LASTNAME] = $updatedLastname;
+        $customerData[Customer::LASTNAME] = $updatedLastName;
 
         $serviceInfo = [
             'rest' => [
@@ -372,16 +370,20 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        $requestData['customer'] = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+        $requestData['customer'] = (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP)
             ? $customerData
-            : [Customer::LASTNAME => $updatedLastname];
-
+            : [
+                Customer::FIRSTNAME => $customer->getFirstname(),
+                Customer::LASTNAME => $updatedLastName,
+                Customer::EMAIL => $customer->getEmail(),
+                Customer::ID => $customerId,
+            ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertNotNull($response);
 
         //Verify if the customer is updated
         $existingCustomerDataObject = $this->getCustomerData($customerId);
-        $this->assertEquals($updatedLastname, $existingCustomerDataObject->getLastname());
+        $this->assertEquals($updatedLastName, $existingCustomerDataObject->getLastname());
         $this->assertEquals($customerData[Customer::FIRSTNAME], $existingCustomerDataObject->getFirstname());
     }
 
@@ -652,8 +654,8 @@ class CustomerRepositoryTest extends WebapiAbstract
                 $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
                 $exceptionData = $this->processRestExceptionResult($e);
                 $expectedExceptionData = [
-                    'message' => '"%fieldName" is required. Enter and try again.',
-                    'parameters' => ['fieldName' => Address::FIRSTNAME],
+                    'message' => '"%1" is a required value.',
+                    'parameters' => ['0' => 'First Name'],
                 ];
                 $this->assertEquals($expectedExceptionData, $exceptionData);
             }
@@ -685,9 +687,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @param bool $subscribeStatus
      * @return void
-     *
-     * @dataProvider subscriptionDataProvider
-     */
+     * */
+    #[DataProvider('subscriptionDataProvider')]
     public function testSearchCustomers(bool $subscribeStatus): void
     {
         $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
@@ -1048,7 +1049,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerLoadedData = $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
         self::assertGreaterThanOrEqual($customerData[Customer::UPDATED_AT], $customerLoadedData[Customer::UPDATED_AT]);
         unset($customerData[Customer::UPDATED_AT]);
-        unset($customerLoadedData[Customer::UPDATED_AT], $customerLoadedData[Customer::CONFIRMATION]);
+        unset(
+            $customerLoadedData[Customer::UPDATED_AT],
+            $customerLoadedData[Customer::CONFIRMATION],
+            $customerLoadedData[Customer::CUSTOM_ATTRIBUTES]
+        );
         self::assertEquals($customerData, $customerLoadedData);
 
         $revokeToken = $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);
@@ -1110,9 +1115,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldValue
      * @param string $expectedMessage
      * @return void
-     *
-     * @dataProvider customerDataProvider
-     */
+     * */
+    #[DataProvider('customerDataProvider')]
     public function testCreateCustomerWithInvalidCustomerFirstName(
         string $fieldName,
         string $fieldValue,
@@ -1180,9 +1184,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldName
      * @param string $fieldValue
      * @return void
-     *
-     * @dataProvider customerWithMultiByteDataProvider
-     */
+     * */
+    #[DataProvider('customerWithMultiByteDataProvider')]
     public function testCreateCustomerWithMultibyteCharacters(string $fieldName, string $fieldValue): void
     {
         $customerData = $this->dataObjectProcessor->buildOutputDataArray(
@@ -1236,9 +1239,8 @@ class CustomerRepositoryTest extends WebapiAbstract
      * @param string $fieldName
      * @param string $fieldValue
      * @return void
-     *
-     * @dataProvider customerValidNameDataProvider
-     */
+     * */
+    #[DataProvider('customerValidNameDataProvider')]
     public function testCreateCustomerWithValidName(string $fieldName, string $fieldValue): void
     {
         $customerData = $this->dataObjectProcessor->buildOutputDataArray(

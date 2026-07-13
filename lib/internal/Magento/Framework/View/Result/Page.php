@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Result;
@@ -139,7 +139,7 @@ class Page extends Layout
         PageLayoutReader $pageLayoutReader,
         $template,
         $isIsolated = false,
-        EntitySpecificHandlesList $entitySpecificHandlesList = null
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();

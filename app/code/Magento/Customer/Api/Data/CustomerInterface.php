@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Api\Data;
 
@@ -340,7 +340,7 @@ interface CustomerInterface extends \Magento\Framework\Api\CustomAttributesDataI
      * @param \Magento\Customer\Api\Data\AddressInterface[] $addresses
      * @return $this
      */
-    public function setAddresses(array $addresses = null);
+    public function setAddresses(?array $addresses = null);
 
     /**
      * Get disable auto group change flag.

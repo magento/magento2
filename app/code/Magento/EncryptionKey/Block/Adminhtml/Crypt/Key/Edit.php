@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
 
@@ -9,6 +9,8 @@ namespace Magento\EncryptionKey\Block\Adminhtml\Crypt\Key;
  * Encryption key change edit page block
  *
  * @api
+ * @deprecated
+ * @see  Extensible Data ReEncryption Mechanism Implemented
  * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container

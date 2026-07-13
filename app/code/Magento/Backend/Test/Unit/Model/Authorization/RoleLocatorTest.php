@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,11 +9,15 @@ namespace Magento\Backend\Test\Unit\Model\Authorization;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\Authorization\RoleLocator;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class RoleLocatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RoleLocator
      */
@@ -25,14 +29,20 @@ class RoleLocatorTest extends TestCase
     private $_sessionMock = [];
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->_sessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['getUser', 'getAclRole', 'hasUser'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->_sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getUser', 'getAclRole', 'hasUser']
+        );
         $this->_model = new RoleLocator($this->_sessionMock);
     }
 

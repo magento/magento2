@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Controller\Adminhtml;
@@ -122,6 +122,33 @@ class IndexTest extends AbstractBackendController
 
         // verify
         $this->assertStringContainsString('<h1 class="page-title">test firstname test lastname</h1>', $body);
+    }
+
+    /**
+     * Storing the full address book in session causes the admin session to exceed the configured Max Session
+     * Size on customers with large address books, logging the admin user out.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     */
+    public function testEditActionDoesNotSerializeAddressesIntoSession()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+
+        $sessionCustomerData = $this->_objectManager->get(Session::class)->getCustomerData();
+
+        $this->assertIsArray($sessionCustomerData);
+        $this->assertArrayHasKey('account', $sessionCustomerData);
+        $this->assertNotEmpty($sessionCustomerData['account']);
+        $this->assertSame(1, (int)$sessionCustomerData['customer_id']);
+        $this->assertArrayHasKey('address', $sessionCustomerData);
+        $this->assertSame(
+            [],
+            $sessionCustomerData['address'],
+            'Customer Edit admin action must not serialize the address collection into the admin session.'
+        );
     }
 
     /**
@@ -247,10 +274,12 @@ class IndexTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->onlyMethods(['sendMessage'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['sendMessage', 'getMessage'])
+            ->getMock();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
+        $transportMock->method('getMessage')
+            ->willReturn(null);
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->onlyMethods(

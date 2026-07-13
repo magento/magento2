@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\HTTP\ResponseFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
@@ -26,6 +27,7 @@ use Psr\Log\LoggerInterface;
  */
 class CurlTest extends TestCase
 {
+
     /**
      * @var Curl
      */
@@ -58,7 +60,7 @@ class CurlTest extends TestCase
     {
         $this->curlAdapterMock = $this->createMock(\Magento\Framework\HTTP\Adapter\Curl::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $curlFactoryMock = $this->getMockBuilder(CurlFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
@@ -106,8 +108,8 @@ class CurlTest extends TestCase
      * @param array $data
      * @return void
      * @throws RuntimeException
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testRequestSuccess(array $data)
     {
         $responseString = 'This is response.';
@@ -145,8 +147,8 @@ class CurlTest extends TestCase
      * @param array $data
      * @return void
      * @throws RuntimeException
-     * @dataProvider getTestData
      */
+    #[DataProvider('getTestData')]
     public function testRequestError(array $data)
     {
         $response = new Response();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
@@ -47,7 +47,7 @@ class Simple implements Fallback\ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null)
     {
         $params = ['area' => $area, 'theme' => $theme, 'locale' => $locale];
         foreach ($params as $key => $param) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
@@ -48,7 +48,7 @@ class Direct implements MergeStrategyInterface
     public function __construct(
         Filesystem $filesystem,
         CssResolver $cssUrlResolver,
-        Random $mathRandom = null
+        ?Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+   * Copyright 2025 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -16,7 +16,6 @@
             <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-32333"/>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Login-->
@@ -55,6 +54,10 @@
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProductsPage">
             <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByProducts.dataUiId}}"/>
+        </actionGroup>
+        <!-- Filter by product name to isolate test data before grabbing review count -->
+        <actionGroup ref="AdminFilterProductReviewByNameActionGroup" stepKey="filterByProductName">
+            <argument name="productName" value="$$createProduct1.name$$"/>
         </actionGroup>
         <!--Sort Review Column -->
         <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabReviewQuantity"/>

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category\FileInfo;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
@@ -65,28 +66,17 @@ class FileInfoTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->mediaDirectory = $this->createMock(WriteInterface::class);
 
-        $this->baseDirectory = $baseDirectory = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $this->baseDirectory = $baseDirectory = $this->createMock(ReadInterface::class);
 
-        $this->pubDirectory = $pubDirectory = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $this->pubDirectory = $pubDirectory = $this->createMock(ReadInterface::class);
 
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
-        $this->storeManager->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->store);
+        $this->store = $this->createMock(Store::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager->method('getStore')->willReturn($this->store);
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
 
         $this->filesystem->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -102,9 +92,7 @@ class FileInfoTest extends TestCase
                 }
             );
 
-        $this->mime = $this->getMockBuilder(Mime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mime = $this->createMock(Mime::class);
 
         $this->baseDirectory->method('getAbsolutePath')
             ->willReturn('/a/b/c/');
@@ -174,8 +162,8 @@ class FileInfoTest extends TestCase
     /**
      * @param $fileName
      * @param $fileMediaPath
-     * @dataProvider isExistProvider
      */
+    #[DataProvider('isExistProvider')]
     public function testIsExist($fileName, $fileMediaPath)
     {
         $this->mediaDirectory->method('getAbsolutePath')
@@ -203,8 +191,8 @@ class FileInfoTest extends TestCase
     /**
      * @param $fileName
      * @param $expected
-     * @dataProvider isBeginsWithMediaDirectoryPathProvider
      */
+    #[DataProvider('isBeginsWithMediaDirectoryPathProvider')]
     public function testIsBeginsWithMediaDirectoryPath($fileName, $expected)
     {
         $this->mediaDirectory->method('getAbsolutePath')

@@ -1,13 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Adminhtml;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Adminhtml\Express;
@@ -18,6 +21,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ExpressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Express
      */
@@ -69,11 +75,19 @@ class ExpressTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->nvp = $this->getMockBuilder(Nvp::class)
-            ->addMethods(['setProcessableErrors'])
-            ->onlyMethods(['getData', 'callDoAuthorization'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        $jsonHelper = $this->createMock(JsonHelper::class);
+        $directoryHelper = $this->createMock(DirectoryHelper::class);
+        
+        $objectManager->prepareObjectManager([
+            [JsonHelper::class, $jsonHelper],
+            [DirectoryHelper::class, $directoryHelper]
+        ]);
+        
+        $this->nvp = $this->createPartialMockWithReflection(
+            Nvp::class,
+            ['setProcessableErrors', 'getData', 'callDoAuthorization']
+        );
         $this->nvp->method('getData')->willReturn([]);
         $this->nvp->method('setProcessableErrors')->willReturnSelf();
 
@@ -83,7 +97,7 @@ class ExpressTest extends TestCase
         );
         $this->pro->method('getApi')->willReturn($this->nvp);
 
-        $this->transaction = $this->getMockForAbstractClass(TransactionInterface::class);
+        $this->transaction = $this->createMock(TransactionInterface::class);
         $this->transactionRepository = $this->createPartialMock(
             TransactionRepository::class,
             ['getByTransactionType']
@@ -98,7 +112,7 @@ class ExpressTest extends TestCase
             ]
         );
 
-        $this->paymentInstance = $this->getMockForAbstractClass(MethodInterface::class);
+        $this->paymentInstance = $this->createMock(MethodInterface::class);
         $this->payment = $this->createPartialMock(
             Payment::class,
             [
@@ -181,8 +195,8 @@ class ExpressTest extends TestCase
      * @param float $authorizedAmount
      * @param bool $isAuthAllowed
      * @throws LocalizedException
-     * @dataProvider paymentDataProvider
      */
+    #[DataProvider('paymentDataProvider')]
     public function testIsOrderAuthorizationAllowed(
         string $method,
         string $action,

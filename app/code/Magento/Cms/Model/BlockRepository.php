@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Cms\Model;
@@ -99,7 +99,7 @@ class BlockRepository implements BlockRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null,
+        ?CollectionProcessorInterface $collectionProcessor = null,
         ?HydratorInterface $hydrator = null
     ) {
         $this->resource = $resource;

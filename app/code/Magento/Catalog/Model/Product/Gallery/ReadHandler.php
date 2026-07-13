@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -65,6 +65,10 @@ class ReadHandler implements ExtensionInterface
         $this->addMediaDataToProduct(
             $entity,
             $mediaEntries
+        );
+        $entity->setOrigData(
+            $this->getAttribute()->getAttributeCode(),
+            $entity->getData($this->getAttribute()->getAttributeCode())
         );
 
         return $entity;

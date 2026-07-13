@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Loader\File;
 
@@ -17,6 +17,6 @@ class Csv extends AbstractFile
      */
     protected function _readFile()
     {
-        return fgetcsv($this->_fileHandler, null, ',', '"');
+        return fgetcsv($this->_fileHandler, null, ',', '"', '\\');
     }
 }

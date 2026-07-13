@@ -1,23 +1,13 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Plugin;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\CartRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +19,8 @@ use Magento\SalesRule\Plugin\CouponUsagesIncrementMultishipping;
 
 class CouponUsageIncreamentForMultishippingTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PlaceOrderDefault|MockObject
      */
@@ -59,16 +51,15 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->subjectMock = $this->getMockBuilder(PlaceOrderDefault::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subjectMock = $this->createMock(PlaceOrderDefault::class);
+        
         $this->updateCouponUsagesMock = $this->getMockBuilder(UpdateCouponUsages::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['execute'])
             ->getMock();
-        $this->cartRepositoryInterfaceMock = $this->getMockBuilder(CartRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        $this->cartRepositoryInterfaceMock = $this->createMock(CartRepositoryInterface::class);
+        
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->onlyMethods(['getQuoteId'])
             ->disableOriginalConstructor()
@@ -88,11 +79,10 @@ class CouponUsageIncreamentForMultishippingTest extends TestCase
             return $orderMock;
         };
         /** @var Quote|MockObject $quote */
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCouponCode'])
-            ->onlyMethods(['dataHasChangedFor'])
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCouponCode', 'dataHasChangedFor']
+        );
         $this->orderMock->expects($this->once())->method('getQuoteId')
             ->willReturn(1);
 

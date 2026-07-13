@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Ddl;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Factories\Table as DtoTable;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Data Definition for table
@@ -236,6 +238,22 @@ class Table
      * @var array
      */
     protected $_options = ['type' => 'INNODB', 'charset' => 'utf8', 'collate' => 'utf8_general_ci'];
+
+    /***
+     * @var DtoTable|null
+     */
+    private ?DtoTable $DtoTable;
+
+    /***
+     * constructor
+     *
+     * @param DtoTable|null $DtoTable
+     */
+    public function __construct(
+        ?DtoTable $DtoTable = null
+    ) {
+        $this->DtoTable = $DtoTable ?: ObjectManager::getInstance()->get(DtoTable::class);
+    }
 
     /**
      * Set table name
@@ -636,7 +654,7 @@ class Table
     /**
      * Retrieve table option value by option name
      *
-     * Return null if option does not exits
+     * Return null if option does not exist
      *
      * @param string $key
      * @return null|string
@@ -645,6 +663,12 @@ class Table
     {
         if (!isset($this->_options[$key])) {
             return null;
+        }
+        if (strtolower($key) == 'charset') {
+            return $this->DtoTable->getDefaultCharset();
+        }
+        if (strtolower($key) == 'collate') {
+            return $this->DtoTable->getDefaultCollation();
         }
         return $this->_options[$key];
     }

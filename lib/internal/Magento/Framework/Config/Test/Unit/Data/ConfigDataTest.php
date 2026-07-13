@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Config\Test\Unit\Data;
 
 use Magento\Framework\Config\Data\ConfigData;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConfigDataTest extends TestCase
 {
@@ -37,9 +38,8 @@ class ConfigDataTest extends TestCase
 
     /**
      * @param string $key
-     * @param string $expectedException
-     * @dataProvider setWrongKeyDataProvider
-     */
+     * @param string $expectedException     */
+    #[DataProvider('setWrongKeyDataProvider')]
     public function testSetWrongKey($key, $expectedException)
     {
         $configData = new ConfigData('testKey');

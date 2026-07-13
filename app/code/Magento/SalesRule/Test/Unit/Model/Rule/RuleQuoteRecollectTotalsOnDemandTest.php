@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -35,7 +35,7 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
         $this->resourceModel = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getConnection', 'getMainTable'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->model = new RuleQuoteRecollectTotalsOnDemand($this->resourceModel);
     }
 
@@ -43,6 +43,8 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
      * Test that multiple updates query are executed on large result
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testExecute(): void
     {
@@ -51,11 +53,11 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
         $selectRange1 = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['from', 'where', 'order', 'limit'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $selectRange2 = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['from', 'where', 'order', 'limit'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $selectRange1->method('from')
             ->willReturnSelf();
         $selectRange1->method('where')
@@ -99,7 +101,7 @@ class RuleQuoteRecollectTotalsOnDemandTest extends TestCase
         $connection = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['select', 'fetchCol', 'update'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $connection->expects($this->exactly(2))
             ->method('select')
             ->willReturnOnConsecutiveCalls($selectRange1, $selectRange2);

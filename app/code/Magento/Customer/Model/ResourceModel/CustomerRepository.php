@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -42,6 +42,8 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class CustomerRepository implements CustomerRepositoryInterface
 {
@@ -166,7 +168,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null,
+        ?DelegatedStorage $delegatedStorage = null,
         ?GroupRepositoryInterface $groupRepository = null
     ) {
         $this->customerFactory = $customerFactory;
@@ -185,7 +187,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
         $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
-        $this->groupRepository = $groupRepository ?: ObjectManager::getInstance()->get(GroupRepositoryInterface::class);
+        $this->groupRepository = $groupRepository
+            ?: ObjectManager::getInstance()->get(GroupRepositoryInterface::class);
     }
 
     /**
@@ -206,17 +209,13 @@ class CustomerRepository implements CustomerRepositoryInterface
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
         $prevCustomerData = $prevCustomerDataArr = null;
-        if ($customer->getDefaultBilling()) {
-            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_BILLING);
-        }
-        if ($customer->getDefaultShipping()) {
-            $this->validateDefaultAddress($customer, CustomerInterface::DEFAULT_SHIPPING);
-        }
+        $defaultBillingAddressFlag = $defaultShippingAddressFlag = false;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
             $customer->setCreatedAt($prevCustomerData->getCreatedAt());
         }
+
         /** @var $customer \Magento\Customer\Model\Data\Customer */
         $customerArr = $customer->__toArray();
         $customer = $this->imageProcessor->save(
@@ -233,6 +232,28 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->populateWithOrigData($customerModel, $prevCustomerDataArr);
         //Model's actual ID field maybe different than "id" so "id" field from $customerData may be ignored.
         $customerModel->setId($customer->getId());
+
+        if ($customer->getDefaultBilling()) {
+            $defaultBillingAddressFlag = $this->validateDefaultAddress(
+                $customer,
+                $prevCustomerData,
+                CustomerInterface::DEFAULT_BILLING
+            );
+            if (!$defaultBillingAddressFlag) {
+                $customerModel->setDefaultBilling(null);
+            }
+        }
+        if ($customer->getDefaultShipping()) {
+            $defaultShippingAddressFlag = $this->validateDefaultAddress(
+                $customer,
+                $prevCustomerData,
+                CustomerInterface::DEFAULT_SHIPPING
+            );
+            if (!$defaultShippingAddressFlag) {
+                $customerModel->setDefaultShipping(null);
+            }
+        }
+
         $storeId = $customerModel->getStoreId();
         if ($storeId === null) {
             $customerModel->setStoreId(
@@ -250,6 +271,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($prevCustomerData && $prevCustomerData->getEmail() !== $customerModel->getEmail()) {
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
+            $isEmailChanged = true;
         }
         if (!array_key_exists('addresses', $customerArr)
             && null !== $prevCustomerDataArr
@@ -296,6 +318,15 @@ class CustomerRepository implements CustomerRepositoryInterface
         }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
+        if (!empty($isEmailChanged)) {
+            $this->eventManager->dispatch(
+                'customer_email_changed',
+                [
+                    'customer' => $savedCustomer,
+                    'original_customer_email' => $prevCustomerData->getEmail()
+                ]
+            );
+        }
         $this->eventManager->dispatch(
             'customer_save_after_data_object',
             [
@@ -569,34 +600,69 @@ class CustomerRepository implements CustomerRepositoryInterface
      * To validate default address
      *
      * @param CustomerInterface $customer
+     * @param CustomerInterface|null $prevCustomerData
      * @param string $defaultAddressType
-     * @return void
+     * @return bool
      * @throws InputException
      */
     private function validateDefaultAddress(
         CustomerInterface $customer,
+        ?CustomerInterface $prevCustomerData,
         string $defaultAddressType
-    ): void {
-        $defaultAddressId = $defaultAddressType === CustomerInterface::DEFAULT_BILLING ?
-            (int) $customer->getDefaultBilling() : (int) $customer->getDefaultShipping();
+    ): bool {
+            $defaultAddressId = (int)(
+            $defaultAddressType === CustomerInterface::DEFAULT_BILLING
+                ? $customer->getDefaultBilling()
+                : $customer->getDefaultShipping()
+            );
 
-        if ($customer->getAddresses()) {
-            foreach ($customer->getAddresses() as $address) {
-                $addressArray = $address->__toArray();
-                $addressId = (int) $address->getId();
-                if (!empty($addressArray[$defaultAddressType])
-                    || empty($addressId)
-                    || $defaultAddressId === $addressId) {
-                    return;
+        if (!$defaultAddressId) {
+            return true;
+        }
+
+        $customerId = (int)($customer->getId() ?? 0);
+        if (!$customerId && $prevCustomerData) {
+            $customerId = (int)($prevCustomerData->getId() ?? 0);
+        }
+        if ($prevCustomerData && $prevCustomerData->getAddresses()) {
+            foreach ($prevCustomerData->getAddresses() as $address) {
+                if ($defaultAddressId === (int)$address->getId()) {
+                    if ($customerId && (int)$address->getCustomerId() !== $customerId) {
+                        $this->throwInvalidAddressException($defaultAddressType);
+                    }
+                    return true;
                 }
             }
-
-            throw new InputException(
-                __(
-                    'The %fieldName value is invalid. Set the correct value and try again.',
-                    ['fieldName' => $defaultAddressType]
-                )
-            );
+            $this->throwInvalidAddressException($defaultAddressType);
         }
+
+        if ($defaultAddressId) {
+            try {
+                $customerAddress = $this->addressRepository->getById($defaultAddressId);
+                if ((int)$customerAddress->getCustomerId() !== $customerId) {
+                    $this->throwInvalidAddressException($defaultAddressType);
+                }
+            } catch (NoSuchEntityException $e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Throw invalid address exception
+     *
+     * @param string $fieldName
+     * @return void
+     * @throws InputException
+     */
+    private function throwInvalidAddressException(string $fieldName): void
+    {
+        throw new InputException(
+            __(
+                'The %fieldName value is invalid. Set the correct value and try again.',
+                ['fieldName' => $fieldName]
+            )
+        );
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
@@ -9,6 +9,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks Mysql adapter behaviour
@@ -238,8 +239,8 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      * @param array $options
      * @param string|bool $expected
      * @throws \Zend_Db_Exception
-     * @dataProvider getAutoIncrementFieldDataProvider
      */
+    #[DataProvider('getAutoIncrementFieldDataProvider')]
     public function testGetAutoIncrementField(array $options, $expected)
     {
         $adapter = $this->getDbAdapter();

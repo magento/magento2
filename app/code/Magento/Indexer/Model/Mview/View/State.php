@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Indexer\Model\Mview\View;
 
@@ -65,8 +65,8 @@ class State extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         \Magento\Indexer\Model\ResourceModel\Mview\View\State $resource,
         \Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection $resourceCollection,
         array $data = [],
-        \Magento\Framework\Lock\LockManagerInterface $lockManager = null,
-        \Magento\Framework\App\DeploymentConfig $configReader = null
+        ?\Magento\Framework\Lock\LockManagerInterface $lockManager = null,
+        ?\Magento\Framework\App\DeploymentConfig $configReader = null
     ) {
         if (!isset($data['mode'])) {
             $data['mode'] = self::MODE_DISABLED;

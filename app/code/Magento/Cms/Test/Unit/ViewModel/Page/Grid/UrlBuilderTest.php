@@ -1,7 +1,7 @@
 <?php
-/***
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  * Class UrlBuilderTest
  *
  * Testing the UrlBuilder
+ *
  */
 class UrlBuilderTest extends TestCase
 {
@@ -53,16 +55,10 @@ class UrlBuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontendUrlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl', 'setScope'])
-            ->getMockForAbstractClass();
-        $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->getTargetUrlMock = $this->getMockBuilder(TargetUrlBuilderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->frontendUrlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->urlEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->getTargetUrlMock = $this->createMock(TargetUrlBuilderInterface::class);
         $this->viewModel = new UrlBuilder(
             $this->frontendUrlBuilderMock,
             $this->urlEncoderMock,
@@ -74,13 +70,12 @@ class UrlBuilderTest extends TestCase
     /**
      * Testing url builder with no scope provided
      *
-     * @dataProvider nonScopedUrlsDataProvider
-     *
      * @param array $url
      * @param string $expected
      * @param string $store
      * @param null $scope
      */
+    #[DataProvider('nonScopedUrlsDataProvider')]
     public function testUrlBuilderWithNoScope(array $url, string $expected, string $store, $scope = null)
     {
         $this->frontendUrlBuilderMock->expects($this->any())
@@ -120,15 +115,14 @@ class UrlBuilderTest extends TestCase
      *
      * @param array $routePaths
      * @param array $expectedUrls
-     *
-     * @dataProvider scopedUrlsDataProvider
      */
+    #[DataProvider('scopedUrlsDataProvider')]
     public function testScopedUrlBuilder(
         array $routePaths,
         array $expectedUrls
     ) {
         /** @var StoreInterface|MockObject $storeMock */
-        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock = $this->createMock(StoreInterface::class);
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn('en');

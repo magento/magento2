@@ -1,17 +1,23 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 use Magento\Catalog\Helper\Data;
 
 /** @var \Magento\Backend\Block\Template $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var $escaper \Magento\Framework\Escaper */
 ?>
 
 <?php
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
+if (!method_exists($jsonHelper, 'getAttributeHiddenFields')) {
+    /** @var \Magento\Catalog\ViewModel\Attribute\ProductAttributeHelper $viewModel */
+    $viewModel = $block->getViewModel();
+    $jsonHelper = $viewModel->getCatalogHelper();
+}
 $scriptString = <<<script
 require([
     "jquery",
@@ -234,7 +240,7 @@ script;
         elseif ($one == '_scope'):
             $scriptString .= 'scopeVisibility = false;';
         else:
-            $scriptString .= "setRowVisibility('" . $block->escapeJs($one) . "', false);";
+            $scriptString .= "setRowVisibility('" . $escaper->escapeJs($one) . "', false);";
         endif;
     endforeach;
     $scriptString .= <<<script
@@ -259,7 +265,7 @@ script;
     setRowVisibility('default_value_yesno', defaultValueYesnoVisibility);
     setRowVisibility('is_global', scopeVisibility);
 
-    var elems = document.getElementsByName('default[]');
+    var elems = document.querySelectorAll('input[name^="default["]');
     for (var i = 0; i < elems.length; i++) {
         elems[i].type = optionDefaultInputType;
     }

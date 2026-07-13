@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2023 Adobe
- * All Rights Reserved.
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
  */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -77,14 +77,15 @@
             <expectedResult type="string">Closed</expectedResult>
             <actualResult type="variable">$getLatestOrderStatus</actualResult>
         </assertEquals>
-
+        <!-- open order view page -->
+        <click selector="{{CustomerOrderCancellationSection.linkToOpenViewOrder}}" stepKey="clickOnLinkToViewOrder"/>
         <!--Grab Order Id for later usage-->
-        <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
-
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="getOrderId"/>
         <!--Go to Admin Sales Order View Page-->
-        <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderId})}}" stepKey="navigateToSalesOrderViewPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="navigateToSalesOrderViewPage">
+            <argument name="entityId" value="{$getOrderId}"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
-
         <!--Check Order History block-->
         <grabTextFrom selector="{{AdminSalesOrderViewSection.orderHistoryNoteListFirstComment}}" stepKey="getOrderCancellationReason"/>
         <assertEquals message="Order cancellation reason should be Other." stepKey="assertOrderCancellationReason" after="getOrderCancellationReason">

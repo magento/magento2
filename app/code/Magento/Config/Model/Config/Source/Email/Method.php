@@ -1,23 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
+namespace Magento\Config\Model\Config\Source\Email;
 
 /**
  * Source for email send method
  *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
-namespace Magento\Config\Model\Config\Source\Email;
-
-/**
  * @api
  * @since 100.0.2
  */
 class Method implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * Return option array
+     *
      * @return array
      */
     public function toOptionArray()

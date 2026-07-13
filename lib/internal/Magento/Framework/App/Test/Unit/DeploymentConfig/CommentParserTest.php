@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class CommentParserTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->readDirectoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();

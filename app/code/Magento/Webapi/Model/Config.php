@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Webapi\Model;
@@ -58,7 +58,7 @@ class Config implements ConfigInterface
     public function __construct(
         WebapiCache $cache,
         Reader $configReader,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->cache = $cache;
         $this->configReader = $configReader;

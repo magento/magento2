@@ -1,21 +1,7 @@
 <?php
-/************************************************************************
- *
- *  ADOBE CONFIDENTIAL
- *  ___________________
- *
- *  Copyright 2024 Adobe
- *  All Rights Reserved.
- *
- *  NOTICE: All information contained herein is, and remains
- *  the property of Adobe and its suppliers, if any. The intellectual
- *  and technical concepts contained herein are proprietary to Adobe
- *  and its suppliers and are protected by all applicable intellectual
- *  property laws, including trade secret and copyright laws.
- *  Dissemination of this information or reproduction of this material
- *  is strictly forbidden unless prior written permission is obtained
- *  from Adobe.
- *  ************************************************************************
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,14 +12,20 @@ use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Catalog\Test\Fixture\ProductStock as ProductStockFixture;
+use Magento\Quote\Test\Fixture\QuoteIdMask as QuoteMaskFixture;
 
 /**
  * Get add to cart through GraphQl query and variables
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToCartTest extends GraphQlAbstract
 {
@@ -60,10 +52,10 @@ class AddProductsToCartTest extends GraphQlAbstract
      * Test addProductsToCart mutation by passing SKU Upper & Lower case
      *
      * @param string $sku
-     * @dataProvider skuDataProvider
      * @throws NoSuchEntityException
      * @throws Exception
      */
+    #[DataProvider('skuDataProvider')]
     #[
         DataFixture(ProductFixture::class, ['sku' => 'Upper_And_Lower_Test_Prod']),
         DataFixture(GuestCartFixture::class, as: 'cart'),
@@ -86,6 +78,54 @@ class AddProductsToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @throws Exception
+     */
+    #[
+        Config('cataloginventory/options/not_available_message', 2),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_10', 'price' => 100.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
+    ]
+    public function testAddSimpleProductNotAvailableMessageInError()
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getAddToCartMutation($maskedQuoteId, 'simple_10', 100);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(
+            [
+                'code' => 'INSUFFICIENT_STOCK',
+                'message' => 'Not enough items for sale'
+            ],
+            $response['addProductsToCart']['user_errors'][0]
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[
+        Config('cataloginventory/options/not_available_message', 1),
+        DataFixture(ProductFixture::class, ['sku' => 'simple_10', 'price' => 100.00], as: 'product'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
+        DataFixture(ProductStockFixture::class, ['prod_id' => '$product.id$', 'prod_qty' => 90], 'prodStock')
+    ]
+    public function testAddSimpleProductNotAvailableMessageInErrorWithQtyShown()
+    {
+        $maskedQuoteId = $this->fixtures->get('quoteIdMask')->getMaskedId();
+        $query = $this->getAddToCartMutation($maskedQuoteId, 'simple_10', 100);
+        $response = $this->graphQlMutation($query);
+        self::assertEquals(
+            [
+                'code' => 'INSUFFICIENT_STOCK',
+                'message' => 'Only 90 of 100 available'
+            ],
+            $response['addProductsToCart']['user_errors'][0]
+        );
+    }
+
+    /**
      * Data provider with sku in uppercase and lowercase
      *
      * @return array
@@ -103,9 +143,10 @@ class AddProductsToCartTest extends GraphQlAbstract
      *
      * @param string $maskedQuoteId
      * @param string $sku
+     * @param int $qty
      * @return string
      */
-    private function getAddToCartMutation(string $maskedQuoteId, string $sku): string
+    private function getAddToCartMutation(string $maskedQuoteId, string $sku, int $qty = 1): string
     {
         return <<<MUTATION
 mutation {
@@ -114,7 +155,7 @@ mutation {
         cartItems: [
             {
                 sku: "{$sku}"
-                quantity: 1
+                quantity: $qty
             }
         ]
     ) {

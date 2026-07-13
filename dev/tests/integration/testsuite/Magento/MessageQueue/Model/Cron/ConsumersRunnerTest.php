@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,12 +23,15 @@ use Magento\Framework\ShellInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 
 /**
  * Tests the different cases of consumers running by ConsumersRunner
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
+#[AllowMockObjectsWithoutExpectations]
 class ConsumersRunnerTest extends TestCase
 {
     /**
@@ -90,7 +93,7 @@ class ConsumersRunnerTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $resourceConnection = $this->objectManager->create(ResourceConnection::class);
         $deploymentConfig = $this->objectManager->create(DeploymentConfig::class);
         // create object with new otherwise dummy locker is created because of di.xml preference for integration tests
@@ -129,8 +132,8 @@ class ConsumersRunnerTest extends TestCase
      * @param array $expectedArguments
      *
      * @return void
-     * @dataProvider runDataProvider
      */
+    #[DataProvider('runDataProvider')]
     public function testArgumentMaxMessages(
         string $specificConsumer,
         int $maxMessage,
@@ -163,7 +166,7 @@ class ConsumersRunnerTest extends TestCase
               'specificConsumer' => 'exportProcessor',
               'maxMessage' => 5000,
               'command' => PHP_BINARY . ' ' . BP . '/bin/magento queue:consumers:start %s %s %s',
-              'expectedArguments' => ['exportProcessor', '--single-thread', '--max-messages=100'],
+              'expectedArguments' => ['exportProcessor', '--single-thread', '--max-messages=5000'],
           ],
         ];
     }

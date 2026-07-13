@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CurrencySymbolProvider;
@@ -17,6 +18,8 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Website;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -75,54 +78,14 @@ class CurrencySymbolProviderTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->scopeConfigMock = $this->getMockForAbstractClass(
-            ScopeConfigInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getValue']
-        );
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getWebsites']
-        );
-        $this->currentStoreMock = $this->getMockForAbstractClass(
-            StoreInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getBaseCurrency']
-        );
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->currentStoreMock = $this->createMock(Store::class);
         $this->currencyMock = $this->createMock(CurrencyModel::class);
         $this->websiteCurrencyMock = $this->createMock(CurrencyData::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->locatorMock = $this->getMockForAbstractClass(
-            LocatorInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getStore', 'getProduct']
-        );
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(
-            CurrencyInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['getWebsites', 'getCurrency']
-        );
+        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
         $this->currencySymbolProvider = $objectManager->getObject(
             CurrencySymbolProvider::class,
             [
@@ -143,8 +106,8 @@ class CurrencySymbolProviderTest extends TestCase
      * @param array $productWebsiteIds
      * @param array $currencySymbols
      * @param array $actualResult
-     * @dataProvider getWebsiteCurrencySymbolDataProvider
      */
+    #[DataProvider('getWebsiteCurrencySymbolDataProvider')]
     public function testGetCurrenciesPerWebsite(
         int $catalogPriceScope,
         string $defaultStoreCurrencySymbol,
@@ -154,35 +117,17 @@ class CurrencySymbolProviderTest extends TestCase
         array $actualResult
     ): void {
         $listOfWebsites = $listOfWebsites($this);
-        $this->locatorMock->expects($this->any())
-            ->method('getStore')
-            ->willReturn($this->currentStoreMock);
-        $this->currentStoreMock->expects($this->any())
-            ->method('getBaseCurrency')
-            ->willReturn($this->currencyMock);
-        $this->currencyMock->expects($this->any())
-            ->method('getCurrencySymbol')
-            ->willReturn($defaultStoreCurrencySymbol);
+        $this->locatorMock->method('getStore')->willReturn($this->currentStoreMock);
+        $this->currentStoreMock->method('getBaseCurrency')->willReturn($this->currencyMock);
+        $this->currencyMock->method('getCurrencySymbol')->willReturn($defaultStoreCurrencySymbol);
         $this->scopeConfigMock
-            ->expects($this->any())
-            ->method('getValue')
-            ->willReturn($catalogPriceScope);
-        $this->locatorMock->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($this->productMock);
-        $this->storeManagerMock->expects($this->any())
-            ->method('getWebsites')
-            ->willReturn($listOfWebsites);
-        $this->productMock->expects($this->any())
-            ->method('getWebsiteIds')
-            ->willReturn($productWebsiteIds);
-        $this->localeCurrencyMock->expects($this->any())
-            ->method('getCurrency')
-            ->willReturn($this->websiteCurrencyMock);
+            ->method('getValue')->willReturn($catalogPriceScope);
+        $this->locatorMock->method('getProduct')->willReturn($this->productMock);
+        $this->storeManagerMock->method('getWebsites')->willReturn($listOfWebsites);
+        $this->productMock->method('getWebsiteIds')->willReturn($productWebsiteIds);
+        $this->localeCurrencyMock->method('getCurrency')->willReturn($this->websiteCurrencyMock);
         foreach ($currencySymbols as $currencySymbol) {
-            $this->websiteCurrencyMock->expects($this->any())
-                ->method('getSymbol')
-                ->willReturn($currencySymbol);
+            $this->websiteCurrencyMock->method('getSymbol')->willReturn($currencySymbol);
         }
         $expectedResult = $this->currencySymbolProvider
             ->getCurrenciesPerWebsite();
@@ -272,21 +217,9 @@ class CurrencySymbolProviderTest extends TestCase
     {
         $websitesMock = [];
         foreach ($websites as $key => $website) {
-            $websitesMock[$key] = $this->getMockForAbstractClass(
-                WebsiteInterface::class,
-                [],
-                '',
-                true,
-                true,
-                true,
-                ['getId', 'getBaseCurrencyCode']
-            );
-            $websitesMock[$key]->expects($this->any())
-                ->method('getId')
-                ->willReturn($website['id']);
-            $websitesMock[$key]->expects($this->any())
-                ->method('getBaseCurrencyCode')
-                ->willReturn($website['base_currency_code']);
+            $websitesMock[$key] = $this->createMock(Website::class);
+            $websitesMock[$key]->method('getId')->willReturn($website['id']);
+            $websitesMock[$key]->method('getBaseCurrencyCode')->willReturn($website['base_currency_code']);
         }
         return $websitesMock;
     }

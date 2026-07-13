@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\Interception;
 
@@ -48,9 +48,9 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
         \Magento\Framework\ObjectManager\DefinitionInterface $classDefinitions,
         array $scopePriorityScheme,
         $cacheId = 'plugins',
-        SerializerInterface $serializer = null,
-        ConfigLoaderInterface $configLoader = null,
-        PluginListGenerator $pluginListGenerator = null
+        ?SerializerInterface $serializer = null,
+        ?ConfigLoaderInterface $configLoader = null,
+        ?PluginListGenerator $pluginListGenerator = null
     ) {
         parent::__construct(
             $reader,

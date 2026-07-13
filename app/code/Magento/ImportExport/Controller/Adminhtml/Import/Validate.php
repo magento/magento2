@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -51,10 +51,16 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
                 $ids = $import->getValidatedIds();
                 if (count($ids) > 0) {
                     $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                    $resultBlock->addAction(
+                        'value',
+                        '_import_history_id',
+                        $this->historyModel->getId()
+                    );
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
@@ -132,7 +138,9 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         $errors = $errorAggregator->getAllErrors();
         $rowNumber = [];
         foreach ($errors as $error) {
-            $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            if ($error->getRowNumber()) {
+                $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            }
         }
         (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
         return $this->_validateRowError;

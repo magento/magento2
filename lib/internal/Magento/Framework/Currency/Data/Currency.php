@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Currency\Data;
 
 use Locale;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Currency\Exception\CurrencyException;
+use Magento\Framework\CurrencyInterface;
 use Magento\Framework\NumberFormatter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
-use Zend_Cache_Core;
-use Magento\Framework\CurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -29,7 +30,7 @@ class Currency
     public const LEFT = 32;
 
     /**
-     * @var Zend_Cache_Core
+     * @var FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
      */
     private static $cache = null;
 
@@ -374,7 +375,8 @@ class Currency
                 $region = substr($this->options['locale'], (strpos($this->options['locale'], '_') + 1));
             }
         }
-        $locale = strtolower($region) . '_' . $region;
+        $locale = substr($this->options['locale'], 0, strpos($this->options['locale'], '_')) . '_' . $region;
+
         $data = NumberFormatter::create($locale, NumberFormatter::CURRENCY)
             ->getTextAttribute(NumberFormatter::CURRENCY_CODE);
 
@@ -406,7 +408,7 @@ class Currency
     /**
      * Returns the set cache.
      *
-     * @return Zend_Cache_Core
+     * @return FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
      */
     public static function getCache()
     {
@@ -416,10 +418,10 @@ class Currency
     /**
      * Sets a cache for Currency
      *
-     * @param Zend_Cache_Core $cache
+     * @param FrontendInterface|\Psr\Cache\CacheItemPoolInterface $cache
      * @return void
      */
-    public static function setCache(Zend_Cache_Core $cache)
+    public static function setCache($cache)
     {
         self::$cache = $cache;
     }
@@ -449,14 +451,13 @@ class Currency
      *
      * @param string|null $tag
      * @return void
-     * @throws \Zend_Cache_Exception
      */
     public static function clearCache($tag = null): void
     {
         if ($tag) {
-            self::$cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tag);
+            self::$cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, $tag);
         } else {
-            self::$cache->clean(\Zend_Cache::CLEANING_MODE_ALL);
+            self::$cache->clean(CacheConstants::CLEANING_MODE_ALL);
         }
     }
 

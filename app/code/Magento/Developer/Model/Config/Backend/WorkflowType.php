@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Model\Config\Backend;
 
@@ -39,8 +39,8 @@ class WorkflowType extends \Magento\Framework\App\Config\Value
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
         CleanupFiles $cleaner,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);

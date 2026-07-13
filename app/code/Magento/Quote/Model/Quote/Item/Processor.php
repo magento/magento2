@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Item;
 
@@ -101,7 +101,7 @@ class Processor
         }
 
         $customPrice = $request->getCustomPrice();
-        if (!empty($customPrice) && !$candidate->getParentProductId()) {
+        if ($customPrice !== null && !$candidate->getParentProductId()) {
             $item->setCustomPrice($customPrice);
             $item->setOriginalCustomPrice($customPrice);
         }

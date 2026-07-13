@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -92,13 +93,13 @@ class SaveTest extends AbstractBackendController
     /**
      * Create customer
      *
-     * @dataProvider createCustomerProvider
      * @magentoDbIsolation enabled
      *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('createCustomerProvider')]
     public function testCreateCustomer(array $postData, array $expectedData): void
     {
         $this->dispatchCustomerSave($postData);
@@ -164,7 +165,6 @@ class SaveTest extends AbstractBackendController
     /**
      * Create customer with exceptions
      *
-     * @dataProvider createCustomerErrorsProvider
      * @magentoDbIsolation enabled
      *
      * @param array $postData
@@ -172,6 +172,7 @@ class SaveTest extends AbstractBackendController
      * @param array $expectedMessage
      * @return void
      */
+    #[DataProvider('createCustomerErrorsProvider')]
     public function testCreateCustomerErrors(array $postData, array $expectedData, array $expectedMessage): void
     {
         $this->dispatchCustomerSave($postData);
@@ -385,7 +386,7 @@ class SaveTest extends AbstractBackendController
                 'sendemail_store_id' => '1',
                 'sendemail' => '1',
                 CustomerData::CREATED_AT => '2000-01-01 00:00:00',
-                CustomerData::DEFAULT_SHIPPING => '_item1',
+                CustomerData::DEFAULT_SHIPPING => '1',
                 CustomerData::DEFAULT_BILLING => '1'
             ]
         ];
@@ -611,10 +612,12 @@ class SaveTest extends AbstractBackendController
         $name = $this->customerViewHelper->getCustomerName($customer);
 
         $transportMock = $this->getMockBuilder(TransportInterface::class)
-            ->onlyMethods(['sendMessage'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['sendMessage', 'getMessage'])
+            ->getMock();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
+        $transportMock->method('getMessage')
+            ->willReturn(null);
         $transportBuilderMock = $this->getMockBuilder(TransportBuilder::class)
             ->disableOriginalConstructor()
             ->onlyMethods(

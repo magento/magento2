@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,48 +17,93 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Asset\MergeService;
+use Magento\Framework\Validator\Url as UrlValidator;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Class BaseurlTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BaseurlTest extends TestCase
 {
     public function testSaveMergedJsCssMustBeCleaned()
     {
-        $context = (new ObjectManager($this))->getObject(Context::class);
-
         $resource = $this->createMock(Data::class);
         $resource->expects($this->any())->method('addCommitCallback')->willReturn($resource);
-        $resourceCollection = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resourceCollection = $this->createMock(AbstractDb::class);
         $mergeService = $this->createMock(MergeService::class);
         $coreRegistry = $this->createMock(Registry::class);
-        $coreConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $cacheTypeListMock = $this->getMockBuilder(TypeListInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $model = $this->getMockBuilder(Baseurl::class)
-            ->onlyMethods(['getOldValue'])
-            ->setConstructorArgs(
-                [
-                    $context,
-                    $coreRegistry,
-                    $coreConfig,
-                    $cacheTypeListMock,
-                    $mergeService,
-                    $resource,
-                    $resourceCollection
-                ]
-            )
-            ->getMock();
-
+        $coreConfig = $this->createMock(ScopeConfigInterface::class);
+        $cacheTypeListMock = $this->createMock(TypeListInterface::class);
+        
         $cacheTypeListMock->expects($this->once())
             ->method('invalidate')
-            ->with(Config::TYPE_IDENTIFIER)
-            ->willReturn($model);
+            ->with(Config::TYPE_IDENTIFIER);
         $mergeService->expects($this->once())->method('cleanMergedJsCss');
+
+        $model = (new ObjectManager($this))->getObject(
+            Baseurl::class,
+            [
+                'config' => $coreConfig,
+                'registry' => $coreRegistry,
+                'resource' => $resource,
+                'resourceCollection' => $resourceCollection,
+                'cacheTypeList' => $cacheTypeListMock,
+                'mergeService' => $mergeService,
+            ]
+        );
 
         $model->setValue('http://example.com/')->setPath(Store::XML_PATH_UNSECURE_BASE_URL);
         $model->afterSave();
+    }
+
+    /**
+     * Test beforeSave method to ensure URL is converted to lower case.
+     *
+     * @param string $value
+     * @param string $expectedValue
+     * @return void
+     */
+    #[DataProvider('beforeSaveDataProvider')]
+    public function testBeforeSaveConvertLowerCase(string $value, string $expectedValue): void
+    {
+        $model = (new ObjectManager($this))->getObject(Baseurl::class);
+
+        $urlValidatorMock = $this->createMock(UrlValidator::class);
+
+        $objectManagerInterface = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerInterface->expects($this->exactly(1))
+            ->method('get')
+            ->with(UrlValidator::class)
+            ->willReturn($urlValidatorMock);
+        AppObjectManager::setInstance($objectManagerInterface);
+
+        $urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($expectedValue, ['http', 'https'])
+            ->willReturn(true);
+
+        $model->setValue($value);
+        $model->beforeSave();
+        $this->assertEquals($expectedValue, $model->getValue());
+    }
+
+    /**
+     * Data provider for testBeforeSaveConvertLowerCase.
+     *
+     * @return array
+     */
+    public static function beforeSaveDataProvider(): array
+    {
+        return [
+            ['https://Example1.com/', 'https://example1.com/'],
+            ['https://EXAMPLE2.COM/', 'https://example2.com/'],
+            ['HTtpS://ExamPLe3.COM/', 'https://example3.com/'],
+        ];
     }
 }

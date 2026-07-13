@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\RemoteStorage\Driver\Adapter\Cache\CacheInterface" type="Magento\RemoteStorage\Driver\Adapter\Cache\Generic"/>
     <preference for="Magento\RemoteStorage\Driver\Adapter\CachedAdapterInterface" type="Magento\RemoteStorage\Driver\Adapter\CachedAdapter"/>
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProvider"/>
-    <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactory"/>
     <preference for="Magento\Framework\Filesystem\DriverPool" type="Magento\RemoteStorage\Driver\DriverPool"/>
     <preference for="Magento\Framework\File\Uploader" type="Magento\RemoteStorage\Model\File\Uploader"/>
     <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">

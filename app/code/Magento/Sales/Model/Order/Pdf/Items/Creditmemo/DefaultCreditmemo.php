@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,8 +37,8 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->string = $string;
@@ -71,7 +71,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
         $lines[0] = [
             [
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                'text' => $this->string->split(html_entity_decode($item->getName()), 35, true, true),
+                'text' => $this->string->split(html_entity_decode($item->getName()), 25, true, true),
                 'feed' => 35
             ]
         ];
@@ -153,7 +153,7 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
             }
         }
 
-        $lineBlock = ['lines' => $lines, 'height' => 20, 'shift' => 5];
+        $lineBlock = ['lines' => $lines, 'height' => 20];
 
         $page = $pdf->drawLineBlocks($page, [$lineBlock], ['table_header' => true]);
         $this->setPage($page);

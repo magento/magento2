@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,9 +15,9 @@
         <element name="searchInput" type="input" selector="#fulltext"/>
         <element name="searchButton" type="button" selector="//*[@id='fulltext']/parent::*/button"/>
         <element name="addNewPageButton" type="button" selector="#add" timeout="30"/>
-        <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//button[text()='Select']" parameterized="true"/>
-        <element name="edit" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Edit']" parameterized="true"/>
-        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='View']" parameterized="true"/>
+        <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//button[text()='Select']" parameterized="true"/>
+        <element name="edit" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//a[text()='Edit']" parameterized="true"/>
+        <element name="preview" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//a[text()='View']" parameterized="true"/>
         <element name="clearAllButton" type="button" selector="//div[@class='admin__data-grid-header']//button[contains(text(), 'Clear all')]" timeout="60"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
@@ -27,7 +27,7 @@
         <element name="activeFilter" type="button" selector="(//div[contains(@class, 'admin__data-grid-filters-current') and contains(@class, '_show')])[1]"/>
         <element name="savePageSuccessMessage" type="text" selector=".message-success"/>
         <element name="savePageWarningMessage" type="text" selector=".message-warning"/>
-        <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//a[text()='Delete']" parameterized="true"/>
+        <element name="delete" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell data-action-position']//a[text()='Delete']" parameterized="true"/>
         <element name="deleteConfirm" type="button" selector=".action-primary.action-accept" timeout="60"/>
         <element name="pageRowCheckboxByIdentifier" type="checkbox" selector="//table[@data-role='grid']//td[count(../../..//th[./*[.='URL Key']]/preceding-sibling::th) + 1][./*[.='{{identifier}}']]/../td//input[@data-action='select-row']"  parameterized="true" />
         <element name="massActionsButton" type="button" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//button[contains(@class, 'action-select')]" />

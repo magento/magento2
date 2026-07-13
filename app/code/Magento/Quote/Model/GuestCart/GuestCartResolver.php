@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -64,7 +64,7 @@ class GuestCartResolver
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function resolve(string $predefinedMaskedQuoteId = null): Quote
+    public function resolve(?string $predefinedMaskedQuoteId = null): Quote
     {
         $maskedQuoteId = $this->guestCartManagement->createEmptyCart();
 

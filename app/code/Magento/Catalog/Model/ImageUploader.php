@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -97,7 +97,7 @@ class ImageUploader
         $basePath,
         $allowedExtensions,
         $allowedMimeTypes = [],
-        Name $fileNameLookup = null
+        ?Name $fileNameLookup = null
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);

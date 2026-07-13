@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMerchandisingUserCanViewCmsBlocksGridTest">
+        <annotations>
+            <features value="CMS"/>
+            <stories value="Admin role restricted to merchandising"/>
+            <title value="Restricted merchandising admin can view cms blocks grid"/>
+            <description value="This test case verifies cms block listing page for admin users with limited permissions."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-14819"/>
+            <group value="cms"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Admin user with restricted permissions for merchandising only -->
+            <!-- Login as default admin to create role and user -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdmin"/>
+            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
+            <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillRoleForm">
+                <argument name="role" value="limitedAccessRole"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="openRoleResourceTab"/>
+            <!-- Grant catalog, products -->
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantProductsMenu">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Products"/>
+            </actionGroup>
+            <!-- Grant catalog, categories -->
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantCategoriesMenu">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Categories"/>
+            </actionGroup>
+            <!-- Grant content → elements → blocks -->
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantBlocksMenu">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Blocks"/>
+            </actionGroup>
+            <!-- Grant content → elements → pages -->
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantPagesMenu">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Pages"/>
+            </actionGroup>
+            <!-- Grant content → save Page (parent) -->
+            <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="grantSavePage">
+                <argument name="User" value="adminRole"/>
+                <argument name="restrictedRole" value="Save Page"/>
+            </actionGroup>
+            <!-- Un-select "edit page design" under "save page" -->
+            <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeEditPageDesign">
+                <argument name="resourceName" value="Edit Page Design"/>
+            </actionGroup>
+            <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+            <!-- Create a new admin user with the above role -->
+            <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="createNewAdminUser">
+                <argument name="user" value="NewAdminUser"/>
+                <argument name="role" value="limitedAccessRole"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutDefaultAdmin"/>
+        </before>
+        <after>
+            <!-- Delete created user, role and logout from admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginDefaultAdminForCleanup"/>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteCreatedUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCreatedRole">
+                <argument name="roleName" value="{{limitedAccessRole.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfterCleanup"/>
+        </after>
+        <!-- Step 2,3: Login with merchandising-permissions user -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginRestrictedUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+        <!-- Step 4: Go to content > elements > blocks (expect cms blocks list) -->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
+        <seeInCurrentUrl url="{{CmsBlocksPage.url}}" stepKey="assertCmsBlocksUrl"/>
+        <waitForElementVisible selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="waitAddNewBlockButtonVisible"/>
+        <waitForElementVisible selector="{{BlockPageActionsSection.idColumn}}" stepKey="waitForCmsBlockList"/>
+        <!-- Logout from restricted user -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutRestrictedUser"/>
+    </test>
+</tests>

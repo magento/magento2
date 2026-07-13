@@ -1,23 +1,34 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\Phrase;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Quote\Api\GuestCartItemRepositoryInterface.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestCartItemRepositoryTest extends WebapiAbstract
 {
@@ -189,9 +200,9 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      * @param array $stockData
      * @param string|null $errorMessage
-     * @dataProvider updateItemDataProvider
      */
-    public function testUpdateItem(array $stockData, string $errorMessage = null)
+    #[DataProvider('updateItemDataProvider')]
+    public function testUpdateItem(array $stockData, ?string $errorMessage = null)
     {
         $this->updateStockData('simple_one', $stockData);
         /** @var Quote $quote */
@@ -337,9 +348,377 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
                     'use_config_backorders' => 0,
                     'backorders' => Stock::BACKORDERS_NO,
                 ],
-                'The requested qty is not available'
+                'Not enough items for sale'
             ]
         ];
+    }
+
+    #[
+        DataProvider('addItemWithFileCustomOptionDataProvider'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FILE,
+                        'title' => 'file_opt',
+                        'file_extension' => 'png, jpg, gif',
+                        'image_size_x' => 300,
+                        'image_size_y' => 300,
+                    ]
+                ]
+            ],
+            as: 'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FILE,
+                        'title' => 'file_opt',
+                        'file_extension' => 'png, jpg, gif',
+                        'image_size_x' => 300,
+                        'image_size_y' => 300,
+                        'is_require' => false,
+                    ]
+                ]
+            ],
+            as: 'product2'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+    ]
+    public function testAddItemWithFileCustomOption(
+        string $product,
+        array $customOptions,
+        array $expectedCustomOptions = [],
+        array $expectFilenames = []
+    ): void {
+        $this->_markTestAsRestOnly();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get($product);
+        $cart = $fixtures->get('cart');
+
+        $item = $this->addProductToCart((int)$cart->getId(), $product->getSku(), [
+            'product_option' => [
+                'extension_attributes' => [
+                    'custom_options' => $this->prepareCustomOptions($product->getOptions(), $customOptions)
+                ]
+            ]
+        ]);
+        $this->assertNotEmpty($item);
+        $optionsIds = [];
+        foreach ($product->getOptions() as $option) {
+            $optionsIds[$option->getTitle()] = $option->getOptionId();
+        }
+        $this->assertEqualsCanonicalizing(
+            array_map(fn ($option) => $optionsIds[$option] ?? $option, $expectedCustomOptions),
+            array_column($item['product_option']['extension_attributes']['custom_options'] ?? [], 'option_id')
+        );
+        $fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $directory = $fileSystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        foreach ($expectFilenames as $expectFilename) {
+            $this->assertTrue($directory->isExist($expectFilename));
+        }
+    }
+
+    #[
+        DataProvider('addItemValidationWithFileCustomOptionDataProvider'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FILE,
+                        'title' => 'file_opt',
+                        'file_extension' => 'png, jpg, gif',
+                        'image_size_x' => 300,
+                        'image_size_y' => 300,
+                    ],
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+                        'title' => 'field_opt',
+                        'is_require' => false,
+                    ]
+                ]
+            ],
+            as: 'product1'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'options' => [
+                    [
+                        'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+                        'title' => 'field_opt',
+                        'is_require' => false,
+                    ]
+                ]
+            ],
+            as: 'product2'
+        ),
+        DataFixture(ProductFixture::class, as: 'product3'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+    ]
+    public function testAddItemValidationWithFileCustomOption(
+        string $product,
+        array $customOptions,
+        string $expectedException
+    ): void {
+        $this->_markTestAsRestOnly();
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $product = $fixtures->get($product);
+        $cart = $fixtures->get('cart');
+        $actualException = '';
+        try {
+            $this->addProductToCart((int)$cart->getId(), $product->getSku(), [
+                'product_option' => [
+                    'extension_attributes' => [
+                        'custom_options' => $this->prepareCustomOptions($product->getOptions(), $customOptions)
+                    ]
+                ]
+            ]);
+        } catch (\Throwable $exception) {
+            $actualException = $exception->getMessage();
+            $json = json_decode($actualException, true);
+            if (json_last_error() === JSON_ERROR_NONE && isset($json['message'], $json['parameters'])) {
+                $actualException = (string) (new Phrase($json['message'], $json['parameters']));
+            }
+        }
+
+        $this->assertStringContainsString(
+            $expectedException,
+            $actualException,
+            'Failed asserting that exception with message: ' . $expectedException . ' was thrown.'
+        );
+        $fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $directory = $fileSystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        foreach ($customOptions as $customOption) {
+            if (!empty($customOption['extension_attributes']['file_info'])) {
+                $fileInfo = $customOption['extension_attributes']['file_info'];
+                $filename = $fileInfo['name'];
+                $path = 'custom_options/quote/' . $filename[0] . '/' . $filename[1] . '/' . $filename;
+                $this->assertFalse($directory->isExist($path), 'File ' . $filename . ' should not exist.');
+            }
+        }
+    }
+
+    public static function addItemWithFileCustomOptionDataProvider(): array
+    {
+        return [
+            'required file option with valid image' => [
+                'product1',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'this value should not matter',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [100, 100, 'image/jpeg'],
+                                'type' => 'image/jpeg',
+                                'name' => 'valid_file1.jpg'
+                            ]
+                        ]
+                    ]
+                ],
+                ['file_opt'],
+                ['custom_options/quote/v/a/valid_file1.jpg']
+            ],
+            'optional file option missing extension_attributes' => [
+                'product2',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'this value should not matter',
+                    ]
+                ],
+            ],
+            'optional file option with file_info NULL' => [
+                'product2',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'this value should not matter',
+                        'extension_attributes' => [
+                            'file_info' => null
+                        ]
+                    ]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     * @SuppressWarnings("PHPMD.ExcessiveMethodLength")
+     */
+    public static function addItemValidationWithFileCustomOptionDataProvider(): array
+    {
+        return [
+            'file_info is null' => [
+                'product1',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'file',
+                        'extension_attributes' => [
+                            'file_info' => null
+                        ]
+                    ]
+                ],
+                'The product\'s required option(s) weren\'t entered. Make sure the options are entered and try again.'
+            ],
+            'invalid extension' => [
+                'product1',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'file',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [100, 100, 'image/jpeg'],
+                                'type' => 'image/jpeg',
+                                'name' => 'invalid_file1.html'
+                            ]
+                        ]
+                    ]
+                ],
+                'The file \'invalid_file1.html\' for \'file_opt\' has an invalid extension.'
+            ],
+            'invalid file name' => [
+                'product1',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'file',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [100, 100, 'image/jpeg'],
+                                'type' => 'image/jpeg',
+                                'name' => 'path/invalid_file2.jpeg'
+                            ]
+                        ]
+                    ]
+                ],
+                'Provided image name contains forbidden characters.'
+            ],
+            'image is too big' => [
+                'product1',
+                [
+                    [
+                        'option_id' => 'file_opt',
+                        'option_value' => 'file',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [1000, 100, 'image/jpeg'],
+                                'type' => 'image/jpeg',
+                                'name' => 'invalid_file3.jpg'
+                            ]
+                        ]
+                    ]
+                ],
+                'The maximum allowed image size for \'file_opt\' is 300x300 px.'
+            ],
+            'option_id provided is not a file' => [
+                'product2',
+                [
+                    [
+                        'option_id' => 'field_opt',
+                        'option_value' => 'file',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [100, 100, 'image/jpeg'],
+                                'type' => 'image/jpeg',
+                                'name' => 'valid_file2.jpeg'
+                            ]
+                        ]
+                    ]
+                ],
+                // no exception will be thrown and the file will not be saved
+                ''
+            ],
+            'option_id provided does not exist' => [
+                'product3',
+                [
+                    [
+                        'option_id' => '1',
+                        'option_value' => 'test',
+                        'extension_attributes' => [
+                            'file_info' => [
+                                'base64_encoded_data' => [100, 100, 'image/jpeg'],
+                                'type' => 'image/gif',
+                                'name' => 'invalid_file5.html'
+                            ]
+                        ]
+                    ]
+                ],
+                'No such entity with option_id = 1'
+            ]
+        ];
+    }
+
+    private static function generateImage($width, $height, $type): string
+    {
+        ob_start();
+        $image = imagecreatetruecolor($width, $height);
+        switch ($type) {
+            case 'image/jpeg':
+                imagejpeg($image);
+                break;
+            case 'image/png':
+                imagepng($image);
+                break;
+            case 'image/gif':
+                imagegif($image);
+                break;
+            default:
+                throw new \InvalidArgumentException('Unsupported image type');
+        }
+        $content = base64_encode(ob_get_clean());
+        return $content;
+    }
+
+    private function addProductToCart(int $cartId, string $sku, array $data): array
+    {
+        $maskedQuoteId = $this->objectManager->get(QuoteIdToMaskedQuoteIdInterface::class)->execute($cartId);
+        $serviceInfoForAddingProduct = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $maskedQuoteId . '/items',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ]
+        ];
+
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $maskedQuoteId,
+                'sku' => $sku,
+                'qty' => 1,
+                ...$data
+            ]
+        ];
+
+        return $this->_webApiCall($serviceInfoForAddingProduct, $requestData);
+    }
+
+    private static function prepareCustomOptions(array $productOptions, array $customOptions): array
+    {
+        $optionsIds = [];
+        foreach ($productOptions as $option) {
+            $optionsIds[$option->getTitle()] = $option->getOptionId();
+        }
+        $result = [];
+        foreach ($customOptions as $customOption) {
+            if (isset($optionsIds[$customOption['option_id']])) {
+                $customOption['option_id'] = $optionsIds[$customOption['option_id']];
+            }
+            if (is_array($customOption['extension_attributes']['file_info']['base64_encoded_data'] ?? null)) {
+                $customOption['extension_attributes']['file_info']['base64_encoded_data'] = self::generateImage(
+                    ...$customOption['extension_attributes']['file_info']['base64_encoded_data']
+                );
+            }
+            $result[] = $customOption;
+        }
+        return $result;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -48,7 +48,7 @@ class UpdateCartItems implements ResolverInterface
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $processedArgs = $this->argsSelection->process($info->fieldName, $args);
 
@@ -104,6 +104,7 @@ class UpdateCartItems implements ResolverInterface
      */
     private function getErrorCode(string $message): string
     {
+        $message = preg_replace('/\d+/', '%s', $message);
         foreach ($this->messageCodesMapper as $key => $code) {
             if (str_contains($message, $key)) {
                 return $code;

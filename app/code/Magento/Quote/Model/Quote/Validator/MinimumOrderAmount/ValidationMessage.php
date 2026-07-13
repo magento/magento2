@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\Quote\Validator\MinimumOrderAmount;
 
@@ -39,7 +39,7 @@ class ValidationMessage
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Locale\CurrencyInterface $currency,
-        \Magento\Framework\Pricing\Helper\Data $priceHelper = null
+        ?\Magento\Framework\Pricing\Helper\Data $priceHelper = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;

@@ -21,6 +21,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\QuoteGraphQl\Model\FormatMoneyTypeData;
 
 /**
@@ -37,6 +38,7 @@ class EstimateShippingMethods implements ResolverInterface
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param ShippingMethodConverter $shippingMethodConverter
      * @param FormatMoneyTypeData $formatMoneyTypeData
+     * @param ErrorMapper $errorMapper
      */
     public function __construct(
         private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
@@ -46,13 +48,14 @@ class EstimateShippingMethods implements ResolverInterface
         private ExtensibleDataObjectConverter $dataObjectConverter,
         private ShippingMethodConverter $shippingMethodConverter,
         private FormatMoneyTypeData $formatMoneyTypeData,
+        private ErrorMapper $errorMapper
     ) {
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $this->validateInput($args);
         try {
@@ -64,7 +67,9 @@ class EstimateShippingMethods implements ResolverInterface
                     [
                         'masked_id' => $args['input']['cart_id']
                     ]
-                )
+                ),
+                $ex,
+                $this->errorMapper->getErrorMessageId('Could not find a cart with ID')
             );
         }
         return $this->getAvailableShippingMethodsForAddress($args['input']['address'], $cart);
