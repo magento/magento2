@@ -201,17 +201,8 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     {
         if ($this->isGlobalScope($category->getStoreId())) {
             $childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
-            foreach ($childrenIds as $childId) {
-                foreach ($category->getStoreIds() as $storeId) {
-                    if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
-                        $storeId,
-                        $childId,
-                        Category::ENTITY
-                    )) {
-                        $child = $this->categoryRepository->get($childId, $storeId);
-                        $this->updateUrlPathForCategory($child, $category);
-                    }
-                }
+            foreach ($category->getStoreIds() as $storeId) {
+                $this->updateOverriddenUrlPathForStore($category, $childrenIds, (int)$storeId);
             }
         } else {
             $children = $this->childrenCategoriesProvider->getChildren($category, true);
@@ -223,6 +214,50 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 } else {
                     $this->updateUrlPathForCategory($child);
                 }
+            }
+        }
+    }
+
+    /**
+     * Refresh overridden url_path values for a category and its descendants at a specific store scope.
+     *
+     * @param Category $category
+     * @param int[] $childrenIds
+     * @param int $storeId
+     * @return void
+     */
+    private function updateOverriddenUrlPathForStore(Category $category, array $childrenIds, int $storeId): void
+    {
+        $storeScopedCategory = null;
+        if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+            $storeId,
+            $category->getId(),
+            Category::ENTITY
+        )) {
+            $storeScopedCategory = $this->categoryRepository->get($category->getId(), $storeId);
+            $this->updateUrlPathForCategory($storeScopedCategory);
+        }
+
+        $overriddenChildren = [];
+        foreach ($childrenIds as $childId) {
+            if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+                $storeId,
+                $childId,
+                Category::ENTITY
+            )) {
+                $overriddenChildren[] = $this->categoryRepository->get($childId, $storeId);
+            }
+        }
+        usort(
+            $overriddenChildren,
+            static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
+        );
+
+        foreach ($overriddenChildren as $child) {
+            if ((int)$child->getParentId() === (int)$category->getId()) {
+                $this->updateUrlPathForCategory($child, $storeScopedCategory);
+            } else {
+                $this->updateUrlPathForCategory($child);
             }
         }
     }
