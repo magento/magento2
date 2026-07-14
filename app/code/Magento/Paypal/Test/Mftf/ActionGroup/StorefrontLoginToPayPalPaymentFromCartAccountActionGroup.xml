@@ -8,6 +8,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontLoginToPayPalPaymentFromCartAccountActionGroup" extends="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup">
-        <seeElement selector="{{PayPalCheckoutAsGuestSection.CreditDebitBtn}}" stepKey="assertCheckoutAsGuest" before="waitForLoginForm"/>
+        <arguments>
+            <argument name="payerName" defaultValue="MPI" type="string"/>
+        </arguments>
+        <waitForText userInput="{{payerName}}" selector="{{PayPalPaymentSection.userName}}" stepKey="seePayerName" before="waitForLoginForm"/>
     </actionGroup>
 </actionGroups>
