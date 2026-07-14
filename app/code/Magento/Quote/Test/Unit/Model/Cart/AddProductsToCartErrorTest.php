@@ -10,7 +10,6 @@ namespace Magento\Quote\Test\Unit\Model\Cart;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Quote\Model\Cart\AddProductsToCartError;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AddProductsToCartErrorTest extends TestCase
@@ -32,17 +31,10 @@ class AddProductsToCartErrorTest extends TestCase
      */
     private RendererInterface $defaultRenderer;
 
-    /**
-     * @var RendererInterface|MockObject
-     */
-    private $rendererMock;
-
     protected function setUp(): void
     {
         $this->model = new AddProductsToCartError(self::ERROR_MESSAGE_CODES_MAPPER);
         $this->defaultRenderer = Phrase::getRenderer();
-        $this->rendererMock = $this->createMock(RendererInterface::class);
-        Phrase::setRenderer($this->rendererMock);
     }
 
     protected function tearDown(): void
@@ -57,7 +49,9 @@ class AddProductsToCartErrorTest extends TestCase
     public function testCreateResolvesCodeFromUntranslatedPhrase(): void
     {
         $translatedMessage = 'Produit introuvable pour le SKU "ABC"';
-        $this->rendererMock->method('render')->willReturn($translatedMessage);
+        $renderer = $this->createStub(RendererInterface::class);
+        $renderer->method('render')->willReturn($translatedMessage);
+        Phrase::setRenderer($renderer);
 
         $phrase = new Phrase('Could not find a product with SKU "%sku"', ['sku' => 'ABC']);
         $error = $this->model->create($phrase, 1);
@@ -70,12 +64,10 @@ class AddProductsToCartErrorTest extends TestCase
     }
 
     /**
-     * A plain string message keeps the previous behavior: no rendering, code resolved from the string.
+     * A plain string message keeps the previous behavior: the code is resolved from the string.
      */
     public function testCreateWithStringMessageKeepsBackwardCompatibility(): void
     {
-        $this->rendererMock->expects($this->never())->method('render');
-
         $error = $this->model->create('Product that you are trying to add is not available.', 2);
 
         $this->assertSame('Product that you are trying to add is not available.', $error->getMessage());

@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Cart;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Phrase;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
 use Magento\Quote\Model\Cart\Data\AddProductsToCartOutput;
@@ -165,7 +163,7 @@ class AddProductsToCart
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
         } catch (\Throwable $e) {
             $errors[] = $this->error->create(
-                $this->getExceptionErrorMessage($e),
+                __($e->getMessage())->render(),
                 $cartItemPosition,
                 $stockItemQuantity
             );
@@ -173,28 +171,11 @@ class AddProductsToCart
 
         if (is_string($result)) {
             foreach (array_unique(explode("\n", $result)) as $error) {
-                $errors[] = $this->error->create(__($error), $cartItemPosition, $stockItemQuantity);
+                $errors[] = $this->error->create(__($error)->render(), $cartItemPosition, $stockItemQuantity);
             }
         }
 
         return $errors;
-    }
-
-    /**
-     * Build the error phrase for an add-to-cart exception.
-     *
-     * The original, untranslated text is preserved (via the raw message for a LocalizedException)
-     * so the resolved error code stays stable across store locales, while the message itself is
-     * still rendered/translated when shown to the client.
-     *
-     * @param \Throwable $e
-     * @return Phrase
-     */
-    private function getExceptionErrorMessage(\Throwable $e): Phrase
-    {
-        return $e instanceof LocalizedException
-            ? __($e->getRawMessage(), $e->getParameters())
-            : __($e->getMessage());
     }
 
     /**
