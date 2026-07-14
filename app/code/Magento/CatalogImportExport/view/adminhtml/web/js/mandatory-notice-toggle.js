@@ -6,16 +6,14 @@ define(['jquery'], function ($) {
     'use strict';
 
     return function (config, element) {
-        var $notice = $(element),
-            $entityField = $(config.entitySelector);
-
-        var toggleMandatoryAttributesNotice = function (entityValue) {
-            if (entityValue === 'catalog_product') {
-                $notice.show();
-            } else {
-                $notice.hide();
-            }
-        };
+        var $notice = $(element), $entityField = $(config.entitySelector),
+            toggleMandatoryAttributesNotice = function (entityValue) {
+                if (entityValue === 'catalog_product') {
+                    $notice.show();
+                } else {
+                    $notice.hide();
+                }
+            };
 
         toggleMandatoryAttributesNotice($entityField.val());
 
