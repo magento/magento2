@@ -141,13 +141,14 @@ define([
         });
 
         it('starts a fresh queue for the next batch after completion', function () {
-            var first = acceptFile('a', '1.jpg');
+            var first,
+                second;
 
+            first = acceptFile('a', '1.jpg');
             handlers['upload-success'](first, { body: { name: first.name } });
             handlers['complete']();
 
-            var second = acceptFile('b', '2.jpg');
-
+            second = acceptFile('b', '2.jpg');
             handlers['upload-success'](second, { body: { name: second.name } });
             handlers['complete']();
 
