@@ -4,19 +4,18 @@
  * All Rights Reserved.
  *
  * @var Escaper $escaper
- * @var SecureHtmlRenderer $secureRenderer
  * @var \Magento\CatalogImportExport\Block\Adminhtml\Export\MandatoryAttributesNotice $block
  */
 
 use Magento\Framework\Escaper;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 ?>
 <?php $mandatoryAttributes = $block->getSystemMandatoryAttributes(); ?>
 <?php if ($mandatoryAttributes): ?>
     <div id="mandatory-attributes-notice"
          class="message message-notice notice mandatory-attributes-notice"
-         style="display: none;">
+         style="display: none;"
+         data-mage-init='{"Magento_CatalogImportExport/js/mandatory-notice-toggle": {"entitySelector": "#entity"}}'>
         <div data-ui-id="messages-message-notice">
             <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
             <?= $escaper->escapeHtml(
@@ -29,24 +28,4 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
             <span class="mandatory-system-fields"><?= $escaper->escapeHtml($mandatoryAttributes) ?></span>
         </div>
     </div>
-    <?php $scriptString = <<<script
-    require(['jquery'], function ($) {
-        var toggleMandatoryAttributesNotice = function () {
-            var notice = $('#mandatory-attributes-notice');
-            var entityValue = $('#entity').val();
-
-            if (entityValue === 'catalog_product') {
-                notice.show();
-            } else {
-                notice.hide();
-            }
-        };
-
-        toggleMandatoryAttributesNotice();
-
-        $('#entity').on('change', toggleMandatoryAttributesNotice);
-    });
-    script;
-    ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
