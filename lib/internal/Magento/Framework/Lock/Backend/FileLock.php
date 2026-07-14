@@ -7,10 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Lock\Backend;
 
-use Magento\Framework\Lock\LockManagerInterface;
-use Magento\Framework\Filesystem\Driver\File as FileDriver;
-use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -83,8 +83,14 @@ class FileLock implements LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
+        $lockFile = $this->getLockPath($name);
+
+        // If already held by this process, don't open a second fd on the same file.
+        if (isset($this->locks[$lockFile])) {
+            return true;
+        }
+
         try {
-            $lockFile = $this->getLockPath($name);
             $fileResource = $this->fileDriver->fileOpen($lockFile, 'w+');
             $skipDeadline = $timeout < 0;
             $deadline = microtime(true) + $timeout;

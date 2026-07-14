@@ -107,15 +107,16 @@ class DataFixtureSetup
                 $data[$key] = $this->resolveVariables($value);
             } else {
                 if (is_string($value)) {
-                    $value = $this->parseFixtureKeyValue($value);
-                    if ($value) {
-                        $data[$key] = $value;
+                    $parser = $this->getParser($value);
+                    if ($parser) {
+                        $data[$key] = $parser($value);
                     }
                 }
             }
 
             if (is_string($key)) {
-                $newKey = $this->parseFixtureKeyValue($key);
+                $parser = $this->getParser($key);
+                $newKey = $parser ? $parser($key) : null;
                 if (is_string($newKey)) {
                     $value = $data[$key];
                     unset($data[$key]);
@@ -131,22 +132,21 @@ class DataFixtureSetup
      * Parse either key or value of the fixture data
      *
      * @param string $data
-     * @return DataObject|mixed|void
-     * @throws LocalizedException
+     * @return callable|null
      */
-    private function parseFixtureKeyValue(string $data)
+    private function getParser(string $data): ?callable
     {
         // Check if entire string is a single placeholder
         if (preg_match('/^\$\w+(\.\w+)?\$$/', $data)) {
-            return $this->resolveSinglePlaceholder($data);
+            return $this->resolveSinglePlaceholder(...);
         }
 
         // Check if string contains one or more placeholders, for multi value support
         if (preg_match('/\$\w+(\.\w+)?\$/', $data)) {
-            return $this->resolveMultiplePlaceholders($data);
+            return $this->resolveMultiplePlaceholders(...);
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -224,6 +224,6 @@ class DataFixtureSetup
      */
     private function extractValue(DataObject $fixtureData, ?string $attribute)
     {
-        return $attribute ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
+        return $attribute !== null ? $fixtureData->getDataUsingMethod($attribute) : $fixtureData;
     }
 }
