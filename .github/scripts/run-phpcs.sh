@@ -21,7 +21,7 @@ fi
 phpcs_tmp=$(mktemp)
 phpcs_exit=0
 mcs/vendor/bin/phpcs \
-  --standard=Magento2 \
+  --standard="${PHPCS_STANDARD:-Magento2}" \
   "$@" \
   --report=full \
   --no-colors \

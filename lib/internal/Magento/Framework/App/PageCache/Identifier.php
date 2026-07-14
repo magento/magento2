@@ -51,8 +51,7 @@ class Identifier implements IdentifierInterface
     public function getValue()
     {
         $pattern = $this->getMarketingParameterPatterns();
-        $replace = array_fill(0, count($pattern), '');
-        $url = preg_replace($pattern, $replace, (string)$this->request->getUriString());
+        $url = preg_replace($pattern, "", (string)$this->request->getUriString());
         list($baseUrl, $query) = $this->reconstructUrl($url);
         $data = [
             $this->request->isSecure(),
@@ -72,7 +71,6 @@ class Identifier implements IdentifierInterface
     public function getMarketingParameterPatterns(): array
     {
         return [
-            '/&?gad_source\=[^&]+/',
             '/&?gbraid\=[^&]+/',
             '/&?wbraid\=[^&]+/',
             '/&?_gl\=[^&]+/',
@@ -92,6 +90,7 @@ class Identifier implements IdentifierInterface
             '/&?mc_(.*?)\=[^&]+/',
             '/&?utm_(.*?)\=[^&]+/',
             '/&?_bta_(.*?)\=[^&]+/',
+            '/&?gad_(.*?)\=[^&]+/',
         ];
     }
 
