@@ -14,39 +14,39 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 ?>
 <?php $mandatoryAttributes = $block->getSystemMandatoryAttributes(); ?>
 <?php if ($mandatoryAttributes): ?>
-<div id="mandatory-attributes-notice"
-     class="message message-notice notice mandatory-attributes-notice"
-     style="display: none;">
-    <div data-ui-id="messages-message-notice">
-        <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
-        <?= $escaper->escapeHtml(
-            __(
-                'The following system columns are automatically appended ' .
-                'during the export process and cannot be excluded:'
-            )
-        ) ?>
-        <br/>
-        <span class="mandatory-system-fields"><?= $escaper->escapeHtml($mandatoryAttributes) ?></span>
+    <div id="mandatory-attributes-notice"
+         class="message message-notice notice mandatory-attributes-notice"
+         style="display: none;">
+        <div data-ui-id="messages-message-notice">
+            <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
+            <?= $escaper->escapeHtml(
+                __(
+                    'The following system columns are automatically appended ' .
+                    'during the export process and cannot be excluded:'
+                )
+            ) ?>
+            <br/>
+            <span class="mandatory-system-fields"><?= $escaper->escapeHtml($mandatoryAttributes) ?></span>
+        </div>
     </div>
-</div>
-<?php $scriptString = <<<script
-require(['jquery'], function ($) {
-    var toggleMandatoryAttributesNotice = function () {
-        var notice = $('#mandatory-attributes-notice');
-        var entityValue = $('#entity').val();
+    <?php $scriptString = <<<script
+    require(['jquery'], function ($) {
+        var toggleMandatoryAttributesNotice = function () {
+            var notice = $('#mandatory-attributes-notice');
+            var entityValue = $('#entity').val();
 
-        if (entityValue === 'catalog_product') {
-            notice.show();
-        } else {
-            notice.hide();
-        }
-    };
+            if (entityValue === 'catalog_product') {
+                notice.show();
+            } else {
+                notice.hide();
+            }
+        };
 
-    toggleMandatoryAttributesNotice();
+        toggleMandatoryAttributesNotice();
 
-    $('#entity').on('change', toggleMandatoryAttributesNotice);
-});
-script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+        $('#entity').on('change', toggleMandatoryAttributesNotice);
+    });
+    script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
