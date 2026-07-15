@@ -40,9 +40,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     private AddProductToCart $addProductToCart;
 
     /**
-     * @var AjaxMessageResponse
+     * @var AjaxMessageResponse|null
      */
-    private AjaxMessageResponse $ajaxMessageResponse;
+    private ?AjaxMessageResponse $ajaxMessageResponse = null;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -54,7 +54,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @param ProductRepositoryInterface $productRepository
      * @param RequestQuantityProcessor|null $quantityProcessor
      * @param AddProductToCart|null $addProductToCart
-     * @param AjaxMessageResponse|null $ajaxMessageResponse
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -66,8 +65,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
         ?RequestQuantityProcessor $quantityProcessor = null,
-        ?AddProductToCart $addProductToCart = null,
-        ?AjaxMessageResponse $ajaxMessageResponse = null
+        ?AddProductToCart $addProductToCart = null
     ) {
         parent::__construct(
             $context,
@@ -82,8 +80,17 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
         $this->addProductToCart = $addProductToCart
             ?? ObjectManager::getInstance()->get(AddProductToCart::class);
-        $this->ajaxMessageResponse = $ajaxMessageResponse
-            ?? ObjectManager::getInstance()->get(AjaxMessageResponse::class);
+    }
+
+    /**
+     * Get the AJAX message response preparer.
+     *
+     * @return AjaxMessageResponse
+     */
+    private function getAjaxMessageResponse(): AjaxMessageResponse
+    {
+        return $this->ajaxMessageResponse
+            ?? $this->ajaxMessageResponse = ObjectManager::getInstance()->get(AjaxMessageResponse::class);
     }
 
     /**
@@ -228,7 +235,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         $result = [];
 
         if ($displayInlineErrors) {
-            $inlineMessages = $this->ajaxMessageResponse->getInlineErrorMessages(true);
+            $inlineMessages = $this->getAjaxMessageResponse()->getInlineErrorMessages(true);
             if ($inlineMessages) {
                 $result['messages'] = $inlineMessages['html'];
                 $result['displayMessages'] = true;
