@@ -51,7 +51,6 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File as DriverFile;
@@ -950,7 +949,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-     * getProductCategories() falls back to the product's existing categories when the SKU was
+     * getProductCategories() falls back to the product's existing category links (read directly
+     * from the category-product link table, not through the product repository) when the SKU was
      * never populated into categoriesCache (i.e. its import row had no category data at all).
      *
      * @return void
@@ -958,39 +958,30 @@ class ProductTest extends AbstractImportTestCase
     public function testGetProductCategoriesFallsBackToExistingProductWhenNotInCache(): void
     {
         $productSku = 'productSku';
-        // getCategoryIds() is declared on the concrete Product model, not on ProductInterface,
-        // so it must be mocked against \Magento\Catalog\Model\Product to be configurable.
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $productMock->expects($this->once())->method('getCategoryIds')->willReturn(['4', '7']);
-
-        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $productRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($productSku)
-            ->willReturn($productMock);
-        $this->setPropertyValue($this->importProduct, 'productRepository', $productRepositoryMock);
+        $this->skuProcessor->method('getNewSku')->with($productSku)->willReturn(['entity_id' => 11]);
+        $resource = $this->createMock(ResourceModel::class);
+        $resource->method('getProductCategoryTable')->willReturn('catalog_category_product');
+        $this->_resourceFactory->method('create')->willReturn($resource);
+        $this->select->method('where')->willReturnSelf();
+        $this->_connection->expects($this->once())->method('fetchCol')->willReturn(['4', '7']);
         $this->setPropertyValue($this->importProduct, 'categoriesCache', []);
 
         $actualResult = $this->importProduct->getProductCategories($productSku);
 
-        $this->assertEquals(['4', '7'], $actualResult);
+        $this->assertEquals([4, 7], $actualResult);
     }
 
     /**
-     * getProductCategories() returns an empty array when the product can't be found either.
+     * getProductCategories() returns an empty array when the product can't be resolved either.
      *
      * @return void
      */
     public function testGetProductCategoriesReturnsEmptyWhenProductMissingAndNotInCache(): void
     {
         $productSku = 'productSku';
-
-        $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
-        $productRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($productSku)
-            ->willThrowException(new NoSuchEntityException());
-        $this->setPropertyValue($this->importProduct, 'productRepository', $productRepositoryMock);
+        $this->skuProcessor->method('getNewSku')->with($productSku)->willReturn(null);
+        $this->skuStorageMock->method('get')->with($productSku)->willReturn(null);
+        $this->_connection->expects($this->never())->method('fetchCol');
         $this->setPropertyValue($this->importProduct, 'categoriesCache', []);
 
         $this->assertEquals([], $this->importProduct->getProductCategories($productSku));

@@ -2325,10 +2325,33 @@ class Product extends AbstractEntity
     public function getProductCategories($productSku)
     {
         if (!array_key_exists($productSku, $this->categoriesCache)) {
-            $product = $this->retrieveProductBySku($productSku);
-            return $product ? $product->getCategoryIds() : [];
+            return $this->getExistingProductCategoryIds((string)$productSku);
         }
         return array_keys($this->categoriesCache[$productSku]);
+    }
+
+    /**
+     * Read a product's existing category ids directly from the category-product link table.
+     *
+     * Deliberately does not go through the product repository: this runs mid-import (e.g. from
+     * URL rewrite generation), and loading the product there would prime the repository's
+     * per-request instance cache with a half-imported product.
+     *
+     * @param string $productSku
+     * @return array
+     */
+    private function getExistingProductCategoryIds(string $productSku): array
+    {
+        $newSku = $this->skuProcessor->getNewSku($productSku);
+        $entityId = $newSku['entity_id'] ?? $this->skuStorage->get($productSku)['entity_id'] ?? null;
+        if (!$entityId) {
+            return [];
+        }
+        $select = $this->_connection->select()
+            ->from($this->_resourceFactory->create()->getProductCategoryTable(), ['category_id'])
+            ->where('product_id = ?', (int)$entityId);
+
+        return array_map('intval', $this->_connection->fetchCol($select));
     }
 
     /**
