@@ -74,6 +74,17 @@ class IndexerSetNoDdlModeCommand extends Command
      */
     protected function configure()
     {
+        $this->applyConfiguration();
+        parent::configure();
+    }
+
+    /**
+     * Set the command name, description, and argument definition
+     *
+     * @return void
+     */
+    private function applyConfiguration(): void
+    {
         $this->setName('indexer:set-no-ddl-mode')
             ->setDescription(
                 'Enable, disable, or show the status of DDL-free (flag-based) table swapping for a full reindex'
@@ -82,13 +93,24 @@ class IndexerSetNoDdlModeCommand extends Command
                 new InputArgument(self::ARG_INDEXER, InputArgument::REQUIRED, 'Indexer ID'),
                 new InputArgument(self::ARG_MODE, InputArgument::OPTIONAL, 'enable|disable|status', self::MODE_STATUS),
             ]);
-        parent::configure();
     }
 
     /**
      * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        return $this->runCommand($input, $output);
+    }
+
+    /**
+     * Run the command
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     */
+    private function runCommand(InputInterface $input, OutputInterface $output): int
     {
         $indexerId = (string)$input->getArgument(self::ARG_INDEXER);
         $mode = (string)$input->getArgument(self::ARG_MODE);
