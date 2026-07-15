@@ -606,6 +606,7 @@ class Factory
                     [
                         'adapter' => $result,
                         'preloadKeys' => $backendOptions['preload_keys'],
+                        'idPrefix' => $idPrefix,
                     ]
                 );
             }

@@ -38,18 +38,50 @@ class PreloadingSymfonyAdapter implements FrontendInterface
      *
      * @param FrontendInterface $adapter Underlying cache adapter
      * @param array $preloadKeys List of cache key identifiers to preload
+     * @param string $idPrefix Cache ID prefix applied by the underlying adapter
      */
     public function __construct(
         FrontendInterface $adapter,
-        array $preloadKeys = []
+        array $preloadKeys = [],
+        string $idPrefix = ''
     ) {
         $this->adapter = $adapter;
-        $this->preloadKeys = $preloadKeys;
+        $this->preloadKeys = $this->normalizePreloadKeys($preloadKeys, $idPrefix);
 
         // Preload keys on initialization (one-time cost per worker)
-        if (!empty($preloadKeys)) {
-            $this->preloadKeys($preloadKeys);
+        if (!empty($this->preloadKeys)) {
+            $this->preloadKeys($this->preloadKeys);
         }
+    }
+
+    /**
+     * Strip the configured ID prefix from preload keys
+     *
+     * The documentation asks for preload keys to include the ID prefix (for example 061_SYSTEM_DEFAULT),
+     * which is what the legacy Zend/Redis backend expected. The Symfony adapter applies the ID prefix
+     * itself, so a prefixed key would be looked up as prefix + prefix + key and never match. Normalizing
+     * the keys back to their logical identifier keeps the documented, backward-compatible configuration
+     * working while still supporting keys that were provided without the prefix.
+     *
+     * @param array $keys
+     * @param string $idPrefix
+     * @return array
+     */
+    private function normalizePreloadKeys(array $keys, string $idPrefix): array
+    {
+        if ($idPrefix === '') {
+            return $keys;
+        }
+
+        $normalized = [];
+        foreach ($keys as $key) {
+            $key = (string)$key;
+            $normalized[] = str_starts_with($key, $idPrefix)
+                ? substr($key, strlen($idPrefix))
+                : $key;
+        }
+
+        return $normalized;
     }
 
     /**
