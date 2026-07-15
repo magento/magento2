@@ -958,7 +958,9 @@ class ProductTest extends AbstractImportTestCase
     public function testGetProductCategoriesFallsBackToExistingProductWhenNotInCache(): void
     {
         $productSku = 'productSku';
-        $productMock = $this->createMock(ProductInterface::class);
+        // getCategoryIds() is declared on the concrete Product model, not on ProductInterface,
+        // so it must be mocked against \Magento\Catalog\Model\Product to be configurable.
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $productMock->expects($this->once())->method('getCategoryIds')->willReturn(['4', '7']);
 
         $productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
