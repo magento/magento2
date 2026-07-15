@@ -380,15 +380,43 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         }
 
         // Build base DSN
-        $baseDsn = $password
-            ? sprintf('redis://%s@%s:%d/%d', urlencode($password), $host, $port, $database)
-            : sprintf('redis://%s:%d/%d', $host, $port, $database);
+        $baseDsn = $this->buildRedisBaseDsn($host, $port, $database, $password);
 
         // Append DSN parameters
         $dsn = $dsnParams ? $baseDsn . '?' . implode('&', $dsnParams) : $baseDsn;
 
         // Create and return the connection using Symfony's factory
         return RedisAdapter::createConnection($dsn);
+    }
+
+    /**
+     * Build the base Redis DSN for a TCP host or a unix socket path
+     *
+     * A host beginning with '/' is treated as a unix socket path, matching the
+     * convention used by phpredis and Credis (the backends behind the previous
+     * Zend-based Redis cache implementation). Symfony's socket DSN format is
+     * redis://[auth@]/path/to/redis.sock/<dbindex> - appending ':<port>' to a
+     * socket path would make Symfony resolve a non-existent socket file.
+     *
+     * @param string $host Hostname, IP address, or unix socket path
+     * @param int $port TCP port (ignored for unix sockets)
+     * @param int $database Redis database index
+     * @param string|null $password Optional AUTH password
+     * @return string
+     */
+    private function buildRedisBaseDsn(
+        string $host,
+        int $port,
+        int $database,
+        ?string $password
+    ): string {
+        $auth = $password !== null && $password !== '' ? rawurlencode($password) . '@' : '';
+
+        if (str_starts_with($host, '/')) {
+            return sprintf('redis://%s%s/%d', $auth, $host, $database);
+        }
+
+        return sprintf('redis://%s%s:%d/%d', $auth, $host, $port, $database);
     }
 
     /**
@@ -413,22 +441,51 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         ?float $timeout,
         ?float $readTimeout
     ) {
-        $params = [
-            'scheme' => 'tcp',
-            'host' => $host,
-            'port' => $port,
-            'database' => $database,
-        ];
-
-        if ($password) {
-            $params['password'] = $password;
-        }
+        $params = $this->buildPredisConnectionParameters($host, $port, $database, $password);
 
         $options = [
             'exceptions' => false,
         ];
 
         return new OptimizedPredisClient($params, $options);
+    }
+
+    /**
+     * Build Predis connection parameters for a TCP host or a unix socket path
+     *
+     * @param string $host Hostname, IP address, or unix socket path
+     * @param int $port TCP port (ignored for unix sockets)
+     * @param int $database Redis database index
+     * @param string|null $password Optional AUTH password
+     * @return array
+     */
+    private function buildPredisConnectionParameters(
+        string $host,
+        int $port,
+        int $database,
+        ?string $password
+    ): array {
+        if (str_starts_with($host, '/')) {
+            // Unix socket connection
+            $params = [
+                'scheme' => 'unix',
+                'path' => $host,
+                'database' => $database,
+            ];
+        } else {
+            $params = [
+                'scheme' => 'tcp',
+                'host' => $host,
+                'port' => $port,
+                'database' => $database,
+            ];
+        }
+
+        if ($password) {
+            $params['password'] = $password;
+        }
+
+        return $params;
     }
 
     /**
