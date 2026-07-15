@@ -14,7 +14,22 @@ use Magento\Webapi\Controller\Soap\Request\Handler as SoapHandler;
  */
 class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
 {
-    const WSDL_BASE_PATH = '/soap';
+    public const WSDL_BASE_PATH = '/soap';
+
+    /**
+     * Maximum number of distinct authentication tokens to keep cached SOAP clients for.
+     */
+    private const MAX_CUSTOM_SOAP_CLIENTS = 5;
+
+    /**
+     * Number of extra attempts for a request that fails with a transient "Bad Gateway" SoapFault.
+     */
+    private const MAX_BAD_GATEWAY_RETRIES = 3;
+
+    /**
+     * Delay, in seconds, between retries of a request that failed with a transient "Bad Gateway" fault.
+     */
+    private const BAD_GATEWAY_RETRY_DELAY_SECONDS = 2;
 
     /**
      * SOAP client initialized with different WSDLs.
@@ -52,7 +67,9 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     {
         $soapOperation = $this->_getSoapOperation($serviceInfo);
         $arguments = $this->_converter->convertKeysToCamelCase($arguments);
-        $soapResponse = $this->_getSoapClient($serviceInfo, $storeCode)->$soapOperation($arguments);
+        $soapResponse = $this->callWithBadGatewayRetry(
+            fn() => $this->_getSoapClient($serviceInfo, $storeCode)->$soapOperation($arguments)
+        );
         //Convert to snake case for tests to use same assertion data for both SOAP and REST tests
         $result = (is_array($soapResponse) || is_object($soapResponse))
             ? $this->toSnakeCase($this->_converter->convertStdObjectToArray($soapResponse, true))
@@ -63,9 +80,34 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
     }
 
     /**
+     * Invoke a SOAP call, retrying only on a transient "Bad Gateway" fault.
+     *
+     * @param callable $invokeSoapCall
+     * @return mixed
+     * @throws \SoapFault
+     */
+    private function callWithBadGatewayRetry(callable $invokeSoapCall)
+    {
+        $attempt = 0;
+        while (true) {
+            try {
+                return $invokeSoapCall();
+            } catch (\SoapFault $fault) {
+                $attempt++;
+                if (trim((string)$fault->getMessage()) !== 'Bad Gateway'
+                    || $attempt > self::MAX_BAD_GATEWAY_RETRIES
+                ) {
+                    throw $fault;
+                }
+                sleep(self::BAD_GATEWAY_RETRY_DELAY_SECONDS);
+            }
+        }
+    }
+
+    /**
      * Get proper SOAP client instance that is initialized with WSDL corresponding to requested service interface.
      *
-     * @param string $serviceInfo PHP service interface name, should include version if present
+     * @param array $serviceInfo PHP service interface name, should include version if present
      * @param string|null $storeCode
      * @return \Laminas\Soap\Client
      */
@@ -85,13 +127,16 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
                 $soapClient = $this->_soapClients['custom'][$token][$wsdlUrl];
             } else {
                 if (!array_key_exists($token, $this->_soapClients['custom'])) {
+                    if (count($this->_soapClients['custom']) >= self::MAX_CUSTOM_SOAP_CLIENTS) {
+                        array_shift($this->_soapClients['custom']);
+                    }
                     $this->_soapClients['custom'][$token] = [];
                 }
                 $soapClient = $this->_soapClients['custom'][$token][$wsdlUrl]
                     = $this->instantiateSoapClient($wsdlUrl, $token);
             }
         } else {
-            if (!isset($this->_soapClients[$wsdlUrl])) {
+            if (!isset($this->_soapClients['default'][$wsdlUrl])) {
                 $this->_soapClients['default'][$wsdlUrl] = $this->instantiateSoapClient($wsdlUrl, null);
             }
             $soapClient = $this->_soapClients['default'][$wsdlUrl];

@@ -349,7 +349,7 @@
         "magento/framework-stomp": "*",
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "components/jquery": "1.11.0",
-        "components/jqueryui": "1.10.4",
+        "components/jqueryui": "1.14.2",
         "twbs/bootstrap": "3.1.0",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
