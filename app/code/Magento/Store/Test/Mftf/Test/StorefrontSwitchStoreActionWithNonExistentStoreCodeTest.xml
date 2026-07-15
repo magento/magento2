@@ -17,9 +17,9 @@
             <testCaseId value="AC-16296"/>
             <group value="store"/>
         </annotations>
-        <!-- Step 1: Open store switch action URL with a non-existent store code -->
-        <amOnPage url="{{StorefrontStoreSwitchPage.url}}" stepKey="openSwitchActionWithInvalidStoreCode"/>
-        <waitForPageLoad stepKey="waitForRedirectAfterSwitchAction"/>
+        <!-- Step 1: Open stores/store/switchaction -->
+        <amOnPage url="/stores/store/switchaction" stepKey="openStoreSwitchAction"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterOpeningSwitchAction"/>
         <!-- Step 2: Assert the store not found error message is displayed immediately -->
         <waitForText selector="{{StorefrontMessagesSection.error}}" userInput="{{StoreNotFoundErrorMessageData.message}}" stepKey="seeStoreNotFoundErrorMessage"/>
     </test>
