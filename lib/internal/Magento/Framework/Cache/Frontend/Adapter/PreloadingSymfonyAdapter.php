@@ -76,14 +76,14 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         // internally, so a pre-prefixed key would otherwise be double-prefixed and never hit.
         $this->preloadKeys = ($idPrefix !== '')
             ? array_map(
-                static fn(string $key): string => str_starts_with($key, $idPrefix)
+                static fn (string $key): string => str_starts_with($key, $idPrefix)
                     ? substr($key, strlen($idPrefix))
                     : $key,
                 $preloadKeys
             )
             : $preloadKeys;
         $this->normalizedPreloadKeys = array_map(
-            fn(string $key): string => $this->normalizeIdentifier($key),
+            fn (string $key): string => $this->normalizeIdentifier($key),
             $this->preloadKeys
         );
     }
