@@ -196,6 +196,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      *
      * @param Category $category
      * @return void
+     * @throws NoSuchEntityException
      */
     protected function updateUrlPathForChildren(Category $category)
     {
@@ -225,16 +226,16 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * @param int[] $childrenIds
      * @param int $storeId
      * @return void
+     * @throws NoSuchEntityException
      */
     private function updateOverriddenUrlPathForStore(Category $category, array $childrenIds, int $storeId): void
     {
-        $storeScopedCategory = null;
+        $storeScopedCategory = $this->getStoreScopedCategory($category, $storeId);
         if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
             $storeId,
             $category->getId(),
             Category::ENTITY
         )) {
-            $storeScopedCategory = $this->categoryRepository->get($category->getId(), $storeId);
             $this->updateUrlPathForCategory($storeScopedCategory);
         }
 
@@ -260,6 +261,30 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $this->updateUrlPathForCategory($child);
             }
         }
+    }
+
+    /**
+     * Re-scope the edited category to a specific store, preserving its just-changed url_key.
+     *
+     * @param Category $category
+     * @param int $storeId
+     * @return Category
+     * @throws NoSuchEntityException
+     */
+    private function getStoreScopedCategory(Category $category, int $storeId): Category
+    {
+        $isEditedScope = $storeId === (int)$category->getStoreId();
+        if (!$isEditedScope && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+            $storeId,
+            $category->getId(),
+            Category::ENTITY
+        )) {
+            return $this->categoryRepository->get($category->getId(), $storeId);
+        }
+
+        $storeScopedCategory = clone $category;
+        $storeScopedCategory->setStoreId($storeId);
+        return $storeScopedCategory;
     }
 
     /**
