@@ -14,7 +14,8 @@
         <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="15"/>
         <element name="DatePickerFrom" type="button" selector="[name='time[from]'] + button" timeout="15"/>
         <element name="DatePickerTo" type="button" selector="[name='time[to]'] + button" timeout="15"/>
-        <element name="todayDate" type="button" selector=".ui-datepicker-today"/>
+        <element name="todayDate" type="button" selector="#ui-datepicker-div td.ui-datepicker-today a" timeout="30"/>
+        <element name="datepickerOverlay" type="block" selector="#ui-datepicker-div" timeout="30"/>
     </section>
 </sections>
 
