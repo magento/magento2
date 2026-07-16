@@ -8,8 +8,12 @@ declare(strict_types=1);
 namespace Magento\Quote\Test\Unit\Model\QuoteRepository;
 
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
@@ -204,6 +208,42 @@ class SaveHandlerTest extends TestCase
             ->willReturnSelf();
 
         $this->assertSame($this->quoteMock, $this->saveHandler->save($this->quoteMock));
+    }
+    
+    public function testSaveThrowsCouldNotSaveExceptionWhenCartItemPersisterFails(): void
+    {
+        $quoteItemMock = $this->createQuoteItemMock(false);
+
+        $this->quoteMock->expects(static::atLeastOnce())
+            ->method('getItems')
+            ->willReturn([$quoteItemMock]);
+        $this->cartItemPersisterMock->expects(static::once())
+            ->method('save')
+            ->with($this->quoteMock, $quoteItemMock)
+            ->willThrowException(new CouldNotSaveException(__('The quote couldn\'t be saved.')));
+
+        $this->expectException(CouldNotSaveException::class);
+        $this->expectExceptionMessage('The quote couldn\'t be saved.');
+
+        $this->saveHandler->save($this->quoteMock);
+    }
+
+    public function testSaveThrowsLocalizedExceptionWhenCartItemPersisterFails(): void
+    {
+        $quoteItemMock = $this->createQuoteItemMock(false);
+
+        $this->quoteMock->expects(static::atLeastOnce())
+            ->method('getItems')
+            ->willReturn([$quoteItemMock]);
+        $this->cartItemPersisterMock->expects(static::once())
+            ->method('save')
+            ->with($this->quoteMock, $quoteItemMock)
+            ->willThrowException(new LocalizedException(__('Invalid cart item.')));
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid cart item.');
+
+        $this->saveHandler->save($this->quoteMock);
     }
 
     /**

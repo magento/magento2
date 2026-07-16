@@ -221,7 +221,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
     {
         $validCoupons = $this->validateCouponCode->execute(
             $quote->getCouponCode() ? [$quote->getCouponCode()] : [],
-            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId()
+            $quote->getCustomerIsGuest() ? null : (int) $quote->getCustomer()->getId(),
+            $quote
         );
 
         if (empty($validCoupons)) {
