@@ -440,10 +440,12 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
         foreach ($this->getRules($address) as $rule) {
             /* @var Rule $rule */
             if (!$rule->getApplyToShipping()) {
-                if ($rule->getStopRulesProcessing()
-                    && $this->validatorUtility->canProcessRule($rule, $address)
-                ) {
-                    break;
+                if ($rule->getStopRulesProcessing()) {
+                    $addressAppliedRuleIds = $address->getAppliedRuleIds()
+                        ? explode(',', $address->getAppliedRuleIds()) : [];
+                    if (in_array($rule->getId(), $addressAppliedRuleIds)) {
+                        break;
+                    }
                 }
                 continue;
             }
