@@ -56,6 +56,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @param AddProductToCart|null $addProductToCart
      * @param AjaxMessageResponse|null $ajaxMessageResponse
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
