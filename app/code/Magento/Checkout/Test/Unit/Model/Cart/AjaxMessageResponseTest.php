@@ -92,10 +92,7 @@ class AjaxMessageResponseTest extends TestCase
         $error->setText('Product that you are trying to add is not available.');
 
         $messages = $this->createMock(Collection::class);
-        $messages->expects($this->once())
-            ->method('getItemsByType')
-            ->with(MessageInterface::TYPE_ERROR)
-            ->willReturn([$error]);
+        $messages->expects($this->once())->method('getItemsByType')->with(MessageInterface::TYPE_ERROR)->willReturn([$error]);
 
         $errorMessages = $this->createMock(Collection::class);
         $errorMessages->expects($this->once())->method('addMessage')->with($error)->willReturnSelf();

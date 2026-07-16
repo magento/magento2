@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Product;
 use Magento\Checkout\Controller\Cart\Add;
 use Magento\Checkout\Model\AddProductToCart;
 use Magento\Checkout\Model\Cart;
-use Magento\Checkout\Model\Cart\AjaxMessageResponse;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -81,11 +80,6 @@ class AddTest extends TestCase
     private $addProductToCart;
 
     /**
-     * @var AjaxMessageResponse&MockObject
-     */
-    private $ajaxMessageResponse;
-
-    /**
      * @var Cart&MockObject
      */
     private $cart;
@@ -123,7 +117,6 @@ class AddTest extends TestCase
         $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->quantityProcessor = $this->createMock(RequestQuantityProcessor::class);
         $this->addProductToCart = $this->createMock(AddProductToCart::class);
-        $this->ajaxMessageResponse = $this->createMock(AjaxMessageResponse::class);
         $this->cart = $this->createMock(Cart::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
 
@@ -142,11 +135,6 @@ class AddTest extends TestCase
                 'cart' => $this->cart,
                 '_response' => $this->response
             ]
-        );
-        $this->objectManagerHelper->setBackwardCompatibleProperty(
-            $this->cartAdd,
-            'ajaxMessageResponse',
-            $this->ajaxMessageResponse
         );
     }
 
