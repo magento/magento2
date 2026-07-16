@@ -178,39 +178,108 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             return [];
         }
 
+        if (empty($options[self::INPUT_KEY_QUEUE_AMQP_HOST])) {
+            return [];
+        }
+
+        return $this->validateAmqpConnection($options);
+    }
+
+    /**
+     * Validate AMQP connection and RabbitMQ version.
+     *
+     * @param array $options
+     * @return array
+     */
+    private function validateAmqpConnection(array $options): array
+    {
         $errors = [];
-        if (isset($options[self::INPUT_KEY_QUEUE_AMQP_HOST])
-            && $options[self::INPUT_KEY_QUEUE_AMQP_HOST] !== '') {
-            if (!$this->isDataEmpty(
-                $options,
-                self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS
-            )) {
-                $sslOptions = json_decode(
-                    $options[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS],
-                    true
-                );
-            } else {
-                $sslOptions = null;
-            }
-            $isSslEnabled = !empty($options[self::INPUT_KEY_QUEUE_AMQP_SSL])
-                && $options[self::INPUT_KEY_QUEUE_AMQP_SSL] !== 'false';
+        $sslOptions = $this->parseSslOptions($options);
+        $isSslEnabled = $this->isSslEnabled($options);
 
-            $result = $this->connectionValidator->isConnectionValid(
-                $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
-                $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
-                $options[self::INPUT_KEY_QUEUE_AMQP_USER],
-                $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
-                $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
-                $isSslEnabled,
-                $sslOptions
-            );
+        $result = $this->connectionValidator->isConnectionValid(
+            $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
+            $options[self::INPUT_KEY_QUEUE_AMQP_USER],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
+            $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
+            $isSslEnabled,
+            $sslOptions
+        );
 
-            if (!$result) {
-                $errors[] = "Could not connect to the Amqp Server.";
+        if (!$result) {
+            $errors[] = "Could not connect to the Amqp Server.";
+        }
+
+        // Validate RabbitMQ version if connection succeeded
+        if ($result) {
+            $versionError = $this->validateVersion($options, $isSslEnabled, $sslOptions);
+            if ($versionError !== null) {
+                $errors[] = $versionError;
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * Parse SSL options from config options.
+     *
+     * @param array $options
+     * @return array|null
+     */
+    private function parseSslOptions(array $options): ?array
+    {
+        if (!$this->isDataEmpty($options, self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS)) {
+            return json_decode($options[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS], true);
+        }
+        return null;
+    }
+
+    /**
+     * Check if SSL is enabled.
+     *
+     * @param array $options
+     * @return bool
+     */
+    private function isSslEnabled(array $options): bool
+    {
+        return !empty($options[self::INPUT_KEY_QUEUE_AMQP_SSL])
+            && $options[self::INPUT_KEY_QUEUE_AMQP_SSL] !== 'false';
+    }
+
+    /**
+     * Validate RabbitMQ version.
+     *
+     * @param array $options
+     * @param bool $isSslEnabled
+     * @param array|null $sslOptions
+     * @return string|null Error message or null
+     */
+    private function validateVersion(array $options, bool $isSslEnabled, ?array $sslOptions): ?string
+    {
+        $serverVersion = $this->connectionValidator->getServerVersion(
+            $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
+            $options[self::INPUT_KEY_QUEUE_AMQP_USER],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
+            $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
+            $isSslEnabled,
+            $sslOptions
+        );
+
+        if ($serverVersion !== null
+            && version_compare($serverVersion, ConnectionValidator::MINIMUM_RABBITMQ_VERSION, '<')
+        ) {
+            return sprintf(
+                'RabbitMQ version "%s" detected. Magento requires RabbitMQ version %s or later. '
+                . 'Please upgrade RabbitMQ and rerun setup.',
+                $serverVersion,
+                ConnectionValidator::MINIMUM_RABBITMQ_VERSION
+            );
+        }
+
+        return null;
     }
 
     /**
