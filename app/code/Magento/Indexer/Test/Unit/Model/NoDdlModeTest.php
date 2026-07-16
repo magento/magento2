@@ -12,7 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Indexer\Model\NoDdlMode;
-use Magento\Indexer\Model\NoDdlModeInterface;
+use Magento\Framework\Indexer\NoDdlModeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

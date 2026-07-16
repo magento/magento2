@@ -14,7 +14,7 @@
     <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <preference for="Magento\Framework\Indexer\IndexMutexInterface" type="Magento\Indexer\Model\IndexMutex" />
     <preference for="Magento\Framework\Indexer\DeferredCacheCleanerInterface" type="Magento\Indexer\Model\Indexer\DeferredCacheCleaner" />
-    <preference for="Magento\Indexer\Model\NoDdlModeInterface" type="Magento\Indexer\Model\NoDdlMode" />
+    <preference for="Magento\Framework\Indexer\NoDdlModeInterface" type="Magento\Indexer\Model\NoDdlMode" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>

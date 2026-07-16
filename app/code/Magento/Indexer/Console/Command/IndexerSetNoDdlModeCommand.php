@@ -11,7 +11,7 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\IndexerFactory;
-use Magento\Indexer\Model\NoDdlModeInterface;
+use Magento\Framework\Indexer\NoDdlModeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

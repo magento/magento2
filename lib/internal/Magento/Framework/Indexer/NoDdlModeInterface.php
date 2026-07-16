@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Indexer\Model;
+namespace Magento\Framework\Indexer;
 
 /**
  * Manages DDL-free (flag-based) active/reserved table swapping for full reindex

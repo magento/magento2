@@ -9,6 +9,7 @@ namespace Magento\Indexer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Indexer\NoDdlModeInterface;
 
 /**
  * Tracks per-indexer No-DDL reindex enablement and active/reserved table state

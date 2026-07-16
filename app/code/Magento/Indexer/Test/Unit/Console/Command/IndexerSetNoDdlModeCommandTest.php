@@ -13,7 +13,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\IndexerFactory;
-use Magento\Indexer\Model\NoDdlModeInterface;
+use Magento\Framework\Indexer\NoDdlModeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
