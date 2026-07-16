@@ -65,7 +65,7 @@
                 <item name="reset" xsi:type="object">Magento\Indexer\Console\Command\IndexerResetStateCommand</item>
                 <item name="set-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand</item>
                 <item name="show-dimensions-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerShowDimensionsModeCommand</item>
-                <item name="set-no-ddl-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand</item>
+                <item name="set-no-ddl-mode" xsi:type="object">Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand\Proxy</item>
             </argument>
         </arguments>
     </type>
