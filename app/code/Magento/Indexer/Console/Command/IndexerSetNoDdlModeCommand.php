@@ -134,6 +134,15 @@ class IndexerSetNoDdlModeCommand extends Command
                 $output->writeln("No-DDL reindex mode enabled for '{$indexer->getTitle()}'.");
                 return Cli::RETURN_SUCCESS;
             case self::MODE_DISABLE:
+                if ($this->noDdlMode->isEnabled($indexerId) && !$this->noDdlMode->isMainTableActive($indexerId)) {
+                    $output->writeln(
+                        "Cannot disable No-DDL reindex mode for '{$indexer->getTitle()}': the replica table is "
+                        . 'currently serving reads and the base table is stale. Run '
+                        . "'bin/magento indexer:reindex {$indexerId}' first to refresh the base table and make it "
+                        . 'active again, then disable.'
+                    );
+                    return Cli::RETURN_FAILURE;
+                }
                 $this->setEnabled($indexerId, false);
                 $output->writeln("No-DDL reindex mode disabled for '{$indexer->getTitle()}'.");
                 return Cli::RETURN_SUCCESS;
