@@ -30,6 +30,6 @@ class StockAll extends UnsubscribeController
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath('customer/account/');
+        return $resultRedirect->setPath('productalert/customer/index');
     }
 }
