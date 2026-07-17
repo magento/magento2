@@ -65,6 +65,7 @@ class TestPreparedSubscriber implements PreparedSubscriber
         $objectManager = Bootstrap::getObjectManager();
         $testObj = $objectManager->create($className, ['name' => $methodName]);
         if ($testData->hasDataFromDataProvider()) {
+            // IMPORTANT: It's not actual data returned from data provider. It's simplified readable version of them.
             $dataFromDataProvider = $testData->dataFromDataProvider();
             $data = array_map(trim(...), explode(',', $dataFromDataProvider->data()));
             $testObj->setData($dataFromDataProvider->dataSetName(), $data);
