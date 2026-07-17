@@ -25,22 +25,26 @@ class FilesystemTagAdapter implements TagAdapterInterface
     private string $tagDirectory;
 
     /**
+     * Whether to maintain the on-disk tag index. Disabled for an L1 tier that sits behind a
+     * Redis L2 (tags + :hash live in the remote, local self-heals on read); kept true for a
+     * file-only cache where the file tag index is the sole invalidation source.
+     *
+     * @var bool
+     */
+    private bool $indexTags;
+
+    /**
      * @param CacheItemPoolInterface $cachePool
      * @param string $tagDirectory Directory to store tag index files
+     * @param bool $indexTags Whether to write/maintain the on-disk tag index
      */
-    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory)
+    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory, bool $indexTags = true)
     {
         $this->cachePool = $cachePool;
         $this->tagDirectory = rtrim($tagDirectory, '/') . '/tags/';
-
-        // Ensure tag directory exists with proper error handling
-        if (!is_dir($this->tagDirectory)) {
-            if (!@mkdir($this->tagDirectory, 0770, true) && !is_dir($this->tagDirectory)) {
-                throw new \RuntimeException(
-                    sprintf('Failed to create tag directory: %s', $this->tagDirectory)
-                );
-            }
-        }
+        $this->indexTags = $indexTags;
+        // Directory is created lazily on the first real tag write (see setTagIds), so a tier
+        // that never indexes tags leaves no empty var/cache/symfony/tags directory behind.
     }
 
     /**
@@ -263,7 +267,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function onSave(string $id, array $tags): void
     {
-        if (empty($tags)) {
+        if (!$this->indexTags || empty($tags)) {
             return;
         }
 
