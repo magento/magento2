@@ -68,7 +68,10 @@ $format = $block->getDateFormat() ?: \IntlDateFormatter::SHORT;
                                     <span class="review-details-label">
                                         <?= $escaper->escapeHtml(__('Review by')) ?>
                                     </span>
-                                    <strong class="review-details-value" itemprop="author" itemscope itemtype="http://schema.org/Person">
+                                    <strong class="review-details-value"
+                                            itemprop="author"
+                                            itemscope
+                                            itemtype="http://schema.org/Person">
                                         <span itemprop="name"><?= $escaper->escapeHtml($_review->getNickname()) ?></span>
                                     </strong>
                                 </p>
