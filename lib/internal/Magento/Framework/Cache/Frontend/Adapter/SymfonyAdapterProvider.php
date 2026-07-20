@@ -198,7 +198,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                 ),
                 'filesystem' => new FilesystemTagAdapter(
                     $cachePool,
-                    $this->getCacheDirectory(),
+                    !empty($backendOptions['cache_dir']) ? $backendOptions['cache_dir'] : $this->getCacheDirectory(),
                     (bool)($backendOptions['index_tags'] ?? true)
                 ),
                 default => new GenericTagAdapter(

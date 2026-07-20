@@ -542,7 +542,7 @@ LUA;
                 }
 
                 return $deleted >= 0; // Lua returns number of items deleted
-            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 // Intentional: Fall through to PHP implementation on Lua failure
             }
@@ -593,7 +593,7 @@ LUA;
                 }
 
                 return $deleted >= 0; // Lua returns number of items deleted
-            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 // Intentional: Fall through to PHP implementation on Lua failure
             }
