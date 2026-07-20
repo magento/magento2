@@ -40,7 +40,7 @@ class TaxSettings
     public function afterGetData(\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject, $result)
     {
         $result['displayTaxes'] = $this->config
-            ->getValue(\Magento\Tax\Model\Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE);
+            ->getValue(\Magento\Tax\Model\Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 
         return $result;
     }
