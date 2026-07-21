@@ -16,6 +16,11 @@ use Magento\Swatches\Plugin\Eav\Model\Entity\Attribute\OptionManagement;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit tests for {@link OptionManagement} plugin.
+ *
+ * @see OptionManagement
+ */
 class OptionManagementTest extends TestCase
 {
     /**
@@ -48,6 +53,9 @@ class OptionManagementTest extends TestCase
      */
     private $attributeMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->attributeRepositoryMock = $this->createMock(AttributeRepository::class);
@@ -64,6 +72,11 @@ class OptionManagementTest extends TestCase
         );
     }
 
+    /**
+     * Test beforeUpdate when the option value matches the existing option ID (no new swatch value).
+     *
+     * @return void
+     */
     public function testBeforeUpdateWithNoNewSwatchValue(): void
     {
         $attributeCode = 'color';
@@ -87,6 +100,11 @@ class OptionManagementTest extends TestCase
         $this->plugin->beforeUpdate($this->subjectMock, $attributeCode, $optionId, $this->optionMock);
     }
 
+    /**
+     * Test beforeUpdate when the option value is empty.
+     *
+     * @return void
+     */
     public function testBeforeUpdateWithEmptyValue(): void
     {
         $attributeCode = 'color';
@@ -110,6 +128,11 @@ class OptionManagementTest extends TestCase
         $this->plugin->beforeUpdate($this->subjectMock, $attributeCode, $optionId, $this->optionMock);
     }
 
+    /**
+     * Test beforeUpdate when a valid visual swatch value is provided.
+     *
+     * @return void
+     */
     public function testBeforeUpdateWithValidSwatchValue(): void
     {
         $attributeCode = 'color';
