@@ -135,7 +135,9 @@ class StoreResolver implements StoreResolverInterface
 
         if (is_array($storeCode)) {
             if (!isset($storeCode['_data']['code'])) {
-                throw new \InvalidArgumentException(__('Invalid store parameter.'));
+                throw new \InvalidArgumentException(
+                    __('Invalid store parameter.')->render()
+                );
             }
             $storeCode = $storeCode['_data']['code'];
         }
