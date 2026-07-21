@@ -141,6 +141,13 @@
                     <svgz>svgz</svgz>
                     <xml>xml</xml>
                     <xhtml>xhtml</xhtml>
+                    <hta>hta</hta>
+                    <mhtml>mhtml</mhtml>
+                    <mht>mht</mht>
+                    <htc>htc</htc>
+                    <xht>xht</xht>
+                    <shtm>shtm</shtm>
+                    <php8>php8</php8>
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -21,6 +22,7 @@ use Magento\Quote\Api\ShipmentEstimationInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote\AddressFactory;
 use Magento\Quote\Model\Cart\ShippingMethodConverter;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\ErrorMapper;
 use Magento\QuoteGraphQl\Model\FormatMoneyTypeData;
 
@@ -31,6 +33,11 @@ use Magento\QuoteGraphQl\Model\FormatMoneyTypeData;
 class EstimateShippingMethods implements ResolverInterface
 {
     /**
+     * @var GetCartForUser
+     */
+    private GetCartForUser $getCartForUser;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
      * @param AddressFactory $addressFactory
@@ -39,6 +46,7 @@ class EstimateShippingMethods implements ResolverInterface
      * @param ShippingMethodConverter $shippingMethodConverter
      * @param FormatMoneyTypeData $formatMoneyTypeData
      * @param ErrorMapper $errorMapper
+     * @param GetCartForUser|null $getCartForUser
      */
     public function __construct(
         private MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
@@ -48,8 +56,10 @@ class EstimateShippingMethods implements ResolverInterface
         private ExtensibleDataObjectConverter $dataObjectConverter,
         private ShippingMethodConverter $shippingMethodConverter,
         private FormatMoneyTypeData $formatMoneyTypeData,
-        private ErrorMapper $errorMapper
+        private ErrorMapper $errorMapper,
+        ?GetCartForUser $getCartForUser = null
     ) {
+        $this->getCartForUser = $getCartForUser ?? ObjectManager::getInstance()->get(GetCartForUser::class);
     }
 
     /**
@@ -58,14 +68,18 @@ class EstimateShippingMethods implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         $this->validateInput($args);
+        $maskedCartId = $args['input']['cart_id'];
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         try {
-            $cart = $this->cartRepository->get($this->maskedQuoteIdToQuoteId->execute($args['input']['cart_id']));
+            // Enforce cart ownership consistently with EstimateTotals / other cart resolvers.
+            $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
+            $cart = $this->cartRepository->get($this->maskedQuoteIdToQuoteId->execute($maskedCartId));
         } catch (NoSuchEntityException $ex) {
             throw new GraphQlInputException(
                 __(
                     'Could not find a cart with ID "%masked_id"',
                     [
-                        'masked_id' => $args['input']['cart_id']
+                        'masked_id' => $maskedCartId
                     ]
                 ),
                 $ex,
