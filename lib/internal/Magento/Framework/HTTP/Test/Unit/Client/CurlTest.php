@@ -25,7 +25,8 @@ class CurlTest extends TestCase
         // Accommodate different libcurl version error messages:
         // - "Protocol telnet not supported or disabled in libcurl" (older versions)
         // - "Protocol \"telnet\" disabled" (newer versions)
-        $this->expectExceptionMessageMatches('/Protocol .?telnet.? (not supported or )?disabled( in libcurl)?/');
+        // - "Protocol \"telnet\" is disabled" (even newer versions >= 8.21)
+        $this->expectExceptionMessageMatches('/Protocol .?telnet.? (not supported or )?(is )?disabled( in libcurl)?/');
         $client = new Curl();
         $client->get('telnet://127.0.0.1/test');
     }
