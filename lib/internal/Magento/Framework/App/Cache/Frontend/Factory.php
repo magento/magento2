@@ -634,9 +634,11 @@ class Factory
      */
     private function isCompressionEnabled(array $backendOptions): bool
     {
-        // Check if compress_data is explicitly enabled (value '1' or true)
-        return isset($backendOptions['compress_data'])
-            && ($backendOptions['compress_data'] === '1' || $backendOptions['compress_data'] === 1);
+        if (!isset($backendOptions['compress_data'])) {
+            return true;
+        }
+
+        return !in_array($backendOptions['compress_data'], ['0', 0, false, 'false'], true);
     }
 
     /**
