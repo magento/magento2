@@ -539,19 +539,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
-        // Get cache directory (optimized path)
-        if (isset($options['cache_dir'])) {
-            $cacheDir = $options['cache_dir'];
-        } else {
-            // Cache the directory path for reuse
-            static $defaultCacheDir = null;
-            if ($defaultCacheDir === null) {
-                $directory = $this->filesystem->getDirectoryWrite(DirectoryList::CACHE);
-                $defaultCacheDir = $directory->getAbsolutePath();
-                $directory->create();
-            }
-            $cacheDir = $defaultCacheDir;
-        }
+        $cacheDir = !empty($options['cache_dir']) ? $options['cache_dir'] : $this->getCacheDirectory();
 
         // Add igbinary marshaller support for file cache (70% faster, 58% smaller)
         $serializer = $options['serializer'] ?? null;
