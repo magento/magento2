@@ -17,8 +17,8 @@ use Magento\Framework\Cache\FrontendInterface;
  * This backend provides local + remote caching with automatic synchronization,
  * designed specifically for Symfony cache adapters (PSR-6 compliant).
  *
- * Unlike RemoteSynchronizedCache (which requires ExtendedBackendInterface),
- * this class works directly with Symfony's FrontendInterface.
+ * This class works directly with Symfony's FrontendInterface and does not require
+ * ExtendedBackendInterface.
  *
  * Architecture:
  * - L1 (Local): Fast cache (file/APCu) - Per worker, ephemeral
@@ -488,8 +488,8 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Generate a unique per-process lock signature (pid-host-random), matching
-     * RemoteSynchronizedCache so lock ownership is unambiguous across servers.
+     * Generate a unique per-process lock signature (pid-host-random) so lock ownership
+     * is unambiguous across servers.
      *
      * @return string
      */
