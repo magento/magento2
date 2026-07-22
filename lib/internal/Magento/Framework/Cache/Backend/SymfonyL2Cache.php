@@ -113,7 +113,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local = $local;
         $this->cleanupPercentage = (int)($options['cleanup_percentage'] ?? self::DEFAULT_CLEANUP_PERCENTAGE);
         $this->useStaleCache = (bool)($options['use_stale_cache'] ?? false);
-        $this->lockSign = hash('sha256', uniqid((string)getmypid(), true));
+        $this->lockSign = $this->generateLockSign();
 
         // Validate cleanup percentage
         if ($this->cleanupPercentage < 1 || $this->cleanupPercentage > 100) {
@@ -485,6 +485,25 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->remote->save($this->lockSign, $lockKey, [], self::LOCK_TTL);
 
         return $this->remote->load($lockKey) === $this->lockSign;
+    }
+
+    /**
+     * Generate a unique per-process lock signature (pid-host-random), matching
+     * RemoteSynchronizedCache so lock ownership is unambiguous across servers.
+     *
+     * @return string
+     */
+    private function generateLockSign(): string
+    {
+        $sign = implode('-', [getmypid(), crc32((string)gethostname())]);
+
+        try {
+            $sign .= '-' . bin2hex(random_bytes(4));
+        } catch (\Exception $e) {
+            $sign .= '-' . uniqid('-uniqid-');
+        }
+
+        return $sign;
     }
 
     /**
