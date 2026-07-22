@@ -485,6 +485,10 @@ LUA;
                 }
                 $this->executePipeline($pipeline);
 
+                // Prune the tag index (tag sets + reverse index) for this chunk so it does
+                // not outlive its data (a tag-scoped flush arrives here as deleteByIds).
+                $this->pruneTagIndex($chunk);
+
                 // Commit each chunk separately (important for large operations)
                 if (method_exists($this->cachePool, 'commit')) {
                     $this->cachePool->commit();
@@ -495,6 +499,10 @@ LUA;
         }
 
         $success = $this->cachePool->deleteItems($ids);
+
+        // Prune the tag index (tag sets + reverse index) for the removed ids. Done before the
+        // all_ids cleanup below because the small-batch path mutates $ids via array_unshift.
+        $this->pruneTagIndex($ids);
 
         if (count($ids) > 10) {
             $pipeline = $this->createPipeline();
@@ -664,6 +672,49 @@ LUA;
 
         // Execute all operations in one go
         $this->executePipeline($pipeline);
+    }
+
+    /**
+     * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete
+     * its reverse-index key. Uses two pipelines (read reverse index, then apply removals) so the
+     * cost is constant round-trips regardless of id count.
+     *
+     * @param array $ids
+     * @return void
+     */
+    private function pruneTagIndex(array $ids): void
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        // Read the reverse index (id -> tags) for every id in one pipeline
+        $readPipe = $this->createPipeline();
+        foreach ($ids as $id) {
+            $readPipe->smembers('cache:id_tags:' . $this->namespace . $id);
+        }
+        $tagsPerId = $this->executePipeline($readPipe);
+        if (!is_array($tagsPerId)) {
+            return;
+        }
+
+        // Drop each id from its tag SETs and delete its reverse index in one pipeline
+        $writePipe = $this->createPipeline();
+        $hasWork = false;
+        foreach (array_values($ids) as $i => $id) {
+            $tags = $tagsPerId[$i] ?? [];
+            if (!is_array($tags) || empty($tags)) {
+                continue;
+            }
+            foreach ($tags as $tag) {
+                $writePipe->srem($this->getTagKey($tag), $id);
+            }
+            $writePipe->del('cache:id_tags:' . $this->namespace . $id);
+            $hasWork = true;
+        }
+        if ($hasWork) {
+            $this->executePipeline($writePipe);
+        }
     }
 
     /**

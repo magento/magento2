@@ -78,6 +78,23 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private const INVALID_MARK_TTL = 86400;
 
     /**
+     * Regeneration lock key prefix (stored in remote L2)
+     */
+    private const LOCK_PREFIX = '___stale_regen_lock_';
+
+    /**
+     * Regeneration lock lifetime in seconds (auto-expires if a regenerator dies)
+     */
+    private const LOCK_TTL = 10;
+
+    /**
+     * Per-process signature to confirm regeneration-lock ownership
+     *
+     * @var string
+     */
+    private string $lockSign;
+
+    /**
      * Constructor
      *
      * @param FrontendInterface $remote Remote cache (L2 - persistent, shared)
@@ -96,6 +113,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local = $local;
         $this->cleanupPercentage = (int)($options['cleanup_percentage'] ?? self::DEFAULT_CLEANUP_PERCENTAGE);
         $this->useStaleCache = (bool)($options['use_stale_cache'] ?? false);
+        $this->lockSign = hash('sha256', uniqid((string)getmypid(), true));
 
         // Validate cleanup percentage
         if ($this->cleanupPercentage < 1 || $this->cleanupPercentage > 100) {
@@ -433,6 +451,11 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $remoteHash = $this->remote->load($id . self::HASH_SUFFIX);
 
         if ($remoteHash === false && $this->useStaleCache) {
+            // Elect one regenerator: lock winner returns a miss (rebuilds + repopulates L2),
+            // others serve stale L1 without waiting.
+            if ($this->tryLock($id)) {
+                return false;
+            }
             return $localData;
         }
 
@@ -443,6 +466,25 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         }
 
         return null;
+    }
+
+    /**
+     * Try to acquire the non-blocking regeneration lock; returns true for exactly one reader.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function tryLock(string $id): bool
+    {
+        $lockKey = self::LOCK_PREFIX . $id;
+
+        if ($this->remote->load($lockKey) !== false) {
+            return false;
+        }
+
+        $this->remote->save($this->lockSign, $lockKey, [], self::LOCK_TTL);
+
+        return $this->remote->load($lockKey) === $this->lockSign;
     }
 
     /**

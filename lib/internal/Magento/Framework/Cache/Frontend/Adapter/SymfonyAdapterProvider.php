@@ -138,21 +138,17 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         $backendTypeLower = strtolower($backendType);
         $resolvedType = $this->adapterTypeMap[$backendTypeLower] ?? 'filesystem';
 
-        // Create adapter based on resolved type with fallback to filesystem
-        try {
-            $adapter = match ($resolvedType) {
-                'redis' => $this->createRedisAdapter($backendOptions, $namespace, $defaultLifetime),
-                'memcached' => $this->createMemcachedAdapter($backendOptions, $namespace, $defaultLifetime),
-                'filesystem' => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
-                'database' => $this->createDatabaseAdapter($backendOptions, $namespace, $defaultLifetime),
-                'apcu' => $this->createApcuAdapter($namespace, $defaultLifetime),
-                'twolevel' => $this->createTwoLevelAdapter($backendOptions, $namespace, $defaultLifetime),
-                default => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
-            };
-        } catch (\Exception $e) {
-            // Fallback to filesystem adapter if the requested adapter fails
-            $adapter = $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime);
-        }
+        // Create adapter based on resolved type. No fallback to filesystem: a backend (e.g. Redis)
+        // outage propagates instead of silently degrading to var/cache, matching legacy fail-fast.
+        $adapter = match ($resolvedType) {
+            'redis' => $this->createRedisAdapter($backendOptions, $namespace, $defaultLifetime),
+            'memcached' => $this->createMemcachedAdapter($backendOptions, $namespace, $defaultLifetime),
+            'filesystem' => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
+            'database' => $this->createDatabaseAdapter($backendOptions, $namespace, $defaultLifetime),
+            'apcu' => $this->createApcuAdapter($namespace, $defaultLifetime),
+            'twolevel' => $this->createTwoLevelAdapter($backendOptions, $namespace, $defaultLifetime),
+            default => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
+        };
 
         // Skip TagAwareAdapter for Redis/Filesystem (native tag support)
         if (in_array($resolvedType, ['redis', 'filesystem'], true)) {

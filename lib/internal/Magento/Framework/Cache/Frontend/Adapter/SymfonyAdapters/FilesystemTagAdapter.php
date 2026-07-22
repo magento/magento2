@@ -257,7 +257,42 @@ class FilesystemTagAdapter implements TagAdapterInterface
             $this->cachePool->commit();
         }
 
+        // Prune the deleted ids from the on-disk tag index so it does not outlive its data.
+        // clean(ALL) is rewritten to a tag-clean by TagScope before reaching this adapter, so a
+        // flush arrives here as deleteByIds(all-ids-of-scope); pruning them empties every tag
+        // file (removed when empty), giving the same clean slate as clearAllIndices().
+        if ($this->indexTags) {
+            $this->pruneIdsFromIndex($ids);
+        }
+
         return $success;
+    }
+
+    /**
+     * Remove the given ids from every tag file in a single pass; delete files left empty.
+     *
+     * @param array $ids
+     * @return void
+     */
+    private function pruneIdsFromIndex(array $ids): void
+    {
+        $tagFiles = glob($this->tagDirectory . '*');
+        if ($tagFiles === false) {
+            return;
+        }
+
+        $idSet = array_flip($ids);
+        foreach ($tagFiles as $file) {
+            if (!is_file($file)) {
+                continue;
+            }
+            $tag = basename($file);
+            $current = $this->getTagIds($tag);
+            $remaining = array_values(array_filter($current, static fn($id) => !isset($idSet[$id])));
+            if (count($remaining) !== count($current)) {
+                $this->setTagIds($tag, $remaining);
+            }
+        }
     }
 
     /**
