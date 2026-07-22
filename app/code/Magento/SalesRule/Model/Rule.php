@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model;
 
@@ -204,12 +204,12 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
         \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ExtensionAttributesFactory $extensionFactory = null,
-        AttributeValueFactory $customAttributeFactory = null,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?ExtensionAttributesFactory $extensionFactory = null,
+        ?AttributeValueFactory $customAttributeFactory = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_couponFactory = $couponFactory;
         $this->_codegenFactory = $codegenFactory;
@@ -577,7 +577,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function hasIsValidForAddress($address)
     {
         $addressId = $this->_getAddressId($address);
-        return isset($this->_validatedAddresses[$addressId]) ? true : false;
+        return ($addressId !== null && isset($this->_validatedAddresses[$addressId])) ? true : false;
     }
 
     /**
@@ -590,7 +590,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function setIsValidForAddress($address, $validationResult)
     {
         $addressId = $this->_getAddressId($address);
-        $this->_validatedAddresses[$addressId] = $validationResult;
+        if ($addressId !== null) {
+            $this->_validatedAddresses[$addressId] = $validationResult;
+        }
         return $this;
     }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\App\Response\Http;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ContentsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Files
      */
@@ -59,12 +61,12 @@ class ContentsTest extends TestCase
     protected $storage;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->view = $this->createMock(ViewInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->session = $this->createMock(Session::class);
         $this->response = $this->createMock(Http::class);
         $this->storage = $this->createMock(Storage::class);
@@ -87,16 +89,11 @@ class ContentsTest extends TestCase
      */
     public function testExecute(): void
     {
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
+        $layout = $this->createMock(LayoutInterface::class);
         $storage = $this->createMock(WysiwygStorage::class);
-        $block = $this->getMockForAbstractClass(
+        $block = $this->createPartialMockWithReflection(
             BlockInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setStorage']
+            ['toHtml', 'setStorage']
         );
 
         $this->view->expects($this->once())

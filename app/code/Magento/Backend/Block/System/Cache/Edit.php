@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\System\Cache;
 
 /**
  * Cache management edit page
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -18,6 +16,8 @@ class Edit extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::system/cache/edit.phtml';
 
     /**
+     * Set the page title
+     *
      * @return void
      */
     protected function _construct()
@@ -28,7 +28,7 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _prepareLayout()
     {
@@ -47,6 +47,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the HTML for the save button
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -55,6 +57,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return the URL to save an item
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -63,6 +67,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Initialise the form
+     *
      * @return $this
      */
     public function initForm()

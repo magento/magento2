@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -54,5 +54,8 @@
         <data key="frontend_label[0]" unique="suffix">TextSwatchAttribute-</data>
         <data key="frontend_input">swatch_text</data>
         <data key="attribute_code" unique="suffix">text_swatch_attribute_</data>
+    </entity>
+    <entity name="VisualSwatchProductAttributeFormWithImageFallback" extends="VisualSwatchProductAttributeForm">
+        <data key="use_product_image_for_swatch">1</data>
     </entity>
 </entities>

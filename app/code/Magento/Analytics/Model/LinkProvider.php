@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\Model;
 
@@ -32,7 +32,7 @@ class LinkProvider implements LinkProviderInterface
     private $storeManager;
 
     /**
-     * @param LinkInterfaceFactory $linkInterfaceFactory
+     * @param LinkInterfaceFactory $linkFactory
      * @param FileInfoManager $fileInfoManager
      * @param StoreManagerInterface $storeManager
      */

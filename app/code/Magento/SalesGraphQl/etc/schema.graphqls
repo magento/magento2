@@ -3,7 +3,7 @@
 
 type Query {
     customerOrders: CustomerOrders @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Orders") @deprecated(reason: "Use the `customer` query instead.") @cache(cacheable: false)
-    guestOrder(input: OrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and postcode.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
+    guestOrder(input: GuestOrderInformationInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on number, email and billing last name.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
     guestOrderByToken(input: OrderTokenInput!): CustomerOrder! @doc(description:"Retrieve guest order details based on token.") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\GuestOrder") @cache(cacheable: false)
 }
 
@@ -160,7 +160,7 @@ type TaxItem @doc(description: "Contains tax item details.") {
 }
 
 type OrderTotal @doc(description: "Contains details about the sales total amounts used to calculate the final price.") {
-    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes.")
+    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes.") @deprecated(reason: "Use subtotal_excl_tax field instead")
     discounts: [Discount] @doc(description: "The applied discounts to the order.")
     total_tax: Money! @doc(description: "The amount of tax applied to the order.")
     taxes: [TaxItem] @doc(description: "The order tax details.")
@@ -168,6 +168,9 @@ type OrderTotal @doc(description: "Contains details about the sales total amount
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency.")
     total_shipping: Money! @doc(description: "The shipping amount for the order.")
     shipping_handling: ShippingHandling @doc(description: "Details about the shipping and handling costs for the order.")
+    subtotal_incl_tax: Money! @doc(description: "The subtotal of the order, including taxes.")
+    subtotal_excl_tax: Money! @doc(description: "The subtotal of the order, excluding taxes.")
+    grand_total_excl_tax: Money! @doc(description: "The grand total of the order, excluding taxes.")
 }
 
 type Invoice @doc(description: "Contains invoice details.") {
@@ -307,10 +310,17 @@ input OrderTokenInput @doc(description: "Input to retrieve an order based on tok
     token: String! @doc(description: "Order token.")
 }
 
-input OrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
+input OrderInformationInput @deprecated(reason: "Use `GuestOrderInformationInput` instead of OrderInformationInput.") @doc(description: "Input to retrieve an order based on details.") {
     number: String! @doc(description: "Order number.")
     email: String! @doc(description: "Order billing address email.")
-    postcode: String! @doc(description: "Order billing address postcode.")
+    lastname: String! @doc(description: "Order billing address lastname.")
+    postcode: String @deprecated(reason: "Use lastname instead of postcode") @doc(description: "Order billing address postcode")
+}
+
+input GuestOrderInformationInput @doc(description: "Input to retrieve an order based on details.") {
+    number: String! @doc(description: "Order number.")
+    email: String! @doc(description: "Order billing address email.")
+    lastname: String! @doc(description: "Order billing address lastname.")
 }
 
 enum OrderActionType @doc(description: "The list of available order actions.") {
@@ -318,19 +328,19 @@ enum OrderActionType @doc(description: "The list of available order actions.") {
 }
 
 type StoreConfig {
-    display_product_prices_in_catalog: Boolean! @doc(description: "Configuration data from tax/display/type")
-    display_shipping_prices: Boolean! @doc(description: "Configuration data from tax/display/shipping")
-    orders_invoices_credit_memos_display_price: Boolean! @doc(description: "Configuration data from tax/sales_display/price")
-    orders_invoices_credit_memos_display_subtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/subtotal")
-    orders_invoices_credit_memos_display_shipping_amount: Boolean! @doc(description: "Configuration data from tax/sales_display/shipping")
+    display_product_prices_in_catalog: Int! @doc(description: "Configuration data from tax/display/type")
+    display_shipping_prices: Int! @doc(description: "Configuration data from tax/display/shipping")
+    orders_invoices_credit_memos_display_price: Int! @doc(description: "Configuration data from tax/sales_display/price")
+    orders_invoices_credit_memos_display_subtotal: Int! @doc(description: "Configuration data from tax/sales_display/subtotal")
+    orders_invoices_credit_memos_display_shipping_amount: Int! @doc(description: "Configuration data from tax/sales_display/shipping")
     orders_invoices_credit_memos_display_grandtotal: Boolean! @doc(description: "Configuration data from tax/sales_display/grandtotal")
     orders_invoices_credit_memos_display_full_summary: Boolean! @doc(description: "Configuration data from tax/sales_display/full_summary")
     orders_invoices_credit_memos_display_zero_tax: Boolean! @doc(description: "Configuration data from tax/sales_display/zero_tax")
     fixed_product_taxes_enable: Boolean! @doc(description: "Configuration data from tax/weee/enable")
-    fixed_product_taxes_display_prices_in_product_lists: Int @doc(description: "Configuration data from tax/weee/display_list")
-    fixed_product_taxes_display_prices_on_product_view_page: Int @doc(description: "Configuration data from tax/weee/display")
-    fixed_product_taxes_display_prices_in_sales_modules: Int @doc(description: "Configuration data from tax/weee/display_sales")
-    fixed_product_taxes_display_prices_in_emails: Int @doc(description: "Configuration data from tax/weee/display_email")
+    fixed_product_taxes_display_prices_in_product_lists: Int! @doc(description: "Configuration data from tax/weee/display_list")
+    fixed_product_taxes_display_prices_on_product_view_page: Int! @doc(description: "Configuration data from tax/weee/display")
+    fixed_product_taxes_display_prices_in_sales_modules: Int! @doc(description: "Configuration data from tax/weee/display_sales")
+    fixed_product_taxes_display_prices_in_emails: Int! @doc(description: "Configuration data from tax/weee/display_email")
     fixed_product_taxes_apply_tax_to_fpt: Boolean! @doc(description: "Configuration data from tax/weee/apply_vat")
     fixed_product_taxes_include_fpt_in_subtotal: Boolean! @doc(description: "Configuration data from tax/weee/include_in_subtotal")
 }

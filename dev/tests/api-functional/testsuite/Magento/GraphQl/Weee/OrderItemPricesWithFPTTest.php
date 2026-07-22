@@ -1,23 +1,13 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Weee;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
@@ -43,6 +33,8 @@ use Magento\Weee\Test\Fixture\Attribute as FptAttributeFixture;
 
 /**
  * Test for guestOrder.items.prices.fixed_product_taxes
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderItemPricesWithFPTTest extends GraphQlAbstract
 {
@@ -117,8 +109,6 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
      * @param array $expectedResponse
      * @return void
      * @throws Exception
-     *
-     * @dataProvider orderItemFixedProductTaxDataProvider
      */
     #[
         DataFixture(FptAttributeFixture::class, ['attribute_code' => 'fpt_attr']),
@@ -159,6 +149,7 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
         DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
     ]
+    #[DataProvider('orderItemFixedProductTaxDataProvider')]
     public function testOrderItemFixedProductTax(int $taxDisplayType, array $expectedResponse): void
     {
         $settings = [
@@ -171,7 +162,7 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
             $this->getQuery(
                 $order->getIncrementId(),
                 $order->getBillingAddress()->getEmail(),
-                $order->getBillingAddress()->getPostcode()
+                $order->getBillingAddress()->getLastname()
             )
         );
 
@@ -258,17 +249,17 @@ class OrderItemPricesWithFPTTest extends GraphQlAbstract
      *
      * @param string $number
      * @param string $email
-     * @param string $postcode
+     * @param string $lastname
      * @return string
      */
-    private function getQuery(string $number, string $email, string $postcode): string
+    private function getQuery(string $number, string $email, string $lastname): string
     {
         return <<<QUERY
 {
   guestOrder(input: {
       number: "{$number}",
       email: "{$email}",
-      postcode: "{$postcode}"
+      lastname: "{$lastname}"
   }) {
     items {
       prices {

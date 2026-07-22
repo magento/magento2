@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\EncryptionKey\Model\ResourceModel\Key;
 
@@ -30,6 +30,8 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * @deprecated
+ * @see Extensible Reencryption Mechanism
  */
 class Change extends AbstractDb
 {
@@ -111,6 +113,8 @@ class Change extends AbstractDb
      * @param string|null $key
      * @return null|string
      * @throws FileSystemException|LocalizedException|Exception
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     public function changeEncryptionKey($key = null)
     {
@@ -148,6 +152,8 @@ class Change extends AbstractDb
      * Gather all encrypted system config values and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     protected function _reEncryptSystemConfigurationValues()
     {
@@ -183,6 +189,8 @@ class Change extends AbstractDb
      * Gather saved credit card numbers from sales order payments and re-encrypt them
      *
      * @return void
+     * @deprecated
+     * @see Extensible Reencryption Mechanism
      */
     protected function _reEncryptCreditCardNumbers()
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Pricing\Render;
@@ -51,8 +51,8 @@ class FinalPriceBox extends BasePriceBox
         PriceInterface $price,
         RendererPool $rendererPool,
         array $data = [],
-        SalableResolverInterface $salableResolver = null,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator = null
+        ?SalableResolverInterface $salableResolver = null,
+        ?MinimalPriceCalculatorInterface $minimalPriceCalculator = null
     ) {
         parent::__construct($context, $saleableItem, $price, $rendererPool, $data);
         $this->salableResolver = $salableResolver ?: ObjectManager::getInstance()->get(SalableResolverInterface::class);

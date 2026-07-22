@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\ReleaseNotification\Test\Unit\Model\ContentProvider\Http;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider;
 use Magento\ReleaseNotification\Model\ContentProvider\Http\UrlBuilder;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -148,8 +149,8 @@ class HttpContentProviderTest extends TestCase
      * @param string $edition
      * @param string $locale
      * @param string $response
-     * @dataProvider getGetContentOnDefaultOrEmptyProvider
      */
+    #[DataProvider('getGetContentOnDefaultOrEmptyProvider')]
     public function testGetContentSuccessOnDefaultOrEmpty($version, $edition, $locale, $response)
     {
         $urlLocale = 'https://content.url.example/' . $version . '/' . $edition . '/' . $locale . '.json';

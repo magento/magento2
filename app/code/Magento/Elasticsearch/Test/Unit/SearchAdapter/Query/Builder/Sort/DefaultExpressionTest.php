@@ -14,6 +14,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort\DefaultExpression;
 use Magento\Framework\Search\RequestInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DefaultExpressionTest extends TestCase
 {
@@ -37,7 +38,6 @@ class DefaultExpressionTest extends TestCase
     }
 
     /**
-     * @dataProvider buildDataProvider
      * @param string $attributeCode
      * @param string $direction
      * @param bool $isSortable
@@ -47,6 +47,7 @@ class DefaultExpressionTest extends TestCase
      * @param array $expected
      * @return void
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild(
         string $attributeCode,
         string $direction,
@@ -86,7 +87,7 @@ class DefaultExpressionTest extends TestCase
     /**
      * @return array
      */
-    public function buildDataProvider(): array
+    public static function buildDataProvider(): array
     {
         return [
             [

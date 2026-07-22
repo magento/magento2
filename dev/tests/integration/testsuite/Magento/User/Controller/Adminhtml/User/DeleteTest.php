@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
@@ -22,6 +22,7 @@ class DeleteTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $messageManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Message\ManagerInterface::class);
         $user->load(1);
+        $this->getRequest()->setMethod('POST');
         $this->getRequest()->setPostValue('user_id', $user->getId() . '_suffix_ignored_in_mysql_casting_to_int');
 
         $this->dispatch('backend/admin/user/delete');

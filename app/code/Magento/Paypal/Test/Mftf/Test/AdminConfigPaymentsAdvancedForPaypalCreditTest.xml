@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+   * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigPaymentsAdvancedForPaypalCreditTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="Payment methods"/>
+            <title value="Check config for PayPal Credit in Unites States"/>
+            <description value="Check paypal Credit payment option's enablement and disablement based on the configuration setting in backend"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5151"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct"/>
+            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set paypal/general/merchant_country 0" stepKey="setMerchantCountryAsUS"/>
+            <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePaymentsAdvanced"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+        <!--Admin navigate to payment configuration page and assert no other paypal payment is enabled-->
+        <actionGroup ref="AdminAssertPaypalAllInOnePaymentMethodActionGroup" stepKey="configPaymentsAdvanced"/>
+        <!--Clear paypal credit config related data-->
+        <actionGroup ref="AdminClearPaymentAdvancedDataActionGroup" stepKey="clearPaymentsAdvanced"/>
+        <!--Enable Payment Advanced and Paypal Credit-->
+        <actionGroup ref="AdminEnablePaymentAdvancedConfigurationActionGroup" stepKey="enablePaymentsAdvanced"/>
+        <!--Save Configuration-->
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigs"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Login to storefront as guest customer-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <!--Add simple product-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Go to cart page-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
+        <!--Open cart page and proceed to checkout-->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <!--Fill Shipping Address-->
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillShippingAddress">
+            <argument name="customer" value="$$createCustomer$$" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <!-- Select shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectShippingMethodAsFlatRate">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <!-- Go to Order review -->
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutPaymentPage"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <!-- Assert Paypal Advanced and Paypal Credit Payment method -->
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.payFlowEdition}}" stepKey="assertPayflowEdition"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.payFlowExpress}}" stepKey="assertPayflowExpress"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.creditCardPayflowAdvanced}}" stepKey="assertCreditCardPayflowAdvanced"/>
+        <magentoCLI command="config:set payment/payflow_advanced/active 0" stepKey="disablePaymentAdvanced"/>
+        <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disablePaypalCredit"/>
+        <magentoCLI command="config:set payment/payflow_express/active 0" stepKey="disableExpressCheckout"/>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPageAfterDisablingPayPalExpressCheckout"/>
+        <waitForPageLoad stepKey="waitForPaymentMethodPageToLoad"/>
+        <waitForElementClickable selector="{{AdminConfigPaymentsAdvancedSection.paymentsAdvanced('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertStatus"/>
+        <click selector="{{AdminConfigPaymentsAdvancedSection.paymentsAdvanced('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatus"/>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.greenCheckMrk('us')}}" stepKey="assertGreenTickMarkAbsentForEnableThisSolutionDropdown"/>
+        <assertElementContainsAttribute stepKey="seePaypalCreditIsDisabled">
+            <expectedResult selector="{{AdminConfigPaymentsAdvancedSection.enablePaypalCredit('us')}}" attribute="disabled" type="string"></expectedResult>
+        </assertElementContainsAttribute>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.disabledPaypalCredit('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalCreditDropdown"/>
+        <seeOptionIsSelected selector="{{AdminConfigPaymentsAdvancedSection.enablePaypalCredit('us')}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo"/>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.sortOrder('us')}}" stepKey="assertSortOrderFieldIsDisappeared"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache1">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{AdminPayPalPayFlowLinkConfigSection.closeButton('us')}}" stepKey="assertConfigureBtnIsDisabled"/>
+        <actionGroup ref="StorefrontNavigateToGuestCheckoutReviewAndPaymentsPageActionGroup" stepKey="goToStoreFrontCheckoutPageToAssertPaypalPaymentMethodIsDisappeared"/>
+        <!-- Assert Again Paypal Advanced and Paypal Credit Payment method -->
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.payFlowEdition}}" stepKey="assertPayflowEditionNptTobeDisplayed"/>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.payFlowExpress}}" stepKey="assertPayPalCreditNotTobeDisplayed"/>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.creditCardPayflowAdvanced}}" stepKey="assertCreditCardPayflowAdvancedNotToBeDisplayed"/>
+        <actionGroup ref="AdminConfigPaymentAdvancedThroughCLIActionGroup" stepKey="configurePaymentAdvancedAndPayFlowEdition"/>
+        <magentoCLI command="config:set payment/payflow_express_bml/active 0" stepKey="disableAgainPaypalCredit"/>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPageAfterDisablingPayPalExpressCheckoutAgain"/>
+        <waitForPageLoad stepKey="waitForPaymentPageToLoad"/>
+        <waitForElementClickable selector="{{AdminConfigPaymentsAdvancedSection.paymentsAdvanced('us')}}" stepKey="waitForClickPayPalConfigureBtnToAssertStatus1"/>
+        <click selector="{{AdminConfigPaymentsAdvancedSection.paymentsAdvanced('us')}}" stepKey="clickPayPalConfigureBtnToAssertStatus1"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.greenCheckMrk('us')}}" stepKey="assertAgainGreenTickMarkPresentEnableThisSolutionDropdown1"/>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.disabledPaypalCredit('us')}}" stepKey="assertGreenTickMarkAbsentForEnablePaypalCreditDropdown1"/>
+        <seeOptionIsSelected selector="{{AdminConfigPaymentsAdvancedSection.enablePaypalCredit('us')}}" userInput="No" stepKey="seePaypalCreditIsSetAsNo1"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration1"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache2">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <waitForElementNotVisible selector="{{AdminConfigPaymentsAdvancedSection.closeButton('us')}}" stepKey="assertConfigBtnIsDisabled"/>
+        <!--Go to checkout page and assert paypal express checkout option is present-->
+        <actionGroup ref="StorefrontNavigateToGuestCheckoutReviewAndPaymentsPageActionGroup" stepKey= "goToStoreFrontCheckoutPageToAssertPaypalPaymentMethodsPresent"/>
+        <waitForElementVisible selector="{{AdminConfigPaymentsAdvancedSection.creditCardPayflowAdvanced}}" stepKey="assertCreditCardPayflowAdvancedInStorefront"/>
+        <waitForElementVisible selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('PayPal Express Checkout Payflow Edition')}}" stepKey="assertPayPalExpressCheckoutPayflowEdition2"/>
+    </test>
+</tests>

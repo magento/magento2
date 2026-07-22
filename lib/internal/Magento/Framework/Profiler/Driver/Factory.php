@@ -2,8 +2,8 @@
 /**
  * Profiler driver factory
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Driver;
 
@@ -46,7 +46,7 @@ class Factory
      * @return DriverInterface
      * @throws \InvalidArgumentException
      */
-    public function create(array $config = null)
+    public function create(?array $config = null)
     {
         $type = isset($config['type']) ? $config['type'] : $this->_defaultDriverType;
         if (class_exists($type)) {

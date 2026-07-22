@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for media gallery images creation during product save.
@@ -102,9 +103,9 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * Check sanity of posted image file name.
      *
      * @param string $imageFileName
-     * @dataProvider illegalFilenameDataProvider
      * @return void
      */
+    #[DataProvider('illegalFilenameDataProvider')]
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
         $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
@@ -132,13 +133,13 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing with different image roles.
      *
-     * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
      * @param string $thumbnail
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithImageRoles(
         string $image,
         string $smallImage,
@@ -160,13 +161,13 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing without images.
      *
-     * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
      * @param string $thumbnail
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithoutImages(
         string $image,
         string $smallImage,
@@ -214,12 +215,12 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing with variations of additional gallery image fields.
      *
-     * @dataProvider additionalGalleryFieldsProvider
      * @param string $mediaField
      * @param string $value
      * @param string|null $expectedValue
      * @return void
      */
+    #[DataProvider('additionalGalleryFieldsProvider')]
     public function testExecuteWithAdditionalGalleryFields(
         string $mediaField,
         string $value,

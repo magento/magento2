@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,15 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NoCookiesObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var NoCookiesObserver
      */
@@ -55,40 +59,31 @@ class NoCookiesObserverTest extends TestCase
             ->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this
-            ->getMockBuilder(ScopeConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->observerMock = $this
             ->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventMock = $this
-            ->getMockBuilder(Event::class)
-            ->addMethods(
-                [
-                    'getStatus',
-                    'getRedirect',
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectMock = $this
-            ->getMockBuilder(DataObject::class)
-            ->addMethods(
-                [
-                    'setLoaded',
-                    'setForwardModule',
-                    'setForwardController',
-                    'setForwardAction',
-                    'setRedirectUrl',
-                    'setRedirect',
-                    'setPath',
-                    'setArguments',
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            [
+                'getStatus',
+                'getRedirect',
+            ]
+        );
+        $this->objectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            [
+                'setLoaded',
+                'setForwardModule',
+                'setForwardController',
+                'setForwardAction',
+                'setRedirectUrl',
+                'setRedirect',
+                'setPath',
+                'setArguments',
+            ]
+        );
 
         $objectManager = new ObjectManager($this);
         $this->noCookiesObserver = $objectManager->getObject(
@@ -103,8 +98,8 @@ class NoCookiesObserverTest extends TestCase
     /**
      * @covers \Magento\Cms\Observer\NoCookiesObserver::execute
      * @param string $pageUrl
-     * @dataProvider noCookiesDataProvider
      */
+    #[DataProvider('noCookiesDataProvider')]
     public function testNoCookies($pageUrl)
     {
         $pageId = 1;

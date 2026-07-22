@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
@@ -15,7 +14,6 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\Store\Test\Fixture\Website as WebsiteFixture;
-use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -191,7 +189,7 @@ class GetCustomerCartTest extends GraphQlAbstract
     public function testGetCustomerCartAfterTokenRevoked()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The request is allowed for logged in customer');
+        $this->expectExceptionMessage('User token has been revoked');
 
         $customerCartQuery = $this->getCustomerCartQuery();
         $headers = $this->getHeaderMap();

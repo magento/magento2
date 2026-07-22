@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -40,12 +41,12 @@ class CatalogEavValidationRulesTest extends TestCase
      * @param array $eavConfig
      * @param array $expectedResult
      * @return void
-     * @dataProvider buildDataProvider
      */
+    #[DataProvider('buildDataProvider')]
     public function testBuild($frontendInput, $frontendClass, array $eavConfig, array $expectedResult)
     {
         /** @var ProductAttributeInterface|MockObject $attribute */
-        $attribute = $this->getMockForAbstractClass(ProductAttributeInterface::class);
+        $attribute = $this->createMock(ProductAttributeInterface::class);
 
         $attribute->expects($this->once())
             ->method('getFrontendInput')

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -53,6 +53,14 @@
     <type name="Magento\SalesRule\Model\ResourceModel\Rule\Collection" shared="false" />
     <type name="Magento\Quote\Model\Quote\Config">
         <plugin name="append_sales_rule_keys_to_quote" type="Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes"/>
+    </type>
+    <type name="Magento\SalesRule\Model\ResourceModel\Rule">
+        <plugin name="clear_salesrule_product_attribute_cache" type="Magento\SalesRule\Model\Plugin\ResourceModel\Rule"/>
+    </type>
+    <type name="Magento\Quote\Model\ResourceModel\Quote\Item\Collection">
+        <plugin name="set_flag_based_on_trigger_recollect"
+                type="Magento\SalesRule\Model\Plugin\QuoteItemCollection"
+                sortOrder="100" />
     </type>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
@@ -209,6 +217,14 @@
     <type name="Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate">
         <arguments>
             <argument name="scopeConfig" xsi:type="object">Magento\Framework\App\Config\ScopeConfigInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesRule\Model\Rule\Action\Discount\ExistingDiscountRuleCollector" shared="true" />
+    <type name="Magento\SalesRule\Model\Data\Validator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="condition" xsi:type="object">Magento\SalesRule\Model\Data\Condition\Validator</item>
+            </argument>
         </arguments>
     </type>
 </config>

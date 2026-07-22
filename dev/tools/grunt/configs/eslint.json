@@ -1,15 +1,13 @@
 {
   "file": {
     "options": {
-      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/.eslintrc",
-      "rulePaths": ["vendor/magento/magento-coding-standard/eslint/rules"],
+      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/eslint.config.mjs",
       "useEslintrc": false
     }
   },
   "test": {
     "options": {
-      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/.eslintrc",
-      "rulePaths": ["vendor/magento/magento-coding-standard/eslint/rules"],
+      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/eslint.config.mjs",
       "outputFile": "dev/tests/static/eslint-error-report.xml",
       "format": "junit",
       "quiet": true

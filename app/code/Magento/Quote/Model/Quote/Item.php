@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -227,10 +227,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         \Magento\Quote\Model\Quote\Item\OptionFactory $itemOptionFactory,
         \Magento\Quote\Model\Quote\Item\Compare $quoteItemCompare,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null,
         ?ComparatorInterface $itemOptionComparator = null
     ) {
         $this->_errorInfos = $statusListFactory->create();
@@ -516,8 +516,9 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             if (in_array($code, $this->_notRepresentOptions)) {
                 continue;
             }
-            if (!isset($options2[$code])
-                || !$this->itemOptionComparator->compare($options2[$code], $option)
+            $codeKey = $code ?? '';
+            if (!isset($options2[$codeKey])
+                || !$this->itemOptionComparator->compare($options2[$codeKey], $option)
             ) {
                 return false;
             }
@@ -713,11 +714,12 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     protected function _addOptionCode($option)
     {
-        if (!isset($this->_optionsByCode[$option->getCode()])) {
-            $this->_optionsByCode[$option->getCode()] = $option;
+        $code = $option->getCode() ?? '';
+        if (!isset($this->_optionsByCode[$code])) {
+            $this->_optionsByCode[$code] = $option;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('An item option with code %1 already exists.', $option->getCode())
+                __('An item option with code %1 already exists.', $code)
             );
         }
         return $this;
@@ -731,6 +733,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      */
     public function getOptionByCode($code)
     {
+        $code = $code ?? '';
         if (isset($this->_optionsByCode[$code]) && !$this->_optionsByCode[$code]->isDeleted()) {
             return $this->_optionsByCode[$code];
         }

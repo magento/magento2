@@ -16,13 +16,22 @@ lib/web/varien/js.js
 lib/web/jquery/jquery.validate.js
 lib/web/prototype/**/*.js
 lib/web/jquery/jstree/jquery.jstree.js
+lib/web/jquery/colorpicker/js/colorpicker.js
+lib/web/chartjs/chartjs-adapter-moment.js
+lib/web/moment-timezone-with-data.js
+lib/web/less/less.min.js
+lib/web/underscore.js
+lib/web/jquery/compat.js
+lib/web/jquery/jquery-ui.js
+lib/web/jquery/**/*.js
 
 // MINIFIED FILES
 app/code/**/*.min.js
 lib/web/legacy-build.min.js
-lib/web/tiny_mce_7/**/*.js
-lib/web/tiny_mce_7/***/*.js
+lib/web/hugerte/**/*.js
+lib/web/hugerte/***/*.js
 lib/web/jquery/uppy/dist/uppy.min.js
+lib/web/chartjs/Chart.min.js
 
 // TEST
 vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*

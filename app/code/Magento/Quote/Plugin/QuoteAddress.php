@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -39,7 +39,7 @@ class QuoteAddress
      * @return array
      * @throws NoSuchEntityException
      */
-    public function beforeSetBillingAddress(Quote $subject, AddressInterface $address = null): array
+    public function beforeSetBillingAddress(Quote $subject, ?AddressInterface $address = null): array
     {
         if ($address !== null) {
             $this->addressValidator->validateWithExistingAddress($subject, $address);
@@ -56,7 +56,7 @@ class QuoteAddress
      * @return array
      * @throws NoSuchEntityException
      */
-    public function beforeSetShippingAddress(Quote $subject, AddressInterface $address = null): array
+    public function beforeSetShippingAddress(Quote $subject, ?AddressInterface $address = null): array
     {
         if ($address !== null) {
             $this->addressValidator->validateWithExistingAddress($subject, $address);

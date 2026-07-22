@@ -1,18 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\Initialization;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(StockDataFilter::class)]
 class StockDataFilterTest extends TestCase
 {
     /**
@@ -35,9 +38,9 @@ class StockDataFilterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
-        $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn(1);
+        $this->scopeConfigMock->method('getValue')->willReturn(1);
 
         $this->stockConfiguration = $this->createPartialMock(
             Configuration::class,
@@ -50,10 +53,8 @@ class StockDataFilterTest extends TestCase
     /**
      * @param array $inputStockData
      * @param array $outputStockData
-     *
-     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter::filter
-     * @dataProvider filterDataProvider
      */
+    #[DataProvider('filterDataProvider')]
     public function testFilter(array $inputStockData, array $outputStockData)
     {
         if (isset($inputStockData['use_config_manage_stock']) && $inputStockData['use_config_manage_stock'] === 1) {

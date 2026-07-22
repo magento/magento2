@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,11 +47,9 @@ class AttributeManagementTest extends TestCase
             ['create']
         );
         $this->storeId = 1;
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $storeMock = $this->createMock(Store::class);
-        $storeMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($this->storeId);
+        $storeMock->method('getId')->willReturn($this->storeId);
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->with(null)
@@ -66,7 +64,7 @@ class AttributeManagementTest extends TestCase
     {
         $attributeSetName = 'Default Attribute Set';
         $expectedResult = [
-            $this->getMockForAbstractClass(ProductAttributeInterface::class),
+            $this->createMock(ProductAttributeInterface::class),
         ];
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->once())

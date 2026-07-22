@@ -1,15 +1,16 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Amqp\Setup;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
-use Magento\Framework\App\DeploymentConfig;
+use Magento\MessageQueue\Setup\ConfigOptionsList as MessageQueueConfigOptionsList;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -19,34 +20,34 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Input key for the options
      */
-    const INPUT_KEY_QUEUE_AMQP_HOST = 'amqp-host';
-    const INPUT_KEY_QUEUE_AMQP_PORT = 'amqp-port';
-    const INPUT_KEY_QUEUE_AMQP_USER = 'amqp-user';
-    const INPUT_KEY_QUEUE_AMQP_PASSWORD = 'amqp-password';
-    const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
-    const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
-    const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
+    public const INPUT_KEY_QUEUE_AMQP_HOST = 'amqp-host';
+    public const INPUT_KEY_QUEUE_AMQP_PORT = 'amqp-port';
+    public const INPUT_KEY_QUEUE_AMQP_USER = 'amqp-user';
+    public const INPUT_KEY_QUEUE_AMQP_PASSWORD = 'amqp-password';
+    public const INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST = 'amqp-virtualhost';
+    public const INPUT_KEY_QUEUE_AMQP_SSL = 'amqp-ssl';
+    public const INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS = 'amqp-ssl-options';
 
     /**
      * Path to the values in the deployment config
      */
-    const CONFIG_PATH_QUEUE_AMQP_HOST = 'queue/amqp/host';
-    const CONFIG_PATH_QUEUE_AMQP_PORT = 'queue/amqp/port';
-    const CONFIG_PATH_QUEUE_AMQP_USER = 'queue/amqp/user';
-    const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password';
-    const CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST = 'queue/amqp/virtualhost';
-    const CONFIG_PATH_QUEUE_AMQP_SSL = 'queue/amqp/ssl';
-    const CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS = 'queue/amqp/ssl_options';
+    public const CONFIG_PATH_QUEUE_AMQP_HOST = 'queue/amqp/host';
+    public const CONFIG_PATH_QUEUE_AMQP_PORT = 'queue/amqp/port';
+    public const CONFIG_PATH_QUEUE_AMQP_USER = 'queue/amqp/user';
+    public const CONFIG_PATH_QUEUE_AMQP_PASSWORD = 'queue/amqp/password';
+    public const CONFIG_PATH_QUEUE_AMQP_VIRTUAL_HOST = 'queue/amqp/virtualhost';
+    public const CONFIG_PATH_QUEUE_AMQP_SSL = 'queue/amqp/ssl';
+    public const CONFIG_PATH_QUEUE_AMQP_SSL_OPTIONS = 'queue/amqp/ssl_options';
 
     /**
      * Default values
      */
-    const DEFAULT_AMQP_HOST = '';
-    const DEFAULT_AMQP_PORT = '5672';
-    const DEFAULT_AMQP_USER = '';
-    const DEFAULT_AMQP_PASSWORD = '';
-    const DEFAULT_AMQP_VIRTUAL_HOST = '/';
-    const DEFAULT_AMQP_SSL = '';
+    public const DEFAULT_AMQP_HOST = '';
+    public const DEFAULT_AMQP_PORT = '5672';
+    public const DEFAULT_AMQP_USER = '';
+    public const DEFAULT_AMQP_PASSWORD = '';
+    public const DEFAULT_AMQP_VIRTUAL_HOST = '/';
+    public const DEFAULT_AMQP_SSL = '';
 
     /**
      * @var ConnectionValidator
@@ -54,8 +55,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $connectionValidator;
 
     /**
-     * Constructor
-     *
      * @param ConnectionValidator $connectionValidator
      */
     public function __construct(ConnectionValidator $connectionValidator)
@@ -64,7 +63,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOptions()
     {
@@ -122,7 +121,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $data, DeploymentConfig $deploymentConfig)
@@ -170,44 +169,117 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
+        $defaultConnection = $options[MessageQueueConfigOptionsList::INPUT_KEY_QUEUE_DEFAULT_CONNECTION] ?? null;
+        if ($defaultConnection && $defaultConnection !== 'amqp') {
+            return [];
+        }
+
+        if (empty($options[self::INPUT_KEY_QUEUE_AMQP_HOST])) {
+            return [];
+        }
+
+        return $this->validateAmqpConnection($options);
+    }
+
+    /**
+     * Validate AMQP connection and RabbitMQ version.
+     *
+     * @param array $options
+     * @return array
+     */
+    private function validateAmqpConnection(array $options): array
+    {
         $errors = [];
+        $sslOptions = $this->parseSslOptions($options);
+        $isSslEnabled = $this->isSslEnabled($options);
 
-        if (isset($options[self::INPUT_KEY_QUEUE_AMQP_HOST])
-            && $options[self::INPUT_KEY_QUEUE_AMQP_HOST] !== '') {
-            if (!$this->isDataEmpty(
-                $options,
-                self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS
-            )) {
-                $sslOptions = json_decode(
-                    $options[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS],
-                    true
-                );
-            } else {
-                $sslOptions = null;
-            }
-            $isSslEnabled = !empty($options[self::INPUT_KEY_QUEUE_AMQP_SSL])
-                && $options[self::INPUT_KEY_QUEUE_AMQP_SSL] !== 'false';
+        $result = $this->connectionValidator->isConnectionValid(
+            $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
+            $options[self::INPUT_KEY_QUEUE_AMQP_USER],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
+            $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
+            $isSslEnabled,
+            $sslOptions
+        );
 
-            $result = $this->connectionValidator->isConnectionValid(
-                $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
-                $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
-                $options[self::INPUT_KEY_QUEUE_AMQP_USER],
-                $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
-                $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
-                $isSslEnabled,
-                $sslOptions
-            );
+        if (!$result) {
+            $errors[] = "Could not connect to the Amqp Server.";
+        }
 
-            if (!$result) {
-                $errors[] = "Could not connect to the Amqp Server.";
+        // Validate RabbitMQ version if connection succeeded
+        if ($result) {
+            $versionError = $this->validateVersion($options, $isSslEnabled, $sslOptions);
+            if ($versionError !== null) {
+                $errors[] = $versionError;
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * Parse SSL options from config options.
+     *
+     * @param array $options
+     * @return array|null
+     */
+    private function parseSslOptions(array $options): ?array
+    {
+        if (!$this->isDataEmpty($options, self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS)) {
+            return json_decode($options[self::INPUT_KEY_QUEUE_AMQP_SSL_OPTIONS], true);
+        }
+        return null;
+    }
+
+    /**
+     * Check if SSL is enabled.
+     *
+     * @param array $options
+     * @return bool
+     */
+    private function isSslEnabled(array $options): bool
+    {
+        return !empty($options[self::INPUT_KEY_QUEUE_AMQP_SSL])
+            && $options[self::INPUT_KEY_QUEUE_AMQP_SSL] !== 'false';
+    }
+
+    /**
+     * Validate RabbitMQ version.
+     *
+     * @param array $options
+     * @param bool $isSslEnabled
+     * @param array|null $sslOptions
+     * @return string|null Error message or null
+     */
+    private function validateVersion(array $options, bool $isSslEnabled, ?array $sslOptions): ?string
+    {
+        $serverVersion = $this->connectionValidator->getServerVersion(
+            $options[self::INPUT_KEY_QUEUE_AMQP_HOST],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PORT],
+            $options[self::INPUT_KEY_QUEUE_AMQP_USER],
+            $options[self::INPUT_KEY_QUEUE_AMQP_PASSWORD],
+            $options[self::INPUT_KEY_QUEUE_AMQP_VIRTUAL_HOST],
+            $isSslEnabled,
+            $sslOptions
+        );
+
+        if ($serverVersion !== null
+            && version_compare($serverVersion, ConnectionValidator::MINIMUM_RABBITMQ_VERSION, '<')
+        ) {
+            return sprintf(
+                'RabbitMQ version "%s" detected. Magento requires RabbitMQ version %s or later. '
+                . 'Please upgrade RabbitMQ and rerun setup.',
+                $serverVersion,
+                ConnectionValidator::MINIMUM_RABBITMQ_VERSION
+            );
+        }
+
+        return null;
     }
 
     /**

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\TableResolver;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
@@ -22,29 +23,22 @@ class TableResolverTest extends TestCase
      * @param int $storeId
      * @param string $tableName
      * @param string $expected
-     * @dataProvider afterGetTableNameDataProvider
      */
+    #[DataProvider('afterGetTableNameDataProvider')]
     public function testAfterGetTableName(int $storeId, string $tableName, string $expected): void
     {
-        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->onlyMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $storeMock = $this->createPartialMock(Store::class, ['getId']);
         $storeMock->method('getId')
             ->willReturn($storeId);
 
         $storeManagerMock->method('getStore')->willReturn($storeMock);
 
-        $tableResolverMock = $this->getMockBuilder(IndexScopeResolver::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $tableResolverMock = $this->createMock(IndexScopeResolver::class);
         $tableResolverMock->method('resolve')->willReturn('catalog_category_product_index_store1');
 
-        $subjectMock = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subjectMock = $this->createMock(ResourceConnection::class);
 
         $model = new TableResolver($storeManagerMock, $tableResolverMock);
 

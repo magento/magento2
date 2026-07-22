@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Observer;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler;
 use Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange;
 use Magento\Framework\Event\Observer;
@@ -17,8 +18,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 {
     /**
      * @param $invalidDataObject
-     * @dataProvider executeInvalidStoreDataProvider
      */
+    #[DataProvider('executeInvalidStoreDataProvider')]
     public function testExecuteInvalidStore($invalidDataObject)
     {
         $eventObserver = new Observer([
@@ -48,8 +49,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 
     /**
      * @param \Closure $store
-     * @dataProvider executeStoreHasNoChangesDataProvider
      */
+    #[DataProvider('executeStoreHasNoChangesDataProvider')]
     public function testExecuteStoreHasNoChanges(\Closure $store)
     {
         $store = $store($this);
@@ -68,13 +69,13 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 
     protected function getMockForStoreClass()
     {
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
+        $store = $this->createPartialMock(
+            Store::class,
+            [
                 'hasDataChanges',
                 'getOrigData',
-            ])
-            ->getMock();
+            ]
+        );
 
         $store->expects($this->once())
             ->method('hasDataChanges')
@@ -103,8 +104,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 
     /**
      * @param \Closure $store
-     * @dataProvider executeWebsiteIdIsNoChangedAndNotNewDataProvider
      */
+    #[DataProvider('executeWebsiteIdIsNoChangedAndNotNewDataProvider')]
     public function testExecuteWebsiteIdIsNoChangedAndNotNew(\Closure $store)
     {
         $store = $store($this);
@@ -137,8 +138,8 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
 
     /**
      * @param \Closure $store
-     * @dataProvider executeSuccessDataProvider
      */
+    #[DataProvider('executeSuccessDataProvider')]
     public function testExecuteSuccess(\Closure $store)
     {
         $store = $store($this);
@@ -158,15 +159,10 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
     protected function getMockForStoreNew($return)
     {
         $sameWebsiteId = 1;
-        $storeNew = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'hasDataChanges',
-                'getOrigData',
-                'getWebsiteId',
-                'isObjectNew',
-            ])
-            ->getMock();
+        $storeNew = $this->createPartialMock(
+            Store::class,
+            ['hasDataChanges', 'getOrigData', 'getWebsiteId', 'isObjectNew']
+        );
 
         $storeNew->expects($this->once())
             ->method('hasDataChanges')
@@ -201,15 +197,10 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
         $sameWebsiteId = 1;
         $newWebsiteId = 2;
 
-        $storeChangedWebsite = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([
-                'hasDataChanges',
-                'getOrigData',
-                'getWebsiteId',
-                'isObjectNew',
-            ])
-            ->getMock();
+        $storeChangedWebsite = $this->createPartialMock(
+            Store::class,
+            ['hasDataChanges', 'getOrigData', 'getWebsiteId', 'isObjectNew']
+        );
 
         $storeChangedWebsite->expects($this->once())
             ->method('hasDataChanges')

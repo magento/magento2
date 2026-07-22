@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -76,6 +76,11 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     private $file;
 
     /**
+     * @var DefaultValueProcessor
+     */
+    private $defaultValueProcessor;
+
+    /**
      * @param ProductRepositoryInterface $productRepository
      * @param ImageContentValidatorInterface $contentValidator
      * @param ProductInterfaceFactory|null $productInterfaceFactory
@@ -84,6 +89,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
      * @param Filesystem|null $filesystem
      * @param Mime|null $mime
      * @param File|null $file
+     * @param DefaultValueProcessor|null $defaultValueProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -94,7 +100,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         ?ImageContentInterfaceFactory $imageContentInterface = null,
         ?Filesystem $filesystem = null,
         ?Mime $mime = null,
-        ?File $file = null
+        ?File $file = null,
+        ?DefaultValueProcessor $defaultValueProcessor = null
     ) {
         $this->productRepository = $productRepository;
         $this->contentValidator = $contentValidator;
@@ -112,6 +119,8 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             ?? ObjectManager::getInstance()->get(
                 File::class
             );
+        $this->defaultValueProcessor = $defaultValueProcessor
+            ?? ObjectManager::getInstance()->get(DefaultValueProcessor::class);
     }
 
     /**
@@ -144,6 +153,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
+        $this->processUnmodifiedMediaEntries($product);
         try {
             $product = $this->productRepository->save($product);
         } catch (\Exception $e) {
@@ -193,6 +203,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
+        $this->processUnmodifiedMediaEntries($product, (int) $entry->getId());
 
         try {
             $this->productRepository->save($product);
@@ -234,6 +245,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product = $this->productInterfaceFactory->create();
         $product->setSku($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
+        $this->processUnmodifiedMediaEntries($product);
         $this->productRepository->save($product);
         return true;
     }
@@ -301,5 +313,33 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             ->setName($fileName)
             ->setBase64EncodedData(base64_encode($imageFileContent))
             ->setType($mediaMimeType);
+    }
+
+    /**
+     * Retains default values for unmodified media if applicable
+     *
+     * @param Product $product
+     * @param int|null $modifiedEntryId
+     * @return void
+     */
+    private function processUnmodifiedMediaEntries(Product $product, ?int $modifiedEntryId = null): void
+    {
+        $data = $product->getData('media_gallery');
+        $processedData = $this->defaultValueProcessor->process($product, $data);
+        if ($modifiedEntryId !== null && !empty($processedData['images'])) {
+            foreach ($processedData['images'] as &$processedImage) {
+                if (((int) $processedImage['value_id']) === $modifiedEntryId) {
+                    // replace with unprocessed data
+                    foreach ($data['images'] as $image) {
+                        if (((int) $image['value_id']) === $modifiedEntryId) {
+                            $processedImage = $image;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        
+        $product->setData('media_gallery', $processedData);
     }
 }

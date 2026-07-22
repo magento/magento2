@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
@@ -57,7 +57,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
         Registry $registry,
         PageFactory $resultPageFactory,
         InvoiceService $invoiceService,
-        OrderRepositoryInterface $orderRepository = null
+        ?OrderRepositoryInterface $orderRepository = null
     ) {
         parent::__construct($context);
 

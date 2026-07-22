@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\MessageQueue\Bulk\Rpc;
 
+use Magento\Framework\MessageQueue\MessageDeliveryMode;
 use Magento\Framework\MessageQueue\PublisherInterface;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\Bulk\ExchangeRepository;
@@ -96,7 +97,7 @@ class Publisher implements PublisherInterface
                     'body' => $message,
                     'properties' => [
                         'reply_to' => $replyTo,
-                        'delivery_mode' => 2,
+                        'delivery_mode' => MessageDeliveryMode::PERSISTENT->value,
                         'correlation_id' => rand(),
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]

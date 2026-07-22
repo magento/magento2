@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework;
@@ -226,8 +226,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor,
         $scopeType,
         array $data = [],
-        HostChecker $hostChecker = null,
-        Json $serializer = null
+        ?HostChecker $hostChecker = null,
+        ?Json $serializer = null
     ) {
         $this->_request = $request;
         $this->_routeConfig = $routeConfig;
@@ -892,7 +892,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function createUrl($routePath = null, array $routeParams = null)
+    private function createUrl($routePath = null, ?array $routeParams = null)
     {
         $escapeQuery = false;
         $escapeParams = true;

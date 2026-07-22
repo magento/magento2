@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Registry;
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class covers process manager execution test logic
@@ -23,11 +24,11 @@ use Psr\Log\LoggerInterface;
 class ProcessManagerTest extends TestCase
 {
     /**
-     * @dataProvider functionsWithErrorProvider
      * @param array $userFunctions
      * @param int $threadsCount
      * @return void
      */
+    #[DataProvider('functionsWithErrorProvider')]
     public function testFailureInChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
@@ -116,11 +117,11 @@ class ProcessManagerTest extends TestCase
     }
 
     /**
-     * @dataProvider successFunctionsProvider
      * @param array $userFunctions
      * @param int $threadsCount
      * @return void
      */
+    #[DataProvider('successFunctionsProvider')]
     public function testSuccessChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
@@ -204,6 +205,39 @@ class ProcessManagerTest extends TestCase
                 ],
                 'threadsCount' => 3,
             ],
+        ];
+    }
+
+    /**
+     * @param $threadsCount
+     * @param $expectedResult
+     * @return void
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    #[DataProvider('isMultiThreadsExecuteDataProvider')]
+    public function testIsMultiThreadsExecute($threadsCount, $expectedResult): void
+    {
+        $connectionMock = $this->createMock(ResourceConnection::class);
+        $registryMock = $this->createMock(Registry::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
+        $processManager = new ProcessManager(
+            $connectionMock,
+            $registryMock,
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
+        );
+        $this->assertEquals($expectedResult, $processManager->isMultiThreadsExecute());
+    }
+
+    public static function isMultiThreadsExecuteDataProvider(): array
+    {
+        return [
+            'threadsCount is null' => [null, false],
+            'threadsCount is 0' => [0, false],
+            'threadsCount is 1' => [1, false],
+            'threadsCount is 2' => [2, true],
         ];
     }
 }

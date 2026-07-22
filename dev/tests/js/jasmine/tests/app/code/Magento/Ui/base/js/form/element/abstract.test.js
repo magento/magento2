@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /*eslint max-nested-callbacks: 0*/
@@ -23,7 +23,11 @@ define([
                     },
                     create: jasmine.createSpy(),
                     set: jasmine.createSpy(),
-                    async: jasmine.createSpy()
+                    async: jasmine.createSpy(),
+                    remove: jasmine.createSpy()
+                },
+                'uiRegistry': {
+                    remove: jasmine.createSpy()
                 },
                 '/mage/utils/wrapper': jasmine.createSpy()
             },
@@ -37,16 +41,17 @@ define([
                     template: 'ui/form/element/helper/service'
                 }
             },
-            model;
+            model, registry;
 
         beforeEach(function (done) {
             injector.mock(mocks);
             injector.require([
                 'Magento_Ui/js/form/element/abstract',
+                'uiRegistry',
                 'knockoutjs/knockout-es5'
-            ], function (Constr) {
+            ], function (Constr, uiRegistry) {
                 model = new Constr(params);
-
+                registry = uiRegistry;
                 done();
             });
         });
@@ -340,6 +345,25 @@ define([
             it('check property state', function () {
                 expect(typeof model.serviceDisabled).toEqual('function');
                 expect(model.serviceDisabled()).toBeFalsy();
+            });
+        });
+        describe('destroy method', function () {
+            beforeEach(function () {
+                model.switcherConfig = {
+                    enabled: true,
+                    name: 'test_switcher'
+                };
+                model.source = { off: function () {} };
+
+                if (typeof model._super !== 'function') {
+                    model._super = function () {};
+                }
+                spyOn(model, '_super').and.callThrough();
+            });
+
+            it('should call registry.remove when switcherConfig.enabled is true', function () {
+                model.destroy();
+                expect(registry.remove).toHaveBeenCalledWith('test_switcher');
             });
         });
     });

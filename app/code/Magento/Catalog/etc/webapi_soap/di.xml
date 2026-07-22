@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 
@@ -43,5 +43,9 @@
     <type name="Magento\Catalog\Api\ProductLinkRepositoryInterface">
         <plugin name="reindex_after_save_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterSaveProductLinksPlugin"/>
         <plugin name="reindex_after_delete_by_id_product_links" type="Magento\Catalog\Plugin\Api\ProductLinkRepositoryInterface\ReindexAfterDeleteByIdProductLinksPlugin"/>
+    </type>
+    <type name="Magento\Catalog\Model\ProductRenderList">
+        <plugin name="customerGroupContextForPricing"
+                type="Magento\Catalog\Plugin\Model\ProductRenderListPlugin" />
     </type>
 </config>

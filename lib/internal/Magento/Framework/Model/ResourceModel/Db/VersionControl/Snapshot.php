@@ -58,7 +58,8 @@ class Snapshot implements ResetAfterRequestInterface
         $metaData = $this->metadata->getFields($entity);
         $filteredData = array_intersect_key($entity->getData(), $metaData);
         $data = array_merge($metaData, $filteredData);
-        $this->snapshotData[get_class($entity)][$entity->getId()] = $data;
+        $entityId = $entity->getId() ?? '';
+        $this->snapshotData[get_class($entity)][$entityId] = $data;
     }
 
     /**
@@ -117,7 +118,7 @@ class Snapshot implements ResetAfterRequestInterface
      *
      * @param DataObject|null $entity
      */
-    public function clear(DataObject $entity = null)
+    public function clear(?DataObject $entity = null)
     {
         if ($entity !== null) {
             $this->snapshotData[get_class($entity)] = [];

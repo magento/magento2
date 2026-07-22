@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
@@ -42,7 +42,7 @@ class Postcode extends Text
         $entityTypeCode,
         $isAjax,
         DirectoryHelper $directoryHelper,
-        StringUtils $stringHelper = null
+        ?StringUtils $stringHelper = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $stringHelper = $stringHelper ?? \Magento\Framework\App\ObjectManager::getInstance()->get(StringUtils::class);

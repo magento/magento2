@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -39,7 +39,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
+        ?\Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null
     ) {
         parent::__construct($context, $tableStrategy, $eavConfig, $scopeConfig, $connectionName);
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()->get(

@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
@@ -37,7 +36,7 @@ class NewAction extends \Magento\Backend\App\Action implements HttpGetActionInte
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider = null
+        ?\Magento\Shipping\Model\ShipmentProviderInterface $shipmentProvider = null
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->shipmentProvider = $shipmentProvider ?: ObjectManager::getInstance()

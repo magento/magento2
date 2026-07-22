@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -103,12 +103,12 @@ class Full extends AbstractAction
         ProductType $catalogProductType,
         CacheContext $cacheContext,
         EventManager $eventManager,
-        MetadataPool $metadataPool = null,
-        BatchSizeManagementInterface $batchSizeManagement = null,
-        BatchProviderInterface $batchProvider = null,
+        ?MetadataPool $metadataPool = null,
+        ?BatchSizeManagementInterface $batchSizeManagement = null,
+        ?BatchProviderInterface $batchProvider = null,
         array $batchRowsCount = [],
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        QueryGenerator $batchQueryGenerator = null,
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?QueryGenerator $batchQueryGenerator = null,
         ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\MessageQueue;
@@ -223,7 +223,6 @@ JSON;
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($propertyName);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $propertyValue);
     }
 }

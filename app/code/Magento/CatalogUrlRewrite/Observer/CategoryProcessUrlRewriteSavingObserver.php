@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -77,7 +77,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
             DataCategoryUrlRewriteDatabaseMap::class,
             DataProductUrlRewriteDatabaseMap::class
         ],
-        CollectionFactory $storeGroupFactory = null
+        ?CollectionFactory $storeGroupFactory = null
     ) {
         $this->categoryUrlRewriteGenerator = $categoryUrlRewriteGenerator;
         $this->urlRewriteHandler = $urlRewriteHandler;

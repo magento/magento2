@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -128,7 +128,7 @@ class ResourceConnection implements ResetAfterRequestInterface
             }
             $this->connections = [];
         } else {
-            $processConnectionName = $this->config->getConnectionName($resourceName);
+            $processConnectionName = $this->config->getConnectionName($resourceName) ?? '';
             if (isset($this->connections[$processConnectionName])) {
                 if ($this->connections[$processConnectionName] !== null) {
                     $this->connections[$processConnectionName]->closeConnection();

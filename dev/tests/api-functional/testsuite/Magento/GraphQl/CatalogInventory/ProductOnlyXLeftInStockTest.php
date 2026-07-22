@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -24,10 +24,13 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Test for the product only x left in stock
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductOnlyXLeftInStockTest extends GraphQlAbstract
 {
@@ -175,9 +178,7 @@ QUERY;
         DataFixture(GuestCartFixture::class, as: 'cart'),
         DataFixture(QuoteMaskFixture::class, ['cart_id' => '$cart.id$'], 'quoteIdMask'),
     ]
-    /**
-     * @dataProvider stockThresholdQtyProvider
-     */
+    #[DataProvider('stockThresholdQtyProvider')]
     public function testOnlyXLeftInStockConfigurableProduct(string $stockThresholdQty, ?int $expected): void
     {
         $this->scopeConfig->setValue('cataloginventory/options/stock_threshold_qty', $stockThresholdQty);

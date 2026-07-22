@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -27,6 +27,7 @@ use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -65,9 +66,7 @@ class ContextTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->design = $this->getMockBuilder(DesignInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->design = $this->createMock(DesignInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -239,9 +238,8 @@ class ContextTest extends TestCase
     /**
      * @param string $headerAccept
      * @param string $acceptType
-     *
-     * @dataProvider getAcceptTypeDataProvider
-     */
+     *     */
+    #[DataProvider('getAcceptTypeDataProvider')]
     public function testGetAcceptType($headerAccept, $acceptType)
     {
         $this->request->expects($this->once())

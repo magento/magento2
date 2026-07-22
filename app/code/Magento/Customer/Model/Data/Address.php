@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model\Data;
 
@@ -268,7 +268,7 @@ class Address extends \Magento\Framework\Api\AbstractExtensibleObject implements
      * @param \Magento\Customer\Api\Data\RegionInterface $region
      * @return $this
      */
-    public function setRegion(RegionInterface $region = null)
+    public function setRegion(?RegionInterface $region = null)
     {
         return $this->setData(self::REGION, $region);
     }

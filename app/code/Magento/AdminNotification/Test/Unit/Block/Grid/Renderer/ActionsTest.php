@@ -2,8 +2,8 @@
 declare(strict_types = 1);
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -39,13 +39,13 @@ class ActionsTest extends TestCase
         $escaperMock->expects($this->atLeastOnce())->method('escapeUrl')->willReturn('https://magento.com');
 
         /** @var AuthorizationInterface|MockObject $authorizationMock */
-        $authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $authorizationMock = $this->createMock(AuthorizationInterface::class);
         $authorizationMock->expects($this->atLeastOnce())
             ->method('isAllowed')
             ->willReturn(true);
 
         /** @var UrlInterface|MockObject $urlBuilder */
-        $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())->method('getUrl')->willReturn('http://magento.com');
 
         /** @var Context|MockObject $contextMock */

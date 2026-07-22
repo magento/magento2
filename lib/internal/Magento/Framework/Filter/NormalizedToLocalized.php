@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Filter;
 
@@ -50,7 +50,7 @@ class NormalizedToLocalized implements FilterInterface
      * @param  array|null $options
      * @return self
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         $this->_options = array_merge($this->_options, $options);
         return $this;

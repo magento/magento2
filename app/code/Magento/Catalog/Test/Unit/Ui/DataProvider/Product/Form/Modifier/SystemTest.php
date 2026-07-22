@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -25,9 +25,7 @@ class SystemTest extends AbstractModifierTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->onlyMethods(['getUrl'])
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
     }
 
     /**
@@ -66,18 +64,10 @@ class SystemTest extends AbstractModifierTestCase
             ]
         );
 
-        $this->productMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($productId);
-        $this->productMock->expects($this->exactly(2))
-            ->method('getTypeId')
-            ->willReturn(Type::TYPE_SIMPLE);
-        $this->productMock->expects($this->once())
-            ->method('getStoreId')
-            ->willReturn($storeId);
-        $this->productMock->expects($this->once())
-            ->method('getAttributeSetId')
-            ->willReturn($attributeSetId);
+        $this->productMock->setId($productId);
+        $this->productMock->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
+        $this->productMock->method('getStoreId')->willReturn($storeId);
+        $this->productMock->method('getAttributeSetId')->willReturn($attributeSetId);
 
         $this->urlBuilderMock->expects($this->exactly(3))
             ->method('getUrl')

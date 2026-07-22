@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Address;
 
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\RegionInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Controller\Address\FormPost;
@@ -17,11 +19,14 @@ use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Validator\Address\File as FileNameValidator;
 use Magento\Directory\Helper\Data as HelperData;
 use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
@@ -30,14 +35,17 @@ use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -45,6 +53,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FormPostTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var FormPost
      */
@@ -176,17 +186,26 @@ class FormPostTest extends TestCase
     private $fileSystemMock;
 
     /**
+     * @var AddressMetadataInterface|MockObject
+     */
+    private $addressMetadata;
+
+    /**
+     * @var FileNameValidator|MockObject
+     */
+    private $fileNameValidator;
+
+    /**
      * {@inheritDoc}
      */
     protected function setUp(): void
     {
         $this->prepareContext();
 
-        $this->session = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setAddressFormData'])
-            ->onlyMethods(['getCustomerId'])
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getCustomerId', 'setAddressFormData']
+        );
 
         $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
             ->disableOriginalConstructor()
@@ -224,6 +243,12 @@ class FormPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->addressMetadata = $this->createMock(AddressMetadataInterface::class);
+
+        $this->fileNameValidator = $this->getMockBuilder(FileNameValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new FormPost(
             $this->context,
             $this->session,
@@ -238,7 +263,9 @@ class FormPostTest extends TestCase
             $this->resultPageFactory,
             $this->regionFactory,
             $this->helperData,
-            $this->fileSystemMock
+            $this->fileSystemMock,
+            $this->addressMetadata,
+            $this->fileNameValidator
         );
 
         $objectManager = new ObjectManager($this);
@@ -258,17 +285,13 @@ class FormPostTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->addMethods(['isPost', 'getPostValue'])
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
 
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
 
-        $this->redirect = $this->getMockBuilder(RedirectInterface::class)
-            ->getMockForAbstractClass();
+        $this->redirect = $this->createMock(RedirectInterface::class);
 
         $this->context->expects($this->any())
             ->method('getRedirect')
@@ -289,15 +312,13 @@ class FormPostTest extends TestCase
             ->method('getResultRedirectFactory')
             ->willReturn($this->resultRedirectFactory);
 
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $this->context->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManager);
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
 
         $this->context->expects($this->any())
             ->method('getMessageManager')
@@ -309,11 +330,9 @@ class FormPostTest extends TestCase
      */
     protected function prepareAddress(): void
     {
-        $this->addressRepository = $this->getMockBuilder(AddressRepositoryInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressRepository = $this->createMock(AddressRepositoryInterface::class);
 
-        $this->addressData = $this->getMockBuilder(AddressInterface::class)
-            ->getMockForAbstractClass();
+        $this->addressData = $this->createMock(AddressInterface::class);
 
         $this->addressDataFactory = $this->getMockBuilder(AddressInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -331,11 +350,10 @@ class FormPostTest extends TestCase
      */
     protected function prepareRegion(): void
     {
-        $this->region = $this->getMockBuilder(Region::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getCode', 'getDefaultName',])
-            ->onlyMethods(['load'])
-            ->getMock();
+        $this->region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['load', 'getCode', 'getDefaultName']
+        );
 
         $this->regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
@@ -344,8 +362,7 @@ class FormPostTest extends TestCase
             ->method('create')
             ->willReturn($this->region);
 
-        $this->regionData = $this->getMockBuilder(RegionInterface::class)
-            ->getMockForAbstractClass();
+        $this->regionData = $this->createMock(RegionInterface::class);
 
         $this->regionDataFactory = $this->getMockBuilder(RegionInterfaceFactory::class)
             ->disableOriginalConstructor()
@@ -415,8 +432,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/edit', [])
@@ -452,10 +468,10 @@ class FormPostTest extends TestCase
      * @param int $newRegionId
      * @param string $newRegion
      * @param string $newRegionCode
-     * @dataProvider dataProviderTestExecute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
+    #[DataProvider('dataProviderTestExecute')]
     public function testExecute(
         $addressId,
         $countryId,
@@ -593,8 +609,7 @@ class FormPostTest extends TestCase
             ->with(__('You saved the address.'))
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/index', ['_secure' => true])
@@ -692,8 +707,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/edit', ['id' => $addressId])
@@ -758,8 +772,7 @@ class FormPostTest extends TestCase
             ->with($postValue)
             ->willReturnSelf();
 
-        $urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $urlBuilder = $this->createMock(UrlInterface::class);
         $urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('*/*/index')
@@ -781,5 +794,87 @@ class FormPostTest extends TestCase
             ->willReturnSelf();
 
         $this->assertEquals($this->resultRedirect, $this->model->execute());
+    }
+
+    /**
+     * Test that validate method is called when deleting address file attribute
+     */
+    public function testDeleteAddressFileAttribute(): void
+    {
+        $attributeCode = 'test_attribute';
+        $attributeValue = 'test_file.jpg';
+        $relativePath = AddressMetadataInterface::ENTITY_TYPE_ADDRESS
+            . DIRECTORY_SEPARATOR
+            . ltrim($attributeValue, DIRECTORY_SEPARATOR);
+        $absolutePath = AddressMetadataInterface::ENTITY_TYPE_ADDRESS . '/test/' . $attributeValue;
+        $allowedAbsolutePath = AddressMetadataInterface::ENTITY_TYPE_ADDRESS . '/test';
+
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('delete_attribute_value')
+            ->willReturn($attributeCode);
+
+        $attributeMetadata = $this->createMock(AttributeMetadataInterface::class);
+        $attributeMetadata->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('file');
+
+        $this->addressMetadata->expects($this->once())
+            ->method('getAttributeMetadata')
+            ->with($attributeCode)
+            ->willReturn($attributeMetadata);
+
+        $customAttribute = $this->getMockBuilder(AttributeValue::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customAttribute->expects($this->any())
+            ->method('getValue')
+            ->willReturn($attributeValue);
+
+        $this->addressData->expects($this->once())
+            ->method('getCustomAttribute')
+            ->with($attributeCode)
+            ->willReturn($customAttribute);
+
+        $directory = $this->createMock(WriteInterface::class);
+
+        $directory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturnCallback(function ($path) use ($relativePath, $absolutePath, $allowedAbsolutePath) {
+                if ($path === AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
+                    return $allowedAbsolutePath;
+                }
+                if ($path === $relativePath) {
+                    return $absolutePath;
+                }
+                return '';
+            });
+
+        $this->fileNameValidator->expects($this->once())
+            ->method('validate')
+            ->with($attributeValue, $absolutePath, $allowedAbsolutePath);
+
+        $directory->expects($this->once())
+            ->method('isFile')
+            ->with($relativePath)
+            ->willReturn(true);
+
+        $directory->expects($this->once())
+            ->method('delete')
+            ->with($relativePath);
+
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($directory);
+
+        $this->addressData->expects($this->once())
+            ->method('setCustomAttribute')
+            ->with($attributeCode, '');
+
+        $method = new \ReflectionMethod($this->model, 'deleteAddressFileAttribute');
+        $result = $method->invoke($this->model, $this->addressData);
+
+        $this->assertSame($this->addressData, $result);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Entity;
@@ -142,10 +142,10 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         DateTimeFormatterInterface $dateTimeFormatter,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AttributeCodeValidator $attributeCodeValidator = null,
+        ?AttributeCodeValidator $attributeCodeValidator = null,
         ?ReservedAttributeCheckerInterface $reservedAttributeChecker = null
     ) {
         parent::__construct(
@@ -285,13 +285,15 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
 
         if ($this->getBackendType() == 'decimal' && $hasDefaultValue) {
             $numberFormatter = new \NumberFormatter($this->_localeResolver->getLocale(), \NumberFormatter::DECIMAL);
-            $defaultValue = $numberFormatter->parse($defaultValue);
-            if ($defaultValue === false) {
+            $position = 0;
+            $parsedValue = $numberFormatter->parse($defaultValue, \NumberFormatter::TYPE_DOUBLE, $position);
+            // PHP 8.5: validate full parse, not partial
+            if ($parsedValue === false || $position !== strlen((string)$defaultValue)) {
                 throw new LocalizedException(
                     __('The default decimal value is invalid. Verify the value and try again.')
                 );
             }
-            $this->setDefaultValue($defaultValue);
+            $this->setDefaultValue($parsedValue);
         }
 
         if ($this->getBackendType() == 'datetime') {

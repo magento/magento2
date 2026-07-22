@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,7 +45,7 @@ class ProductTest extends TestCase
      */
     public function testExecute()
     {
-        $product = $this->getMockForAbstractClass(ProductInterface::class);
+        $product = $this->createStub(ProductInterface::class);
         $productResourceModel = $this->createMock(ProductResourceModel::class);
         $this->wishlistCleaner->expects($this->once())->method('execute')->with($product);
         $this->model->beforeDelete($productResourceModel, $product);

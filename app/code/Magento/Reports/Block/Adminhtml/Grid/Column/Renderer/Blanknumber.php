@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Reports\Block\Adminhtml\Grid\Column\Renderer;
 
 /**
  * Adminhtml grid item renderer number or blank line
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Blanknumber extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Number
 {
     /**
+     * Get Value
+     *
      * @param \Magento\Framework\DataObject $row
      *
      * @return string

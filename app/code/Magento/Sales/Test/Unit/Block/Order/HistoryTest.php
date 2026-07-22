@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Page\Title;
 use Magento\Sales\Block\Order\History;
 use Magento\Sales\Model\Order\Config;
@@ -58,7 +59,7 @@ class HistoryTest extends TestCase
     protected $orderConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|MockObject
+     * @var PageConfig|MockObject
      */
     protected $pageConfig;
 
@@ -68,7 +69,7 @@ class HistoryTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -82,8 +83,8 @@ class HistoryTest extends TestCase
             $this->getMockBuilder(CollectionFactoryInterface::class)
                 ->disableOriginalConstructor()
                 ->onlyMethods(['create'])
-                ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+                ->getMock();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturn($this->orderCollectionFactoryInterface);
@@ -99,12 +100,8 @@ class HistoryTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageConfig = $this->createMock(PageConfig::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
     }
 
     /**

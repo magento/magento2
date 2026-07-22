@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Exception;
@@ -42,7 +42,7 @@ abstract class AbstractAggregateException extends LocalizedException implements 
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase, \Exception $cause = null, $code = 0)
+    public function __construct(Phrase $phrase, ?\Exception $cause = null, $code = 0)
     {
         $this->originalPhrase = $phrase;
         parent::__construct($phrase, $cause, $code);

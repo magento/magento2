@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class CreateEmptyCartForCustomer
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function execute(int $customerId, string $predefinedMaskedQuoteId = null): string
+    public function execute(int $customerId, ?string $predefinedMaskedQuoteId = null): string
     {
         $cart = $this->cartResolver->resolve($customerId, $predefinedMaskedQuoteId);
         $quoteId = (int) $cart->getId();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model;
 
@@ -421,8 +421,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = [],
-        \Magento\Eav\Model\Config $config = null,
-        FilterProductCustomAttribute $filterCustomAttribute = null
+        ?\Magento\Eav\Model\Config $config = null,
+        ?FilterProductCustomAttribute $filterCustomAttribute = null
     ) {
         $this->metadataService = $metadataService;
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -1119,7 +1119,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function cleanCache()
     {
-        $this->_cacheManager->clean('catalog_product_' . $this->getId());
+        $this->_cacheManager->clean(['catalog_product_' . $this->getId()]);
         return $this;
     }
 
@@ -1162,7 +1162,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductTierPriceInterface[] $tierPrices
      * @return $this
      */
-    public function setTierPrices(array $tierPrices = null)
+    public function setTierPrices(?array $tierPrices = null)
     {
         $this->getPriceModel()->setTierPrices($this, $tierPrices);
         return $this;
@@ -1492,7 +1492,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
      * @return $this
      */
-    public function setProductLinks(array $links = null)
+    public function setProductLinks(?array $links = null)
     {
         if ($links === null) {
             $this->setData('ignore_links_flag', true);
@@ -1545,7 +1545,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getMediaGalleryImages()
     {
         $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        if (!$this->hasData('media_gallery_images')) {
+        $mediaGalleryImages = $this->getData('media_gallery_images');
+        if (!$mediaGalleryImages instanceof \Magento\Framework\Data\Collection) {
             $this->setData('media_gallery_images', $this->_collectionFactory->create());
         }
         if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {
@@ -2047,7 +2048,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductCustomOptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         $this->setData('options', $options);
         return $this;
@@ -2078,6 +2079,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $option = $this->_itemOptionFactory->create()->addData(
             ['product_id' => $product->getId(), 'product' => $product, 'code' => $code, 'value' => $value]
         );
+        $code = (string)$code;
         $this->_customOptions[$code] = $option;
         return $this;
     }
@@ -2696,7 +2698,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setMediaGalleryEntries(array $mediaGalleryEntries = null)
+    public function setMediaGalleryEntries(?array $mediaGalleryEntries = null)
     {
         if ($mediaGalleryEntries !== null) {
             $images = [];

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\Driver\Http;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify HttpTest class.
@@ -45,10 +46,9 @@ class HttpTest extends TestCase
      * Verify IsExists.
      *
      * @param string $status
-     * @param bool $result
-     * @dataProvider dataProviderForTestIsExists
-     * @return void
+     * @param bool $result     * @return void
      */
+    #[DataProvider('dataProviderForTestIsExists')]
     public function testIsExists(string $status, bool $result): void
     {
         self::$headers = [$status];
@@ -62,17 +62,16 @@ class HttpTest extends TestCase
      */
     public static function dataProviderForTestIsExists(): array
     {
-        return [['200 OK', true], ['404 Not Found', false]];
+        return [['200 OK', true], ['200', true], ['404 Not Found', false]];
     }
 
     /**
      * Verify Stat.
      *
      * @param array $headers
-     * @param \Closure $result
-     * @dataProvider dataProviderForTestStat
-     * @return void
+     * @param \Closure $result     * @return void
      */
+    #[DataProvider('dataProviderForTestStat')]
     public function testStat(array $headers, \Closure $result): void
     {
         if (is_callable($result)) {

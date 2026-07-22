@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\TestCase\GraphQl;
@@ -35,8 +35,8 @@ class Client
      * @param JsonSerializer|null $json
      */
     public function __construct(
-        \Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
-        \Magento\TestFramework\Helper\JsonSerializer $json = null
+        ?\Magento\TestFramework\TestCase\HttpClient\CurlClient $curlClient = null,
+        ?\Magento\TestFramework\Helper\JsonSerializer $json = null
     ) {
         $objectManager = Bootstrap::getObjectManager();
         $this->curlClient = $curlClient ?: $objectManager->get(CurlClient::class);
@@ -294,7 +294,7 @@ class Client
         $cookiesArray = [];
         $headers = preg_split('/((\r?\n)|(\r\n?))/', $headers);
         foreach ($headers as $header) {
-            if (strpos($header, 'Set-Cookie:') === 0) {
+            if (stripos($header, 'Set-Cookie:') === 0) {
                 $cookie = preg_split('/: /', $header, 2);
                 if (isset($cookie[1]) && !empty($cookie[1])) {
                     $cookiesArray[] = $cookie[1];

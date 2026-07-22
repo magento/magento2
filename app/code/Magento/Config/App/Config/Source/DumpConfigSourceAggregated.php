@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\App\Config\Source;
 
@@ -86,7 +86,7 @@ class DumpConfigSourceAggregated implements DumpConfigSourceInterface
     public function __construct(
         ExcludeList $excludeList,
         array $sources = [],
-        TypePool $typePool = null,
+        ?TypePool $typePool = null,
         array $rules = []
     ) {
         $this->sources = $sources;

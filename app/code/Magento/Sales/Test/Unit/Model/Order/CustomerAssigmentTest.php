@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,12 +15,14 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\CustomerAssignment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Sales\Model\Order\CustomerAssignment class.
  */
 class CustomerAssigmentTest extends TestCase
 {
+
     /**
      * @var CustomerAssignment
      */
@@ -49,9 +51,9 @@ class CustomerAssigmentTest extends TestCase
     /**
      * Tests 'execute' method.
      *
-     * @dataProvider executeDataProvider
      * @param array $data
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(array $data): void
     {
         $this->configureOrderMock($data);
@@ -98,10 +100,10 @@ class CustomerAssigmentTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->orderMock = $this->getMockForAbstractClass(OrderInterface::class);
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->orderMock = $this->createMock(OrderInterface::class);
+        $this->customerMock = $this->createMock(CustomerInterface::class);
+        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->customerAssignment = $objectManager->getObject(
             CustomerAssignment::class,
             [

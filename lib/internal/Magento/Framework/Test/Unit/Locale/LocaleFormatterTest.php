@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,7 +33,7 @@ class LocaleFormatterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->localeResolver = $this->getMockForAbstractClass(LocalResolverInterface::class);
+        $this->localeResolver = $this->createMock(LocalResolverInterface::class);
         $this->model = new LocaleFormatter($this->localeResolver);
     }
 

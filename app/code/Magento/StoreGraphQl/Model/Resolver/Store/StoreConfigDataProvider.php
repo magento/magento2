@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -87,7 +87,7 @@ class StoreConfigDataProvider
      * @param int|null $storeGroupId
      * @return array
      */
-    public function getAvailableStoreConfig(int $websiteId, int $storeGroupId = null): array
+    public function getAvailableStoreConfig(int $websiteId, ?int $storeGroupId = null): array
     {
         $websiteStores = $this->storeWebsiteRelation->getWebsiteStores($websiteId, true, $storeGroupId);
         $storeCodes = array_column($websiteStores, 'code');

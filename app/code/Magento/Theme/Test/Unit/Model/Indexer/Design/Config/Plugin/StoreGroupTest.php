@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,8 +40,7 @@ class StoreGroupTest extends TestCase
             ->getMock();
 
         /** @var IndexerInterface|MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->getMockForAbstractClass();
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->once())
             ->method('invalidate');
 

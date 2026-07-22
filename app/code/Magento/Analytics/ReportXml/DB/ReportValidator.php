@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Analytics\ReportXml\DB;
 
@@ -10,7 +10,7 @@ use Magento\Analytics\ReportXml\QueryFactory;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
 /**
- * Validates report definitions by doing query to storage with limit 0
+ * Validates report definitions by doing query to storage with limit 1
  */
 class ReportValidator
 {
@@ -39,18 +39,18 @@ class ReportValidator
     }
 
     /**
-     * Tries to do query for provided report with limit 0 and return error information if it failed
+     * Tries to do query for provided report with limit 1 and return error information if it failed
      *
      * @param string $name
      * @param SearchCriteriaInterface $criteria
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function validate($name, SearchCriteriaInterface $criteria = null)
+    public function validate($name, ?SearchCriteriaInterface $criteria = null)
     {
         $query = $this->queryFactory->create($name);
         $connection = $this->connectionFactory->getConnection($query->getConnectionName());
-        $query->getSelect()->limit(0);
+        $query->getSelect()->limit(1);
         try {
             $connection->query($query->getSelect());
         } catch (\Zend_Db_Statement_Exception $e) {
