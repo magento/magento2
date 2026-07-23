@@ -15,6 +15,7 @@ use Magento\Analytics\ReportXml\DB\SelectBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -126,8 +127,8 @@ class JoinAssemblerTest extends TestCase
      * @param array $tablesMapping
      *
      * @return void
-     * @dataProvider assembleNotEmptyDataProvider
      */
+    #[DataProvider('assembleNotEmptyDataProvider')]
     public function testAssembleNotEmpty(array $queryConfigMock, array $joinsMock, array $tablesMapping): void
     {
         $filtersMock = [];

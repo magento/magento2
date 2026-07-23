@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -30,29 +30,39 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     private $dbKey;
 
     /**
-     * @var SqlVersionProvider
+     * @var SqlVersionProvider|null
      */
     private $sqlVersionProvider;
 
     /**
-     * @var ResourceConnection
+     * @var ResourceConnection|null
      */
-    private ResourceConnection $resourceConnection;
+    private ?ResourceConnection $resourceConnection = null;
 
     /**
-     * @inheritDoc
+     * Get SQL version provider instance (lazy initialization)
+     *
+     * @return SqlVersionProvider
      */
-    public function __construct(
-        $name = null,
-        array $data = [],
-        $dataName = '',
-        ?ResourceConnection $resourceConnection = null
-    ) {
-        parent::__construct($name);
+    private function getSqlVersionProvider(): SqlVersionProvider
+    {
+        if ($this->sqlVersionProvider === null) {
+            $this->sqlVersionProvider = Bootstrap::getObjectManager()->get(SqlVersionProvider::class);
+        }
+        return $this->sqlVersionProvider;
+    }
 
-        $objectManager = Bootstrap::getObjectManager();
-        $this->sqlVersionProvider = $objectManager->get(SqlVersionProvider::class);
-        $this->resourceConnection = $resourceConnection ?? $objectManager->get(ResourceConnection::class);
+    /**
+     * Get resource connection instance (lazy initialization)
+     *
+     * @return ResourceConnection
+     */
+    private function getResourceConnection(): ResourceConnection
+    {
+        if ($this->resourceConnection === null) {
+            $this->resourceConnection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        }
+        return $this->resourceConnection;
     }
 
     /**
@@ -89,7 +99,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      */
     protected function getDatabaseVersion(): string
     {
-        return $this->sqlVersionProvider->getSqlVersion();
+        return $this->getSqlVersionProvider()->getSqlVersion();
     }
 
     /**
@@ -104,18 +114,25 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
         }
 
         $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
-        foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
-            if ($this->sqlVersionProvider->isMysqlGte8029()) {
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
-                break;
-            } elseif ($this->sqlVersionProvider->isMariaDbEngine()) {
-                $suffixKey = $this->sqlVersionProvider->getMariaDbSuffixKey();
-                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];
-                break;
-            } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
-                $this->dbKey = $suffix;
-                break;
+        
+        try {
+            foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
+                if ($this->getSqlVersionProvider()->isMysqlGte8029()) {
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
+                    break;
+                } elseif ($this->getSqlVersionProvider()->isMariaDbEngine()) {
+                    $suffixKey = $this->getSqlVersionProvider()->getMariaDbSuffixKey();
+                    $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[$suffixKey];
+                    break;
+                } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+                    $this->dbKey = $suffix;
+                    break;
+                }
             }
+        } catch (\Exception $e) {
+            // If database connection is not available yet (e.g., during data provider setup),
+            // use the fallback value
+            $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
         }
 
         return $this->dbKey;
@@ -130,7 +147,7 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
     public function isUsingAuroraDb(string $resource = ResourceConnection::DEFAULT_CONNECTION): bool
     {
         try {
-            $this->resourceConnection->getConnection($resource)->query('SELECT AURORA_VERSION();');
+            $this->getResourceConnection()->getConnection($resource)->query('SELECT AURORA_VERSION();');
             return true;
         } catch (Zend_Db_Statement_Exception $e) {
             return false;

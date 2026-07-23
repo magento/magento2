@@ -26,6 +26,7 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="enterPostcode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForShippingMethods"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('')}}" stepKey="waitForSelectShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('')}}" stepKey="selectShippingMethod"/>
         <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForTheNextButton"/>
         <waitForElementNotVisible selector=".loading-mask" time="300" stepKey="waitForProcessShippingMethod"/>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -21,5 +21,19 @@
     </type>
     <type name="Magento\Sales\Model\Service\InvoiceService">
         <plugin name="addTransactionCommentAfterCapture" type="Magento\Sales\Plugin\Model\Service\Invoice\AddTransactionCommentAfterCapture"/>
+    </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Relation">
+        <plugin name="add_existing_product_options"
+                type="Magento\Sales\Plugin\Model\ResourceModel\Order\Relation\AddExistingItemProductOptions"/>
+    </type>
+    <type name="Magento\Sales\Model\OrderRepository">
+        <plugin name="validate_billing_address_on_save"
+                type="Magento\Sales\Plugin\Model\OrderRepositoryPlugin"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Webapi\ServiceOutputProcessor">
+        <plugin name="sales_rest_add_null_state_status"
+                type="Magento\Sales\Plugin\Webapi\OrderResponseNullKeysPlugin"
+                sortOrder="10"/>
     </type>
 </config>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Developer\Console\Command;
@@ -55,7 +55,7 @@ class QueryLogDisableCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $data = [LoggerProxy::PARAM_ALIAS => LoggerProxy::LOGGER_ALIAS_DISABLED];
         $this->deployConfigWriter->saveConfig([ConfigFilePool::APP_ENV => [LoggerProxy::CONF_GROUP_NAME => $data]]);

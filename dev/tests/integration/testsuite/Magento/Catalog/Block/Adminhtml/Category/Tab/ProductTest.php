@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends TestCase
 {
@@ -72,13 +74,13 @@ class ProductTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/category_with_two_products.php
      * @magentoDataFixture Magento/Catalog/_files/product_associated.php
      * @magentoDataFixture Magento/Catalog/_files/simple_product_disabled.php
-     * @dataProvider optionsFilterProvider
      * @param string $filterColumn
      * @param int $categoryId
      * @param int $storeId
      * @param array $items
      * @return void
      */
+    #[DataProvider('optionsFilterProvider')]
     public function testFilterProductInCategory(string $filterColumn, int $categoryId, int $storeId, array $items): void
     {
         $collection = $this->filterProductInGrid($filterColumn, $categoryId, $storeId);
@@ -148,7 +150,6 @@ class ProductTest extends TestCase
     }
 
     /**
-     * @dataProvider sortingOptionsProvider
      * @param string $sortField
      * @param string $sortDirection
      * @param string $store
@@ -156,6 +157,7 @@ class ProductTest extends TestCase
      * @return void
      */
     #[
+        DataProvider('sortingOptionsProvider'),
         DataFixture(CategoryFixture::class, ['name' => 'CategoryA'], as: 'category'),
         DataFixture(
             ProductFixture::class,

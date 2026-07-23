@@ -18,6 +18,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Quote\Model\CustomerCartMutexInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
@@ -184,6 +185,16 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     private $cartMutex;
 
     /**
+     * @var CustomerCartMutexInterface
+     */
+    private $customerCartMutex;
+
+    /**
+     * @var QuoteAddressValidator
+     */
+    private $quoteAddressValidator;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -210,6 +221,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @param RemoteAddress|null $remoteAddress
      * @param LockManagerInterface $lockManager
      * @param CartMutexInterface|null $cartMutex
+     * @param QuoteAddressValidator|null $quoteAddressValidator
+     * @param CustomerCartMutexInterface|null $customerCartMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -239,7 +252,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         ?RequestInterface $request = null,
         ?RemoteAddress $remoteAddress = null,
         ?LockManagerInterface $lockManager = null,
-        ?CartMutexInterface $cartMutex = null
+        ?CartMutexInterface $cartMutex = null,
+        ?QuoteAddressValidator $quoteAddressValidator = null,
+        ?CustomerCartMutexInterface $customerCartMutex = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -271,6 +286,10 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ->get(RemoteAddress::class);
         $this->cartMutex = $cartMutex
             ?? ObjectManager::getInstance()->get(CartMutexInterface::class);
+        $this->quoteAddressValidator = $quoteAddressValidator
+            ?? ObjectManager::getInstance()->get(QuoteAddressValidator::class);
+        $this->customerCartMutex = $customerCartMutex
+            ?? ObjectManager::getInstance()->get(CustomerCartMutexInterface::class);
     }
 
     /**
@@ -299,7 +318,30 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      */
     public function createEmptyCartForCustomer($customerId)
     {
-        $storeId = $this->storeManager->getStore()->getStoreId();
+        $store = $this->storeManager->getStore();
+        try {
+            return $this->customerCartMutex->execute(
+                (int)$customerId,
+                (int)$store->getStoreId(),
+                \Closure::fromCallable([$this, 'createEmptyCartForCustomerRun']),
+                [(int)$customerId, (int)$store->getStoreId()]
+            );
+        } catch (CustomerCartMutexException $e) {
+            throw new CouldNotSaveException(__("The quote can't be created."), $e);
+        }
+    }
+
+    /**
+     * Creates an empty cart for the customer, called within the customer cart mutex.
+     *
+     * @param int $customerId
+     * @param int $storeId
+     * @return int
+     * @throws CouldNotSaveException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function createEmptyCartForCustomerRun(int $customerId, int $storeId): int
+    {
         $quote = $this->createCustomerCart($customerId, $storeId);
 
         $this->_prepareCustomerQuote($quote);
@@ -528,7 +570,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     {
         $orderItems = [];
         foreach ($quote->getAllItems() as $quoteItem) {
-            $itemId = $quoteItem->getId();
+            $itemId = $quoteItem->getId() ?? '';
 
             if (!empty($orderItems[$itemId])) {
                 continue;
@@ -542,7 +584,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                     ['parent_item' => null]
                 );
             }
-            $parentItem = isset($orderItems[$parentItemId]) ? $orderItems[$parentItemId] : null;
+            $parentItem = (isset($parentItemId, $orderItems[$parentItemId]))
+                ? $orderItems[$parentItemId]
+                : null;
             $orderItems[$itemId] = $this->quoteItemToOrderItem->convert($quoteItem, ['parent_item' => $parentItem]);
         }
         return array_values($orderItems);
@@ -622,6 +666,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if ($quote->getReservedOrderId()) {
             $order->setIncrementId($quote->getReservedOrderId());
         }
+        $this->validateQuoteAddressesOwnership($quote);
         $this->submitQuoteValidator->validateOrder($order);
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
@@ -647,6 +692,23 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             throw $e;
         }
         return $order;
+    }
+
+    /**
+     * Validates final quote addresses ownership before order placement.
+     *
+     * @param QuoteEntity $quote
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function validateQuoteAddressesOwnership(QuoteEntity $quote): void
+    {
+        $this->quoteAddressValidator->validateForCart($quote, $quote->getBillingAddress());
+
+        if (!$quote->isVirtual()) {
+            $this->quoteAddressValidator->validateForCart($quote, $quote->getShippingAddress());
+        }
     }
 
     /**

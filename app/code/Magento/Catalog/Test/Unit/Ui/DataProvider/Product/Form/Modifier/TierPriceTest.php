@@ -38,7 +38,7 @@ class TierPriceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productPriceOptions = $this->getMockForAbstractClass(ProductPriceOptionsInterface::class);
+        $this->productPriceOptions = $this->createMock(ProductPriceOptionsInterface::class);
         $this->arrayManager = $this->createMock(ArrayManager::class);
 
         $this->tierPrice = (new ObjectManager($this))->getObject(TierPrice::class, [
@@ -129,7 +129,7 @@ class TierPriceTest extends TestCase
         $this->arrayManager
             ->expects($this->once())
             ->method('merge')
-            ->with($priceWrapperPath, $meta, $this->isType('array'))
+            ->with($priceWrapperPath, $meta, $this->callback(fn($arg) => is_array($arg)))
             ->willReturnArgument(2);
 
         $modifiedMeta = $this->tierPrice->modifyMeta($meta);

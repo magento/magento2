@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Model;
 
 use Laminas\Validator\Identical;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\DataObject;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\NotEmpty;
@@ -22,9 +24,40 @@ use Magento\Framework\Validator\StringLength;
 class UserValidationRules
 {
     /**
-     * Minimum length of admin password
+     * Configuration path for minimum admin password length
+     */
+    private const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'admin/security/minimum_password_length';
+
+    /**
+     * Minimum length of admin password (fallback)
      */
     public const MIN_PASSWORD_LENGTH = 7;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface|null $scopeConfig
+     */
+    public function __construct(?ScopeConfigInterface $scopeConfig = null)
+    {
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+    }
+
+    /**
+     * Get minimum password length from configuration
+     *
+     * @return int
+     */
+    private function getMinimumPasswordLength(): int
+    {
+        $configValue = $this->scopeConfig ?
+            $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH) : null;
+
+        return $configValue ? (int) $configValue : self::MIN_PASSWORD_LENGTH;
+    }
 
     /**
      * Adds validation rule for user first name, last name, username and email
@@ -83,7 +116,7 @@ class UserValidationRules
     {
         $passwordNotEmpty = new NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), NotEmpty::IS_EMPTY);
-        $minPassLength = self::MIN_PASSWORD_LENGTH;
+        $minPassLength = $this->getMinimumPasswordLength();
         $passwordLength = new StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
         $passwordLength->setMessage(
             __('Your password must be at least %1 characters.', $minPassLength),

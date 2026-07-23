@@ -25,12 +25,7 @@ class DecimalTest extends TestCase
 
         $objectManager = new ObjectManager($this);
 
-        $dataProviderFactory = $this->getMockBuilder(
-            DecimalFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $dataProviderFactory = $this->createPartialMock(DecimalFactory::class, ['create']);
         $instance = $objectManager->getObject(
             Decimal::class,
             [

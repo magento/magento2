@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,8 @@ namespace Magento\Csp\Plugin;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
 use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin that stores generated integrity hashes for all assets.
@@ -27,15 +29,24 @@ class StoreAssetIntegrityHashes
     private SubresourceIntegrityRepositoryPool $integrityRepositoryPool;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param SubresourceIntegrityCollector $integrityCollector
      * @param SubresourceIntegrityRepositoryPool $integrityRepositoryPool
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         SubresourceIntegrityCollector $integrityCollector,
-        SubresourceIntegrityRepositoryPool $integrityRepositoryPool
+        SubresourceIntegrityRepositoryPool $integrityRepositoryPool,
+        ?LoggerInterface $logger = null
     ) {
         $this->integrityCollector = $integrityCollector;
         $this->integrityRepositoryPool = $integrityRepositoryPool;
+        $this->logger = $logger ??
+            ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -55,16 +66,34 @@ class StoreAssetIntegrityHashes
         array $options
     ): void {
         $bunches = [];
+        $integrityHashes = $this->integrityCollector->release();
 
-        foreach ($this->integrityCollector->release() as $integrity) {
-            $area = explode("/", $integrity->getPath())[0];
+        foreach ($integrityHashes as $integrity) {
+            $path = $integrity->getPath();
 
-            $bunches[$area][] = $integrity;
+            if (empty($path)) {
+                $this->logger->debug('SRI: Skipping empty path');
+                continue;
+            }
+
+            $pathParts = explode("/", $path);
+
+            // Ensure we have at least 4 segments: area/vendor/theme/locale
+            if (count($pathParts) < 4) {
+                $this->logger->debug('SRI: Skipping invalid path (< 4 segments)', ['path' => $path]);
+                continue;
+            }
+
+            $context = implode('/', array_slice($pathParts, 0, 4));
+            $bunches[$context][] = $integrity;
         }
 
-        foreach ($bunches as $area => $bunch) {
-            $this->integrityRepositoryPool->get($area)
-                ->saveBunch($bunch);
+        foreach ($bunches as $context => $bunch) {
+            try {
+                $this->integrityRepositoryPool->get($context)->saveBunch($bunch);
+            } catch (\Exception $e) {
+                $this->logger->error('SRI Store: Failed saving ' . $context . ': ' . $e->getMessage());
+            }
         }
     }
 }

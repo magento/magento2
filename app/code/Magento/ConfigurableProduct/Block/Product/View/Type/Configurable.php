@@ -203,7 +203,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Returns additional values for js config, con be overridden by descendants
+     * Returns additional values for js config, can be overridden by descendants
      *
      * @return array
      */
@@ -230,7 +230,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'template' => str_replace('%s', '<%- data.price %>', $store->getCurrentCurrency()->getOutputFormat()),
             'currencyFormat' => $store->getCurrentCurrency()->getOutputFormat(),
             'optionPrices' => $this->getOptionPrices(),
-            'priceFormat' => $this->localeFormat->getPriceFormat(),
+            'priceFormat' => $this->localeFormat->getPriceFormat(null, $store->getCurrentCurrency()->getCurrencyCode()),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
             'chooseText' => __('Choose an Option...'),

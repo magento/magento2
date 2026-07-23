@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,9 +18,11 @@ use Magento\Framework\Controller\ResultFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class UploadTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Upload
      */
@@ -70,11 +72,9 @@ class UploadTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->customerMetadataService = $this->getMockBuilder(CustomerMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->customerMetadataService = $this->createMock(CustomerMetadataInterface::class);
 
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->controller = new Upload(
             $this->context,
@@ -136,8 +136,7 @@ class UploadTest extends TestCase
             'url' => $resultFileUrl,
         ];
 
-        $attributeMetadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
 
         $this->customerMetadataService->expects($this->once())
             ->method('getAttributeMetadata')
@@ -196,8 +195,7 @@ class UploadTest extends TestCase
             'error2',
         ];
 
-        $attributeMetadataMock = $this->getMockBuilder(AttributeMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $attributeMetadataMock = $this->createMock(AttributeMetadataInterface::class);
 
         $this->customerMetadataService->expects($this->once())
             ->method('getAttributeMetadata')

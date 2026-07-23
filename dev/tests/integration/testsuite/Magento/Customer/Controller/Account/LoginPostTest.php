@@ -1,25 +1,35 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Customer\Model\ResourceModel\Visitor as VisitorResource;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Exception\SessionException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Session\Generic;
 use Magento\Framework\Url\EncoderInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks customer login action
  *
  * @see \Magento\Customer\Controller\Account\LoginPost
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPostTest extends AbstractController
 {
@@ -40,6 +50,16 @@ class LoginPostTest extends AbstractController
     private $generic;
 
     /**
+     * @var CustomerResource
+     */
+    private $customerResource;
+
+    /**
+     * @var VisitorResource
+     */
+    private $visitorResource;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -50,6 +70,8 @@ class LoginPostTest extends AbstractController
         $this->urlEncoder = $this->_objectManager->get(EncoderInterface::class);
         $this->customerUrl = $this->_objectManager->get(Url::class);
         $this->generic = $this->_objectManager->get(Generic::class);
+        $this->customerResource = $this->_objectManager->get(CustomerResource::class);
+        $this->visitorResource = $this->_objectManager->get(VisitorResource::class);
     }
 
     /**
@@ -57,13 +79,12 @@ class LoginPostTest extends AbstractController
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider missingParametersDataProvider
-     *
      * @param string|null $email
      * @param string|null $password
      * @param string $expectedErrorMessage
      * @return void
      */
+    #[DataProvider('missingParametersDataProvider')]
     public function testLoginIncorrectParameters(?string $email, ?string $password, string $expectedErrorMessage): void
     {
         $this->prepareRequest($email, $password);
@@ -244,6 +265,71 @@ class LoginPostTest extends AbstractController
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertNotEmpty($this->generic->getVisitorData()['visitor_id']);
         $this->assertNotEmpty($this->generic->getVisitorData()['customer_id']);
+    }
+
+    /**
+     * Login succeeds on first attempt when session_cutoff is set (password reset on other device).
+     *
+     * @return void
+     */
+    #[
+        Config('customer/startup/redirect_dashboard', 0, ScopeInterface::SCOPE_STORE),
+        Config('customer/captcha/enable', 0, ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testLoginSucceedsWhenSessionCutoffSetAfterPasswordResetElsewhere(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $this->prepareRequest($customer->getEmail(), 'password');
+        $this->dispatch('customer/account/loginPost');
+        $this->assertTrue($this->session->isLoggedIn());
+
+        $visitorData = $this->generic->getVisitorData();
+        $this->assertNotEmpty($visitorData['visitor_id']);
+        $visitorId = (int) $visitorData['visitor_id'];
+        $customerId = (int) $this->session->getCustomerId();
+
+        $this->session->logout();
+
+        $cutoffTime = time();
+        $oldSessionCreationTime = $cutoffTime - 3600;
+        $this->customerResource->updateSessionCutOff($customerId, $cutoffTime);
+        $this->visitorResource->updateCreatedAt($visitorId, $oldSessionCreationTime);
+
+        $this->prepareRequest($customer->getEmail(), 'password');
+        $this->dispatch('customer/account/loginPost');
+
+        $this->assertTrue($this->session->isLoggedIn());
+        $this->assertRedirect($this->stringContains('customer/account/'));
+    }
+
+    /**
+     * Logged-in session is invalidated after password reset on another device.
+     *
+     * @return void
+     */
+    #[
+        Config('customer/startup/redirect_dashboard', 0, ScopeInterface::SCOPE_STORE),
+        Config('customer/captcha/enable', 0, ScopeInterface::SCOPE_STORE),
+        DataFixture(Customer::class, as: 'customer')
+    ]
+    public function testLoggedInSessionIsInvalidatedWhenSessionCutoffIsUpdated(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $this->prepareRequest($customer->getEmail(), 'password');
+        $this->dispatch('customer/account/loginPost');
+        $this->assertTrue($this->session->isLoggedIn());
+
+        $customerId = (int)$this->session->getCustomerId();
+        $this->customerResource->updateSessionCutOff($customerId, time() + 1);
+
+        $sessionExceptionThrown = false;
+        try {
+            $this->session->start();
+        } catch (SessionException) {
+            $sessionExceptionThrown = true;
+        }
+        $this->assertTrue($sessionExceptionThrown);
     }
 
     /**

@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Bundle\Model\Sales\Order\Pdf\Items\Shipment;
 use Magento\Framework\Filter\FilterManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Item;
@@ -19,6 +21,8 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractItemsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Shipment
      */
@@ -41,15 +45,16 @@ class AbstractItemsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getOrderItem', 'getOrderItemId'])
-            ->onlyMethods(['getProductOptions', 'getParentItem', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['stripTags', 'sprintf'])
-            ->getMock();
+        $this->orderItemMock = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getId', 'getParentItem', 'getOrderItemId', 'getProductOptions', 'getName', 'getOrderItem']
+        );
+        $this->orderItemMock->method('getOrderItem')->willReturnSelf();
+        
+        $this->filterManagerMock = $this->createPartialMockWithReflection(
+            FilterManager::class,
+            ['stripTags', 'sprintf']
+        );
 
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
@@ -63,24 +68,18 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider getChildrenEmptyItemsDataProvider
      *
      * @param string $class
      * @param string $method
      * @param string $returnClass
      */
+    #[DataProvider('getChildrenEmptyItemsDataProvider')]
     public function testGetChildrenEmptyItems($class, $method, $returnClass)
     {
-        $salesModel = $this->getMockBuilder($returnClass)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getAllItems'])
-            ->getMock();
+        $salesModel = $this->createPartialMock($returnClass, ['getAllItems']);
         $salesModel->expects($this->once())->method('getAllItems')->willReturn([]);
 
-        $item = $this->getMockBuilder($class)
-            ->disableOriginalConstructor()
-            ->onlyMethods([$method, 'getOrderItem'])
-            ->getMock();
+        $item = $this->createPartialMock($class, [$method, 'getOrderItem']);
         $item->expects($this->once())->method($method)->willReturn($salesModel);
         $item->expects($this->once())->method('getOrderItem')->willReturn($this->orderItemMock);
         $this->orderItemMock->method('getId')->willReturn(1);
@@ -113,17 +112,15 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider getChildrenDataProvider
-     *
      * @param bool $parentItem
      */
+    #[DataProvider('getChildrenDataProvider')]
     public function testGetChildren($parentItem)
     {
         if ($parentItem) {
             $parentItem = $this->createPartialMock(Item::class, ['getId']);
             $parentItem->method('getId')->willReturn(1);
         }
-        $this->orderItemMock->method('getOrderItem')->willReturnSelf();
         $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
         $this->orderItemMock->method('getOrderItemId')->willReturn(2);
         $this->orderItemMock->method('getId')->willReturn(1);
@@ -153,15 +150,15 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider isShipmentSeparatelyWithoutItemDataProvider
      *
      * @param array $productOptions
      * @param bool $result
      */
+    #[DataProvider('isShipmentSeparatelyWithoutItemDataProvider')]
     public function testIsShipmentSeparatelyWithoutItem($productOptions, $result)
     {
-        $this->model->setItem($this->orderItemMock);
         $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $this->model->setItem($this->orderItemMock);
 
         $this->assertSame($result, $this->model->isShipmentSeparately());
     }
@@ -179,12 +176,12 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider isShipmentSeparatelyWithItemDataProvider
      *
      * @param array $productOptions
      * @param bool $result
      * @param bool $parentItem
      */
+    #[DataProvider('isShipmentSeparatelyWithItemDataProvider')]
     public function testIsShipmentSeparatelyWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
@@ -193,12 +190,11 @@ class AbstractItemsTest extends TestCase
                 ['getProductOptions']
             );
             $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
         } else {
-            $this->orderItemMock->method('getProductOptions')
-                ->willReturn($productOptions);
+            $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItemMock->method('getParentItem')->willReturn(null);
         }
-        $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
-        $this->orderItemMock->method('getOrderItem')->willReturnSelf();
 
         $this->assertSame($result, $this->model->isShipmentSeparately($this->orderItemMock));
     }
@@ -217,15 +213,15 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider isChildCalculatedWithoutItemDataProvider
      *
      * @param array $productOptions
      * @param bool $result
      */
+    #[DataProvider('isChildCalculatedWithoutItemDataProvider')]
     public function testIsChildCalculatedWithoutItem($productOptions, $result)
     {
-        $this->model->setItem($this->orderItemMock);
         $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $this->model->setItem($this->orderItemMock);
 
         $this->assertSame($result, $this->model->isChildCalculated());
     }
@@ -243,12 +239,12 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider isChildCalculatedWithItemDataProvider
      *
      * @param array $productOptions
      * @param bool $result
      * @param bool $parentItem
      */
+    #[DataProvider('isChildCalculatedWithItemDataProvider')]
     public function testIsChildCalculatedWithItem($productOptions, $result, $parentItem)
     {
         if ($parentItem) {
@@ -257,12 +253,11 @@ class AbstractItemsTest extends TestCase
                 ['getProductOptions']
             );
             $parentItem->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
         } else {
-            $this->orderItemMock->method('getProductOptions')
-                ->willReturn($productOptions);
+            $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+            $this->orderItemMock->method('getParentItem')->willReturn(null);
         }
-        $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
-        $this->orderItemMock->method('getOrderItem')->willReturnSelf();
 
         $this->assertSame($result, $this->model->isChildCalculated($this->orderItemMock));
     }
@@ -281,14 +276,14 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider getBundleOptionsDataProvider
      * @param array $productOptions
      * @param array|string $result
      */
+    #[DataProvider('getBundleOptionsDataProvider')]
     public function testGetBundleOptions($productOptions, $result)
     {
-        $this->model->setItem($this->orderItemMock);
         $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $this->model->setItem($this->orderItemMock);
         $this->assertSame($result, $this->model->getBundleOptions());
     }
 
@@ -330,8 +325,8 @@ class AbstractItemsTest extends TestCase
             'additional_options' => ['additional_options'],
             'attributes_info' => ['attributes_info'],
         ];
-        $this->model->setItem($this->orderItemMock);
         $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $this->model->setItem($this->orderItemMock);
         $this->assertEquals(['attributes_info', 'options', 'additional_options'], $this->model->getOrderOptions());
     }
 
@@ -342,18 +337,17 @@ class AbstractItemsTest extends TestCase
     }
 
     /**
-     * @dataProvider canShowPriceInfoDataProvider
      *
      * @param bool $parentItem
      * @param array $productOptions
      * @param bool $result
      */
+    #[DataProvider('canShowPriceInfoDataProvider')]
     public function testCanShowPriceInfo($parentItem, $productOptions, $result)
     {
-        $this->model->setItem($this->orderItemMock);
-        $this->orderItemMock->method('getOrderItem')->willReturnSelf();
         $this->orderItemMock->method('getParentItem')->willReturn($parentItem);
         $this->orderItemMock->method('getProductOptions')->willReturn($productOptions);
+        $this->model->setItem($this->orderItemMock);
 
         $this->assertSame($result, $this->model->canShowPriceInfo($this->orderItemMock));
     }
@@ -370,20 +364,18 @@ class AbstractItemsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider getValueHtmlWithoutShipmentSeparatelyDataProvider
-     */
+    #[DataProvider('getValueHtmlWithoutShipmentSeparatelyDataProvider')]
     public function testGetValueHtmlWithoutShipmentSeparately($qty)
     {
-        $this->filterManagerMock->expects($this->any())->method('stripTags')->willReturn('Test');
-        $this->filterManagerMock->expects($this->any())->method('sprintf')->willReturn($qty);
-        $this->orderItemMock->expects($this->any())->method('getProductOptions')
-            ->willReturn([
-                'shipment_type' => 1,
-                'bundle_selection_attributes' => [],
-            ]);
-        $this->serializerMock->expects($this->any())->method('unserialize')
-            ->willReturn(['qty' => $qty]);
+        $this->filterManagerMock->method('stripTags')->willReturn('Test');
+        $this->filterManagerMock->method('sprintf')->willReturn((string)$qty);
+        $this->orderItemMock->method('getProductOptions')->willReturn([
+            'shipment_type' => 1,
+            'bundle_selection_attributes' => [],
+        ]);
+        $this->orderItemMock->method('getName')->willReturn('Test');
+        $this->model->setItem($this->orderItemMock);
+        $this->serializerMock->method('unserialize')->willReturn(['qty' => $qty]);
         $this->assertSame($qty . ' x Test', $this->model->getValueHtml($this->orderItemMock));
     }
 

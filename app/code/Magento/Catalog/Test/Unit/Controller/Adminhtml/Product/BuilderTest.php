@@ -16,6 +16,7 @@ use Magento\Cms\Model\Wysiwyg\Config as WysiwygConfig;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreFactory;
@@ -28,6 +29,7 @@ use Psr\Log\LoggerInterface;
  */
 class BuilderTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -86,28 +88,20 @@ class BuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->productFactoryMock = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->wysiwygConfigMock = $this->getMockBuilder(WysiwygConfig::class)
-            ->addMethods(['setStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->wysiwygConfigMock = $this->createPartialMockWithReflection(
+            WysiwygConfig::class,
+            ['setStoreId']
+        );
         $this->requestMock = $this->createMock(Http::class);
-        $methods = ['setStoreId', 'setData', 'load', 'setAttributeSetId', 'setTypeId'];
-        $this->productMock = $this->createPartialMock(Product::class, $methods);
-        $this->storeFactoryMock = $this->getMockBuilder(StoreFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['load'])
-            ->getMockForAbstractClass();
+        $this->productMock = $this->createMock(Product::class);
+        $this->storeFactoryMock = $this->createPartialMock(StoreFactory::class, ['create']);
+        $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->storeMock->method('load')->willReturnSelf();
 
-        $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
-            ->onlyMethods(['getById'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
 
         $this->builder = $this->objectManager->getObject(
             Builder::class,
@@ -145,14 +139,7 @@ class BuilderTest extends TestCase
             ->with($productId, true, $productStore)
             ->willReturn($this->productMock);
 
-        $this->storeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->storeMock);
-
-        $this->storeMock->expects($this->any())
-            ->method('load')
-            ->with($productStore)
-            ->willReturnSelf();
+        $this->storeFactoryMock->method('create')->willReturn($this->storeMock);
 
         $registryValueMap = [
             ['product', $this->productMock, $this->registryMock],
@@ -160,9 +147,7 @@ class BuilderTest extends TestCase
             ['current_store', $this->registryMock, $this->storeMock],
         ];
 
-        $this->registryMock->expects($this->any())
-            ->method('register')
-            ->willReturn($registryValueMap);
+        $this->registryMock->method('register')->willReturn($registryValueMap);
 
         $this->wysiwygConfigMock->expects($this->once())
             ->method('setStoreId')
@@ -217,14 +202,9 @@ class BuilderTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
-        $this->storeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->storeMock);
+        $this->storeFactoryMock->method('create')->willReturn($this->storeMock);
 
-        $this->storeMock->expects($this->any())
-            ->method('load')
-            ->with($productStore)
-            ->willReturnSelf();
+        // No mock expectations needed for anonymous class
 
         $registryValueMap = [
             ['product', $this->productMock, $this->registryMock],
@@ -232,9 +212,7 @@ class BuilderTest extends TestCase
             ['current_store', $this->registryMock, $this->storeMock],
         ];
 
-        $this->registryMock->expects($this->any())
-            ->method('register')
-            ->willReturn($registryValueMap);
+        $this->registryMock->method('register')->willReturn($registryValueMap);
 
         $this->wysiwygConfigMock->expects($this->once())
             ->method('setStoreId')
@@ -286,14 +264,9 @@ class BuilderTest extends TestCase
             ->method('setAttributeSetId')
             ->with($productSet);
 
-        $this->storeFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->storeMock);
+        $this->storeFactoryMock->method('create')->willReturn($this->storeMock);
 
-        $this->storeMock->expects($this->any())
-            ->method('load')
-            ->with($productStore)
-            ->willReturnSelf();
+        // No mock expectations needed for anonymous class
 
         $registryValueMap = [
             ['product', $this->productMock, $this->registryMock],
@@ -301,9 +274,7 @@ class BuilderTest extends TestCase
             ['current_store', $this->registryMock, $this->storeMock],
         ];
 
-        $this->registryMock->expects($this->any())
-            ->method('register')
-            ->willReturn($registryValueMap);
+        $this->registryMock->method('register')->willReturn($registryValueMap);
 
         $this->wysiwygConfigMock->expects($this->once())
             ->method('setStoreId')

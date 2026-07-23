@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Console;
 
 /**
  * Class CommandList has a list of commands, which can be extended via DI configuration.
+ * @api
  */
 class CommandList implements CommandListInterface
 {
@@ -17,7 +18,16 @@ class CommandList implements CommandListInterface
     protected $commands;
 
     /**
-     * Constructor
+     * CommandList constructor is being used for injecting new Commands
+     *
+     * Registration of new Commands can be done using `di.xml`:
+     *  <type name="Magento\Framework\Console\CommandList">
+     *  <arguments>
+     *       <argument name="commands" xsi:type="array">
+     *           <item name="your-command-name" xsi:type="object">Vendor\Module\Console\Command\YourCommand</item>
+     *       </argument>
+     *  </arguments>
+     *  </type>
      *
      * @param array $commands
      */
@@ -27,7 +37,7 @@ class CommandList implements CommandListInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCommands()
     {

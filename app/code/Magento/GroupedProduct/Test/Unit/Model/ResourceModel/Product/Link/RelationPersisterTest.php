@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Link;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link as LinkResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link\RelationPersister;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class RelationPersisterTest extends TestCase
 {
+    use MockCreationTrait;
     /** @var RelationPersister|MockObject */
     private $object;
 
@@ -49,25 +51,18 @@ class RelationPersisterTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->linkFactory = $this->getMockBuilder(LinkFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->linkFactory = $this->createPartialMock(LinkFactory::class, ['create']);
 
-        $this->relationProcessor = $this->getMockBuilder(Relation::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->relationProcessor = $this->createMock(Relation::class);
 
-        $this->link = $this->getMockBuilder(Link::class)
-            ->addMethods(['getLinkTypeId', 'getProductId', 'getLinkedProductId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->link = $this->createPartialMockWithReflection(
+            \Magento\Catalog\Model\Product\Link::class,
+            ['getLinkTypeId', 'getProductId', 'getLinkedProductId']
+        );
 
-        $this->linkFactory->expects($this->any())->method('create')->willReturn($this->link);
+        $this->linkFactory->method('create')->willReturn($this->link);
 
-        $this->subject = $this->getMockBuilder(LinkResourceModel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->subject = $this->createMock(LinkResourceModel::class);
 
         $this->object = $this->objectManager->getObject(
             RelationPersister::class,
@@ -92,21 +87,18 @@ class RelationPersisterTest extends TestCase
 
     public function testAroundDeleteProductLink()
     {
-        $subject = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Link::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $subject->expects($this->any())->method('getIdFieldName')->willReturn('id');
+        $subject = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
+            ['getIdFieldName', 'load']
+        );
+        $subject->method('getIdFieldName')->willReturn('id');
         $subject->expects($this->once())->method('load')->with($this->link, 155, 'id');
 
-        $this->link->expects($this->any())
-            ->method('getLinkTypeId')
+        // Configure the mock to return the expected values when getters are called
+        $this->link->method('getLinkTypeId')
             ->willReturn(\Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED);
-        $this->link->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(12);
-        $this->link->expects($this->any())
-            ->method('getLinkedProductId')
-            ->willReturn(13);
+        $this->link->method('getProductId')->willReturn(12);
+        $this->link->method('getLinkedProductId')->willReturn(13);
 
         $this->relationProcessor->expects($this->once())->method('removeRelations')->with(12, 13);
         $this->assertEquals(

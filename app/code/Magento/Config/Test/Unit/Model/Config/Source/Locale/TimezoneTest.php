@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,9 +26,7 @@ class TimezoneTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->listMock = $this->getMockBuilder(TranslatedLists::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->listMock = $this->createMock(TranslatedLists::class);
         $this->model = new Timezone($this->listMock);
     }
 

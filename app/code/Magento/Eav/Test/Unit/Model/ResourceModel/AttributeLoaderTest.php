@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AttributeLoaderTest extends TestCase
 {
@@ -43,7 +44,7 @@ class AttributeLoaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attributeRepositoryMock = $this->getMockForAbstractClass(AttributeRepositoryInterface::class);
+        $this->attributeRepositoryMock = $this->createMock(AttributeRepositoryInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -65,11 +66,11 @@ class AttributeLoaderTest extends TestCase
      * @param string $entityType
      * @param int|null $attributeSetId
      * @param string $expectedCondition
-     * @dataProvider getAttributesDataProvider
      */
+    #[DataProvider('getAttributesDataProvider')]
     public function testGetAttributes($entityType, $attributeSetId, $expectedCondition)
     {
-        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $metadataMock = $this->createMock(EntityMetadataInterface::class);
         $metadataMock->expects($this->once())
             ->method('getEavEntityType')
             ->willReturn($entityType);
@@ -78,7 +79,7 @@ class AttributeLoaderTest extends TestCase
             ->with($entityType)
             ->willReturn($metadataMock);
 
-        $searchCriteria = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('addFilter')
             ->with(
@@ -90,8 +91,8 @@ class AttributeLoaderTest extends TestCase
             ->method('create')
             ->willReturn($searchCriteria);
 
-        $attributeMock = $this->getMockForAbstractClass(AttributeInterface::class);
-        $searchResultMock = $this->getMockForAbstractClass(AttributeSearchResultsInterface::class);
+        $attributeMock = $this->createMock(AttributeInterface::class);
+        $searchResultMock = $this->createMock(AttributeSearchResultsInterface::class);
         $searchResultMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$attributeMock]);

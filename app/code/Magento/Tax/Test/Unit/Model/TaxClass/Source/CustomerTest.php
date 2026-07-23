@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Tax\Api\Data\TaxClassInterface;
 use Magento\Tax\Api\Data\TaxClassSearchResultsInterface;
@@ -18,11 +19,14 @@ use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\TaxClass\Source\Customer;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
 {
+    // use MockCreationTrait;
+
     /**
      * @var TaxClassRepositoryInterface|MockObject
      */
@@ -57,15 +61,7 @@ class CustomerTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->taxClassRepositoryMock = $this->getMockForAbstractClass(
-            TaxClassRepositoryInterface::class,
-            ['getList'],
-            '',
-            false,
-            true,
-            true,
-            []
-        );
+        $this->taxClassRepositoryMock = $this->createMock(TaxClassRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,
             ['addFilters', 'create']
@@ -87,31 +83,17 @@ class CustomerTest extends TestCase
 
     /**
      * Run test getAllOptions method
-     *
-     * @param bool $isEmpty
-     * @param array $expected
-     * @dataProvider dataProviderGetAllOptions
      */
-    public function testGetAllOptions($isEmpty, array $expected)
+    #[DataProvider('dataProviderGetAllOptions')]
+    public function testGetAllOptions(bool $isEmpty, array $expected): void
     {
         $filterMock = $this->createMock(Filter::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $searchResultsMock = $this->getMockForAbstractClass(
-            TaxClassSearchResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getItems']
+        $searchResultsMock = $this->createMock(
+            TaxClassSearchResultsInterface::class
         );
-        $taxClassMock = $this->getMockForAbstractClass(
-            TaxClassInterface::class,
-            ['getClassId', 'getClassName'],
-            '',
-            false,
-            true,
-            true
+        $taxClassMock = $this->createMock(
+            TaxClassInterface::class
         );
 
         $this->filterBuilderMock->expects($this->once())
@@ -180,30 +162,17 @@ class CustomerTest extends TestCase
 
     /**
      * Run test getAllOptions method for names integrity
-     *
-     * @param array $value
-     * @dataProvider dataProviderGetAllOptionsNameIntegrity
      */
-    public function testGetAllOptionsNameIntegrity(array $value)
+    #[DataProvider('dataProviderGetAllOptionsNameIntegrity')]
+    public function testGetAllOptionsNameIntegrity(array $value): void
     {
         $filterMock = $this->createMock(Filter::class);
         $searchCriteriaMock = $this->createMock(SearchCriteria::class);
-        $searchResultsMock = $this->getMockForAbstractClass(
-            TaxClassSearchResultsInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getItems']
+        $searchResultsMock = $this->createMock(
+            TaxClassSearchResultsInterface::class
         );
-        $taxClassMock = $this->getMockForAbstractClass(
-            TaxClassInterface::class,
-            ['getClassId', 'getClassName'],
-            '',
-            false,
-            true,
-            true
+        $taxClassMock = $this->createMock(
+            TaxClassInterface::class
         );
 
         $this->filterBuilderMock->expects($this->once())

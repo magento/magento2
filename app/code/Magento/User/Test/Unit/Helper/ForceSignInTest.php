@@ -33,9 +33,7 @@ class ForceSignInTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->adminSessionInfo = $this->getMockBuilder(AdminSessionInfo::class)
-         ->disableOriginalConstructor()
-         ->getMock();
+        $this->adminSessionInfo = $this->createMock(AdminSessionInfo::class);
 
         $objectManager = new ObjectManager($this);
         $this->forceSignIn = $objectManager->getObject(

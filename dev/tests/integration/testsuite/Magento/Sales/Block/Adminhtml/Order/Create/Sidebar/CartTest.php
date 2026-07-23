@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -80,8 +80,10 @@ class CartTest extends TestCase
     public function testClearShoppingCartButton(): void
     {
         $confirmation = __('Are you sure you want to delete all items from shopping cart?');
+        // Apply the same escaping that the security fix applies
+        $escapedConfirmation = $this->block->escapeJs($this->block->escapeHtml($confirmation));
         $button = $this->block->getChildBlock('empty_customer_cart_button');
-        $this->assertEquals(sprintf("order.clearShoppingCart('%s')", $confirmation), $button->getOnclick());
+        $this->assertEquals(sprintf("order.clearShoppingCart('%s')", $escapedConfirmation), $button->getOnclick());
         $this->assertEquals(__('Clear Shopping Cart'), $button->getLabel());
     }
 

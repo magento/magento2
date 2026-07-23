@@ -117,7 +117,9 @@ class Cart extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractS
      */
     protected function _prepareLayout()
     {
-        $deleteAllConfirmString = __('Are you sure you want to delete all items from shopping cart?');
+        $deleteAllConfirmString = $this->escapeJs(
+            $this->escapeHtml(__('Are you sure you want to delete all items from shopping cart?'))
+        );
         $this->addChild(
             'empty_customer_cart_button',
             \Magento\Backend\Block\Widget\Button::class,
