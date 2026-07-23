@@ -264,7 +264,6 @@ class SidebarTest extends TestCase
         ];
 
         $reflection = new \ReflectionProperty($this->model, 'jsLayout');
-        $reflection->setAccessible(true);
         $reflection->setValue($this->model, $jsLayout);
 
         $this->serializer->method('serialize')
@@ -309,7 +308,6 @@ class SidebarTest extends TestCase
         ];
 
         $reflection = new \ReflectionProperty($this->model, 'jsLayout');
-        $reflection->setAccessible(true);
         $reflection->setValue($this->model, $jsLayout);
 
         $this->serializer->method('serialize')
@@ -358,7 +356,6 @@ class SidebarTest extends TestCase
         ];
 
         $reflection = new \ReflectionProperty($this->model, 'jsLayout');
-        $reflection->setAccessible(true);
         $reflection->setValue($this->model, $jsLayout);
 
         $this->serializer->method('serialize')
