@@ -8,13 +8,16 @@ declare(strict_types=1);
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\NoDdlModeInterface;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Tracks per-indexer No-DDL reindex enablement and active/reserved table state
  */
-class NoDdlMode implements NoDdlModeInterface
+class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
 {
     private const TABLE_NAME = 'indexer_no_ddl_state';
 
@@ -29,6 +32,11 @@ class NoDdlMode implements NoDdlModeInterface
     private $resourceConnection;
 
     /**
+     * @var PoisonPillPutInterface
+     */
+    private $poisonPillPut;
+
+    /**
      * @var bool[]
      */
     private $isMainActiveCache = [];
@@ -36,13 +44,16 @@ class NoDdlMode implements NoDdlModeInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ResourceConnection $resourceConnection
+     * @param PoisonPillPutInterface|null $poisonPillPut
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ?PoisonPillPutInterface $poisonPillPut = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->resourceConnection = $resourceConnection;
+        $this->poisonPillPut = $poisonPillPut ?? ObjectManager::getInstance()->get(PoisonPillPutInterface::class);
     }
 
     /**
@@ -87,5 +98,17 @@ class NoDdlMode implements NoDdlModeInterface
             ['is_main_active']
         );
         $this->isMainActiveCache[$indexerId] = $newValue;
+
+        // Long-running processes (message queue consumers) may hold a stale isMainActiveCache entry
+        // for this indexer indefinitely; a new poison pill version signals them to restart.
+        $this->poisonPillPut->put();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->isMainActiveCache = [];
     }
 }

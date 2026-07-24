@@ -11,6 +11,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Indexer\Model\NoDdlMode;
 use Magento\Framework\Indexer\NoDdlModeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,6 +37,11 @@ class NoDdlModeTest extends TestCase
     private $connectionMock;
 
     /**
+     * @var PoisonPillPutInterface|MockObject
+     */
+    private $poisonPillPutMock;
+
+    /**
      * @var NoDdlMode
      */
     private $noDdlMode;
@@ -50,8 +56,13 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->method('getConnection')->willReturn($this->connectionMock);
         $this->resourceConnectionMock->method('getTableName')->willReturnArgument(0);
+        $this->poisonPillPutMock = $this->createMock(PoisonPillPutInterface::class);
 
-        $this->noDdlMode = new NoDdlMode($this->scopeConfigMock, $this->resourceConnectionMock);
+        $this->noDdlMode = new NoDdlMode(
+            $this->scopeConfigMock,
+            $this->resourceConnectionMock,
+            $this->poisonPillPutMock
+        );
     }
 
     /**
