@@ -71,7 +71,13 @@
       "json5": "~2.2.3"
     },
     "svgo": {
-      "js-yaml": "~4.2.0"
+      "js-yaml": "~4.3.0"
+    },
+    "grunt": {
+      "js-yaml": "~4.3.0"
+    },
+    "load-grunt-config": {
+      "js-yaml": "~4.3.0"
     },
     "css-select": {
       "nth-check": "~3.0.1"
