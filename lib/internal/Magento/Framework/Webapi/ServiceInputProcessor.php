@@ -179,7 +179,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      * key-value array.  The top level of this array needs keys that match the names of the parameters on the
      * service method.
      *
-     * Mismatched types are caught by the PHP runtime, not explicitly checked for by this code.
+     * Complex type shape is validated (scalars rejected for complex types / arrays of complex types);
+     * other type mismatches for simple types are handled by TypeProcessor.
      *
      * @param string $serviceClassName name of the service class that we are trying to call
      * @param string $serviceMethodName name of the method that we are trying to call
@@ -281,6 +282,18 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      */
     protected function _createFromArray($className, $data)
     {
+        // Defense in depth: reject non-array scalars/objects; null still coerces to [] for BC.
+        if ($data !== null && !is_array($data)) {
+            throw new SerializationException(
+                new Phrase(
+                    'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.',
+                    [
+                        'value' => is_scalar($data) ? (string)$data : gettype($data),
+                        'type' => (string)$className
+                    ]
+                )
+            );
+        }
         $data = is_array($data) ? $data : [];
         // convert to string directly to avoid situations when $className is object
         // which implements __toString method like \ReflectionObject
@@ -568,6 +581,20 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     private function processComplexTypes($data, $type)
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
+
+        // Reject scalars / non-arrays for complex types and arrays of complex types (client error, not 500).
+        // null is allowed: single complex still coerces to empty object in _createFromArray; array types return null.
+        if ($data !== null && !is_array($data)) {
+            throw new SerializationException(
+                new Phrase(
+                    'The "%value" value\'s type is invalid. The "%type" type was expected. Verify and try again.',
+                    [
+                        'value' => is_scalar($data) ? (string)$data : gettype($data),
+                        'type' => $type
+                    ]
+                )
+            );
+        }
 
         if (!$isArrayType) {
             return $this->_createFromArray($type, $data);

@@ -381,7 +381,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attributeModel = $this->getEntity()->getAttribute($attribute);
             if (!$attributeModel) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Invalid attribute identifier for filter (%1)', get_class($attribute))
+                    __(
+                        'Invalid attribute identifier for filter (%1)',
+                        $this->getAttributeIdentifierForMessage($attribute)
+                    )
                 );
             }
             $attribute = $attributeModel->getAttributeCode();
@@ -407,11 +410,36 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $this->_totalRecords = null;
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Invalid attribute identifier for filter (%1)', get_class($attribute))
+                __(
+                    'Invalid attribute identifier for filter (%1)',
+                    $this->getAttributeIdentifierForMessage($attribute)
+                )
             );
         }
 
         return $this;
+    }
+
+    /**
+     * Safe string representation of an attribute identifier for exception messages.
+     *
+     * Avoids TypeError from get_class() when $attribute is a scalar (e.g. numeric string "1").
+     *
+     * @param mixed $attribute
+     * @return string
+     */
+    private function getAttributeIdentifierForMessage($attribute): string
+    {
+        if (is_object($attribute)) {
+            return get_class($attribute);
+        }
+        if (is_array($attribute)) {
+            return 'array';
+        }
+        if (is_scalar($attribute) || $attribute === null) {
+            return (string)$attribute;
+        }
+        return gettype($attribute);
     }
 
     /**

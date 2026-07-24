@@ -273,6 +273,100 @@ class ServiceInputProcessorTest extends TestCase
         $this->assertEquals('Test', $details->getName());
     }
 
+    /**
+     * Empty object {} for a complex type must still create an empty data object (BC).
+     */
+    public function testNestedDataEmptyObject()
+    {
+        $data = ['nested' => []];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'nestedData',
+            $data
+        );
+        $this->assertNotNull($result);
+        $this->assertCount(1, $result);
+        $this->assertInstanceOf(Nested::class, $result[0]);
+    }
+
+    /**
+     * Scalar values for a complex type parameter must fail as client errors (not HTTP 500).
+     *
+     * @param mixed $nestedValue
+     */
+    #[DataProvider('invalidComplexTypeScalarDataProvider')]
+    public function testNestedDataRejectsScalar($nestedValue)
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("value's type is invalid");
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'nestedData',
+            ['nested' => $nestedValue]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function invalidComplexTypeScalarDataProvider()
+    {
+        return [
+            'empty string' => [''],
+            'non-object string' => ['not-an-object'],
+            'integer' => [1],
+            'boolean' => [true],
+            'float' => [1.5],
+        ];
+    }
+
+    /**
+     * Empty array for array-of-complex must keep working (BC).
+     */
+    public function testArrayOfDataObjectEmptyArray()
+    {
+        $data = ['dataObjects' => []];
+        $result = $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            $data
+        );
+        $this->assertNotNull($result);
+        $this->assertCount(1, $result);
+        $this->assertIsArray($result[0]);
+        $this->assertCount(0, $result[0]);
+    }
+
+    /**
+     * Scalar values for array-of-complex must fail as client errors (not HTTP 500).
+     *
+     * @param mixed $dataObjectsValue
+     */
+    #[DataProvider('invalidComplexArrayScalarDataProvider')]
+    public function testArrayOfDataObjectRejectsScalar($dataObjectsValue)
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("value's type is invalid");
+        $this->serviceInputProcessor->process(
+            TestService::class,
+            'dataArray',
+            ['dataObjects' => $dataObjectsValue]
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function invalidComplexArrayScalarDataProvider()
+    {
+        return [
+            'empty string' => [''],
+            'non-array string' => ['x'],
+            'integer' => [42],
+            'boolean' => [false],
+        ];
+    }
+
     public function testSimpleConstructorProperties()
     {
         $data = ['simpleConstructor' => ['entityId' => 15, 'name' => 'Test']];
