@@ -28,7 +28,7 @@ use UnexpectedValueException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
+     */
 class Factory
 {
     /**
@@ -634,10 +634,15 @@ class Factory
      */
     private function isCompressionEnabled(array $backendOptions): bool
     {
-        // Opt-in: compression is applied only when compress_data is explicitly enabled ('1' or 1).
-        // Defaulting to off preserves write latency for existing installs that never configured it.
-        return isset($backendOptions['compress_data'])
-            && ($backendOptions['compress_data'] === '1' || $backendOptions['compress_data'] === 1);
+        // Opt-in: default OFF when compress_data is not configured (preserves write latency for
+        // installs that never set it, matching the legacy backend). When it IS set, treat any value
+        // other than an explicit falsey ('0', 0, false, 'false', '') as enabled — so 1, '1' and the
+        // boolean true all turn compression on.
+        if (!isset($backendOptions['compress_data'])) {
+            return false;
+        }
+
+        return !in_array($backendOptions['compress_data'], ['0', 0, false, 'false', ''], true);
     }
 
     /**
