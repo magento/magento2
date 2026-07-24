@@ -634,11 +634,10 @@ class Factory
      */
     private function isCompressionEnabled(array $backendOptions): bool
     {
-        if (!isset($backendOptions['compress_data'])) {
-            return true;
-        }
-
-        return !in_array($backendOptions['compress_data'], ['0', 0, false, 'false'], true);
+        // Opt-in: compression is applied only when compress_data is explicitly enabled ('1' or 1).
+        // Defaulting to off preserves write latency for existing installs that never configured it.
+        return isset($backendOptions['compress_data'])
+            && ($backendOptions['compress_data'] === '1' || $backendOptions['compress_data'] === 1);
     }
 
     /**

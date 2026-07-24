@@ -43,8 +43,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
         $this->cachePool = $cachePool;
         $this->tagDirectory = rtrim($tagDirectory, '/') . '/tags/';
         $this->indexTags = $indexTags;
-        // Directory is created lazily on the first real tag write (see setTagIds), so a tier
-        // that never indexes tags leaves no empty var/cache/symfony/tags directory behind.
+        // Directory is created lazily on the first real tag write (see mutateTagFileLocked), so a
+        // tier that never indexes tags leaves no empty var/cache/symfony/tags directory behind.
     }
 
     /**
@@ -73,43 +73,85 @@ class FilesystemTagAdapter implements TagAdapterInterface
         }
 
         $content = @file_get_contents($file);
-        if ($content === false || $content === '') {
+        if ($content === false) {
             return [];
         }
 
-        // IDs are stored one per line
+        return $this->parseIds($content);
+    }
+
+    /**
+     * Parse the on-disk tag-file body (one id per line) into an array of ids
+     *
+     * @param string $content
+     * @return array
+     */
+    private function parseIds(string $content): array
+    {
+        if ($content === '') {
+            return [];
+        }
+
         $ids = trim(substr($content, 0, strrpos($content, "\n") ?: strlen($content)));
         return $ids !== '' ? explode("\n", $ids) : [];
     }
 
     /**
-     * Write IDs to a tag file
+     * Read-modify-write a tag file while holding an exclusive lock for the whole cycle.
+     *
+     * flock(LOCK_EX) spans the read and the write, so concurrent PHP-FPM workers on the same host
+     * can no longer lose an update (the previous getTagIds/setTagIds pair only locked the write,
+     * leaving the read-modify-write racy). $transform receives the current ids and returns the new
+     * ids, or null to signal "no change" (skips the rewrite).
      *
      * @param string $tag
-     * @param array $ids
+     * @param callable $transform fn(array $ids): ?array
      * @return void
      */
-    private function setTagIds(string $tag, array $ids): void
+    private function mutateTagFileLocked(string $tag, callable $transform): void
     {
         $file = $this->getTagFile($tag);
 
-        if (empty($ids)) {
-            // Remove tag file if no IDs
-            @unlink($file);
-            return;
-        }
-
-        // Ensure directory exists before writing (defensive check)
         if (!is_dir($this->tagDirectory)) {
             @mkdir($this->tagDirectory, 0770, true);
         }
 
-        // Write IDs, one per line, with trailing newline
-        $content = implode("\n", $ids) . "\n";
-        if (@file_put_contents($file, $content, LOCK_EX) === false) {
-            throw new \RuntimeException(
-                sprintf('Failed to write tag file: %s', $file)
-            );
+        $fp = @fopen($file, 'c+');
+        if ($fp === false) {
+            return;
+        }
+
+        if (!flock($fp, LOCK_EX)) {
+            fclose($fp);
+            return;
+        }
+
+        $emptied = false;
+        try {
+            $content = stream_get_contents($fp);
+            $current = $this->parseIds($content !== false ? $content : '');
+            $new = $transform($current);
+
+            if ($new === null) {
+                return; // no change; finally still unlocks/closes
+            }
+
+            if (empty($new)) {
+                ftruncate($fp, 0);
+                $emptied = true;
+            } else {
+                ftruncate($fp, 0);
+                rewind($fp);
+                fwrite($fp, implode("\n", $new) . "\n");
+                fflush($fp);
+            }
+        } finally {
+            flock($fp, LOCK_UN);
+            fclose($fp);
+        }
+
+        if ($emptied) {
+            @unlink($file);
         }
     }
 
@@ -122,11 +164,13 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function addIdToTag(string $tag, string $id): void
     {
-        $ids = $this->getTagIds($tag);
-        if (!in_array($id, $ids, true)) {
+        $this->mutateTagFileLocked($tag, static function (array $ids) use ($id) {
+            if (in_array($id, $ids, true)) {
+                return null;
+            }
             $ids[] = $id;
-            $this->setTagIds($tag, $ids);
-        }
+            return $ids;
+        });
     }
 
     /**
@@ -138,13 +182,14 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function removeIdFromTag(string $tag, string $id): void
     {
-        $ids = $this->getTagIds($tag);
-        $key = array_search($id, $ids, true);
-
-        if ($key !== false) {
+        $this->mutateTagFileLocked($tag, static function (array $ids) use ($id) {
+            $key = array_search($id, $ids, true);
+            if ($key === false) {
+                return null;
+            }
             unset($ids[$key]);
-            $this->setTagIds($tag, array_values($ids));
-        }
+            return array_values($ids);
+        });
     }
 
     /**
@@ -287,11 +332,10 @@ class FilesystemTagAdapter implements TagAdapterInterface
                 continue;
             }
             $tag = basename($file);
-            $current = $this->getTagIds($tag);
-            $remaining = array_values(array_filter($current, static fn($id) => !isset($idSet[$id])));
-            if (count($remaining) !== count($current)) {
-                $this->setTagIds($tag, $remaining);
-            }
+            $this->mutateTagFileLocked($tag, static function (array $current) use ($idSet) {
+                $remaining = array_values(array_filter($current, static fn($id) => !isset($idSet[$id])));
+                return count($remaining) === count($current) ? null : $remaining;
+            });
         }
     }
 

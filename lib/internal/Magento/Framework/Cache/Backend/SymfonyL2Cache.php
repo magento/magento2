@@ -9,6 +9,7 @@ namespace Magento\Framework\Cache\Backend;
 
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
@@ -93,6 +94,29 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      * @var string
      */
     private string $lockSign;
+
+    /**
+     * Resolved Redis tag adapter from the remote frontend, used for atomic lock ops.
+     * Null once resolution has run and the remote is not Redis-backed.
+     *
+     * @var RedisTagAdapter|null
+     */
+    private ?RedisTagAdapter $lockAdapter = null;
+
+    /**
+     * Whether lock-adapter resolution has been attempted (so a null result is not re-resolved)
+     *
+     * @var bool
+     */
+    private bool $lockAdapterResolved = false;
+
+    /**
+     * Cache ids for which this process currently holds the regeneration lock, so save() only
+     * issues a release round-trip for locks it actually owns.
+     *
+     * @var array<string, true>
+     */
+    private array $heldLocks = [];
 
     /**
      * Constructor
@@ -189,6 +213,12 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
                 $this->markInvalid($id);
             }
         }
+
+        // If this process elected itself the regenerator for $id, the fresh value is now in L2,
+        // so release the lock immediately (ownership-safe) instead of leaving it to the TTL. This
+        // lets an immediate re-invalidation elect a new regenerator right away rather than serving
+        // stale until LOCK_TTL expires.
+        $this->releaseRegenLock($id);
 
         return $remoteSaved;
     }
@@ -471,10 +501,55 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     /**
      * Try to acquire the non-blocking regeneration lock; returns true for exactly one reader.
      *
+     * Uses an atomic SET NX EX on the remote Redis client when available, so exactly one caller
+     * cluster-wide wins the election. Falls back to a best-effort (non-atomic) scheme only when
+     * the remote is not Redis-backed.
+     *
      * @param string $id
      * @return bool
      */
     private function tryLock(string $id): bool
+    {
+        $adapter = $this->getLockAdapter();
+
+        if ($adapter !== null) {
+            if ($adapter->acquireLock($id, $this->lockSign, self::LOCK_TTL)) {
+                $this->heldLocks[$id] = true;
+                return true;
+            }
+            return false;
+        }
+
+        return $this->tryLockFallback($id);
+    }
+
+    /**
+     * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op
+     * otherwise). Cheap: only issues a call when this process is recorded as the lock holder.
+     *
+     * @param string $id
+     * @return void
+     */
+    private function releaseRegenLock(string $id): void
+    {
+        if (!isset($this->heldLocks[$id])) {
+            return;
+        }
+
+        $adapter = $this->getLockAdapter();
+        if ($adapter !== null) {
+            $adapter->releaseLock($id, $this->lockSign);
+        }
+        unset($this->heldLocks[$id]);
+    }
+
+    /**
+     * Best-effort, non-atomic lock used only when the remote is not Redis-backed.
+     *
+     * @param string $id
+     * @return bool
+     */
+    private function tryLockFallback(string $id): bool
     {
         $lockKey = self::LOCK_PREFIX . $id;
 
@@ -484,7 +559,45 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
         $this->remote->save($this->lockSign, $lockKey, [], self::LOCK_TTL);
 
-        return $this->remote->load($lockKey) === $this->lockSign;
+        if ($this->remote->load($lockKey) === $this->lockSign) {
+            $this->heldLocks[$id] = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Lazily resolve the remote frontend's Redis tag adapter for atomic lock operations.
+     *
+     * Reaches through any frontend decorators via getLowLevelFrontend(); returns null (once)
+     * when the remote is not Redis-backed, in which case the best-effort fallback is used.
+     *
+     * @return RedisTagAdapter|null
+     */
+    private function getLockAdapter(): ?RedisTagAdapter
+    {
+        if ($this->lockAdapterResolved) {
+            return $this->lockAdapter;
+        }
+
+        $this->lockAdapterResolved = true;
+
+        try {
+            if (method_exists($this->remote, 'getLowLevelFrontend')) {
+                $lowLevel = $this->remote->getLowLevelFrontend();
+                if (method_exists($lowLevel, 'getTagAdapter')) {
+                    $adapter = $lowLevel->getTagAdapter();
+                    if ($adapter instanceof RedisTagAdapter) {
+                        $this->lockAdapter = $adapter;
+                    }
+                }
+            }
+        } catch (\Throwable $e) {
+            $this->lockAdapter = null;
+        }
+
+        return $this->lockAdapter;
     }
 
     /**

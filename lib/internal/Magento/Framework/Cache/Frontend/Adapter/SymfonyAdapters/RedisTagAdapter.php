@@ -23,6 +23,40 @@ class RedisTagAdapter implements TagAdapterInterface
 {
     private const TAG_INDEX_PREFIX = 'cache:tags:';
     private const ALL_IDS_SET = 'cache:all_ids';
+    private const REVERSE_INDEX_PREFIX = 'cache:id_tags:';
+
+    /**
+     * Key prefix for the stale-cache regeneration lock (owned by SymfonyL2Cache).
+     * Kept here because this adapter owns the raw Redis client and its type handling.
+     */
+    private const REGEN_LOCK_PREFIX = 'cache:regen_lock:';
+
+    /**
+     * Atomically prune the tag index for a batch of ids using their reverse index.
+     *
+     * For each id: read its reverse index (id -> tags), SREM the id from every tag SET,
+     * then DEL the reverse index. Running inside EVAL makes the whole read-modify-write
+     * atomic, so a concurrent onSave for the same id cannot be half-clobbered.
+     *
+     * ARGV[1] = tag key prefix, ARGV[2] = namespace, ARGV[3..] = ids to prune.
+     */
+    private const LUA_PRUNE_INDEX = <<<'LUA'
+local tag_prefix = ARGV[1]
+local namespace = ARGV[2]
+local rev_prefix = 'cache:id_tags:' .. namespace
+local pruned = 0
+for i = 3, #ARGV do
+    local id = ARGV[i]
+    local rev = rev_prefix .. id
+    local tags_of_id = redis.call('SMEMBERS', rev)
+    for _, t in ipairs(tags_of_id) do
+        redis.call('SREM', tag_prefix .. namespace .. t, id)
+    end
+    redis.call('DEL', rev)
+    pruned = pruned + 1
+end
+return pruned
+LUA;
 
     /**
      * SUNION chunk size
@@ -82,9 +116,19 @@ if #ids_to_delete == 0 then
     return 0
 end
 
--- Delete cache items and remove from indices
+-- Delete cache items and remove from indices (forward tag SETs, reverse index, all_ids)
 local deleted = 0
+local rev_prefix = 'cache:id_tags:' .. namespace
 for _, id in ipairs(ids_to_delete) do
+    -- Remove the id from every tag SET it belongs to, via its reverse index
+    local rev = rev_prefix .. id
+    local tags_of_id = redis.call('SMEMBERS', rev)
+    for _, t in ipairs(tags_of_id) do
+        redis.call('SREM', tag_prefix .. namespace .. t, id)
+    end
+    redis.call('DEL', rev)
+    redis.call('SREM', 'cache:all_ids', id)
+
     -- Delete the actual cache item
     local cache_key = namespace .. id
     redis.call('DEL', cache_key)
@@ -149,9 +193,18 @@ if #filtered_ids == 0 then
     return 0
 end
 
--- Step 4: Delete filtered IDs
+-- Step 4: Delete filtered IDs and remove from indices (tag SETs, reverse index, all_ids)
 local deleted = 0
+local rev_prefix = 'cache:id_tags:' .. namespace
 for _, id in ipairs(filtered_ids) do
+    local rev = rev_prefix .. id
+    local tags_of_id = redis.call('SMEMBERS', rev)
+    for _, t in ipairs(tags_of_id) do
+        redis.call('SREM', tag_prefix .. namespace .. t, id)
+    end
+    redis.call('DEL', rev)
+    redis.call('SREM', 'cache:all_ids', id)
+
     local cache_key = namespace .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
@@ -676,8 +729,7 @@ LUA;
 
     /**
      * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete
-     * its reverse-index key. Uses two pipelines (read reverse index, then apply removals) so the
-     * cost is constant round-trips regardless of id count.
+     * its reverse-index key. Prefers an atomic EVAL and falls back to a pipelined path.
      *
      * @param array $ids
      * @return void
@@ -688,10 +740,52 @@ LUA;
             return;
         }
 
+        // Prefer the atomic EVAL path: reading the reverse index and applying the removals in a
+        // single script eliminates the read/write gap that let a concurrent onSave get clobbered.
+        // Falls back to the pipelined path when EVAL is unavailable (Predis/cluster) or fails.
+        if ($this->supportsAtomicEval() && $this->pruneTagIndexAtomic($ids)) {
+            return;
+        }
+
+        $this->pruneTagIndexPipelined($ids);
+    }
+
+    /**
+     * Atomically prune the tag index for the given ids via a single EVAL per chunk.
+     *
+     * @param array $ids
+     * @return bool True on success, false if EVAL failed (caller should fall back)
+     */
+    private function pruneTagIndexAtomic(array $ids): bool
+    {
+        try {
+            foreach (array_chunk(array_values($ids), self::LUA_MAX_CSTACK) as $chunk) {
+                $args = array_merge([self::TAG_INDEX_PREFIX, $this->namespace], $chunk);
+                // phpredis eval(script, args, numKeys): numKeys=0 => every arg is an ARGV entry
+                $this->redis->eval(self::LUA_PRUNE_INDEX, $args, 0);
+            }
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Non-atomic pipelined prune (fallback for Predis/cluster or when EVAL is disabled).
+     *
+     * Two pipelines: read the reverse index for every id, then apply removals. There is a
+     * read/write gap here, so a concurrent save for the same id may still be clobbered; the
+     * atomic path above is preferred whenever the client supports it.
+     *
+     * @param array $ids
+     * @return void
+     */
+    private function pruneTagIndexPipelined(array $ids): void
+    {
         // Read the reverse index (id -> tags) for every id in one pipeline
         $readPipe = $this->createPipeline();
         foreach ($ids as $id) {
-            $readPipe->smembers('cache:id_tags:' . $this->namespace . $id);
+            $readPipe->smembers(self::REVERSE_INDEX_PREFIX . $this->namespace . $id);
         }
         $tagsPerId = $this->executePipeline($readPipe);
         if (!is_array($tagsPerId)) {
@@ -709,11 +803,77 @@ LUA;
             foreach ($tags as $tag) {
                 $writePipe->srem($this->getTagKey($tag), $id);
             }
-            $writePipe->del('cache:id_tags:' . $this->namespace . $id);
+            $writePipe->del(self::REVERSE_INDEX_PREFIX . $this->namespace . $id);
             $hasWork = true;
         }
         if ($hasWork) {
             $this->executePipeline($writePipe);
+        }
+    }
+
+    /**
+     * Whether the underlying client supports atomic single-node EVAL with computed keys.
+     *
+     * True only for phpredis standalone (\Redis). Excludes \RedisCluster (cross-slot EVAL) and
+     * Predis, which use the pipelined fallback.
+     *
+     * @return bool
+     */
+    private function supportsAtomicEval(): bool
+    {
+        return $this->redis instanceof \Redis;
+    }
+
+    /**
+     * Acquire the stale-cache regeneration lock atomically (SET key token NX EX ttl).
+     *
+     * Returns true for exactly one caller cluster-wide; the token identifies the owner so the
+     * lock can be released safely later. Any client error is treated as "not acquired".
+     *
+     * @param string $id Cache id being regenerated
+     * @param string $token Per-process ownership token
+     * @param int $ttl Lock lifetime in seconds (auto-expiry if the owner dies)
+     * @return bool
+     */
+    public function acquireLock(string $id, string $token, int $ttl): bool
+    {
+        $key = self::REGEN_LOCK_PREFIX . $this->namespace . $id;
+
+        try {
+            $result = $this->isPredisClient()
+                ? $this->redis->set($key, $token, 'EX', $ttl, 'NX')
+                : $this->redis->set($key, $token, ['NX', 'EX' => $ttl]);
+
+            // phpredis returns true/false; Predis returns a Status('OK') on set, null when NX fails
+            return $result !== null && $result !== false;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Release the regeneration lock only if this process still owns it (ownership-safe delete).
+     *
+     * Uses a GET+DEL compare-and-delete in a single EVAL so a lock re-acquired by another owner
+     * (e.g. after TTL expiry) is never deleted out from under it.
+     *
+     * @param string $id Cache id
+     * @param string $token The token used when acquiring
+     * @return bool True if this process owned the lock and it was released
+     */
+    public function releaseLock(string $id, string $token): bool
+    {
+        $key = self::REGEN_LOCK_PREFIX . $this->namespace . $id;
+        $lua = "if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) else return 0 end";
+
+        try {
+            $result = $this->isPredisClient()
+                ? $this->redis->eval($lua, 1, $key, $token)
+                : $this->redis->eval($lua, [$key, $token], 1);
+
+            return (int)$result === 1;
+        } catch (\Throwable $e) {
+            return false;
         }
     }
 
