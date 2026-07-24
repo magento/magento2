@@ -355,7 +355,20 @@
         "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*",
         "magento/module-jwt-framework-adapter": "*",
-        "magento/module-jwt-user-token": "*"
+        "magento/module-jwt-user-token": "*",
+        "paragonie/random_compat": "*",
+        "ralouphie/getallheaders": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-intl-grapheme": "*",
+        "symfony/polyfill-intl-idn": "*",
+        "symfony/polyfill-intl-normalizer": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-php74": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/polyfill-php81": "*",
+        "symfony/polyfill-php82": "*",
+        "symfony/polyfill-php83": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"

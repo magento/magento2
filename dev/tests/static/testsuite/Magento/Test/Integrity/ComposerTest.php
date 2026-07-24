@@ -447,7 +447,7 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
             );
         }
         foreach (array_keys(self::$rootJson['replace']) as $replace) {
-            if (!MagentoComponent::matchMagentoComponent($replace)) {
+            if (!MagentoComponent::matchMagentoComponent($replace) && !$this->isUnnecessaryPolyfillPackage($replace)) {
                 $this->assertArrayHasKey(
                     $replace,
                     self::$rootJson['extra']['component_paths'],
@@ -478,6 +478,27 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
         }
 
         return $flat;
+    }
+
+    private function isUnnecessaryPolyfillPackage(string $package): bool
+    {
+        $polyfillPackages = [
+            'paragonie/random_compat',
+            'ralouphie/getallheaders',
+            'symfony/polyfill-ctype',
+            'symfony/polyfill-intl-grapheme',
+            'symfony/polyfill-intl-idn',
+            'symfony/polyfill-intl-normalizer',
+            'symfony/polyfill-mbstring',
+            'symfony/polyfill-php73',
+            'symfony/polyfill-php74',
+            'symfony/polyfill-php80',
+            'symfony/polyfill-php81',
+            'symfony/polyfill-php82',
+            'symfony/polyfill-php83',
+        ];
+
+        return in_array($package, $polyfillPackages, true);
     }
 
     /**
