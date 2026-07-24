@@ -247,28 +247,27 @@ class RulesApplier
     {
         if ($item->getChildren() && $item->isChildrenCalculated()) {
             $cloneItem = clone $item;
-            /**
-             * Validates item without children to check whether the rule can be applied to the item itself
-             * If the rule can be applied to the item, the discount is applied to the item itself and
-             * distributed among its children
-             */
-            if ($rule->getActions()->validate($cloneItem)) {
-                // Aggregate discount data from children
+
+            // Apply discount only to children that individually satisfy the rule conditions
+            $applyToChildren = false;
+            foreach ($item->getChildren() as $childItem) {
+                if ($rule->getActions()->validate($childItem)) {
+                    $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
+                    $this->setDiscountData($discountData, $childItem);
+                    $applyToChildren = true;
+                }
+            }
+
+            // If no child matched the conditions, fall back to validating the parent item itself.
+            // When the parent matches, calculate the discount at the parent level and distribute
+            // it proportionally across all children (e.g. a rule keyed on the bundle parent SKU).
+            if (!$applyToChildren && $rule->getActions()->validate($cloneItem)) {
                 $discountData = $this->getDiscountDataFromChildren($item);
                 $this->setDiscountData($discountData, $item);
-                // Calculate discount data based on parent item
                 $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
                 $this->distributeDiscount($discountData, $item);
-                // reset discount data in parent item after distributing discount to children
                 $discountData = $this->discountFactory->create();
                 $this->setDiscountData($discountData, $item);
-            } else {
-                foreach ($item->getChildren() as $childItem) {
-                    if ($rule->getActions()->validate($childItem)) {
-                        $discountData = $this->getDiscountData($childItem, $rule, $address, $couponCodes);
-                        $this->setDiscountData($discountData, $childItem);
-                    }
-                }
             }
         } else {
             $discountData = $this->getDiscountData($item, $rule, $address, $couponCodes);
