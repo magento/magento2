@@ -426,12 +426,19 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     /**
      * Mark a cache key as valid (synchronized with remote)
      *
+     * Only removes the L1 invalid marker when one actually exists. Markers are written without
+     * tags and only when a remote write fails, so on the healthy path (e.g. post-deploy cache
+     * warmup, remote up) there is nothing to clear. Skipping avoids an L1 remove() — and the
+     * FilesystemTagAdapter::onRemove() it triggers — on every successful save.
+     *
      * @param string $id
      * @return void
      */
     private function markValid(string $id): void
     {
-        $this->local->remove(self::INVALID_KEY_PREFIX . $id);
+        if ($this->isInvalid($id)) {
+            $this->local->remove(self::INVALID_KEY_PREFIX . $id);
+        }
     }
 
     /**

@@ -25,6 +25,15 @@ class FilesystemTagAdapter implements TagAdapterInterface
     private string $tagDirectory;
 
     /**
+     * Directory holding the id -> tags reverse index (one file per tagged id). Lets onRemove and
+     * deleteByIds touch only the tag files a given id actually belongs to, instead of scanning the
+     * whole tag directory. Mirrors the reverse index the Redis tier already keeps.
+     *
+     * @var string
+     */
+    private string $reverseDirectory;
+
+    /**
      * Whether to maintain the on-disk tag index. Disabled for an L1 tier that sits behind a
      * Redis L2 (tags + :hash live in the remote, local self-heals on read); kept true for a
      * file-only cache where the file tag index is the sole invalidation source.
@@ -41,10 +50,70 @@ class FilesystemTagAdapter implements TagAdapterInterface
     public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory, bool $indexTags = true)
     {
         $this->cachePool = $cachePool;
-        $this->tagDirectory = rtrim($tagDirectory, '/') . '/tags/';
+        $base = rtrim($tagDirectory, '/');
+        $this->tagDirectory = $base . '/tags/';
+        $this->reverseDirectory = $base . '/idtags/';
         $this->indexTags = $indexTags;
-        // Directory is created lazily on the first real tag write (see mutateTagFileLocked), so a
-        // tier that never indexes tags leaves no empty var/cache/symfony/tags directory behind.
+        // Directories are created lazily on the first real write, so a tier that never indexes tags
+        // leaves no empty var/cache/symfony/{tags,idtags} directories behind.
+    }
+
+    /**
+     * Reverse-index file path for a cache id
+     *
+     * @param string $id
+     * @return string
+     */
+    private function getReverseFile(string $id): string
+    {
+        return $this->reverseDirectory . $id;
+    }
+
+    /**
+     * Read the tags associated with a cache id from the reverse index
+     *
+     * @param string $id
+     * @return array
+     */
+    private function getIdTags(string $id): array
+    {
+        $file = $this->getReverseFile($id);
+        if (!file_exists($file)) {
+            return [];
+        }
+        $content = @file_get_contents($file);
+        return $content === false ? [] : $this->parseIds($content);
+    }
+
+    /**
+     * Store the tags for a cache id in the reverse index (replace), or delete the file when empty
+     *
+     * @param string $id
+     * @param array $tags
+     * @return void
+     */
+    private function setIdTags(string $id, array $tags): void
+    {
+        $this->mutateFileLocked(
+            $this->getReverseFile($id),
+            $this->reverseDirectory,
+            static fn() => array_values(array_unique($tags))
+        );
+    }
+
+    /**
+     * Delete the reverse-index entry for a cache id
+     *
+     * @param string $id
+     * @return void
+     */
+    private function deleteIdTags(string $id): void
+    {
+        $this->mutateFileLocked(
+            $this->getReverseFile($id),
+            $this->reverseDirectory,
+            static fn() => []
+        );
     }
 
     /**
@@ -110,10 +179,26 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function mutateTagFileLocked(string $tag, callable $transform): void
     {
-        $file = $this->getTagFile($tag);
+        $this->mutateFileLocked($this->getTagFile($tag), $this->tagDirectory, $transform);
+    }
 
-        if (!is_dir($this->tagDirectory)) {
-            @mkdir($this->tagDirectory, 0770, true);
+    /**
+     * Read-modify-write a line-per-entry index file while holding an exclusive lock for the whole
+     * cycle. Used for both tag files (tag -> ids) and reverse-index files (id -> tags).
+     *
+     * flock(LOCK_EX) spans the read and the write, so concurrent workers on the same host cannot
+     * lose an update. $transform receives the current entries and returns the new entries, or null
+     * to signal "no change" (skips the rewrite). An empty result deletes the file.
+     *
+     * @param string $file
+     * @param string $dir Directory that must exist before writing
+     * @param callable $transform fn(array $entries): ?array
+     * @return void
+     */
+    private function mutateFileLocked(string $file, string $dir, callable $transform): void
+    {
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0770, true);
         }
 
         $fp = @fopen($file, 'c+');
@@ -302,10 +387,9 @@ class FilesystemTagAdapter implements TagAdapterInterface
             $this->cachePool->commit();
         }
 
-        // Prune the deleted ids from the on-disk tag index so it does not outlive its data.
-        // clean(ALL) is rewritten to a tag-clean by TagScope before reaching this adapter, so a
-        // flush arrives here as deleteByIds(all-ids-of-scope); pruning them empties every tag
-        // file (removed when empty), giving the same clean slate as clearAllIndices().
+        // Prune the deleted ids from the on-disk tag index so it does not outlive its data. Uses
+        // the id -> tags reverse index to touch only the affected tag files (grouped so each tag
+        // file is rewritten once), instead of scanning the whole tag directory.
         if ($this->indexTags) {
             $this->pruneIdsFromIndex($ids);
         }
@@ -314,28 +398,36 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Remove the given ids from every tag file in a single pass; delete files left empty.
+     * Remove the given ids from their tag files using the reverse index; delete files left empty.
      *
      * @param array $ids
      * @return void
      */
     private function pruneIdsFromIndex(array $ids): void
     {
-        $tagFiles = glob($this->tagDirectory . '*');
-        if ($tagFiles === false) {
-            return;
-        }
-
-        $idSet = array_flip($ids);
-        foreach ($tagFiles as $file) {
-            if (!is_file($file)) {
+        // Build tag -> [ids] from the reverse index so each tag file is rewritten at most once.
+        $tagToIds = [];
+        $reverseToDelete = [];
+        foreach ($ids as $id) {
+            $tags = $this->getIdTags($id);
+            if (empty($tags)) {
                 continue;
             }
-            $tag = basename($file);
+            foreach ($tags as $tag) {
+                $tagToIds[$tag][$id] = true;
+            }
+            $reverseToDelete[] = $id;
+        }
+
+        foreach ($tagToIds as $tag => $idSet) {
             $this->mutateTagFileLocked($tag, static function (array $current) use ($idSet) {
                 $remaining = array_values(array_filter($current, static fn($id) => !isset($idSet[$id])));
                 return count($remaining) === count($current) ? null : $remaining;
             });
+        }
+
+        foreach ($reverseToDelete as $id) {
+            $this->deleteIdTags($id);
         }
     }
 
@@ -350,32 +442,38 @@ class FilesystemTagAdapter implements TagAdapterInterface
             return;
         }
 
-        // Add ID to each tag file
+        // Forward index: add the id to each tag file.
         foreach ($tags as $tag) {
             $this->addIdToTag($tag, $id);
         }
+
+        // Reverse index: record this id's tags so onRemove/deleteByIds need not scan every tag file.
+        $this->setIdTags($id, $tags);
     }
 
     /**
      * @inheritDoc
      *
-     * Removes ID from all tag files
+     * Removes ID from only the tag files it belongs to, via the reverse index.
      */
     public function onRemove(string $id): void
     {
-        // We need to scan all tag files and remove this ID
-        $tagFiles = glob($this->tagDirectory . '*');
-
-        if ($tagFiles === false) {
+        if (!$this->indexTags) {
             return;
         }
 
-        foreach ($tagFiles as $file) {
-            if (is_file($file)) {
-                $tag = basename($file);
-                $this->removeIdFromTag($tag, $id);
-            }
+        // No reverse entry => the id was saved without tags (e.g. an L2 invalid marker) or is not
+        // indexed. Either way there is nothing to prune, so this is O(1) rather than a full scan.
+        $tags = $this->getIdTags($id);
+        if (empty($tags)) {
+            return;
         }
+
+        foreach ($tags as $tag) {
+            $this->removeIdFromTag($tag, $id);
+        }
+
+        $this->deleteIdTags($id);
     }
 
     /**
@@ -383,16 +481,16 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function clearAllIndices(): void
     {
-        // Remove all tag files
-        $tagFiles = glob($this->tagDirectory . '*');
-
-        if ($tagFiles === false) {
-            return;
-        }
-
-        foreach ($tagFiles as $file) {
-            if (is_file($file)) {
-                @unlink($file);
+        // Remove all forward tag files and all reverse-index files.
+        foreach ([$this->tagDirectory, $this->reverseDirectory] as $dir) {
+            $files = glob($dir . '*');
+            if ($files === false) {
+                continue;
+            }
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    @unlink($file);
+                }
             }
         }
     }
