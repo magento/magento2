@@ -552,6 +552,78 @@ class CustomerTest extends ResolverCacheAbstract
     }
 
     /**
+     * Test that a single customer token cached on website A does not leak
+     * when the same token is re-queried with the website-B Store header.
+     *
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @return void
+     */
+    #[
+        DataFixture(WebsiteFixture::class, ['code' => 'website2'], 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$', 'code' => 'store2'], 'store2'),
+        DataFixture(
+            CustomerFixture::class,
+            [
+                'firstname' => 'WebsiteACustomer',
+                'email' => 'cross_website@example.com',
+                'store_id' => '1' // default store (website A)
+            ]
+        )
+    ]
+    #[AllowMockObjectsWithoutExpectations]
+    public function testSameTokenOnDifferentWebsiteDoesNotReturnCachedData()
+    {
+        $customer = $this->customerRepository->get('cross_website@example.com');
+        $query = $this->getCustomerQuery();
+
+        // Generate token on website A (default)
+        $token = $this->generateCustomerToken(
+            $customer->getEmail(),
+            'password'
+        );
+
+        // Warm cache on website A
+        $this->mockCustomerUserInfoContext($customer);
+        $responseA = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $this->assertEquals(
+            'WebsiteACustomer',
+            $responseA['body']['customer']['firstname']
+        );
+
+        // Assert cache is populated for website A
+        $websiteACacheKey = $this->getCacheKeyForCustomerResolver();
+        $this->assertIsNumeric(
+            $this->graphQlResolverCache->test($websiteACacheKey)
+        );
+
+        // Re-query the same token with website B's Store header
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore('store2');
+        $websiteBCacheKey = $this->getCacheKeyForCustomerResolver();
+        $storeManager->setCurrentStore('default');
+
+        // Cache keys must differ due to CURRENT_WEBSITE_ID factor
+        $this->assertNotEquals(
+            $websiteACacheKey,
+            $websiteBCacheKey,
+            'Cache keys for different websites must not be identical'
+        );
+
+        // Website B cache entry must not exist (no cross-website leak)
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($websiteBCacheKey),
+            'Website B must not have a cached entry from website A'
+        );
+    }
+
+    /**
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @return void
      */
