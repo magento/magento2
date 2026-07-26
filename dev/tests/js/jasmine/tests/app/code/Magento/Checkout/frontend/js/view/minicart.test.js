@@ -45,7 +45,7 @@ define(['squire'], function (Squire) {
         try {
             injector.clean();
             injector.remove();
-        } catch (e) {}
+        } catch {}
     });
 
     describe('Magento_Checkout/js/view/minicart', function () {
