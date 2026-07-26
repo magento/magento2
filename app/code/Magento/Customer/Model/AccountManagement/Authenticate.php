@@ -10,7 +10,6 @@ namespace Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Event\ManagerInterface;
@@ -19,7 +18,6 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Authenticate customer
@@ -54,40 +52,24 @@ class Authenticate
     private ManagerInterface $eventManager;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
-
-    /**
-     * @var Share
-     */
-    private Share $configShare;
-
-    /**
      * @param CustomerRepository $customerRepository
      * @param CustomerFactory $customerFactory
      * @param AuthenticationInterface $authentication
      * @param AccountConfirmation $accountConfirmation
      * @param ManagerInterface $eventManager
-     * @param StoreManagerInterface $storeManager
-     * @param Share $configShare
      */
     public function __construct(
         CustomerRepository $customerRepository,
         CustomerFactory $customerFactory,
         AuthenticationInterface $authentication,
         AccountConfirmation $accountConfirmation,
-        ManagerInterface $eventManager,
-        StoreManagerInterface $storeManager,
-        Share $configShare
+        ManagerInterface $eventManager
     ) {
         $this->customerRepository = $customerRepository;
         $this->customerFactory = $customerFactory;
         $this->authentication = $authentication;
         $this->accountConfirmation = $accountConfirmation;
         $this->eventManager = $eventManager;
-        $this->storeManager = $storeManager;
-        $this->configShare = $configShare;
     }
 
     /**
@@ -100,12 +82,8 @@ class Authenticate
      */
     public function execute(string $email, string $password): CustomerInterface
     {
-        $websiteId = $this->configShare->isWebsiteScope()
-            ? ((int)$this->storeManager->getStore()->getWebsiteId() ?: null)
-            : null;
-
         try {
-            $customer = $this->customerRepository->get($email, $websiteId);
+            $customer = $this->customerRepository->get($email);
         } catch (NoSuchEntityException $exception) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }

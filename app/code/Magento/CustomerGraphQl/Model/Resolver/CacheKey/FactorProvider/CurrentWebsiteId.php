@@ -9,7 +9,6 @@ namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provides current website ID as a factor for the resolver cache key.
@@ -23,14 +22,6 @@ class CurrentWebsiteId implements GenericFactorProviderInterface
     private const NAME = 'CURRENT_WEBSITE_ID';
 
     /**
-     * @param StoreManagerInterface $storeManager
-     */
-    public function __construct(
-        private readonly StoreManagerInterface $storeManager
-    ) {
-    }
-
-    /**
      * @inheritdoc
      */
     public function getFactorName(): string
@@ -39,10 +30,10 @@ class CurrentWebsiteId implements GenericFactorProviderInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function getFactorValue(ContextInterface $context): string
     {
-        return (string)$this->storeManager->getStore()->getWebsiteId();
+        return (string)$context->getExtensionAttributes()->getStore()->getWebsiteId();
     }
 }
