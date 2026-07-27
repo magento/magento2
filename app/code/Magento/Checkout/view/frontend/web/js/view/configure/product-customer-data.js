@@ -11,11 +11,11 @@ require([
         productIdSelector: '#product_addtocart_form [name="product"]',
         itemIdSelector: '#product_addtocart_form [name="item"]'
     },
-    cartData = customerData.get('cart'),
-    productId = $(selectors.productIdSelector).val(),
-    itemId = $(selectors.itemIdSelector).val(),
-    productQty,
-    productQtyInput,
+        cartData = customerData.get('cart'),
+        productId = $(selectors.productIdSelector).val(),
+        itemId = $(selectors.itemIdSelector).val(),
+        productQty,
+        productQtyInput,
 
     /**
      * Copyright 2016 Adobe
