@@ -719,9 +719,13 @@ class Factory
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
-        // Keep an L1 tag index only for use_stale_cache frontends, so clean-by-tag can still evict
-        // the stale L1 copy; plain L2 frontends rely on the Redis tags + :hash.
-        $localBackendOptions['index_tags'] = (bool)($backendOptions['use_stale_cache'] ?? false);
+        // Never maintain an on-disk L1 tag index (tags/ + idtags/). The L2 remote (Redis) is the
+        // source of truth for tags and the :hash marker, and the L1 self-heals on read when its
+        // hash no longer matches the remote. This keeps the L1 from accumulating hundreds of
+        // thousands of tiny index files on the node (the post-deploy warmup degradation / tmpfs
+        // ENOSPC); cache data itself is still written normally to the L1 cache_dir, and
+        // clean-by-tag continues to work through the remote.
+        $localBackendOptions['index_tags'] = false;
 
         // Get common options
         $frontend = $this->_getFrontendOptions($options);
