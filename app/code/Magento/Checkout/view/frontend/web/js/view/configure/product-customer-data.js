@@ -18,9 +18,9 @@ require([
     productQtyInput,
 
     /**
- * Copyright 2016 Adobe
- * All Rights Reserved.
- */
+     * Copyright 2016 Adobe
+     * All Rights Reserved.
+     */
     updateQty = function () {
 
         if (productQty || productQty === 0) {
@@ -33,10 +33,10 @@ require([
     },
 
     /**
-    * Sets productQty according to cart data from customer-data
-    *
-    * @param {Object} data - cart data from customer-data
-    */
+     * Sets productQty according to cart data from customer-data
+     *
+     * @param {Object} data - cart data from customer-data
+     */
     setProductQty = function (data) {
         var product;
 
