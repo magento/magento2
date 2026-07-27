@@ -32,6 +32,7 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\CartMutexInterface;
+use Magento\Quote\Model\CustomerCartMutexInterface;
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -66,6 +67,7 @@ use PHPUnit\Framework\TestCase;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class QuoteManagementTest extends TestCase
 {
@@ -217,6 +219,11 @@ class QuoteManagementTest extends TestCase
     private $cartMutexMock;
 
     /**
+     * @var CustomerCartMutexInterface|MockObject
+     */
+    private $customerCartMutexMock;
+
+    /**
      * @var QuoteAddressValidator|MockObject
      */
     private $quoteAddressValidatorMock;
@@ -298,6 +305,7 @@ class QuoteManagementTest extends TestCase
         $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
 
         $this->cartMutexMock = $this->createMock(CartMutexInterface::class);
+        $this->customerCartMutexMock = $this->createMock(CustomerCartMutexInterface::class);
         $this->quoteAddressValidatorMock = $this->createMock(QuoteAddressValidator::class);
 
         $this->model = $objectManager->getObject(
@@ -325,7 +333,8 @@ class QuoteManagementTest extends TestCase
                 'quoteFactory' => $this->quoteFactoryMock,
                 'addressRepository' => $this->addressRepositoryMock,
                 'lockManager' => $this->lockManagerMock,
-                'quoteAddressValidator' => $this->quoteAddressValidatorMock
+                'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                'customerCartMutex' => $this->customerCartMutexMock
             ]
         );
 
@@ -408,6 +417,14 @@ class QuoteManagementTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($storeMock);
 
+        $this->customerCartMutexMock->expects($this->once())
+            ->method('execute')
+            ->willReturnCallback(
+                function (int $customerId, int $storeId, callable $callable, array $args) {
+                    return $callable(...$args);
+                }
+            );
+
         $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
@@ -443,6 +460,14 @@ class QuoteManagementTest extends TestCase
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($storeMock);
+
+        $this->customerCartMutexMock->expects($this->once())
+            ->method('execute')
+            ->willReturnCallback(
+                function (int $customerId, int $websiteId, callable $callable, array $args) {
+                    return $callable(...$args);
+                }
+            );
 
         $this->model->createEmptyCartForCustomer($userId);
     }
@@ -941,7 +966,8 @@ class QuoteManagementTest extends TestCase
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
                     'cartMutex' => $this->cartMutexMock,
-                    'quoteAddressValidator' => $this->quoteAddressValidatorMock
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                    'customerCartMutex' => $this->customerCartMutexMock
                 ]
             )
             ->getMock();
@@ -1025,7 +1051,8 @@ class QuoteManagementTest extends TestCase
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
                     'cartMutex' => $this->cartMutexMock,
-                    'quoteAddressValidator' => $this->quoteAddressValidatorMock
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                    'customerCartMutex' => $this->customerCartMutexMock
                 ]
             )
             ->getMock();

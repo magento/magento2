@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCouponCartRuleOverridesAutoRuleWithSubtotalConditionTest">
+        <annotations>
+            <features value="SalesRule"/>
+            <stories value="Cart price rule priority — coupon overrides automatic rule"/>
+            <title value="Applying a coupon rule (30% off, Priority 0) overrides an automatic rule with Subtotal Excl. Tax condition"/>
+            <description value="Verify coupon rule with code test1 overrides automatic subtotal rule; only coupon discount applies to cart."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3973"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create $100 simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100</field>
+            </createData>
+            <!-- Step 2: Rule 1 — Priority 0, coupon test1, 30% discount, Discard Subsequent Rules = No -->
+            <createData entity="ApiSalesRule" stepKey="createRule1">
+                <field key="sort_order">0</field>
+                <field key="discount_amount">30</field>
+                <field key="stop_rules_processing">false</field>
+            </createData>
+            <createData entity="ApiSalesRuleCoupon" stepKey="createRule1Coupon">
+                <requiredEntity createDataKey="createRule1"/>
+                <field key="code">test1</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 3: Create Rule 2 -->
+            <!-- Fill Rule 2 base fields -->
+            <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="navigateToCartPriceRulesPage"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="waitForAddNewRule2ButtonClickable"/>
+            <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule2"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="waitForRule2FormVisible"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="CartPriceRule2AutoSubtotalExclTax" stepKey="fillRule2Name"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.websites}}" stepKey="waitForRule2WebsitesSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectRule2Websites"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.customerGroups}}" stepKey="waitForRule2CustomerGroupsSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="['NOT LOGGED IN', 'General', 'Wholesale', 'Retailer']" stepKey="selectRule2CustomerGroups"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.coupon}}" stepKey="waitForRule2CouponSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="No Coupon" stepKey="selectRule2NoCoupon"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.priority}}" stepKey="waitForRule2PriorityField"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.priority}}" userInput="1" stepKey="fillRule2Priority"/>
+            <!-- Fill Rule 2 conditions -->
+            <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToRule2ConditionsHeader"/>
+            <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeaderOpen}}" visible="false" stepKey="expandRule2ConditionsTab"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.addNewCondition('1')}}" stepKey="waitForRule2AddConditionLink"/>
+            <click selector="{{AdminCartPriceRulesFormSection.addNewCondition('1')}}" stepKey="addRule2SubtotalCondition"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" stepKey="waitForSubtotalConditionSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Subtotal (Excl. Tax)" stepKey="selectSubtotalExclTaxCondition"/>
+            <waitForPageLoad stepKey="waitForSubtotalConditionLoad"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.condition('is')}}" stepKey="waitForSubtotalOperatorLink"/>
+            <click selector="{{AdminCartPriceRulesFormSection.condition('is')}}" stepKey="clickSubtotalOperatorLink"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.conditionsOperator}}" stepKey="waitForSubtotalOperatorSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.conditionsOperator}}" userInput="equals or greater than" stepKey="selectSubtotalEqualsOrGreaterThan"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="waitForSubtotalValueEllipsis"/>
+            <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickSubtotalValueEllipsis"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" stepKey="waitForSubtotalValueInput"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="75" stepKey="fillSubtotalThreshold"/>
+            <pressKey selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="blurSubtotalThreshold"/>
+            <!-- Fill Rule 2 actions -->
+            <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeaderOpen}}" visible="true" stepKey="collapseRule2ConditionsTab"/>
+            <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="scrollToRule2ActionsHeader"/>
+            <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeaderOpen}}" visible="false" stepKey="expandRule2ActionsTab"/>
+            <waitForPageLoad stepKey="waitForRule2ActionsTabLoad"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" stepKey="waitForApplyToShippingAmountToggle"/>
+            <click selector="{{AdminCartPriceRulesFormSection.applyToShippingAmount}}" stepKey="enableRule2ApplyToShippingAmount"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="waitForRule2ActionsFieldsetOpen"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Fixed amount discount" stepKey="selectRule2FixedDiscountType"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.discountAmount}}" stepKey="waitForRule2DiscountAmountField"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="5" stepKey="fillRule2FixedDiscountAmount"/>
+            <pressKey selector="{{AdminCartPriceRulesFormSection.discountAmount}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="blurRule2DiscountAmount"/>
+            <!-- Fill Rule 2 actions condition -->
+            <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsCondition('TRUE')}}" stepKey="scrollToActionsTrueLink"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.actionsCondition('TRUE')}}" stepKey="waitForActionsTrueLink"/>
+            <click selector="{{AdminCartPriceRulesFormSection.actionsCondition('TRUE')}}" stepKey="clickTrueLinkToOpenActionsValueSelect"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.actionsValueSelect}}" stepKey="waitForActionsValueSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.actionsValueSelect}}" userInput="FALSE" stepKey="setActionsConditionValueFalse"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.actionsAddCondition}}" stepKey="waitForActionsAddConditionLink"/>
+            <click selector="{{AdminCartPriceRulesFormSection.actionsAddCondition}}" stepKey="clickAddActionsCondition"/>
+            <waitForPageLoad stepKey="waitForActionsConditionAttributeDropdown"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.actionsChildAttributeSelect}}" stepKey="waitForPriceInCartAttributeSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.actionsChildAttributeSelect}}" userInput="Price in cart" stepKey="selectPriceInCartAttribute"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.actionsCondition('is')}}" stepKey="waitForPriceInCartConditionRow"/>
+            <click selector="{{AdminCartPriceRulesFormSection.actionsCondition('is')}}" stepKey="clickPriceInCartOperatorLink"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.actionsChildOperator}}" stepKey="waitForPriceInCartOperatorSelect"/>
+            <selectOption selector="{{AdminCartPriceRulesFormSection.actionsChildOperator}}" userInput="greater than" stepKey="selectGreaterThanOperator"/>
+            <waitForElementClickable selector="{{AdminCartPriceRulesFormSection.actionsCondition('...')}}" stepKey="waitForPriceInCartValueEllipsis"/>
+            <click selector="{{AdminCartPriceRulesFormSection.actionsCondition('...')}}" stepKey="clickPriceInCartValueEllipsis"/>
+            <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.actionsChildValue}}" stepKey="waitForPriceInCartValueInput"/>
+            <fillField selector="{{AdminCartPriceRulesFormSection.actionsChildValue}}" userInput="0" stepKey="fillPriceInCartConditionValue"/>
+            <pressKey selector="{{AdminCartPriceRulesFormSection.actionsChildValue}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::TAB]" stepKey="blurPriceInCartConditionValue"/>
+            <!-- Save Rule 2 -->
+            <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="assertRule2SaveSuccess"/>
+        </before>
+        <after>
+            <!-- Delete test data -->
+            <deleteData createDataKey="createRule1Coupon" stepKey="deleteRule1Coupon"/>
+            <deleteData createDataKey="createRule1" stepKey="deleteRule1"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteRule2ByName">
+                <argument name="ruleName" value="CartPriceRule2AutoSubtotalExclTax"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 4: Open Storefront and add 1 qty of product to cart -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Step 5: Open Shopping Cart page and verify Rule 2 is applied automatically -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <waitForText selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$100.00" stepKey="verifyCartSubtotalBeforeCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$5.00" stepKey="verifyRule2AutoDiscountAppliedBeforeCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.total}}" userInput="$100.00" stepKey="verifyGrandTotalBeforeCoupon"/>
+        <!-- Step 6: Apply test1 coupon code from Rule 1 -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyRule1CouponCode">
+            <argument name="coupon" value="$$createRule1Coupon$$"/>
+        </actionGroup>
+        <!-- Expected: Rule 1 applied (30% = -$30), Rule 2 not applied, total discount = -$30 -->
+        <waitForText selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$30.00" stepKey="verifyDiscountIsThirtyDollarsAfterCoupon"/>
+        <waitForText selector="{{CheckoutCartSummarySection.total}}" userInput="$75.00" stepKey="verifyGrandTotalIsSeventyAfterCoupon"/>
+    </test>
+</tests>
