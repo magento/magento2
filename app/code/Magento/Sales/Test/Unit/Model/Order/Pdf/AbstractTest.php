@@ -289,6 +289,107 @@ class AbstractTest extends TestCase
     }
 
     /**
+     * A block is moved to a new page only when it can fit on one.
+     *
+     * A block taller than an empty page overflows wherever it starts, so breaking the page for it
+     * leaves the rest of the current page empty without keeping the block together.
+     *
+     * @param int $blockHeight
+     * @param int $expectedNewPages
+     * @return void
+     * @throws \ReflectionException
+     * @dataProvider blockHeightDataProvider
+     */
+    public function testDrawLineBlocksBreaksPageOnlyForABlockThatFits(
+        int $blockHeight,
+        int $expectedNewPages
+    ): void {
+        $paymentData = $this->createMock(Data::class);
+        $string = $this->createMock(StringUtils::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
+        $pdfConfig = $this->createMock(Config::class);
+        $pdfTotalFactory = $this->createMock(Factory::class);
+        $pdfItemsFactory = $this->createMock(ItemsFactory::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
+        $translate = $this->createMock(StateInterface::class);
+        $addressRenderer = $this->createMock(Renderer::class);
+        $taxHelper = $this->createMock(TaxHelper::class);
+        $fileStorageDatabase = $this->createMock(Database::class);
+        $rtlTextHandler = $this->createMock(RtlTextHandler::class);
+        $image = $this->createMock(Image::class);
+
+        $abstractPdfMock = $this->getMockBuilder(AbstractPdf::class)
+            ->setConstructorArgs([
+                $paymentData,
+                $string,
+                $scopeConfig,
+                $filesystem,
+                $pdfConfig,
+                $pdfTotalFactory,
+                $pdfItemsFactory,
+                $localeMock,
+                $translate,
+                $addressRenderer,
+                [],
+                $fileStorageDatabase,
+                $rtlTextHandler,
+                $image,
+                $taxHelper
+            ])
+            ->onlyMethods(['_setFontRegular', '_getPdf', 'getPdf'])
+            ->getMock();
+
+        $pageOne = $this->createMock(\Zend_Pdf_Page::class);
+        $pageTwo = $this->createMock(\Zend_Pdf_Page::class);
+        $zendFont = $this->createMock(\Zend_Pdf_Font::class);
+        $zendPdf = $this->createMock(\Zend_Pdf::class);
+
+        $zendPdf->expects($this->exactly($expectedNewPages))->method('newPage')->willReturn($pageTwo);
+        $abstractPdfMock->expects($this->atLeastOnce())->method('_setFontRegular')->willReturn($zendFont);
+        $abstractPdfMock->expects($this->any())->method('_getPdf')->willReturn($zendPdf);
+
+        // Half way down the page: too little room left for either block.
+        $abstractPdfMock->y = 400;
+
+        $expectedPage = $expectedNewPages === 0 ? $pageOne : $pageTwo;
+        $otherPage = $expectedNewPages === 0 ? $pageTwo : $pageOne;
+        $expectedPage->expects($this->once())
+            ->method('drawText')
+            ->with('single-line', 35, $this->anything(), 'UTF-8');
+        $otherPage->expects($this->never())->method('drawText');
+
+        $drawBlockLineData = [[
+            'lines' => [[['text' => ['single-line'], 'feed' => 35]]],
+            'height' => 20,
+            'shift' => $blockHeight
+        ]];
+
+        $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, 'drawLineBlocks');
+        $resultPage = $reflectionMethod->invoke(
+            $abstractPdfMock,
+            $pageOne,
+            $drawBlockLineData,
+            ['table_header' => true]
+        );
+
+        $this->assertSame($expectedPage, $resultPage);
+    }
+
+    /**
+     * Block height against the 785pt an empty page has room for
+     *
+     * @return array[]
+     */
+    public function blockHeightDataProvider(): array
+    {
+        return [
+            'block that fits on an empty page is moved to one' => [500, 1],
+            'block taller than an empty page stays where it is' => [900, 0],
+        ];
+    }
+
+    /**
      * Generate the array for multiline block
      *
      * @param int $numberOfLines
