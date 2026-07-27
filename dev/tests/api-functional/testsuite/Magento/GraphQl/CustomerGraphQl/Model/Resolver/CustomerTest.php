@@ -509,6 +509,8 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         // query customer2
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore('store2');
         $this->mockCustomerUserInfoContext($customer2);
         $customer2Token = $this->generateCustomerToken(
             $customer2->getEmail(),
@@ -526,8 +528,6 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         );
 
-        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $storeManager->setCurrentStore('store2');
         $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
         $storeManager->setCurrentStore('default');
 
@@ -606,6 +606,7 @@ class CustomerTest extends ResolverCacheAbstract
         // Re-query the same token with website B's Store header
         $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $storeManager->setCurrentStore('store2');
+        $this->mockCustomerUserInfoContext($customer);
         $websiteBCacheKey = $this->getCacheKeyForCustomerResolver();
         $storeManager->setCurrentStore('default');
 

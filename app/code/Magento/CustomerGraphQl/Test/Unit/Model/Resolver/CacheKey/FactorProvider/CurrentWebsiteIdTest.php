@@ -46,7 +46,7 @@ class CurrentWebsiteIdTest extends TestCase
     {
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->addMethods(['getStore'])
+            ->onlyMethods(['getStore'])
             ->getMockForAbstractClass();
         $this->contextMock = $this->createMock(ContextInterface::class);
 
