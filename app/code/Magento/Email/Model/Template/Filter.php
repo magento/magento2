@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -191,6 +192,11 @@ class Filter extends Template
      * @var StoreInformation
      */
     private $storeInformation;
+
+    /**
+     * @var DataObject[]
+     */
+    private $storeInformationObjects = [];
 
     /**
      * @var StateInterface
@@ -855,9 +861,6 @@ class Filter extends Template
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
-        $store = $this->_storeManager->getStore($storeId);
-        $storeInformationObj = $this->storeInformation
-            ->getStoreInformationObject($store);
         if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
@@ -865,14 +868,34 @@ class Filter extends Template
                 $storeId
             );
             if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
-                $configValue = $storeInformationObj->getData('country');
+                $configValue = $this->getStoreInformationObject($storeId)->getData('country');
             } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
-                $configValue = $storeInformationObj->getData('region') ?
-                    $storeInformationObj->getData('region') :
-                    $configValue;
+                $region = $this->getStoreInformationObject($storeId)->getData('region');
+                $configValue = $region ?: $configValue;
             }
         }
         return $configValue;
+    }
+
+    /**
+     * Retrieve store information object, resolving it at most once per store.
+     *
+     * Store information resolution loads country and region entities from the database, so it must only happen
+     * for the config paths that actually need it.
+     *
+     * @param int|string|null $storeId
+     * @return DataObject
+     * @throws NoSuchEntityException
+     */
+    private function getStoreInformationObject($storeId): DataObject
+    {
+        $cacheKey = (string)$storeId;
+        if (!isset($this->storeInformationObjects[$cacheKey])) {
+            $this->storeInformationObjects[$cacheKey] = $this->storeInformation
+                ->getStoreInformationObject($this->_storeManager->getStore($storeId));
+        }
+
+        return $this->storeInformationObjects[$cacheKey];
     }
 
     /**
