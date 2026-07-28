@@ -36,6 +36,7 @@
         <element name="paypalPopupButton2" type="button" selector="//button[span[text()='Create an Account']]"/>
         <element name="changeShippingAddressButton" type="button" selector="//button[@data-dd-action-name='Ship to Tab']"/>
         <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])" parameterized="true"/>
+        <element name="shippingAddressDropdownButton" type="select" selector="//div[@data-dd-action-name='Shipping Address'][.//span[normalize-space()='6161 W Centinela Ave, Culver City, CA 90230-6306']]//button[@aria-label='More options']"/>
         <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
         <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
         <!-- Union selector: resolves as soon as either the password field OR the use-password
