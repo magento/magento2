@@ -30,11 +30,6 @@ class CurrentWebsiteIdTest extends TestCase
     private ContextInterface|MockObject $contextMock;
 
     /**
-     * @var ContextExtensionInterface|MockObject
-     */
-    private ContextExtensionInterface|MockObject $extensionAttributesMock;
-
-    /**
      * @var StoreInterface|MockObject
      */
     private StoreInterface|MockObject $storeMock;
@@ -45,9 +40,6 @@ class CurrentWebsiteIdTest extends TestCase
     protected function setUp(): void
     {
         $this->storeMock = $this->createMock(StoreInterface::class);
-        $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->onlyMethods(['getStore'])
-            ->getMockForAbstractClass();
         $this->contextMock = $this->createMock(ContextInterface::class);
 
         $this->provider = new CurrentWebsiteId();
@@ -74,10 +66,20 @@ class CurrentWebsiteIdTest extends TestCase
 
         $this->storeMock->method('getWebsiteId')
             ->willReturn($websiteId);
-        $this->extensionAttributesMock->method('getStore')
-            ->willReturn($this->storeMock);
+
+        $extensionAttributesStub = new class ($this->storeMock) implements ContextExtensionInterface {
+            public function __construct(private StoreInterface $store)
+            {
+            }
+
+            public function getStore()
+            {
+                return $this->store;
+            }
+        };
+
         $this->contextMock->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributesMock);
+            ->willReturn($extensionAttributesStub);
 
         $this->assertEquals((string)$websiteId, $this->provider->getFactorValue($this->contextMock));
     }
