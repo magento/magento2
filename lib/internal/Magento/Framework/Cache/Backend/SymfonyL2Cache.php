@@ -119,6 +119,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private array $heldLocks = [];
 
     /**
+     * Absolute path of the L1 (file) cache directory, used to gauge disk fill for size-based
+     * eviction. Null when the L1 is not file-backed (then eviction is disabled).
+     *
+     * @var string|null
+     */
+    private ?string $localCacheDir;
+
+    /**
      * Constructor
      *
      * @param FrontendInterface $remote Remote cache (L2 - persistent, shared)
@@ -137,6 +145,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local = $local;
         $this->cleanupPercentage = (int)($options['cleanup_percentage'] ?? self::DEFAULT_CLEANUP_PERCENTAGE);
         $this->useStaleCache = (bool)($options['use_stale_cache'] ?? false);
+        $this->localCacheDir = isset($options['local_cache_dir']) ? (string)$options['local_cache_dir'] : null;
         $this->lockSign = $this->generateLockSign();
 
         // Validate cleanup percentage
@@ -190,17 +199,35 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $hashSaved = false;
 
         try {
-            // Save data first to avoid hash pointing to non-existent data
-            $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
+            if ($this->isRemoteUpToDate($data, $id)) {
+                // L2 already holds this exact value — skip the redundant data+hash write. Mirrors the
+                // legacy RemoteSynchronizedCache, which compares the stored hash (and data) before
+                // re-writing, so a repeated identical save (cache warmup, re-render of unchanged block
+                // output, config re-cache) does not hammer Redis with duplicate writes.
+                $remoteSaved = true;
+                $hashSaved = true;
+            } else {
+                // Save data first to avoid hash pointing to non-existent data
+                $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
 
-            if ($remoteSaved !== false) {
-                // Calculate and save hash to remote for synchronization
-                $hash = $this->getDataHash($data);
-                $hashSaved = $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+                if ($remoteSaved !== false) {
+                    // Calculate and save hash to remote for synchronization
+                    $hash = $this->getDataHash($data);
+                    $hashSaved = $this->remote->save($hash, $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+                }
             }
         } catch (\Exception $e) {
             $remoteSaved = false;
             $hashSaved = false;
+        }
+
+        // Disk-full safety valve: occasionally flush the whole L1 when its partition is nearly full,
+        // BEFORE re-saving this entry so the current value survives the flush. Mirrors legacy
+        // RemoteSynchronizedCache::save(), which probabilistically calls local->clean() when the L1
+        // filling percentage reaches cleanup_percentage. clearLocal() is used (not local->clean(),
+        // which is tag-scoped and cannot see an index_tags=false L1).
+        if ($this->shouldCheckLocalSpace() && $this->isLocalCacheSpaceExceeded()) {
+            $this->clearLocal();
         }
 
         // Save to local cache
@@ -260,9 +287,43 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
     {
-        // Clean both caches
+        if ($mode === CacheConstants::CLEANING_MODE_ALL) {
+            // Full flush: clear the L1 pool directly. A tag-scoped clean() cannot reach the local
+            // tier when index_tags=false (it has no tag index), so cache:flush would otherwise leave
+            // stale L1 data behind. Mirrors the legacy RemoteSynchronizedCache, whose clean(ALL)
+            // clears the raw local backend.
+            $this->clearLocal();
+            return $this->remote->clean($mode, $tags);
+        }
         $this->local->clean($mode, $tags);
         return $this->remote->clean($mode, $tags);
+    }
+
+    /**
+     * Fully wipe both cache tiers (L1 + L2). Used by FlushAll / cache:flush via getBackend()->clear().
+     *
+     * @return bool
+     */
+    public function clear(): bool
+    {
+        $this->clearLocal();
+        return (bool)$this->remote->clean(CacheConstants::CLEANING_MODE_ALL);
+    }
+
+    /**
+     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see an
+     * index_tags=false file index.
+     *
+     * @return void
+     */
+    private function clearLocal(): void
+    {
+        $localBackend = $this->local->getBackend();
+        if (method_exists($localBackend, 'clear')) {
+            $localBackend->clear();
+        } else {
+            $this->local->clean(CacheConstants::CLEANING_MODE_ALL);
+        }
     }
 
     /**
@@ -274,6 +335,27 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private function getDataHash(string $data): string
     {
         return hash('sha256', $data);
+    }
+
+    /**
+     * Whether the remote (L2) already holds exactly this value, so a re-write would be redundant.
+     *
+     * Compares the stored :hash first (cheap) and, only on a match, confirms the data itself is still
+     * present and identical — guarding against the data having been evicted while the hash lingered
+     * under a different TTL. Mirrors legacy RemoteSynchronizedCache::save()'s up-to-date check.
+     *
+     * @param string $data
+     * @param string $id
+     * @return bool
+     */
+    private function isRemoteUpToDate(string $data, string $id): bool
+    {
+        $remoteHash = $this->remote->load($id . self::HASH_SUFFIX);
+        if ($remoteHash === false || $remoteHash !== $this->getDataHash($data)) {
+            return false;
+        }
+        $remoteData = $this->remote->load($id);
+        return $remoteData !== false && $remoteData === $data;
     }
 
     /**
@@ -328,8 +410,44 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function getFillingPercentage()
     {
-        // Cannot determine filling percentage for L2 cache
-        return 0;
+        // Disk-partition filling percentage of the L1 (file) cache dir, matching the legacy Zend file
+        // backend semantics (used only as a disk-full safety valve). Returns 0 when the L1 is not
+        // file-backed or the dir is unavailable, so eviction never triggers spuriously.
+        if ($this->localCacheDir === null || !is_dir($this->localCacheDir)) {
+            return 0;
+        }
+
+        $free = @disk_free_space($this->localCacheDir);
+        $total = @disk_total_space($this->localCacheDir);
+        if ($free === false || $total === false || $total <= 0 || $free >= $total) {
+            return 0;
+        }
+
+        return (int)(100.0 * ($total - $free) / $total);
+    }
+
+    /**
+     * Whether the L1 partition has reached the configured cleanup threshold.
+     *
+     * @return bool
+     */
+    private function isLocalCacheSpaceExceeded(): bool
+    {
+        return $this->getFillingPercentage() >= $this->cleanupPercentage;
+    }
+
+    /**
+     * Throttle the (syscall-bearing) disk-space check so it does not stat the disk on every save.
+     * Mirrors the legacy ~1/101 probability. Kept as a protected seam so the eviction path can be
+     * exercised deterministically in tests.
+     *
+     * @return bool
+     */
+    protected function shouldCheckLocalSpace(): bool
+    {
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        return !mt_rand(0, 100);
     }
 
     /**

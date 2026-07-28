@@ -727,6 +727,18 @@ class Factory
         // clean-by-tag continues to work through the remote.
         $localBackendOptions['index_tags'] = false;
 
+        // Resolve the L1 file cache directory up front so both the local backend and the L2 wrapper
+        // agree on it. SymfonyL2Cache uses it to gauge disk fill for size-based L1 eviction (the
+        // legacy disk-full safety valve). Only meaningful for the default file L1.
+        if (($localBackend === 'file') && empty($localBackendOptions['cache_dir'])) {
+            if (!isset($this->cachedDirectories['cache'])) {
+                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                $this->cachedDirectories['cache'] = $cacheDir->getAbsolutePath();
+                $cacheDir->create();
+            }
+            $localBackendOptions['cache_dir'] = $this->cachedDirectories['cache'];
+        }
+
         // Get common options
         $frontend = $this->_getFrontendOptions($options);
         $defaultLifetime = $frontend['lifetime'] ?? self::DEFAULT_LIFETIME;
@@ -762,6 +774,7 @@ class Factory
                     'options' => [
                         'cleanup_percentage' => $backendOptions['cleanup_percentage'] ?? 90,
                         'use_stale_cache' => $backendOptions['use_stale_cache'] ?? false,
+                        'local_cache_dir' => $localBackendOptions['cache_dir'] ?? null,
                     ],
                 ]
             );

@@ -442,6 +442,14 @@ class FilesystemTagAdapter implements TagAdapterInterface
             return;
         }
 
+        // Retag cleanup: drop the id from the forward file of any tag it no longer carries, so a
+        // re-save with a different tag set (e.g. [A,B] then [C]) does not leave the old A/B
+        // memberships dangling once the reverse index is replaced below. Mirrors the legacy
+        // Cm_Cache_Backend_Redis save() which array_diffs the previous tags and removes them.
+        foreach (array_diff($this->getIdTags($id), $tags) as $removedTag) {
+            $this->removeIdFromTag($removedTag, $id);
+        }
+
         // Forward index: add the id to each tag file.
         foreach ($tags as $tag) {
             $this->addIdToTag($tag, $id);

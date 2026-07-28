@@ -90,6 +90,20 @@ local all_ids = ARGV[3]
 local tag_prefix = ARGV[4]
 local namespace = ARGV[5]
 local reverse_key = ARGV[6]
+-- Retag cleanup: drop the id from the forward SET of any tag it no longer carries. Without this a
+-- re-save with a different tag set (e.g. [A,B] then [C]) would leave the old A/B memberships
+-- dangling because the reverse index is about to be replaced. Mirrors the legacy
+-- Cm_Cache_Backend_Redis save() which array_diffs the previous tags and SREMs them.
+local keep = {}
+for i = 7, #ARGV do
+    keep[ARGV[i]] = true
+end
+local old_tags = redis.call('SMEMBERS', reverse_key)
+for j = 1, #old_tags do
+    if not keep[old_tags[j]] then
+        redis.call('SREM', tag_prefix .. namespace .. old_tags[j], id)
+    end
+end
 redis.call('SADD', all_ids, id)
 redis.call('DEL', reverse_key)
 for i = 7, #ARGV do
@@ -789,19 +803,31 @@ LUA;
      */
     private function onSavePipelined(string $id, array $tags): void
     {
+        $idTagsKey = self::REVERSE_INDEX_PREFIX . $this->namespace . $id;
+
+        // Retag cleanup: read the id's previous tags and drop it from the forward SET of any tag it
+        // no longer carries, so stale memberships cannot linger after a re-save with a different tag
+        // set. A separate read is required because a pipeline cannot branch on a value; mirrors the
+        // legacy Cm_Cache_Backend_Redis save() array_diff of old vs new tags.
+        $oldTags = $this->toIdsArray($this->redis->sMembers($idTagsKey));
+        $removedTags = array_diff($oldTags, $tags);
+
         $pipeline = $this->createPipeline();
+
+        // Forward index: drop the id from tags it no longer has.
+        foreach ($removedTags as $tag) {
+            $pipeline->srem($this->getTagKey($tag), $id);
+        }
 
         // Add ID to all_ids set
         $pipeline->sadd(self::ALL_IDS_SET, $id);
 
         // Forward index: Add ID to each tag's SET
         foreach ($tags as $tag) {
-            $tagKey = $this->getTagKey($tag);
-            $pipeline->sadd($tagKey, $id);
+            $pipeline->sadd($this->getTagKey($tag), $id);
         }
 
-        // Reverse index: Store tags for this ID (for cleanup on delete)
-        $idTagsKey = self::REVERSE_INDEX_PREFIX . $this->namespace . $id;
+        // Reverse index: replace the id's tag set with the new tags.
         $pipeline->del($idTagsKey);  // Clear old tags first
         foreach ($tags as $tag) {
             $pipeline->sadd($idTagsKey, $tag);
