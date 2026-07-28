@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Test\Unit\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentWebsiteId;
+use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -66,25 +67,13 @@ class CurrentWebsiteIdTest extends TestCase
         $this->storeMock->method('getWebsiteId')
             ->willReturn($websiteId);
 
-        $storeMock = $this->storeMock;
-        $extensionAttributesStub = new class ($storeMock) {
-            private StoreInterface $store;
-
-            public function __construct(StoreInterface $store)
-            {
-                $this->store = $store;
-            }
-
-            public function getStore(): StoreInterface
-            {
-                return $this->store;
-            }
-        };
+        $extensionAttributesMock = $this->createMock(ContextExtensionInterface::class);
+        $extensionAttributesMock->method('getStore')
+            ->willReturn($this->storeMock);
 
         $this->contextMock->method('getExtensionAttributes')
-            ->willReturn($extensionAttributesStub);
+            ->willReturn($extensionAttributesMock);
 
         $this->assertEquals((string)$websiteId, $this->provider->getFactorValue($this->contextMock));
     }
 }
-
