@@ -39,11 +39,17 @@ class FileLockTest extends \PHPUnit\Framework\TestCase
     {
         $name = 'test_lock';
 
+        // A second instance represents a different process (separate file descriptors).
+        $anotherModel = $this->objectManager->create(
+            \Magento\Framework\Lock\Backend\FileLock::class,
+            ['path' => $this->lockPath]
+        );
+
         $this->assertFalse($this->model->isLocked($name));
 
         $this->assertTrue($this->model->lock($name));
         $this->assertTrue($this->model->isLocked($name));
-        $this->assertFalse($this->model->lock($name, 2));
+        $this->assertFalse($anotherModel->lock($name, 2));
 
         $this->assertTrue($this->model->unlock($name));
         $this->assertFalse($this->model->isLocked($name));

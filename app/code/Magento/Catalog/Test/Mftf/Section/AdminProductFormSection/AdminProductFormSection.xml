@@ -94,5 +94,7 @@
         <element name="attributeOptionUncheckDefaultValue" type="checkbox" selector="input[name='use_default[{{attribute_code}}]']" parameterized="true"/>
         <element name="customAttributeUnderMassUpdate" type="select" selector="//select[@name='attributes[{{attribute_code}}][]']" parameterized="true"/>
         <element name="datePickerCalendar" type="button" selector="//div[{{row}}]//button[contains(@class, 'ui-datepicker-trigger')]" parameterized="true"/>
+        <element name="datePickerTriggerByAttributeCode" type="button" selector="//div[contains(@data-index,'{{attributeCode}}')]//button[contains(@class, 'ui-datepicker-trigger')]" parameterized="true"/>
+        <element name="datePickerCalendarNearTriggerByAttributeCode" type="text" selector="//div[contains(@data-index,'{{attributeCode}}')]//button[contains(@class, 'ui-datepicker-trigger')]/following::div[@id='ui-datepicker-div']//table[contains(@class,'ui-datepicker-calendar')]" parameterized="true"/>
     </section>
 </sections>

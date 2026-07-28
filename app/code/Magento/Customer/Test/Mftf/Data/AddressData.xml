@@ -662,4 +662,7 @@
         <data key="default_billing">Yes</data>
         <data key="default_shipping">Yes</data>
     </entity>
+    <entity name="InvalidCityCharsetAddressData" type="address" extends="CustomerAddressSimple">
+        <data key="city">PARGAS-5xx!&quot;#?!x'</data>
+    </entity>
 </entities>
