@@ -27,6 +27,7 @@ use Magento\Backend\Model\Validator\UrlKey\CompositeUrlKey;
  * Class for set or update url path.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
 {
@@ -124,16 +125,10 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                         $isStoreScopedRevert = !$category->isObjectNew()
                             && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
                         if ($isStoreScopedRevert) {
-                            // Remove the store-scoped override now, while url_key is still null, so
-                            // descendants recomputed below see the real, already-committed default via
-                            // EAV fallback instead of the pre-save in-memory placeholder.
                             $this->removeStoreScopedUrlKeyOverride($category, $linkField);
                         }
                         $this->updateUrlKey($category, $defaultUrlKey);
                         if ($isStoreScopedRevert) {
-                            // url_key was only borrowed to compute/cascade url_path above; put it back to
-                            // null so the deferred core save doesn't resurrect the override row we just
-                            // removed, and the "Use Default Value" checkbox reflects reality afterwards.
                             $category->setUrlKey(null);
                         }
                     }
@@ -161,7 +156,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             [
                 'attribute_id = ?' => $attribute->getAttributeId(),
                 $linkField . ' = ?' => $category->getData($linkField),
-                'store_id = ?' => (int)$category->getStoreId(),
+                'store_id = ?' => (int) $category->getStoreId(),
             ]
         );
     }
