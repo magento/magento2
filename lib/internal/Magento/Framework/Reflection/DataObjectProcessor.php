@@ -7,6 +7,7 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObject\PropertyMetadataProvider;
 
@@ -38,10 +39,12 @@ class DataObjectProcessor
         private readonly ExtensionAttributesProcessor $extensionAttributesProcessor,
         private readonly array $processors = [],
         private readonly array $excludedMethodsClassMap = [],
-        private PropertyMetadataProvider $propertyMetadataProvider = null,
+        private ?PropertyMetadataProvider $propertyMetadataProvider = null
     ) {
         if ($propertyMetadataProvider === null) {
-            $this->propertyMetadataProvider = \Magento\Framework\App\ObjectManager::getInstance()->get(PropertyMetadataProvider::class);
+            $this->propertyMetadataProvider
+                = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(PropertyMetadataProvider::class);
         }
     }
 
