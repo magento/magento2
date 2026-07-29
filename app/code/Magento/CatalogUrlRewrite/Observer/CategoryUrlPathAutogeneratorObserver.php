@@ -121,11 +121,49 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 if ($id) {
                     $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
                     if ($defaultUrlKey) {
+                        $isStoreScopedRevert = !$category->isObjectNew()
+                            && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+                        if ($isStoreScopedRevert) {
+                            // Remove the store-scoped override now, while url_key is still null, so
+                            // descendants recomputed below see the real, already-committed default via
+                            // EAV fallback instead of the pre-save in-memory placeholder.
+                            $this->removeStoreScopedUrlKeyOverride($category, $linkField);
+                        }
                         $this->updateUrlKey($category, $defaultUrlKey);
+                        if ($isStoreScopedRevert) {
+                            // url_key was only borrowed to compute/cascade url_path above; put it back to
+                            // null so the deferred core save doesn't resurrect the override row we just
+                            // removed, and the "Use Default Value" checkbox reflects reality afterwards.
+                            $category->setUrlKey(null);
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Remove a store-scoped url_key override row directly, without disturbing other stores.
+     *
+     * Category's resource model (unlike Product's) does not scope saveAttribute()/getAttributeRow()
+     * by store, so a store-scoped removal must be done explicitly here rather than through it.
+     *
+     * @param Category $category
+     * @param string $linkField
+     * @return void
+     */
+    private function removeStoreScopedUrlKeyOverride(Category $category, string $linkField): void
+    {
+        $resource = $category->getResource();
+        $attribute = $resource->getAttribute('url_key');
+        $resource->getConnection()->delete(
+            $attribute->getBackendTable(),
+            [
+                'attribute_id = ?' => $attribute->getAttributeId(),
+                $linkField . ' = ?' => $category->getData($linkField),
+                'store_id = ?' => (int)$category->getStoreId(),
+            ]
+        );
     }
 
     /**

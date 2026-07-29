@@ -322,6 +322,22 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ->with('url_path')
             ->willReturn(true);
 
+        $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
+        $urlKeyAttribute->method('getAttributeId')->willReturn(120);
+        $this->categoryResource->method('getAttribute')
+            ->with('url_key')
+            ->willReturn($urlKeyAttribute);
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection->expects($this->once())
+            ->method('delete')
+            ->with('catalog_category_entity_varchar', [
+                'attribute_id = ?' => 120,
+                'row_id = ?' => $rowId,
+                'store_id = ?' => $storeId,
+            ]);
+        $this->categoryResource->method('getConnection')->willReturn($connection);
+
         $childCategory = $this->createPartialMockWithReflection(
             Category::class,
             [
@@ -839,6 +855,22 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->entityMetaDataInterface->method('getLinkField')->willReturn('row_id');
         $this->getDefaultUrlKey->method('execute')->with($categoryId)->willReturn('one');
         $this->compositeUrlValidator->method('validate')->willReturn([]);
+
+        $urlKeyAttribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class);
+        $urlKeyAttribute->method('getBackendTable')->willReturn('catalog_category_entity_varchar');
+        $urlKeyAttribute->method('getAttributeId')->willReturn(120);
+        $this->categoryResource->method('getAttribute')
+            ->with('url_key')
+            ->willReturn($urlKeyAttribute);
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection->expects($this->once())
+            ->method('delete')
+            ->with('catalog_category_entity_varchar', [
+                'attribute_id = ?' => 120,
+                'row_id = ?' => $categoryId,
+                'store_id = ?' => $storeId,
+            ]);
+        $this->categoryResource->method('getConnection')->willReturn($connection);
 
         $directChild = $this->createPartialMockWithReflection(
             Category::class,
