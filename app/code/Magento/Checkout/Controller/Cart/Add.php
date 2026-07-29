@@ -8,9 +8,9 @@ namespace Magento\Checkout\Controller\Cart;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\AddProductToCart;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Checkout\Model\Cart\AjaxMessageResponse;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -37,11 +37,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @var AddProductToCart
      */
     private AddProductToCart $addProductToCart;
-
-    /**
-     * @var AjaxMessageResponse|null
-     */
-    private ?AjaxMessageResponse $ajaxMessageResponse = null;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -76,23 +71,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         );
         $this->productRepository = $productRepository;
         $this->quantityProcessor = $quantityProcessor
-            ?? $this->_objectManager->get(RequestQuantityProcessor::class);
+            ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
         $this->addProductToCart = $addProductToCart
-            ?? $this->_objectManager->get(AddProductToCart::class);
-    }
-
-    /**
-     * Provides AJAX message response service.
-     *
-     * @return AjaxMessageResponse
-     */
-    private function getAjaxMessageResponse(): AjaxMessageResponse
-    {
-        if ($this->ajaxMessageResponse === null) {
-            $this->ajaxMessageResponse = $this->_objectManager->get(AjaxMessageResponse::class);
-        }
-
-        return $this->ajaxMessageResponse;
+            ?? ObjectManager::getInstance()->get(AddProductToCart::class);
     }
 
     /**
@@ -132,7 +113,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         }
 
         $params = $this->getRequest()->getParams();
-        $product = null;
         try {
             if (isset($params['qty'])) {
                 $filter = new LocalizedToNormalized(
@@ -206,14 +186,14 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
 
-            return $this->goBack($url, $product);
+            return $this->goBack($url);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t add this item to your shopping cart right now.')
             );
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            return $this->goBack(null, $product);
+            return $this->goBack();
         }
 
         return $this->getResponse();
@@ -222,8 +202,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     /**
      * Resolve response
      *
-     * @param string|null $backUrl
-     * @param \Magento\Catalog\Model\Product|null $product
+     * @param string $backUrl
+     * @param \Magento\Catalog\Model\Product $product
      * @return ResponseInterface|ResultInterface
      */
     protected function goBack($backUrl = null, $product = null)
@@ -232,26 +212,16 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             return parent::_goBack($backUrl);
         }
 
-        $resolvedBackUrl = $backUrl ?: $this->getBackUrl();
         $result = [];
 
-        if ($resolvedBackUrl) {
-            $result['backUrl'] = $resolvedBackUrl;
-        }
-
-        if ($product && !$product->getIsSalable()) {
-            $result['product'] = [
-                'statusText' => __('Out of stock')
-            ];
-        }
-
-        $inlineResponse = $this->getAjaxMessageResponse()->resolve(
-            $resolvedBackUrl,
-            $this->_redirect->getRefererUrl()
-        );
-        if ($inlineResponse) {
-            $result['messages'] = $inlineResponse['html'];
-            $result['displayMessages'] = $inlineResponse['displayMessages'];
+        if ($backUrl || $backUrl = $this->getBackUrl()) {
+            $result['backUrl'] = $backUrl;
+        } else {
+            if ($product && !$product->getIsSalable()) {
+                $result['product'] = [
+                    'statusText' => __('Out of stock')
+                ];
+            }
         }
 
         $this->getResponse()->representJson(
