@@ -19,7 +19,7 @@
         <click selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="clickChangeShippingAddressButton"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="waitForAddressDropdown"/>
         <scrollTo selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="scrollToShippingAddressRow"/>
-        <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressDropdownButton}}" stepKey="waitForAddressDropdown"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressDropdownButton}}" stepKey="waitForAddressDropdownButton"/>
         <click selector="{{PayPalPaymentSection.shippingAddressDropdownButton}}" stepKey="selectShippingAddress"/>
     </actionGroup>
 </actionGroups>
