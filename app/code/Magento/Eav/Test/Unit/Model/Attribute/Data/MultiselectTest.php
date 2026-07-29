@@ -218,6 +218,10 @@ class MultiselectTest extends TestCase
                 'optionText' => false,
                 'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
             ],
+            'non-existent option, source returns null' => [
+                'optionText' => null,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
             'valid label' => [
                 'optionText' => 'Label',
                 'expectedResult' => true,

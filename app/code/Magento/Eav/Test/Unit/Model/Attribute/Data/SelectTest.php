@@ -202,6 +202,10 @@ class SelectTest extends TestCase
                 'optionText' => false,
                 'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
             ],
+            'non-existent option returns null from source' => [
+                'optionText' => null,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
             'valid label passes' => [
                 'optionText' => 'Label',
                 'expectedResult' => true,
