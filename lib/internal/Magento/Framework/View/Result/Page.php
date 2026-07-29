@@ -374,7 +374,10 @@ class Page extends Layout
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
             return $this->assetRepo->getUrlWithParams($fileId, $params);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to resolve the URL of the {fileId} view file',
+                ['fileId' => $fileId, 'exception' => $e]
+            );
             return $this->urlBuilder->getUrl('', ['_direct' => 'core/index/notFound']);
         }
     }

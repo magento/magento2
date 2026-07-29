@@ -39,7 +39,7 @@ class ArtemisClient implements ClientInterface
             $data = $this->executeRequest($params);
             $result = isset($data['value']['agent']);
         } catch (RequestFailedException $e) {
-            $this->logger->notice($e);
+            $this->logger->notice('Artemis broker is not available', ['exception' => $e]);
             $result = false;
         }
 

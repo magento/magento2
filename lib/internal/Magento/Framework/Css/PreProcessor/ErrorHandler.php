@@ -28,6 +28,6 @@ class ErrorHandler implements ErrorHandlerInterface
      */
     public function processException(\Exception $e)
     {
-        $this->logger->critical($e);
+        $this->logger->critical('Error while pre-processing CSS', ['exception' => $e]);
     }
 }

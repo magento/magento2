@@ -611,7 +611,10 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
                 throw $e;
             }
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to render the {elementName} layout element',
+                ['elementName' => $name, 'exception' => $e]
+            );
         }
         return $result;
     }

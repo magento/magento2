@@ -160,7 +160,10 @@ class Image
             $this->theme->setPreviewImage($destinationFileName);
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             $this->theme->setPreviewImage(null);
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to create a theme preview image from {sourcePath}',
+                ['sourcePath' => $sourcePath, 'exception' => $e]
+            );
         }
         return $isCopied;
     }

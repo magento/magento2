@@ -88,6 +88,6 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
      */
     public function logException(\Exception $e)
     {
-        $this->logger->critical($e->getMessage());
+        $this->logger->critical('Redis session handler failure', ['exception' => $e]);
     }
 }

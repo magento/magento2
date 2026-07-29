@@ -68,7 +68,10 @@ class FeedFactory implements FeedFactoryInterface
                 ['data' => $data]
             );
         } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+            $this->logger->error(
+                'Unable to create a feed of the {feedFormat} format',
+                ['feedFormat' => $format, 'exception' => $e]
+            );
             throw new \Magento\Framework\Exception\RuntimeException(
                 new \Magento\Framework\Phrase('There has been an error with import'),
                 $e

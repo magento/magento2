@@ -180,7 +180,7 @@ class ExceptionHandlerTest extends TestCase
             ->willReturn(__DIR__ . '/_files/pub/errors/404.php');
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception);
+            ->with($exception->getMessage(), ['exception' => $exception]);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::PUB)
@@ -225,7 +225,10 @@ class ExceptionHandlerTest extends TestCase
             ->willReturn('some-sha256-hash');
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception, ['report_id' => 'some-sha256-hash']);
+            ->with(
+                $exception->getMessage(),
+                ['report_id' => 'some-sha256-hash', 'exception' => $exception]
+            );
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
             ->with(DirectoryList::PUB)

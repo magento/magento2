@@ -72,7 +72,8 @@ class TransportTest extends TestCase
     public function testSendMessageBrokenMessage(): void
     {
         $exception = new RfcComplianceException('Email "" does not comply with addr-spec of RFC 2822.');
-        $this->loggerMock->expects(self::once())->method('error')->with($exception);
+        $this->loggerMock->expects(self::once())->method('error')
+            ->with('Unable to send an email message', ['exception' => $exception]);
         $this->expectException('Magento\Framework\Exception\MailException');
         $this->expectExceptionMessage('Unable to send mail. Please try again later.');
 

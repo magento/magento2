@@ -75,7 +75,7 @@ class Template
             $this->templateNode->ownerDocument->normalizeDocument();
             $result = $this->templateNode->ownerDocument->saveHTML();
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Unable to render an XHTML template', ['exception' => $e]);
             $result = '';
         }
         return $result;
