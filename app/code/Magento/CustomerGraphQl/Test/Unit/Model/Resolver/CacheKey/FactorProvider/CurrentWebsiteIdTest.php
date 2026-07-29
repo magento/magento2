@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Test\Unit\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentWebsiteId;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrentWebsiteIdTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CurrentWebsiteId
      */
@@ -28,6 +31,11 @@ class CurrentWebsiteIdTest extends TestCase
      * @var ContextInterface|MockObject
      */
     private ContextInterface|MockObject $contextMock;
+
+    /**
+     * @var ContextExtensionInterface|MockObject
+     */
+    private ContextExtensionInterface|MockObject $extensionAttributesMock;
 
     /**
      * @var StoreInterface|MockObject
@@ -40,6 +48,10 @@ class CurrentWebsiteIdTest extends TestCase
     protected function setUp(): void
     {
         $this->storeMock = $this->createMock(StoreInterface::class);
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
         $this->contextMock = $this->createMock(ContextInterface::class);
 
         $this->provider = new CurrentWebsiteId();
@@ -66,13 +78,10 @@ class CurrentWebsiteIdTest extends TestCase
 
         $this->storeMock->method('getWebsiteId')
             ->willReturn($websiteId);
-
-        $extensionAttributesMock = $this->createMock(ContextExtensionInterface::class);
-        $extensionAttributesMock->method('getStore')
+        $this->extensionAttributesMock->method('getStore')
             ->willReturn($this->storeMock);
-
         $this->contextMock->method('getExtensionAttributes')
-            ->willReturn($extensionAttributesMock);
+            ->willReturn($this->extensionAttributesMock);
 
         $this->assertEquals((string)$websiteId, $this->provider->getFactorValue($this->contextMock));
     }
