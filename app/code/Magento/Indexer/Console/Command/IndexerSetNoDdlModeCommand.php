@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\IndexerFactory;
@@ -39,7 +40,7 @@ class IndexerSetNoDdlModeCommand extends Command
     private $noDdlMode;
 
     /**
-     * @var \Magento\Framework\App\Config\ConfigResource\ConfigInterface
+     * @var ConfigInterface
      */
     private $configWriter;
 
@@ -51,14 +52,14 @@ class IndexerSetNoDdlModeCommand extends Command
     /**
      * @param IndexerFactory $indexerFactory
      * @param NoDdlModeInterface $noDdlMode
-     * @param \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter
+     * @param ConfigInterface $configWriter
      * @param TypeListInterface $cacheTypeList
      * @param string|null $name
      */
     public function __construct(
         IndexerFactory $indexerFactory,
         NoDdlModeInterface $noDdlMode,
-        \Magento\Framework\App\Config\ConfigResource\ConfigInterface $configWriter,
+        ConfigInterface $configWriter,
         TypeListInterface $cacheTypeList,
         ?string $name = null
     ) {
