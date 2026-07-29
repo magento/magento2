@@ -799,4 +799,86 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->assertSame($grandChildId, $processedIds[1]['id']);
         $this->assertFalse($processedIds[1]['hasParent']);
     }
+
+    /**
+     * When a category is edited directly at a specific store scope (not "All Store Views"), descendants
+     * beyond the direct child must still be refreshed in level order and linked to their actual,
+     * already-updated in-memory parent - not left to independently resolve a parent that may be stale.
+     *
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testChildrenAreUpdatedInLevelOrderWithCorrectParentForSpecificStore(): void
+    {
+        $categoryId = 3;
+        $storeId = 2;
+        $directChildId = 4;
+        $grandChildId = 5;
+
+        $categoryData = [
+            'id' => $categoryId,
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one',
+            'row_id' => $categoryId,
+        ];
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->method('hasChildren')->willReturn(true);
+        $this->category->method('getUrlKey')->willReturn(false);
+        $this->category->method('getData')->willReturnMap([
+            ['use_default', null, ['url_key' => 1]],
+            ['row_id', null, $categoryId],
+        ]);
+        $this->category->method('dataHasChangedFor')->willReturn(true);
+
+        $this->metadataPool->method('getMetadata')
+            ->with(CategoryInterface::class)
+            ->willReturn($this->entityMetaDataInterface);
+        $this->entityMetaDataInterface->method('getLinkField')->willReturn('row_id');
+        $this->getDefaultUrlKey->method('execute')->with($categoryId)->willReturn('one');
+        $this->compositeUrlValidator->method('validate')->willReturn([]);
+
+        $directChild = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getResource', 'getStore', 'getStoreId', 'setStoreId', 'getUrlPath', 'setUrlPath']
+        );
+        $directChild->setData(['id' => $directChildId, 'parent_id' => $categoryId, 'level' => 3]);
+        $directChild->method('getResource')->willReturn($this->createMock(CategoryResource::class));
+
+        $grandChild = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getResource', 'getStore', 'getStoreId', 'setStoreId', 'getUrlPath', 'setUrlPath']
+        );
+        $grandChild->setData(['id' => $grandChildId, 'parent_id' => $directChildId, 'level' => 4]);
+        $grandChild->method('getResource')->willReturn($this->createMock(CategoryResource::class));
+
+        // Discovery order is reversed (grandchild before direct child) to prove level-based sorting.
+        $this->childrenCategoriesProvider->expects($this->once())
+            ->method('getChildren')
+            ->willReturn([$grandChild, $directChild]);
+
+        $processed = [];
+        $this->categoryUrlPathGenerator->method('getUrlPath')
+            ->willReturnCallback(function ($cat, $parent = null) use (&$processed, $directChildId, $grandChildId) {
+                if ($cat->getId() === $directChildId || $cat->getId() === $grandChildId) {
+                    $processed[] = ['id' => $cat->getId(), 'parent' => $parent];
+                }
+                return 'generated_url_path';
+            });
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+
+        $this->assertSame($directChildId, $processed[0]['id']);
+        $this->assertSame($this->category, $processed[0]['parent']);
+
+        $this->assertSame($grandChildId, $processed[1]['id']);
+        $this->assertSame(
+            $directChild,
+            $processed[1]['parent'],
+            'Grandchild must be linked to the in-memory updated direct child, not left to resolve ' .
+            'its own parent independently.'
+        );
+    }
 }

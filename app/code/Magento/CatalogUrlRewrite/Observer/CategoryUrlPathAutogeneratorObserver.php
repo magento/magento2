@@ -207,14 +207,20 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             }
         } else {
             $children = $this->childrenCategoriesProvider->getChildren($category, true);
+            $childrenById = [];
             foreach ($children as $child) {
                 /** @var Category $child */
                 $child->setStoreId($category->getStoreId());
-                if ($child->getParentId() === $category->getId()) {
-                    $this->updateUrlPathForCategory($child, $category);
-                } else {
-                    $this->updateUrlPathForCategory($child);
-                }
+                $childrenById[(int)$child->getId()] = $child;
+            }
+            uasort(
+                $childrenById,
+                static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
+            );
+            foreach ($childrenById as $child) {
+                $parentId = (int)$child->getParentId();
+                $parent = $parentId === (int)$category->getId() ? $category : ($childrenById[$parentId] ?? null);
+                $this->updateUrlPathForCategory($child, $parent);
             }
         }
     }
