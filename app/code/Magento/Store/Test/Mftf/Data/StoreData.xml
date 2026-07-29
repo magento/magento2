@@ -236,4 +236,7 @@
     <entity name="storeViewCode" type="data">
         <data key="code" unique="suffix">storeview_main</data>
     </entity>
+    <entity name="StoreNotFoundErrorMessageData">
+        <data key="message">The store that was requested wasn't found. Verify the store and try again.</data>
+    </entity>
 </entities>
