@@ -240,6 +240,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
             $result['backUrl'] = $resolvedBackUrl;
         }
 
+        //If the product is no longer salable after the add-to-cart request, display the "Out of stock" message.
         if ($product && !$product->getIsSalable()) {
             $result['product'] = [
                 'statusText' => __('Out of stock')
