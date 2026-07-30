@@ -24,7 +24,10 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param \Exception $e
+     * @return void
      */
     public function processException(\Exception $e)
     {

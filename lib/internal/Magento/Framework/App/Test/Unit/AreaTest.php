@@ -30,7 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 class AreaTest extends TestCase
 {
-    const SCOPE_ID = '1';
+    public const SCOPE_ID = '1';
 
     /**
      * @var ObjectManager
