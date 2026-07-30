@@ -269,15 +269,6 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      */
     private function updateOverriddenUrlPathForStore(Category $category, array $childrenIds, int $storeId): void
     {
-        $storeScopedCategory = $this->getStoreScopedCategory($category, $storeId);
-        if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
-            $storeId,
-            $category->getId(),
-            Category::ENTITY
-        )) {
-            $this->updateUrlPathForCategory($storeScopedCategory);
-        }
-
         $overriddenChildren = [];
         foreach ($childrenIds as $childId) {
             if ($this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
@@ -288,6 +279,19 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $overriddenChildren[] = $this->categoryRepository->get($childId, $storeId);
             }
         }
+
+        $categoryHasOverride = $this->storeViewService->doesEntityHaveOverriddenUrlPathForStore(
+            $storeId,
+            $category->getId(),
+            Category::ENTITY
+        );
+        $needsStoreScopedParent = $categoryHasOverride || $this->hasDirectChild($overriddenChildren, $category);
+        $storeScopedCategory = $needsStoreScopedParent ? $this->getStoreScopedCategory($category, $storeId) : null;
+
+        if ($categoryHasOverride) {
+            $this->updateUrlPathForCategory($storeScopedCategory);
+        }
+
         usort(
             $overriddenChildren,
             static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
@@ -300,6 +304,23 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $this->updateUrlPathForCategory($child);
             }
         }
+    }
+
+    /**
+     * Check whether any of the given categories is a direct child of the edited category.
+     *
+     * @param Category[] $categories
+     * @param Category $category
+     * @return bool
+     */
+    private function hasDirectChild(array $categories, Category $category): bool
+    {
+        foreach ($categories as $candidate) {
+            if ((int)$candidate->getParentId() === (int)$category->getId()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
