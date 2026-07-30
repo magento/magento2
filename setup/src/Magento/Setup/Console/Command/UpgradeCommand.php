@@ -152,7 +152,7 @@ class UpgradeCommand extends AbstractSetupCommand
         try {
             $request = $input->getOptions();
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
-            
+
             // Clean up deprecated 'SET NAMES utf8;' from database connections
             $output->writeln('<info>Cleaning up deprecated SET NAMES utf8 from database connections...</info>');
             $this->dbInitStatementsCleanup->execute();
@@ -165,8 +165,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig->validateSearchEngine();
             $amqpVersionError = $this->validateAmqpVersion();
             if ($amqpVersionError !== null) {
-                $output->writeln('<error>' . $amqpVersionError . '</error>');
-                return Cli::RETURN_FAILURE;
+                $output->writeln('<comment>Warning: ' . $amqpVersionError . '</comment>');
             }
             $installer->installSchema($request);
             $installer->removeUnusedTriggers();
