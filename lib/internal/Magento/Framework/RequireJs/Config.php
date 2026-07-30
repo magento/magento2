@@ -302,15 +302,30 @@ config;
         $result = <<<code
     (function () {
         var ctx = require.s.contexts._,
-            origNameToUrl = ctx.nameToUrl,
-            baseUrl = ctx.config.baseUrl;
+            newContext = require.s.newContext;
 
-        ctx.nameToUrl = function() {
-            var url = origNameToUrl.apply(ctx, arguments);
-            if ({$excludesCode}) {
-                url = url.replace(/(\.min)?\.js$/, '.min.js');
-            }
-            return url;
+        function applyMinResolver(context) {
+            var origNameToUrl = context.nameToUrl;
+
+            context.nameToUrl = function() {
+                var url = origNameToUrl.apply(context, arguments),
+                    baseUrl = context.config.baseUrl;
+
+                if ({$excludesCode}) {
+                    url = url.replace(/(\.min)?\.js$/, '.min.js');
+                }
+                return url;
+            };
+        }
+
+        applyMinResolver(ctx);
+
+        require.s.newContext = function () {
+            var context = newContext.apply(require.s, arguments);
+
+            applyMinResolver(context);
+
+            return context;
         };
     })();
 code;
