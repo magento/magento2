@@ -13,17 +13,21 @@ use PHPUnit\Framework\TestCase;
 class ComponentRegistrarTest extends TestCase
 {
     /**
-     * Module registrar object
-     *
      * @var ComponentRegistrar
      */
-    private $object;
+    private ComponentRegistrar $object;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->object = new ComponentRegistrar();
     }
 
+    /**
+     * @return void
+     */
     public function testWithInvalidType()
     {
         $this->expectException('LogicException');
@@ -31,6 +35,9 @@ class ComponentRegistrarTest extends TestCase
         ComponentRegistrar::register('some_type', "test_module_one", "some/path/name/one");
     }
 
+    /**
+     * @return void
+     */
     public function testGetPathsForModule()
     {
         ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/one");
@@ -43,15 +50,65 @@ class ComponentRegistrarTest extends TestCase
         $this->assertContains($expected['test_module_two'], $this->object->getPaths(ComponentRegistrar::MODULE));
     }
 
+    /**
+     * @return void
+     */
     public function testRegistrarWithExceptionForModules()
     {
         $this->expectException('LogicException');
         ComponentRegistrar::register(ComponentRegistrar::MODULE, "test_module_one", "some/path/name/onemore");
     }
 
+    /**
+     * @return void
+     */
     public function testGetPath()
     {
         $this->assertSame("some/path/name/one", $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_one'));
         $this->assertSame("some/path/name/two", $this->object->getPath(ComponentRegistrar::MODULE, 'test_module_two'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPathForUnregisteredComponentReturnsNull()
+    {
+        $this->assertNull($this->object->getPath(ComponentRegistrar::MODULE, 'nonexistent_module'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPathWithNonStringTypeThrowsException()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            '$type and $componentName must both be strings, got int and string.'
+        );
+        $this->object->getPath(123, 'test_module_one');
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPathWithNonStringComponentNameThrowsException()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            '$type and $componentName must both be strings, got string and array.'
+        );
+        $this->object->getPath(ComponentRegistrar::MODULE, ['test_module_one']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetPathWithNonStringTypeAndComponentNameThrowsException()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            '$type and $componentName must both be strings, got null and bool.'
+        );
+        $this->object->getPath(null, true);
     }
 }
