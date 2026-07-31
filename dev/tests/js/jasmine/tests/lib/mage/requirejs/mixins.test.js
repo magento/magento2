@@ -27,7 +27,8 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
             expect(unbundledContext.nameToUrl).not.toBe(defContext.nameToUrl);
         });
 
-        it('should not forward deps, callback and bundles to unbundled context during default context configure', function () {
+        it('should not forward deps, callback and bundles to unbundled context during ' +
+            'default context configure', function () {
             var originalDeps = defContext.config.deps,
                 originalCallback = defContext.config.callback,
                 noop = function () {},
