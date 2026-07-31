@@ -69,7 +69,6 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      * @param string $type
      * @param string $componentName
      * @return null|string
-     * @throws \InvalidArgumentException
      */
     public function getPath($type, $componentName)
     {
