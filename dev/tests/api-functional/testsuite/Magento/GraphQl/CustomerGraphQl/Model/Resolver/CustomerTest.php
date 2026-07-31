@@ -453,6 +453,7 @@ class CustomerTest extends ResolverCacheAbstract
 
     /**
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoConfigFixture default/customer/account_share/scope 1
      * @return void
      */
     #[
@@ -502,6 +503,7 @@ class CustomerTest extends ResolverCacheAbstract
 
         $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
         $customer1CacheEntry = $this->graphQlResolverCache->load($customer1CacheKey);
+        $this->assertIsString($customer1CacheEntry, 'Customer1 resolver cache entry should exist');
         $customer1CacheEntryDecoded = json_decode($customer1CacheEntry, true);
         $this->assertEquals(
             $customer1->getFirstname(),
@@ -509,6 +511,11 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         // query customer2
+        /** @var StoreManagerInterface $storeManager */
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $previousStoreCode = $storeManager->getStore()->getCode();
+        $storeManager->setCurrentStore('store2');
+
         $this->mockCustomerUserInfoContext($customer2);
         $customer2Token = $this->generateCustomerToken(
             $customer2->getEmail(),
@@ -527,8 +534,10 @@ class CustomerTest extends ResolverCacheAbstract
         );
 
         $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
+        $storeManager->setCurrentStore($previousStoreCode);
 
         $customer2CacheEntry = $this->graphQlResolverCache->load($customer2CacheKey);
+        $this->assertIsString($customer2CacheEntry, 'Customer2 resolver cache entry should exist');
         $customer2CacheEntryDecoded = json_decode($customer2CacheEntry, true);
         $this->assertEquals(
             $customer2->getFirstname(),

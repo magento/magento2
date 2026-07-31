@@ -12,9 +12,12 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -51,19 +54,27 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var HttpRequest
+     */
+    private $request;
+
     /**
      * @param UserContextInterface $userContext
      * @param Session $session
      * @param CustomerRepository $customerRepository
      * @param Share $configShare
      * @param StoreManagerInterface $storeManager
+     * @param HttpRequest|null $request
      */
     public function __construct(
         UserContextInterface $userContext,
         Session $session,
         CustomerRepository $customerRepository,
         Share $configShare,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ?HttpRequest $request = null
     ) {
         $this->userContext = $userContext;
         $this->userContextFromConstructor = $userContext;
@@ -71,6 +82,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
         $this->customerRepository = $customerRepository;
         $this->configShare = $configShare;
         $this->storeManager = $storeManager;
+        $this->request = $request ?? ObjectManager::getInstance()->get(HttpRequest::class);
     }
 
     /**
@@ -109,6 +121,13 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
         $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
+        if (!$isCustomer
+            && !empty($currentUserId)
+            && $currentUserType === UserContextInterface::USER_TYPE_CUSTOMER
+        ) {
+            $contextParameters->setUserId(0);
+        }
+
         if ($isCustomer) {
             $customer = $this->customerRepository->getById($currentUserId);
             $this->session->setCustomerData($customer);
@@ -142,8 +161,22 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
 
         if ($result && $this->configShare->isWebsiteScope()) {
             $customer = $this->customerRepository->getById($customerId);
-            return (int)$customer->getWebsiteId() === (int)$this->storeManager->getStore()->getWebsiteId();
+            return (int)$customer->getWebsiteId() === (int)$this->getEffectiveStore()->getWebsiteId();
         }
         return $result;
+    }
+
+    /**
+     * Resolve the store to use for website-scope validation.
+     *
+     * @return StoreInterface
+     */
+    private function getEffectiveStore(): StoreInterface
+    {
+        $storeCode = trim((string) $this->request->getHeader('Store'));
+        if (!empty($storeCode)) {
+            return $this->storeManager->getStore($storeCode);
+        }
+        return $this->storeManager->getStore();
     }
 }
