@@ -79,36 +79,12 @@ class ComponentRegistrarTest extends TestCase
     /**
      * @return void
      */
-    public function testGetPathWithNonStringTypeThrowsException()
+    public function testGetPathWithTypeAndNullComponentName()
     {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$type and $componentName must both be strings, got int and string.'
-        );
-        $this->object->getPath(123, 'test_module_one');
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetPathWithNonStringComponentNameThrowsException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$type and $componentName must both be strings, got string and array.'
-        );
-        $this->object->getPath(ComponentRegistrar::MODULE, ['test_module_one']);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetPathWithNonStringTypeAndComponentNameThrowsException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage(
-            '$type and $componentName must both be strings, got null and bool.'
-        );
-        $this->object->getPath(null, true);
+        $this->assertNull($this->object->getPath(ComponentRegistrar::LANGUAGE, null));
+        $this->assertNull($this->object->getPath(ComponentRegistrar::MODULE, null));
+        $this->assertNull($this->object->getPath(ComponentRegistrar::LIBRARY, null));
+        $this->assertNull($this->object->getPath(ComponentRegistrar::THEME, null));
+        $this->assertNull($this->object->getPath(ComponentRegistrar::SETUP, null));
     }
 }

@@ -73,15 +73,11 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public function getPath($type, $componentName)
     {
-        if (!is_string($type) || !is_string($componentName)) {
-            throw new \InvalidArgumentException(sprintf(
-                '$type and $componentName must both be strings, got %s and %s.',
-                get_debug_type($type),
-                get_debug_type($componentName)
-            ));
+        self::validateType($type);
+        if (!is_string($componentName)) {
+            return null;
         }
 
-        self::validateType($type);
         return self::$paths[$type][$componentName] ?? null;
     }
 
