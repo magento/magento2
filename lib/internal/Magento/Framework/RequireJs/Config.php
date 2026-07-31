@@ -18,54 +18,55 @@ class Config
     /**
      * Name of sub-directory where generated RequireJs config is placed
      *
-     * @deprecated since 2.2.0 RequireJS Configuration file is moved into package directory
+     * @deprecated since 2.2.0 The generated RequireJS configuration is stored in package-specific config paths.
+     * @see \Magento\Framework\RequireJs\Config::getConfigFileRelativePath()
      */
-    const DIR_NAME = '_requirejs';
+    public const DIR_NAME = '_requirejs';
 
     /**
      * File name of RequireJs config
      */
-    const CONFIG_FILE_NAME = 'requirejs-config.js';
+    public const CONFIG_FILE_NAME = 'requirejs-config.js';
 
     /**
      * File name of RequireJs mixins
      */
-    const MIXINS_FILE_NAME = 'mage/requirejs/mixins.js';
+    public const MIXINS_FILE_NAME = 'mage/requirejs/mixins.js';
 
     /**
      * File name of RequireJs
      */
-    const REQUIRE_JS_FILE_NAME = 'requirejs/require.js';
+    public const REQUIRE_JS_FILE_NAME = 'requirejs/require.js';
 
     /**
      * File name of StaticJs
      */
-    const STATIC_FILE_NAME = 'mage/requirejs/static.js';
+    public const STATIC_FILE_NAME = 'mage/requirejs/static.js';
 
     /**
      * File name of minified files resolver
      */
-    const MIN_RESOLVER_FILENAME = 'requirejs-min-resolver.js';
+    public const MIN_RESOLVER_FILENAME = 'requirejs-min-resolver.js';
 
     /**
      * File name of RequireJs mixins
      */
-    const MAP_FILE_NAME = 'requirejs-map.js';
+    public const MAP_FILE_NAME = 'requirejs-map.js';
 
     /**
      * File name of BaseUrlInterceptorJs
      */
-    const URL_RESOLVER_FILE_NAME = 'mage/requirejs/baseUrlResolver.js';
+    public const URL_RESOLVER_FILE_NAME = 'mage/requirejs/baseUrlResolver.js';
 
     /**
      * File name of StaticJs
      */
-    const BUNDLE_JS_DIR = 'js/bundle';
+    public const BUNDLE_JS_DIR = 'js/bundle';
 
     /**
      * Template for combined RequireJs config file
      */
-    const FULL_CONFIG_TEMPLATE = <<<config
+    public const FULL_CONFIG_TEMPLATE = <<<config
 (function(require){
 %function%
 
@@ -76,7 +77,7 @@ config;
     /**
      * Template for wrapped partial config
      */
-    const PARTIAL_CONFIG_TEMPLATE = <<<config
+    public const PARTIAL_CONFIG_TEMPLATE = <<<config
 (function() {
 %config%
 require.config(config);
@@ -297,7 +298,7 @@ config;
         foreach ($this->minification->getExcludes('js') as $expression) {
             $excludes[] = '!url.match(/' . str_replace('/', '\/', $expression) . '/)';
         }
-        $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
+        $excludesCode = implode('&&', $excludes);
 
         $result = <<<code
     (function () {
