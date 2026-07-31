@@ -71,14 +71,15 @@ class Page
      *
      * @param string $pageIdentifier
      * @param int $storeId
+     * @param ResolveInfo|null $info
      * @return array
      * @throws NoSuchEntityException
      */
-    public function getDataByPageIdentifier(string $pageIdentifier, int $storeId): array
+    public function getDataByPageIdentifier(string $pageIdentifier, int $storeId, ?ResolveInfo $info = null): array
     {
         $page = $this->pageByIdentifier->execute($pageIdentifier, $storeId);
 
-        return $this->convertPageData($page);
+        return $this->convertPageData($page, $info ? array_keys($info->getFieldSelection(1)) : []);
     }
 
     /**
@@ -106,7 +107,7 @@ class Page
             PageInterface::PAGE_ID => $page->getId(),
             PageInterface::IDENTIFIER => $page->getIdentifier()
         ];
-        if (in_array(PageInterface::CONTENT, $fields)) {
+        if (empty($fields) || in_array(PageInterface::CONTENT, $fields)) {
             $pageData[PageInterface::CONTENT] = $this->widgetFilter->filter($page->getContent());
         }
         return $pageData;
