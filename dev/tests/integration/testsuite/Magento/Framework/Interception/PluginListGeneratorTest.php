@@ -23,14 +23,22 @@ class PluginListGeneratorTest extends TestCase
     /**
      * Generated plugin list config for frontend scope
      */
-    const CACHE_ID_FRONTEND = 'primary|global|frontend|plugin-list';
+    private const CACHE_ID_FRONTEND = 'primary|global|frontend|plugin-list';
 
     /**
      * Generated plugin list config for dummy scope
      */
-    const CACHE_ID_DUMMY = 'primary|global|dummy|plugin-list';
+    private const CACHE_ID_DUMMY = 'primary|global|dummy|plugin-list';
 
-    private $cacheIds = [self::CACHE_ID_FRONTEND, self::CACHE_ID_DUMMY];
+    /**
+     * Generated plugin list config for the base global scope
+     */
+    private const CACHE_ID_GLOBAL = 'primary|global|plugin-list';
+
+    /**
+     * @var string[]
+     */
+    private $cacheIds = [self::CACHE_ID_FRONTEND, self::CACHE_ID_DUMMY, self::CACHE_ID_GLOBAL];
 
     /**
      * @var PluginListGenerator
@@ -141,6 +149,45 @@ class PluginListGeneratorTest extends TestCase
             $globalPlugin,
             $configDataDummy[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'][1],
             'Plugin configurations are not equal. "dummy" scope should contain plugins from "global" scope'
+        );
+    }
+
+    /**
+     * The base "global" scope plugin-list file must be generated even when "global" is not supplied first.
+     *
+     * In production, setup:di:compile passes scopes sorted alphabetically, so "global" is not the first scope.
+     * Previously the base "global" scope was marked as loaded while generating an earlier area scope and then
+     * skipped, so its own "primary|global|plugin-list" file was never written and area scopes generated before
+     * "global" did not inherit the global plugin data. This asserts both are now correct regardless of order.
+     *
+     * @see https://github.com/magento/magento2/issues/40407
+     */
+    public function testBaseGlobalScopeConfigIsGeneratedRegardlessOfScopeOrder()
+    {
+        // "global" is intentionally not the first scope, mirroring the alphabetically sorted production order.
+        // "dummy" is placed after "global" so that a cache miss on "global" would also leave "dummy" without
+        // the inherited global plugin data.
+        $scopes = ['frontend', 'global', 'dummy'];
+        $globalPlugin = 'genericHeaderPlugin';
+        $this->model->write($scopes);
+
+        $configDataGlobal = $this->model->load(self::CACHE_ID_GLOBAL);
+        $this->assertNotEmpty(
+            $configDataGlobal,
+            'The base "primary|global|plugin-list" config must be generated for the global scope.'
+        );
+        $this->assertContains(
+            $globalPlugin,
+            $configDataGlobal[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'][1],
+            'The generated global scope config must contain global scope plugins.'
+        );
+
+        // Area scopes generated before "global" must still inherit the global plugin data.
+        $configDataDummy = $this->model->load(self::CACHE_ID_DUMMY);
+        $this->assertContains(
+            $globalPlugin,
+            $configDataDummy[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'][1],
+            '"dummy" scope generated before "global" must still contain plugins from the "global" scope.'
         );
     }
 

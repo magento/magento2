@@ -87,6 +87,7 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
      */
     public function write(array $scopes): void
     {
+        $scopes = $this->prioritizeBaseScopes($scopes);
         foreach ($scopes as $scope) {
             $this->scopeConfig->setCurrentScope($scope);
             if (false === isset($this->loadedScopes[$scope])) {
@@ -132,6 +133,31 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
                 }
             }
         }
+    }
+
+    /**
+     * Move base priority scopes (e.g. "global") to the front of the processing order.
+     *
+     * At runtime a request with no active area scope (CLI, cron, early bootstrap) asks for the base scope
+     * plugin-list, e.g. "primary|global|plugin-list". If a base scope is processed after an area scope it is
+     * marked as loaded as a side effect of the area scope generation and then skipped by the loaded-scopes
+     * guard in write(), so its own file is never generated and its plugin data is not carried over to the
+     * area scopes. Generating the base scopes first keeps the compile-time cache IDs and plugin data in sync
+     * with runtime regardless of the order in which scopes are supplied (see issue #40407).
+     *
+     * @param array $scopes
+     * @return array
+     */
+    private function prioritizeBaseScopes(array $scopes): array
+    {
+        $baseScopes = [];
+        foreach ($this->scopePriorityScheme as $baseScope) {
+            if (in_array($baseScope, $scopes, true)) {
+                $baseScopes[] = $baseScope;
+            }
+        }
+
+        return array_merge($baseScopes, array_values(array_diff($scopes, $baseScopes)));
     }
 
     /**
