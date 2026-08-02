@@ -149,6 +149,30 @@
         <data key="path">tax/cart_display/subtotal</data>
         <data key="value">1</data>
     </entity>
+    <entity name="EnableCrossBorderTrade">
+        <data key="path">tax/calculation/cross_border_trade_enabled</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCrossBorderTrade">
+        <data key="path">tax/calculation/cross_border_trade_enabled</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CartDisplayPriceIncludingTax">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="CartDisplaySubtotalIncludingTax">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="CartDisplayShippingIncludingTax">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="SalesDisplayPriceIncludingTax">
+        <data key="path">tax/sales_display/price</data>
+        <data key="value">2</data>
+    </entity>
     <entity name="TaxCalculationUnitBaseAlgorithm">
         <data key="path">tax/calculation/algorithm</data>
         <data key="value">UNIT_BASE_CALCULATION</data>
@@ -200,5 +224,13 @@
     <entity name="DefaultDisplaySalesPrice">
         <data key="path">tax/sales_display/price</data>
         <data key="value">1</data>
+    </entity>
+    <entity name="SalesDisplaySubtotalIncludingTax">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="SalesDisplayShippingIncludingTax">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">2</data>
     </entity>
 </entities>
