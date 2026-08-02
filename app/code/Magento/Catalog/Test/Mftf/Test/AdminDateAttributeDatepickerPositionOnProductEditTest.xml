@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDateAttributeDatepickerPositionOnProductEditTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Date attribute datepicker positioning on product edit page"/>
+            <title value="Date attribute calendar appears near datepicker trigger when assigned to product details group"/>
+            <description value="Verify date attribute calendar appears near datepicker trigger when assigned to product details group"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-17673"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Log in to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Delete product, attribute, clear filters  and logout from admin-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteDateAttribute">
+                <argument name="ProductAttribute" value="dateProductAttribute"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <generateDate date="now" format="m/j/Y" stepKey="generateDefaultDate"/>
+        <!-- Step 2: Go to stores, attributes, product -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+        <!-- Steps 3,4: Create Date attribute using existing entity + action group -->
+        <actionGroup ref="CreateProductAttributeWithDateFieldActionGroup" stepKey="createDateAttribute">
+            <argument name="attribute" value="dateProductAttribute"/>
+            <argument name="date" value="{$generateDefaultDate}"/>
+        </actionGroup>
+        <!-- Step 5: Go to stores, attributes, attribute set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetGrid"/>
+        <!-- Step 6: Open Default attribute set -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet">
+            <argument name="name" value="Default"/>
+        </actionGroup>
+        <!-- Step 7: Assign date attribute to Product Details group -->
+        <waitForElementVisible selector="{{AdminProductAttributeSetEditSection.unassignedAttribute(dateProductAttribute.attribute_code)}}"
+                               stepKey="waitForAttributeInUnassigned"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDateAttributeToProductDetailsGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{dateProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductAttributeSetEditSection.assignedAttribute(dateProductAttribute.attribute_code)}}"
+                               stepKey="waitForAttributeInProductDetailsGroup"/>
+        <!-- Step 8: Save attribute set -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+        <!-- Steps 9,10,11: Open product edit page by ID -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEdit">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
+        <!-- Step 12: Verify date attribute is visible in product details -->
+        <waitForElementVisible selector="{{AdminProductFormSection.newAddedAttribute(dateProductAttribute.attribute_code)}}" stepKey="waitForDateAttributeField"/>
+        <!-- Step 13: Click datepicker trigger button -->
+        <waitForElementClickable selector="{{AdminProductFormSection.datePickerTriggerByAttributeCode(dateProductAttribute.attribute_code)}}" stepKey="waitForDatePickerTrigger"/>
+        <click selector="{{AdminProductFormSection.datePickerTriggerByAttributeCode(dateProductAttribute.attribute_code)}}" stepKey="clickDatePickerTrigger"/>
+        <!-- Steps 14: Verify calendar displays near the datepicker trigger button -->
+        <waitForElementVisible selector="{{AdminProductFormSection.datePickerCalendarNearTriggerByAttributeCode(dateProductAttribute.attribute_code)}}" stepKey="assertCalendarNearDatePickerTrigger"/>
+    </test>
+</tests>
