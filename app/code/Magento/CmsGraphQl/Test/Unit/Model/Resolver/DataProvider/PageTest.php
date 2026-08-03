@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CmsGraphQl\Test\Integration\Model\Resolver\DataProvider;
+namespace Magento\CmsGraphQl\Test\Unit\Model\Resolver\DataProvider;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetPageByIdentifierInterface;
@@ -17,9 +17,6 @@ use Magento\Widget\Model\Template\FilterEmulate;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Unit test for Cms Page GraphQl data provider
- */
 class PageTest extends TestCase
 {
     /**
