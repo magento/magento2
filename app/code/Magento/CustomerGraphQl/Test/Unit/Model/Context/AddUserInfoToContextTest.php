@@ -72,7 +72,7 @@ class AddUserInfoToContextTest extends TestCase
         );
     }
 
-    public function testExecuteStoresCustomerDataWithoutSession(): void
+    public function testExecuteStoresCustomerDataInRequestLocalSession(): void
     {
         $customerMock = $this->createMock(CustomerInterface::class);
 
@@ -98,6 +98,15 @@ class AddUserInfoToContextTest extends TestCase
             ->method('getById')
             ->with(1)
             ->willReturn($customerMock);
+        $customerMock->expects($this->once())
+            ->method('getGroupId')
+            ->willReturn(3);
+        $this->sessionMock->expects($this->once())
+            ->method('setCustomerData')
+            ->with($customerMock);
+        $this->sessionMock->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with(3);
 
         $this->assertSame(
             $this->contextParametersMock,
@@ -127,6 +136,10 @@ class AddUserInfoToContextTest extends TestCase
             ->method('isWebsiteScope');
         $this->customerRepositoryMock->expects($this->never())
             ->method('getById');
+        $this->sessionMock->expects($this->never())
+            ->method('setCustomerData');
+        $this->sessionMock->expects($this->never())
+            ->method('setCustomerGroupId');
 
         $this->addUserInfoToContext->execute($this->contextParametersMock);
 

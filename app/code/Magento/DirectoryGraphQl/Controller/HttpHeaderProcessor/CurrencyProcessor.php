@@ -34,7 +34,8 @@ class CurrencyProcessor implements HttpHeaderProcessorInterface
 
     /**
      * @var SessionManagerInterface
-     * @deprecated
+     * @deprecated Session state is no longer used to resolve currency.
+     * @see self::$request
      */
     private $session;
 

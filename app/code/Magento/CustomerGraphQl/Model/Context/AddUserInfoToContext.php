@@ -119,6 +119,8 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface, R
 
         if ($isCustomer) {
             $this->loggedInCustomerData = $this->customerRepository->getById($currentUserId);
+            $this->session->setCustomerData($this->loggedInCustomerData);
+            $this->session->setCustomerGroupId($this->loggedInCustomerData->getGroupId());
         }
         return $contextParameters;
     }
