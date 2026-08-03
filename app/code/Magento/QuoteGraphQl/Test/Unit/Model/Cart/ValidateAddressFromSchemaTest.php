@@ -21,6 +21,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidateAddressFromSchemaTest extends TestCase
 {
+    /** @var ValidateAddressFromSchema */
     private ValidateAddressFromSchema $model;
 
     /** @var TypeRegistry|MockObject */
