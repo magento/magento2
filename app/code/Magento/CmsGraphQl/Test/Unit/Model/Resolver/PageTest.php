@@ -14,8 +14,8 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\Context;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,9 +33,9 @@ class PageTest extends TestCase
     private Field $fieldMock;
 
     /**
-     * @var ContextInterface|MockObject
+     * @var Context|MockObject
      */
-    private ContextInterface $contextMock;
+    private Context $contextMock;
 
     /**
      * @var ResolveInfo|MockObject
@@ -51,7 +51,7 @@ class PageTest extends TestCase
     {
         $this->pageDataProviderMock = $this->createMock(PageDataProvider::class);
         $this->fieldMock = $this->createStub(Field::class);
-        $this->contextMock = $this->createStub(ContextInterface::class);
+        $this->contextMock = $this->createStub(Context::class);
         $this->resolveInfoMock = $this->createStub(ResolveInfo::class);
 
         $this->resolver = new Page($this->pageDataProviderMock);
@@ -113,7 +113,7 @@ class PageTest extends TestCase
     {
         $expectedData = ['title' => 'Page Title'];
 
-        $contextMock = $this->createMock(ContextInterface::class);
+        $contextMock = $this->createMock(Context::class);
         $contextExtensionMock = $this->createMock(ContextExtensionInterface::class);
         $storeMock = $this->createMock(StoreInterface::class);
 
