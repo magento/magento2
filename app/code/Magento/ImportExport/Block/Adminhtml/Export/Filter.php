@@ -485,7 +485,6 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
 
             $skipColumn = $this->getColumn('skip');
             if ($skipColumn && !empty($disabledIds)) {
-                $skipColumn->setValues($disabledIds);
                 $skipColumn->setDisabledValues($disabledIds);
             }
         }

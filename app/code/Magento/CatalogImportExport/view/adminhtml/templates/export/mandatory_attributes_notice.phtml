@@ -3,29 +3,43 @@
  * Copyright 2026 Adobe
  * All Rights Reserved.
  *
- * @var Escaper $escaper
  * @var \Magento\CatalogImportExport\Block\Adminhtml\Export\MandatoryAttributesNotice $block
+ * @var \Magento\Framework\Escaper $escaper
  */
-
-use Magento\Framework\Escaper;
-
 ?>
-<?php $mandatoryAttributes = $block->getSystemMandatoryAttributes(); ?>
-<?php if ($mandatoryAttributes): ?>
-    <div id="mandatory-attributes-notice"
-         class="message message-notice notice mandatory-attributes-notice"
-         style="display: none;"
-         data-mage-init='{"Magento_CatalogImportExport/js/mandatory-notice-toggle": {"entitySelector": "#entity"}}'>
-        <div data-ui-id="messages-message-notice">
-            <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
-            <?= $escaper->escapeHtml(
-                __(
-                    'The following system columns are automatically appended ' .
-                    'during the export process and cannot be excluded:'
-                )
-            ) ?>
-            <br/>
-            <span class="mandatory-system-fields"><?= $escaper->escapeHtml($mandatoryAttributes) ?></span>
-        </div>
+<div id="mandatory-attributes-notice"
+     class="message message-notice notice mandatory-attributes-notice"
+     style="display: none;"
+     data-mage-init='{"Magento_CatalogImportExport/js/mandatory-notice-toggle": {"entitySelector": "#entity"}}'>
+    <div data-ui-id="messages-message-notice">
+        <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
+        <?= $escaper->escapeHtml(
+            __('To ensure your file can be successfully re-imported, the following systemic data is ' .
+                'automatically included and cannot be excluded:')
+        ) ?>
+        <ul>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Core Identifiers:')) ?></strong>
+                <?= $escaper->escapeHtml(__('SKU, Store View, Attribute Set, and Product Type')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Catalog Structure:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Categories, Websites, and Custom Options')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Complex Product Data:')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('Configurations for Bundle, Configurable, Gift Card, and Downloadable products')
+                ) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Inventory & Stock:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Quantity and Stock Status')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Product Relations:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Related, Up-sell, and Cross-sell product links')) ?>
+            </li>
+        </ul>
     </div>
-<?php endif; ?>
+</div>
