@@ -57,7 +57,8 @@ class Page implements ResolverInterface
             } elseif (isset($args['identifier'])) {
                 $pageData = $this->pageDataProvider->getDataByPageIdentifier(
                     (string)$args['identifier'],
-                    (int)$context->getExtensionAttributes()->getStore()->getId()
+                    (int)$context->getExtensionAttributes()->getStore()->getId(),
+                    $info
                 );
             }
         } catch (NoSuchEntityException $e) {
