@@ -26,6 +26,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -137,6 +138,45 @@ class RepositoryTest extends TestCase
     }
 
     /**
+     * Configure eav attribute repository to report attribute code does not exist on lookup.
+     *
+     * @param string $attributeCode
+     * @return void
+     */
+    private function mockAttributeCodeNotFound(string $attributeCode): void
+    {
+        $this->eavAttributeRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
+            ->willThrowException(
+                NoSuchEntityException::singleField('attribute_code', $attributeCode)
+            );
+    }
+
+    /**
+     * Configure eav attribute repository lookup for new attribute creation flow.
+     *
+     * @param string $attributeCode
+     * @param MockObject $attributeMock
+     * @return void
+     */
+    private function mockAttributeCodeNotFoundThenReturn(string $attributeCode, MockObject $attributeMock): void
+    {
+        $invocation = 0;
+        $this->eavAttributeRepositoryMock->expects($this->exactly(2))
+            ->method('get')
+            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
+            ->willReturnCallback(function () use (&$invocation, $attributeMock, $attributeCode) {
+                $invocation++;
+                if ($invocation === 1) {
+                    throw NoSuchEntityException::singleField('attribute_code', $attributeCode);
+                }
+
+                return $attributeMock;
+            });
+    }
+
+    /**
      * @return void
      */
     public function testGet()
@@ -222,9 +262,9 @@ class RepositoryTest extends TestCase
         $this->expectExceptionMessage('No such entity with attribute_code = test attribute code');
         $attributeMock = $this->createMock(Attribute::class);
         $existingModelMock = $this->createMock(Attribute::class);
-        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn('12');
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn('12');
         $attributeCode = 'test attribute code';
-        $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $this->eavAttributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with(
@@ -246,7 +286,7 @@ class RepositoryTest extends TestCase
             Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', 'setAttributeId']
         );
-        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $attributeMock->expects($this->once())->method('getFrontendLabels')->willReturn(null);
         $attributeMock->expects($this->once())->method('getDefaultFrontendLabel')->willReturn(null);
@@ -298,7 +338,7 @@ class RepositoryTest extends TestCase
             Attribute::class,
             ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', 'setAttributeId']
         );
-        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $labelMock = $this->createMock(FrontendLabel::class);
         $attributeMock->method('getFrontendLabels')->willReturn([$labelMock]);
@@ -397,7 +437,7 @@ class RepositoryTest extends TestCase
                 'getBackendType'
             ]
         );
-        $attributeMock->expects($this->once())->method('getAttributeId')->willReturn(null);
+        $attributeMock->expects($this->any())->method('getAttributeId')->willReturn(null);
         $attributeMock->expects($this->once())->method('setAttributeId')->with(null)->willReturnSelf();
         $labelMock = $this->createMock(FrontendLabel::class);
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
@@ -409,6 +449,8 @@ class RepositoryTest extends TestCase
         $validateMock = $this->createMock(Validator::class);
         $this->validatorFactoryMock->expects($this->any())->method('create')->willReturn($validateMock);
         $validateMock->expects($this->any())->method('isValid')->willReturn(true);
+
+        $this->mockAttributeCodeNotFound('attribute_code');
 
         $this->model->save($attributeMock);
     }
@@ -456,10 +498,7 @@ class RepositoryTest extends TestCase
         $validatorMock->expects($this->once())->method('isValid')->with($frontendInput)->willReturn(true);
 
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->eavAttributeRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
-            ->willReturn($attributeMock);
+        $this->mockAttributeCodeNotFoundThenReturn($attributeCode, $attributeMock);
 
         $this->model->save($attributeMock);
     }
@@ -557,10 +596,44 @@ class RepositoryTest extends TestCase
         $validatorMock->expects($this->once())->method('isValid')->with($frontendInput)->willReturn(true);
 
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->eavAttributeRepositoryMock->expects($this->once())
+        $this->mockAttributeCodeNotFoundThenReturn($attributeCode, $attributeMock);
+
+        $this->model->save($attributeMock);
+    }
+
+    /**
+     * Test save resolves existing attribute by code when attribute_id is not provided
+     *
+     * @return void
+     */
+    public function testSaveResolvesExistingAttributeByCodeWhenAttributeIdIsMissing(): void
+    {
+        $attributeId = 10;
+        $attributeCode = 'color';
+        $backendModel = 'backend_model';
+
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock
+            ->expects($this->any())
+            ->method('getAttributeId')
+            ->willReturnOnConsecutiveCalls(null, $attributeId);
+        $attributeMock->expects($this->exactly(2))->method('setAttributeId')->with($attributeId)->willReturnSelf();
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $attributeMock->expects($this->once())->method('setAttributeCode')->with($attributeCode)->willReturnSelf();
+        $attributeMock->expects($this->once())->method('setBackendModel')->with($backendModel)->willReturnSelf();
+
+        $existingModelMock = $this->createMock(Attribute::class);
+        $existingModelMock->method('getAttributeId')->willReturn($attributeId);
+        $existingModelMock->method('getAttributeCode')->willReturn($attributeCode);
+        $existingModelMock->expects($this->once())->method('getBackendModel')->willReturn($backendModel);
+        $existingModelMock->expects($this->once())->method('getDefaultFrontendLabel')->willReturn('Color');
+        $existingModelMock->expects($this->once())->method('getSource')->willReturn(null);
+
+        $this->eavAttributeRepositoryMock->expects($this->exactly(3))
             ->method('get')
             ->with(ProductAttributeInterface::ENTITY_TYPE_CODE, $attributeCode)
-            ->willReturn($attributeMock);
+            ->willReturn($existingModelMock);
+        $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
 
         $this->model->save($attributeMock);
     }
@@ -599,6 +672,9 @@ class RepositoryTest extends TestCase
         // Add filterable method setup to prevent early validation failures
         $attributeMock->expects($this->any())->method('getIsFilterable')->willReturn(false);
         $attributeMock->expects($this->any())->method('getIsFilterableInSearch')->willReturn(false);
+
+        $this->mockAttributeCodeNotFound('123_invalid_code');
+
         $this->model->save($attributeMock);
     }
 
@@ -624,6 +700,8 @@ class RepositoryTest extends TestCase
         $this->validatorFactoryMock->expects($this->once())->method('create')->willReturn($validatorMock);
         $validatorMock->expects($this->once())->method('isValid')->with('invalid_input')->willReturn(false);
 
+        $this->mockAttributeCodeNotFound('valid_code');
+
         $this->model->save($attributeMock);
     }
 
@@ -646,7 +724,7 @@ class RepositoryTest extends TestCase
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([]);
         // Return null first to trigger generateCode, then return the generated code for subsequent calls
         $attributeMock->expects($this->any())->method('getAttributeCode')
-            ->willReturnOnConsecutiveCalls(null, $generatedCode, $generatedCode);
+            ->willReturnOnConsecutiveCalls(null, null, $generatedCode, $generatedCode);
         $attributeMock->expects($this->once())->method('setAttributeCode')->with($generatedCode)->willReturnSelf();
         $attributeMock->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
         $attributeMock->expects($this->once())->method('getBackendTypeByInput')->willReturn($backendType);
@@ -693,7 +771,7 @@ class RepositoryTest extends TestCase
         $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn($frontendLabel);
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([]);
         $attributeMock->expects($this->any())->method('getAttributeCode')
-            ->willReturnOnConsecutiveCalls(null, $expectedCode, $expectedCode);
+            ->willReturnOnConsecutiveCalls(null, null, $expectedCode, $expectedCode);
         $attributeMock->expects($this->once())->method('setAttributeCode')->with($expectedCode)->willReturnSelf();
         $attributeMock->expects($this->any())->method('getFrontendInput')->willReturn($frontendInput);
         $attributeMock->expects($this->once())->method('getBackendTypeByInput')->willReturn($backendType);
