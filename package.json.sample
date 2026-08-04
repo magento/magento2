@@ -106,6 +106,6 @@
     }
   },
   "dependencies": {
-    "magento-coding-standard-eslint-plugin": "file:vendor/magento/magento-coding-standard/eslint"
+    "eslint-plugin-magento": "file:vendor/magento/magento-coding-standard/eslint"
   }
 }
