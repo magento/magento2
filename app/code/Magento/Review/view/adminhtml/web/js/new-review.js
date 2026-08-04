@@ -6,7 +6,8 @@ define([
     'jquery',
     'Magento_Review/js/rating',
     'prototype',
-    'Magento_Ui/js/modal/alert'
+    'Magento_Ui/js/modal/alert',
+    'mage/translate'
 ], function (jQuery, rating, prototype, alert) {
     'use strict';
 
@@ -97,6 +98,9 @@ define([
                 params;
 
             $('save_button').disabled = true;
+
+            // Serialize to a Hash (not a query string) so params.isAjax = 'true' can be assigned below;
+            // 'use strict' throws when setting a property on a primitive string.
             params = Form.serializeElements(elements, true);
 
             if (!params.isAjax) {
@@ -142,7 +146,7 @@ define([
          */
         reqFailure: function () {
             alert({
-                content: $.mage.__('We can\'t retrieve the product ID.')
+                content: jQuery.mage.__('We can\'t retrieve the product ID.')
             });
         }
     };
