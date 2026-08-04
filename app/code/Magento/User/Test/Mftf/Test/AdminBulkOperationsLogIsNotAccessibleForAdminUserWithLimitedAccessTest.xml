@@ -22,29 +22,185 @@
         </annotations>
 
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="restrictedAdminRoleMainWebsite"/>
+            <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
+                <argument name="roleName" value="{{adminProductInWebsiteRole.rolename}}"/>
+                <argument name="userPassword" value="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
+                <argument name="resourceAccess" value="Custom"/>
+                <argument name="storeName" value="{{_defaultWebsite.name}}"/>
+            </actionGroup>
+<!--        Magento_Backend::dashboard_anchor-->
+<!--        Magento_Analytics::analytics_api_anchor-->
+<!--        Magento_Sales::sales_operation_anchor-->
+<!--        Magento_Catalog::catalog_anchor-->
+<!--        Magento_Customer::customer_anchor-->
+<!--        Magento_Cart::cart_anchor-->
+<!--        Magento_Backend::myaccount_anchor-->
+<!--        Magento_Backend::marketing_anchor-->
+<!--        Magento_Backend::content_anchor-->
+<!--        Magento_Reports::report_anchor-->
+<!--        Magento_Backend::convert_anchor-->
+<!--        Magento_Backend::extensions_anchor-->
+<!--        Magento_Backend::cache_anchor-->
+<!--        Magento_Backend::system_other_settings_anchor-->
+<!--        Magento_Backend::global_search_anchor-->
+<!--        Magento_Backup::backup_anchor-->
+<!--        Magento_Indexer::index_anchor-->
+<!--        Magento_Indexer::changeMode_anchor-->
+<!--        Magento_Integration::extensions_anchor-->
+<!--        Magento_User::acl_anchor-->
+
+
+
+<!--        <item>Magento_Backend::dashboard</item>-->
+
+<!--        <item>Magento_Analytics::analytics</item>-->
+<!--        <item>Magento_Analytics::analytics_api</item>-->
+
+<!--        <item>Magento_Sales::sales</item>-->
+<!--        <item>Magento_Sales::sales_operation</item>-->
+
+<!--        <item>Magento_Catalog::catalog</item>-->
+
+<!--        <item>Magento_Customer::customer</item>-->
+
+<!--        <item>Magento_Cart::cart</item>-->
+
+<!--        <item>Magento_Backend::myaccount</item>-->
+
+<!--        <item>Magento_Backend::marketing</item>-->
+<!--        <item>Magento_Backend::content</item>-->
+<!--        <item>Magento_Reports::report</item>-->
+
+<!--        <item>Magento_Backend::stores</item>-->
+<!--        <item>Magento_Backend::convert</item>-->
+<!--        <item>Magento_Backend::extensions</item>-->
+
+<!--        <item>Magento_Backend::tools</item>-->
+<!--        <item>Magento_Backend::cache</item>-->
+
+<!--        <item>Magento_Backend::main_actions</item>-->
+<!--        <item>Magento_Backend::mass_actions</item>-->
+<!--        <item>Magento_Backend::additional_cache_management</item>-->
+
+<!--        <item>Magento_Backend::system_other_settings</item>-->
+<!--        <item>Magento_Backend::global_search</item>-->
+<!--        <item>Magento_Backend::system</item>-->
+
+<!--        <item>Magento_Backup::backup</item>-->
+
+<!--        <item>Magento_Indexer::index</item>-->
+<!--        <item>Magento_Indexer::changeMode</item>-->
+
+<!--        <item>Magento_Integration::extensions</item>-->
+
+<!--        <item>Magento_User::acl</item>-->
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="dashboardAccess">
+                <argument name="resourceId" value="Magento_Backend::dashboard_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="analyticsApiAccess">
+                <argument name="resourceId" value="Magento_Analytics::analytics_api_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="salesOperationAccess">
+                <argument name="resourceId" value="Magento_Sales::sales_operation_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="catalogAccess">
+                <argument name="resourceId" value="Magento_Catalog::catalog_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="customerAccess">
+                <argument name="resourceId" value="Magento_Customer::customer_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="cartAccess">
+                <argument name="resourceId" value="Magento_Cart::cart_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="myaccountAccess">
+                <argument name="resourceId" value="Magento_Backend::myaccount_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="marketingAccess">
+                <argument name="resourceId" value="Magento_Backend::marketing_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="contentAccess">
+                <argument name="resourceId" value="Magento_Backend::content_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="reportAccess">
+                <argument name="resourceId" value="Magento_Reports::report_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="convertAccess">
+                <argument name="resourceId" value="Magento_Backend::convert_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="extensionsAccess">
+                <argument name="resourceId" value="Magento_Backend::extensions_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="integrationExtensionsAccess">
+                <argument name="resourceId" value="Magento_Integration::integrations_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="cacheAccess">
+                <argument name="resourceId" value="Magento_Backend::cache_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="systemOtherSettingsAccess">
+                <argument name="resourceId" value="Magento_Backend::system_other_settings_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="globalSearchAccess">
+                <argument name="resourceId" value="Magento_Backend::global_search_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="backupAccess">
+                <argument name="resourceId" value="Magento_Backup::backup_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="indexAccess">
+                <argument name="resourceId" value="Magento_Indexer::index_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="changeModeAccess">
+                <argument name="resourceId" value="Magento_Indexer::changeMode_anchor"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminSelectUserRoleResourceActionGroup" stepKey="userAclAccess">
+                <argument name="resourceId" value="Magento_User::acl_anchor"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveRole"/>
         </before>
 
         <after>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+<!--            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>-->
+<!--            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>-->
 
-            <!-- Delete User -->
-            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteLimitedUser">
-                <argument name="user" value="NewAdminUser"/>
-            </actionGroup>
-
-            <!-- Delete users role -->
-            <actionGroup ref="AdminDeleteRoleByRoleNameActionGroup" stepKey="deleteRole">
-                <argument name="role" value="adminWithoutBulkActionRole"/>
-            </actionGroup>
-           <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+<!--            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">-->
+<!--                <argument name="user" value="NewAdminUser"/>-->
+<!--            </actionGroup>-->
+<!--            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteRestrictedRole">-->
+<!--                <argument name="roleName" value="{{adminProductInWebsiteRole.rolename}}"/>-->
+<!--            </actionGroup>-->
+<!--           <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>-->
         </after>
-
-        <!-- Create admin user2 who doesn't have access to "Bulk Operations". Role Resources, uncheck point with title "Bulk Operations" -->
-        <createData entity="adminWithoutBulkActionRole" stepKey="createAdminRole"/>
+<!--        <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="createNewAdminUser">-->
+<!--            <argument name="role" value="adminProductInWebsiteRole"/>-->
+<!--            <argument name="user" value="restrictedWebUser"/>-->
+<!--        </actionGroup>-->
+<!--        -->
+<!--        &lt;!&ndash; Create admin user2 who doesn't have access to "Bulk Operations". Role Resources, uncheck point with title "Bulk Operations" &ndash;&gt;-->
+<!--        <createData entity="adminWithoutBulkActionRole" stepKey="createAdminRole"/>-->
         <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
             <argument name="user" value="NewAdminUser"/>
-            <argument name="role" value="adminWithoutBulkActionRole"/>
+            <argument name="role" value="adminProductInWebsiteRole"/>
         </actionGroup>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
@@ -57,9 +213,13 @@
         <!-- Bulk operation menu item isn't visible( System > Action Logs > -Bulk Actions-) -->
         <click selector="{{AdminMenuSection.menuItem('magento-backend-system')}}" stepKey="clickSystem"/>
         <dontSeeElement selector="{{AdminMenuSection.menuItem('magento-logging-system-magento-logging-bulk-operations')}}" stepKey="dontSeeBulkOperations"/>
+        <click selector="{{AdminMenuSection.menuItem('magento-backend-system')}}" stepKey="clickSystem1"/>
+
+        <waitForElementVisible selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="waitMessagesDropdownAppears"/>
+        <conditionalClick selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" dependentSelector="{{AdminSystemMessagesSection.messagesBlock}}" visible="false" stepKey="openMessagesBlockIfCollapsed"/>
 
         <!-- Notification messages area does not have links " Dismiss All Completed" and "Tasks Your Bulk Operations Log " -->
-        <dontSeeElement selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="dontSeeSystemMessages"/>
+<!--        <dontSeeElement selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="dontSeeSystemMessages"/>-->
         <dontSeeElement selector="{{AdminSystemMessagesSection.actionMessageLog('Dismiss All Completed Tasks')}}" stepKey="dontSeeDismissAllCompleted"/>
         <dontSeeElement selector="{{AdminSystemMessagesSection.actionMessageLog('Bulk Actions Log')}}" stepKey="dontSeeTaskYourBulkOperationsLog"/>
 
@@ -69,6 +229,6 @@
 
         <!-- Access Denied -->
         <see userInput="Sorry, you need permissions to view this content." selector="{{AdminMessagesSection.accessDenied}}" stepKey="seeAccessDenied"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+<!--        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>-->
     </test>
 </tests>
