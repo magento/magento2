@@ -791,4 +791,74 @@ class ValidatorTest extends TestCase
         );
         $this->assertInstanceOf(Validator::class, $this->model->reset($addressMock));
     }
+
+    /**
+     * @param bool $stopRulesProcessing
+     * @param bool $ruleAppliedToItems
+     * @param float $expectedShippingDiscount
+     * @return void
+     */
+    #[DataProvider('dataProviderNonShippingRuleStopProcessing')]
+    public function testProcessShippingAmountNonShippingRuleStopProcessing(
+        bool $stopRulesProcessing,
+        bool $ruleAppliedToItems,
+        float $expectedShippingDiscount
+    ): void {
+        $shippingAmount = 10.0;
+
+        $rule1 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount', 'getId']
+        );
+        $rule1->method('getApplyToShipping')->willReturn(false);
+        $rule1->method('getStopRulesProcessing')->willReturn($stopRulesProcessing);
+        $rule1->method('getId')->willReturn(1);
+
+        $rule2 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount']
+        );
+        $rule2->method('getApplyToShipping')->willReturn(true);
+        $rule2->method('getStopRulesProcessing')->willReturn(false);
+        $rule2->method('getSimpleAction')->willReturn(Rule::BY_PERCENT_ACTION);
+        $rule2->method('getDiscountAmount')->willReturn(100);
+
+        $iterator = new \ArrayIterator([$rule1, $rule2]);
+        $this->ruleCollection->method('getIterator')->willReturn($iterator);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturnCallback(function ($price) {
+                return round($price, 2);
+            });
+
+        $this->utility->method('canProcessRule')->willReturn(true);
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $addressMock = $this->setupAddressMock($shippingAmount);
+
+        if ($ruleAppliedToItems) {
+            $addressMock->setAppliedRuleIds('1');
+        }
+
+        $this->model->processShippingAmount($addressMock);
+
+        self::assertEquals($expectedShippingDiscount, $addressMock->getShippingDiscountAmount());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderNonShippingRuleStopProcessing(): array
+    {
+        return [
+            'stop processing honored when rule is applied to items' => [true, true, 0.0],
+            'stop processing ignored when rule is not applied to items' => [true, false, 10.0],
+            'no stop processing allows subsequent rules' => [false, true, 10.0],
+        ];
+    }
 }

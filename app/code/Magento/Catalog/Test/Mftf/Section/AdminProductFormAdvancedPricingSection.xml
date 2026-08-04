@@ -38,5 +38,8 @@
         <element name="lastTierPriceType" type="select" selector="[data-index='tier_price'] table tbody tr.data-row:last-child [name*='[value_type]']"/>
         <element name="lastTierPriceFixedAmount" type="input" selector="[data-index='tier_price'] table tbody tr.data-row:last-child [name*='[price]']"/>
         <element name="lastTierPriceDiscountAmount" type="input" selector="[data-index='tier_price'] table tbody tr.data-row:last-child [name*='[percentage_value]']"/>
+        <element name="specialPriceFromDatePicker" type="button" selector=".product_form_product_form_advanced_pricing_modal div[data-index='special_from_date'] button.ui-datepicker-trigger"/>
+        <element name="specialPriceToDatePicker" type="button" selector=".product_form_product_form_advanced_pricing_modal div[data-index='special_to_date'] button.ui-datepicker-trigger"/>
+        <element name="datePickerWidget" type="text" selector="#ui-datepicker-div"/>
     </section>
 </sections>
