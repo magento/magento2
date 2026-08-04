@@ -162,7 +162,6 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 
     public function testLayoutObjectArgumentUpdatersDirective()
     {
-        $this->markTestSkipped('Will be fixed after MAGETWO-33840 will be done');
         $layout = $this->_getLayoutModel('arguments_object_type_updaters.xml');
 
         $expectedObjectData = [0 => 'updater call', 1 => 'updater call'];
