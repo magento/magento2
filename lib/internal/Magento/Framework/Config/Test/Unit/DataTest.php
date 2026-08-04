@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Config\Test\Unit;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Config\Data;
 use Magento\Framework\Config\ReaderInterface;
@@ -83,6 +84,33 @@ class DataTest extends TestCase
             $cacheId,
             $this->serializerMock
         );
+        $this->assertEquals($data, $config->get());
+        $this->assertEquals('b', $config->get('a'));
+    }
+
+    public function testGetConfigLoadedThroughLockWhenLockerProvided()
+    {
+        $data = ['a' => 'b'];
+        $cacheId = 'test';
+        $lockLoader = $this->createMock(LockGuardedCacheLoader::class);
+        // The whole read/generate/save must be delegated to the mutex, keyed by the cache id, instead
+        // of initData touching the cache/reader directly.
+        $this->cacheMock->expects($this->never())->method('load');
+        $this->readerMock->expects($this->never())->method('read');
+        $lockLoader->expects($this->once())
+            ->method('lockedLoadData')
+            ->with($cacheId, $this->isType('callable'), $this->isType('callable'), $this->isType('callable'))
+            ->willReturn($data);
+
+        $config = new Data(
+            $this->readerMock,
+            $this->cacheMock,
+            $cacheId,
+            $this->serializerMock,
+            null,
+            $lockLoader
+        );
+
         $this->assertEquals($data, $config->get());
         $this->assertEquals('b', $config->get('a'));
     }
