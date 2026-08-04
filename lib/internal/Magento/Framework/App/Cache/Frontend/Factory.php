@@ -571,14 +571,27 @@ class Factory
             // Create initial cache pool
             $cachePool = $cacheFactory();
 
-            // Create tag adapter for backend-specific operations
-            $adapter = $adapterProvider->createTagAdapter(
+            // Factory that (re)builds the tag adapter for a given pool. Passed to the Symfony adapter so
+            // that, after a fork, the tag adapter is rebuilt against the child's fresh pool/connection
+            // (otherwise it keeps the parent's extracted Redis socket and corrupts tag ops).
+            $adapterFactory = function ($pool) use (
+                $adapterProvider,
                 $originalBackendType,
-                $cachePool,
                 $idPrefix,
                 $isPageCache,
                 $backendOptions
-            );
+            ) {
+                return $adapterProvider->createTagAdapter(
+                    $originalBackendType,
+                    $pool,
+                    $idPrefix,
+                    $isPageCache,
+                    $backendOptions
+                );
+            };
+
+            // Create tag adapter for backend-specific operations
+            $adapter = $adapterFactory($cachePool);
 
             // Create Symfony adapter with fork detection support and tag adapter
             $result = $this->_objectManager->create(
@@ -588,6 +601,7 @@ class Factory
                     'adapter' => $adapter,
                     'defaultLifetime' => $defaultLifetime,
                     'idPrefix' => $idPrefix,
+                    'adapterFactory' => $adapterFactory,
                 ]
             );
 

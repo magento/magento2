@@ -60,6 +60,19 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     private array $connectionPool = [];
 
     /**
+     * PID that owns the pooled connections.
+     *
+     * This provider is a shared singleton, so a process that forks (e.g. parallel indexers) hands the
+     * child a connection pool that still points at the PARENT's sockets. Sharing one socket across
+     * processes interleaves the Redis/Valkey protocol and corrupts reads (garbled describeTable() etc.).
+     * Detecting a PID change lets us drop the inherited connections so the child reconnects on its own
+     * socket — mirroring the legacy Zend adapter, which re-creates its connection when the PID changes.
+     *
+     * @var int|null
+     */
+    private ?int $poolPid = null;
+
+    /**
      * Cached adapter type mappings (lowercase => canonical)
      *
      * @var array<string, string>
@@ -116,6 +129,25 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->connectionPool = [];
+        $this->poolPid = null;
+    }
+
+    /**
+     * Drop pooled connections after a fork so a child process never reuses the parent's socket.
+     *
+     * We intentionally do NOT close the inherited handles: persistent connections are process-shared,
+     * and closing a forked socket could disturb the parent. Dropping our references is enough — the
+     * child then opens a fresh connection (see the PID-scoped persistent_id in createPhpRedisConnection).
+     *
+     * @return void
+     */
+    private function resetPooledConnectionsOnFork(): void
+    {
+        $pid = getmypid();
+        if ($this->poolPid !== $pid) {
+            $this->connectionPool = [];
+            $this->poolPid = $pid;
+        }
     }
 
     /**
@@ -237,6 +269,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
+        // Fork-safety: if this process forked since the pool was built (parallel indexers, queue
+        // consumers), discard the inherited connections so we reconnect on our own socket.
+        $this->resetPooledConnectionsOnFork();
+
         // Extract connection parameters (optimized with null coalescing)
         $host = $options['server'] ?? $options['host'] ?? '127.0.0.1';
         $port = (int)($options['port'] ?? 6379);
@@ -353,9 +389,12 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // Add persistent connection parameters
         if ($persistent) {
             $dsnParams[] = 'persistent=1';
-            if ($persistentId) {
-                $dsnParams[] = 'persistent_id=' . urlencode($persistentId);
-            }
+            // Scope the persistent_id to the current PID. phpredis keys persistent connections by
+            // persistent_id, so after a fork a child re-running pconnect() with the SAME id would get
+            // the parent's shared socket back. Including the PID makes each process open its OWN
+            // persistent connection (stable within a long-lived FPM/CLI worker, isolated per fork).
+            $forkSafePersistentId = ($persistentId ?? 'default') . ':' . getmypid();
+            $dsnParams[] = 'persistent_id=' . urlencode($forkSafePersistentId);
         }
 
         // Add connection timeout parameters
@@ -497,6 +536,9 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
+        // Fork-safety: drop connections inherited from a parent process (see resetPooledConnectionsOnFork).
+        $this->resetPooledConnectionsOnFork();
+
         // Build server list (optimized)
         if (isset($options['servers'])) {
             // Multiple servers - optimize with direct assignment

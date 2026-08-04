@@ -47,6 +47,15 @@ class Symfony implements FrontendInterface
     private ?Closure $cacheFactory;
 
     /**
+     * Factory that (re)builds the tag adapter bound to a given pool. Needed so that when the pool is
+     * re-created after a fork, the tag adapter is rebuilt too — otherwise it keeps the extracted
+     * PARENT Redis connection and corrupts tag operations in the child.
+     *
+     * @var Closure|null
+     */
+    private ?Closure $adapterFactory;
+
+    /**
      * @var int
      */
     private int $pid;
@@ -121,9 +130,11 @@ class Symfony implements FrontendInterface
         Closure $cacheFactory,
         ?TagAdapterInterface $adapter = null,
         int $defaultLifetime = self::DEFAULT_LIFETIME,
-        string $idPrefix = self::DEFAULT_CACHE_PREFIX
+        string $idPrefix = self::DEFAULT_CACHE_PREFIX,
+        ?Closure $adapterFactory = null
     ) {
         $this->cacheFactory = $cacheFactory;
+        $this->adapterFactory = $adapterFactory;
         $this->pid = getmypid();
         $this->cache = $cacheFactory();
         $this->defaultLifetime = $defaultLifetime;
@@ -143,6 +154,11 @@ class Symfony implements FrontendInterface
         if ($currentPid !== $this->pid) {
             $this->parentCachePools[] = $this->cache;
             $this->cache = ($this->cacheFactory)();
+            // Rebuild the tag adapter against the NEW pool so tag operations use this process's own
+            // Redis connection instead of the parent's inherited (shared) socket.
+            if ($this->adapterFactory !== null) {
+                $this->adapter = ($this->adapterFactory)($this->cache);
+            }
             $this->pid = $currentPid;
             $this->isTagAware = null;
         }
