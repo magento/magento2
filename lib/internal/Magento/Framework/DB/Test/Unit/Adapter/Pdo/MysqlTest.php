@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql as PdoMysqlAdapter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Select;
@@ -1059,6 +1060,27 @@ class MysqlTest extends TestCase
             [new \Zend_Db_Statement_Exception('', 0, $pdoException)],
             [new \Exception()],
         ];
+    }
+
+    /**
+     * MariaDB error 1020 (record changed since last read, under innodb_snapshot_isolation) is resolved by
+     * restarting the transaction, so the adapter must surface it as a DeadlockException to be retried.
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testSnapshotIsolationErrorIsWrappedAsDeadlock(): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock([]);
+
+        $pdoException = new \PDOException('Record has changed since last read');
+        $pdoException->errorInfo = [1 => 1020];
+        $queryExecutor = static function () use ($pdoException) {
+            throw $pdoException;
+        };
+
+        $this->expectException(DeadlockException::class);
+        $this->invokeModelMethod($adapter, 'performQuery', [$queryExecutor]);
     }
 
     public function testDestruct(): void
