@@ -180,13 +180,12 @@ class FilesystemTagAdapter implements TagAdapterInterface
             return [];
         }
 
-        $ids = [];
+        $idsPerTag = [];
         foreach ($tags as $tag) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $ids = array_merge($ids, $this->getTagIds($tag));
+            $idsPerTag[] = $this->getTagIds($tag);
         }
 
-        return array_values(array_unique($ids));
+        return array_values(array_unique(array_merge(...$idsPerTag)));
     }
 
     /**
@@ -218,7 +217,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     private function getAllIds(): array
     {
-        $allIds = [];
+        $idsPerTag = [];
         $tagFiles = glob($this->tagDirectory . '*');
 
         if ($tagFiles === false) {
@@ -227,14 +226,11 @@ class FilesystemTagAdapter implements TagAdapterInterface
 
         foreach ($tagFiles as $file) {
             if (is_file($file)) {
-                $tag = basename($file);
-                $ids = $this->getTagIds($tag);
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $allIds = array_merge($allIds, $ids);
+                $idsPerTag[] = $this->getTagIds(basename($file));
             }
         }
 
-        return array_values(array_unique($allIds));
+        return array_values(array_unique(array_merge(...$idsPerTag)));
     }
 
     /**
