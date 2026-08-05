@@ -150,7 +150,8 @@ class DataProviderTest extends TestCase
     private function createOrderItemMock(int $itemId, int $orderId, int $productId)
     {
         $orderItem = $this->createMock(OrderItemModel::class);
-        $orderItem->method('getItemId')->willReturn($itemId);
+        // getItemId() is a DB value surfaced as a string; the provider base64_encodes it.
+        $orderItem->method('getItemId')->willReturn((string)$itemId);
         $orderItem->method('getOrderId')->willReturn($orderId);
         $orderItem->method('getProductId')->willReturn($productId);
         $orderItem->method('getName')->willReturn('Item name');
