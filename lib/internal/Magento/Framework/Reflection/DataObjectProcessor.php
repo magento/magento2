@@ -7,7 +7,6 @@ namespace Magento\Framework\Reflection;
 
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\DataObject\PropertyMetadataProvider;
 
@@ -115,7 +114,9 @@ class DataObjectProcessor
             $outputData[$key] = $value;
         }
 
-        $outputData = $this->addPublicProperties($dataObject, $dataObjectType, $outputData, $methodFieldNames);
+        if ($dataObject instanceof \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface) {
+            $outputData = $this->addPublicProperties($dataObject, $dataObjectType, $outputData, $methodFieldNames);
+        }
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
 
