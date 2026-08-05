@@ -83,6 +83,11 @@ class OptionManagement
             return;
         }
 
+        $optionsValue = $option->getValue() !== null ? trim((string)$option->getValue()) : '';
+        if ($optionsValue === '' || $optionsValue === (string)$optionId) {
+            return;
+        }
+
         $this->setSwatchAttributeOption($attribute, $option, (string)$optionId);
     }
 

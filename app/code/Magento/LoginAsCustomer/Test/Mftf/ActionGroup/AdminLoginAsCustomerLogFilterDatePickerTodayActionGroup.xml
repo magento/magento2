@@ -14,10 +14,14 @@
         </annotations>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.filters}}" stepKey="clickFilters"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerFrom}}" stepKey="clickFromDate"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
+        <waitForElementVisible selector="{{AdminLoginAsCustomerLogToolbarSection.datepickerOverlay}}" stepKey="waitForFromDatePicker"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickFromToday"/>
+        <waitForElementNotVisible selector="{{AdminLoginAsCustomerLogToolbarSection.datepickerOverlay}}" stepKey="waitForFromDatePickerClosed"/>
         <waitForElementClickable selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="waitForToDateClickable"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="clickToDate"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickTodayDateAgain"/>
+        <waitForElementVisible selector="{{AdminLoginAsCustomerLogToolbarSection.datepickerOverlay}}" stepKey="waitForToDatePicker"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
+        <waitForElementNotVisible selector="{{AdminLoginAsCustomerLogToolbarSection.datepickerOverlay}}" stepKey="waitForToDatePickerClosed"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
     </actionGroup>
 </actionGroups>
