@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\Context;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -22,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 class PageTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var PageDataProvider|MockObject
      */
@@ -114,7 +117,10 @@ class PageTest extends TestCase
         $expectedData = ['title' => 'Page Title'];
 
         $contextMock = $this->createMock(Context::class);
-        $contextExtensionMock = $this->createMock(ContextExtensionInterface::class);
+        $contextExtensionMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
         $storeMock = $this->createMock(StoreInterface::class);
 
         $contextMock->expects($this->once())
