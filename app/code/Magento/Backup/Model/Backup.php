@@ -22,9 +22,9 @@ use Magento\Framework\Filesystem\DriverPool;
 class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {
     /**
-     * Compress rate
+     * Compression level used when the backup archive is written
      */
-    const COMPRESS_RATE = 9;
+    public const COMPRESS_RATE = 9;
 
     /**
      * Type of backup file
@@ -58,8 +58,6 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
     protected $_localeResolver;
 
     /**
-     * Backend auth session
-     *
      * @var \Magento\Backend\Model\Auth\Session
      */
     protected $_backendAuthSession;
@@ -244,8 +242,9 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
     /**
      * Return content of backup file
      *
-     * @return array
+     * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function &getFile()
     {
@@ -253,7 +252,10 @@ class Backup extends \Magento\Framework\DataObject implements \Magento\Framework
             throw new \Magento\Framework\Exception\LocalizedException(__('The backup file does not exist.'));
         }
 
-        return $this->varDirectory->read($this->_getFilePath());
+        // the returned expression must be a variable, otherwise PHP raises a notice for the by-reference return
+        $contents = $this->varDirectory->readFile($this->_getFilePath());
+
+        return $contents;
     }
 
     /**
