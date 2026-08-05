@@ -26,9 +26,9 @@ class DataObjectProcessor
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
-     * @param PropertyMetadataProvider $propertyMetadataProvider
      * @param array $processors
      * @param array $excludedMethodsClassMap
+     * @param PropertyMetadataProvider $propertyMetadataProvider
      */
     public function __construct(
         private readonly MethodsMap $methodsMapProcessor,

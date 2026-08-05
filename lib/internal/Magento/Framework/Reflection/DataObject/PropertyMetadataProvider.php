@@ -83,11 +83,11 @@ class PropertyMetadataProvider
     {
         $typeNames = [];
         foreach ($type->getTypes() as $unionType) {
-            if ($unionType instanceof \ReflectionNamedType) {
-                $name = $unionType->getName();
-                if ($name !== 'null') {
-                    $typeNames[] = $name;
-                }
+            if (
+                $unionType instanceof \ReflectionNamedType
+                && $unionType->getName() !== 'null'
+            ) {
+                $typeNames[] = $unionType->getName();
             }
         }
 

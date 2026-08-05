@@ -228,31 +228,16 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      */
     private function getConstructorData(string $className, array $data): array
     {
-        $constructor = $this->getConstructorReflection($className);
-        if ($constructor === null) {
-            return [];
-        }
-
-        return $this->getConstructorArguments($constructor, $data);
-    }
-
-    /**
-     * Get constructor reflection for a class.
-     *
-     * @param string $className
-     * @return MethodReflection|null
-     * @throws \ReflectionException
-     */
-    private function getConstructorReflection(string $className): ?MethodReflection
-    {
         $preferenceClass = $this->config->getPreference($className);
         $class = new ClassReflection($preferenceClass ?: $className);
 
         try {
-            return $class->getMethod('__construct');
+            $constructor = $class->getMethod('__construct');
         } catch (\ReflectionException $e) {
-            return null;
+            return [];
         }
+
+        return $this->getConstructorArguments($constructor, $data);
     }
 
     /**
@@ -287,13 +272,26 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
      */
     private function getConstructorParameterValue(\ReflectionParameter $parameter, array $data)
     {
-        [$hasValue, $parameterValue] = $this->getParameterValue($data, $parameter->getName());
-        if (!$hasValue) {
-            return null;
+        $parameterName = $parameter->getName();
+
+        if (isset($data[$parameterName])) {
+            $parameterValue = $data[$parameterName];
+        } else {
+            $snakeCaseParameterName =
+                SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
+
+            if (!isset($data[$snakeCaseParameterName])) {
+                return null;
+            }
+
+            $parameterValue = $data[$snakeCaseParameterName];
         }
 
         $parameterType = $this->typeProcessor->getParamType($parameter);
-        if (!$this->isAllowedConstructorType($parameterType)) {
+        if (!(
+            $this->typeProcessor->isTypeSimple($parameterType)
+            || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1
+        )) {
             return null;
         }
 
@@ -304,39 +302,6 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             // By not returning the constructor value, we will automatically fall back to the "setters" way.
             return null;
         }
-    }
-
-    /**
-     * Retrieve input value for a constructor parameter.
-     *
-     * @param array $data
-     * @param string $parameterName
-     * @return array [bool $hasValue, mixed $value]
-     */
-    private function getParameterValue(array $data, string $parameterName): array
-    {
-        if (isset($data[$parameterName])) {
-            return [true, $data[$parameterName]];
-        }
-
-        $snakeCaseParameterName = SimpleDataObjectConverter::camelCaseToSnakeCase($parameterName);
-        if (isset($data[$snakeCaseParameterName])) {
-            return [true, $data[$snakeCaseParameterName]];
-        }
-
-        return [false, null];
-    }
-
-    /**
-     * Allow only simple types or Api Data Objects for constructor hydration.
-     *
-     * @param string $parameterType
-     * @return bool
-     */
-    private function isAllowedConstructorType(string $parameterType): bool
-    {
-        return $this->typeProcessor->isTypeSimple($parameterType)
-            || preg_match('~\\\\?\w+\\\\\w+\\\\Api\\\\Data\\\\~', $parameterType) === 1;
     }
 
     /**
