@@ -83,8 +83,7 @@ class PropertyMetadataProvider
     {
         $typeNames = [];
         foreach ($type->getTypes() as $unionType) {
-            if (
-                $unionType instanceof \ReflectionNamedType
+            if ($unionType instanceof \ReflectionNamedType
                 && $unionType->getName() !== 'null'
             ) {
                 $typeNames[] = $unionType->getName();
@@ -99,6 +98,14 @@ class PropertyMetadataProvider
             return $typeNames[0];
         }
 
+        return $this->resolvePreferredType($typeNames);
+    }
+
+    /**
+     * @param string[] $typeNames
+     */
+    private function resolvePreferredType(array $typeNames): string
+    {
         // Prefer a class/interface type when multiple union types are present
         foreach ($typeNames as $name) {
             if ($this->isObjectType($name)) {
@@ -107,7 +114,18 @@ class PropertyMetadataProvider
         }
 
         // Prefer non-builtin types if any (e.g., avoid scalar/array/mixed)
-        $builtin = ['int', 'float', 'string', 'bool', 'array', 'iterable', 'mixed', 'callable', 'object'];
+        $builtin = [
+            'int',
+            'float',
+            'string',
+            'bool',
+            'array',
+            'iterable',
+            'mixed',
+            'callable',
+            'object'
+        ];
+
         foreach ($typeNames as $name) {
             if (!in_array($name, $builtin, true)) {
                 return $name;
