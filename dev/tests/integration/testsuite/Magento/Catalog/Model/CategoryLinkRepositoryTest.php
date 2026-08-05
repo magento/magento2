@@ -25,6 +25,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 #[AppArea('crontab')]
 #[DbIsolation(false)]
 class CategoryLinkRepositoryTest extends TestCase
