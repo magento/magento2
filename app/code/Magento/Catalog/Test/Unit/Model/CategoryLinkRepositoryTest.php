@@ -86,7 +86,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['getPostedProducts', 'setPostedProducts', 'getProductsPosition', 'save']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
@@ -116,7 +115,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
@@ -148,7 +146,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -174,7 +171,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -205,7 +201,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -234,7 +229,6 @@ class CategoryLinkRepositoryTest extends TestCase
             Category::class,
             ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
         );
-        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);

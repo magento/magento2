@@ -154,6 +154,8 @@ class CategoryTest extends AbstractBackendController
         $categoryId = 3;
         $category = $this->categoryRepository->get($categoryId);
         $newUrlPath = 'test_url_path';
+        $defaultUrlKey = $category->getData('url_key');
+        $defaultUrlPath = $category->getData('url_path');
 
         // update url_path and check it
         $category->setStoreId(1);
@@ -183,8 +185,9 @@ class CategoryTest extends AbstractBackendController
          * saves the category via resource model, so the cache in the repository is not cleaned
          */
         $newCategoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
-        $category = $newCategoryRepository->get($categoryId);
-        $this->assertEquals($newUrlPath, $category->getData('url_key'));
+        $category = $newCategoryRepository->get($categoryId, Store::DEFAULT_STORE_ID);
+        $this->assertEquals($defaultUrlKey, $category->getData('url_key'));
+        $this->assertEquals($defaultUrlPath, $category->getData('url_path'));
     }
 
     /**
