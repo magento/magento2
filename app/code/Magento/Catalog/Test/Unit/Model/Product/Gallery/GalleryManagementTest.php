@@ -159,6 +159,20 @@ class GalleryManagementTest extends TestCase
     /**
      * @return void
      */
+    public function testCreateWithMissingContentThrowsInputException(): void
+    {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('The image content is invalid. Verify the content and try again.');
+        $this->mediaGalleryEntryMock->method('getContent')->willReturn(null);
+
+        $this->contentValidatorMock->expects($this->never())->method('isValid');
+
+        $this->model->create('sku', $this->mediaGalleryEntryMock);
+    }
+
+    /**
+     * @return void
+     */
     public function testCreateWithInvalidImageException(): void
     {
         $this->expectException('Magento\Framework\Exception\InputException');
