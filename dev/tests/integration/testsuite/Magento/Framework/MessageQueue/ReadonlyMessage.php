@@ -10,7 +10,7 @@ namespace Magento\Framework\MessageQueue;
 /**
  * Simple DTO used by message queue integration tests.
  */
-class ReadonlyMessage
+class ReadonlyMessage implements \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface
 {
     /**
      * @param int $entityId
