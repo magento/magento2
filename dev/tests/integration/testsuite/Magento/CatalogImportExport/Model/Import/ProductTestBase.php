@@ -204,6 +204,20 @@ class ProductTestBase extends TestCase
                 'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
                 'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
+            // Unique-content fixtures for product_image_import_mode=replace tests (shared
+            // magento_additional_image_*.jpg binaries are identical and collide on content-hash match).
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_a.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_a.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_b.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_b.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_c.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_c.jpg',
+            ],
         ];
 
         foreach ($items as $item) {
@@ -284,10 +298,14 @@ class ProductTestBase extends TestCase
      *
      * @param string $fileName
      * @param int $expectedErrors
+     * @param string $imageImportMode
      * @return void
      */
-    protected function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
-    {
+    protected function importDataForMediaTest(
+        string $fileName,
+        int $expectedErrors = 0,
+        string $imageImportMode = Import::PRODUCT_IMAGE_IMPORT_MODE_ADD
+    ) {
         $this->createNewModel();
         $filesystem = $this->objectManager->get(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -308,7 +326,8 @@ class ProductTestBase extends TestCase
             [
                 'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
                 'entity' => 'catalog_product',
-                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import'
+                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import',
+                Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE => $imageImportMode,
             ]
         );
         $uploader = $this->_model->getUploader();

@@ -188,6 +188,122 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceImageImportModeRemovesUnlistedAdditionalImages(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $product = $this->getProductBySku('simple_new');
+        $this->assertCount(5, $product->getMediaGalleryImages()->getItems());
+
+        $this->importDataForMediaTest(
+            'import_media_replace_additional_images.csv',
+            0,
+            \Magento\ImportExport\Model\Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $product = $this->getProductBySku('simple_new');
+        $files = array_map(
+            static function (\Magento\Framework\DataObject $item) {
+                return $item->getFile();
+            },
+            array_values($product->getMediaGalleryImages()->getItems())
+        );
+
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertCount(4, $files);
+
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+
+        $this->importDataForMediaTest('import_media_replace_append.csv');
+        $product = $this->getProductBySku('simple_new');
+        $filesAfterAppend = array_map(
+            static function (\Magento\Framework\DataObject $item) {
+                return $item->getFile();
+            },
+            array_values($product->getMediaGalleryImages()->getItems())
+        );
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $filesAfterAppend);
+        $this->assertContains('/r/e/repro_replace_additional_c.jpg', $filesAfterAppend);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $filesAfterAppend);
+        $this->assertGreaterThanOrEqual(5, count($filesAfterAppend));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+    }
+
+    /**
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceImageImportModeWithEmptyAdditionalImagesKeepsRoles(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $this->assertCount(5, $this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
+
+        $this->importDataForMediaTest(
+            'import_media_replace_empty_additional.csv',
+            0,
+            \Magento\ImportExport\Model\Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $product = $this->getProductBySku('simple_new');
+        $files = array_map(
+            static function (\Magento\Framework\DataObject $item) {
+                return $item->getFile();
+            },
+            array_values($product->getMediaGalleryImages()->getItems())
+        );
+
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
+        // Roles only (base+swatch share magento_image.jpg): three gallery entries.
+        $this->assertCount(3, $files);
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+    }
+
+    /**
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceWithoutAdditionalImagesColumnDoesNotDropGallery(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $this->assertCount(5, $this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
+
+        $this->importDataForMediaTest(
+            'import_media_replace_roles_only.csv',
+            0,
+            \Magento\ImportExport\Model\Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $product = $this->getProductBySku('simple_new');
+        $files = array_map(
+            static function (\Magento\Framework\DataObject $item) {
+                return $item->getFile();
+            },
+            array_values($product->getMediaGalleryImages()->getItems())
+        );
+
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertCount(5, $files);
+    }
+
+    /**
      * Test that errors occurred during importing images are logged.
      *
      * @magentoDataFixture mediaImportImageFixture

@@ -765,6 +765,11 @@ class Product extends AbstractEntity
     private $productRepository;
 
     /**
+     * @var array<string, array<string, string|null>>
+     */
+    private $productImageRolesCache = [];
+
+    /**
      * @var StatusProcessor
      */
     private $statusProcessor;
@@ -1687,7 +1692,12 @@ class Product extends AbstractEntity
             $labelsForUpdate = [];
             $imagesForChangeVisibility = [];
             $uploadedImages = [];
+            $imagesToKeepBySku = [];
+            $imageReplaceSkus = [];
             $existingImages = $this->getExistingImages($bunch);
+            if ($this->isImageReplaceMode()) {
+                $this->warmProductImageRolesCache($bunch);
+            }
             $attributes = [];
             foreach ($bunch as $rowNum => $rowData) {
                 try {
@@ -1742,7 +1752,9 @@ class Product extends AbstractEntity
                         $uploadedImages,
                         $imagesForChangeVisibility,
                         $labelsForUpdate,
-                        $mediaGallery
+                        $mediaGallery,
+                        $imagesToKeepBySku,
+                        $imageReplaceSkus
                     );
                     $this->saveProductAttributesPhase(
                         $rowData,
@@ -1766,6 +1778,14 @@ class Product extends AbstractEntity
             $this->_saveProductCategories($this->categoriesCache);
             $this->_saveProductTierPrices($tierPrices);
             $this->_saveMediaGallery($mediaGallery);
+            [$imagesToRemove, $mediaGalleryRemovedSkus] = $this->collectImagesToRemove(
+                $imageReplaceSkus,
+                $imagesToKeepBySku,
+                $existingImages
+            );
+            if ($imagesToRemove) {
+                $this->mediaProcessor->removeProductImages($imagesToRemove);
+            }
             $this->updateMediaGalleryVisibility($imagesForChangeVisibility);
             $this->updateMediaGalleryLabels($labelsForUpdate);
             $this->_saveProductAttributes($attributes);
@@ -1776,6 +1796,7 @@ class Product extends AbstractEntity
                     'bunch' => $bunch,
                     'media_gallery' => $mediaGallery,
                     'media_gallery_labels' => $labelsForUpdate,
+                    'media_gallery_removed_skus' => $mediaGalleryRemovedSkus,
                 ]
             );
         }
@@ -1924,9 +1945,12 @@ class Product extends AbstractEntity
      * @param array $imagesForChangeVisibility
      * @param array $labelsForUpdate
      * @param array $mediaGallery
+     * @param array $imagesToKeepBySku
+     * @param array $imageReplaceSkus
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @return void
      */
     private function saveProductMediaGalleryPhase(
@@ -1938,7 +1962,9 @@ class Product extends AbstractEntity
         array &$uploadedImages,
         array &$imagesForChangeVisibility,
         array &$labelsForUpdate,
-        array &$mediaGallery
+        array &$mediaGallery,
+        array &$imagesToKeepBySku = [],
+        array &$imageReplaceSkus = []
     ) : void {
         $rowSku = $rowData[self::COL_SKU];
         $rowSkuNormalized = mb_strtolower($rowSku);
@@ -1959,8 +1985,21 @@ class Product extends AbstractEntity
                 $rowImages[self::COL_MEDIA_IMAGE][] = $image;
             }
         }
+        $hasAdditionalImagesColumn = $this->rowHasAdditionalImagesColumn($rowData);
         $rowData[self::COL_MEDIA_IMAGE] = [];
         list($rowImages, $rowData) = $this->clearNoSelectionImages($rowImages, $rowData);
+
+        $trackReplaceKeep = $this->isImageReplaceMode()
+            && (int)$storeId === Store::DEFAULT_STORE_ID
+            && $hasAdditionalImagesColumn;
+        if ($trackReplaceKeep) {
+            $imageReplaceSkus[$rowSkuNormalized] = $rowSku;
+            $imagesToKeepBySku[$rowSkuNormalized] = $imagesToKeepBySku[$rowSkuNormalized] ?? [];
+            foreach ($this->getProtectedRoleImagePaths($rowSku, $rowData) as $protectedPath) {
+                $imagesToKeepBySku[$rowSkuNormalized][$protectedPath] = true;
+            }
+        }
+
         /*
          * Note: to avoid problems with undefined sorting, the value of media gallery items positions
          * must be unique in scope of one product.
@@ -2012,6 +2051,9 @@ class Product extends AbstractEntity
                     continue;
                 }
                 $uploadedFileNormalized = ltrim($uploadedFile, '/\\');
+                if ($trackReplaceKeep) {
+                    $imagesToKeepBySku[$rowSkuNormalized][$uploadedFileNormalized] = true;
+                }
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
@@ -2060,6 +2102,176 @@ class Product extends AbstractEntity
                 }
             }
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isImageReplaceMode(): bool
+    {
+        $mode = $this->_parameters[Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE]
+            ?? Import::PRODUCT_IMAGE_IMPORT_MODE_ADD;
+
+        return $mode === Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+            && $this->getBehavior() === Import::BEHAVIOR_APPEND;
+    }
+
+    /**
+     * Whether the row includes the additional_images column (mapped or raw).
+     *
+     * @param array $rowData
+     * @return bool
+     */
+    private function rowHasAdditionalImagesColumn(array $rowData): bool
+    {
+        return array_key_exists(self::COL_MEDIA_IMAGE, $rowData)
+            || array_key_exists('additional_images', $rowData);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getMediaImageRoleAttributes(): array
+    {
+        return array_values(
+            array_filter(
+                $this->_imagesArrayKeys,
+                static function (string $code): bool {
+                    return $code !== self::COL_MEDIA_IMAGE;
+                }
+            )
+        );
+    }
+
+    /**
+     * @param array $bunch
+     * @return void
+     */
+    private function warmProductImageRolesCache(array $bunch): void
+    {
+        $skus = [];
+        foreach ($bunch as $rowData) {
+            if (!empty($rowData[self::COL_SKU])) {
+                $skus[] = (string)$rowData[self::COL_SKU];
+            }
+        }
+        if ($skus === []) {
+            return;
+        }
+        $rolesBySku = $this->mediaProcessor->getProductImageRoles(
+            array_values(array_unique($skus)),
+            $this->getMediaImageRoleAttributes()
+        );
+        foreach ($rolesBySku as $skuKey => $roles) {
+            $this->productImageRolesCache[$skuKey] = $roles;
+        }
+    }
+
+    /**
+     * @param string $sku
+     * @param array $rowData
+     * @return string[]
+     */
+    private function getProtectedRoleImagePaths(string $sku, array $rowData): array
+    {
+        $protected = [];
+        foreach ($this->getMediaImageRoleAttributes() as $attributeCode) {
+            if (array_key_exists($attributeCode, $rowData)) {
+                continue;
+            }
+            $path = $this->getExistingRoleImagePath($sku, $attributeCode);
+            if ($path !== null) {
+                $protected[] = $path;
+            }
+        }
+        return $protected;
+    }
+
+    /**
+     * @param string $sku
+     * @param string $attributeCode
+     * @return string|null
+     */
+    private function getExistingRoleImagePath(string $sku, string $attributeCode): ?string
+    {
+        $skuKey = mb_strtolower($sku);
+        if (!isset($this->productImageRolesCache[$skuKey])) {
+            $roles = [];
+            try {
+                $product = $this->productRepository->get($sku);
+                foreach ($this->getMediaImageRoleAttributes() as $roleCode) {
+                    $roles[$roleCode] = $product->getData($roleCode);
+                }
+            } catch (NoSuchEntityException) {
+                $roles = [];
+            }
+            $this->productImageRolesCache[$skuKey] = $roles;
+        }
+        $path = $this->productImageRolesCache[$skuKey][$attributeCode] ?? null;
+        if (!$path || $path === 'no_selection') {
+            return null;
+        }
+        return ltrim((string)$path, '/\\');
+    }
+
+    /**
+     * @param array $imageReplaceSkus
+     * @param array $imagesToKeepBySku
+     * @param array $existingImages
+     * @return array{0: array, 1: string[]} [removals, product SKUs that lost gallery images]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function collectImagesToRemove(
+        array $imageReplaceSkus,
+        array $imagesToKeepBySku,
+        array $existingImages
+    ): array {
+        if (!$imageReplaceSkus || !$this->isImageReplaceMode()) {
+            return [[], []];
+        }
+        $removals = [];
+        $removedSkus = [];
+        $seen = [];
+        $linkField = $this->getProductEntityLinkField();
+        foreach ($imageReplaceSkus as $skuNormalized => $originalSku) {
+            $keep = $imagesToKeepBySku[$skuNormalized] ?? [];
+            $skuHadRemoval = false;
+            foreach ($existingImages as $bySku) {
+                if (!isset($bySku[$skuNormalized])) {
+                    continue;
+                }
+                foreach ($bySku[$skuNormalized] as $path => $imageData) {
+                    if (!isset($imageData['value_id'], $imageData[$linkField])) {
+                        continue;
+                    }
+                    $mediaType = $imageData['media_type'] ?? null;
+                    if ($mediaType !== null && $mediaType !== '' && $mediaType !== 'image') {
+                        continue;
+                    }
+                    $pathNormalized = ltrim((string)$path, '/\\');
+                    $valueNormalized = isset($imageData['value'])
+                        ? ltrim((string)$imageData['value'], '/\\')
+                        : $pathNormalized;
+                    if (isset($keep[$pathNormalized]) || isset($keep[$valueNormalized])) {
+                        continue;
+                    }
+                    $key = $imageData['value_id'] . ':' . $imageData[$linkField];
+                    if (isset($seen[$key])) {
+                        continue;
+                    }
+                    $seen[$key] = true;
+                    $skuHadRemoval = true;
+                    $removals[] = [
+                        'value_id' => $imageData['value_id'],
+                        $linkField => $imageData[$linkField],
+                    ];
+                }
+            }
+            if ($skuHadRemoval) {
+                $removedSkus[] = (string)$originalSku;
+            }
+        }
+        return [$removals, array_values(array_unique($removedSkus))];
     }
 
     /**

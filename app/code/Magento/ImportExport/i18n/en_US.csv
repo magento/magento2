@@ -130,3 +130,7 @@ Summary,Summary
 "Please provide valid export file name","Please provide valid export file name"
 "%1 is not a valid file","%1 is not a valid file"
 "Content of uploaded file was changed, please re-upload the file","Content of uploaded file was changed, please re-upload the file"
+"Product Images Import Mode","Product Images Import Mode"
+"Add new images only (default)","Add new images only (default)"
+"Replace existing images with images from file","Replace existing images with images from file"
+"Add keeps existing images. Replace removes gallery images not listed in additional_images. Image roles are kept. No effect if additional_images is omitted.","Add keeps existing images. Replace removes gallery images not listed in additional_images. Image roles are kept. No effect if additional_images is omitted."

@@ -270,6 +270,113 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Unlink gallery images from products (links/values only; not shared files).
+     *
+     * @param array $removals
+     * @return void
+     */
+    public function removeProductImages(array $removals): void
+    {
+        if (empty($removals)) {
+            return;
+        }
+        $this->initMediaGalleryResources();
+        $linkField = $this->getProductEntityLinkField();
+        $pairs = [];
+        foreach ($removals as $removal) {
+            if (!isset($removal['value_id'], $removal[$linkField])) {
+                continue;
+            }
+            $valueId = (int)$removal['value_id'];
+            $productId = (int)$removal[$linkField];
+            $key = $valueId . ':' . $productId;
+            if (isset($pairs[$key])) {
+                continue;
+            }
+            $pairs[$key] = [$valueId, $productId];
+        }
+        if (empty($pairs)) {
+            return;
+        }
+        $conditions = [];
+        foreach ($pairs as [$valueId, $productId]) {
+            $conditions[] = sprintf(
+                '(%s AND %s)',
+                $this->connection->quoteInto('value_id = ?', $valueId),
+                $this->connection->quoteInto($linkField . ' = ?', $productId)
+            );
+        }
+        $where = implode(' OR ', $conditions);
+        $this->connection->delete($this->mediaGalleryEntityToValueTableName, $where);
+        $this->connection->delete($this->mediaGalleryValueTableName, $where);
+    }
+
+    /**
+     * @param string[] $skus
+     * @param string[] $roleAttributeCodes
+     * @return array
+     */
+    public function getProductImageRoles(array $skus, array $roleAttributeCodes): array
+    {
+        $result = [];
+        if (empty($skus) || empty($roleAttributeCodes)) {
+            return $result;
+        }
+        foreach ($skus as $sku) {
+            $result[mb_strtolower((string)$sku)] = [];
+        }
+
+        $attributeIdToCode = [];
+        $attributeIdsByTable = [];
+        foreach ($roleAttributeCodes as $attributeCode) {
+            $attribute = $this->getResource()->getAttribute($attributeCode);
+            if (!$attribute || !$attribute->getId()) {
+                continue;
+            }
+            $attributeId = (int)$attribute->getId();
+            $attributeIdToCode[$attributeId] = $attributeCode;
+            $backendTable = $attribute->getBackendTable();
+            $attributeIdsByTable[$backendTable][] = $attributeId;
+        }
+        if (empty($attributeIdToCode)) {
+            return $result;
+        }
+
+        $this->initMediaGalleryResources();
+        $linkField = $this->getProductEntityLinkField();
+        foreach ($attributeIdsByTable as $backendTable => $attributeIds) {
+            $select = $this->connection->select()
+                ->from(
+                    ['e' => $this->productEntityTableName],
+                    ['sku' => 'e.sku']
+                )->joinInner(
+                    ['v' => $backendTable],
+                    sprintf('e.%1$s = v.%1$s', $linkField),
+                    ['attribute_id' => 'v.attribute_id', 'value' => 'v.value']
+                )->where(
+                    'e.sku IN (?)',
+                    $skus
+                )->where(
+                    'v.attribute_id IN (?)',
+                    $attributeIds
+                )->where(
+                    'v.store_id = ?',
+                    Store::DEFAULT_STORE_ID
+                );
+            foreach ($this->connection->fetchAll($select) as $row) {
+                $skuKey = mb_strtolower((string)$row['sku']);
+                $code = $attributeIdToCode[(int)$row['attribute_id']] ?? null;
+                if ($code === null) {
+                    continue;
+                }
+                $result[$skuKey][$code] = $row['value'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Update media gallery labels.
      *
      * @param array $labels
@@ -355,7 +462,10 @@ class MediaGalleryProcessor
         );
         $select = $this->connection->select()->from(
             ['mg' => $this->mediaGalleryTableName],
-            ['value' => 'mg.value']
+            [
+                'value' => 'mg.value',
+                'media_type' => 'mg.media_type',
+            ]
         )->joinInner(
             ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',
