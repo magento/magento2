@@ -57,15 +57,7 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         $data = $this->attributeResource->getConnection()->fetchAll($select);
 
         if ($superAttribute->getSourceModel()) {
-            $options = $superAttribute->getSource()->getAllOptions(false);
-
-            $optionLabels = [];
-            foreach ($options as $option) {
-                $optionValue = $option['value'] ?? null;
-                if ($optionValue !== null) {
-                    $optionLabels[$optionValue] = $option['label'];
-                }
-            }
+            $optionLabels = $this->getOptionLabels($superAttribute, $this->getValueIndexes($data));
 
             foreach ($data as $key => $value) {
                 $valueIndex = $value['value_index'] ?? null;
@@ -78,5 +70,57 @@ class AttributeOptionProvider implements AttributeOptionProviderInterface
         }
 
         return $data;
+    }
+
+    /**
+     * Collect distinct option value indexes present in the fetched rows
+     *
+     * @param array $data
+     * @return array
+     */
+    private function getValueIndexes(array $data): array
+    {
+        $valueIndexes = [];
+        foreach ($data as $row) {
+            $valueIndex = $row['value_index'] ?? null;
+            if ($valueIndex !== null) {
+                $valueIndexes[$valueIndex] = $valueIndex;
+            }
+        }
+
+        return array_values($valueIndexes);
+    }
+
+    /**
+     * Get option labels indexed by option value
+     *
+     * Only the options used by the product are loaded when the source supports it, since loading every option of
+     * the attribute is prohibitively slow for attributes with a large number of options.
+     *
+     * @param AbstractAttribute $superAttribute
+     * @param array $valueIndexes
+     * @return array
+     */
+    private function getOptionLabels(AbstractAttribute $superAttribute, array $valueIndexes): array
+    {
+        if (!$valueIndexes) {
+            return [];
+        }
+
+        $source = $superAttribute->getSource();
+        // getSpecificOptions() is not a part of the source contract, so custom source models may not implement it
+        $options = method_exists($source, 'getSpecificOptions')
+            ? $source->getSpecificOptions($valueIndexes, false)
+            : $source->getAllOptions(false);
+
+        $optionLabels = [];
+        foreach ($options as $option) {
+            $optionValue = $option['value'] ?? null;
+            if ($optionValue !== null) {
+                $optionLabels[$optionValue] = $option['label'];
+            }
+        }
+
+        return $optionLabels;
     }
 }
