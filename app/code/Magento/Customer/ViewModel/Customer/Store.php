@@ -64,8 +64,7 @@ class Store implements OptionSourceInterface
      */
     public function toOptionArray(): array
     {
-        return (bool)$this->configShare->isWebsiteScope() ? $this->getStoreOptions()
-            : $this->getStoreOptionsWithCurrentWebsiteId();
+        return $this->getStoreOptions();
     }
 
     /**
@@ -99,32 +98,5 @@ class Store implements OptionSourceInterface
         }
 
         return $options;
-    }
-
-    /**
-     * Adding current website ID to options list
-     *
-     * @return array
-     */
-    private function getStoreOptionsWithCurrentWebsiteId(): array
-    {
-        $options = $this->systemStore->getStoreValuesForForm();
-        $websites = $this->systemStore->getWebsiteCollection();
-        $allOptions = [];
-
-        foreach ($websites as $website) {
-            foreach ($options as $key => $option) {
-                $options[$key]['website_id'] = $website->getId();
-                if (is_array($option['value']) && !empty($option['value'])) {
-                    foreach ($option['value'] as $storeViewKey => $storeView) {
-                        $storeView['website_id'] = $website->getId();
-                        $options[$key]['value'][$storeViewKey] = $storeView;
-                    }
-                }
-                $allOptions[] = $options[$key];
-            }
-        }
-
-        return $allOptions;
     }
 }
