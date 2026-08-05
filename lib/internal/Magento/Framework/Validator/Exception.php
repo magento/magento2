@@ -2,8 +2,8 @@
 /**
  * \Exception class for validator
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Validator;
 
@@ -34,8 +34,8 @@ class Exception extends InputException
      * @param int $code
      */
     public function __construct(
-        Phrase $phrase = null,
-        \Exception $cause = null,
+        ?Phrase $phrase = null,
+        ?\Exception $cause = null,
         array $messages = [],
         $code = 0
     ) {

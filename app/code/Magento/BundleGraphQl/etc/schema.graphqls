@@ -1,5 +1,5 @@
-# Copyright © Magento, Inc. All rights reserved.
-# See COPYING.txt for license details.
+# Copyright 2018 Adobe.
+# All Rights Reserved.
 
 type Mutation {
     addBundleProductsToCart(input: AddBundleProductsToCartInput @doc(description: "An input object that defines which bundle products to add to the cart.")): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description: "Add one or more bundle products to the specified cart. We recommend using `addProductsToCart` instead.")
@@ -103,6 +103,7 @@ enum ShipBundleItemsEnum @doc(description: "Defines whether bundle items must be
 
 type BundleOrderItem implements OrderItemInterface @doc(description: "Defines bundle product options for `OrderItemInterface`.") {
     bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+    parent_sku: String @doc(description: "The SKU of parent product.")
 }
 
 type BundleInvoiceItem implements InvoiceItemInterface @doc(description: "Defines bundle product options for `InvoiceItemInterface`.") {

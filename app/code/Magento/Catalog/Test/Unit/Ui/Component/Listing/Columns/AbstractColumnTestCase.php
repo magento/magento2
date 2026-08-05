@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,14 +46,9 @@ abstract class AbstractColumnTestCase extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $this->uiComponentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->processorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactoryMock = $this->createMock(UiComponentFactory::class);
+        $this->processorMock = $this->createMock(Processor::class);
 
         $this->contextMock->expects($this->never())
             ->method('getProcessor')

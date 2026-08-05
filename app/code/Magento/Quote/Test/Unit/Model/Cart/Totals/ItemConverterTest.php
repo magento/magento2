@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -53,7 +52,7 @@ class ItemConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->configPoolMock = $this->createMock(ConfigurationPool::class);
-        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
         $this->totalsFactoryMock = $this->createPartialMock(
             TotalsItemInterfaceFactory::class,
@@ -78,7 +77,7 @@ class ItemConverterTest extends TestCase
 
         $itemMock = $this->createMock(Item::class);
         $itemMock->expects($this->once())->method('toArray')->willReturn(['options' => []]);
-        $itemMock->expects($this->any())->method('getProductType')->willReturn($productType);
+        $itemMock->method('getProductType')->willReturn($productType);
 
         $simpleConfigMock = $this->createMock(Configuration::class);
         $defaultConfigMock = $this->createMock(Configuration::class);
@@ -91,7 +90,7 @@ class ItemConverterTest extends TestCase
             ->willReturn($options);
 
         $option = ['data' => 'optionsData', 'label' => ''];
-        $defaultConfigMock->expects($this->any())->method('getFormattedOptionValue')->willReturn($option);
+        $defaultConfigMock->method('getFormattedOptionValue')->willReturn($option);
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')
             ->with('items_additional_data', ['item' => $itemMock]);

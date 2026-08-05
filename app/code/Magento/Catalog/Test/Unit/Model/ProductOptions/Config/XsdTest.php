@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductOptions\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\TestFramework\Unit\Utility\XsdValidator;
 use PHPUnit\Framework\TestCase;
@@ -38,31 +39,40 @@ class XsdTest extends TestCase
      * @param string $schemaName
      * @param string $xmlString
      * @param array $expectedError
+     * @param bool $isRegex
      */
-    protected function _loadDataForTest($schemaName, $xmlString, $expectedError)
+    protected function _loadDataForTest($schemaName, $xmlString, $expectedError, $isRegex = false)
     {
-        $actualError = $this->_xsdValidator->validate($this->_xsdSchemaPath . $schemaName, $xmlString);
-        $this->assertEquals(false, empty($actualError));
+        $actualErrors = $this->_xsdValidator->validate($this->_xsdSchemaPath . $schemaName, $xmlString);
+        $this->assertNotEmpty($actualErrors);
+
         foreach ($expectedError as $error) {
-            $this->assertContains($error, $actualError);
+            if ($isRegex) {
+                foreach ($actualErrors as $actualError) {
+                    $this->assertMatchesRegularExpression($error, $actualError);
+                }
+            } else {
+                $this->assertContains($error, $actualErrors);
+            }
         }
     }
 
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider
+     * @param $isRegex
      */
-    public function testSchemaCorrectlyIdentifiesInvalidProductOptionsXml($xmlString, $expectedError)
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidProductOptionsDataProvider')]
+    public function testSchemaCorrectlyIdentifiesInvalidProductOptionsXml($xmlString, $expectedError, $isRegex)
     {
-        $this->_loadDataForTest('product_options.xsd', $xmlString, $expectedError);
+        $this->_loadDataForTest('product_options.xsd', $xmlString, $expectedError, $isRegex);
     }
 
     /**
      * @param string $xmlString
      * @param array $expectedError
-     * @dataProvider schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesInvalidProductOptionsMergedXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesInvalidProductOptionsMergedXml($xmlString, $expectedError)
     {
         $this->_loadDataForTest('product_options_merged.xsd', $xmlString, $expectedError);
@@ -71,8 +81,8 @@ class XsdTest extends TestCase
     /**
      * @param string $schemaName
      * @param string $validFileName
-     * @dataProvider schemaCorrectlyIdentifiesValidXmlDataProvider
      */
+    #[DataProvider('schemaCorrectlyIdentifiesValidXmlDataProvider')]
     public function testSchemaCorrectlyIdentifiesValidXml($schemaName, $validFileName)
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/' . $validFileName);

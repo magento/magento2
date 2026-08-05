@@ -1,8 +1,7 @@
 <?php
-
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,9 +16,12 @@ use Magento\Framework\View\Result\Page;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Catalog\Model\Design.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DesignTest extends TestCase
 {
@@ -34,7 +36,7 @@ class DesignTest extends TestCase
     private $productRepository;
 
     /**
-     * @inheriDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -43,10 +45,10 @@ class DesignTest extends TestCase
     }
 
     /**
-     * @dataProvider getThemeModel
      * @param Theme $theme
      * @return void
      */
+    #[DataProvider('getThemeModel')]
     public function testApplyCustomDesign(Theme $theme): void
     {
         $this->model->applyCustomDesign($theme);
@@ -63,9 +65,9 @@ class DesignTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/simple_product_with_custom_design.php
      * @param array $designSettings
      * @param array $expectedSetting
-     * @dataProvider getDesignSettingsForProductWithScheduleDesignTest
      * @return void
      */
+    #[DataProvider('getDesignSettingsForProductWithScheduleDesignTest')]
     public function testGetDesignSettingsForProductWithScheduleDesign(
         array $designSettings,
         array $expectedSetting

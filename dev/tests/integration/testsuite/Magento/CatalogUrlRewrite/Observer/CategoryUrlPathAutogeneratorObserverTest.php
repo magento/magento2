@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2023 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -105,7 +94,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
             [
                 'parent_id' => $category1->getId(),
                 'name' => 'Category 2',
-                'url_key' => null,
+                'url_key' => 'category-2',
                 'is_active' => true
             ]
         );
@@ -114,7 +103,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
         $this->storeManager->setCurrentStore($secondStore);
 
         $category2 = $this->categoryRepository->get($category2->getId());
-        $category2->setUrlKey(null);
+        $category2->setUrlKey('category-2');
         $this->categoryRepository->save($category2);
 
         $this->storeManager->setCurrentStore(StoreModel::DEFAULT_STORE_ID);

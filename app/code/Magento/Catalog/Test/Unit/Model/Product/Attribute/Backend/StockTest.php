@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,30 +41,20 @@ class StockTest extends TestCase
     protected function setUp(): void
     {
         $this->objectHelper = new ObjectManager($this);
-        $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getStockItem'])
-            ->getMock();
+        $this->stockRegistry = $this->createPartialMock(StockRegistry::class, ['getStockItem']);
 
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
             ['getIsInStock', 'getQty']
         );
 
-        $this->stockRegistry->expects($this->any())
-            ->method('getStockItem')
-            ->willReturn($this->stockItemMock);
+        $this->stockRegistry->method('getStockItem')->willReturn($this->stockItemMock);
         $this->model = $this->objectHelper->getObject(
             Stock::class,
             ['stockRegistry' => $this->stockRegistry]
         );
-        $attribute = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getAttributeCode'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attribute->expects($this->atLeastOnce())
-            ->method('getAttributeCode')
-            ->willReturn(self::ATTRIBUTE_NAME);
+        $attribute = $this->createPartialMock(DataObject::class, []);
+        $attribute->setAttributeCode(self::ATTRIBUTE_NAME);
         $this->model->setAttribute($attribute);
     }
 

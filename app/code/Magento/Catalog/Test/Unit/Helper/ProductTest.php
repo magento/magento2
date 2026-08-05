@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
@@ -34,8 +36,8 @@ class ProductTest extends TestCase
     /**
      * @param mixed $data
      * @param boolean $result
-     * @dataProvider getData
      */
+    #[DataProvider('getData')]
     public function testIsDataForPriceIndexerWasChanged($data, $result)
     {
         if (is_callable($data)) {
@@ -46,10 +48,7 @@ class ProductTest extends TestCase
 
     protected function getMockForCatalogProduct($method)
     {
-        $product = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()
-            ->getMock();
+        $product = $this->createMock(ProductModel::class);
         if ($method!=null) {
             $product->expects(
                 $this->once()

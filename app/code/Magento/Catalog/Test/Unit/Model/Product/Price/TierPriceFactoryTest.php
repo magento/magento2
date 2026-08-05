@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2022 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\TierPriceInterfaceFactory;
 use Magento\Catalog\Model\Product\Price\TierPrice;
 use Magento\Catalog\Model\Product\Price\TierPriceFactory;
@@ -73,11 +74,11 @@ class TierPriceFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider createDataProvider
      * @param array $rawData
      * @param array $expected
      * @return void
      */
+    #[DataProvider('createDataProvider')]
     public function testCreate(array $rawData, array $expected): void
     {
         $rawData = array_merge(
@@ -104,7 +105,7 @@ class TierPriceFactoryTest extends TestCase
             ],
             $expected
         );
-        $customerGroupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $customerGroupMock = $this->createMock(GroupInterface::class);
         $customerGroupMock->method('getCode')
             ->willReturn('NOT LOGGED IN');
 
@@ -112,13 +113,9 @@ class TierPriceFactoryTest extends TestCase
         $this->customerGroupRepository->expects($isCustomerGroupResolved ? $this->never() : $this->once())
             ->method('getById')
             ->willReturn($customerGroupMock);
-        $expectedTierPrice = $this->getMockBuilder(TierPrice::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $expectedTierPrice = $this->createMock(TierPrice::class);
         $expectedTierPrice->setData($expected);
-        $tierPriceMock = $this->getMockBuilder(TierPrice::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $tierPriceMock = $this->createMock(TierPrice::class);
         $this->tierPriceFactory->method('create')
             ->willReturn($tierPriceMock);
         $tierPrice = $this->model->create($rawData, 'simple');

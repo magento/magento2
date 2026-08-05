@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
@@ -64,8 +63,8 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
         Context $context,
         UserFactory $userFactory,
         SecurityManager $securityManager,
-        CollectionFactory $userCollectionFactory = null,
-        Data $backendDataHelper = null,
+        ?CollectionFactory $userCollectionFactory = null,
+        ?Data $backendDataHelper = null,
         ?NotificatorInterface $notificator = null
     ) {
         parent::__construct($context, $userFactory);

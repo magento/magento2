@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Design\Theme;
 
@@ -55,7 +55,7 @@ class Customization implements CustomizationInterface
     public function __construct(
         \Magento\Framework\View\Design\Theme\FileProviderInterface $fileProvider,
         \Magento\Framework\View\Design\Theme\Customization\Path $customizationPath,
-        \Magento\Framework\View\Design\ThemeInterface $theme = null
+        ?\Magento\Framework\View\Design\ThemeInterface $theme = null
     ) {
         $this->fileProvider = $fileProvider;
         $this->customizationPath = $customizationPath;

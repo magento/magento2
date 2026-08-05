@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -23,6 +23,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 
@@ -95,13 +96,13 @@ class CategoryTest extends AbstractBackendController
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoDbIsolation enabled
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
-     * @dataProvider saveActionDataProvider
      * @param array $inputData
      * @param array $defaultAttributes
      * @param array $attributesSaved
      * @return void
      * @throws NoSuchEntityException
      */
+    #[DataProvider('saveActionDataProvider')]
     public function testSaveAction(array $inputData, array $defaultAttributes, array $attributesSaved = []): void
     {
         $store = $this->storeRepository->get('fixturestore');
@@ -153,7 +154,6 @@ class CategoryTest extends AbstractBackendController
         $categoryId = 3;
         $category = $this->categoryRepository->get($categoryId);
         $newUrlPath = 'test_url_path';
-        $defaultUrlPath = $category->getData('url_path');
 
         // update url_path and check it
         $category->setStoreId(1);
@@ -184,17 +184,17 @@ class CategoryTest extends AbstractBackendController
          */
         $newCategoryRepository = $this->_objectManager->create(CategoryRepositoryInterface::class);
         $category = $newCategoryRepository->get($categoryId);
-        $this->assertEquals($defaultUrlPath, $category->getData('url_key'));
+        $this->assertEquals($newUrlPath, $category->getData('url_key'));
     }
 
     /**
      * Test save action from product form page
      *
      * @param array $postData
-     * @dataProvider categoryCreatedFromProductCreationPageDataProvider
      * @magentoDbIsolation enabled
      * @return void
      */
+    #[DataProvider('categoryCreatedFromProductCreationPageDataProvider')]
     public function testSaveActionFromProductCreationPage(array $postData): void
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -509,7 +509,6 @@ class CategoryTest extends AbstractBackendController
      * Test move action.
      *
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
-     * @dataProvider moveActionDataProvider
      *
      * @param int $parentId
      * @param int $childId
@@ -519,6 +518,7 @@ class CategoryTest extends AbstractBackendController
      * @param boolean $error
      * @return void
      */
+    #[DataProvider('moveActionDataProvider')]
     public function testMoveAction(
         int $parentId,
         int $childId,
@@ -570,10 +570,10 @@ class CategoryTest extends AbstractBackendController
      *
      * @magentoDataFixture Magento/Catalog/_files/products_in_different_stores.php
      * @magentoDbIsolation disabled
-     * @dataProvider saveActionWithDifferentWebsitesDataProvider
      *
      * @param array $postData
      */
+    #[DataProvider('saveActionWithDifferentWebsitesDataProvider')]
     public function testSaveCategoryWithProductPosition(array $postData): void
     {
         $store = $this->storeRepository->get('fixturestore');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Model\Cron;
 
@@ -86,9 +86,9 @@ class ConsumersRunner
         DeploymentConfig $deploymentConfig,
         ShellInterface $shellBackground,
         LockManagerInterface $lockManager,
-        ConnectionTypeResolver $mqConnectionTypeResolver = null,
-        LoggerInterface $logger = null,
-        CheckIsAvailableMessagesInQueue $checkIsAvailableMessages = null
+        ?ConnectionTypeResolver $mqConnectionTypeResolver = null,
+        ?LoggerInterface $logger = null,
+        ?CheckIsAvailableMessagesInQueue $checkIsAvailableMessages = null
     ) {
         $this->phpExecutableFinder = $phpExecutableFinder;
         $this->consumerConfig = $consumerConfig;
@@ -139,8 +139,7 @@ class ConsumersRunner
                     ];
 
                     if ($maxMessages) {
-                        $arguments[] =
-                            '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
+                        $arguments = $this->addMaxMessagesArgument($arguments, $consumer, $maxMessages);
                     }
 
                     $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
@@ -155,7 +154,7 @@ class ConsumersRunner
                 ];
 
                 if ($maxMessages) {
-                    $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
+                    $arguments = $this->addMaxMessagesArgument($arguments, $consumer, $maxMessages);
                 }
 
                 $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
@@ -164,6 +163,38 @@ class ConsumersRunner
                 $this->shellBackground->execute($command, $arguments);
             }
         }
+    }
+
+    /**
+     * Add max-messages argument and log warning if exceeds default
+     *
+     * @param array $arguments Arguments array to append to
+     * @param ConsumerConfigItemInterface $consumer
+     * @param int $defaultMaxMessages
+     * @return array
+     */
+    private function addMaxMessagesArgument(
+        array $arguments,
+        ConsumerConfigItemInterface $consumer,
+        int $defaultMaxMessages
+    ): array {
+        $consumerMaxMessages =$consumer->getMaxMessages() ?? $defaultMaxMessages;
+
+        if ($consumerMaxMessages > $defaultMaxMessages) {
+            $this->logger->warning(
+                __(
+                    'Consumer "%1" has max-messages=%2 which exceeds the configured default (%3). '
+                    . 'This may probably cause high memory usage or long processing times.',
+                    $consumer->getName(),
+                    $consumerMaxMessages,
+                    $defaultMaxMessages
+                )
+            );
+        }
+
+        $arguments[] = '--max-messages=' . $consumerMaxMessages;
+
+        return $arguments;
     }
 
     /**

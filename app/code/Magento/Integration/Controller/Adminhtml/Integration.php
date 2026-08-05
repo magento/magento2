@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -106,7 +106,7 @@ abstract class Integration extends Action
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
         \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection,
-        Validator $urlValidator = null
+        ?Validator $urlValidator = null
     ) {
         parent::__construct($context);
         $this->_registry = $registry;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -72,7 +72,7 @@ class ImageProcessorTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->directoryWriteMock = $this->getMockForAbstractClass(
+        $this->directoryWriteMock = $this->createMock(
             WriteInterface::class
         );
         $this->fileSystemMock = $this->getMockBuilder(Filesystem::class)
@@ -91,7 +91,7 @@ class ImageProcessorTest extends TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->uploaderMock = $this->getMockBuilder(Uploader::class)
             ->onlyMethods(
                 [
@@ -122,7 +122,7 @@ class ImageProcessorTest extends TestCase
     {
         $imageDataMock = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageDataMock->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);
@@ -140,7 +140,7 @@ class ImageProcessorTest extends TestCase
         $this->expectExceptionMessage('The image content is invalid. Verify the content and try again.');
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageDataObject = $this->getMockBuilder(AttributeValue::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,7 +150,7 @@ class ImageProcessorTest extends TestCase
 
         $imageDataMock = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageDataMock->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);
@@ -170,7 +170,7 @@ class ImageProcessorTest extends TestCase
     {
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn('testImageData');
@@ -188,7 +188,7 @@ class ImageProcessorTest extends TestCase
             ->method('getValue')
             ->willReturn($imageContent);
 
-        $imageData = $this->getMockForAbstractClass(CustomAttributesDataInterface::class);
+        $imageData = $this->createMock(CustomAttributesDataInterface::class);
         $imageData->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);
@@ -212,7 +212,7 @@ class ImageProcessorTest extends TestCase
     {
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->any())
             ->method('getBase64EncodedData')
             ->willReturn('testImageData');
@@ -227,7 +227,7 @@ class ImageProcessorTest extends TestCase
             ->method('getValue')
             ->willReturn($imageContent);
 
-        $imageData = $this->getMockForAbstractClass(CustomAttributesDataInterface::class);
+        $imageData = $this->createMock(CustomAttributesDataInterface::class);
         $imageData->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);
@@ -244,12 +244,12 @@ class ImageProcessorTest extends TestCase
             ->method('getAbsolutePath')
             ->willReturn('testPath');
 
-        $prevImageAttribute = $this->getMockForAbstractClass(AttributeInterface::class);
+        $prevImageAttribute = $this->createMock(AttributeInterface::class);
         $prevImageAttribute->expects($this->once())
             ->method('getValue')
             ->willReturn('testImagePath');
 
-        $prevImageData = $this->getMockForAbstractClass(CustomAttributesDataInterface::class);
+        $prevImageData = $this->createMock(CustomAttributesDataInterface::class);
         $prevImageData->expects($this->once())
             ->method('getCustomAttribute')
             ->willReturn($prevImageAttribute);
@@ -263,7 +263,7 @@ class ImageProcessorTest extends TestCase
         $this->expectExceptionMessage('Cannot recognize image extension.');
         $imageContent = $this->getMockBuilder(ImageContentInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $imageContent->expects($this->once())
             ->method('getBase64EncodedData')
             ->willReturn('testImageData');
@@ -278,7 +278,7 @@ class ImageProcessorTest extends TestCase
             ->method('getValue')
             ->willReturn($imageContent);
 
-        $imageData = $this->getMockForAbstractClass(CustomAttributesDataInterface::class);
+        $imageData = $this->createMock(CustomAttributesDataInterface::class);
         $imageData->expects($this->once())
             ->method('getCustomAttributes')
             ->willReturn([]);

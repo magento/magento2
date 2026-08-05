@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\SalesRule\Test\Unit\Observer;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\SalesRule\Observer\CatalogAttributeDeleteAfterObserver;
 use Magento\SalesRule\Observer\CheckSalesRulesAvailability;
@@ -18,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 class CatalogAttributeDeleteAfterObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var CatalogAttributeDeleteAfterObserver|MockObject
      */
@@ -52,10 +55,7 @@ class CatalogAttributeDeleteAfterObserverTest extends TestCase
     {
         $attributeCode = 'attributeCode';
         $observer = $this->createMock(Observer::class);
-        $event = $this->getMockBuilder(Event::class)
-            ->addMethods(['getAttribute'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(Event::class, ['getAttribute']);
         $attribute = $this->createPartialMock(
             Attribute::class,
             ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode']

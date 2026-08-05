@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Frontend\Product;
@@ -10,8 +10,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Fieldset config form element renderer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Watermark extends \Magento\Backend\Block\AbstractBlock implements
     \Magento\Framework\Data\Form\Element\Renderer\RendererInterface

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Stdlib;
 
@@ -24,6 +24,8 @@ class DateTime
     public const DATETIME_PHP_FORMAT = 'Y-m-d H:i:s';
 
     public const DATE_PHP_FORMAT = 'Y-m-d';
+
+    public const DATETIME_SLASH_PHP_FORMAT = 'd/m/Y H:i:s';
 
     /**#@-*/
 

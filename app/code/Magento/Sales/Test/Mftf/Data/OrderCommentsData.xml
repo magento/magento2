@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -13,5 +13,12 @@
     </entity>
     <entity name="anchorTagFragment" type="string">
         <data key="anchorTag">a href</data>
+    </entity>
+    <entity name="OrderInvoiceComment" type="order">
+        <data key="sent">An example comment when Status is sent.</data>
+        <data key="readyForPickup">An example comment when Status is Ready For Pickup.</data>
+    </entity>
+    <entity name="OrderUnassignedStatusMessage">
+        <data key="value">You have unassigned the order status.</data>
     </entity>
 </entities>

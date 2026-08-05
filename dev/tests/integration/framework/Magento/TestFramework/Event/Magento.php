@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\TestFramework\Event;
@@ -74,7 +74,7 @@ class Magento implements ObserverInterface
      *
      * @param \Magento\TestFramework\EventManager $eventManager
      */
-    public static function setDefaultEventManager(\Magento\TestFramework\EventManager $eventManager = null)
+    public static function setDefaultEventManager(?\Magento\TestFramework\EventManager $eventManager = null)
     {
         self::$_defaultEventManager = $eventManager;
     }

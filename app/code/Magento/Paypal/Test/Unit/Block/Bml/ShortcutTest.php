@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class ShortcutTest extends TestCase
     {
         $this->paymentHelperMock = $this->createMock(Data::class);
         $this->randomMock = $this->createMock(Random::class);
-        $this->paypalShortcutHelperMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->paypalShortcutHelperMock = $this->createMock(ValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $configFactoryMock = $this->getMockBuilder(ConfigFactory::class)

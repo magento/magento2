@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -41,6 +41,7 @@ return [
         Magento\Framework\Logger\Handler\Base::class => [ // TODO: remove this after ACPT-1034 is fixed
             'stream' => null,
         ],
+        Magento\Framework\Validator\AbstractValidator::class => ['_defaultTranslator' => null],
     ],
     'services' => [ // Note: These apply only to the service names that match.
         Magento\Framework\ObjectManager\ConfigInterface::class => ['_mergedArguments' => null],
@@ -110,8 +111,6 @@ return [
         Magento\Search\Model\SearchEngine::class => ['adapter' => null],
         // TODO: Do we need resetState for the connection?
         Magento\Elasticsearch\SearchAdapter\ConnectionManager::class => ['client' => null],
-        // TODO: Do we need resetState for the connection?
-        Magento\Elasticsearch7\Model\Client\Elasticsearch::class => ['client' => null],
         // TODO: Do we need resetState for the connection?
         Magento\Webapi\Model\Authorization\TokenUserContext::class => ['request' => null],
         Magento\Framework\Json\Helper\Data::class => ['_request' => null],
@@ -188,6 +187,7 @@ return [
         Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem::class => [
             'topic' => null, // TODO: Confirm this doesn't change outside of deployment,
                             // TODO:  or if it does, that it resets properly from poison pill
+            'queue' => null,
             'isDisabled' => null,
         ],
         Magento\Framework\View\File\Collector\Decorator\ModuleDependency::class => [

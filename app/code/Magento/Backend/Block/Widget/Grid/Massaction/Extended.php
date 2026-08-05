@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Backend\Block\Widget\Grid\Massaction;
 
@@ -13,9 +13,9 @@ use Magento\Framework\DB\Select;
  *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @see Nothing
  * @method \Magento\Quote\Model\Quote setHideFormElement(boolean $value) Hide Form element to prevent IE errors
  * @method boolean getHideFormElement()
- * @author Magento Core Team <core@magentocommerce.com>
  * @TODO MAGETWO-31510: Remove deprecated class
  * @since 100.0.2
  */
@@ -36,8 +36,6 @@ class Extended extends \Magento\Backend\Block\Widget
     protected $_template = 'Magento_Backend::widget/grid/massaction_extended.phtml';
 
     /**
-     * Backend data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_backendData = null;

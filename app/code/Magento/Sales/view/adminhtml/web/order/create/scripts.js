@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
  define([
@@ -440,7 +440,7 @@
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['items', 'billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
@@ -507,7 +507,7 @@
         loadPaymentMethods: function () {
             var data = this.serializeData(this.billingAddressContainer).toObject();
 
-            this.loadArea(['billing_method', 'totals'], true, data);
+            this.loadArea(['items', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -524,7 +524,7 @@
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data);
         },
 
         setPaymentMethod: function (method) {
@@ -783,11 +783,27 @@
                 var getPrice = function (elm) {
                     var optQty = 1;
                     if (elm.hasAttribute('qtyId')) {
-                        if (!$(elm.getAttribute('qtyId')).value) {
-                            return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
+                        var qtyId = elm.getAttribute('qtyId'),
+                            confirmedBlock = $(productConfigure.confirmedCurrentId),
+                            qtyEl = null,
+                            qtyInputs, j;
+
+                        if (confirmedBlock) {
+                            qtyInputs = confirmedBlock.getElementsByTagName('input');
+
+                            for (j = 0; j < qtyInputs.length; j++) {
+                                if (qtyInputs[j].id === qtyId) {
+                                    qtyEl = qtyInputs[j];
+                                    break;
+                                }
+                            }
                         }
+
+                        if (!qtyEl || !qtyEl.value) {
+                            return 0;
+                        }
+
+                        optQty = parseFloat(qtyEl.value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;
@@ -1376,15 +1392,26 @@
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 

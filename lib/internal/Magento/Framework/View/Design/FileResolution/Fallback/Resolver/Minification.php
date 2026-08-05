@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
@@ -50,7 +50,7 @@ class Minification implements ResolverInterface
      * @param string|null $module
      * @return string|false
      */
-    public function resolve($type, $file, $area = null, ThemeInterface $theme = null, $locale = null, $module = null)
+    public function resolve($type, $file, $area = null, ?ThemeInterface $theme = null, $locale = null, $module = null)
     {
         $file = $this->minification->addMinifiedSign($file);
         $path = $this->fallback->resolve($type, $file, $area, $theme, $locale, $module);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\ImportExport\Controller\Adminhtml\History\Download;
 use Magento\ImportExport\Helper\Report;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -88,9 +89,7 @@ class DownloadTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(Http::class);
         $this->reportHelper = $this->createPartialMock(
             Report::class,
             ['importFileExists', 'getReportSize', 'getReportOutput']
@@ -147,8 +146,8 @@ class DownloadTest extends TestCase
      *
      * @param string $requestFilename
      * @param string $processedFilename
-     * @dataProvider executeDataProvider
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($requestFilename, $processedFilename)
     {
         $this->request->method('getParam')
@@ -159,8 +158,7 @@ class DownloadTest extends TestCase
             ->with($processedFilename)
             ->willReturn(true);
 
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)
-            ->getMock();
+        $responseMock = $this->createMock(ResponseInterface::class);
         $this->fileFactory->expects($this->once())
             ->method('create')
             ->with(
@@ -199,8 +197,8 @@ class DownloadTest extends TestCase
     /**
      * Test execute() with return Redirect
      * @param string|null $requestFilename
-     * @dataProvider executeWithRedirectDataProvider
      */
+    #[DataProvider('executeWithRedirectDataProvider')]
     public function testExecuteWithRedirect(?string $requestFilename): void
     {
         $this->request->method('getParam')->with('filename')->willReturn($requestFilename);
@@ -211,7 +209,7 @@ class DownloadTest extends TestCase
     /**
      * @return array
      */
-    public function executeWithRedirectDataProvider(): array
+    public static function executeWithRedirectDataProvider(): array
     {
         return [
             'null file name' => [null],

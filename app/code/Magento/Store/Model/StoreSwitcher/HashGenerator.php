@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,7 +17,7 @@ use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 /**
  * Generate one time token and build redirect url
  *
- * @deplacated No longer used
+ * @deprecated No longer used
  * @see RedirectDataGenerator
  * @see RedirectDataValidator
  */
@@ -99,6 +99,7 @@ class HashGenerator
      */
     public function validateHash(string $signature, HashData $hashData): bool
     {
+        // @phpstan-ignore-next-line
         if (!empty($signature) && !empty($hashData)) {
             $timeStamp = $hashData->getTimestamp();
             $fromStoreCode = $hashData->getFromStoreCode();

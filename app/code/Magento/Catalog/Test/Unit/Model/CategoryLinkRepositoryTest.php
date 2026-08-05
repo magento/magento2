@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Catalog\Model\CategoryLinkRepository;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CategoryLinkRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CategoryLinkRepository
      */
@@ -57,13 +59,10 @@ class CategoryLinkRepositoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productResourceMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProductsIdsBySkus', 'getIdBySku'])
-            ->getMock();
-        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
-        $this->productLinkMock = $this->getMockForAbstractClass(CategoryProductLinkInterface::class);
+        $this->productResourceMock = $this->createPartialMock(Product::class, ['getProductsIdsBySkus', 'getIdBySku']);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
+        $this->productLinkMock = $this->createMock(CategoryProductLinkInterface::class);
         $this->model = new CategoryLinkRepository(
             $this->categoryRepositoryMock,
             $this->productRepositoryMock,
@@ -83,11 +82,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productPosition = 1;
         $sku = 'testSku';
         $productPositions = [$productId => $productPosition];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['getPostedProducts', 'setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getPostedProducts', 'setPostedProducts', 'getProductsPosition', 'save']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
@@ -113,11 +112,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productPosition = 1;
         $sku = 'testSku';
         $productPositions = [$productId => $productPosition];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($sku);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
@@ -145,11 +144,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -171,11 +170,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -202,11 +201,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productPositions = [55 => 1];
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($productSku);
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -231,11 +230,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productPositions = [55 => 1];
         $this->productLinkMock->expects($this->once())->method('getCategoryId')->willReturn($categoryId);
         $this->productLinkMock->expects($this->once())->method('getSku')->willReturn($productSku);
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
+        $productMock = $this->createMock(ProductModel::class);
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $categoryMock->expects($this->once())->method('getProductsPosition')->willReturn($productPositions);
@@ -256,11 +255,10 @@ class CategoryLinkRepositoryTest extends TestCase
         $categoryId = 42;
         $productSkus = ['testSku', 'testSku1', 'testSku2', 'testSku3'];
         $productPositions = [55 => 1, 56 => 2, 57 => 3, 58 => 4];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $this->productResourceMock->expects($this->once())->method('getProductsIdsBySkus')
@@ -281,11 +279,10 @@ class CategoryLinkRepositoryTest extends TestCase
     {
         $categoryId = 42;
         $productSku = 'testSku';
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
 
@@ -305,11 +302,11 @@ class CategoryLinkRepositoryTest extends TestCase
         $productSku = 'testSku';
         $productId = 55;
         $productPositions = [55 => 1];
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setPostedProducts'])
-            ->onlyMethods(['getProductsPosition', 'save', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['setPostedProducts', 'getProductsPosition', 'save', 'getId']
+        );
         $this->categoryRepositoryMock->expects($this->once())->method('get')->with($categoryId)
             ->willReturn($categoryMock);
         $this->productResourceMock->expects($this->once())->method('getProductsIdsBySkus')

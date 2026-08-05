@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Model;
@@ -45,7 +45,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
     public function __construct(
         CategoryRepositoryInterface $categoryRepository,
         ProductRepositoryInterface $productRepository,
-        Product $productResource = null
+        ?Product $productResource = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;

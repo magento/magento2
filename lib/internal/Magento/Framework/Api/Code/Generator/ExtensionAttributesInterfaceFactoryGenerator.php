@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Api\Code\Generator;
@@ -30,9 +30,9 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
     public function __construct(
         $sourceClassName = null,
         $resultClassName = null,
-        Io $ioObject = null,
-        CodeGeneratorInterface $classGenerator = null,
-        DefinedClasses $definedClasses = null
+        ?Io $ioObject = null,
+        ?CodeGeneratorInterface $classGenerator = null,
+        ?DefinedClasses $definedClasses = null
     ) {
         $sourceClassName .= 'Extension';
         parent::__construct(

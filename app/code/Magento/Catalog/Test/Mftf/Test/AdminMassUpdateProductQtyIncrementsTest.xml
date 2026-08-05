@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,9 +20,6 @@
             <group value="catalog"/>
             <group value="CatalogInventory"/>
             <group value="product_attributes"/>
-            <skip>
-            <issueId value="ACQE-4352"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -48,8 +45,11 @@
             <argument name="keyword" value="api-simple-product"/>
         </actionGroup>
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForSelectCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
         <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <seeCheckboxIsChecked selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="seeProduct1IsChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="seeProduct2IsChecked"/>
         <!-- Mass update qty increments -->
         <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickMassUpdateProductAttributes"/>
         <actionGroup ref="AdminMassUpdateProductQtyIncrementsActionGroup" stepKey="updateQtyIncrements">

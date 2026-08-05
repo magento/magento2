@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Rss\Controller\Adminhtml\Feed\Index as AdminIndex;
 use Magento\Rss\Model\Rss;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class IndexTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AdminIndex
      */
@@ -64,17 +67,16 @@ class IndexTest extends TestCase
     protected function setUp(): void
     {
         $this->rssManager = $this->createPartialMock(RssManager::class, ['getProvider']);
-        $this->scopeConfigInterface = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->scopeConfigInterface = $this->createMock(ScopeConfigInterface::class);
         $this->rssFactory = $this->createPartialMock(RssFactory::class, ['create']);
 
-        $request = $this->getMockForAbstractClass(RequestInterface::class);
+        $request = $this->createMock(RequestInterface::class);
         $request->expects($this->once())->method('getParam')->with('type')->willReturn('rss_feed');
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->onlyMethods(['sendResponse'])
-            ->addMethods(['setHeader', 'setBody'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['sendResponse', 'setHeader', 'setBody']
+        );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $controllerArguments = $objectManagerHelper->getConstructArguments(
@@ -88,7 +90,7 @@ class IndexTest extends TestCase
             ]
         );
         $objectManager = $controllerArguments['context']->getObjectManager();
-        $urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $urlInterface = $this->createMock(UrlInterface::class);
         $objectManager
             ->method('get')
             ->with(UrlInterface::class)
@@ -105,7 +107,7 @@ class IndexTest extends TestCase
     public function testExecute(): void
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
-        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $rssModel = $this->createPartialMock(Rss::class, ['setDataProvider', 'createRssXml']);
@@ -127,7 +129,7 @@ class IndexTest extends TestCase
     public function testExecuteWithException(): void
     {
         $this->scopeConfigInterface->expects($this->once())->method('getValue')->willReturn(true);
-        $dataProvider = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $dataProvider->expects($this->once())->method('isAllowed')->willReturn(true);
 
         $rssModel = $this->createPartialMock(Rss::class, ['setDataProvider', 'createRssXml']);

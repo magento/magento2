@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Cron;
 
@@ -73,9 +73,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
 
         $reflection = new \ReflectionClass(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class);
         $paths = $reflection->getProperty('attributesValues');
-        $paths->setAccessible(true);
         $paths->setValue($this->objectManager->get(\Magento\Catalog\Model\Attribute\ScopeOverriddenValue::class), null);
-        $paths->setAccessible(false);
 
         $product = $this->productRepository->get('simple');
         $productResource = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Product::class);

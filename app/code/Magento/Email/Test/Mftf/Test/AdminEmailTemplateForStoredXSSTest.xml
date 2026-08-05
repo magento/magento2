@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEmailTemplateForStoredXSSTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Email template for stored XSS"/>
+            <title value="Email template with stored XSS should be escaped"/>
+            <description value="Admin creates a email template with stored XSS and it should not appear in template preview"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4237"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created Template-->
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <actionGroup ref="CreateCustomTemplateActionGroup" stepKey="createTemplate">
+            <argument name="template" value="EmailTemplateWithStoreddXSS"/>
+        </actionGroup>
+        <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
+        <dontSee userInput="{{EmailTemplateWithStoreddXSS.templateText}}" stepKey="assertContent"/>
+    </test>
+</tests>

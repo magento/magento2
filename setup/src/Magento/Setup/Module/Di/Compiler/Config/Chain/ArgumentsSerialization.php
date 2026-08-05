@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Module\Di\Compiler\Config\Chain;
@@ -31,7 +31,7 @@ class ArgumentsSerialization implements ModificationInterface
      *
      * @param SerializerInterface|null $serializer
      */
-    public function __construct(SerializerInterface $serializer = null)
+    public function __construct(?SerializerInterface $serializer = null)
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
     }

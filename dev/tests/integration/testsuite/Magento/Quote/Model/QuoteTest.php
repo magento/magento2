@@ -1,15 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCartFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -21,6 +28,7 @@ use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
 use Magento\Quote\Api\Data\CartInterface;
@@ -30,8 +38,10 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
 
@@ -42,6 +52,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class QuoteTest extends TestCase
 {
@@ -88,6 +99,11 @@ class QuoteTest extends TestCase
     private $extensibleDataObjectConverter;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
      * @var DataFixtureStorage
      */
     private $fixtures;
@@ -113,6 +129,7 @@ class QuoteTest extends TestCase
         $this->customerResourceModel = $this->objectManager->get(CustomerResourceModel::class);
         $this->groupFactory = $this->objectManager->get(GroupFactory::class);
         $this->extensibleDataObjectConverter = $this->objectManager->get(ExtensibleDataObjectConverter::class);
+        $this->cartRepository = $this->objectManager->get(CartRepositoryInterface::class);
         $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
@@ -153,31 +170,46 @@ class QuoteTest extends TestCase
     public function testGetAddressWithVirtualProduct(): void
     {
         $quote = $this->objectManager->create(Quote::class);
-        $billingAddress = $this->addressFactory->create();
-        $billingAddress->setFirstname('Joe')
-            ->setLastname('Doe')
-            ->setCountryId('US')
-            ->setRegion('TX')
-            ->setCity('Austin')
-            ->setStreet('1000 West Parmer Line')
-            ->setPostcode('11501')
-            ->setTelephone('123456789');
-        $quote->setBillingAddress($billingAddress);
-        $shippingAddress = $this->addressFactory->create();
-        $shippingAddress->setFirstname('Joe')
-            ->setLastname('Doe')
-            ->setCountryId('US')
-            ->setRegion('NJ')
-            ->setCity('Newark')
-            ->setStreet('2775  Granville Lane')
-            ->setPostcode('07102')
-            ->setTelephone('9734685221');
-        $quote->setShippingAddress($shippingAddress);
-        $product = $this->productRepository->get('virtual-product', false, null, true);
-        $quote->addProduct($product);
-        $quote->save();
-        $expectedAddress = $quote->getBillingAddress();
-        $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $originalStore = $storeManager->getStore();
+        $defaultStoreView = $storeManager->getDefaultStoreView();
+        $storeManager->setCurrentStore($defaultStoreView);
+
+        try {
+            $quote->setStore($defaultStoreView);
+
+            $billingAddress = $this->addressFactory->create();
+            $billingAddress->setFirstname('Joe')
+                ->setLastname('Doe')
+                ->setCountryId('US')
+                ->setRegion('TX')
+                ->setCity('Austin')
+                ->setStreet('1000 West Parmer Line')
+                ->setPostcode('11501')
+                ->setTelephone('123456789');
+            $quote->setBillingAddress($billingAddress);
+            $shippingAddress = $this->addressFactory->create();
+            $shippingAddress->setFirstname('Joe')
+                ->setLastname('Doe')
+                ->setCountryId('US')
+                ->setRegion('NJ')
+                ->setCity('Newark')
+                ->setStreet('2775  Granville Lane')
+                ->setPostcode('07102')
+                ->setTelephone('9734685221');
+            $quote->setShippingAddress($shippingAddress);
+
+            $product = $this->productRepository->get('virtual-product', false, (int) $defaultStoreView->getId(), true);
+            $item = $this->objectManager->create(\Magento\Quote\Model\Quote\Item::class);
+            $item->setProduct($product);
+            $item->setQty(1);
+            $quote->addItem($item);
+            $quote->save();
+            $expectedAddress = $quote->getBillingAddress();
+            $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
+        } finally {
+            $storeManager->setCurrentStore($originalStore);
+        }
     }
 
     /**
@@ -451,9 +483,9 @@ class QuoteTest extends TestCase
      * @param int|null $expectedOrderGiftMessageId
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider giftMessageDataProvider
      * @return void
      */
+    #[DataProvider('giftMessageDataProvider')]
     public function testMerge(
         ?int $guestItemGiftMessageId,
         ?int $customerItemGiftMessageId,
@@ -839,5 +871,79 @@ class QuoteTest extends TestCase
             round((float)$product->getPrice(), 2),
             round((float)$item->getPrice(), 2)
         );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], as: 'p', count: 2),
+        DataFixture(AttributeFixture::class, as: 'attr'),
+        DataFixture(
+            ConfigurableProductFixture::class,
+            ['_options' => ['$attr$'], '_links' => ['$p1$', '$p2$']],
+            'cp1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p1.id$', 'qty' => 2],
+        ),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p2.id$', 'qty' => 2],
+        ),
+        DataFixture('deleteProduct')
+    ]
+    public function testCollectTotalsWhenConfigurableChildIsDeleted(): void
+    {
+        $cart = $this->fixtures->get('cart');
+        $cart = $this->cartRepository->get($cart->getId());
+        $cart->setTotalsCollectedFlag(false)->collectTotals();
+        $items = $cart->getAllItems();
+        $this->assertCount(3, $items);
+        $this->assertCount(0, $items[0]->getChildren());
+        $this->assertTrue($items[0]->getHasError());
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['price' => 10], as: 'p', count: 2),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p2$']], 'opt2'),
+        DataFixture(BundleProductFixture::class, ['_options' => ['$opt1$', '$opt2$']], 'bp1'),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p2.id$']],
+                'qty' => 1
+            ],
+        ),
+        DataFixture('deleteProduct')
+    ]
+    public function testCollectTotalsWhenBundleChildIsDeleted(): void
+    {
+        $cart = $this->fixtures->get('cart');
+        $cart = $this->cartRepository->get($cart->getId());
+        $cart->setTotalsCollectedFlag(false)->collectTotals();
+        $items = $cart->getAllItems();
+        $this->assertCount(2, $items);
+        $this->assertCount(1, $items[0]->getChildren());
+        $this->assertTrue($items[0]->getHasError());
+    }
+
+    public static function deleteProduct(): void
+    {
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $isSecureArea = $registry->registry('isSecureArea');
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+        try {
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class)->deleteById(
+                DataFixtureStorageManager::getStorage()->get('p1')->getSku()
+            );
+        } finally {
+            $registry->unregister('isSecureArea');
+            $registry->register('isSecureArea', $isSecureArea);
+        }
     }
 }

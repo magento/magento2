@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Mail;
 
-use Laminas\Mime\Mime;
-use Laminas\Mime\Part;
+use Magento\Framework\Mail\MimeInterface;
+use Symfony\Component\Mime\Message as SymfonyMessage;
+use Symfony\Component\Mime\Part\TextPart;
+use Symfony\Component\Mime\Part\HtmlPart;
+use Symfony\Component\Mime\Part\AbstractPart;
 
 /**
  * Class Message for email transportation
@@ -17,24 +20,28 @@ use Laminas\Mime\Part;
 class Message implements MailMessageInterface
 {
     /**
-     * @var \Laminas\Mail\Message
+     * @var SymfonyMessage
      */
-    protected $zendMessage;
+    protected SymfonyMessage $symfonyMessage;
 
     /**
      * @var string
      */
-    private $messageType = Mime::TYPE_TEXT;
+    private string $messageType = MimeInterface::TYPE_TEXT;
 
     /**
-     * Initialize dependencies.
+     * @var string
+     */
+    protected string $charset;
+
+    /**
+     * Initialize dependencies.ßß
      *
      * @param string $charset
      */
-    public function __construct($charset = 'utf-8')
+    public function __construct(string $charset = 'utf-8')
     {
-        $this->zendMessage = new \Laminas\Mail\Message();
-        $this->zendMessage->setEncoding($charset);
+        $this->charset = $charset;
     }
 
     /**
@@ -44,7 +51,7 @@ class Message implements MailMessageInterface
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
-    public function setMessageType($type)
+    public function setMessageType($type): self
     {
         $this->messageType = $type;
         return $this;
@@ -57,38 +64,40 @@ class Message implements MailMessageInterface
      * @see \Magento\Framework\Mail\Message::setBodyText
      * @see \Magento\Framework\Mail\Message::setBodyHtml
      */
-    public function setBody($body)
+    public function setBody($body): self
     {
         if (is_string($body)) {
-            $body = self::createMimeFromString($body, $this->messageType);
+            $body = $this->createMimeFromString($body, $this->messageType);
         }
-        $this->zendMessage->setBody($body);
+
+        $this->symfonyMessage = $body;
+
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function setSubject($subject)
+    public function setSubject($subject): self
     {
-        $this->zendMessage->setSubject($subject);
+        $this->symfonyMessage->getHeaders()->addTextHeader('Subject', $subject);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function getSubject()
+    public function getSubject(): ?string
     {
-        return $this->zendMessage->getSubject();
+        return $this->symfonyMessage->getHeaders()->getHeaderBody('Subject');
     }
 
     /**
      * @inheritdoc
      */
-    public function getBody()
+    public function getBody(): AbstractPart
     {
-        return $this->zendMessage->getBody();
+        return $this->symfonyMessage->getBody();
     }
 
     /**
@@ -98,7 +107,7 @@ class Message implements MailMessageInterface
      * setFromAddress() function sets both from address and from name.
      * @see setFromAddress()
      */
-    public function setFrom($fromAddress)
+    public function setFrom($fromAddress): self
     {
         $this->setFromAddress($fromAddress, null);
         return $this;
@@ -107,54 +116,54 @@ class Message implements MailMessageInterface
     /**
      * @inheritdoc
      */
-    public function setFromAddress($fromAddress, $fromName = null)
+    public function setFromAddress($fromAddress, $fromName = null): self
     {
-        $this->zendMessage->setFrom($fromAddress, $fromName);
+        $this->symfonyMessage->getHeaders()->addMailboxListHeader('From', [$fromAddress, $fromName]);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function addTo($toAddress)
+    public function addTo($toAddress): self
     {
-        $this->zendMessage->addTo($toAddress);
+        $this->symfonyMessage->getHeaders()->addMailboxListHeader('To', [$toAddress]);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function addCc($ccAddress)
+    public function addCc($ccAddress): self
     {
-        $this->zendMessage->addCc($ccAddress);
+        $this->symfonyMessage->getHeaders()->addMailboxListHeader('Cc', [$ccAddress]);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function addBcc($bccAddress)
+    public function addBcc($bccAddress): self
     {
-        $this->zendMessage->addBcc($bccAddress);
+        $this->symfonyMessage->getHeaders()->addMailboxListHeader('Bcc', [$bccAddress]);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function setReplyTo($replyToAddress)
+    public function setReplyTo($replyToAddress): self
     {
-        $this->zendMessage->setReplyTo($replyToAddress);
+        $this->symfonyMessage->getHeaders()->addMailboxListHeader('Reply-To', [$replyToAddress]);
         return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function getRawMessage()
+    public function getRawMessage(): string
     {
-        return $this->zendMessage->toString();
+        return $this->symfonyMessage->toString();
     }
 
     /**
@@ -162,35 +171,38 @@ class Message implements MailMessageInterface
      *
      * @param string $body
      * @param string $messageType
-     * @return \Laminas\Mime\Message
+     * @return SymfonyMessage
      */
-    private function createMimeFromString($body, $messageType)
+    private function createMimeFromString(string $body, string $messageType): SymfonyMessage
     {
-        $part = new Part($body);
-        $part->setCharset($this->zendMessage->getEncoding());
-        $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
-        $part->setDisposition(Mime::DISPOSITION_INLINE);
-        $part->setType($messageType);
-        $mimeMessage = new \Laminas\Mime\Message();
-        $mimeMessage->addPart($part);
-        return $mimeMessage;
+        if ($messageType == MimeInterface::TYPE_HTML) {
+            $part = new TextPart($body, $this->charset, 'html', MimeInterface::ENCODING_QUOTED_PRINTABLE);
+            $part->setDisposition('inline');
+            return new SymfonyMessage(null, $part);
+        }
+
+        $part = new TextPart($body, $this->charset, 'plain', MimeInterface::ENCODING_QUOTED_PRINTABLE);
+        $part->setDisposition('inline');
+        return new SymfonyMessage(null, $part);
     }
 
     /**
      * @inheritdoc
      */
-    public function setBodyHtml($html)
+    public function setBodyHtml($html): self
     {
-        $this->setMessageType(Mime::TYPE_HTML);
-        return $this->setBody($html);
+        $this->setMessageType(MimeInterface::TYPE_HTML);
+        $this->setBody($html);
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function setBodyText($text)
+    public function setBodyText($text): self
     {
-        $this->setMessageType(Mime::TYPE_TEXT);
-        return $this->setBody($text);
+        $this->setMessageType(MimeInterface::TYPE_TEXT);
+        $this->setBody($text);
+        return $this;
     }
 }

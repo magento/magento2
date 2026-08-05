@@ -2,8 +2,8 @@
 /**
  * No such entity service exception
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Exception;
 
@@ -30,7 +30,7 @@ class NoSuchEntityException extends LocalizedException
      * @param \Exception $cause
      * @param int $code
      */
-    public function __construct(Phrase $phrase = null, \Exception $cause = null, $code = 0)
+    public function __construct(?Phrase $phrase = null, ?\Exception $cause = null, $code = 0)
     {
         if ($phrase === null) {
             $phrase = new Phrase('No such entity.');

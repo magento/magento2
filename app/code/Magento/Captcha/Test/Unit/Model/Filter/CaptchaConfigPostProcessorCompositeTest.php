@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,14 +45,8 @@ class CaptchaConfigPostProcessorCompositeTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->processorMock1 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['process'])
-            ->getMock();
-        $this->processorMock2 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['process'])
-            ->getMock();
+        $this->processorMock1 = $this->createMock(CaptchaConfigPostProcessorInterface::class);
+        $this->processorMock2 = $this->createMock(CaptchaConfigPostProcessorInterface::class);
 
         $processors = [$this->processorMock1, $this->processorMock2];
 
@@ -71,7 +65,7 @@ class CaptchaConfigPostProcessorCompositeTest extends TestCase
      */
     public function testProcess(): void
     {
-        $config = ['test1','test2', 'test3'];
+        $config = ['test1', 'test2', 'test3'];
 
         $this->processorMock1->expects($this->atLeastOnce())
             ->method('process')
@@ -82,6 +76,6 @@ class CaptchaConfigPostProcessorCompositeTest extends TestCase
             ->with($config)
             ->willReturn(['test3']);
 
-        $this->assertEquals(['test1','test2', 'test3'], $this->model->process($config));
+        $this->assertEquals(['test1', 'test2', 'test3'], $this->model->process($config));
     }
 }

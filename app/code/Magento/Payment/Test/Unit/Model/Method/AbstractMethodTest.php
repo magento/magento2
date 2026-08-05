@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Payment\Test\Unit\Model\Method\AbstractMethod\Stub;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -57,24 +58,15 @@ class AbstractMethodTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['getValue'])
-            ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->onlyMethods(['dispatch'])
-            ->getMockForAbstractClass();
-        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
-            ->onlyMethods(['getStoreId'])
-            ->getMockForAbstractClass();
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getEventDispatcher'])
-            ->getMock();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->quoteMock = $this->createMock(CartInterface::class);
+        $contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->eventManagerMock);
         $this->loggerMock = $this->getMockBuilder(Logger::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->onlyMethods(['debug'])
             ->getMock();
 
@@ -101,9 +93,8 @@ class AbstractMethodTest extends TestCase
 
     /**
      * @param bool $result
-     *
-     * @dataProvider dataProviderForTestIsAvailable
      */
+    #[DataProvider('dataProviderForTestIsAvailable')]
     public function testIsAvailable($result)
     {
         $storeId = 15;
@@ -132,7 +123,7 @@ class AbstractMethodTest extends TestCase
     public function testAssignData()
     {
         $data = new DataObject();
-        $paymentInfo = $this->getMockForAbstractClass(InfoInterface::class);
+        $paymentInfo = $this->createMock(InfoInterface::class);
 
         $this->payment->setInfoInstance($paymentInfo);
 

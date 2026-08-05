@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -84,6 +84,11 @@ define([
             $.each(elements, function (index, field) {
                 uiRegistry.async(formPath + '.' + field)(self.doElementBinding.bind(self));
             });
+            let regionId = uiRegistry.async(formPath + '.region_id');
+
+            if (regionId() !== undefined) {
+                this.bindHandler(regionId(), self.validateDelay);
+            }
         },
 
         /**

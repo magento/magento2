@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_data_object_login">
@@ -25,8 +25,12 @@
     <event name="controller_action_postdispatch_checkout_onepage_saveBilling">
         <observer name="persistent" instance="Magento\Persistent\Observer\SetRememberMeCheckedStatusObserver" />
     </event>
+    <event name="layout_load_before">
+        <observer name="persistent_add_remember_me_init" instance="Magento\Persistent\Observer\AddPersistentRememberMeInitObserver" />
+    </event>
     <event name="layout_generate_blocks_after">
         <observer name="persistent" instance="Magento\Persistent\Observer\ApplyPersistentDataObserver" />
+        <observer name="persistent_add_remember_me_init" instance="Magento\Persistent\Observer\AddPersistentRememberMeInitObserver" />
     </event>
     <event name="controller_action_predispatch">
         <observer name="persistent_synchronize" instance="Magento\Persistent\Observer\SynchronizePersistentInfoObserver" />

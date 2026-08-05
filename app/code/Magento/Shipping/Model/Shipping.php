@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Shipping\Model;
@@ -130,7 +130,7 @@ class Shipping implements RateCollectorInterface
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        RateRequestFactory $rateRequestFactory = null,
+        ?RateRequestFactory $rateRequestFactory = null,
         ?PackageResultFactory $packageResultFactory = null,
         ?CarrierResultFactory $carrierResultFactory = null
     ) {
@@ -363,7 +363,7 @@ class Shipping implements RateCollectorInterface
         $fullItems = [];
         $weightItems = [];
 
-        $maxWeight = (double)$carrier->getConfigData('max_package_weight');
+        $maxWeight = (float)$carrier->getConfigData('max_package_weight');
 
         /** @var $item \Magento\Quote\Model\Quote\Item */
         foreach ($allItems as $item) {

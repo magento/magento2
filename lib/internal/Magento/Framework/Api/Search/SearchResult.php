@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Api\Search;
 
@@ -39,7 +39,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
     /**
      * {@inheritdoc}
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this->setData(self::ITEMS, $items);
     }
@@ -60,7 +60,7 @@ class SearchResult extends AbstractSimpleObject implements SearchResultInterface
      * @param BaseSearchCriteriaInterface $searchCriteria
      * @return $this
      */
-    public function setSearchCriteria(BaseSearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?BaseSearchCriteriaInterface $searchCriteria = null)
     {
         return $this->setData(self::SEARCH_CRITERIA, $searchCriteria);
     }

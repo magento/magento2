@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -96,6 +96,32 @@ class SetupUpgradeTest extends SetupTestCase
     }
 
     /**
+     * Test upgrading a module with a modified db_schema.xml column type.
+     *
+     * @moduleName Magento_TestSetupDeclarationModule11
+     * @throws \Exception
+     */
+    public function testUpgradeWithColumnTypeChange()
+    {
+        $moduleName = 'Magento_TestSetupDeclarationModule11';
+        $this->moduleManager->updateRevision(
+            $moduleName,
+            'initial_install',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommand->install([$moduleName]);
+        $this->moduleManager->updateRevision(
+            $moduleName,
+            'upgrade_column_type',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommand->upgrade();
+
+        $this->assertSchemaColumnTypeChange($moduleName);
+    }
+    /**
      * Convert file content in the DOM document.
      *
      * @param string $schemaFileName
@@ -169,5 +195,22 @@ class SetupUpgradeTest extends SetupTestCase
             );
 
         return $schemaFixturePath;
+    }
+
+    /**
+     * Assert that the column type has changed as expected.
+     *
+     * @param string $moduleName
+     */
+    private function assertSchemaColumnTypeChange(string $moduleName): void
+    {
+        $generatedSchema = $this->getGeneratedSchema($moduleName);
+        $expectedSchema = $this->getSchemaDocument($this->getSchemaFixturePath($moduleName, 'upgrade'));
+
+        $this->assertEquals(
+            $expectedSchema->saveXML(),
+            $generatedSchema->saveXML(),
+            "The generated db_schema.xml does not match the expected schema after upgrade."
+        );
     }
 }

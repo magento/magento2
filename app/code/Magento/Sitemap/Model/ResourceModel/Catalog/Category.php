@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
@@ -65,7 +65,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null,
-        CategorySelectBuilder $categorySelectBuilder = null
+        ?CategorySelectBuilder $categorySelectBuilder = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;

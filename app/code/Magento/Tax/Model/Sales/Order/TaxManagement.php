@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Model\Sales\Order;
@@ -62,7 +61,7 @@ class TaxManagement implements \Magento\Tax\Api\OrderTaxManagementInterface
     protected function convertToAppliedTaxDataObject(
         TaxDetailsDataObjectFactory $appliedTaxDataObjectFactory,
         $itemAppliedTax,
-        AppliedTax $existingAppliedTax = null
+        ?AppliedTax $existingAppliedTax = null
     ) {
         // if there is an existingAppliedTax, include its amount and baseAmount
         $amount = $baseAmount = 0;

@@ -1,9 +1,7 @@
 <?php
 /**
- * Eav attribute option
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Customer\Model\Data;
@@ -72,7 +70,7 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
      * @param \Magento\Customer\Api\Data\OptionInterface[] $options
      * @return $this
      */
-    public function setOptions(array $options = null)
+    public function setOptions(?array $options = null)
     {
         return $this->setData(self::OPTIONS, $options);
     }

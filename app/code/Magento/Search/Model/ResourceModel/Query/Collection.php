@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Search\Model\ResourceModel\Query;
 
@@ -60,8 +60,8 @@ class Collection extends AbstractCollection
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
         Helper $resourceHelper,
-        AdapterInterface $connection = null,
-        AbstractDb $resource = null
+        ?AdapterInterface $connection = null,
+        ?AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_resourceHelper = $resourceHelper;
@@ -171,7 +171,6 @@ class Collection extends AbstractCollection
         $select = $this->getSelect();
         $select->reset(\Magento\Framework\DB\Select::FROM);
         $select->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $select->distinct(true);
         $select->from(['main_table' => $this->getTable('search_query')], ['query_text']);
         $select->where('main_table.store_id IN (?)', $storeId);
         $select->where('main_table.num_results > 0');

@@ -1,18 +1,7 @@
 <?php
-/************************************************************************
- *
+/**
  * Copyright 2024 Adobe
  * All Rights Reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Adobe and its suppliers, if any. The intellectual
- * and technical concepts contained herein are proprietary to Adobe
- * and its suppliers and are protected by all applicable intellectual
- * property laws, including trade secret and copyright laws.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Adobe.
- * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -25,11 +14,15 @@ use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class InvalidateLayoutCacheObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var InvalidateLayoutCacheObserver
      */
@@ -67,41 +60,26 @@ class InvalidateLayoutCacheObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->cacheStateMock = $this
-            ->getMockBuilder(CacheState::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutCacheMock = $this
-            ->getMockBuilder(LayoutCache::class)
-            ->onlyMethods(['clean'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->tagResolverMock = $this
-            ->getMockBuilder(LayoutCacheTagResolverFactory::class)
-            ->addMethods(['getTags'])
-            ->onlyMethods(['getStrategy'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->observerMock = $this
-            ->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->eventMock = $this
-            ->getMockBuilder(Event::class)
-            ->addMethods(['getObject'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->objectMock = $this
-            ->getMockBuilder(DataObject::class)
-            ->addMethods(
-                [
-                    'getIdentifier',
-                    'dataHasChangedFor',
-                    'isObjectNew'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cacheStateMock = $this->createMock(CacheState::class);
+        
+        $this->layoutCacheMock = $this->createPartialMock(LayoutCache::class, ['clean']);
+        
+        $this->tagResolverMock = $this->createPartialMockWithReflection(
+            LayoutCacheTagResolverFactory::class,
+            ['getTags', 'getStrategy']
+        );
+        
+        $this->observerMock = $this->createMock(Observer::class);
+        
+        $this->eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getObject']
+        );
+        
+        $this->objectMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getIdentifier', 'dataHasChangedFor', 'isObjectNew']
+        );
         $this->invalidateLayoutCacheObserver = new InvalidateLayoutCacheObserver(
             $this->layoutCacheMock,
             $this->cacheStateMock,
@@ -117,8 +95,8 @@ class InvalidateLayoutCacheObserverTest extends TestCase
      * @param bool $isObjectNew
      * @param object|null $cacheStrategy
      * @param array $tags
-     * @dataProvider invalidateLayoutCacheDataProvider
      */
+    #[DataProvider('invalidateLayoutCacheDataProvider')]
     public function testExecute(
         bool    $cacheIsEnabled,
         bool    $isDataChangedFor,

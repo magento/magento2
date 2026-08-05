@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model;
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -90,7 +91,9 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function tearDown(): void
     {
-        $this->executeFixtures($this->fixtures, true);
+        if ($this->fixtures !== null) {
+            $this->executeFixtures($this->fixtures, true);
+        }
 
         if ($this->csvFile !== null) {
             $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
@@ -109,8 +112,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @return void
-     * @dataProvider exportImportDataProvider
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
         $this->csvFile = null;
@@ -134,9 +137,9 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param array $fixtures
      * @param string[] $skus
      * @param string[] $skippedAttributes
-     * @dataProvider exportImportDataProvider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;
@@ -253,7 +256,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string|null $csvFile
      * @return void
      */
-    protected function executeImportDeleteTest(array $skus, string $csvFile = null): void
+    protected function executeImportDeleteTest(array $skus, ?string $csvFile = null): void
     {
         $csvFile = $csvFile ?? $this->exportProducts();
         $this->importProducts($csvFile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
@@ -333,7 +336,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $skus,
         $skippedAttributes,
         $usePagination = false,
-        string $csvfile = null
+        ?string $csvfile = null
     ) {
         $replacedAttributes = [
             'row_id',
@@ -359,7 +362,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
             $itemsPerPageProperty = new \ReflectionProperty(Product::class, '_itemsPerPage');
-            $itemsPerPageProperty->setAccessible(true);
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
 
@@ -404,7 +406,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param Product|null $exportProduct
      * @return string Return exported file
      */
-    private function exportProducts(Product $exportProduct = null)
+    private function exportProducts(?Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $this->csvFile = $csvfile;

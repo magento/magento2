@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,7 @@
         </annotations>
         <before>
             <!-- Step1: Login as Admin -->
+            <magentoCLI command="config:set {{DefaultStoreFrontProductsSortByOrder.path}} {{DefaultStoreFrontProductsSortByOrder.value}}" stepKey="setDefaultSortByOrderValue"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -33,7 +34,10 @@
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         <!-- Step4: Create Text Attribute with used for Sorting in Product Listing as No -->
@@ -138,6 +142,9 @@
         <generateDate date="-1 day" format="m/d/Y" stepKey="generateYesterdayDate"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct1"/>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct1">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct1">
             <argument name="product" value="$$createSimpleProduct1$$"/>
         </actionGroup>
@@ -149,6 +156,9 @@
         <conditionalClick selector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" dependentSelector="{{AdminProductFormSection.customSwitcherAttribute('$$createYesNoProductAttribute.attribute_code$$','1')}}" visible="true" stepKey="selectNoForCustomYesNoAttributeForSimpleProduct1"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct1"/>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPageToEditProduct2"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct2">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditSimpleProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>

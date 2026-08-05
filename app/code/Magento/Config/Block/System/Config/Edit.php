@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Config edit page
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Block\System\Config;
 
@@ -21,7 +19,7 @@ use \Magento\Framework\Serialize\Serializer\Json;
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
-    const DEFAULT_SECTION_BLOCK = \Magento\Config\Block\System\Config\Form::class;
+    public const DEFAULT_SECTION_BLOCK = \Magento\Config\Block\System\Config\Form::class;
 
     /**
      * Form block class name
@@ -59,7 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Config\Model\Config\Structure $configStructure,
         array $data = [],
-        Json $jsonSerializer = null
+        ?Json $jsonSerializer = null
     ) {
         $this->_configStructure = $configStructure;
         $this->jsonSerializer = $jsonSerializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -120,6 +118,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return search parameters in JSON format
+     *
      * @return string
      * @since 101.1.0
      */

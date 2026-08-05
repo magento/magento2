@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\SaveHandler;
@@ -14,11 +15,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveHandler
      */
@@ -44,14 +47,9 @@ class SaveHandlerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)
-            ->getMockForAbstractClass();
-        $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCategoryLink = $this->createMock(CategoryLink::class);
+        $this->hydrator = $this->createMock(HydratorInterface::class);
+        $this->hydratorPool = $this->createMock(HydratorPool::class);
 
         $this->saveHandler = new SaveHandler(
             $this->productCategoryLink,
@@ -67,8 +65,8 @@ class SaveHandlerTest extends TestCase
      * @param array $affectedIds
      *
      * @return void
-     * @dataProvider getCategoryDataProvider
      */
+    #[DataProvider('getCategoryDataProvider')]
     public function testExecute(
         array $categoryIds,
         ?array $categoryLinks,
@@ -86,25 +84,18 @@ class SaveHandlerTest extends TestCase
                 ->willReturn($this->hydrator);
         }
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setCategoryLinks', 'getCategoryLinks'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            $this->getProductExtensionMethods()
+        );
         $extensionAttributes->expects(static::any())
             ->method('getCategoryLinks')
             ->willReturn($categoryLinks);
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getExtensionAttributes', 'getCategoryIds'])
-            ->addMethods(['setAffectedCategoryIds', 'setIsChangedCategories'])
-            ->getMock();
-        $product->method('setIsChangedCategories')
-            ->willReturnCallback(function ($arg) {
-                if ($arg === false) {
-                    return null;
-                }
-            });
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getExtensionAttributes', 'getCategoryIds', 'setAffectedCategoryIds', 'setIsChangedCategories']
+        );
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -226,19 +217,41 @@ class SaveHandlerTest extends TestCase
      */
     public function testExecuteWithoutProcess(): void
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getExtensionAttributes'])
-            ->addMethods(['hasCategoryIds'])
-            ->getMock();
+        $product = $this->createPartialMock(
+            Product::class,
+            ['getExtensionAttributes']
+        );
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn(null);
-        $product->expects(static::any())
-            ->method('hasCategoryIds')
-            ->willReturn(false);
 
         $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
+    }
+
+    private function getProductExtensionMethods(): array
+    {
+        return [
+            'getWebsiteIds',
+            'setWebsiteIds',
+            'getCategoryLinks',
+            'setCategoryLinks',
+            'getBundleProductOptions',
+            'setBundleProductOptions',
+            'getStockItem',
+            'setStockItem',
+            'getDiscounts',
+            'setDiscounts',
+            'getConfigurableProductOptions',
+            'setConfigurableProductOptions',
+            'getConfigurableProductLinks',
+            'setConfigurableProductLinks',
+            'getDownloadableProductLinks',
+            'setDownloadableProductLinks',
+            'getDownloadableProductSamples',
+            'setDownloadableProductSamples',
+            'getGiftcardAmounts',
+            'setGiftcardAmounts',
+        ];
     }
 }

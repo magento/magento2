@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -47,7 +47,7 @@ class ForwardTest extends TestCase
             CookieMetadataFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

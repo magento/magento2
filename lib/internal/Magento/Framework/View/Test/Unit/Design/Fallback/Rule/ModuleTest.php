@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -33,8 +33,8 @@ class ModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->rule = $this->createMock(RuleInterface::class);
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->model = new Module($this->rule, $this->componentRegistrar);

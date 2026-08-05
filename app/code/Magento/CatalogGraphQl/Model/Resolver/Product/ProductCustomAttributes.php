@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,9 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\DataObject;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  *
@@ -46,21 +49,29 @@ class ProductCustomAttributes implements ResolverInterface
     private FilterProductCustomAttribute $filterCustomAttribute;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param GetAttributeValueInterface $getAttributeValue
      * @param ProductDataProvider $productDataProvider
      * @param GetFilteredAttributes $getFilteredAttributes
      * @param FilterProductCustomAttribute $filterCustomAttribute
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         GetAttributeValueInterface $getAttributeValue,
         ProductDataProvider $productDataProvider,
         GetFilteredAttributes $getFilteredAttributes,
-        FilterProductCustomAttribute $filterCustomAttribute
+        FilterProductCustomAttribute $filterCustomAttribute,
+        ?LoggerInterface $logger = null
     ) {
         $this->getAttributeValue = $getAttributeValue;
         $this->productDataProvider = $productDataProvider;
         $this->getFilteredAttributes = $getFilteredAttributes;
         $this->filterCustomAttribute = $filterCustomAttribute;
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -78,8 +89,8 @@ class ProductCustomAttributes implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         $filtersArgs = $args['filters'] ?? [];
 
@@ -107,8 +118,29 @@ class ProductCustomAttributes implements ResolverInterface
                 continue;
             }
             $attributeValue = $productData[$attributeCode] ?? "";
+            if ($attributeValue instanceof DataObject) {
+                $attributeValue = $attributeValue->getData($attributeCode);
+            }
+            if ($attributeValue === null) {
+                continue;
+            }
             if (is_array($attributeValue)) {
-                $attributeValue = implode(',', $attributeValue);
+                $attributeValue = (count($attributeValue) != count($attributeValue, COUNT_RECURSIVE))
+                    ? json_encode($attributeValue)
+                    : implode(',', $attributeValue);
+            }
+            if (!is_scalar($attributeValue)) {
+                // Only strings/numbers allowed after normalization; skip any other types
+                $this->logger->warning(
+                    'Skipped product custom attribute due to unsupported value type',
+                    [
+                        'attribute_code' => $attributeCode,
+                        'product_id' => (int) $product->getId(),
+                        'sku' => $product->getSku(),
+                        'value_type' => get_debug_type($attributeValue)
+                    ]
+                );
+                continue;
             }
             $customAttributes[] = [
                 'attribute_code' => $attributeCode,

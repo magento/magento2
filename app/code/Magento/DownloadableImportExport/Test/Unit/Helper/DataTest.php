@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
 
 namespace Magento\DownloadableImportExport\Test\Unit\Helper;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\DownloadableImportExport\Helper\Data as HelperData;
 use Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
@@ -34,8 +35,8 @@ class DataTest extends TestCase
      *
      * @param array $rowData
      * @param bool $expected
-     * @dataProvider isRowDownloadableEmptyOptionsDataProvider
      */
+    #[DataProvider('isRowDownloadableEmptyOptionsDataProvider')]
     public function testIsRowDownloadableEmptyOptions($rowData, $expected)
     {
         $this->assertEquals($expected, $this->helper->isRowDownloadableEmptyOptions($rowData));
@@ -71,8 +72,8 @@ class DataTest extends TestCase
      *
      * @param array $rowData
      * @param bool $expected
-     * @dataProvider isRowDownloadableNoValidDataProvider
      */
+    #[DataProvider('isRowDownloadableNoValidDataProvider')]
     public function isRowDownloadableNoValid($rowData, $expected)
     {
         $this->assertEquals($expected, $this->helper->isRowDownloadableNoValid($rowData));
@@ -83,7 +84,7 @@ class DataTest extends TestCase
      *
      * @return array
      */
-    public function isRowDownloadableNoValidDataProvider()
+    public static function isRowDownloadableNoValidDataProvider()
     {
         return [
             'Data set include downloadable link and sample' => [
@@ -110,8 +111,8 @@ class DataTest extends TestCase
      * @param array $option
      * @param array $existingOptions
      * @param array $expected
-     * @dataProvider fillExistOptionsDataProvider
      */
+    #[DataProvider('fillExistOptionsDataProvider')]
     public function testFillExistOptions($base, $option, $existingOptions, $expected)
     {
         $this->assertEquals($expected, $this->helper->fillExistOptions($base, $option, $existingOptions));
@@ -189,8 +190,8 @@ class DataTest extends TestCase
      * @param array $base
      * @param array $replacement
      * @param array $expected
-     * @dataProvider prepareDataForSaveDataProvider
      */
+    #[DataProvider('prepareDataForSaveDataProvider')]
     public function testPrepareDataForSave($base, $replacement, $expected)
     {
         $this->assertEquals($expected, $this->helper->prepareDataForSave($base, $replacement));
@@ -251,8 +252,8 @@ class DataTest extends TestCase
      *
      * @param string $option
      * @param string $expected
-     * @dataProvider getTypeByValueDataProvider
      */
+    #[DataProvider('getTypeByValueDataProvider')]
     public function testGetTypeByValue($option, $expected)
     {
         $this->assertEquals($expected, $this->helper->getTypeByValue($option));

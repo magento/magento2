@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\HTTP\Adapter\Curl;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -100,10 +101,7 @@ class FeedTest extends TestCase
         $this->curlFactory = $this->createPartialMock(CurlFactory::class, ['create']);
         $this->curl = $this->createMock(Curl::class);
         $this->appState = $this->createPartialMock(State::class, []);
-        $this->inboxModel = $this->createPartialMock(Inbox::class, [
-            '__wakeup',
-            'parse'
-        ]);
+        $this->inboxModel = $this->createMock(Inbox::class);
         $this->backendConfig = $this->createPartialMock(
             ConfigInterface::class,
             [
@@ -126,7 +124,7 @@ class FeedTest extends TestCase
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->productMetadata = $this->createMock(ProductMetadata::class);
-        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlBuilder = $this->createMock(UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
             Feed::class,
@@ -148,8 +146,8 @@ class FeedTest extends TestCase
      * @param string $curlRequest
      *
      * @return void
-     * @dataProvider checkUpdateDataProvider
      */
+    #[DataProvider('checkUpdateDataProvider')]
     public function testCheckUpdate(bool $callInbox, string $curlRequest): void
     {
         $mockName    = 'Test Product Name';

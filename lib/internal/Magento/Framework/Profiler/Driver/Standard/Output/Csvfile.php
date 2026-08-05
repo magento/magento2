@@ -1,9 +1,7 @@
 <?php
 /**
- * Class that represents profiler output in CSV-file format
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Profiler\Driver\Standard\Output;
 
@@ -35,7 +33,7 @@ class Csvfile extends AbstractOutput
      *
      * @param array|null $config
      */
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         parent::__construct($config);
         $this->_filePath = $this->_parseFilePath($config);
@@ -49,7 +47,7 @@ class Csvfile extends AbstractOutput
      * @param array|null $config
      * @return string
      */
-    protected function _parseFilePath(array $config = null)
+    protected function _parseFilePath(?array $config = null)
     {
         $result = isset($config['filePath']) ? $config['filePath'] : self::DEFAULT_FILEPATH;
         if (isset($config['baseDir'])) {
@@ -98,7 +96,7 @@ class Csvfile extends AbstractOutput
             foreach ($this->_columns as $column) {
                 $row[] = $this->_renderColumnValue($stat->fetch($timerName, $column), $column);
             }
-            fputcsv($fileHandle, $row, $this->_delimiter, $this->_enclosure);
+            fputcsv($fileHandle, $row, $this->_delimiter, $this->_enclosure, '\\');
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Cache;
 
@@ -52,7 +52,7 @@ class TypeList implements TypeListInterface
         StateInterface $cacheState,
         InstanceFactory $factory,
         \Magento\Framework\App\CacheInterface $cache,
-        SerializerInterface $serializer = null
+        ?SerializerInterface $serializer = null
     ) {
         $this->_config = $config;
         $this->_factory = $factory;
