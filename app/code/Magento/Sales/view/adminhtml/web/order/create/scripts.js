@@ -5,6 +5,7 @@
 
  define([
     'jquery',
+    'underscore',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
     'mage/template',
@@ -14,7 +15,7 @@
     'prototype',
     'Magento_Catalog/catalog/product/composite/configure',
     'Magento_Ui/js/lib/view/utils/async'
-], function (jQuery, confirm, alert, template, shippingTemplate, paymentTemplate) {
+], function (jQuery, _, confirm, alert, template, shippingTemplate, paymentTemplate) {
 
     window.AdminOrder = new Class.create();
 
@@ -1496,6 +1497,7 @@
                 country: $(parameters.countryElementId).value,
                 vat: $(parameters.vatElementId).value
             };
+            var escapedVat = _.escape(params.vat);
 
             if (this.storeId !== false) {
                 params.store_id = this.storeId;
@@ -1516,7 +1518,7 @@
                             if (true === response.valid) {
                                 message = parameters.vatValidMessage;
                             } else if (true === response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                             } else {
                                 message = parameters.vatValidationFailedMessage;
                             }
@@ -1531,7 +1533,7 @@
                                     groupActionRequired = 'change';
                                 }
                             } else if (response.success) {
-                                message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                                message = parameters.vatInvalidMessage.replace(/%s/, escapedVat);
                                 groupActionRequired = 'inform';
                             } else {
                                 message = parameters.vatValidationFailedMessage;
