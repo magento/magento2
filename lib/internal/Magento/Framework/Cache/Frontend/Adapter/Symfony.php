@@ -298,6 +298,47 @@ class Symfony implements FrontendInterface
     }
 
     /**
+     * Load several ids in a SINGLE batched round-trip (PSR-6 getItems()).
+     *
+     * Used by the preloading wrapper to fetch all hot keys at once instead of N sequential load()s —
+     * matching the legacy Redis wrapper's pipeline preload. Returns [originalId => value] for hits only.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        if (empty($identifiers)) {
+            return [];
+        }
+        if ($this->hasPendingWrites) {
+            $this->commitPendingWrites();
+        }
+
+        // Map cleaned key -> original id so the caller can look results up by the id it passed.
+        $cleanToOriginal = [];
+        foreach ($identifiers as $identifier) {
+            $cleanToOriginal[$this->cleanIdentifier($identifier)] = $identifier;
+        }
+
+        $results = [];
+        foreach ($this->getCache()->getItems(array_keys($cleanToOriginal)) as $cleanId => $item) {
+            if (!$item->isHit()) {
+                continue;
+            }
+            $wrappedData = $item->get();
+            $value = (is_array($wrappedData) && array_key_exists('data', $wrappedData))
+                ? $wrappedData['data']
+                : $wrappedData;
+            if ($value !== false) {
+                $results[$cleanToOriginal[$cleanId]] = $value;
+            }
+        }
+
+        return $results;
+    }
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

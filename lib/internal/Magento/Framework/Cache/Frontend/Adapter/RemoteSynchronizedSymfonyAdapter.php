@@ -60,6 +60,28 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     }
 
     /**
+     * Batched multi-load (used by the preloading wrapper). Delegates to the L2 backend's loadMultiple()
+     * when available (one round-trip to the remote tier); otherwise falls back to per-key loads.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        if (method_exists($this->backend, 'loadMultiple')) {
+            return $this->backend->loadMultiple($identifiers);
+        }
+        $out = [];
+        foreach ($identifiers as $id) {
+            $value = $this->backend->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)

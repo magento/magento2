@@ -178,6 +178,35 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
+     * Batched multi-load from the remote (L2) tier in a single round-trip.
+     *
+     * Used by the preloading wrapper to warm a set of hot keys at once, mirroring the legacy Redis
+     * wrapper (which pipelines the preload from the shared/slave tier). The remote is the source of
+     * truth, so we fetch the values there in one call; per-id L1/hash validation is intentionally
+     * skipped for this warm-up path (any preloaded value is still re-validated on a normal load()).
+     *
+     * @param string[] $ids
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $ids): array
+    {
+        if (empty($ids)) {
+            return [];
+        }
+        if (method_exists($this->remote, 'loadMultiple')) {
+            return $this->remote->loadMultiple($ids);
+        }
+        $out = [];
+        foreach ($ids as $id) {
+            $value = $this->remote->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function test($id)
