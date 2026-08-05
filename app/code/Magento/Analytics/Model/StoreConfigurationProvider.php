@@ -56,25 +56,21 @@ class StoreConfigurationProvider
      */
     public function getReport()
     {
-        $configReport = $this->generateReportForScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0);
+        $reportsPerScope = [$this->generateReportForScope(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)];
 
         /** @var WebsiteInterface $website */
         foreach ($this->storeManager->getWebsites() as $website) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $configReport = array_merge(
-                $this->generateReportForScope(ScopeInterface::SCOPE_WEBSITES, $website->getId()),
-                $configReport
-            );
+            $reportsPerScope[] = $this->generateReportForScope(ScopeInterface::SCOPE_WEBSITES, $website->getId());
         }
 
         /** @var StoreInterface $store */
         foreach ($this->storeManager->getStores() as $store) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $configReport = array_merge(
-                $this->generateReportForScope(ScopeInterface::SCOPE_STORES, $store->getId()),
-                $configReport
-            );
+            $reportsPerScope[] = $this->generateReportForScope(ScopeInterface::SCOPE_STORES, $store->getId());
         }
+
+        // Each scope used to be prepended to the report, so the most specific scope comes first
+        $configReport = array_merge(...array_reverse($reportsPerScope));
+
         return new \IteratorIterator(new \ArrayIterator($configReport));
     }
 
