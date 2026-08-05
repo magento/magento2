@@ -24,7 +24,19 @@
             </li>
             <li>
                 <strong><?= $escaper->escapeHtml(__('Catalog Structure:')) ?></strong>
-                <?= $escaper->escapeHtml(__('Categories, Websites, and Custom Options')) ?>
+                <?= $escaper->escapeHtml(
+                    __('Categories, Websites, Custom Options, and Additional Attributes')
+                ) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Media & Visuals:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Additional Images, Swatch Images, and Product Page Visibility')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Pricing & Display:')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('MAP (Manufacturer\'s Suggested Retail Price) and Product Options Display settings')
+                ) ?>
             </li>
             <li>
                 <strong><?= $escaper->escapeHtml(__('Complex Product Data:')) ?></strong>
