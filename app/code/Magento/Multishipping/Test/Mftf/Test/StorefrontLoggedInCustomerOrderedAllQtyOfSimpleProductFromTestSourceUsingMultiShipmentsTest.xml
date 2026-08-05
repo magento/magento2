@@ -23,6 +23,7 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
         <!-- Login as a customer -->

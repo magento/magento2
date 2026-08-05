@@ -361,7 +361,7 @@ class Email extends AbstractModel
         $this->_appEmulation->stopEnvironmentEmulation();
 
         $customerName = $this->_customerHelper->getCustomerName($this->_customer);
-        $this->_transportBuilder->setTemplateIdentifier(
+        $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId
         )->setTemplateOptions(
             ['area' => Area::AREA_FRONTEND, 'store' => $storeId]
@@ -380,8 +380,11 @@ class Email extends AbstractModel
         )->addTo(
             $this->_customer->getEmail(),
             $customerName
-        )->getTransport()->sendMessage();
+        )->getTransport();
 
+        $this->_appEmulation->startEnvironmentEmulation($storeId);
+        $transport->sendMessage();
+        $this->_appEmulation->stopEnvironmentEmulation();
         return true;
     }
 

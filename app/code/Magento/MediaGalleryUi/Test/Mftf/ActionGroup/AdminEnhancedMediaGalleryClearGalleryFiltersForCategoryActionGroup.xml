@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup">
+        <annotations>
+            <description>Opens media gallery for category and clears filters.</description>
+        </annotations>
+        <conditionalClick selector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" dependentSelector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <waitForPageLoad stepKey="waitForPageFullyLoadedAfterClearingFilters"/>
+    </actionGroup>
+</actionGroups>
