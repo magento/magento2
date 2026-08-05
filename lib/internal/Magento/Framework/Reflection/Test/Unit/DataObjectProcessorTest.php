@@ -193,6 +193,8 @@ class DataObjectProcessorTest extends TestCase
             $fieldNamer,
             $customAttributesProcessor,
             $this->extensionAttributesProcessorMock,
+            [],
+            [],
             $propertyMetadataProvider
         );
 

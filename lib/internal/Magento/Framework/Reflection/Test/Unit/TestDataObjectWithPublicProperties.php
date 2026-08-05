@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-class TestDataObjectWithPublicProperties
+class TestDataObjectWithPublicProperties implements \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface
 {
     public function __construct(
         public readonly int $entityId,
