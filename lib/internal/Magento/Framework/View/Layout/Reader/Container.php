@@ -37,6 +37,8 @@ class Container implements Layout\ReaderInterface
      */
     protected $readerPool;
 
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
+
     /**
      * Constructor
      *
@@ -45,10 +47,18 @@ class Container implements Layout\ReaderInterface
      */
     public function __construct(
         Layout\ScheduledStructure\Helper $helper,
-        Layout\ReaderPool $readerPool
+        Layout\ReaderPool $readerPool,
+        ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->helper = $helper;
         $this->readerPool = $readerPool;
+        if ($scopeConfig === null) {
+            $this->scopeConfig
+                = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        } else {
+            $this->scopeConfig = $scopeConfig;
+        }
     }
 
     /**
@@ -99,6 +109,10 @@ class Container implements Layout\ReaderInterface
         $containerName = $currentElement->getAttribute('name');
         $elementData = $scheduledStructure->getStructureElementData($containerName);
 
+        if (!$this->isReferenceContainerActive($currentElement)) {
+            return;
+        }
+
         if (isset($elementData['attributes'])) {
             $keys = array_keys($elementData['attributes']);
             foreach ($keys as $key) {
@@ -132,6 +146,9 @@ class Container implements Layout\ReaderInterface
         Layout\ScheduledStructure $scheduledStructure,
         Layout\Element $currentElement
     ) {
+        if (!$this->isReferenceContainerActive($currentElement)) {
+            return;
+        }
         $containerName = $currentElement->getAttribute('name');
         $containerRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
         if ($containerRemove) {
@@ -141,5 +158,21 @@ class Container implements Layout\ReaderInterface
             $scheduledStructure->unsetElementFromListToRemove($containerName);
         }
         $this->mergeContainerAttributes($scheduledStructure, $currentElement);
+    }
+
+    /**
+     * Determine whether the current reference block should be interpreted.
+     *
+     * @param Element $currentElement
+     * @return bool
+     */
+    protected function isReferenceContainerActive(Layout\Element $currentElement): bool
+    {
+        $ifconfig = $currentElement->getAttribute('ifconfig');
+        if ($ifconfig === '' || $ifconfig === null) {
+            return true;
+        }
+
+        return $this->scopeConfig->isSetFlag($ifconfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
     }
 }
