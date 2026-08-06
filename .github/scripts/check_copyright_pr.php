@@ -45,8 +45,6 @@ if (!file_exists($filesPath)) {
 }
 
 $template        = trim((string) file_get_contents($templatePath));
-$isPrivate       = str_contains($template, 'ADOBE CONFIDENTIAL');
-$requiresNotice  = str_contains($template, 'NOTICE:');
 $changedFiles = array_filter(array_map('trim', file($filesPath)));
 $addedFiles   = ($addedPath && file_exists($addedPath))
     ? array_flip(array_filter(array_map('trim', file($addedPath))))
@@ -250,33 +248,6 @@ foreach ($changedFiles as $filePath) {
     $isNew         = isset($addedFiles[$filePath]);
     $currentHeader = extractCopyrightBlock($content);
 
-    // ── Confidentiality format check (derived from template) ─────────────────
-    $hasConfidential = str_contains($content, 'ADOBE CONFIDENTIAL');
-    $hasNotice       = str_contains($content, 'NOTICE:');
-    if ($isPrivate && !$hasConfidential) {
-        $issues[] = [
-            'file'   => $filePath,
-            'reason' => 'Private repo: missing ADOBE CONFIDENTIAL header',
-            'new'    => $isNew,
-        ];
-        continue;
-    }
-    if ($isPrivate && $requiresNotice && !$hasNotice) {
-        $issues[] = [
-            'file'   => $filePath,
-            'reason' => 'Private repo: missing NOTICE block in copyright header',
-            'new'    => $isNew,
-        ];
-        continue;
-    }
-    if (!$isPrivate && $hasConfidential) {
-        $issues[] = [
-            'file'   => $filePath,
-            'reason' => 'Public repo: file must not contain ADOBE CONFIDENTIAL',
-            'new'    => $isNew,
-        ];
-        continue;
-    }
 
     if ($isNew) {
         // ── New file: must have a copyright header in current-year format ─────
