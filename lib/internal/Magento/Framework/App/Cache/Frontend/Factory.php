@@ -731,6 +731,17 @@ class Factory
         $remoteBackend = $backendOptions['remote_backend'] ?? 'redis';
         $remoteBackendOptions = $backendOptions['remote_backend_options'] ?? [];
 
+        // Mirror legacy RemoteSynchronizedCache: top-level ("universal") backend_options that are not
+        // L2 structural keys flow into the remote tier, so preload_keys works in either backend_options
+        // or remote_backend_options (remote_backend_options wins on conflict, matching legacy merge order).
+        $l2StructuralKeys = [
+            'remote_backend', 'remote_backend_custom_naming', 'remote_backend_autoload', 'remote_backend_options',
+            'local_backend', 'local_backend_options', 'local_backend_custom_naming', 'local_backend_autoload',
+            'use_stale_cache', 'cleanup_percentage',
+        ];
+        $universalOptions = array_diff_key($backendOptions, array_flip($l2StructuralKeys));
+        $remoteBackendOptions = array_merge($universalOptions, $remoteBackendOptions);
+
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
