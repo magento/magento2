@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout\AclCondition;
@@ -21,6 +22,7 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
@@ -190,6 +192,40 @@ class BlockTest extends TestCase
     /**
      * @return array
      */
+    public function testReferenceBlockWithIfconfigDoesNotScheduleWhenConfigIsDisabled(): void
+    {
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with('config_path', ScopeInterface::SCOPE_STORE)
+            ->willReturn(false);
+
+        $this->context->expects($this->once())
+            ->method('getScheduledStructure')
+            ->willReturn($this->scheduledStructure);
+
+        $this->scheduledStructure->expects($this->never())
+            ->method('getStructureElementData');
+        $this->scheduledStructure->expects($this->never())
+            ->method('setStructureElementData');
+
+        $this->prepareReaderPool(
+            '<referenceBlock name="test_reference" ifconfig="config_path" />',
+            'referenceBlock'
+        );
+
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
+        $block = $this->getBlock([
+            'readerPool' => $this->readerPool,
+            'conditionReader' => $condition,
+            'scopeType' => 'scope',
+            'scopeConfig' => $scopeConfig,
+        ]);
+
+        $block->interpret($this->context, $this->currentElement);
+    }
+
     public static function processBlockDataProvider()
     {
         return [
@@ -322,8 +358,7 @@ class BlockTest extends TestCase
                         Block::ATTRIBUTE_TEMPLATE => '',
                         Block::ATTRIBUTE_TTL => '',
                         Block::ATTRIBUTE_DISPLAY => '',
-                        Block::ATTRIBUTE_ACL => '',
-                        'visibilityConditions' => []
+                        Block::ATTRIBUTE_ACL => ''
                     ]
                 ]
             );
@@ -344,51 +379,6 @@ class BlockTest extends TestCase
                 'scopeType' => 'scope',
             ]
         );
-        $block->interpret($this->context, $this->currentElement);
-    }
-
-    public function testReferenceBlockWithIfconfigAddsVisibilityCondition(): void
-    {
-        // maybe this isnt how it should be done?
-        $this->context->expects($this->once())
-            ->method('getScheduledStructure')
-            ->willReturn($this->scheduledStructure);
-
-        $this->scheduledStructure->expects($this->once())
-            ->method('getStructureElementData')
-            ->with('test_reference', [])
-            ->willReturn([]);
-
-        $this->scheduledStructure->expects($this->once())
-            ->method('setStructureElementData')
-            ->with(
-                'test_reference',
-                $this->callback(function (array $data) {
-                    $this->assertArrayHasKey('attributes', $data);
-                    $this->assertSame(
-                        [
-                            'name' => ConfigCondition::class,
-                            'arguments' => ['configPath' => 'config_path'],
-                        ],
-                        $data['attributes']['visibilityConditions']['ifconfig']
-                    );
-                    return true;
-                })
-            );
-
-        $this->prepareReaderPool(
-            '<referenceBlock name="test_reference" ifconfig="config_path" />',
-            'referenceBlock'
-        );
-
-        $objectManager = new ObjectManager($this);
-        $condition = $objectManager->getObject(Condition::class);
-        $block = $this->getBlock([
-            'readerPool' => $this->readerPool,
-            'conditionReader' => $condition,
-            'scopeType' => 'scope',
-        ]);
-
         $block->interpret($this->context, $this->currentElement);
     }
 

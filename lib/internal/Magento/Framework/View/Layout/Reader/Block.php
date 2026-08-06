@@ -269,7 +269,7 @@ class Block implements Layout\ReaderInterface
             return true;
         }
 
-        return $this->scopeConfig->isSetFlag($ifconfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+        return $this->scopeConfig->isSetFlag($ifconfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
