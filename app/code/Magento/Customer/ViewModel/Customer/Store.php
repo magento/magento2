@@ -8,10 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\ViewModel\Customer;
 
-use Magento\Customer\Model\Config\Share as ConfigShare;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store as SystemStore;
 
 /**
@@ -22,41 +19,16 @@ class Store implements OptionSourceInterface
     /**
      * @var SystemStore
      */
-    private $systemStore;
-
-    /**
-     * @var ConfigShare
-     */
-    private $configShare;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
+    private SystemStore $systemStore;
     /**
      * Store constructor.
      *
      * @param SystemStore $systemStore
-     * @param ConfigShare $configShare
-     * @param StoreManagerInterface $storeManager
-     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
-        SystemStore $systemStore,
-        ConfigShare $configShare,
-        StoreManagerInterface $storeManager,
-        DataPersistorInterface $dataPersistor
+        SystemStore $systemStore
     ) {
         $this->systemStore = $systemStore;
-        $this->configShare = $configShare;
-        $this->storeManager = $storeManager;
-        $this->dataPersistor = $dataPersistor;
     }
 
     /**

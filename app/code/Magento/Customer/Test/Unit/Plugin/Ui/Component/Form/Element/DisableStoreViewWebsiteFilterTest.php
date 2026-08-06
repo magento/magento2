@@ -31,7 +31,7 @@ class DisableStoreViewWebsiteFilterTest extends TestCase
     /**
      * @var DisableStoreViewWebsiteFilter
      */
-    private $plugin;
+    private DisableStoreViewWebsiteFilter $plugin;
 
     protected function setUp(): void
     {

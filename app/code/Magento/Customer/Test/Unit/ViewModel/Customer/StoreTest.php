@@ -8,11 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
-use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\ViewModel\Customer\Store as CustomerStore;
-use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store as SystemStore;
 use PHPUnit\Framework\TestCase;
 
@@ -34,12 +31,7 @@ class StoreTest extends TestCase
     protected function setUp(): void
     {
         $this->systemStore = $this->createStub(SystemStore::class);
-        $this->customerStore = new CustomerStore(
-            $this->systemStore,
-            $this->createStub(ConfigShare::class),
-            $this->createStub(StoreManagerInterface::class),
-            $this->createStub(DataPersistorInterface::class)
-        );
+        $this->customerStore = new CustomerStore($this->systemStore);
     }
 
     /**

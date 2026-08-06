@@ -33,7 +33,7 @@ class DisableStoreViewWebsiteFilter
     /**
      * @var ConfigShare
      */
-    private $configShare;
+    private ConfigShare $configShare;
 
     /**
      * @param ConfigShare $configShare
