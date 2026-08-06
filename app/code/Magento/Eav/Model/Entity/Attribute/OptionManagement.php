@@ -14,6 +14,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option as AttributeOptionResource;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -75,7 +76,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
 
-        if ($attribute->getSource()->getOptionId($label) !== null) {
+        if ($this->getOptionIdByLabel($attribute->getSource(), $label) !== null) {
             throw new InputException(
                 __(
                     'Admin store attribute option label "%1" already exists.',
@@ -116,8 +117,8 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
                 )
             );
         }
-        $optionIdByLabel = $attribute->getSource()->getOptionId($label);
-        if (!empty($optionIdByLabel) && (int)$optionIdByLabel !== (int)$optionId) {
+        $optionIdByLabel = $this->getOptionIdByLabel($attribute->getSource(), $label);
+        if ($optionIdByLabel !== null && (int)$optionIdByLabel !== (int)$optionId) {
             throw new InputException(
                 __(
                     'Admin store attribute option label \'%1\' already exists.',
@@ -253,6 +254,30 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
                 )
             );
         }
+    }
+
+    /**
+     * Find an option id by its label only.
+     *
+     * Unlike the source's getOptionId(), which also matches against the option value, this
+     * comparison is restricted to the label so that a numeric label is not mistaken for an
+     * existing option whose value (id) happens to equal that number.
+     *
+     * @param SourceInterface $source
+     * @param string $label
+     * @return string|null
+     */
+    private function getOptionIdByLabel(SourceInterface $source, string $label): ?string
+    {
+        foreach ($source->getAllOptions() as $option) {
+            if (isset($option['label'])
+                && mb_strtolower(trim((string)$option['label'])) === mb_strtolower($label)
+            ) {
+                return (string)$option['value'];
+            }
+        }
+
+        return null;
     }
 
     /**
