@@ -276,6 +276,82 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
+     * When a listed image fails to load under replace, successful images may still be added
+     * but gallery unlinks are skipped so a re-import can complete safely.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceSkipsUnlinkWhenImageUploadFails(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $filesBefore = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $filesBefore);
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $filesBefore);
+
+        // One good additional + one missing file → media error + replace-skipped notice.
+        $this->importDataForMediaTest(
+            'import_media_replace_with_missing_image.csv',
+            2,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        // Good image from the CSV is present; failed name is not.
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        // Unlink skipped: previous additional B must still be in the gallery.
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
+    }
+
+    /**
+     * Former additional image promoted to thumbnail with empty additional_images under replace:
+     * new thumbnail is kept; old thumbnail is dropped when no longer used as a role.
+     *
+     * Before: thumbnail = a (was additional), gallery also has b as additional.
+     * Import (replace): thumbnail = b, additional_images empty.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplacePromotesAdditionalToThumbnailAndDropsOldThumbnail(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        // Point thumbnail at former additional A; B remains a pure additional image.
+        $this->importDataForMediaTest('import_media_replace_thumbnail_to_additional_a.csv');
+
+        $product = $this->getProductBySku('simple_new');
+        $this->assertEquals('/r/e/repro_replace_additional_a.jpg', $product->getData('thumbnail'));
+        $filesBefore = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $filesBefore);
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $filesBefore);
+
+        $this->importDataForMediaTest(
+            'import_media_replace_thumbnail_from_additional_empty.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $product = $this->getProductBySku('simple_new');
+        $files = $this->getGalleryFiles('simple_new');
+
+        $this->assertEquals('/r/e/repro_replace_additional_b.jpg', $product->getData('thumbnail'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
+        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
+        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
+
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        // Old thumbnail A is no longer a role and not in additional_images → removed.
+        $this->assertNotContains('/r/e/repro_replace_additional_a.jpg', $files);
+        // B was only an additional image before; now it is the thumbnail (kept).
+        // Pure extras not re-listed are removed; former B is kept via thumbnail keepPath.
+    }
+
+    /**
      * @magentoDataFixture mediaImportImageFixture
      * @return void
      */
@@ -301,6 +377,198 @@ class ProductImagesTest extends ProductTestBase
         $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
         $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
         $this->assertCount(5, $files);
+    }
+
+    /**
+     * Replace keep-set is the union of additional_images from multiple default rows.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceKeepsUnionOfAdditionalImagesFromMultipleRows(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $this->assertCount(5, $this->getGalleryFiles('simple_new'));
+
+        $this->importDataForMediaTest(
+            'import_media_replace_union_rows.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertContains('/r/e/repro_replace_additional_c.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
+    }
+
+    /**
+     * Cross-bunch replace: default replace row and store role reassignment in separate bunches.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @return void
+     */
+    public function testReplaceAcrossBunchesWithStoreRoleReassignment(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        // Make store-scoped base use additional B so replace must not drop it until reassigned.
+        $this->importDataForMediaTest('import_media_assign_store_base.csv');
+        $this->assertEquals(
+            '/r/e/repro_replace_additional_b.jpg',
+            $this->getProductBySku('simple_new', 'fixturestore')->getData('image')
+        );
+
+        // bunch_size=1 forces default and store rows into different bunches.
+        $this->importDataForMediaTest(
+            'import_media_replace_cross_bunch.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE,
+            1
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertContains('/m/a/magento_image.jpg', $files);
+        $this->assertContains('/m/a/magento_small_image.jpg', $files);
+        $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
+
+        $this->assertEquals(
+            '/m/a/magento_image.jpg',
+            $this->getProductBySku('simple_new', 'fixturestore')->getData('image')
+        );
+        $this->assertEquals('/m/a/magento_image.jpg', $this->getProductBySku('simple_new')->getData('image'));
+    }
+
+    /**
+     * Store-scoped additional_images still import under replace mode without wiping gallery
+     * when the default row does not register replace (non-default store only).
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @return void
+     */
+    public function testStoreAdditionalImagesImportedWithoutDefaultReplaceRow(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $this->assertCount(5, $this->getGalleryFiles('simple_new'));
+
+        $this->importDataForMediaTest(
+            'import_media_replace_store_additional_only.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertContains('/r/e/repro_replace_additional_c.jpg', $files);
+        $this->assertCount(6, $files);
+    }
+
+    /**
+     * External-video gallery entries are not removed by replace mode.
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceDoesNotRemoveExternalVideoEntries(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $this->insertExternalVideoGalleryRow('simple_new');
+
+        $this->assertSame(1, $this->countExternalVideoEntries('simple_new'));
+
+        $this->importDataForMediaTest(
+            'import_media_replace_additional_images.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
+        $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
+        $this->assertSame(1, $this->countExternalVideoEntries('simple_new'));
+    }
+
+    /**
+     * @param string $sku
+     * @return string[]
+     */
+    private function getGalleryFiles(string $sku): array
+    {
+        return array_map(
+            static function (\Magento\Framework\DataObject $item) {
+                return $item->getFile();
+            },
+            array_values($this->getProductBySku($sku)->getMediaGalleryImages()->getItems())
+        );
+    }
+
+    /**
+     * @param string $sku
+     * @return int
+     */
+    private function countExternalVideoEntries(string $sku): int
+    {
+        $count = 0;
+        foreach ($this->getProductBySku($sku)->getMediaGalleryEntries() as $entry) {
+            if ($entry->getMediaType() === 'external-video') {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Insert a gallery value with media_type=external-video without GalleryManagement save quirks.
+     *
+     * @param string $sku
+     * @return void
+     */
+    private function insertExternalVideoGalleryRow(string $sku): void
+    {
+        $connection = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection();
+        $productResource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
+        $productId = (int)$productResource->getIdBySku($sku);
+        $linkField = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class)
+            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
+        $linkValue = (int)$connection->fetchOne(
+            $connection->select()
+                ->from($productResource->getEntityTable(), $linkField)
+                ->where('entity_id = ?', $productId)
+        );
+
+        $attributeId = (int)$productResource->getAttribute('media_gallery')->getAttributeId();
+        $galleryTable = $productResource->getTable('catalog_product_entity_media_gallery');
+        $valueToEntity = $productResource->getTable('catalog_product_entity_media_gallery_value_to_entity');
+        $valueTable = $productResource->getTable('catalog_product_entity_media_gallery_value');
+
+        $connection->insert($galleryTable, [
+            'attribute_id' => $attributeId,
+            'value' => '/r/e/replace_test_video.jpg',
+            'media_type' => 'external-video',
+            'disabled' => 0,
+        ]);
+        $valueId = (int)$connection->lastInsertId($galleryTable);
+        $connection->insert($valueToEntity, [
+            'value_id' => $valueId,
+            $linkField => $linkValue,
+        ]);
+        $connection->insert($valueTable, [
+            'value_id' => $valueId,
+            'store_id' => 0,
+            $linkField => $linkValue,
+            'label' => 'Replace Test Video',
+            'position' => 99,
+            'disabled' => 0,
+        ]);
     }
 
     /**

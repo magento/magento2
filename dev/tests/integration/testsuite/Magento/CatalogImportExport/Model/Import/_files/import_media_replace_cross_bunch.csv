@@ -1,0 +1,3 @@
+sku,store_view_code,additional_images,base_image,small_image,thumbnail_image,swatch_image
+simple_new,,repro_replace_additional_a.jpg,magento_image.jpg,magento_small_image.jpg,magento_thumbnail.jpg,magento_image.jpg
+simple_new,fixturestore,,magento_image.jpg,magento_small_image.jpg,magento_thumbnail.jpg,magento_image.jpg

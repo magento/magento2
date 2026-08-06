@@ -312,9 +312,14 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Load image role attribute values for SKUs across all store views.
+     *
+     * Roles (image, small_image, …) are store-scoped; replace must not drop a
+     * gallery file that is still assigned as a role on any store.
+     *
      * @param string[] $skus
      * @param string[] $roleAttributeCodes
-     * @return array
+     * @return array<string, array<string, array<int, string|null>>> lowercase sku => code => store_id => value
      */
     public function getProductImageRoles(array $skus, array $roleAttributeCodes): array
     {
@@ -352,16 +357,17 @@ class MediaGalleryProcessor
                 )->joinInner(
                     ['v' => $backendTable],
                     sprintf('e.%1$s = v.%1$s', $linkField),
-                    ['attribute_id' => 'v.attribute_id', 'value' => 'v.value']
+                    [
+                        'attribute_id' => 'v.attribute_id',
+                        'store_id' => 'v.store_id',
+                        'value' => 'v.value',
+                    ]
                 )->where(
                     'e.sku IN (?)',
                     $skus
                 )->where(
                     'v.attribute_id IN (?)',
                     $attributeIds
-                )->where(
-                    'v.store_id = ?',
-                    Store::DEFAULT_STORE_ID
                 );
             foreach ($this->connection->fetchAll($select) as $row) {
                 $skuKey = mb_strtolower((string)$row['sku']);
@@ -369,7 +375,7 @@ class MediaGalleryProcessor
                 if ($code === null) {
                     continue;
                 }
-                $result[$skuKey][$code] = $row['value'];
+                $result[$skuKey][$code][(int)$row['store_id']] = $row['value'];
             }
         }
 

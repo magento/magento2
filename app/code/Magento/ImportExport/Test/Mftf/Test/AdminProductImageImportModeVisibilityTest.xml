@@ -29,47 +29,28 @@
         <waitForPageLoad stepKey="waitForImportPageLoad"/>
         <waitForElementVisible selector="{{AdminImportMainSection.entityType}}" stepKey="waitForEntityType"/>
 
-        <executeJS function="return (function () { var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } return el.disabled || window.getComputedStyle(el).display === 'none' ? 'hidden' : 'visible'; })();" stepKey="stateBeforeEntity"/>
-        <assertEquals stepKey="fieldHiddenBeforeEntitySelected">
-            <expectedResult type="string">hidden</expectedResult>
-            <actualResult type="variable">stateBeforeEntity</actualResult>
-        </assertEquals>
+        <!-- Field starts hidden until entity/behavior qualify. -->
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenBeforeEntity"/>
 
+        <!-- Products alone is not enough: explicitly set Add/Update (do not rely on empty-option fallback). -->
         <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsEntity"/>
-        <executeJS function="return (function () { if (typeof varienImport === 'undefined') { return 'missing_varienImport'; } varienImport.handleEntityTypeSelector(); var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } var style = window.getComputedStyle(el); return (!el.disabled &amp;&amp; style.display !== 'none') ? 'visible' : 'hidden'; })();" stepKey="stateProductsAddUpdate"/>
-        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehavior"/>
-        <waitForElementVisible selector="{{AdminImportMainSection.imagesFileDirectory}}" stepKey="waitForUploadFieldset"/>
-        <assertEquals stepKey="fieldVisibleForProductsAddUpdate">
-            <expectedResult type="string">visible</expectedResult>
-            <actualResult type="variable">stateProductsAddUpdate</actualResult>
-        </assertEquals>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" time="30" stepKey="waitForImportBehavior"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.imagesFileDirectory}}" time="30" stepKey="waitForUploadFieldset"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehavior"/>
+        <actionGroup ref="AdminAssertProductImageImportModeVisibleActionGroup" stepKey="assertVisibleForProductsAddUpdate"/>
 
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Replace" stepKey="selectReplaceBehavior"/>
-        <executeJS function="return (function () { if (typeof varienImport !== 'undefined') { varienImport.handleImportBehaviorSelector(); } var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } return el.disabled || window.getComputedStyle(el).display === 'none' ? 'hidden' : 'visible'; })();" stepKey="stateReplace"/>
-        <assertEquals stepKey="fieldHiddenForReplace">
-            <expectedResult type="string">hidden</expectedResult>
-            <actualResult type="variable">stateReplace</actualResult>
-        </assertEquals>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForReplace"/>
 
-        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehavior"/>
-        <executeJS function="return (function () { if (typeof varienImport !== 'undefined') { varienImport.handleImportBehaviorSelector(); } var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } var style = window.getComputedStyle(el); return (!el.disabled &amp;&amp; style.display !== 'none') ? 'visible' : 'hidden'; })();" stepKey="stateAddUpdateAgain"/>
-        <assertEquals stepKey="fieldVisibleAgainForAddUpdate">
-            <expectedResult type="string">visible</expectedResult>
-            <actualResult type="variable">stateAddUpdateAgain</actualResult>
-        </assertEquals>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehaviorAgain"/>
+        <actionGroup ref="AdminAssertProductImageImportModeVisibleActionGroup" stepKey="assertVisibleAgainForAddUpdate"/>
 
         <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Delete" stepKey="selectDeleteBehavior"/>
-        <executeJS function="return (function () { if (typeof varienImport !== 'undefined') { varienImport.handleImportBehaviorSelector(); } var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } return el.disabled || window.getComputedStyle(el).display === 'none' ? 'hidden' : 'visible'; })();" stepKey="stateDelete"/>
-        <assertEquals stepKey="fieldHiddenForDelete">
-            <expectedResult type="string">hidden</expectedResult>
-            <actualResult type="variable">stateDelete</actualResult>
-        </assertEquals>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForDelete"/>
 
+        <!-- Non-product entity: field must stay hidden even if behavior options change. -->
         <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Advanced Pricing" stepKey="selectAdvancedPricingEntity"/>
-        <executeJS function="return (function () { if (typeof varienImport !== 'undefined') { varienImport.handleEntityTypeSelector(); } var el = document.getElementById('product_image_import_mode'); if (!el) { return 'absent'; } return el.disabled || window.getComputedStyle(el).display === 'none' ? 'hidden' : 'visible'; })();" stepKey="stateNonProduct"/>
-        <assertEquals stepKey="fieldHiddenForNonProductEntity">
-            <expectedResult type="string">hidden</expectedResult>
-            <actualResult type="variable">stateNonProduct</actualResult>
-        </assertEquals>
+        <waitForPageLoad stepKey="waitAfterNonProductEntity"/>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForNonProductEntity"/>
     </test>
 </tests>

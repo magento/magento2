@@ -299,14 +299,32 @@ class ProductTestBase extends TestCase
      * @param string $fileName
      * @param int $expectedErrors
      * @param string $imageImportMode
+     * @param int|null $bunchSize When set, forces import bunch size (for multi-bunch tests)
      * @return void
      */
     protected function importDataForMediaTest(
         string $fileName,
         int $expectedErrors = 0,
-        string $imageImportMode = Import::PRODUCT_IMAGE_IMPORT_MODE_ADD
+        string $imageImportMode = Import::PRODUCT_IMAGE_IMPORT_MODE_ADD,
+        ?int $bunchSize = null
     ) {
-        $this->createNewModel();
+        if ($bunchSize !== null) {
+            $importExportData = $this->getMockBuilder(Data::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $importExportData->method('getBunchSize')->willReturn($bunchSize);
+            $this->_model = $this->objectManager->create(
+                ImportProduct::class,
+                [
+                    'logger' => $this->logger,
+                    'importExportData' => $importExportData,
+                ]
+            );
+        } else {
+            $this->createNewModel();
+        }
+        // StoreResolver is a shared service and caches store codes for the process lifetime.
+        $this->clearImportStoreResolverCache();
         $filesystem = $this->objectManager->get(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -335,7 +353,16 @@ class ProductTestBase extends TestCase
         $this->assertTrue($uploader->setTmpDir($tmpDir));
         $this->_model->setSource($source);
         $errors = $this->_model->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue(
+            $errors->getErrorsCount() == 0,
+            array_reduce(
+                $errors->getAllErrors(),
+                static function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                "Validation failed for {$fileName}:"
+            )
+        );
         $this->_model->importData();
         $this->assertEquals(
             $expectedErrors,
@@ -348,6 +375,26 @@ class ProductTestBase extends TestCase
                 ''
             )
         );
+    }
+
+    /**
+     * Reset CatalogImportExport store/website maps so newly created stores are visible.
+     *
+     * @return void
+     */
+    protected function clearImportStoreResolverCache(): void
+    {
+        $resolver = $this->objectManager->get(Product\StoreResolver::class);
+        $reflection = new \ReflectionClass($resolver);
+        foreach (['storeCodeToId', 'storeIdToWebsiteStoreIds', 'websiteCodeToId', 'websiteCodeToStoreIds'] as $property) {
+            if (!$reflection->hasProperty($property)) {
+                continue;
+            }
+            $prop = $reflection->getProperty($property);
+            $prop->setAccessible(true);
+            $prop->setValue($resolver, []);
+        }
+        $this->objectManager->get(StoreManagerInterface::class)->reinitStores();
     }
 
     /**

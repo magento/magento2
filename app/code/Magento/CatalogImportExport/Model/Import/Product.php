@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryReplaceCoordinator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as ValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
 use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
@@ -765,9 +766,9 @@ class Product extends AbstractEntity
     private $productRepository;
 
     /**
-     * @var array<string, array<string, string|null>>
+     * @var MediaGalleryReplaceCoordinator
      */
-    private $productImageRolesCache = [];
+    private $mediaGalleryReplace;
 
     /**
      * @var StatusProcessor
@@ -855,6 +856,7 @@ class Product extends AbstractEntity
      * @param StockItemProcessorInterface|null $stockItemProcessor
      * @param SkuStorage|null $skuStorage
      * @param DomainValidator|null $domainValidator
+     * @param MediaGalleryReplaceCoordinator|null $mediaGalleryReplace
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -912,7 +914,8 @@ class Product extends AbstractEntity
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
         ?SkuStorage $skuStorage = null,
-        ?DomainValidator $domainValidator = null
+        ?DomainValidator $domainValidator = null,
+        ?MediaGalleryReplaceCoordinator $mediaGalleryReplace = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -946,6 +949,8 @@ class Product extends AbstractEntity
         $this->catalogConfig = $catalogConfig ?: ObjectManager::getInstance()->get(CatalogConfig::class);
         $this->imageTypeProcessor = $imageTypeProcessor ?: ObjectManager::getInstance()->get(ImageTypeProcessor::class);
         $this->mediaProcessor = $mediaProcessor ?: ObjectManager::getInstance()->get(MediaGalleryProcessor::class);
+        $this->mediaGalleryReplace = $mediaGalleryReplace
+            ?: ObjectManager::getInstance()->get(MediaGalleryReplaceCoordinator::class);
         $this->stockItemImporter = $stockItemImporter ?: ObjectManager::getInstance()
             ->get(StockItemImporterInterface::class);
         $this->statusProcessor = $statusProcessor ?: ObjectManager::getInstance()
@@ -1682,6 +1687,10 @@ class Product extends AbstractEntity
         $previousType = null;
         $prevAttributeSet = null;
         $productMediaPath = $this->getProductMediaPath();
+        $this->mediaGalleryReplace->configure(
+            $this->isImageReplaceMode(),
+            $this->getMediaImageRoleAttributeCodes()
+        );
         while ($bunch = $this->_dataSourceModel->getNextUniqueBunch($this->getIds())) {
             $entityRowsIn = [];
             $entityRowsUp = [];
@@ -1692,12 +1701,11 @@ class Product extends AbstractEntity
             $labelsForUpdate = [];
             $imagesForChangeVisibility = [];
             $uploadedImages = [];
-            $imagesToKeepBySku = [];
-            $imageReplaceSkus = [];
             $existingImages = $this->getExistingImages($bunch);
-            if ($this->isImageReplaceMode()) {
-                $this->warmProductImageRolesCache($bunch);
-            }
+            $this->mediaGalleryReplace->planRoleAssignments(
+                $this->extractImageRoleAssignmentsFromBunch($bunch)
+            );
+            $this->mediaGalleryReplace->warmRolesCache(array_column($bunch, self::COL_SKU));
             $attributes = [];
             foreach ($bunch as $rowNum => $rowData) {
                 try {
@@ -1752,9 +1760,7 @@ class Product extends AbstractEntity
                         $uploadedImages,
                         $imagesForChangeVisibility,
                         $labelsForUpdate,
-                        $mediaGallery,
-                        $imagesToKeepBySku,
-                        $imageReplaceSkus
+                        $mediaGallery
                     );
                     $this->saveProductAttributesPhase(
                         $rowData,
@@ -1778,14 +1784,6 @@ class Product extends AbstractEntity
             $this->_saveProductCategories($this->categoriesCache);
             $this->_saveProductTierPrices($tierPrices);
             $this->_saveMediaGallery($mediaGallery);
-            [$imagesToRemove, $mediaGalleryRemovedSkus] = $this->collectImagesToRemove(
-                $imageReplaceSkus,
-                $imagesToKeepBySku,
-                $existingImages
-            );
-            if ($imagesToRemove) {
-                $this->mediaProcessor->removeProductImages($imagesToRemove);
-            }
             $this->updateMediaGalleryVisibility($imagesForChangeVisibility);
             $this->updateMediaGalleryLabels($labelsForUpdate);
             $this->_saveProductAttributes($attributes);
@@ -1796,11 +1794,65 @@ class Product extends AbstractEntity
                     'bunch' => $bunch,
                     'media_gallery' => $mediaGallery,
                     'media_gallery_labels' => $labelsForUpdate,
-                    'media_gallery_removed_skus' => $mediaGalleryRemovedSkus,
+                    'media_gallery_removed_skus' => [],
                 ]
             );
         }
+        // Replace unlinks after all bunches so keep/plan cover SKUs split across bunches.
+        $this->applyDeferredMediaGalleryReplaceRemovals();
         return $this;
+    }
+
+    /**
+     * Unlink gallery images for replace-mode SKUs after the full import save loop.
+     *
+     * @return void
+     */
+    private function applyDeferredMediaGalleryReplaceRemovals(): void
+    {
+        if (!$this->mediaGalleryReplace->hasRegisteredProducts()) {
+            return;
+        }
+        $existingImages = $this->getExistingImages(
+            array_map(
+                static function (string $sku): array {
+                    return [self::COL_SKU => $sku];
+                },
+                $this->mediaGalleryReplace->getRegisteredSkus()
+            )
+        );
+        foreach ($this->mediaGalleryReplace->getSkusWithSkippedRemovals() as $sku) {
+            $this->addRowError(
+                'productImageReplaceSkippedDueToUploadFailure',
+                null,
+                null,
+                (string)__(
+                    'Gallery replace was skipped for SKU "%1" because one or more images could not be loaded. '
+                    . 'Existing images were kept. Fix the files and import again.',
+                    $sku
+                ),
+                ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+            );
+        }
+        [$imagesToRemove, $mediaGalleryRemovedSkus] = $this->mediaGalleryReplace->collectRemovals(
+            $existingImages
+        );
+        if ($imagesToRemove) {
+            $this->mediaProcessor->removeProductImages($imagesToRemove);
+        }
+        if ($mediaGalleryRemovedSkus === []) {
+            return;
+        }
+        $this->_eventManager->dispatch(
+            'catalog_product_import_bunch_save_after',
+            [
+                'adapter' => $this,
+                'bunch' => [],
+                'media_gallery' => [],
+                'media_gallery_labels' => [],
+                'media_gallery_removed_skus' => $mediaGalleryRemovedSkus,
+            ]
+        );
     }
     //phpcs:enable Generic.Metrics.NestingLevel
 
@@ -1945,12 +1997,9 @@ class Product extends AbstractEntity
      * @param array $imagesForChangeVisibility
      * @param array $labelsForUpdate
      * @param array $mediaGallery
-     * @param array $imagesToKeepBySku
-     * @param array $imageReplaceSkus
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @return void
      */
     private function saveProductMediaGalleryPhase(
@@ -1962,9 +2011,7 @@ class Product extends AbstractEntity
         array &$uploadedImages,
         array &$imagesForChangeVisibility,
         array &$labelsForUpdate,
-        array &$mediaGallery,
-        array &$imagesToKeepBySku = [],
-        array &$imageReplaceSkus = []
+        array &$mediaGallery
     ) : void {
         $rowSku = $rowData[self::COL_SKU];
         $rowSkuNormalized = mb_strtolower($rowSku);
@@ -1985,20 +2032,9 @@ class Product extends AbstractEntity
                 $rowImages[self::COL_MEDIA_IMAGE][] = $image;
             }
         }
-        $hasAdditionalImagesColumn = $this->rowHasAdditionalImagesColumn($rowData);
+        $this->mediaGalleryReplace->registerProduct($rowSku, $rowData, $storeId);
         $rowData[self::COL_MEDIA_IMAGE] = [];
         list($rowImages, $rowData) = $this->clearNoSelectionImages($rowImages, $rowData);
-
-        $trackReplaceKeep = $this->isImageReplaceMode()
-            && (int)$storeId === Store::DEFAULT_STORE_ID
-            && $hasAdditionalImagesColumn;
-        if ($trackReplaceKeep) {
-            $imageReplaceSkus[$rowSkuNormalized] = $rowSku;
-            $imagesToKeepBySku[$rowSkuNormalized] = $imagesToKeepBySku[$rowSkuNormalized] ?? [];
-            foreach ($this->getProtectedRoleImagePaths($rowSku, $rowData) as $protectedPath) {
-                $imagesToKeepBySku[$rowSkuNormalized][$protectedPath] = true;
-            }
-        }
 
         /*
          * Note: to avoid problems with undefined sorting, the value of media gallery items positions
@@ -2029,6 +2065,7 @@ class Product extends AbstractEntity
                         $uploadedImages[$columnImage] = $uploadedFile;
                     } else {
                         unset($rowData[$column]);
+                        $this->mediaGalleryReplace->markUploadFailed((string)$rowSku);
                         $this->addRowError(
                             ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                             $rowNum,
@@ -2051,9 +2088,7 @@ class Product extends AbstractEntity
                     continue;
                 }
                 $uploadedFileNormalized = ltrim($uploadedFile, '/\\');
-                if ($trackReplaceKeep) {
-                    $imagesToKeepBySku[$rowSkuNormalized][$uploadedFileNormalized] = true;
-                }
+                $this->mediaGalleryReplace->keepPath($rowSku, $uploadedFileNormalized);
                 if (isset($rowExistingImages[$uploadedFileNormalized])) {
                     $currentFileData = $rowExistingImages[$uploadedFileNormalized];
                     $currentFileData['store_id'] = $storeId;
@@ -2105,6 +2140,8 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Whether product image import replace mode is active for this job.
+     *
      * @return bool
      */
     private function isImageReplaceMode(): bool
@@ -2117,21 +2154,11 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Whether the row includes the additional_images column (mapped or raw).
+     * Media image role attribute codes (excludes additional_images / COL_MEDIA_IMAGE).
      *
-     * @param array $rowData
-     * @return bool
-     */
-    private function rowHasAdditionalImagesColumn(array $rowData): bool
-    {
-        return array_key_exists(self::COL_MEDIA_IMAGE, $rowData)
-            || array_key_exists('additional_images', $rowData);
-    }
-
-    /**
      * @return string[]
      */
-    private function getMediaImageRoleAttributes(): array
+    private function getMediaImageRoleAttributeCodes(): array
     {
         return array_values(
             array_filter(
@@ -2144,134 +2171,36 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Collect image-role column values from all store rows in the bunch.
+     *
+     * Used so replace-mode protection reflects multi-store role reassignments in
+     * the same import batch, not only pre-import DB values.
+     *
      * @param array $bunch
-     * @return void
+     * @return array<string, array<int, array<string, mixed>>> lowercase sku => store_id => code => value
      */
-    private function warmProductImageRolesCache(array $bunch): void
+    private function extractImageRoleAssignmentsFromBunch(array $bunch): array
     {
-        $skus = [];
+        $roleCodes = $this->getMediaImageRoleAttributeCodes();
+        if ($roleCodes === []) {
+            return [];
+        }
+        $assignments = [];
         foreach ($bunch as $rowData) {
-            if (!empty($rowData[self::COL_SKU])) {
-                $skus[] = (string)$rowData[self::COL_SKU];
-            }
-        }
-        if ($skus === []) {
-            return;
-        }
-        $rolesBySku = $this->mediaProcessor->getProductImageRoles(
-            array_values(array_unique($skus)),
-            $this->getMediaImageRoleAttributes()
-        );
-        foreach ($rolesBySku as $skuKey => $roles) {
-            $this->productImageRolesCache[$skuKey] = $roles;
-        }
-    }
-
-    /**
-     * @param string $sku
-     * @param array $rowData
-     * @return string[]
-     */
-    private function getProtectedRoleImagePaths(string $sku, array $rowData): array
-    {
-        $protected = [];
-        foreach ($this->getMediaImageRoleAttributes() as $attributeCode) {
-            if (array_key_exists($attributeCode, $rowData)) {
+            if (empty($rowData[self::COL_SKU])) {
                 continue;
             }
-            $path = $this->getExistingRoleImagePath($sku, $attributeCode);
-            if ($path !== null) {
-                $protected[] = $path;
-            }
-        }
-        return $protected;
-    }
-
-    /**
-     * @param string $sku
-     * @param string $attributeCode
-     * @return string|null
-     */
-    private function getExistingRoleImagePath(string $sku, string $attributeCode): ?string
-    {
-        $skuKey = mb_strtolower($sku);
-        if (!isset($this->productImageRolesCache[$skuKey])) {
-            $roles = [];
-            try {
-                $product = $this->productRepository->get($sku);
-                foreach ($this->getMediaImageRoleAttributes() as $roleCode) {
-                    $roles[$roleCode] = $product->getData($roleCode);
-                }
-            } catch (NoSuchEntityException) {
-                $roles = [];
-            }
-            $this->productImageRolesCache[$skuKey] = $roles;
-        }
-        $path = $this->productImageRolesCache[$skuKey][$attributeCode] ?? null;
-        if (!$path || $path === 'no_selection') {
-            return null;
-        }
-        return ltrim((string)$path, '/\\');
-    }
-
-    /**
-     * @param array $imageReplaceSkus
-     * @param array $imagesToKeepBySku
-     * @param array $existingImages
-     * @return array{0: array, 1: string[]} [removals, product SKUs that lost gallery images]
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function collectImagesToRemove(
-        array $imageReplaceSkus,
-        array $imagesToKeepBySku,
-        array $existingImages
-    ): array {
-        if (!$imageReplaceSkus || !$this->isImageReplaceMode()) {
-            return [[], []];
-        }
-        $removals = [];
-        $removedSkus = [];
-        $seen = [];
-        $linkField = $this->getProductEntityLinkField();
-        foreach ($imageReplaceSkus as $skuNormalized => $originalSku) {
-            $keep = $imagesToKeepBySku[$skuNormalized] ?? [];
-            $skuHadRemoval = false;
-            foreach ($existingImages as $bySku) {
-                if (!isset($bySku[$skuNormalized])) {
-                    continue;
-                }
-                foreach ($bySku[$skuNormalized] as $path => $imageData) {
-                    if (!isset($imageData['value_id'], $imageData[$linkField])) {
-                        continue;
-                    }
-                    $mediaType = $imageData['media_type'] ?? null;
-                    if ($mediaType !== null && $mediaType !== '' && $mediaType !== 'image') {
-                        continue;
-                    }
-                    $pathNormalized = ltrim((string)$path, '/\\');
-                    $valueNormalized = isset($imageData['value'])
-                        ? ltrim((string)$imageData['value'], '/\\')
-                        : $pathNormalized;
-                    if (isset($keep[$pathNormalized]) || isset($keep[$valueNormalized])) {
-                        continue;
-                    }
-                    $key = $imageData['value_id'] . ':' . $imageData[$linkField];
-                    if (isset($seen[$key])) {
-                        continue;
-                    }
-                    $seen[$key] = true;
-                    $skuHadRemoval = true;
-                    $removals[] = [
-                        'value_id' => $imageData['value_id'],
-                        $linkField => $imageData[$linkField],
-                    ];
+            $skuKey = mb_strtolower((string)$rowData[self::COL_SKU]);
+            $storeId = !empty($rowData[self::COL_STORE])
+                ? (int)$this->getStoreIdByCode($rowData[self::COL_STORE])
+                : Store::DEFAULT_STORE_ID;
+            foreach ($roleCodes as $code) {
+                if (array_key_exists($code, $rowData)) {
+                    $assignments[$skuKey][$storeId][$code] = $rowData[$code];
                 }
             }
-            if ($skuHadRemoval) {
-                $removedSkus[] = (string)$originalSku;
-            }
         }
-        return [$removals, array_values(array_unique($removedSkus))];
+        return $assignments;
     }
 
     /**
