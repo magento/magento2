@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
-class TestDataObjectWithPublicProperties
-    implements \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface
+use \Magento\Framework\Reflection\Api\PublicPropertySerializableInterface;
+
+class TestDataObjectWithPublicProperties implements PublicPropertySerializableInterface
 {
     public function __construct(
         public readonly int $entityId,
