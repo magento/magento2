@@ -1,3 +1,7 @@
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
 define([
     'jquery',
     'mage/translate'

@@ -1,3 +1,8 @@
+/**
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
+ */
+
 /* eslint-disable max-nested-callbacks */
 define([
     'squire'
