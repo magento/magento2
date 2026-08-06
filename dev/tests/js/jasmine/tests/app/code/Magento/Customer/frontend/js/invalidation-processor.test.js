@@ -40,7 +40,7 @@ define([
 
         describe('"process" method', function () {
             it('record status is 1', function () {
-                /* eslint-disable no-native-reassign */
+                /* eslint-disable no-native-reassign, no-global-assign */
 
                 var requireTmp = require;
 

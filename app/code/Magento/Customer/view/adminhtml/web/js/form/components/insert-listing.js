@@ -17,7 +17,7 @@ define([
          * @param {Object} data - customer address and actions
          */
         onAction: function (data) {
-            this[data.action + 'Action'].call(this, data.data);
+            this[data.action + 'Action'](data.data);
         },
 
         /**
@@ -26,7 +26,7 @@ define([
          * @param {Object} data - customer address
          */
         onMassAction: function (data) {
-            this[data.action + 'Massaction'].call(this, data.data);
+            this[data.action + 'Massaction'](data.data);
         },
 
         /**

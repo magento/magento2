@@ -27,7 +27,8 @@ define([
          */
         stopLoader: function (forceStop) {
             var $elem = $(containerId),
-                stop = $elem.trigger.bind($elem, 'processStop'); //eslint-disable-line jquery-no-bind-unbind
+                // eslint-disable-next-line eslint-plugin-magento/jquery-no-bind-unbind
+                stop = $elem.trigger.bind($elem, 'processStop');
 
             forceStop ? stop() : resolver(stop);
         }
