@@ -102,6 +102,8 @@ class PropertyMetadataProvider
     }
 
     /**
+     * Resolves the preferred type from a list of type names.
+     *
      * @param string[] $typeNames
      */
     private function resolvePreferredType(array $typeNames): string
