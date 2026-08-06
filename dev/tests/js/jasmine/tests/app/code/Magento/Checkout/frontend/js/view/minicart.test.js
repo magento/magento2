@@ -101,11 +101,9 @@ define(['squire'], function (Squire) {
                 expect(obj.minicartSelector).toBe('[data-block="minicart"]');
             });
 
-            it('Can be overridden via config.', function () {
-                var customObj;
-
+            it('Can be overridden via config.', function (done) {
                 injector.require(['Magento_Checkout/js/view/minicart'], function (Constr) {
-                    customObj = new Constr({
+                    var customObj = new Constr({
                         provider: 'provName',
                         name: '',
                         index: '',
@@ -113,9 +111,10 @@ define(['squire'], function (Squire) {
                         cart: {},
                         itemRenderer: {}
                     });
-                });
 
-                expect(customObj.minicartSelector).toBe('[data-block="minicart-footer"]');
+                    expect(customObj.minicartSelector).toBe('[data-block="minicart-footer"]');
+                    done();
+                });
             });
         });
 
@@ -124,21 +123,20 @@ define(['squire'], function (Squire) {
                 expect(obj.addToCartCalls).toBe(0);
             });
 
-            it('Each instance maintains its own counter.', function () {
-                var secondObj;
-
+            it('Each instance maintains its own counter.', function (done) {
                 injector.require(['Magento_Checkout/js/view/minicart'], function (Constr) {
-                    secondObj = new Constr({
+                    var secondObj = new Constr({
                         provider: 'provName',
                         name: '',
                         index: '',
                         cart: {},
                         itemRenderer: {}
                     });
-                });
 
-                obj.addToCartCalls = 5;
-                expect(secondObj.addToCartCalls).toBe(0);
+                    obj.addToCartCalls = 5;
+                    expect(secondObj.addToCartCalls).toBe(0);
+                    done();
+                });
             });
         });
 
