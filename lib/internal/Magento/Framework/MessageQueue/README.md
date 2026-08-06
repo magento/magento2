@@ -5,6 +5,6 @@ This component is designed to provide Message Queue Framework.
 Message payloads using `object_interface` topics are serialized through the Web API data processors.
 
 - Getter methods define the payload fields; if a getter and a public property map to the same field, the getter wins.
-- Public properties without getters are supported, including promoted/readonly properties, and are converted to
-  snake_case field names.
-- Constructor hydration accepts both camelCase and snake_case keys to support promoted/readonly DTOs on decode.
+- Public properties without getters are supported, given the object is implementing `\Magento\Framework\Reflection\Api\PublicPropertySerializableInterface`.
+    - This includes promoted/readonly properties, and are converted to snake_case field names.
+    - Constructor hydration accepts both camelCase and snake_case keys to support promoted/readonly DTOs on decode.
