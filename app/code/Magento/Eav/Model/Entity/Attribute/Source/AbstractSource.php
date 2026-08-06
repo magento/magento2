@@ -183,4 +183,20 @@ abstract class AbstractSource implements
             mb_strtoupper($str2, $encoding)
         );
     }
+
+    /**
+     * Get option id by label.
+     *
+     * @param string $label
+     * @return null|string
+     */
+    public function getOptionIdByLabel($label)
+    {
+        foreach ($this->getAllOptions() as $option) {
+            if ($this->mbStrcasecmp($option['label'], $label) === 0) {
+                return $option['value'];
+            }
+        }
+        return null;
+    }
 }
