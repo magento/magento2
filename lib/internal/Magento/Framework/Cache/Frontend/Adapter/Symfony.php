@@ -519,15 +519,20 @@ class Symfony implements FrontendInterface
      */
     private function calculateActualLifetime($lifeTime): ?int
     {
-        $actualLifetime = null;
+        // Legacy Zend/Cm parity for the lifetime argument:
+        //   null  => NO expiration — the entry persists until an explicit flush or tag invalidation
+        //            (config/layout-type caches). Legacy stored these with no TTL; coercing null to a
+        //            default forced a 2h expiry on entries that must live until invalidated.
+        //   false / 0 => fall back to the configured default lifetime (unchanged behavior).
+        //   > 0   => use that lifetime.
+        if ($lifeTime === null) {
+            return null;
+        }
 
-        if ($lifeTime !== null && $lifeTime !== false && $lifeTime !== 0) {
-            $actualLifetime = (int)$lifeTime;
-        } elseif ($lifeTime === 0 || $lifeTime === false) {
-            // 0 or false means use default in Zend behavior
+        if ($lifeTime === false || $lifeTime === 0) {
             $actualLifetime = $this->defaultLifetime;
         } else {
-            $actualLifetime = $this->defaultLifetime;
+            $actualLifetime = (int)$lifeTime;
         }
 
         // Enforce Redis MAX_LIFETIME limit (matches Zend behavior)
@@ -698,9 +703,11 @@ class Symfony implements FrontendInterface
      */
     private function cleanOld(CacheItemPoolInterface $cache): bool
     {
-        // Symfony handles expiration automatically
-        // This is a no-op as expired items are not returned
-        return true;
+        // Symfony auto-expires the DATA key by TTL, but the id lingers in its tag SETs / reverse index
+        // (cache:tags:*, cache:id_tags:*, cache:all_ids). Sweep those orphaned members so the tag index
+        // does not grow unbounded — the L2 cron path reaches GC here via the remote frontend. Mirrors
+        // legacy Cm Redis clean(OLD) -> _collectGarbage(). No-op on adapters without such an index.
+        return $this->adapter->garbageCollect() >= 0;
     }
 
     /**

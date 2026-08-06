@@ -557,14 +557,17 @@ class Factory
                 $adapterProvider,
                 $originalBackendType,
                 $backendOptions,
-                $idPrefix,
-                $defaultLifetime
+                $idPrefix
             ) {
+                // Build the PSR-6 pool with default lifetime 0 (no hidden TTL). The Symfony frontend
+                // adapter applies every lifetime explicitly via expiresAfter(), so a null lifetime must
+                // mean "no expiration" (legacy Zend/Cm parity) — if the pool imposed its own default,
+                // null-lifetime entries (config/layout caches) would wrongly expire after 2h.
                 return $adapterProvider->createAdapter(
                     $originalBackendType,
                     $backendOptions,
                     $idPrefix,
-                    $defaultLifetime
+                    0
                 );
             };
 

@@ -86,8 +86,11 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
-        $lifetime = $lifeTime ?? $this->defaultLifetime;
-        return $this->backend->save($data, $identifier, $tags, $lifetime);
+        // Pass the lifetime through untouched (including null) so the underlying Symfony adapter's
+        // calculateActualLifetime() is the single place that applies legacy semantics: null => no
+        // expiration, false/0 => default lifetime. Coercing null to the default here forced a TTL on
+        // L2 entries that legacy stored permanently.
+        return $this->backend->save($data, $identifier, $tags, $lifeTime);
     }
 
     /**

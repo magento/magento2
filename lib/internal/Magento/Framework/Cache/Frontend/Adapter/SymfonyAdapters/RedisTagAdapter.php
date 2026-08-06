@@ -1098,18 +1098,75 @@ LUA;
      */
     public function garbageCollect(int $batchSize = 1000): int
     {
-        // Garbage collection specifically checks use_lua_on_gc flag
-        if (!$this->useLuaOnGc || !$this->luaHelper) {
+        // Always sweep via the reverse index. We deliberately do NOT use the Lua keyspace-scan GC
+        // (use_lua_on_gc): that script does SCAN MATCH "<namespace>*" and prunes keys whose TTL == -2,
+        // but a TTL-expired data key has already been removed from the keyspace by Redis, so SCAN
+        // never returns it — it can never find these orphans (it prunes 0). The tag SETs and reverse
+        // index persist after the data expires, so we walk the reverse index and prune the ids whose
+        // data key is gone. Mirrors legacy Cm Redis _collectGarbage() (which likewise reasons from the
+        // tag/id sets, not a keyspace scan of already-deleted keys).
+        return $this->garbageCollectClientSide($batchSize);
+    }
+
+    /**
+     * Non-Lua garbage collection: prune tag-index members whose data key no longer exists.
+     *
+     * Enumerates THIS namespace's reverse-index keys (cache:id_tags:<namespace><id>) — one per tagged
+     * id, so the sweep is namespace-scoped and never touches another frontend's entries (mirrors the
+     * keys() enumeration already used by clearAllIndices()). For each id whose data key has TTL-expired
+     * it hands the id to pruneTagIndex(), which removes it from its tag SETs, reverse index and
+     * all_ids. Only ids confirmed missing are pruned, so live entries are never touched. The data-key
+     * derivation (dataKeyPrefix() . id) is the same one the atomic prune's EXISTS guard already relies
+     * on.
+     *
+     * @param int $batchSize
+     * @return int Number of orphaned index entries removed
+     */
+    private function garbageCollectClientSide(int $batchSize): int
+    {
+        $reversePrefix = self::REVERSE_INDEX_PREFIX . $this->namespace;
+        try {
+            $reverseKeys = $this->redis->keys($reversePrefix . '*');
+        } catch (\Throwable $e) {
+            return 0;
+        }
+        if (!is_array($reverseKeys) || empty($reverseKeys)) {
             return 0;
         }
 
-        $result = $this->luaHelper->garbageCollect(
-            $this->namespace . '*',
-            self::TAG_INDEX_PREFIX . $this->namespace,
-            $batchSize
-        );
+        $dataPrefix = $this->dataKeyPrefix();
+        $prefixLen = strlen($reversePrefix);
+        $removed = 0;
 
-        return $result[0]; // Return deleted count (first element)
+        foreach (array_chunk($reverseKeys, max(1, $batchSize)) as $chunk) {
+            // Map each reverse-index key back to its id and EXISTS-check its data key in one pipeline.
+            $ids = [];
+            $pipe = $this->createPipeline();
+            foreach ($chunk as $reverseKey) {
+                $id = substr((string)$reverseKey, $prefixLen);
+                $ids[] = $id;
+                $pipe->exists($dataPrefix . $id);
+            }
+            $exists = $this->executePipeline($pipe);
+            if (!is_array($exists)) {
+                continue;
+            }
+
+            $expired = [];
+            foreach ($ids as $i => $id) {
+                // phpredis EXISTS returns 0/1 (int); a falsy value means the data key is gone.
+                if (empty($exists[$i])) {
+                    $expired[] = $id;
+                }
+            }
+
+            if (!empty($expired)) {
+                $this->pruneTagIndex($expired);
+                $removed += count($expired);
+            }
+        }
+
+        return $removed;
     }
 
     /**

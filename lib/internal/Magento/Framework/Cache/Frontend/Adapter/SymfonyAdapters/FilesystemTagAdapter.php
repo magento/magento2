@@ -502,4 +502,15 @@ class FilesystemTagAdapter implements TagAdapterInterface
             }
         }
     }
+
+    /**
+     * @inheritDoc
+     *
+     * No-op: the file backend has no Redis-style tag SETs that accumulate orphaned members, and the
+     * memory-exhaustion concern this addresses is specific to the Redis/Valkey tag index.
+     */
+    public function garbageCollect(int $batchSize = 1000): int
+    {
+        return 0;
+    }
 }

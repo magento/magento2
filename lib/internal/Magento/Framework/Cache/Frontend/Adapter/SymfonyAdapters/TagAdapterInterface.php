@@ -83,4 +83,17 @@ interface TagAdapterInterface
      * @return void
      */
     public function clearAllIndices(): void;
+
+    /**
+     * Sweep tag-index members whose data entry has expired (CLEANING_MODE_OLD).
+     *
+     * Redis/Valkey auto-expire the data key by TTL but leave the id in its tag SETs; this prunes
+     * those orphaned members so the tag index does not grow unbounded. Mirrors legacy Cm Redis
+     * _collectGarbage(), run by the backend_clean_cache cron. Adapters with no such index (file)
+     * return 0.
+     *
+     * @param int $batchSize Number of ids to process per iteration
+     * @return int Number of orphaned index entries removed
+     */
+    public function garbageCollect(int $batchSize = 1000): int;
 }
