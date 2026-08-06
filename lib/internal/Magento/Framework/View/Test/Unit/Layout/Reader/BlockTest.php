@@ -121,16 +121,16 @@ class BlockTest extends TestCase
         $aclValue
     ) {
         // Convert string expectations to matchers
-        $scheduleStructureCount = is_string($scheduleStructureCount) 
-            ? $this->createInvocationMatcher($scheduleStructureCount) 
+        $scheduleStructureCount = is_string($scheduleStructureCount)
+            ? $this->createInvocationMatcher($scheduleStructureCount)
             : $scheduleStructureCount;
-        $getCondition = is_string($getCondition) 
-            ? $this->createInvocationMatcher($getCondition) 
+        $getCondition = is_string($getCondition)
+            ? $this->createInvocationMatcher($getCondition)
             : $getCondition;
-        $setCondition = is_string($setCondition) 
-            ? $this->createInvocationMatcher($setCondition) 
+        $setCondition = is_string($setCondition)
+            ? $this->createInvocationMatcher($setCondition)
             : $setCondition;
-        
+
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->willReturn($this->scheduledStructure);
         $this->scheduledStructure->expects($getCondition)
@@ -274,16 +274,16 @@ class BlockTest extends TestCase
         $setRemoveCondition
     ) {
         // Convert string expectations to matchers
-        $getCondition = is_string($getCondition) 
-            ? $this->createInvocationMatcher($getCondition) 
+        $getCondition = is_string($getCondition)
+            ? $this->createInvocationMatcher($getCondition)
             : $getCondition;
-        $setCondition = is_string($setCondition) 
-            ? $this->createInvocationMatcher($setCondition) 
+        $setCondition = is_string($setCondition)
+            ? $this->createInvocationMatcher($setCondition)
             : $setCondition;
-        $setRemoveCondition = is_string($setRemoveCondition) 
-            ? $this->createInvocationMatcher($setRemoveCondition) 
+        $setRemoveCondition = is_string($setRemoveCondition)
+            ? $this->createInvocationMatcher($setRemoveCondition)
             : $setRemoveCondition;
-        
+
         if ($literal == 'referenceBlock' && $remove == 'false') {
             $this->scheduledStructure->expects($this->once())
                 ->method('unsetElementFromListToRemove')
@@ -322,7 +322,8 @@ class BlockTest extends TestCase
                         Block::ATTRIBUTE_TEMPLATE => '',
                         Block::ATTRIBUTE_TTL => '',
                         Block::ATTRIBUTE_DISPLAY => '',
-                        Block::ATTRIBUTE_ACL => ''
+                        Block::ATTRIBUTE_ACL => '',
+                        'visibilityConditions' => []
                     ]
                 ]
             );
@@ -343,6 +344,51 @@ class BlockTest extends TestCase
                 'scopeType' => 'scope',
             ]
         );
+        $block->interpret($this->context, $this->currentElement);
+    }
+
+    public function testReferenceBlockWithIfconfigAddsVisibilityCondition(): void
+    {
+        // maybe this isnt how it should be done?
+        $this->context->expects($this->once())
+            ->method('getScheduledStructure')
+            ->willReturn($this->scheduledStructure);
+
+        $this->scheduledStructure->expects($this->once())
+            ->method('getStructureElementData')
+            ->with('test_reference', [])
+            ->willReturn([]);
+
+        $this->scheduledStructure->expects($this->once())
+            ->method('setStructureElementData')
+            ->with(
+                'test_reference',
+                $this->callback(function (array $data) {
+                    $this->assertArrayHasKey('attributes', $data);
+                    $this->assertSame(
+                        [
+                            'name' => ConfigCondition::class,
+                            'arguments' => ['configPath' => 'config_path'],
+                        ],
+                        $data['attributes']['visibilityConditions']['ifconfig']
+                    );
+                    return true;
+                })
+            );
+
+        $this->prepareReaderPool(
+            '<referenceBlock name="test_reference" ifconfig="config_path" />',
+            'referenceBlock'
+        );
+
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
+        $block = $this->getBlock([
+            'readerPool' => $this->readerPool,
+            'conditionReader' => $condition,
+            'scopeType' => 'scope',
+        ]);
+
         $block->interpret($this->context, $this->currentElement);
     }
 

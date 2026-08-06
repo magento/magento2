@@ -243,6 +243,39 @@ class Block implements Layout\ReaderInterface
         $scheduledStructure->setStructureElementData($elementName, $data);
     }
 
+    // /**
+    //  * Determine whether the current reference block should be interpreted.
+    //  *
+    //  * @param Element $currentElement
+    //  * @return bool
+    //  */
+    // protected function shouldScheduleReference(Element $currentElement): bool
+    // {
+    //     $ifconfig = $currentElement->getAttribute('ifconfig');
+    //     if ($ifconfig === '' || $ifconfig === null) {
+    //         return true;
+    //     }
+
+    //     // return true or false based of ScopeConfigInterface.
+    //     // ^ perhaps this logic should live somewhere else?
+
+    // }
+
+    /**
+     * Merge layout visibility conditions into the scheduled element attributes.
+     *
+     * @param array $attributes
+     * @param Element $currentElement
+     * @return array
+     */
+    protected function mergeVisibilityConditionsToAttributes(array $attributes, Element $currentElement): array
+    {
+        return array_merge(
+            $attributes,
+            ['visibilityConditions' => $this->conditionReader->parseConditions($currentElement)]
+        );
+    }
+
     /**
      * Update data for scheduled element
      *

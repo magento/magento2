@@ -221,6 +221,20 @@ class DomTest extends TestCase
         );
     }
 
+    public function testReferenceBlockIfconfigAttributeIsAllowed()
+    {
+        $xml = '<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><body>'
+            . '<referenceBlock name="contactForm" ifconfig="company_contact/general/enabled" '
+            . 'template="Company_Contact::form.phtml"/></body></page>';
+
+        $dom = new Dom($xml, $this->validationStateMock, [], null, null);
+        $actualErrors = [];
+        $result = $dom->validate('urn:magento:framework:View/Layout/etc/page_configuration.xsd', $actualErrors);
+
+        $this->assertTrue($result, 'Expected validation to succeed for referenceBlock with ifconfig. ' . print_r($actualErrors, true));
+        $this->assertEmpty($actualErrors);
+    }
+
     public function testValidateDomDocumentThrowsException()
     {
         $this->expectException('Magento\Framework\Config\Dom\ValidationSchemaException');
