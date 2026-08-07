@@ -8,10 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogImportExport\Model\Import\Product;
 
 /**
- * Tracks pre-import image roles and CSV reassignments for replace-mode protection.
- *
- * Keep a gallery path if it is still a role after import:
- * existing DB role on (sku, store, code) and that role was not reassigned in CSV.
+ * Protects image-role gallery paths during replace import.
  */
 class MediaGalleryReplaceRolePlan
 {
@@ -21,21 +18,17 @@ class MediaGalleryReplaceRolePlan
     private array $roleAttributeCodes = [];
 
     /**
-     * Lowercase SKU => role code => store_id => path (first load = pre-import).
-     *
-     * @var array<string, array<string, array<int, string|null>>>
+     * @var array
      */
     private array $dbRoles = [];
 
     /**
-     * Lowercase SKU => store_id => role code => CSV value (merge across bunches).
-     *
-     * @var array<string, array<int, array<string, mixed>>>
+     * @var array
      */
     private array $csvOverrides = [];
 
     /**
-     * @param MediaGalleryProcessor $mediaProcessor Media gallery DB helper
+     * @param MediaGalleryProcessor $mediaProcessor
      */
     public function __construct(
         private readonly MediaGalleryProcessor $mediaProcessor
@@ -58,7 +51,7 @@ class MediaGalleryReplaceRolePlan
     /**
      * Merge CSV role column values into the plan.
      *
-     * @param array $assignments Lowercase sku => store_id => attribute_code => value
+     * @param array $assignments
      * @return void
      */
     public function mergeCsvAssignments(array $assignments): void
@@ -73,7 +66,7 @@ class MediaGalleryReplaceRolePlan
     }
 
     /**
-     * Load missing SKUs' roles from DB (all stores). First sight wins for the import.
+     * Prefetch role values for SKUs not yet loaded.
      *
      * @param string[] $skus
      * @return void
@@ -100,7 +93,7 @@ class MediaGalleryReplaceRolePlan
     }
 
     /**
-     * Normalized gallery paths that must stay because they remain image roles.
+     * Gallery paths protected by remaining image roles.
      *
      * @param string $sku
      * @return string[]

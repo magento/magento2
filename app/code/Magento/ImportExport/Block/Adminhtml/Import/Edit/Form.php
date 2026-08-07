@@ -276,6 +276,22 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
         $fieldset->addField(
+            Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED,
+            'checkbox',
+            [
+                'name' => Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED,
+                'label' => __('Delete Unused Image Files'),
+                'title' => __('Delete Unused Image Files'),
+                'required' => false,
+                'disabled' => true,
+                'css_class' => 'no-display',
+                'value' => 1,
+                'note' => __(
+                    'Deletes media files unused by any product (including cache).'
+                ),
+            ]
+        );
+        $fieldset->addField(
             Import::FIELD_IMPORT_IDS,
             'hidden',
             [

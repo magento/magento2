@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -78,6 +79,11 @@ class MediaGalleryProcessor
     private $productEntityTableName;
 
     /**
+     * @var MediaGalleryCleanup
+     */
+    private $mediaGalleryCleanup;
+
+    /**
      * MediaProcessor constructor.
      *
      * @param SkuProcessor $skuProcessor
@@ -85,19 +91,23 @@ class MediaGalleryProcessor
      * @param ResourceConnection $resourceConnection
      * @param ResourceModelFactory $resourceModelFactory
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param MediaGalleryCleanup|null $mediaGalleryCleanup
      */
     public function __construct(
         SkuProcessor $skuProcessor,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
         ResourceModelFactory $resourceModelFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        ?MediaGalleryCleanup $mediaGalleryCleanup = null
     ) {
         $this->skuProcessor = $skuProcessor;
         $this->metadataPool = $metadataPool;
         $this->connection = $resourceConnection->getConnection();
         $this->resourceFactory = $resourceModelFactory;
         $this->errorAggregator = $errorAggregator;
+        $this->mediaGalleryCleanup = $mediaGalleryCleanup
+            ?? ObjectManager::getInstance()->get(MediaGalleryCleanup::class);
     }
 
     /**
@@ -270,56 +280,23 @@ class MediaGalleryProcessor
     }
 
     /**
-     * Unlink gallery images from products (links/values only; not shared files).
+     * Remove product gallery images (delegates to MediaGalleryCleanup).
      *
      * @param array $removals
+     * @param bool $deleteUnusedFiles
      * @return void
      */
-    public function removeProductImages(array $removals): void
+    public function removeProductImages(array $removals, bool $deleteUnusedFiles = false): void
     {
-        if (empty($removals)) {
-            return;
-        }
-        $this->initMediaGalleryResources();
-        $linkField = $this->getProductEntityLinkField();
-        $pairs = [];
-        foreach ($removals as $removal) {
-            if (!isset($removal['value_id'], $removal[$linkField])) {
-                continue;
-            }
-            $valueId = (int)$removal['value_id'];
-            $productId = (int)$removal[$linkField];
-            $key = $valueId . ':' . $productId;
-            if (isset($pairs[$key])) {
-                continue;
-            }
-            $pairs[$key] = [$valueId, $productId];
-        }
-        if (empty($pairs)) {
-            return;
-        }
-        $conditions = [];
-        foreach ($pairs as [$valueId, $productId]) {
-            $conditions[] = sprintf(
-                '(%s AND %s)',
-                $this->connection->quoteInto('value_id = ?', $valueId),
-                $this->connection->quoteInto($linkField . ' = ?', $productId)
-            );
-        }
-        $where = implode(' OR ', $conditions);
-        $this->connection->delete($this->mediaGalleryEntityToValueTableName, $where);
-        $this->connection->delete($this->mediaGalleryValueTableName, $where);
+        $this->mediaGalleryCleanup->removeProductImages($removals, $deleteUnusedFiles);
     }
 
     /**
-     * Load image role attribute values for SKUs across all store views.
-     *
-     * Roles (image, small_image, …) are store-scoped; replace must not drop a
-     * gallery file that is still assigned as a role on any store.
+     * Load image role values for SKUs across all stores.
      *
      * @param string[] $skus
      * @param string[] $roleAttributeCodes
-     * @return array<string, array<string, array<int, string|null>>> lowercase sku => code => store_id => value
+     * @return array
      */
     public function getProductImageRoles(array $skus, array $roleAttributeCodes): array
     {

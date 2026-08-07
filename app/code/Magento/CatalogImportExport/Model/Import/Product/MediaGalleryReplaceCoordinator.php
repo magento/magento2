@@ -14,51 +14,30 @@ use Magento\Store\Model\Store;
 
 /**
  * Replace-mode media gallery reconciliation for product import.
- *
- * Import-scoped lifecycle:
- * 1. configure()
- * 2. Per bunch: planRoleAssignments, warmRolesCache, registerProduct, keepPath
- * 3. After all bunches: collectRemovals()
- *
- * A path is kept if it was resolved during media import (keepPath) or it remains
- * an image role after applying multi-store CSV role reassignments (role plan).
- *
- * If any image upload fails for a SKU, deferred gallery unlinks are skipped for
- * that SKU so a re-import can complete replace safely (partial adds may remain).
  */
 class MediaGalleryReplaceCoordinator
 {
     /**
-     * Whether replace mode is active for this import.
-     *
      * @var bool
      */
     private bool $enabled = false;
 
     /**
-     * Lowercase SKU => original SKU
-     *
-     * @var array<string, string>
+     * @var array
      */
     private array $replaceSkus = [];
 
     /**
-     * Lowercase SKU => normalized path => true
-     *
-     * @var array<string, array<string, true>>
+     * @var array
      */
     private array $keptPaths = [];
 
     /**
-     * Lowercase SKU => true when at least one image failed to load for the SKU.
-     *
-     * @var array<string, true>
+     * @var array
      */
     private array $uploadFailedSkus = [];
 
     /**
-     * Product entity link field (row_id or entity_id).
-     *
      * @var string|null
      */
     private ?string $productEntityLinkField = null;
@@ -90,7 +69,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Whether any SKU was registered for replace during this import.
+     * Check if any SKUs were registered for replace.
      *
      * @return bool
      */
@@ -100,7 +79,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * SKUs registered for replace (original casing).
+     * Get registered replace SKUs.
      *
      * @return string[]
      */
@@ -110,7 +89,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Record that an image could not be loaded for the SKU (any store row).
+     * Mark SKU when an image failed to load.
      *
      * @param string $sku
      * @return void
@@ -124,9 +103,9 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Registered replace SKUs that must not be unlinked (media load failure).
+     * Get SKUs whose gallery unlinks were skipped.
      *
-     * @return string[] Original SKU casing
+     * @return string[]
      */
     public function getSkusWithSkippedRemovals(): array
     {
@@ -140,9 +119,9 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Merge image-role column values from a bunch into the role plan.
+     * Merge CSV role assignments into the plan.
      *
-     * @param array $assignments Lowercase sku => store_id => attribute_code => value
+     * @param array $assignments
      * @return void
      */
     public function planRoleAssignments(array $assignments): void
@@ -153,7 +132,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Prefetch role attribute values for SKUs (first sight wins).
+     * Prefetch role attribute values for SKUs.
      *
      * @param string[] $skus
      * @return void
@@ -166,7 +145,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Mark SKU for replace when default-store row includes additional_images.
+     * Register SKU for replace when default-store row has additional_images.
      *
      * @param string $sku
      * @param array $rowData
@@ -185,7 +164,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Record a resolved gallery path to keep for the SKU.
+     * Keep a resolved gallery path for the SKU.
      *
      * @param string $sku
      * @param string $normalizedPath
@@ -197,10 +176,10 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Build unlink list for registered SKUs without upload failures.
+     * Build gallery unlink list for registered SKUs.
      *
-     * @param array $existingImages storeId => sku => path => imageData
-     * @return array{0: array, 1: string[]}
+     * @param array $existingImages
+     * @return array
      */
     public function collectRemovals(array $existingImages): array
     {
@@ -214,7 +193,6 @@ class MediaGalleryReplaceCoordinator
         $linkField = $this->getProductEntityLinkField();
 
         foreach ($this->replaceSkus as $skuKey => $originalSku) {
-            // Partial media failure: keep existing gallery so re-import can finish replace.
             if (isset($this->uploadFailedSkus[$skuKey])) {
                 continue;
             }
@@ -233,9 +211,11 @@ class MediaGalleryReplaceCoordinator
                 }
                 $seen[$dedupeKey] = true;
                 $skuHadRemoval = true;
+                $filePath = (string)($imageData['value'] ?? $pathNormalized);
                 $removals[] = [
                     'value_id' => $imageData['value_id'],
                     $linkField => $imageData[$linkField],
+                    'value' => $filePath !== '' ? $filePath : $pathNormalized,
                 ];
             }
 
@@ -248,7 +228,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Build keep-set from kept media paths and protected role paths.
+     * Build keep-set from kept paths and protected roles.
      *
      * @param string $sku
      * @param string $skuKey
@@ -264,12 +244,12 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Yield removable image entries for a SKU (dedupe by store is handled via value_id).
+     * Yield removable image entries for a SKU.
      *
      * @param array $existingImages
      * @param string $skuKey
      * @param string $linkField
-     * @return \Generator<int, array>
+     * @return \Generator
      */
     private function iterateImageEntries(array $existingImages, string $skuKey, string $linkField): \Generator
     {
@@ -292,7 +272,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Whether the row includes the additional_images column.
+     * Check if row has additional_images column.
      *
      * @param array $rowData
      * @return bool
@@ -304,7 +284,7 @@ class MediaGalleryReplaceCoordinator
     }
 
     /**
-     * Product entity link field (row_id or entity_id).
+     * Get product entity link field.
      *
      * @return string
      */

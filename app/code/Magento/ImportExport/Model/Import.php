@@ -73,14 +73,13 @@ class Import extends AbstractModel
      */
     public const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
 
-    /**
-     * Product images import mode (add|replace).
-     */
     public const string FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE = 'product_image_import_mode';
 
     public const string PRODUCT_IMAGE_IMPORT_MODE_ADD = 'add';
 
     public const string PRODUCT_IMAGE_IMPORT_MODE_REPLACE = 'replace';
+
+    public const string FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED = 'product_image_delete_unused';
 
     /**
      * Allowed errors count field name

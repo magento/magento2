@@ -137,5 +137,92 @@ define([
                 }).not.toThrow();
             });
         });
+
+        describe('shouldShowProductImageDeleteUnused', function () {
+            var replaceMode = 'replace';
+
+            it('returns true only for catalog_product + append + replace image mode', function () {
+                expect(productImageImportMode.shouldShowProductImageDeleteUnused(
+                    productEntityCode,
+                    behaviorAppend,
+                    replaceMode,
+                    productEntityCode,
+                    behaviorAppend,
+                    replaceMode
+                )).toBe(true);
+            });
+
+            it('returns false when image mode is add', function () {
+                expect(productImageImportMode.shouldShowProductImageDeleteUnused(
+                    productEntityCode,
+                    behaviorAppend,
+                    defaultMode,
+                    productEntityCode,
+                    behaviorAppend,
+                    replaceMode
+                )).toBe(false);
+            });
+
+            it('returns false when import behavior is not append', function () {
+                expect(productImageImportMode.shouldShowProductImageDeleteUnused(
+                    productEntityCode,
+                    'replace',
+                    replaceMode,
+                    productEntityCode,
+                    behaviorAppend,
+                    replaceMode
+                )).toBe(false);
+            });
+
+            it('returns false for non-product entity', function () {
+                expect(productImageImportMode.shouldShowProductImageDeleteUnused(
+                    'customer',
+                    behaviorAppend,
+                    replaceMode,
+                    productEntityCode,
+                    behaviorAppend,
+                    replaceMode
+                )).toBe(false);
+            });
+        });
+
+        describe('applyProductImageDeleteUnusedVisibility', function () {
+            var $field, $fieldRow;
+
+            beforeEach(function () {
+                $field = $('<input type="checkbox" id="product_image_delete_unused" value="1"/>');
+                $fieldRow = $('<div class="field-product_image_delete_unused no-display"></div>');
+                $field.prop('checked', true);
+                $field.prop('disabled', true);
+                $fieldRow.hide();
+                $('body').append($fieldRow.append($field));
+            });
+
+            afterEach(function () {
+                $fieldRow.remove();
+                $field = null;
+                $fieldRow = null;
+            });
+
+            it('enables and shows the checkbox when visible', function () {
+                productImageImportMode.applyProductImageDeleteUnusedVisibility($field, $fieldRow, true);
+
+                expect($field.prop('disabled')).toBe(false);
+                expect($fieldRow.hasClass('no-display')).toBe(false);
+                expect($fieldRow.is(':visible')).toBe(true);
+            });
+
+            it('disables, hides, and unchecks when not visible', function () {
+                $field.prop('disabled', false).prop('checked', true);
+                $fieldRow.removeClass('no-display').show();
+
+                productImageImportMode.applyProductImageDeleteUnusedVisibility($field, $fieldRow, false);
+
+                expect($field.prop('disabled')).toBe(true);
+                expect($field.prop('checked')).toBe(false);
+                expect($fieldRow.hasClass('no-display')).toBe(true);
+                expect($fieldRow.is(':visible')).toBe(false);
+            });
+        });
     });
 });

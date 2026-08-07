@@ -9,8 +9,10 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $fieldNameSourceFile = \Magento\ImportExport\Model\Import::FIELD_NAME_SOURCE_FILE;
 $productImageImportModeField = \Magento\ImportExport\Model\Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE;
+$productImageDeleteUnusedField = \Magento\ImportExport\Model\Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED;
 $behaviorAppend = \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND;
 $productImageImportModeAdd = \Magento\ImportExport\Model\Import::PRODUCT_IMAGE_IMPORT_MODE_ADD;
+$productImageImportModeReplace = \Magento\ImportExport\Model\Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE;
 $uploaderErrorMessage = $block->escapeHtml(
     __('Content of uploaded file was changed, please re-upload the file')
 );
@@ -20,33 +22,11 @@ $uploaderErrorMessage = $block->escapeHtml(
 require([
     'jquery',
     'Magento_Ui/js/modal/alert',
+    'Magento_ImportExport/js/form/product-image-import-mode',
     'prototype'
-], function(jQuery, alert){
+], function(jQuery, alert, productImageImportModeHelpers){
 
 //<![CDATA[
-    var productImageImportModeHelpers = {
-        shouldShowProductImageImportMode: function (entity, behavior, productEntityCode, behaviorAppend) {
-            return entity === productEntityCode && behavior === behaviorAppend;
-        },
-        applyProductImageImportModeVisibility: function (\$field, \$fieldRow, isVisible, defaultMode) {
-            if (!\$field || !\$field.length) {
-                return;
-            }
-            if (isVisible) {
-                \$field.prop('disabled', false).show();
-                if (\$fieldRow && \$fieldRow.length) {
-                    \$fieldRow.removeClass('no-display').show();
-                }
-            } else {
-                \$field.val(defaultMode);
-                \$field.prop('disabled', true).hide();
-                if (\$fieldRow && \$fieldRow.length) {
-                    \$fieldRow.addClass('no-display').hide();
-                }
-            }
-        }
-    };
-
     // Temporary Class will be replaced after refactoring of import/export functionality
     varienImport = {
         /**
@@ -82,7 +62,9 @@ require([
         productEntityCode: 'catalog_product',
         behaviorAppend: '{$behaviorAppend}',
         productImageImportModeField: '{$productImageImportModeField}',
+        productImageDeleteUnusedField: '{$productImageDeleteUnusedField}',
         productImageImportModeAdd: '{$productImageImportModeAdd}',
+        productImageImportModeReplace: '{$productImageImportModeReplace}',
 
         /**
         * Loaded file last modified
@@ -192,7 +174,11 @@ require([
                 behaviorInput = requiredBehavior ? jQuery('#' + requiredBehavior) : null,
                 behavior = null,
                 field = jQuery('#' + this.productImageImportModeField),
-                fieldRow = jQuery('.field-' + this.productImageImportModeField);
+                fieldRow = jQuery('.field-' + this.productImageImportModeField),
+                deleteUnusedField = jQuery('#' + this.productImageDeleteUnusedField),
+                deleteUnusedFieldRow = jQuery('.field-' + this.productImageDeleteUnusedField),
+                isVisible,
+                isDeleteUnusedVisible;
             if (behaviorInput && behaviorInput.length) {
                 behavior = behaviorInput.val();
                 if (!behavior) {
@@ -203,12 +189,15 @@ require([
             if (!fieldRow.length && field.length) {
                 fieldRow = field.closest('div.admin__field, .field');
             }
-            var isVisible = productImageImportModeHelpers.shouldShowProductImageImportMode(
-                    entity,
-                    behavior,
-                    this.productEntityCode,
-                    this.behaviorAppend
-                );
+            if (!deleteUnusedFieldRow.length && deleteUnusedField.length) {
+                deleteUnusedFieldRow = deleteUnusedField.closest('div.admin__field, .field');
+            }
+            isVisible = productImageImportModeHelpers.shouldShowProductImageImportMode(
+                entity,
+                behavior,
+                this.productEntityCode,
+                this.behaviorAppend
+            );
 
             productImageImportModeHelpers.applyProductImageImportModeVisibility(
                 field,
@@ -216,6 +205,25 @@ require([
                 isVisible,
                 this.productImageImportModeAdd
             );
+
+            isDeleteUnusedVisible = productImageImportModeHelpers.shouldShowProductImageDeleteUnused(
+                entity,
+                behavior,
+                field.length ? field.val() : null,
+                this.productEntityCode,
+                this.behaviorAppend,
+                this.productImageImportModeReplace
+            );
+            productImageImportModeHelpers.applyProductImageDeleteUnusedVisibility(
+                deleteUnusedField,
+                deleteUnusedFieldRow,
+                isDeleteUnusedVisible
+            );
+
+            if (field.length && !field.data('deleteUnusedBound')) {
+                field.data('deleteUnusedBound', true);
+                field.on('change', jQuery.proxy(this.showProductImageImportMode, this));
+            }
         },
 
         /**

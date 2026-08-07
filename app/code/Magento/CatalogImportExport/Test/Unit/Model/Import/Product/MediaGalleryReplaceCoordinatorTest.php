@@ -152,6 +152,7 @@ class MediaGalleryReplaceCoordinatorTest extends TestCase
         $this->assertSame(['SKU1'], $removedSkus);
         $this->assertCount(1, $removals);
         $this->assertSame(2, (int)$removals[0]['value_id']);
+        $this->assertSame('/o/l/old_extra.jpg', $removals[0]['value']);
     }
 
     public function testWarmRolesCacheUsesBulkLoad(): void

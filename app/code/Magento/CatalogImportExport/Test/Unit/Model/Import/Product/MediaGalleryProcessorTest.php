@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
+use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryCleanup;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel;
@@ -22,82 +23,60 @@ use PHPUnit\Framework\TestCase;
 class MediaGalleryProcessorTest extends TestCase
 {
     /**
-     * @var AdapterInterface|MockObject
-     */
-    private $connection;
-
-    /**
      * @var MediaGalleryProcessor
      */
     private $processor;
 
     /**
-     * @var ResourceModel|MockObject
+     * @var MediaGalleryCleanup|MockObject
      */
-    private $resourceModel;
+    private $mediaGalleryCleanup;
 
     protected function setUp(): void
     {
-        $this->connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->createMock(AdapterInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
-        $resourceConnection->method('getConnection')->willReturn($this->connection);
+        $resourceConnection->method('getConnection')->willReturn($connection);
 
         $metadata = $this->createMock(EntityMetadata::class);
         $metadata->method('getLinkField')->willReturn('row_id');
         $metadataPool = $this->createMock(MetadataPool::class);
         $metadataPool->method('getMetadata')->willReturn($metadata);
 
-        $this->resourceModel = $this->createMock(ResourceModel::class);
-        $this->resourceModel->method('getTable')->willReturnCallback(
-            static function (string $table): string {
-                return $table;
-            }
-        );
+        $resourceModel = $this->createMock(ResourceModel::class);
         $resourceFactory = $this->createMock(ResourceModelFactory::class);
-        $resourceFactory->method('create')->willReturn($this->resourceModel);
+        $resourceFactory->method('create')->willReturn($resourceModel);
+
+        $this->mediaGalleryCleanup = $this->createMock(MediaGalleryCleanup::class);
 
         $this->processor = new MediaGalleryProcessor(
             $this->createMock(SkuProcessor::class),
             $metadataPool,
             $resourceConnection,
             $resourceFactory,
-            $this->createMock(ProcessingErrorAggregatorInterface::class)
+            $this->createMock(ProcessingErrorAggregatorInterface::class),
+            $this->mediaGalleryCleanup
         );
     }
 
-    public function testRemoveProductImagesDeletesLinksAndValuesInBatch(): void
+    public function testRemoveProductImagesDelegatesToCleanup(): void
     {
-        $this->connection->method('quoteInto')
-            ->willReturnCallback(static function (string $text, $value): string {
-                return str_replace('?', (string)$value, $text);
-            });
+        $removals = [
+            ['value_id' => 10, 'row_id' => 5, 'value' => '/o/l/old.jpg'],
+        ];
+        $this->mediaGalleryCleanup->expects($this->once())
+            ->method('removeProductImages')
+            ->with($removals, true);
 
-        $deleted = [];
-        $this->connection->expects($this->exactly(2))
-            ->method('delete')
-            ->willReturnCallback(function (string $table, string $where) use (&$deleted) {
-                $deleted[] = [$table, $where];
-                return 1;
-            });
-
-        $this->processor->removeProductImages([
-            ['value_id' => 10, 'row_id' => 5],
-            ['value_id' => 10, 'row_id' => 5],
-            ['value_id' => 11, 'row_id' => 6],
-        ]);
-
-        $this->assertCount(2, $deleted);
-        $this->assertSame('catalog_product_entity_media_gallery_value_to_entity', $deleted[0][0]);
-        $this->assertSame('catalog_product_entity_media_gallery_value', $deleted[1][0]);
-        $this->assertStringContainsString('(value_id = 10 AND row_id = 5)', $deleted[0][1]);
-        $this->assertStringContainsString('(value_id = 11 AND row_id = 6)', $deleted[0][1]);
-        $this->assertStringContainsString(' OR ', $deleted[0][1]);
-        $this->assertSame($deleted[0][1], $deleted[1][1]);
+        $this->processor->removeProductImages($removals, true);
     }
 
-    public function testRemoveProductImagesWithEmptyListDoesNothing(): void
+    public function testRemoveProductImagesDelegatesEmptyList(): void
     {
-        $this->connection->expects($this->never())->method('delete');
+        $this->mediaGalleryCleanup->expects($this->once())
+            ->method('removeProductImages')
+            ->with([], false);
+
         $this->processor->removeProductImages([]);
     }
 }

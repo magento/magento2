@@ -1798,13 +1798,12 @@ class Product extends AbstractEntity
                 ]
             );
         }
-        // Replace unlinks after all bunches so keep/plan cover SKUs split across bunches.
         $this->applyDeferredMediaGalleryReplaceRemovals();
         return $this;
     }
 
     /**
-     * Unlink gallery images for replace-mode SKUs after the full import save loop.
+     * Apply deferred replace-mode gallery unlinks.
      *
      * @return void
      */
@@ -1838,7 +1837,10 @@ class Product extends AbstractEntity
             $existingImages
         );
         if ($imagesToRemove) {
-            $this->mediaProcessor->removeProductImages($imagesToRemove);
+            $this->mediaProcessor->removeProductImages(
+                $imagesToRemove,
+                $this->shouldDeleteUnusedImageFiles()
+            );
         }
         if ($mediaGalleryRemovedSkus === []) {
             return;
@@ -2140,7 +2142,7 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Whether product image import replace mode is active for this job.
+     * Check if product image replace mode is active.
      *
      * @return bool
      */
@@ -2154,7 +2156,26 @@ class Product extends AbstractEntity
     }
 
     /**
-     * Media image role attribute codes (excludes additional_images / COL_MEDIA_IMAGE).
+     * Check if unused media files should be deleted after replace.
+     *
+     * @return bool
+     */
+    private function shouldDeleteUnusedImageFiles(): bool
+    {
+        if (!$this->isImageReplaceMode()) {
+            return false;
+        }
+        $flag = $this->_parameters[Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED] ?? false;
+
+        return $flag === true
+            || $flag === 1
+            || $flag === '1'
+            || $flag === 'true'
+            || $flag === 'on';
+    }
+
+    /**
+     * Get media image role attribute codes.
      *
      * @return string[]
      */

@@ -204,8 +204,6 @@ class ProductTestBase extends TestCase
                 'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
                 'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
-            // Unique-content fixtures for product_image_import_mode=replace tests (shared
-            // magento_additional_image_*.jpg binaries are identical and collide on content-hash match).
             [
                 'source' => __DIR__ . '/_files/repro_replace_additional_a.jpg',
                 'dest' => $dirPath . '/repro_replace_additional_a.jpg',
@@ -300,13 +298,15 @@ class ProductTestBase extends TestCase
      * @param int $expectedErrors
      * @param string $imageImportMode
      * @param int|null $bunchSize When set, forces import bunch size (for multi-bunch tests)
+     * @param bool $deleteUnusedImageFiles
      * @return void
      */
     protected function importDataForMediaTest(
         string $fileName,
         int $expectedErrors = 0,
         string $imageImportMode = Import::PRODUCT_IMAGE_IMPORT_MODE_ADD,
-        ?int $bunchSize = null
+        ?int $bunchSize = null,
+        bool $deleteUnusedImageFiles = false
     ) {
         if ($bunchSize !== null) {
             $importExportData = $this->getMockBuilder(Data::class)
@@ -340,14 +340,16 @@ class ProductTestBase extends TestCase
         $tmpDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images';
         $mediaDirectory->create('catalog' . DIRECTORY_SEPARATOR . 'product');
         $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
-        $this->_model->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import',
-                Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE => $imageImportMode,
-            ]
-        );
+        $parameters = [
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import',
+            Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE => $imageImportMode,
+        ];
+        if ($deleteUnusedImageFiles) {
+            $parameters[Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED] = '1';
+        }
+        $this->_model->setParameters($parameters);
         $uploader = $this->_model->getUploader();
         $this->assertTrue($uploader->setDestDir($destDir));
         $this->assertTrue($uploader->setTmpDir($tmpDir));

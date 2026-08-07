@@ -267,7 +267,6 @@ class ProductImagesTest extends ProductTestBase
         $this->assertContains('/m/a/magento_thumbnail.jpg', $files);
         $this->assertNotContains('/r/e/repro_replace_additional_a.jpg', $files);
         $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
-        // Roles only (base+swatch share magento_image.jpg): three gallery entries.
         $this->assertCount(3, $files);
         $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
         $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
@@ -276,9 +275,6 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * When a listed image fails to load under replace, successful images may still be added
-     * but gallery unlinks are skipped so a re-import can complete safely.
-     *
      * @magentoDataFixture mediaImportImageFixture
      * @return void
      */
@@ -289,7 +285,6 @@ class ProductImagesTest extends ProductTestBase
         $this->assertContains('/r/e/repro_replace_additional_a.jpg', $filesBefore);
         $this->assertContains('/r/e/repro_replace_additional_b.jpg', $filesBefore);
 
-        // One good additional + one missing file → media error + replace-skipped notice.
         $this->importDataForMediaTest(
             'import_media_replace_with_missing_image.csv',
             2,
@@ -297,9 +292,7 @@ class ProductImagesTest extends ProductTestBase
         );
 
         $files = $this->getGalleryFiles('simple_new');
-        // Good image from the CSV is present; failed name is not.
         $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
-        // Unlink skipped: previous additional B must still be in the gallery.
         $this->assertContains('/r/e/repro_replace_additional_b.jpg', $files);
         $this->assertContains('/m/a/magento_image.jpg', $files);
         $this->assertContains('/m/a/magento_small_image.jpg', $files);
@@ -307,12 +300,6 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * Former additional image promoted to thumbnail with empty additional_images under replace:
-     * new thumbnail is kept; old thumbnail is dropped when no longer used as a role.
-     *
-     * Before: thumbnail = a (was additional), gallery also has b as additional.
-     * Import (replace): thumbnail = b, additional_images empty.
-     *
      * @magentoDataFixture mediaImportImageFixture
      * @return void
      */
@@ -380,8 +367,7 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * Replace keep-set is the union of additional_images from multiple default rows.
-     *
+
      * @magentoDataFixture mediaImportImageFixture
      * @return void
      */
@@ -406,8 +392,7 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * Cross-bunch replace: default replace row and store role reassignment in separate bunches.
-     *
+
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @return void
@@ -445,9 +430,7 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * Store-scoped additional_images still import under replace mode without wiping gallery
-     * when the default row does not register replace (non-default store only).
-     *
+
      * @magentoDataFixture mediaImportImageFixture
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @return void
@@ -471,8 +454,6 @@ class ProductImagesTest extends ProductTestBase
     }
 
     /**
-     * External-video gallery entries are not removed by replace mode.
-     *
      * @magentoDataFixture mediaImportImageFixture
      * @return void
      */
@@ -493,6 +474,90 @@ class ProductImagesTest extends ProductTestBase
         $this->assertContains('/r/e/repro_replace_additional_a.jpg', $files);
         $this->assertNotContains('/r/e/repro_replace_additional_b.jpg', $files);
         $this->assertSame(1, $this->countExternalVideoEntries('simple_new'));
+    }
+
+    /**
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceWithoutDeleteUnusedKeepsPhysicalFiles(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $removedPath = '/r/e/repro_replace_additional_b.jpg';
+        $this->assertTrue($this->mediaFileExists($removedPath));
+        $this->assertGreaterThan(0, $this->countMediaGalleryRowsForPath($removedPath));
+
+        $this->importDataForMediaTest(
+            'import_media_replace_additional_images.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE
+        );
+
+        $this->assertNotContains($removedPath, $this->getGalleryFiles('simple_new'));
+        $this->assertSame(0, $this->countMediaGalleryRowsForPath($removedPath));
+        $this->assertTrue($this->mediaFileExists($removedPath));
+    }
+
+    /**
+     * @magentoDataFixture mediaImportImageFixture
+     * @return void
+     */
+    public function testReplaceWithDeleteUnusedRemovesPhysicalFiles(): void
+    {
+        $this->importDataForMediaTest('import_media_replace_setup.csv');
+        $removedPath = '/r/e/repro_replace_additional_b.jpg';
+        $keptPath = '/r/e/repro_replace_additional_a.jpg';
+        $this->assertTrue($this->mediaFileExists($removedPath));
+        $this->assertTrue($this->mediaFileExists($keptPath));
+
+        $this->importDataForMediaTest(
+            'import_media_replace_additional_images.csv',
+            0,
+            Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE,
+            null,
+            true
+        );
+
+        $files = $this->getGalleryFiles('simple_new');
+        $this->assertContains($keptPath, $files);
+        $this->assertNotContains($removedPath, $files);
+        $this->assertFalse($this->mediaFileExists($removedPath));
+        $this->assertTrue($this->mediaFileExists($keptPath));
+    }
+
+    /**
+     * @param string $galleryFile
+     * @return bool
+     */
+    private function mediaFileExists(string $galleryFile): bool
+    {
+        $filesystem = $this->objectManager->get(Filesystem::class);
+        $mediaDirectory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $relative = 'catalog/product/' . ltrim($galleryFile, '/');
+
+        return $mediaDirectory->isFile($relative);
+    }
+
+    /**
+     * @param string $galleryFile
+     * @return int
+     */
+    private function countMediaGalleryRowsForPath(string $galleryFile): int
+    {
+        $connection = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class)
+            ->getConnection();
+        $table = $connection->getTableName('catalog_product_entity_media_gallery');
+        $variants = array_unique([
+            $galleryFile,
+            '/' . ltrim($galleryFile, '/'),
+            ltrim($galleryFile, '/'),
+        ]);
+
+        return (int)$connection->fetchOne(
+            $connection->select()
+                ->from($table, ['cnt' => new \Zend_Db_Expr('COUNT(value_id)')])
+                ->where('value IN (?)', $variants)
+        );
     }
 
     /**
