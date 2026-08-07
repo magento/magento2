@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\CatalogGraphQl\Model\Resolver\Product\ProductFieldsSelector;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ProductFactory as ProductDataProviderFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -40,11 +41,14 @@ class Product implements ResolverInterface
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
      * @param ProductFieldsSelector $productFieldsSelector
+     * @param ProductDataProviderFactory|null $productDataProviderFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductDataProvider $productDataProvider,
         ValueFactory $valueFactory,
-        ProductFieldsSelector $productFieldsSelector
+        ProductFieldsSelector $productFieldsSelector,
+        ?ProductDataProviderFactory $productDataProviderFactory = null
     ) {
         $this->productDataProvider = $productDataProvider;
         $this->valueFactory = $valueFactory;

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\BundleGraphQl\Model\Resolver\Options;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\Product as ProductDataProvider;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred\ProductFactory as ProductDataProviderFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -31,14 +32,19 @@ class Label implements ResolverInterface
 
     /**
      * @param ValueFactory $valueFactory
-     * @param ProductDataProvider $productDataProvider
+     * @param ProductDataProvider $product
+     * @param ProductDataProviderFactory|null $productFactory
+     * @param ProductDataProvider|null $productDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ValueFactory $valueFactory,
-        ProductDataProvider $productDataProvider
+        ProductDataProvider $product,
+        ?ProductDataProviderFactory $productFactory = null,
+        ?ProductDataProvider $productDataProvider = null
     ) {
         $this->valueFactory = $valueFactory;
-        $this->productDataProvider = $productDataProvider;
+        $this->productDataProvider = $productDataProvider ?? $product;
     }
 
     /**
