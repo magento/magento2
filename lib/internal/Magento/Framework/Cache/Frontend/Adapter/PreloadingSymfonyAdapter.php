@@ -34,6 +34,23 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     private array $preloadKeys;
 
     /**
+     * Fast-path lookup: normalized identifier => cached value. Mirrors $localCache but keyed by the
+     * canonical id form (see normalizeIdentifier) so a preload key configured as "SYSTEM_DEFAULT:hash"
+     * is served for the runtime id the app actually loads ("system_default:hash"). $localCache stays
+     * keyed by the original preload key for stats/diagnostics.
+     *
+     * @var array
+     */
+    private array $normalizedIndex = [];
+
+    /**
+     * Normalized forms of $preloadKeys (computed once), for membership checks in save().
+     *
+     * @var array
+     */
+    private array $normalizedPreloadKeys = [];
+
+    /**
      * Whether the one-time preload has run yet (lazy, on first load).
      *
      * @var bool
@@ -65,6 +82,28 @@ class PreloadingSymfonyAdapter implements FrontendInterface
                 $preloadKeys
             )
             : $preloadKeys;
+        $this->normalizedPreloadKeys = array_map(
+            fn(string $key): string => $this->normalizeIdentifier($key),
+            $this->preloadKeys
+        );
+    }
+
+    /**
+     * Normalize an identifier to the canonical form the Symfony adapter stores keys under.
+     *
+     * Mirrors Magento\Framework\Cache\Frontend\Adapter\Symfony::cleanIdentifier() so a preload key
+     * configured in any case/separator (e.g. "SYSTEM_DEFAULT:hash") resolves to the same local-cache
+     * slot as the runtime id the application loads (e.g. "system_default:hash"). Both clean to
+     * "SYSTEM_DEFAULT_HASH".
+     *
+     * @param string $identifier
+     * @return string
+     */
+    private function normalizeIdentifier(string $identifier): string
+    {
+        // Single source of truth (shared with Symfony::cleanIdentifier) so the preload fast-path key
+        // form cannot drift from the store-path key form.
+        return Symfony\IdentifierNormalizer::normalize($identifier);
     }
 
     /**
@@ -93,15 +132,22 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         if (method_exists($this->adapter, 'loadMultiple')) {
             // one batched round-trip for all keys
             $this->localCache = $this->adapter->loadMultiple($this->preloadKeys);
-            return;
+        } else {
+            // fallback: per-key (no batching available on the underlying adapter)
+            foreach ($this->preloadKeys as $key) {
+                $value = $this->adapter->load($key);
+                if ($value !== false) {
+                    $this->localCache[$key] = $value;
+                }
+            }
         }
 
-        // fallback: per-key (no batching available on the underlying adapter)
-        foreach ($this->preloadKeys as $key) {
-            $value = $this->adapter->load($key);
-            if ($value !== false) {
-                $this->localCache[$key] = $value;
-            }
+        // Build the normalized fast-path index so load() matches runtime ids regardless of
+        // case/separator (the miss confirmed by tracing: localCache was keyed "SYSTEM_DEFAULT:hash"
+        // but the app loads "system_default:hash").
+        $this->normalizedIndex = [];
+        foreach ($this->localCache as $key => $value) {
+            $this->normalizedIndex[$this->normalizeIdentifier((string)$key)] = $value;
         }
     }
 
@@ -114,9 +160,11 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     {
         $this->ensurePreloaded();
 
-        // Fast path: served from the in-process preload cache (no Redis round-trip)
-        if (isset($this->localCache[$identifier])) {
-            return $this->localCache[$identifier];
+        // Fast path: served from the in-process preload cache (no Redis round-trip). Look up by the
+        // normalized id so configured preload keys match the runtime ids regardless of case/separators.
+        $normalized = $this->normalizeIdentifier((string)$identifier);
+        if (isset($this->normalizedIndex[$normalized])) {
+            return $this->normalizedIndex[$normalized];
         }
 
         // Slow path: fetch from Redis
@@ -133,9 +181,12 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         // Write through to Redis
         $result = $this->adapter->save($data, $identifier, $tags, $lifeTime);
 
-        // If this is a preloaded key, update local cache
-        if ($result && in_array($identifier, $this->preloadKeys, true)) {
+        // If this id is a configured preload key (matched on the normalized form), keep the preload
+        // cache fresh so a subsequent load() in this request serves the new value from memory.
+        $normalized = $this->normalizeIdentifier((string)$identifier);
+        if ($result && in_array($normalized, $this->normalizedPreloadKeys, true)) {
             $this->localCache[$identifier] = $data;
+            $this->normalizedIndex[$normalized] = $data;
         }
 
         return $result;
@@ -158,8 +209,8 @@ class PreloadingSymfonyAdapter implements FrontendInterface
      */
     public function remove($identifier)
     {
-        // Remove from local cache if present
-        unset($this->localCache[$identifier]);
+        // Remove from local cache if present (both the original-keyed view and the normalized index)
+        unset($this->localCache[$identifier], $this->normalizedIndex[$this->normalizeIdentifier((string)$identifier)]);
 
         return $this->adapter->remove($identifier);
     }
@@ -173,6 +224,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     {
         // Drop the preload cache and arm a lazy re-preload on the next load().
         $this->localCache = [];
+        $this->normalizedIndex = [];
         $this->preloaded = false;
 
         return $this->adapter->clean($mode, $tags);

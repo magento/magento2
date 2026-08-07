@@ -187,13 +187,9 @@ class Symfony implements FrontendInterface
      */
     private function cleanIdentifier(?string $identifier): ?string
     {
-        if ($identifier === null) {
-            return null;
-        }
-
-        $identifier = strtoupper($identifier);
-        $cleaned = str_replace('.', '__', $identifier);
-        return preg_replace('/[^a-zA-Z0-9_]/', '_', $cleaned);
+        // Single source of truth (shared with PreloadingSymfonyAdapter) so key normalization
+        // cannot drift between the store path and the preload fast-path.
+        return $identifier === null ? null : Symfony\IdentifierNormalizer::normalize($identifier);
     }
 
     /**
