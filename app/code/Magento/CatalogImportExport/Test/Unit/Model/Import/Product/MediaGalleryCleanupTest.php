@@ -101,6 +101,7 @@ class MediaGalleryCleanupTest extends TestCase
         $select->method('from')->willReturnSelf();
         $select->method('where')->willReturnSelf();
         $select->method('distinct')->willReturnSelf();
+        $select->method('group')->willReturnSelf();
         $this->connection->method('select')->willReturn($select);
         $this->connection->method('fetchCol')->willReturn([]);
 
@@ -147,9 +148,11 @@ class MediaGalleryCleanupTest extends TestCase
         $select->method('from')->willReturnSelf();
         $select->method('where')->willReturnSelf();
         $select->method('distinct')->willReturnSelf();
+        $select->method('group')->willReturnSelf();
         $this->connection->method('select')->willReturn($select);
         $this->connection->method('fetchCol')->willReturn([]);
-        $this->connection->method('fetchOne')->willReturn('0');
+        // No remaining gallery rows for the path (batched COUNT via fetchPairs).
+        $this->connection->method('fetchPairs')->willReturn([]);
         $this->connection->method('delete')->willReturn(1);
 
         $this->mediaDirectory->expects($this->once())
@@ -166,6 +169,83 @@ class MediaGalleryCleanupTest extends TestCase
         $this->cleanup->removeProductImages(
             [
                 ['value_id' => 10, 'row_id' => 5, 'value' => '/o/l/old_extra.jpg'],
+            ],
+            true
+        );
+    }
+
+    public function testRemoveProductImagesRejectsPathTraversalWhenDeletingFiles(): void
+    {
+        $this->connection->method('quoteInto')
+            ->willReturnCallback(static function (string $text, $value): string {
+                if (is_array($value)) {
+                    return str_replace('?', implode(',', $value), $text);
+                }
+                return str_replace('?', (string)$value, $text);
+            });
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $select->method('distinct')->willReturnSelf();
+        $select->method('group')->willReturnSelf();
+        $this->connection->method('select')->willReturn($select);
+        $this->connection->method('fetchCol')->willReturn([]);
+        $this->connection->method('delete')->willReturn(1);
+
+        $this->mediaDirectory->expects($this->never())->method('isFile');
+        $this->mediaDirectory->expects($this->never())->method('delete');
+        $this->removeDeletedImagesFromCache->expects($this->never())->method('removeDeletedImagesFromCache');
+
+        $this->cleanup->removeProductImages(
+            [
+                ['value_id' => 10, 'row_id' => 5, 'value' => '/../../etc/passwd'],
+            ],
+            true
+        );
+    }
+
+    public function testRemoveProductImagesBatchesUsageCountsForMultiplePaths(): void
+    {
+        $this->connection->method('quoteInto')
+            ->willReturnCallback(static function (string $text, $value): string {
+                if (is_array($value)) {
+                    return str_replace('?', implode(',', $value), $text);
+                }
+                return str_replace('?', (string)$value, $text);
+            });
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturnSelf();
+        $select->method('where')->willReturnSelf();
+        $select->method('distinct')->willReturnSelf();
+        $select->method('group')->willReturnSelf();
+        $this->connection->method('select')->willReturn($select);
+        $this->connection->method('fetchCol')->willReturn([]);
+        $this->connection->method('delete')->willReturn(1);
+
+        // One batched fetchPairs for usage counts (not per-path).
+        $this->connection->expects($this->once())
+            ->method('fetchPairs')
+            ->willReturn([
+                '/a/a/a.jpg' => '0',
+                'a/a/a.jpg' => '0',
+                '/b/b/b.jpg' => '2',
+                'b/b/b.jpg' => '0',
+            ]);
+
+        $this->mediaDirectory->method('isFile')->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('delete')
+            ->with('catalog/product/a/a/a.jpg');
+        $this->removeDeletedImagesFromCache->expects($this->once())
+            ->method('removeDeletedImagesFromCache')
+            ->with(['a/a/a.jpg']);
+
+        $this->cleanup->removeProductImages(
+            [
+                ['value_id' => 10, 'row_id' => 5, 'value' => '/a/a/a.jpg'],
+                ['value_id' => 11, 'row_id' => 5, 'value' => '/b/b/b.jpg'],
             ],
             true
         );
@@ -229,8 +309,10 @@ class MediaGalleryCleanupTest extends TestCase
         $select->method('from')->willReturnSelf();
         $select->method('where')->willReturnSelf();
         $select->method('distinct')->willReturnSelf();
+        $select->method('group')->willReturnSelf();
         $this->connection->method('select')->willReturn($select);
         $this->connection->method('fetchCol')->willReturn([]);
+        $this->connection->method('fetchPairs')->willReturn([]);
 
         $deleted = [];
         $this->connection->expects($this->exactly(3))

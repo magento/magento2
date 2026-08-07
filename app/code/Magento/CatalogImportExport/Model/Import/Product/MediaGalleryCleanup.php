@@ -216,27 +216,30 @@ class MediaGalleryCleanup
     }
 
     /**
-     * Collect paths with no remaining gallery references.
+     * Collect relative paths with no remaining gallery references.
      *
      * @param array $pathsByValueId
-     * @return string[]
+     * @return string[] Relative paths without leading slash
      */
     private function collectUnusedFilePaths(array $pathsByValueId): array
     {
-        $candidatePaths = [];
+        $candidates = [];
         foreach ($pathsByValueId as $path) {
-            $path = (string)$path;
-            if ($path === '') {
+            $relative = $this->normalizeGalleryRelativePath((string)$path);
+            if ($relative === null) {
                 continue;
             }
-            $normalized = '/' . ltrim($path, '/\\');
-            $candidatePaths[$normalized] = true;
+            $candidates[$relative] = true;
+        }
+        if ($candidates === []) {
+            return [];
         }
 
+        $usageByRelative = $this->countImageUsesByRelativePath(array_keys($candidates));
         $filesToDelete = [];
-        foreach (array_keys($candidatePaths) as $path) {
-            if ($this->countImageUses($path) < 1) {
-                $filesToDelete[] = ltrim($path, '/');
+        foreach (array_keys($candidates) as $relative) {
+            if (($usageByRelative[$relative] ?? 0) < 1) {
+                $filesToDelete[] = $relative;
             }
         }
 
@@ -244,49 +247,121 @@ class MediaGalleryCleanup
     }
 
     /**
-     * Delete media files and resized cache.
+     * Batch-count remaining gallery rows per relative path.
      *
-     * @param string[] $filesToDelete
+     * @param string[] $relativePaths Paths without leading slash
+     * @return array<string, int> relative path => remaining uses
+     */
+    private function countImageUsesByRelativePath(array $relativePaths): array
+    {
+        $usageByRelative = array_fill_keys($relativePaths, 0);
+        $variants = [];
+        $variantToRelative = [];
+        foreach ($relativePaths as $relative) {
+            foreach (['/' . $relative, $relative] as $variant) {
+                $variants[] = $variant;
+                $variantToRelative[$variant] = $relative;
+            }
+        }
+        $variants = array_values(array_unique($variants));
+        if ($variants === []) {
+            return $usageByRelative;
+        }
+
+        $rows = $this->connection->fetchPairs(
+            $this->connection->select()
+                ->from(
+                    $this->mediaGalleryTableName,
+                    ['value', 'cnt' => new \Zend_Db_Expr('COUNT(value_id)')]
+                )
+                ->where('value IN (?)', $variants)
+                ->group('value')
+        ) ?: [];
+
+        foreach ($rows as $value => $count) {
+            $value = (string)$value;
+            $relative = $variantToRelative[$value]
+                ?? $this->normalizeGalleryRelativePath($value);
+            if ($relative === null || !array_key_exists($relative, $usageByRelative)) {
+                continue;
+            }
+            $usageByRelative[$relative] += (int)$count;
+        }
+
+        return $usageByRelative;
+    }
+
+    /**
+     * Delete media files and resized cache under the catalog media path only.
+     *
+     * @param string[] $filesToDelete Relative paths without leading slash
      * @return void
      */
     private function deletePhysicalFilesAndCache(array $filesToDelete): void
     {
+        $catalogPath = rtrim(str_replace('\\', '/', $this->mediaConfig->getBaseMediaPath()), '/');
+        $safeFiles = [];
         try {
-            $catalogPath = $this->mediaConfig->getBaseMediaPath();
             foreach ($filesToDelete as $filePath) {
-                $relativePath = $catalogPath . '/' . $filePath;
+                $relative = $this->normalizeGalleryRelativePath((string)$filePath);
+                if ($relative === null) {
+                    continue;
+                }
+                $relativePath = $catalogPath . '/' . $relative;
+                if (!$this->isPathInsideBase($catalogPath, $relativePath)) {
+                    continue;
+                }
                 if ($this->mediaDirectory->isFile($relativePath)) {
                     $this->mediaDirectory->delete($relativePath);
                 }
+                $safeFiles[] = $relative;
             }
-            $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($filesToDelete);
-        } catch (\Exception $e) {
+            if ($safeFiles !== []) {
+                $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($safeFiles);
+            }
+        } catch (FileSystemException $e) {
             $this->logger->critical($e);
         }
     }
 
     /**
-     * Count gallery rows for the image path.
+     * Normalize gallery file path to a safe relative path under media (no traversal).
      *
-     * @param string $image
-     * @return int
+     * @param string $path
+     * @return string|null Relative path without leading slash, or null if unsafe/empty
      */
-    private function countImageUses(string $image): int
+    private function normalizeGalleryRelativePath(string $path): ?string
     {
-        $variants = array_values(array_unique(array_filter([
-            $image,
-            '/' . ltrim($image, '/\\'),
-            ltrim($image, '/\\'),
-        ])));
-        if ($variants === []) {
-            return 0;
+        $path = str_replace('\\', '/', $path);
+        $path = ltrim($path, '/');
+        if ($path === '' || str_contains($path, "\0")) {
+            return null;
+        }
+        if (preg_match('#^[a-zA-Z]:#', $path) === 1) {
+            return null;
+        }
+        foreach (explode('/', $path) as $segment) {
+            if ($segment === '..') {
+                return null;
+            }
         }
 
-        $select = $this->connection->select()
-            ->from($this->mediaGalleryTableName, ['cnt' => new \Zend_Db_Expr('COUNT(value_id)')])
-            ->where('value IN (?)', $variants);
+        return $path;
+    }
 
-        return (int)$this->connection->fetchOne($select);
+    /**
+     * Whether $path stays under $base (both media-relative, forward slashes).
+     *
+     * @param string $base
+     * @param string $path
+     * @return bool
+     */
+    private function isPathInsideBase(string $base, string $path): bool
+    {
+        $base = rtrim(str_replace('\\', '/', $base), '/') . '/';
+        $path = str_replace('\\', '/', $path);
+
+        return str_starts_with($path, $base);
     }
 
     /**
