@@ -53,12 +53,7 @@
         <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardData">
             <argument name="cardData" value="VisaDefaultCard"/>
         </actionGroup>
-        <!-- ClickPlaceOrderActionGroup takes no arguments, so its internal waitForPageLoad
-             (which propagates its timeout into waitForLoadingMaskToDisappear -
-             see MagentoWebDriver.php waitForPageLoad()/waitForLoadingMaskToDisappear())
-             cannot be widened by callers. Payflow Pro Sale authorization can be slower than
-             the framework default, so inline the same steps here with a longer timeout
-             (same pattern used for other slow-gateway checkouts, e.g. Payments Pro). -->
+        <!-- Inlined so the Place Order wait can be widened for slow Payflow Pro Sale authorization -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForPlaceOrderButtonForPayflowProCheckout"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderForPayflowProCheckout"/>
         <waitForPageLoad time="120" stepKey="waitForPayflowProOrderPlaced"/>
