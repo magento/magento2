@@ -319,7 +319,10 @@ class GridTest extends TestCase
         $this->stockState->expects($this->exactly(2))
             ->method('checkQuoteItemQty')
             ->willReturnCallback(
-                function ($productId, $qty, $qty2, $qty3, $websiteId) use (
+                function (
+                    $productId,
+                    $qty
+                ) use (
                     $productId1,
                     $productId2,
                     $expectedQty1,
