@@ -133,6 +133,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
 
             if (!$item->getMessage()) {
                 $childItems = $item->getChildren();
+                $websiteId = $this->getQuote()->getStore()->getWebsiteId();
                 if (count($childItems)) {
                     foreach ($childItems as $childItem) {
                         $childQty = $childItem->getQty() * $item->getQty();
@@ -141,7 +142,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                             $childQty,
                             $childQty,
                             $childQty,
-                            $this->getQuote()->getStore()->getWebsiteId()
+                            $websiteId
                         );
                         $item->setMessage($check->getMessage());
                         $item->setHasError($check->getHasError());
@@ -152,7 +153,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
                         $item->getQty(),
                         $item->getQty(),
                         $item->getQty(),
-                        $this->getQuote()->getStore()->getWebsiteId()
+                        $websiteId
                     );
                     $item->setMessage($check->getMessage());
                     $item->setHasError($check->getHasError());
