@@ -569,6 +569,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
 
+        if ($this->typeProcessor->isTypeBackedEnum($type)) {
+            return $type::from($data);
+        }
+
         if (!$isArrayType) {
             return $this->_createFromArray($type, $data);
         }
