@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Indexer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\NoDdlModeInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
@@ -44,16 +43,16 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ResourceConnection $resourceConnection
-     * @param PoisonPillPutInterface|null $poisonPillPut
+     * @param PoisonPillPutInterface $poisonPillPut
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         ResourceConnection $resourceConnection,
-        ?PoisonPillPutInterface $poisonPillPut = null
+        PoisonPillPutInterface $poisonPillPut
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->resourceConnection = $resourceConnection;
-        $this->poisonPillPut = $poisonPillPut ?? ObjectManager::getInstance()->get(PoisonPillPutInterface::class);
+        $this->poisonPillPut = $poisonPillPut;
     }
 
     /**
@@ -87,17 +86,19 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
      */
     public function flipActiveTable(string $indexerId): void
     {
-        $newValue = !$this->isMainTableActive($indexerId);
         $connection = $this->resourceConnection->getConnection();
-        $connection->insertOnDuplicate(
-            $this->resourceConnection->getTableName(self::TABLE_NAME),
-            [
-                'indexer_id' => $indexerId,
-                'is_main_active' => $newValue,
-            ],
-            ['is_main_active']
+        $tableName = $this->resourceConnection->getTableName(self::TABLE_NAME);
+
+        // Ensure a row exists, defaulting to the same "main active" value isMainTableActive()
+        // assumes when no row is present, then toggle it atomically to avoid a read-then-write race.
+        $connection->insertOnDuplicate($tableName, ['indexer_id' => $indexerId, 'is_main_active' => true]);
+        $connection->update(
+            $tableName,
+            ['is_main_active' => new \Zend_Db_Expr('NOT is_main_active')],
+            ['indexer_id = ?' => $indexerId]
         );
-        $this->isMainActiveCache[$indexerId] = $newValue;
+
+        unset($this->isMainActiveCache[$indexerId]);
 
         // Long-running processes (message queue consumers) may hold a stale isMainActiveCache entry
         // for this indexer indefinitely; a new poison pill version signals them to restart.

@@ -79,6 +79,7 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('load')->with('catalogpermissions_category')->willReturnSelf();
         $this->indexerMock->method('isScheduled')->willReturn(true);
         $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
+        $this->indexerMock->method('getId')->willReturn('catalogpermissions_category');
 
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')
@@ -124,6 +125,7 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('load')->willReturnSelf();
         $this->indexerMock->method('isScheduled')->willReturn(false);
         $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
+        $this->indexerMock->method('getId')->willReturn('catalogpermissions_category');
 
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')

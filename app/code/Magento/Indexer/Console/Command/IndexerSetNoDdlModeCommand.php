@@ -120,44 +120,85 @@ class IndexerSetNoDdlModeCommand extends Command
             $indexer = $this->loadIndexer($indexerId);
         } catch (\InvalidArgumentException $e) {
             $output->writeln($e->getMessage());
+            if ($output->isVerbose()) {
+                $output->writeln($e->getTraceAsString());
+            }
             return Cli::RETURN_FAILURE;
         }
 
         switch ($mode) {
             case self::MODE_ENABLE:
-                if (!$indexer->isScheduled()) {
-                    $output->writeln(
-                        'No-DDL reindex mode can only be enabled for indexers using "Update on Schedule" mode.'
-                    );
-                    return Cli::RETURN_FAILURE;
-                }
-                $this->setEnabled($indexerId, true);
-                $output->writeln("No-DDL reindex mode enabled for '{$indexer->getTitle()}'.");
-                return Cli::RETURN_SUCCESS;
+                return $this->handleEnable($indexer, $output);
             case self::MODE_DISABLE:
-                if ($this->noDdlMode->isEnabled($indexerId) && !$this->noDdlMode->isMainTableActive($indexerId)) {
-                    $output->writeln(
-                        "Cannot disable No-DDL reindex mode for '{$indexer->getTitle()}': the replica table is "
-                        . 'currently serving reads and the base table is stale. Run '
-                        . "'bin/magento indexer:reindex {$indexerId}' first to refresh the base table and make it "
-                        . 'active again, then disable.'
-                    );
-                    return Cli::RETURN_FAILURE;
-                }
-                $this->setEnabled($indexerId, false);
-                $output->writeln("No-DDL reindex mode disabled for '{$indexer->getTitle()}'.");
-                return Cli::RETURN_SUCCESS;
+                return $this->handleDisable($indexerId, $indexer, $output);
             case self::MODE_STATUS:
-                $enabled = $this->noDdlMode->isEnabled($indexerId);
-                $output->writeln(
-                    "No-DDL reindex mode for '{$indexer->getTitle()}' is currently "
-                    . ($enabled ? 'enabled' : 'disabled') . '.'
-                );
-                return Cli::RETURN_SUCCESS;
+                return $this->handleStatus($indexerId, $indexer, $output);
             default:
                 $output->writeln('Invalid mode "' . $mode . '". Accepted values: enable, disable, status.');
                 return Cli::RETURN_FAILURE;
         }
+    }
+
+    /**
+     * Handle the "enable" mode
+     *
+     * @param Indexer $indexer
+     * @param OutputInterface $output
+     * @return int
+     */
+    private function handleEnable(Indexer $indexer, OutputInterface $output): int
+    {
+        if (!$indexer->isScheduled()) {
+            $output->writeln(
+                'No-DDL reindex mode can only be enabled for indexers using "Update on Schedule" mode.'
+            );
+            return Cli::RETURN_FAILURE;
+        }
+        $this->setEnabled($indexer, true);
+        $output->writeln("No-DDL reindex mode enabled for '{$indexer->getTitle()}'.");
+        return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Handle the "disable" mode
+     *
+     * @param string $indexerId
+     * @param Indexer $indexer
+     * @param OutputInterface $output
+     * @return int
+     */
+    private function handleDisable(string $indexerId, Indexer $indexer, OutputInterface $output): int
+    {
+        if ($this->noDdlMode->isEnabled($indexerId) && !$this->noDdlMode->isMainTableActive($indexerId)) {
+            $output->writeln(
+                "Cannot disable No-DDL reindex mode for '{$indexer->getTitle()}': the replica table is "
+                . 'currently serving reads and the base table is stale. Run '
+                . "'bin/magento indexer:reindex {$indexerId}' first to refresh the base table and make it "
+                . 'active again, then disable.'
+            );
+            return Cli::RETURN_FAILURE;
+        }
+        $this->setEnabled($indexer, false);
+        $output->writeln("No-DDL reindex mode disabled for '{$indexer->getTitle()}'.");
+        return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Handle the "status" mode
+     *
+     * @param string $indexerId
+     * @param Indexer $indexer
+     * @param OutputInterface $output
+     * @return int
+     */
+    private function handleStatus(string $indexerId, Indexer $indexer, OutputInterface $output): int
+    {
+        $enabled = $this->noDdlMode->isEnabled($indexerId);
+        $output->writeln(
+            "No-DDL reindex mode for '{$indexer->getTitle()}' is currently "
+            . ($enabled ? 'enabled' : 'disabled') . '.'
+        );
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -178,17 +219,17 @@ class IndexerSetNoDdlModeCommand extends Command
     /**
      * Persist the flag and invalidate the given indexer
      *
-     * @param string $indexerId
+     * @param Indexer $indexer
      * @param bool $value
      * @return void
      */
-    private function setEnabled(string $indexerId, bool $value): void
+    private function setEnabled(Indexer $indexer, bool $value): void
     {
         $this->configWriter->saveConfig(
-            sprintf(NoDdlModeInterface::XML_PATH_NO_DDL_REINDEX_MASK, $indexerId),
+            sprintf(NoDdlModeInterface::XML_PATH_NO_DDL_REINDEX_MASK, $indexer->getId()),
             (int)$value
         );
         $this->cacheTypeList->cleanType('config');
-        $this->loadIndexer($indexerId)->invalidate();
+        $indexer->invalidate();
     }
 }

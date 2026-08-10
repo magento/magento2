@@ -137,24 +137,31 @@ class NoDdlModeTest extends TestCase
     /**
      * @return void
      */
-    public function testFlipActiveTablePersistsInverseOfCurrentValue(): void
+    public function testFlipActiveTableSeedsRowAndTogglesAtomically(): void
     {
-        $selectMock = $this->createMock(Select::class);
-        $selectMock->method('from')->willReturnSelf();
-        $selectMock->method('where')->willReturnSelf();
-        $this->connectionMock->method('select')->willReturn($selectMock);
-        $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('1');
-
         $this->connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with(
                 self::TABLE_NAME,
                 [
                     'indexer_id' => 'catalogpermissions_category',
-                    'is_main_active' => false,
-                ],
-                ['is_main_active']
+                    'is_main_active' => true,
+                ]
             );
+
+        $this->connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                self::TABLE_NAME,
+                $this->callback(function (array $data) {
+                    return isset($data['is_main_active'])
+                        && $data['is_main_active'] instanceof \Zend_Db_Expr
+                        && (string)$data['is_main_active'] === 'NOT is_main_active';
+                }),
+                ['indexer_id = ?' => 'catalogpermissions_category']
+            );
+
+        $this->poisonPillPutMock->expects($this->once())->method('put');
 
         $this->noDdlMode->flipActiveTable('catalogpermissions_category');
     }
@@ -162,14 +169,16 @@ class NoDdlModeTest extends TestCase
     /**
      * @return void
      */
-    public function testFlipActiveTableUpdatesInMemoryCacheWithoutReQueryingDb(): void
+    public function testFlipActiveTableInvalidatesCacheSoNextReadReQueriesDb(): void
     {
+        $this->connectionMock->method('insertOnDuplicate');
+        $this->connectionMock->method('update');
+
         $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')->willReturnSelf();
         $selectMock->method('where')->willReturnSelf();
         $this->connectionMock->method('select')->willReturn($selectMock);
-        $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('1');
-        $this->connectionMock->method('insertOnDuplicate');
+        $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('0');
 
         $this->noDdlMode->flipActiveTable('catalogpermissions_category');
 
@@ -179,8 +188,11 @@ class NoDdlModeTest extends TestCase
     /**
      * @return void
      */
-    public function testFlipActiveTableIsMemoizedPerIndexerIdIndependently(): void
+    public function testFlipActiveTableInvalidatesCachePerIndexerIdIndependently(): void
     {
+        $this->connectionMock->method('insertOnDuplicate');
+        $this->connectionMock->method('update');
+
         $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')->willReturnSelf();
         $selectMock->method('where')->willReturnSelf();
@@ -188,13 +200,12 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock->expects($this->exactly(2))
             ->method('fetchOne')
             ->willReturn(false);
-        $this->connectionMock->method('insertOnDuplicate');
 
         $this->noDdlMode->flipActiveTable('catalogpermissions_category');
         $this->noDdlMode->flipActiveTable('catalogpermissions_product');
 
-        $this->assertFalse($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
-        $this->assertFalse($this->noDdlMode->isMainTableActive('catalogpermissions_product'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_product'));
     }
 
     /**
