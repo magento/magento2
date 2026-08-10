@@ -52,7 +52,8 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->command = new IndexerSetNoDdlModeCommand(
             $this->indexerFactoryMock,
             $this->noDdlModeMock,
-            ['sample_indexer']
+            ['sample_indexer', 'sample_indexer_a', 'sample_indexer_b'],
+            []
         );
     }
 
@@ -119,6 +120,62 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->assertSame(Cli::RETURN_FAILURE, $exitCode);
         $this->assertSame(
             "No-DDL reindex mode is not supported for 'Unsupported Indexer'." . PHP_EOL,
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testEnableWarnsWhenPairedIndexerIsNotEnabled(): void
+    {
+        $command = new IndexerSetNoDdlModeCommand(
+            $this->indexerFactoryMock,
+            $this->noDdlModeMock,
+            ['sample_indexer_a', 'sample_indexer_b'],
+            ['sample_indexer_a' => 'sample_indexer_b']
+        );
+        $this->indexerMock->method('load')->with('sample_indexer_a')->willReturnSelf();
+        $this->indexerMock->method('isScheduled')->willReturn(true);
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer A');
+        $this->indexerMock->method('getId')->willReturn('sample_indexer_a');
+        $this->noDdlModeMock->method('isEnabled')->with('sample_indexer_b')->willReturn(false);
+
+        $commandTester = new CommandTester($command);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer_a', 'mode' => 'enable']);
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
+        $this->assertSame(
+            "No-DDL reindex mode enabled for 'Sample Indexer A'." . PHP_EOL
+            . "Note: also run 'bin/magento indexer:set-no-ddl-mode sample_indexer_b enable' "
+            . 'for this to take effect.' . PHP_EOL,
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testEnableDoesNotWarnWhenPairedIndexerIsAlreadyEnabled(): void
+    {
+        $command = new IndexerSetNoDdlModeCommand(
+            $this->indexerFactoryMock,
+            $this->noDdlModeMock,
+            ['sample_indexer_a', 'sample_indexer_b'],
+            ['sample_indexer_a' => 'sample_indexer_b']
+        );
+        $this->indexerMock->method('load')->with('sample_indexer_a')->willReturnSelf();
+        $this->indexerMock->method('isScheduled')->willReturn(true);
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer A');
+        $this->indexerMock->method('getId')->willReturn('sample_indexer_a');
+        $this->noDdlModeMock->method('isEnabled')->with('sample_indexer_b')->willReturn(true);
+
+        $commandTester = new CommandTester($command);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer_a', 'mode' => 'enable']);
+
+        $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
+        $this->assertSame(
+            "No-DDL reindex mode enabled for 'Sample Indexer A'." . PHP_EOL,
             $commandTester->getDisplay()
         );
     }

@@ -7,7 +7,6 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\MessageQueue\ConfigInterface as MessageQueueConfig;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
 
@@ -68,11 +67,6 @@ class BatchConsumer implements ConsumerInterface
     private $consumerConfig;
 
     /**
-     * @var EventManagerInterface
-     */
-    private $eventManager;
-
-    /**
      * @param ConfigInterface $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
@@ -83,7 +77,6 @@ class BatchConsumer implements ConsumerInterface
      * @param int $batchSize [optional]
      * @param MessageProcessorLoader|null $messageProcessorLoader [optional]
      * @param ConsumerConfig|null $consumerConfig
-     * @param EventManagerInterface|null $eventManager
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -97,8 +90,7 @@ class BatchConsumer implements ConsumerInterface
         $interval = 5,
         $batchSize = 0,
         ?MessageProcessorLoader $messageProcessorLoader = null,
-        ?ConsumerConfig $consumerConfig = null,
-        ?EventManagerInterface $eventManager = null
+        ?ConsumerConfig $consumerConfig = null
     ) {
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
@@ -110,7 +102,6 @@ class BatchConsumer implements ConsumerInterface
         $this->messageProcessorLoader = $messageProcessorLoader
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(MessageProcessorLoader::class);
         $this->consumerConfig = $consumerConfig ?: ObjectManager::getInstance()->get(ConsumerConfig::class);
-        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
     }
 
     /**
@@ -243,10 +234,6 @@ class BatchConsumer implements ConsumerInterface
     private function getTransactionCallback(QueueInterface $queue, MergerInterface $merger)
     {
         return function (array $messages) use ($queue, $merger) {
-            $this->eventManager->dispatch(
-                'message_queue_batch_consumer_process_batch_before',
-                ['consumer_name' => $this->configuration->getConsumerName()]
-            );
             list($messages, $messagesToAcknowledge) = $this->lockMessages($messages);
             $decodedMessages = $this->decodeMessages($messages);
             $mergedMessages = $merger->merge($decodedMessages);

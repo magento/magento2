@@ -45,20 +45,31 @@ class IndexerSetNoDdlModeCommand extends Command
     private $supportedIndexerIds;
 
     /**
+     * Indexer ID to paired indexer ID, for indexers whose No-DDL flag only takes effect when both are enabled
+     * together, contributed by each adopting module's own di.xml
+     *
+     * @var string[]
+     */
+    private $pairedIndexerIds;
+
+    /**
      * @param IndexerFactory $indexerFactory
      * @param NoDdlModeInterface $noDdlMode
      * @param string[] $supportedIndexerIds
+     * @param string[] $pairedIndexerIds
      * @param string|null $name
      */
     public function __construct(
         IndexerFactory $indexerFactory,
         NoDdlModeInterface $noDdlMode,
         array $supportedIndexerIds,
+        array $pairedIndexerIds,
         ?string $name = null
     ) {
         $this->indexerFactory = $indexerFactory;
         $this->noDdlMode = $noDdlMode;
         $this->supportedIndexerIds = $supportedIndexerIds;
+        $this->pairedIndexerIds = $pairedIndexerIds;
         parent::__construct($name);
     }
 
@@ -154,7 +165,26 @@ class IndexerSetNoDdlModeCommand extends Command
         }
         $this->setEnabled($indexer, true);
         $output->writeln("No-DDL reindex mode enabled for '{$indexer->getTitle()}'.");
+        $this->warnIfPairedIndexerNotEnabled($indexer, $output);
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Warn if this indexer is paired with another one that also needs to be enabled to take effect
+     *
+     * @param Indexer $indexer
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function warnIfPairedIndexerNotEnabled(Indexer $indexer, OutputInterface $output): void
+    {
+        $pairedIndexerId = $this->pairedIndexerIds[$indexer->getId()] ?? null;
+        if ($pairedIndexerId !== null && !$this->noDdlMode->isEnabled($pairedIndexerId)) {
+            $output->writeln(
+                "Note: also run 'bin/magento indexer:set-no-ddl-mode {$pairedIndexerId} enable' "
+                . 'for this to take effect.'
+            );
+        }
     }
 
     /**

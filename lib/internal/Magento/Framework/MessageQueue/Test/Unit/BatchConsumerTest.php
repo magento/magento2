@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\MessageQueue\Test\Unit;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
 use Magento\Framework\MessageQueue\BatchConsumer;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface;
@@ -85,11 +84,6 @@ class BatchConsumerTest extends TestCase
     private $messageProcessorLoader;
 
     /**
-     * @var EventManagerInterface|MockObject
-     */
-    private $eventManager;
-
-    /**
      * Set up.
      *
      * @return void
@@ -117,7 +111,6 @@ class BatchConsumerTest extends TestCase
             ->getMockBuilder(MessageProcessorLoader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->eventManager = $this->createMock(EventManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->batchConsumer = $objectManager->getObject(
@@ -129,8 +122,7 @@ class BatchConsumerTest extends TestCase
                 'mergerFactory' => $this->mergerFactory,
                 'resource' => $this->resource,
                 'batchSize' => $this->batchSize,
-                'messageProcessorLoader' => $this->messageProcessorLoader,
-                'eventManager' => $this->eventManager
+                'messageProcessorLoader' => $this->messageProcessorLoader
             ]
         );
 
@@ -192,9 +184,6 @@ class BatchConsumerTest extends TestCase
         $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);
         $merger->expects($this->once())->method('merge')
             ->with([$topicName => [$message, $message]])->willReturnArgument(0);
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('message_queue_batch_consumer_process_batch_before', ['consumer_name' => $consumerName]);
 
         $this->batchConsumer->process($numberOfMessages);
     }
@@ -232,9 +221,6 @@ class BatchConsumerTest extends TestCase
         $messageProcessor = $this->createMock(MessageProcessorInterface::class);
         $this->messageProcessorLoader->expects($this->atLeastOnce())->method('load')->willReturn($messageProcessor);
         $merger->expects($this->once())->method('merge')->willReturn([]);
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with('message_queue_batch_consumer_process_batch_before', ['consumer_name' => $consumerName]);
 
         $this->batchConsumer->process($numberOfMessages);
     }
