@@ -8,7 +8,7 @@ Resolve PHP version + magento/magento2 composer.json the same way as pr-quality-
 
 Used in GitHub Actions (writes GITHUB_OUTPUT and /tmp/magento2-composer.json) and locally:
 
-  REPO_NAME=magento2b2b BASE_REF=2.4.8-p3 \\
+  REPO_NAME=magento2ce BASE_REF=2.4-develop \\
     python3 .github/scripts/resolve_magento_tool_constraints.py --print-summary
 
 See emulate_ci_tools_locally.sh for a full local QA-tools install.
@@ -54,25 +54,8 @@ def resolve(
     """
     Returns (php_version, source_ref, composer_json_data, raw_php_constraint_or_empty).
     """
-    # Normalize known repo-name aliases used across forks/exceptions.
-    repo_alias_map = {
-        "magento2inventory": "inventory",
-    }
-    normalized_repo_name = repo_alias_map.get(repo_name, repo_name)
-
-    repo_package_map = {
-        "magento2ce": "magento/magento2-base",
-        "magento2ee": "magento/magento2-ee-base",
-        "magento2b2b": "magento/magento2-b2b-base",
-        "inventory": "magento/inventory-metapackage",
-        "magento2-page-builder": "magento/module-page-builder",
-        "magento2-page-builder-ee": "magento/page-builder-commerce",
-        "security-package": "magento/security-package",
-        "security-package-ee": "magento/security-package-ee",
-    }
-
     selected_release = ""
-    package_key = repo_package_map.get(normalized_repo_name, "")
+    package_key = os.environ.get("REPO_PACKAGE_KEY", "")
     base_ref = (base_ref or "").strip()
 
     def base_ref_candidates(ref: str) -> list[str]:
@@ -246,7 +229,7 @@ def main() -> int:
     p.add_argument(
         "--repo-name",
         default=os.environ.get("REPO_NAME", ""),
-        help="GitHub repository name (e.g. magento2b2b). Env: REPO_NAME",
+        help="GitHub repository name (e.g. magento2ce). Env: REPO_NAME",
     )
     p.add_argument(
         "--base-ref",
