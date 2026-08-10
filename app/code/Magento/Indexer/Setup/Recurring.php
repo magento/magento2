@@ -6,7 +6,9 @@
 
 namespace Magento\Indexer\Setup;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Json\EncoderInterface;
@@ -60,6 +62,11 @@ class Recurring implements InstallSchemaInterface
     private $indexerFactory;
 
     /**
+     * @var TriggerCleaner
+     */
+    private $triggerCleaner;
+
+    /**
      * Init
      *
      * @param CollectionFactory $statesFactory
@@ -68,6 +75,7 @@ class Recurring implements InstallSchemaInterface
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
      * @param IndexerInterfaceFactory $indexerFactory
+     * @param TriggerCleaner|null $triggerCleaner
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -75,7 +83,8 @@ class Recurring implements InstallSchemaInterface
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder,
-        IndexerInterfaceFactory $indexerFactory
+        IndexerInterfaceFactory $indexerFactory,
+        ?TriggerCleaner $triggerCleaner = null
     ) {
         $this->statesFactory = $statesFactory;
         $this->stateFactory = $stateFactory;
@@ -83,6 +92,7 @@ class Recurring implements InstallSchemaInterface
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
         $this->indexerFactory = $indexerFactory;
+        $this->triggerCleaner = $triggerCleaner ?? ObjectManager::getInstance()->get(TriggerCleaner::class);
     }
 
     /**
@@ -132,15 +142,15 @@ class Recurring implements InstallSchemaInterface
 
             $indexer = $this->indexerFactory->create()->load($indexerId);
             if ($indexer->isScheduled()) {
-                // The purpose of the following two lines is to ensure that any
-                // database triggers are correctly set up for this indexer. We
-                // are calling methods on the view directly because we want to
-                // choose to not drop the changelog tables at this time. This
-                // also intentionally bypasses the $indexer->invalidate() call
-                // within $indexer->setScheduled().
-                $indexer->getView()->unsubscribe(false);
-                $indexer->getView()->subscribe();
+                // Migrate existing changelog tables (version_id int→bigint, charset→utf8mb4)
+                // without unsubscribing/subscribing, which would unconditionally rebuild triggers.
+                $indexer->getView()->getChangelog()->create();
             }
         }
+
+        // Use TriggerCleaner to only recreate triggers whose statements actually changed,
+        // instead of unconditionally dropping and recreating all triggers for every indexer.
+        // This avoids acquiring exclusive table locks when no trigger changes are needed.
+        $this->triggerCleaner->removeTriggers();
     }
 }
