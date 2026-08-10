@@ -10,7 +10,6 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - "*"
-  workflow_dispatch:
 
 # Repository variables used by this workflow:
 # - PR_QA_ENABLED_JOBS: CSV list of top-level jobs to run.
@@ -38,7 +37,7 @@ jobs:
       checks: read
       statuses: read
     env:
-      CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
+      HAS_CROSS_REPO_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
     steps:
 
       # ── Mainline alignment ──────────────────────────────────────────
@@ -46,10 +45,13 @@ jobs:
         id: mainline
         env:
           GH_TOKEN: ${{ github.token }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
-          base_branch="${{ github.event.pull_request.base.ref }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
+          base_branch="$BASE_REF"
+          head_sha="$HEAD_SHA"
           repo="${{ github.repository }}"
           owner="${repo%%/*}"
           echo "Base branch : ${base_branch}"
@@ -98,7 +100,7 @@ jobs:
           fi
 
           # ── 2. Conflict check ───────────────────────────────────────────
-          mergeable=$(gh api "repos/${repo}/pulls/${{ github.event.pull_request.number }}" \
+          mergeable=$(gh api "repos/${repo}/pulls/${PR_NUMBER}" \
             --jq '.mergeable')
           if [[ "$mergeable" == "false" ]]; then
             echo "::error::Merge conflicts detected between this branch and ${upstream_label} ${base_branch}. Merge mainline and resolve conflicts before CI can proceed."
@@ -124,11 +126,14 @@ jobs:
         id: check
         env:
           GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          BASE_REPO: ${{ github.event.pull_request.base.repo.full_name }}
         run: |
           set -euo pipefail
-          pr="${{ github.event.pull_request.number }}"
+          pr="$PR_NUMBER"
           repo="${{ github.repository }}"
-          echo "PR #${pr}  ${{ github.event.pull_request.head.repo.full_name }} → ${{ github.event.pull_request.base.repo.full_name }}"
+          echo "PR #${pr}  ${HEAD_REPO} → ${BASE_REPO}"
           echo "PR_QA_ENABLED_JOBS: ${{ vars.PR_QA_ENABLED_JOBS }}"
 
           # Fetch all changed files as "filename TAB status" pairs (paginated)
@@ -139,8 +144,6 @@ jobs:
           required=(
             .github/workflows/pr-quality-gates.yml
             .github/scripts/copyright-template.txt
-            .github/scripts/phpmd-ruleset.xml
-            .github/scripts/filter-blacklist.sh
           )
           missing=false
           while IFS=$'\t' read -r filename status; do
@@ -251,6 +254,7 @@ jobs:
         env:
           REPO_NAME: ${{ github.event.repository.name }}
           BASE_REF: ${{ github.event.pull_request.base.ref }}
+          REPO_PACKAGE_KEY: magento/magento2-base
         run: python3 .github/scripts/resolve_magento_tool_constraints.py
 
       - name: Setup PHP
@@ -265,7 +269,7 @@ jobs:
         if: env.HAS_JS == 'true'
         uses: actions/setup-node@v6
         with:
-          node-version: '21'
+          node-version: '22'
 
       - name: Install Magento Coding Standard
         id: install-mcs
@@ -340,24 +344,33 @@ jobs:
 
       - name: Print resolved tool version map
         if: env.HAS_PHP_OR_STATIC == 'true'
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          MAGENTO_COMPOSER_REF: ${{ steps.php-version.outputs.magento_composer_ref }}
+          PHP_VERSION_OUT: ${{ steps.php-version.outputs.php_version }}
         run: |
           set -euo pipefail
           phpmd_mcs="$(.github/scripts/read-pkg-constraint.sh "${GITHUB_WORKSPACE}/mcs/composer.json" "phpmd/phpmd" || true)"
           phpmd_m2="$(.github/scripts/read-pkg-constraint.sh "/tmp/magento2-composer.json" "phpmd/phpmd" || true)"
 
           echo "=== Resolved Tool Version Map ==="
-          echo "repo_name=${{ github.event.repository.name }}"
-          echo "base_ref=${{ github.event.pull_request.base.ref }}"
-          echo "magento_composer_ref=${{ steps.php-version.outputs.magento_composer_ref }}"
-          echo "php_version=${{ steps.php-version.outputs.php_version }}"
+          echo "repo_name=${REPO_NAME}"
+          echo "base_ref=${BASE_REF}"
+          echo "magento_composer_ref=${MAGENTO_COMPOSER_REF}"
+          echo "php_version=${PHP_VERSION_OUT}"
           echo "phpmd_constraint_from_mcs=${phpmd_mcs:-<missing>}"
           echo "phpmd_constraint_from_magento2=${phpmd_m2:-<missing>}"
 
       - name: Fetch Magento static PHPMD framework
+        id: fetch-static
+        continue-on-error: true
         if: env.HAS_PHP_OR_STATIC == 'true' || env.HAS_JS == 'true'
+        env:
+          MAGENTO_COMPOSER_REF: ${{ steps.php-version.outputs.magento_composer_ref }}
         run: |
           set -euo pipefail
-          ref="${{ steps.php-version.outputs.magento_composer_ref }}"
+          ref="${MAGENTO_COMPOSER_REF}"
           if [ -z "$ref" ]; then
             ref="2.4-develop"
           fi
@@ -377,13 +390,16 @@ jobs:
             lib/internal/Magento/Framework
 
           echo "Fetched Magento static PHPMD framework from ref: $ref"
+          echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Checkout changed files and fetch base commit
         id: files
         if: steps.install-mcs.outputs.ready == 'true'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
-          base_sha="${{ github.event.pull_request.base.sha }}"
+          base_sha="$BASE_SHA"
           echo "base_sha=$base_sha" >> "$GITHUB_ENV"
           git fetch --filter=blob:none --depth=1 origin "$base_sha" 2>/dev/null || true
 
@@ -472,11 +488,10 @@ jobs:
             echo "No XML/XSD files to check — skipping."
             exit 0
           fi
-          sudo apt-get install -y -q libxml2-utils 2>/dev/null
           errors=0
           while IFS= read -r file; do
             [ -n "$file" ] || continue
-            if ! xmllint --noout "$file" 2>&1; then
+            if ! python3 -c "import sys,xml.etree.ElementTree as ET; ET.parse(sys.argv[1])" "$file" 2>&1; then
               errors=$((errors + 1))
             fi
           done < /tmp/changed_xml.txt
@@ -491,7 +506,7 @@ jobs:
         if: always() && steps.gate.outputs.phpcs_xml == 'true' && env.HAS_STATIC == 'true'
         run: |
           set -euo pipefail
-          grep -E '^(app/code/|lib/internal/|app/design/|dev/tests/|pub/|setup/|phpserver/)' /tmp/changed_xml.txt 2>/dev/null > /tmp/changed_xml_phpcs.txt || true
+          grep -vE '^(\.github/|node_modules/|vendor/)' /tmp/changed_xml.txt 2>/dev/null > /tmp/changed_xml_phpcs.txt || true
           python3 - <<'PY'
           import xml.etree.ElementTree as ET, sys
           src = 'mcs/Magento2/ruleset.xml'
@@ -574,24 +589,21 @@ jobs:
             exit 0
           fi
           phpmd_bin="${GITHUB_WORKSPACE}/qa-tools/vendor/bin/phpmd"
-          magento_ruleset="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
-          prepend_file="/tmp/magento2-static/phpmd-prepend.php"
-          # Wrap the Magento ruleset to exclude rules that require the full
-          # vendor tree (Laminas etc.) and crash in the sparse-clone environment.
-          ruleset="/tmp/phpmd-ruleset-ci.xml"
-          {
-            printf '<?xml version="1.0" encoding="UTF-8"?>\n'
-            printf '<ruleset name="Magento PHPMD (CI)" xmlns="http://pmd.sf.net/ruleset/1.0.0"\n'
-            printf '         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
-            printf '         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">\n'
-            printf '  <description>Magento PHPMD rules, excluding rules that require the full vendor tree.</description>\n'
-            printf '  <rule ref="%s">\n' "$magento_ruleset"
-            printf '    <exclude name="CookieAndSessionMisuse"/>\n'
-            printf '    <exclude name="AllPurposeAction"/>\n'
-            printf '  </rule>\n'
-            printf '</ruleset>\n'
-          } > "$ruleset"
-          cat > "$prepend_file" <<'PHP'
+          prepend_file=$(mktemp)
+          if [ "${{ steps.fetch-static.outputs.ready }}" != "true" ]; then
+            ref="${{ steps.php-version.outputs.magento_composer_ref }}"
+            [ -z "$ref" ] && ref="2.4-develop"
+            echo "::warning::Magento static framework unavailable — fetching PHPMD ruleset directly from magento/magento2@${ref}."
+            magento_ruleset=$(mktemp /tmp/phpmd-ruleset-raw-XXXXXX.xml)
+            if ! curl -fsSL "https://raw.githubusercontent.com/magento/magento2/${ref}/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml" \
+                    -o "$magento_ruleset" 2>/dev/null; then
+              echo "::error::Failed to fetch PHPMD ruleset — skipping PHPMD."
+              exit 0
+            fi
+          else
+            magento_ruleset="/tmp/magento2-static/dev/tests/static/testsuite/Magento/Test/Php/_files/phpmd/ruleset.xml"
+            prepend_file="/tmp/magento2-static/phpmd-prepend.php"
+            cat > "$prepend_file" <<'PHP'
           <?php
           $root = '/tmp/magento2-static';
           $traitFile = $root . '/lib/internal/Magento/Framework/GetParameterClassTrait.php';
@@ -612,6 +624,22 @@ jobs:
               }
           });
           PHP
+          fi
+          # Wrap the Magento ruleset to exclude rules that require the full
+          # vendor tree (Laminas etc.) and crash in the sparse-clone environment.
+          ruleset="/tmp/phpmd-ruleset-ci.xml"
+          {
+            printf '<?xml version="1.0" encoding="UTF-8"?>\n'
+            printf '<ruleset name="Magento PHPMD (CI)" xmlns="http://pmd.sf.net/ruleset/1.0.0"\n'
+            printf '         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
+            printf '         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd">\n'
+            printf '  <description>Magento PHPMD rules, excluding rules that require the full vendor tree.</description>\n'
+            printf '  <rule ref="%s">\n' "$magento_ruleset"
+            printf '    <exclude name="CookieAndSessionMisuse"/>\n'
+            printf '    <exclude name="AllPurposeAction"/>\n'
+            printf '  </rule>\n'
+            printf '</ruleset>\n'
+          } > "$ruleset"
 
           mapfile -t files < <(while IFS= read -r f; do [ -f "$f" ] && printf '%s\n' "$f"; done < /tmp/changed_php.txt)
 
@@ -781,6 +809,10 @@ jobs:
             exit 0
           fi
 
+          if [ "${{ steps.fetch-static.outputs.ready }}" != "true" ]; then
+            echo "::warning::Magento static framework unavailable — ESLint whitelist/blacklist filtering skipped. All changed JS files will be linted."
+          fi
+
           # Apply Jenkins whitelist then blacklist — both live in CE repo sparse clone.
           # Whitelist defines which files are expected to comply (app/code, app/design,
           # lib/web/mage, etc.). Files outside it (grunt tasks, setup scripts) are not
@@ -830,6 +862,17 @@ jobs:
               except FileNotFoundError:
                   return []
 
+          NON_MODULE_DIRS = {
+              'app', 'lib', 'dev', 'pub', 'setup', 'vendor', '.github',
+              'bin', 'generated', 'var', 'build', 'node_modules',
+          }
+
+          def whitelist_path(fp):
+              first = fp.split('/')[0]
+              if first and first[0].isupper() and first not in NON_MODULE_DIRS:
+                  return 'app/code/Magento/' + fp
+              return fp
+
           with open(sys.argv[1]) as f:
               files = [l.strip() for l in f if l.strip()]
           whitelist = load(sys.argv[2])
@@ -837,9 +880,10 @@ jobs:
 
           result = []
           for fp in files:
-              if whitelist and not any(r.match(fp) for r in whitelist):
+              match_fp = whitelist_path(fp)
+              if whitelist and not any(r.match(match_fp) for r in whitelist):
                   continue
-              if any(r.match(fp) for r in blacklist):
+              if any(r.match(match_fp) for r in blacklist):
                   continue
               result.append(fp)
           print('\n'.join(result))
@@ -883,29 +927,34 @@ jobs:
         run: |
           set -euo pipefail
           echo "PR_QA_ENABLED_JOBS='${{ vars.PR_QA_ENABLED_JOBS }}'"
-          if [ -n "${CROSS_REPO_READ_TOKEN}" ]; then
+          if [ "${HAS_CROSS_REPO_TOKEN}" = "true" ]; then
             echo "CROSS_REPO_READ_TOKEN=present"
           else
             echo "CROSS_REPO_READ_TOKEN=missing"
           fi
 
       - name: Skip if cross-repo token is missing
-        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.CROSS_REPO_READ_TOKEN == ''
+        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.HAS_CROSS_REPO_TOKEN == 'false'
         run: |
           set -euo pipefail
           echo "CROSS_REPO_READ_TOKEN is not set. Skipping aggregate-linked-pr-checks."
           exit 0
 
       - name: Validate linked PR checks
-        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.CROSS_REPO_READ_TOKEN != ''
+        if: always() && contains(format(',{0},', vars.PR_QA_ENABLED_JOBS), ',aggregate-linked-pr-checks,') && env.HAS_CROSS_REPO_TOKEN == 'true'
         uses: actions/github-script@v9
         with:
-          github-token: ${{ env.CROSS_REPO_READ_TOKEN }}
+          github-token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const pr = context.payload.pull_request;
-            const prNumber = pr.number;
+            const prNumber = context.payload.pull_request.number;
+            // Fetch the current PR body via REST API — the webhook payload snapshot
+            // (context.payload.pull_request.body) is frozen at trigger time and misses
+            // description edits made after the last push.
+            const { data: pr } = await github.rest.pulls.get({
+              owner, repo, pull_number: prNumber,
+            });
             const body = pr.body || '';
             // Only scan the "Related Pull Requests" section, up to the placeholder comment.
             const sectionMatch = body.match(
@@ -938,12 +987,12 @@ jobs:
               return;
             }
 
-            const okConclusions = new Set(['success', 'neutral', 'skipped']);
             const rows = [];
             let hasFailures = false;
 
             for (const link of links) {
               const label = `${link.owner}/${link.repo}#${link.number}`;
+              const url   = `https://github.com/${link.owner}/${link.repo}/pull/${link.number}`;
               try {
                 const { data: linked } = await github.rest.pulls.get({
                   owner: link.owner,
@@ -954,83 +1003,101 @@ jobs:
                 const sha = linked.head.sha;
                 const prState = linked.state;
 
-                const statusesResp = await github.rest.repos.listCommitStatusesForRef({
-                  owner: link.owner,
-                  repo: link.repo,
-                  ref: sha,
-                  per_page: 100,
-                });
-                const statuses = statusesResp.data || [];
-                const badStatuses = statuses.filter(s => s.state !== 'success');
-
+                // Only look at the pr-quality-gates check run; ignore unrelated checks (Kodiak, etc.)
                 const checksResp = await github.rest.checks.listForRef({
                   owner: link.owner,
                   repo: link.repo,
                   ref: sha,
+                  check_name: 'pr-quality-gates',
                   per_page: 100,
                 });
-                const checkRuns = checksResp.data.check_runs || [];
-                const badChecks = checkRuns.filter(c => c.status !== 'completed' || !okConclusions.has(c.conclusion || ''));
+                // GitHub returns most recent run first
+                const gateRun = (checksResp.data.check_runs || [])[0] || null;
 
-                const hasAnySignals = statuses.length > 0 || checkRuns.length > 0;
-                const pass = prState === 'open' && hasAnySignals && badStatuses.length === 0 && badChecks.length === 0;
+                let gateStatus = 'no run';
+                let failedSteps = [];
+                if (gateRun) {
+                  if (gateRun.status !== 'completed') {
+                    gateStatus = gateRun.status;
+                  } else {
+                    gateStatus = gateRun.conclusion;
+                    if (gateRun.conclusion === 'failure') {
+                      const jobIdMatch = (gateRun.details_url || gateRun.html_url || '').match(/\/job\/(\d+)/);
+                      if (jobIdMatch) {
+                        try {
+                          const { data: jobData } = await github.rest.actions.getJobForWorkflowRun({
+                            owner: link.owner,
+                            repo: link.repo,
+                            job_id: parseInt(jobIdMatch[1]),
+                          });
+                          failedSteps = (jobData.steps || [])
+                            .filter(s => s.conclusion === 'failure')
+                            .map(s => s.name);
+                        } catch (_) { /* step detail unavailable */ }
+                      }
+                    }
+                  }
+                }
 
-                if (!pass) hasFailures = true;
+                // Only confirmed bad conclusions count as failures; in_progress/queued is not a failure
+                const badConclusions = new Set(['failure', 'cancelled', 'timed_out', 'action_required', 'stale']);
+                const isPending = !gateRun || gateRun.status !== 'completed';
+                const isFailed  = !isPending && badConclusions.has(gateRun.conclusion);
+
+                if (isFailed) hasFailures = true;
 
                 rows.push({
                   pr: label,
+                  url,
                   state: prState,
-                  totalStatuses: statuses.length,
-                  failingStatuses: badStatuses.length,
-                  totalChecks: checkRuns.length,
-                  failingChecks: badChecks.length,
-                  result: pass ? 'PASS' : 'FAIL',
+                  gateStatus,
+                  failedSteps,
+                  result: isFailed ? 'FAIL' : isPending ? 'PENDING' : 'PASS',
                   error: null,
                 });
               } catch (e) {
-                hasFailures = true;
+                const httpStatus = e.status || (e.response && e.response.status) || 0;
+                const isTransient = httpStatus >= 500 || httpStatus === 408 || httpStatus === 429;
+                const shortMsg = (e.message || String(e)).split('\n')[0].slice(0, 120);
+                if (!isTransient) hasFailures = true;
                 rows.push({
                   pr: label,
+                  url,
                   state: 'unknown',
-                  totalStatuses: 0,
-                  failingStatuses: 0,
-                  totalChecks: 0,
-                  failingChecks: 0,
-                  result: 'FAIL',
-                  error: e.message,
+                  gateStatus: isTransient ? `api unavailable (${httpStatus})` : 'error',
+                  failedSteps: [],
+                  result: isTransient ? 'PENDING' : 'FAIL',
+                  error: isTransient ? null : shortMsg,
                 });
               }
             }
 
             const ciCell = r => {
               if (r.error) return `error: ${r.error}`;
-              const parts = [];
-              if (r.totalChecks > 0)
-                parts.push(`${r.totalChecks} check run${r.totalChecks !== 1 ? 's' : ''}` +
-                  (r.failingChecks > 0 ? `, ${r.failingChecks} failing` : ', all green'));
-              if (r.totalStatuses > 0)
-                parts.push(`${r.totalStatuses} status${r.totalStatuses !== 1 ? 'es' : ''}` +
-                  (r.failingStatuses > 0 ? `, ${r.failingStatuses} failing` : ', all green'));
-              return parts.length > 0 ? parts.join(' / ') : 'no signals';
+              if (r.gateStatus === 'no run') return 'no run yet';
+              if (r.gateStatus === 'success') return 'passing';
+              if (r.gateStatus === 'failure' && r.failedSteps.length > 0)
+                return r.failedSteps.join(', ');
+              return r.gateStatus;
             };
 
             // GitHub Actions summary: rendered as an HTML table
             await core.summary
               .addHeading('Linked PR Aggregate Report', 3)
               .addTable([
-                ['Linked PR', 'State', 'CI', 'Result'].map(h => ({ data: h, header: true })),
+                ['Linked PR', 'State', 'Quality Gate', 'Result'].map(h => ({ data: h, header: true })),
                 ...rows.map(r => [
-                  r.pr,
+                  `<a href="${r.url}">${r.pr}</a>`,
                   r.state,
                   ciCell(r),
-                  r.result === 'PASS' ? '✅ PASS' : '❌ FAIL',
+                  r.result === 'PASS' ? '✅ PASS' : r.result === 'PENDING' ? '⏳ PENDING' : '❌ FAIL',
                 ]),
               ])
               .write();
 
             // Step log: plain text
             const logLines = rows.map(r =>
-              `  ${r.result === 'PASS' ? '✅' : '❌'} ${r.pr}  [${r.state}]  ${ciCell(r)}`
+              `  ${r.result === 'PASS' ? '✅' : r.result === 'PENDING' ? '⏳' : '❌'} ${r.pr}  [${r.state}]  ${ciCell(r)}  ${r.url}`
             );
             const logReport = logLines.join('\n');
 
