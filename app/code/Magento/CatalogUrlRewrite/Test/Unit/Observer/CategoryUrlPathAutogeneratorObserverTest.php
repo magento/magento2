@@ -341,6 +341,56 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldUpdateUrlPathForLeafCategoryWhenUrlKeyIsResetToDefaultAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-onexxxx',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->metadataPool->method('getMetadata')
+            ->with(CategoryInterface::class)
+            ->willReturn($this->entityMetaDataInterface);
+        $this->entityMetaDataInterface->method('getLinkField')
+            ->willReturn('row_id');
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->getDefaultUrlKey->expects($this->once())
+            ->method('execute')
+            ->with($rowId)
+            ->willReturn('one-point-one-one-one');
+        $this->category->expects($this->once())
+            ->method('dataHasChangedFor')
+            ->with('url_path')
+            ->willReturn(false);
+        $this->categoryResource->expects($this->once())
+            ->method('saveAttribute')
+            ->with($this->category, 'url_path');
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
+    }
+
+    /**
      * @param $useDefaultUrlKey
      * @param $isObjectNew
      * @throws LocalizedException

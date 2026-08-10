@@ -106,24 +106,55 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         /** @var Category $category */
         $category = $observer->getEvent()->getCategory();
         $useDefaultAttribute = !empty($category->getData('use_default')['url_key']);
-        if ($category->getUrlKey() !== false && !$useDefaultAttribute) {
+        if ($useDefaultAttribute) {
+            $this->restoreDefaultUrlKey($category);
+            return;
+        }
+        if ($category->getUrlKey() !== false) {
             $resultUrlKey = $this->categoryUrlPathGenerator->getUrlKey($category);
             $this->updateUrlKey($category, $resultUrlKey);
-        } elseif ($useDefaultAttribute) {
-            if (!$category->isObjectNew() && $category->getStoreId() === Store::DEFAULT_STORE_ID) {
-                $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
-                $this->updateUrlKey($category, $resultUrlKey);
-            }
-            if ($category->hasChildren()) {
-                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
-                $linkField = $metadata->getLinkField();
-                $id = $category->getData($linkField);
-                if ($id) {
-                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
-                    if ($defaultUrlKey) {
-                        $this->updateUrlKey($category, $defaultUrlKey);
-                    }
-                }
+        }
+    }
+
+    /**
+     * Restore url_key/url_path from the default-scope value.
+     *
+     * @param Category $category
+     * @return void
+     * @throws LocalizedException
+     */
+    private function restoreDefaultUrlKey(Category $category): void
+    {
+        if (!$category->isObjectNew() && $category->getStoreId() === Store::DEFAULT_STORE_ID) {
+            $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
+            $this->updateUrlKey($category, $resultUrlKey);
+        }
+        $this->restoreDefaultUrlKeyIfNeeded($category);
+    }
+
+    /**
+     * Restore url_key/url_path from the default-scope value.
+     *
+     * Covers categories with children (to cascade the default to descendants) and categories
+     * without children reverted to the default url_key at a specific store view, which
+     * restoreDefaultUrlKey() never handles.
+     *
+     * @param Category $category
+     * @return void
+     * @throws LocalizedException
+     */
+    private function restoreDefaultUrlKeyIfNeeded(Category $category): void
+    {
+        $isRevertedAtStoreScope = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+        if (!$category->hasChildren() && !$isRevertedAtStoreScope) {
+            return;
+        }
+        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+
+        if ($id = $category->getData($metadata->getLinkField())) {
+            $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+            if ($defaultUrlKey) {
+                $this->updateUrlKey($category, $defaultUrlKey);
             }
         }
     }
