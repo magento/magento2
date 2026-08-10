@@ -363,7 +363,7 @@ define([
                     try {
                         // Get integration name either from current element or from neighbor column
                         integrationName = $(ctx).attr('data-row-name') ||
-                            // eslint-disable-next-line eslint-plugin-magento/jquery-no-trim
+                            // eslint-disable-next-line magento-coding-standard-eslint-plugin/jquery-no-trim
                             $(ctx).parents('tr').find('.col-name').html().trim();
 
                         if (integrationName.indexOf('<span') > -1) {
