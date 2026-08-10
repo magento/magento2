@@ -50,10 +50,18 @@ class IndexerSetNoDdlModeCommand extends Command
     private $cacheTypeList;
 
     /**
+     * Indexer IDs that declare support for No-DDL reindex mode, contributed by each adopting module's own di.xml
+     *
+     * @var string[]
+     */
+    private $supportedIndexerIds;
+
+    /**
      * @param IndexerFactory $indexerFactory
      * @param NoDdlModeInterface $noDdlMode
      * @param ConfigInterface $configWriter
      * @param TypeListInterface $cacheTypeList
+     * @param string[] $supportedIndexerIds
      * @param string|null $name
      */
     public function __construct(
@@ -61,12 +69,14 @@ class IndexerSetNoDdlModeCommand extends Command
         NoDdlModeInterface $noDdlMode,
         ConfigInterface $configWriter,
         TypeListInterface $cacheTypeList,
+        array $supportedIndexerIds,
         ?string $name = null
     ) {
         $this->indexerFactory = $indexerFactory;
         $this->noDdlMode = $noDdlMode;
         $this->configWriter = $configWriter;
         $this->cacheTypeList = $cacheTypeList;
+        $this->supportedIndexerIds = $supportedIndexerIds;
         parent::__construct($name);
     }
 
@@ -148,6 +158,12 @@ class IndexerSetNoDdlModeCommand extends Command
      */
     private function handleEnable(Indexer $indexer, OutputInterface $output): int
     {
+        if (!in_array($indexer->getId(), $this->supportedIndexerIds, true)) {
+            $output->writeln(
+                "No-DDL reindex mode is not supported for '{$indexer->getTitle()}'."
+            );
+            return Cli::RETURN_FAILURE;
+        }
         if (!$indexer->isScheduled()) {
             $output->writeln(
                 'No-DDL reindex mode can only be enabled for indexers using "Update on Schedule" mode.'

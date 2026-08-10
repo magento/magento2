@@ -72,10 +72,10 @@ class NoDdlModeTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('indexer/catalogpermissions_category/no_ddl_reindex')
+            ->with('indexer/sample_indexer_a/no_ddl_reindex')
             ->willReturn('1');
 
-        $this->assertTrue($this->noDdlMode->isEnabled('catalogpermissions_category'));
+        $this->assertTrue($this->noDdlMode->isEnabled('sample_indexer_a'));
     }
 
     /**
@@ -85,10 +85,10 @@ class NoDdlModeTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('indexer/catalogpermissions_product/no_ddl_reindex')
+            ->with('indexer/sample_indexer_b/no_ddl_reindex')
             ->willReturn('0');
 
-        $this->assertFalse($this->noDdlMode->isEnabled('catalogpermissions_product'));
+        $this->assertFalse($this->noDdlMode->isEnabled('sample_indexer_b'));
     }
 
     /**
@@ -102,7 +102,7 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn(false);
 
-        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('sample_indexer_a'));
     }
 
     /**
@@ -116,7 +116,7 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('0');
 
-        $this->assertFalse($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
+        $this->assertFalse($this->noDdlMode->isMainTableActive('sample_indexer_a'));
     }
 
     /**
@@ -130,8 +130,8 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('1');
 
-        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
-        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('sample_indexer_a'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('sample_indexer_a'));
     }
 
     /**
@@ -144,7 +144,7 @@ class NoDdlModeTest extends TestCase
             ->with(
                 self::TABLE_NAME,
                 [
-                    'indexer_id' => 'catalogpermissions_category',
+                    'indexer_id' => 'sample_indexer_a',
                     'is_main_active' => true,
                 ]
             );
@@ -158,12 +158,12 @@ class NoDdlModeTest extends TestCase
                         && $data['is_main_active'] instanceof \Zend_Db_Expr
                         && (string)$data['is_main_active'] === 'NOT is_main_active';
                 }),
-                ['indexer_id = ?' => 'catalogpermissions_category']
+                ['indexer_id = ?' => 'sample_indexer_a']
             );
 
         $this->poisonPillPutMock->expects($this->once())->method('put');
 
-        $this->noDdlMode->flipActiveTable('catalogpermissions_category');
+        $this->noDdlMode->flipActiveTable('sample_indexer_a');
     }
 
     /**
@@ -180,9 +180,9 @@ class NoDdlModeTest extends TestCase
         $this->connectionMock->method('select')->willReturn($selectMock);
         $this->connectionMock->expects($this->once())->method('fetchOne')->willReturn('0');
 
-        $this->noDdlMode->flipActiveTable('catalogpermissions_category');
+        $this->noDdlMode->flipActiveTable('sample_indexer_a');
 
-        $this->assertFalse($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
+        $this->assertFalse($this->noDdlMode->isMainTableActive('sample_indexer_a'));
     }
 
     /**
@@ -201,11 +201,11 @@ class NoDdlModeTest extends TestCase
             ->method('fetchOne')
             ->willReturn(false);
 
-        $this->noDdlMode->flipActiveTable('catalogpermissions_category');
-        $this->noDdlMode->flipActiveTable('catalogpermissions_product');
+        $this->noDdlMode->flipActiveTable('sample_indexer_a');
+        $this->noDdlMode->flipActiveTable('sample_indexer_b');
 
-        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_category'));
-        $this->assertTrue($this->noDdlMode->isMainTableActive('catalogpermissions_product'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('sample_indexer_a'));
+        $this->assertTrue($this->noDdlMode->isMainTableActive('sample_indexer_b'));
     }
 
     /**

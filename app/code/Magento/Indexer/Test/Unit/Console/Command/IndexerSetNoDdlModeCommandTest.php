@@ -67,7 +67,8 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
             $this->indexerFactoryMock,
             $this->noDdlModeMock,
             $this->configWriterMock,
-            $this->cacheTypeListMock
+            $this->cacheTypeListMock,
+            ['sample_indexer']
         );
     }
 
@@ -76,23 +77,23 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
      */
     public function testEnableSucceedsWhenIndexerIsScheduled(): void
     {
-        $this->indexerMock->method('load')->with('catalogpermissions_category')->willReturnSelf();
+        $this->indexerMock->method('load')->with('sample_indexer')->willReturnSelf();
         $this->indexerMock->method('isScheduled')->willReturn(true);
-        $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
-        $this->indexerMock->method('getId')->willReturn('catalogpermissions_category');
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
+        $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')
-            ->with('indexer/catalogpermissions_category/no_ddl_reindex', 1);
+            ->with('indexer/sample_indexer/no_ddl_reindex', 1);
         $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
         $this->indexerMock->expects($this->once())->method('invalidate');
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category', 'mode' => 'enable']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'enable']);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
         $this->assertSame(
-            "No-DDL reindex mode enabled for 'Category Permissions'." . PHP_EOL,
+            "No-DDL reindex mode enabled for 'Sample Indexer'." . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -104,11 +105,12 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     {
         $this->indexerMock->method('load')->willReturnSelf();
         $this->indexerMock->method('isScheduled')->willReturn(false);
+        $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
         $this->configWriterMock->expects($this->never())->method('saveConfig');
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category', 'mode' => 'enable']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'enable']);
 
         $this->assertSame(Cli::RETURN_FAILURE, $exitCode);
         $this->assertSame(
@@ -120,25 +122,46 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     /**
      * @return void
      */
+    public function testEnableFailsWhenIndexerDoesNotSupportNoDdlMode(): void
+    {
+        $this->indexerMock->method('load')->willReturnSelf();
+        $this->indexerMock->method('getId')->willReturn('unsupported_indexer');
+        $this->indexerMock->method('getTitle')->willReturn('Unsupported Indexer');
+
+        $this->configWriterMock->expects($this->never())->method('saveConfig');
+
+        $commandTester = new CommandTester($this->command);
+        $exitCode = $commandTester->execute(['indexer' => 'unsupported_indexer', 'mode' => 'enable']);
+
+        $this->assertSame(Cli::RETURN_FAILURE, $exitCode);
+        $this->assertSame(
+            "No-DDL reindex mode is not supported for 'Unsupported Indexer'." . PHP_EOL,
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function testDisableAlwaysSucceeds(): void
     {
         $this->indexerMock->method('load')->willReturnSelf();
         $this->indexerMock->method('isScheduled')->willReturn(false);
-        $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
-        $this->indexerMock->method('getId')->willReturn('catalogpermissions_category');
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
+        $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')
-            ->with('indexer/catalogpermissions_category/no_ddl_reindex', 0);
+            ->with('indexer/sample_indexer/no_ddl_reindex', 0);
         $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
         $this->indexerMock->expects($this->once())->method('invalidate');
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category', 'mode' => 'disable']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'disable']);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
         $this->assertSame(
-            "No-DDL reindex mode disabled for 'Category Permissions'." . PHP_EOL,
+            "No-DDL reindex mode disabled for 'Sample Indexer'." . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -149,18 +172,18 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     public function testStatusReportsEnabledState(): void
     {
         $this->indexerMock->method('load')->willReturnSelf();
-        $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
         $this->noDdlModeMock->expects($this->once())
             ->method('isEnabled')
-            ->with('catalogpermissions_category')
+            ->with('sample_indexer')
             ->willReturn(true);
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category', 'mode' => 'status']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'status']);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
         $this->assertSame(
-            "No-DDL reindex mode for 'Category Permissions' is currently enabled." . PHP_EOL,
+            "No-DDL reindex mode for 'Sample Indexer' is currently enabled." . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -171,18 +194,18 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     public function testStatusReportsDisabledState(): void
     {
         $this->indexerMock->method('load')->willReturnSelf();
-        $this->indexerMock->method('getTitle')->willReturn('Category Permissions');
+        $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
         $this->noDdlModeMock->expects($this->once())
             ->method('isEnabled')
-            ->with('catalogpermissions_category')
+            ->with('sample_indexer')
             ->willReturn(false);
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer']);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $exitCode);
         $this->assertSame(
-            "No-DDL reindex mode for 'Category Permissions' is currently disabled." . PHP_EOL,
+            "No-DDL reindex mode for 'Sample Indexer' is currently disabled." . PHP_EOL,
             $commandTester->getDisplay()
         );
     }
@@ -214,7 +237,7 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('load')->willReturnSelf();
 
         $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'catalogpermissions_category', 'mode' => 'bogus']);
+        $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'bogus']);
 
         $this->assertSame(Cli::RETURN_FAILURE, $exitCode);
         $this->assertSame(
