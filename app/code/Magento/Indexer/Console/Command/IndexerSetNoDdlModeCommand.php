@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Console\Command;
 
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\IndexerFactory;
@@ -40,16 +38,6 @@ class IndexerSetNoDdlModeCommand extends Command
     private $noDdlMode;
 
     /**
-     * @var ConfigInterface
-     */
-    private $configWriter;
-
-    /**
-     * @var TypeListInterface
-     */
-    private $cacheTypeList;
-
-    /**
      * Indexer IDs that declare support for No-DDL reindex mode, contributed by each adopting module's own di.xml
      *
      * @var string[]
@@ -59,23 +47,17 @@ class IndexerSetNoDdlModeCommand extends Command
     /**
      * @param IndexerFactory $indexerFactory
      * @param NoDdlModeInterface $noDdlMode
-     * @param ConfigInterface $configWriter
-     * @param TypeListInterface $cacheTypeList
      * @param string[] $supportedIndexerIds
      * @param string|null $name
      */
     public function __construct(
         IndexerFactory $indexerFactory,
         NoDdlModeInterface $noDdlMode,
-        ConfigInterface $configWriter,
-        TypeListInterface $cacheTypeList,
         array $supportedIndexerIds,
         ?string $name = null
     ) {
         $this->indexerFactory = $indexerFactory;
         $this->noDdlMode = $noDdlMode;
-        $this->configWriter = $configWriter;
-        $this->cacheTypeList = $cacheTypeList;
         $this->supportedIndexerIds = $supportedIndexerIds;
         parent::__construct($name);
     }
@@ -241,11 +223,7 @@ class IndexerSetNoDdlModeCommand extends Command
      */
     private function setEnabled(Indexer $indexer, bool $value): void
     {
-        $this->configWriter->saveConfig(
-            sprintf(NoDdlModeInterface::XML_PATH_NO_DDL_REINDEX_MASK, $indexer->getId()),
-            (int)$value
-        );
-        $this->cacheTypeList->cleanType('config');
+        $this->noDdlMode->setEnabled($indexer->getId(), $value);
         $indexer->invalidate();
     }
 }

@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface as ConfigWriter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\NoDdlModeInterface;
@@ -21,9 +23,24 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
     private const TABLE_NAME = 'indexer_no_ddl_state';
 
     /**
+     * Config path mask (sprintf with the indexer ID) controlling whether No-DDL reindex mode is enabled
+     */
+    private const XML_PATH_NO_DDL_REINDEX_MASK = 'indexer/%s/no_ddl_reindex';
+
+    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
+    /**
+     * @var ConfigWriter
+     */
+    private $configWriter;
+
+    /**
+     * @var TypeListInterface
+     */
+    private $cacheTypeList;
 
     /**
      * @var ResourceConnection
@@ -42,15 +59,21 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param ConfigWriter $configWriter
+     * @param TypeListInterface $cacheTypeList
      * @param ResourceConnection $resourceConnection
      * @param PoisonPillPutInterface $poisonPillPut
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
+        ConfigWriter $configWriter,
+        TypeListInterface $cacheTypeList,
         ResourceConnection $resourceConnection,
         PoisonPillPutInterface $poisonPillPut
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->configWriter = $configWriter;
+        $this->cacheTypeList = $cacheTypeList;
         $this->resourceConnection = $resourceConnection;
         $this->poisonPillPut = $poisonPillPut;
     }
@@ -61,6 +84,18 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
     public function isEnabled(string $indexerId): bool
     {
         return (bool)$this->scopeConfig->getValue(sprintf(self::XML_PATH_NO_DDL_REINDEX_MASK, $indexerId));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setEnabled(string $indexerId, bool $enabled): void
+    {
+        $this->configWriter->saveConfig(
+            sprintf(self::XML_PATH_NO_DDL_REINDEX_MASK, $indexerId),
+            (int)$enabled
+        );
+        $this->cacheTypeList->cleanType('config');
     }
 
     /**

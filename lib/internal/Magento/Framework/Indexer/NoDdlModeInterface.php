@@ -13,17 +13,21 @@ namespace Magento\Framework\Indexer;
 interface NoDdlModeInterface
 {
     /**
-     * Config path mask (sprintf with the indexer ID) controlling whether No-DDL reindex mode is enabled
-     */
-    public const XML_PATH_NO_DDL_REINDEX_MASK = 'indexer/%s/no_ddl_reindex';
-
-    /**
      * Check whether No-DDL reindex mode is enabled for the given indexer
      *
      * @param string $indexerId
      * @return bool
      */
     public function isEnabled(string $indexerId): bool;
+
+    /**
+     * Enable or disable No-DDL reindex mode for the given indexer
+     *
+     * @param string $indexerId
+     * @param bool $enabled
+     * @return void
+     */
+    public function setEnabled(string $indexerId, bool $enabled): void;
 
     /**
      * Check whether the main (non-replica) table is currently active for the given indexer

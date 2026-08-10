@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ConfigResource\ConfigInterface as ConfigWriter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Indexer\Model\NoDdlMode;
-use Magento\Framework\Indexer\NoDdlModeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +26,16 @@ class NoDdlModeTest extends TestCase
      * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
+
+    /**
+     * @var ConfigWriter|MockObject
+     */
+    private $configWriterMock;
+
+    /**
+     * @var TypeListInterface|MockObject
+     */
+    private $cacheTypeListMock;
 
     /**
      * @var ResourceConnection|MockObject
@@ -52,6 +63,8 @@ class NoDdlModeTest extends TestCase
     protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->configWriterMock = $this->createMock(ConfigWriter::class);
+        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
         $this->connectionMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->method('getConnection')->willReturn($this->connectionMock);
@@ -60,6 +73,8 @@ class NoDdlModeTest extends TestCase
 
         $this->noDdlMode = new NoDdlMode(
             $this->scopeConfigMock,
+            $this->configWriterMock,
+            $this->cacheTypeListMock,
             $this->resourceConnectionMock,
             $this->poisonPillPutMock
         );
@@ -211,8 +226,26 @@ class NoDdlModeTest extends TestCase
     /**
      * @return void
      */
-    public function testConstant(): void
+    public function testSetEnabledPersistsConfigAndCleansCache(): void
     {
-        $this->assertSame('indexer/%s/no_ddl_reindex', NoDdlModeInterface::XML_PATH_NO_DDL_REINDEX_MASK);
+        $this->configWriterMock->expects($this->once())
+            ->method('saveConfig')
+            ->with('indexer/sample_indexer_a/no_ddl_reindex', 1);
+        $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
+
+        $this->noDdlMode->setEnabled('sample_indexer_a', true);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetDisabledPersistsConfigAndCleansCache(): void
+    {
+        $this->configWriterMock->expects($this->once())
+            ->method('saveConfig')
+            ->with('indexer/sample_indexer_a/no_ddl_reindex', 0);
+        $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
+
+        $this->noDdlMode->setEnabled('sample_indexer_a', false);
     }
 }

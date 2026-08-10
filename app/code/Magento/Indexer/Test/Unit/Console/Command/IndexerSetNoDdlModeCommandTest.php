@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\ConfigResource\ConfigInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand;
 use Magento\Indexer\Model\Indexer;
@@ -31,16 +29,6 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     private $noDdlModeMock;
 
     /**
-     * @var ConfigInterface|MockObject
-     */
-    private $configWriterMock;
-
-    /**
-     * @var TypeListInterface|MockObject
-     */
-    private $cacheTypeListMock;
-
-    /**
      * @var Indexer|MockObject
      */
     private $indexerMock;
@@ -57,8 +45,6 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     {
         $this->indexerFactoryMock = $this->createMock(IndexerFactory::class);
         $this->noDdlModeMock = $this->createMock(NoDdlModeInterface::class);
-        $this->configWriterMock = $this->createMock(ConfigInterface::class);
-        $this->cacheTypeListMock = $this->createMock(TypeListInterface::class);
         $this->indexerMock = $this->createMock(Indexer::class);
 
         $this->indexerFactoryMock->method('create')->willReturn($this->indexerMock);
@@ -66,8 +52,6 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->command = new IndexerSetNoDdlModeCommand(
             $this->indexerFactoryMock,
             $this->noDdlModeMock,
-            $this->configWriterMock,
-            $this->cacheTypeListMock,
             ['sample_indexer']
         );
     }
@@ -82,10 +66,9 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
         $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
-        $this->configWriterMock->expects($this->once())
-            ->method('saveConfig')
-            ->with('indexer/sample_indexer/no_ddl_reindex', 1);
-        $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
+        $this->noDdlModeMock->expects($this->once())
+            ->method('setEnabled')
+            ->with('sample_indexer', true);
         $this->indexerMock->expects($this->once())->method('invalidate');
 
         $commandTester = new CommandTester($this->command);
@@ -107,7 +90,7 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('isScheduled')->willReturn(false);
         $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
-        $this->configWriterMock->expects($this->never())->method('saveConfig');
+        $this->noDdlModeMock->expects($this->never())->method('setEnabled');
 
         $commandTester = new CommandTester($this->command);
         $exitCode = $commandTester->execute(['indexer' => 'sample_indexer', 'mode' => 'enable']);
@@ -128,7 +111,7 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('getId')->willReturn('unsupported_indexer');
         $this->indexerMock->method('getTitle')->willReturn('Unsupported Indexer');
 
-        $this->configWriterMock->expects($this->never())->method('saveConfig');
+        $this->noDdlModeMock->expects($this->never())->method('setEnabled');
 
         $commandTester = new CommandTester($this->command);
         $exitCode = $commandTester->execute(['indexer' => 'unsupported_indexer', 'mode' => 'enable']);
@@ -150,10 +133,9 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
         $this->indexerMock->method('getTitle')->willReturn('Sample Indexer');
         $this->indexerMock->method('getId')->willReturn('sample_indexer');
 
-        $this->configWriterMock->expects($this->once())
-            ->method('saveConfig')
-            ->with('indexer/sample_indexer/no_ddl_reindex', 0);
-        $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
+        $this->noDdlModeMock->expects($this->once())
+            ->method('setEnabled')
+            ->with('sample_indexer', false);
         $this->indexerMock->expects($this->once())->method('invalidate');
 
         $commandTester = new CommandTester($this->command);
