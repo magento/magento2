@@ -87,7 +87,7 @@ class NoDdlModeTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('indexer/sample_indexer_a/no_ddl_reindex')
+            ->with('indexer/no_ddl_reindex/sample_indexer_a')
             ->willReturn('1');
 
         $this->assertTrue($this->noDdlMode->isEnabled('sample_indexer_a'));
@@ -100,7 +100,7 @@ class NoDdlModeTest extends TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with('indexer/sample_indexer_b/no_ddl_reindex')
+            ->with('indexer/no_ddl_reindex/sample_indexer_b')
             ->willReturn('0');
 
         $this->assertFalse($this->noDdlMode->isEnabled('sample_indexer_b'));
@@ -161,7 +161,8 @@ class NoDdlModeTest extends TestCase
                 [
                     'indexer_id' => 'sample_indexer_a',
                     'is_main_active' => true,
-                ]
+                ],
+                ['indexer_id']
             );
 
         $this->connectionMock->expects($this->once())
@@ -230,7 +231,7 @@ class NoDdlModeTest extends TestCase
     {
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')
-            ->with('indexer/sample_indexer_a/no_ddl_reindex', 1);
+            ->with('indexer/no_ddl_reindex/sample_indexer_a', 1);
         $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
 
         $this->noDdlMode->setEnabled('sample_indexer_a', true);
@@ -243,7 +244,7 @@ class NoDdlModeTest extends TestCase
     {
         $this->configWriterMock->expects($this->once())
             ->method('saveConfig')
-            ->with('indexer/sample_indexer_a/no_ddl_reindex', 0);
+            ->with('indexer/no_ddl_reindex/sample_indexer_a', 0);
         $this->cacheTypeListMock->expects($this->once())->method('cleanType')->with('config');
 
         $this->noDdlMode->setEnabled('sample_indexer_a', false);

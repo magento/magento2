@@ -25,7 +25,7 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
     /**
      * Config path mask (sprintf with the indexer ID) controlling whether No-DDL reindex mode is enabled
      */
-    private const XML_PATH_NO_DDL_REINDEX_MASK = 'indexer/%s/no_ddl_reindex';
+    private const XML_PATH_NO_DDL_REINDEX_MASK = 'indexer/no_ddl_reindex/%s';
 
     /**
      * @var ScopeConfigInterface
@@ -126,7 +126,14 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
 
         // Ensure a row exists, defaulting to the same "main active" value isMainTableActive()
         // assumes when no row is present, then toggle it atomically to avoid a read-then-write race.
-        $connection->insertOnDuplicate($tableName, ['indexer_id' => $indexerId, 'is_main_active' => true]);
+        // The ['indexer_id'] $fields argument makes the ON DUPLICATE KEY clause a true no-op (updates
+        // indexer_id to itself) when the row already exists -- insertOnDuplicate() with no $fields
+        // argument defaults to updating every column, including is_main_active, on every call.
+        $connection->insertOnDuplicate(
+            $tableName,
+            ['indexer_id' => $indexerId, 'is_main_active' => true],
+            ['indexer_id']
+        );
         $connection->update(
             $tableName,
             ['is_main_active' => new \Zend_Db_Expr('NOT is_main_active')],
