@@ -135,9 +135,10 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /**
      * Restore url_key/url_path from the default-scope value.
      *
-     * Covers categories with children (to cascade the default to descendants) and categories
-     * without children reverted to the default url_key at a specific store view, which
-     * restoreDefaultUrlKey() never handles.
+     * Covers categories with children (to cascade the default to descendants) and leaf
+     * categories that had a genuine store-scoped url_key override reverted to default, which
+     * restoreDefaultUrlKey() never handles. The override-existence check prevents this from
+     * firing on routine partial saves that never touched url_key in the first place.
      *
      * @param Category $category
      * @return void
@@ -145,7 +146,13 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      */
     private function restoreDefaultUrlKeyIfNeeded(Category $category): void
     {
-        $isRevertedAtStoreScope = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+        $isRevertedAtStoreScope = !$category->isObjectNew()
+            && $category->getStoreId() !== Store::DEFAULT_STORE_ID
+            && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+                $category->getStoreId(),
+                $category->getId(),
+                Category::ENTITY
+            );
         if (!$category->hasChildren() && !$isRevertedAtStoreScope) {
             return;
         }
