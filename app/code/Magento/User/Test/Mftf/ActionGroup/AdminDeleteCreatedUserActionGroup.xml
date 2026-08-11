@@ -24,6 +24,8 @@
         <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
         <waitForPageLoad stepKey="waitForConfirmationPopup"/>
         <click stepKey="clickToConfirm" selector="{{AdminDeleteUserSection.confirm}}"/>
-        <see stepKey="seeDeleteMessageForUser" userInput="You deleted the user."/>
+        <waitForPageLoad stepKey="waitForUsersGridAfterDelete"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForAdminUsersGridMaskAfterDelete"/>
+        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You deleted the user." stepKey="seeDeleteMessageForUser"/>
     </actionGroup>
 </actionGroups>
