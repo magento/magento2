@@ -235,7 +235,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $additionalFile = dirname(dirname($this->_varPath)).'/etc/mysql-client-config.php';
         if (file_exists($additionalFile)) {
-            $config = array_merge($config, (array)include $additionalFile);
+            $config = array_merge_recursive($config, (array)include $additionalFile);
         }
 
         $ini = '';
