@@ -115,25 +115,43 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            if ($category->hasChildren()) {
-                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
-                $linkField = $metadata->getLinkField();
-                $id = $category->getData($linkField);
-                if ($id) {
-                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
-                    if ($defaultUrlKey) {
-                        $isStoreScopedRevert = !$category->isObjectNew()
-                            && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
-                        if ($isStoreScopedRevert) {
-                            $this->removeStoreScopedUrlKeyOverride($category, $linkField);
-                        }
-                        $this->updateUrlKey($category, $defaultUrlKey);
-                        if ($isStoreScopedRevert) {
-                            $category->setUrlKey(null);
-                        }
-                    }
-                }
-            }
+            $this->restoreDefaultUrlKeyIfNeeded($category);
+        }
+    }
+
+    /**
+     * Restore url_key/url_path from the default-scope value.
+     *
+     * Runs for categories with children (to cascade the default to descendants) and for
+     * categories reverted to the default url_key at a specific store view, including leaf
+     * categories without children, which the default-store-scope branch above never handles.
+     *
+     * @param Category $category
+     * @return void
+     * @throws LocalizedException
+     */
+    private function restoreDefaultUrlKeyIfNeeded(Category $category): void
+    {
+        $isStoreScopedRevert = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+        if (!$category->hasChildren() && !$isStoreScopedRevert) {
+            return;
+        }
+        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $metadata->getLinkField();
+        $id = $category->getData($linkField);
+        if (!$id) {
+            return;
+        }
+        $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+        if (!$defaultUrlKey) {
+            return;
+        }
+        if ($isStoreScopedRevert) {
+            $this->removeStoreScopedUrlKeyOverride($category, $linkField);
+        }
+        $this->updateUrlKey($category, $defaultUrlKey);
+        if ($isStoreScopedRevert) {
+            $category->setUrlKey(null);
         }
     }
 
