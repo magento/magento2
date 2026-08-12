@@ -12,6 +12,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Charset\DefaultCharsetCollationMap;
 use Magento\Framework\DB\Adapter\DuplicateException;
 use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
@@ -76,6 +77,32 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * Maximum number of connection retries
      */
     public const MAX_CONNECTION_RETRIES = 10;
+
+    /**
+     * Fallback init statement when DB version cannot be determined (utf8mb4 for MySQL 8.0.29+).
+     */
+    private const DEFAULT_CHARSET_INIT_STATEMENT = 'SET NAMES utf8mb4 COLLATE utf8mb4_general_ci';
+
+    /**
+     * Default charset init statement based on DB version (DefaultCharsetCollationMap). Fallback when version unknown.
+     *
+     * @return string e.g. "SET NAMES utf8mb4 COLLATE utf8mb4_general_ci"
+     */
+    private function getDefaultCharsetInitStatement(): string
+    {
+        try {
+            $result = $this->_connection->query('SELECT @@version');
+            if ($result !== false) {
+                $row = $result->fetch(\PDO::FETCH_NUM);
+                if (!empty($row[0])) {
+                    return DefaultCharsetCollationMap::getInitStatementFromVersionString((string) $row[0]);
+                }
+            }
+        } catch (\Throwable $e) {
+            return self::DEFAULT_CHARSET_INIT_STATEMENT;
+        }
+        return self::DEFAULT_CHARSET_INIT_STATEMENT;
+    }
 
     /**
      * Default class name for a DB statement.
@@ -525,6 +552,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             foreach ($statements as $statement) {
                 $this->_query($statement);
             }
+        } else {
+            // Default init statement from DB version (DefaultCharsetCollationMap) when env.php has no initStatements
+            $this->_query($this->getDefaultCharsetInitStatement());
         }
 
         if (!$this->_connectionFlagsSet) {
@@ -550,10 +580,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     private function getMysqlConstant(string $constantName): int
     {
-        if(version_compare(PHP_VERSION, '8.4') < 0){
+        if (version_compare(PHP_VERSION, '8.4') < 0) {
             return constant('PDO::MYSQL_' . $constantName);
-        }
-        else{
+        } else {
             return constant('Pdo\Mysql::' . $constantName);
         }
     }
@@ -954,7 +983,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         foreach ($parts as $i => $part) {
             // strings
-            if (($part === "'" || $part === '"') && ($i === 0 || $parts[$i-1] !== '\\')) {
+            if (($part === "'" || $part === '"') && $this->countPrecedingBackslashes($parts, $i) % 2 === 0) {
                 if ($q === false) {
                     $q = $part;
                 } elseif ($q === $part) {
@@ -991,6 +1020,25 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         }
 
         return $stmts;
+    }
+
+    /**
+     * Count consecutive backslash delimiters immediately preceding the given position.
+     *
+     * A quote delimiter is escaped only when preceded by an odd number of backslashes.
+     *
+     * @param string[] $parts
+     * @param int $index
+     * @return int
+     */
+    private function countPrecedingBackslashes(array $parts, int $index): int
+    {
+        $count = 0;
+        for ($position = $index - 1; $position >= 0 && $parts[$position] === '\\'; $position--) {
+            $count++;
+        }
+
+        return $count;
     }
 
     /**

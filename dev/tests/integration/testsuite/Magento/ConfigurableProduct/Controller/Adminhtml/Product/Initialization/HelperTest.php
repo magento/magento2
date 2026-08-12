@@ -22,6 +22,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -113,11 +114,11 @@ class HelperTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider initializeDataProvider
      * @param array $childProducts
      * @param array $expectedImages
      * @return void
      */
+    #[DataProvider('initializeDataProvider')]
     public function testInitialize(array $childProducts, array $expectedImages): void
     {
         $this->setRequestParams($childProducts);
@@ -130,11 +131,11 @@ class HelperTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @dataProvider initializeWithExistingChildImagesDataProvider
      * @param array $childProducts
      * @param array $expectedImages
      * @return void
      */
+    #[DataProvider('initializeWithExistingChildImagesDataProvider')]
     public function testInitializeWithExistingChildImages(array $childProducts, array $expectedImages): void
     {
         $this->updateChildProductsImages(

@@ -26,6 +26,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>

@@ -41,6 +41,7 @@ use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\Catalog\Api\ProductRepositoryInterface
@@ -175,14 +176,16 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * Test get() method with invalid sku
+     * Test get() method with invalid SKUs
+     *
+     * @param string $invalidSku SKU that must not exist in the catalog
      */
-    public function testGetNoSuchEntityException()
+    #[DataProvider('getNotExistingProductSkuDataProvider')]
+    public function testGetNoSuchEntityException(string $invalidSku): void
     {
-        $invalidSku = '(nonExistingSku)';
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $invalidSku,
+                'resourcePath' => self::RESOURCE_PATH . '/' . rawurlencode($invalidSku),
                 'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
@@ -207,6 +210,20 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
         }
+    }
+
+    /**
+     * Non-existent SKUs for {@see testGetNoSuchEntityException}
+     *
+     * @return array<string, array{string}>
+     */
+    public static function getNotExistingProductSkuDataProvider(): array
+    {
+        return [
+            'Non-existent SKU with parentheses' => ['(nonExistingSku)'],
+            'Non-existent SKU with numeric-looking token' => ['123abc'],
+            'Random missing SKU' => ['missing-product-webapi-bad-ref'],
+        ];
     }
 
     /**
@@ -452,9 +469,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * Test create() method
-     *
-     * @dataProvider productCreationProvider
      */
+    #[DataProvider('productCreationProvider')]
     public function testCreate($product)
     {
         $response = $this->saveProduct($product);
@@ -465,9 +481,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @param array $fixtureProduct
      *
-     * @dataProvider productCreationProvider
      * @magentoApiDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      */
+    #[DataProvider('productCreationProvider')]
     public function testCreateAllStoreCode($fixtureProduct)
     {
         $response = $this->saveProduct($fixtureProduct, 'all');
@@ -495,8 +511,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Test creating product with all store code on single store
      *
      * @param array $fixtureProduct
-     * @dataProvider productCreationProvider
      */
+    #[DataProvider('productCreationProvider')]
     public function testCreateAllStoreCodeForSingleWebsite($fixtureProduct)
     {
         $response = $this->saveProduct($fixtureProduct, 'all');
@@ -541,10 +557,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @param array $fixtureProduct
-     *
-     * @dataProvider productCreationProvider
      * @magentoApiDataFixture Magento/Store/_files/fixture_store_with_catalogsearch_index.php
      */
+    #[DataProvider('productCreationProvider')]
     public function testDeleteAllStoreCode($fixtureProduct)
     {
         $sku = $fixtureProduct[ProductInterface::SKU];
@@ -1098,13 +1113,12 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_websites_and_stores.php
-     * @dataProvider getListWithFilteringByStoreDataProvider
-     *
      * @param array $searchCriteria
      * @param array $skus
      * @param int $expectedProductCount
      * @return void
      */
+    #[DataProvider('getListWithFilteringByStoreDataProvider')]
     public function testGetListWithFilteringByStore(array $searchCriteria, array $skus, $expectedProductCount = null)
     {
         $serviceInfo = [
@@ -1190,8 +1204,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      *
      * @magentoAppIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
-     * @dataProvider productPaginationDataProvider
      */
+    #[DataProvider('productPaginationDataProvider')]
     public function testGetListPagination(int $pageSize, int $currentPage, int $expectedCount)
     {
         $fixtureProducts = 5;
@@ -1336,11 +1350,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * Test get list filter by category sorting by position.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
-     * @dataProvider getListSortingByPositionDataProvider
-     *
      * @param string $sortOrder
      * @param array $expectedItems
      */
+    #[DataProvider('getListSortingByPositionDataProvider')]
     public function testGetListSortingByPosition(string $sortOrder, array $expectedItems): void
     {
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);

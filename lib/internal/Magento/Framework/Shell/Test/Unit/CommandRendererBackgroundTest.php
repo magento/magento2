@@ -11,6 +11,7 @@ use Magento\Framework\OsInfo;
 use Magento\Framework\Shell\CommandRendererBackground;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CommandRendererBackgroundTest extends TestCase
 {
@@ -32,11 +33,10 @@ class CommandRendererBackgroundTest extends TestCase
             ->getMock();
     }
 
-    /**
-     * @dataProvider commandPerOsTypeDataProvider
-     * @param bool $isWindows
+    /**     * @param bool $isWindows
      * @param string $expectedResults
      */
+    #[DataProvider('commandPerOsTypeDataProvider')]
     public function testRender($isWindows, $expectedResults)
     {
         $this->osInfo->expects($this->once())

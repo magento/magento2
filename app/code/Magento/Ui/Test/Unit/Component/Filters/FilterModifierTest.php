@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class FilterModifierTest extends TestCase
@@ -43,8 +44,8 @@ class FilterModifierTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->dataProvider = $this->getMockForAbstractClass(
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->dataProvider = $this->createMock(
             DataProviderInterface::class
         );
         $this->filterBuilder = $this->createMock(FilterBuilder::class);
@@ -94,8 +95,8 @@ class FilterModifierTest extends TestCase
      * @param $conditionType
      * @param $value
      * @return void
-     * @dataProvider getApplyFilterModifierDataProvider
      */
+    #[DataProvider('getApplyFilterModifierDataProvider')]
     public function testApplyFilterModifierWith($filterModifier, $filterName, $conditionType, $value)
     {
         $filter = $this->createMock(Filter::class);

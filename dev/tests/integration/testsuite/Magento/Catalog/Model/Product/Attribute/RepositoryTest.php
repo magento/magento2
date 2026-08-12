@@ -16,6 +16,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Checks product attribute save behaviour.
@@ -83,12 +84,11 @@ class RepositoryTest extends TestCase
     }
 
     /**
-     * @dataProvider errorProvider
-     *
      * @param string $fieldName
      * @param string $fieldValue
      * @return void
      */
+    #[DataProvider('errorProvider')]
     public function testSaveWithInvalidCode(string $fieldName, string $fieldValue): void
     {
         $this->expectExceptionObject(InputException::invalidFieldValue($fieldName, $fieldValue));

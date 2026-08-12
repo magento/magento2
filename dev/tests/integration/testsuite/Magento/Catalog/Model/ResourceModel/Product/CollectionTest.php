@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\ProductGlobalPriceStoreScopedDecimal;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Store\Model\Store;
@@ -18,6 +19,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -228,12 +230,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test addAttributeToSort() with attribute 'is_saleable' works properly on frontend.
      *
-     * @dataProvider addIsSaleableAttributeToSortDataProvider
      * @magentoDataFixture Magento/Catalog/_files/multiple_products_with_non_saleable_product.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
+    #[DataProvider('addIsSaleableAttributeToSortDataProvider')]
     public function testAddIsSaleableAttributeToSort(string $productSku, string $order)
     {
         $this->collection->addAttributeToSort('is_saleable', $order);
@@ -261,13 +263,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test addAttributeToSort() with attribute 'price' works properly on frontend.
      *
-     * @dataProvider addPriceAttributeToSortDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_equal_zero.php
      * @magentoAppIsolation enabled
      * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      */
+    #[DataProvider('addPriceAttributeToSortDataProvider')]
     public function testAddPriceAttributeToSort(string $productSku, string $order)
     {
         $this->processor->getIndexer()->reindexAll();
@@ -337,9 +339,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     *
-     * @dataProvider addAttributeTierPriceToFilterDataProvider
      */
+    #[DataProvider('addAttributeTierPriceToFilterDataProvider')]
     public function testAddAttributeTierPriceToFilter($condition): void
     {
         $size = $this->collection->addAttributeToFilter('tier_price', $condition)->getSize();
@@ -364,9 +365,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
-     *
-     * @dataProvider addAttributeIsSaleableToFilterDataProvider
      */
+    #[DataProvider('addAttributeIsSaleableToFilterDataProvider')]
     public function testAddAttributeIsSaleableToFilter($condition): void
     {
         $size = $this->collection->addAttributeToFilter('is_saleable', $condition)->getSize();
@@ -384,5 +384,35 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'condition is int' => [1],
             'condition is null' => [null]
         ];
+    }
+
+    /**
+     * Global `price` and store-scoped decimals share `catalog_product_entity_decimal`; collection load must not
+     * collapse store scope for other attributes in that batch (see AC-40218 / PR 40419).
+     *
+     * DbIsolation disabled: fixture uses CategorySetup::addAttribute (DDL) and product save triggers indexers;
+     * wrapping those in a DB transaction causes MySQL ER_CANT_EXECUTE_WITH_PRIMARY_CHANGED / 1412 in MSI + ES
+     * pipelines.
+     */
+    #[
+        AppIsolation(true),
+        DbIsolation(false),
+        DataFixture(ProductGlobalPriceStoreScopedDecimal::class),
+    ]
+    public function testStoreScopedDecimalLoadedWithGlobalPriceOnSameDecimalTable(): void
+    {
+        $sku = 'simple-global-price-store-decimal-pr40419';
+        $attributeCode = 'decimal_attr_store_scope_pr40419';
+
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $collection->setStore('fixture_second_store')
+            ->addAttributeToSelect(['price', $attributeCode])
+            ->addFieldToFilter('sku', $sku)
+            ->load();
+
+        $this->assertCount(1, $collection->getItems());
+        $item = $collection->getFirstItem();
+        $this->assertSame(77.5, (float)$item->getPrice());
+        $this->assertEqualsWithDelta(9.99, (float)$item->getData($attributeCode), 0.0001);
     }
 }

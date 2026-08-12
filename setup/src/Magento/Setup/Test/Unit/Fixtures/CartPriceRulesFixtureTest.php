@@ -22,13 +22,17 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartPriceRulesFixtureTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject|FixtureModel
      */
@@ -67,14 +71,9 @@ class CartPriceRulesFixtureTest extends TestCase
             ->willReturn('website_id');
 
         $contextMock = $this->createMock(Context::class);
-        $abstractDbMock = $this->getMockForAbstractClass(
+        $abstractDbMock = $this->createPartialMockWithReflection(
             AbstractDb::class,
-            [$contextMock],
-            '',
-            true,
-            true,
-            true,
-            ['getAllChildren']
+            ['getAllChildren', '_construct']
         );
         $abstractDbMock->expects($this->once())
             ->method('getAllChildren')
@@ -158,8 +157,8 @@ class CartPriceRulesFixtureTest extends TestCase
      * @param int $ruleId
      * @param array $categoriesArray
      * @param int $ruleCount
-     * @dataProvider dataProviderGenerateAdvancedCondition
      */
+    #[DataProvider('dataProviderGenerateAdvancedCondition')]
     public function testGenerateAdvancedCondition($ruleId, $categoriesArray, $ruleCount)
     {
         $reflection = new \ReflectionClass($this->model);

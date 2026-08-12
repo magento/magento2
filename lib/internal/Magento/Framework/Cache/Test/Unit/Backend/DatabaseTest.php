@@ -14,6 +14,8 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class DatabaseTest extends TestCase
@@ -35,8 +37,8 @@ class DatabaseTest extends TestCase
      * @param array $options
      *
      * @return void
-     * @dataProvider initializeWithExceptionDataProvider
      */
+     #[DataProvider('initializeWithExceptionDataProvider')]
     public function testInitializeWithException($options): void
     {
         if ($options['adapter']!='' && is_callable($options['adapter'])) {
@@ -93,8 +95,8 @@ class DatabaseTest extends TestCase
      * @param bool|string $expected
      *
      * @return void
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testLoad($options, $expected): void
     {
         $options = $options($this);
@@ -205,8 +207,8 @@ class DatabaseTest extends TestCase
      * @param bool|string $expected
      *
      * @return void
-     * @dataProvider loadDataProvider
      */
+     #[DataProvider('loadDataProvider')]
     public function testTest($options, $expected): void
     {
         $options = $options($this);
@@ -225,8 +227,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider saveDataProvider
      */
+     #[DataProvider('saveDataProvider')]
     public function testSave($options, $expected): void
     {
         $options = $options($this);
@@ -275,10 +277,7 @@ class DatabaseTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dbStatementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->onlyMethods(['rowCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dbStatementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
 
         $dbStatementMock->expects($this->any())
             ->method('rowCount')
@@ -300,8 +299,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider removeDataProvider
      */
+     #[DataProvider('removeDataProvider')]
     public function testRemove($options, $expected): void
     {
         $options = $options($this);
@@ -353,8 +352,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider cleanDataProvider
      */
+     #[DataProvider('cleanDataProvider')]
     public function testClean($options, $mode, $expected): void
     {
         $options = $options($this);
@@ -452,8 +451,8 @@ class DatabaseTest extends TestCase
      * @param array $expected
      *
      * @return void
-     * @dataProvider getIdsDataProvider
      */
+     #[DataProvider('getIdsDataProvider')]
     public function testGetIds($options, $expected): void
     {
         $options = $options($this);
@@ -721,8 +720,8 @@ class DatabaseTest extends TestCase
      * @param bool $expected
      *
      * @return void
-     * @dataProvider touchDataProvider
      */
+     #[DataProvider('touchDataProvider')]
     public function testTouch($options, $expected): void
     {
         $options = $options($this);

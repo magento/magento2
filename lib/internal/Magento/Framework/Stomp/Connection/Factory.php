@@ -18,8 +18,6 @@ class Factory
     /**
      * Create connection according to given options.
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param FactoryOptions $options
      * @return Connection
      * @throws ConnectionException
@@ -35,7 +33,6 @@ class Factory
             $connection = $this->createConnectionInstance($broker);
         }
 
-        $connection->connect();
         return $connection;
     }
 

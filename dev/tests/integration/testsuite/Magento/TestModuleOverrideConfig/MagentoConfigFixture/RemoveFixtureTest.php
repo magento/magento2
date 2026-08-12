@@ -10,6 +10,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoConfigFixture;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoConfigFixtures can be removed using override config
@@ -50,12 +51,11 @@ class RemoveFixtureTest extends AbstractOverridesTest
      * @magentoConfigFixture current_store test_section/test_group/field_2 new_value
      * @magentoConfigFixture current_store test_section/test_group/field_3 new_value
      *
-     * @dataProvider datasetDataProvider
-     *
      * @param string $expectedFirstValue
      * @param string $expectedSecondValue
      * @return void
      */
+    #[DataProvider('datasetDataProvider')]
     public function testRemoveFixtureForMethod(string $expectedFirstValue, string $expectedSecondValue): void
     {
         $fistValue = $this->config->getValue('test_section/test_group/field_2', ScopeInterface::SCOPE_STORES);
@@ -71,12 +71,12 @@ class RemoveFixtureTest extends AbstractOverridesTest
     {
         return [
             'first_data_set' => [
-                'expectedFirstValue' => '2nd field default value',
-                'expectedSecondValue' => 'new_value',
+                '2nd field default value',
+                'new_value',
             ],
             'second_data_set' => [
-                'expectedFirstValue' => '2nd field default value',
-                'expectedSecondValue' => '3rd field website scope default value',
+                '2nd field default value',
+                '3rd field website scope default value',
             ],
         ];
     }

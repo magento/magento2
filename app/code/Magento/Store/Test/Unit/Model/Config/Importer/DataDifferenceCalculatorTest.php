@@ -33,8 +33,7 @@ class DataDifferenceCalculatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->runtimeConfigSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+        $this->runtimeConfigSourceMock = $this->createMock(ConfigSourceInterface::class);
 
         $this->model = new DataDifferenceCalculator(
             $this->runtimeConfigSourceMock

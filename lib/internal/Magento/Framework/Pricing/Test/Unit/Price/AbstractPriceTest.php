@@ -59,7 +59,7 @@ class AbstractPriceTest extends TestCase
             ->willReturn($this->priceInfoMock);
         $objectManager = new ObjectManager($this);
 
-        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
 
         $this->price = $objectManager->getObject(
             Stub::class,

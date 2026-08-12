@@ -18,6 +18,7 @@ use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -46,9 +47,7 @@ class RemoteServiceGeneratorTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->communicationConfig = $this->getMockBuilder(CommunicationConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->communicationConfig = $this->createMock(CommunicationConfigInterface::class);
 
         $loader = new ClassLoader();
         $loader->addPsr4(
@@ -65,9 +64,8 @@ class RemoteServiceGeneratorTest extends TestCase
      * @param string $sourceClassName
      * @param string $resultClassName
      * @param string $topicName
-     * @param string $fileName
-     * @dataProvider interfaceDataProvider
-     */
+     * @param string $fileName     */
+    #[DataProvider('interfaceDataProvider')]
     public function testGenerate($sourceClassName, $resultClassName, $topicName, $fileName)
     {
         $this->createGenerator($sourceClassName, $resultClassName);
@@ -159,15 +157,11 @@ class RemoteServiceGeneratorTest extends TestCase
      */
     private function createMethodMap()
     {
-        $cache = $this->getMockBuilder(FrontendInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $cache = $this->createMock(FrontendInterface::class);
         $cache->method('load')
             ->willReturn(false);
 
-        $serializer = $this->getMockBuilder(SerializerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $serializer = $this->createMock(SerializerInterface::class);
         $typeProcessor = $this->objectManager->getObject(TypeProcessor::class);
 
         /** @var MethodsMap $serviceMethodMap */

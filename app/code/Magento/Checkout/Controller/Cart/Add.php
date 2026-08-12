@@ -149,11 +149,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                         $product->getName()
                     );
                     $this->messageManager->addSuccessMessage($message);
-                } elseif ($this->cart->getQuote()->getHasError()) {
-                    $errors = $this->cart->getQuote()->getErrors();
-                    foreach ($errors as $error) {
-                        $this->messageManager->addErrorMessage($error->getText());
-                    }
                 } else {
                     $this->messageManager->addComplexSuccessMessage(
                         'addCartSuccessMessage',
@@ -162,6 +157,13 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                             'cart_url' => $this->getCartUrl(),
                         ]
                     );
+                }
+
+                if ($this->cart->getQuote()->getHasError()) {
+                    $errors = $this->cart->getQuote()->getErrors();
+                    foreach ($errors as $error) {
+                        $this->messageManager->addErrorMessage($error->getText());
+                    }
                 }
                 return $this->goBack(null, $product);
             }

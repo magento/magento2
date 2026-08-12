@@ -20,6 +20,7 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Model\ConfigOptionsList\Lock;
 use Magento\Setup\Validator\DbValidator;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -79,11 +80,22 @@ class ConfigOptionsListTest extends TestCase
         $objectManagerHelper = new ObjectManager($this);
         $objects = [];
         foreach ($this->configOptionsListClasses as $className) {
-            $configOptionClassMock = $this->getMockBuilder($className)
+            $hasArrayParam = false;
+            foreach ((new \ReflectionClass($className))->getConstructor()?->getParameters() ?? [] as $param) {
+                $type = $param->getType();
+                if ($type instanceof \ReflectionNamedType && $type->getName() === 'array') {
+                    $hasArrayParam = true;
+                    break;
+                }
+            }
+            $mock = $this->getMockBuilder($className)
                 ->disableOriginalConstructor()
-                ->onlyMethods([])
+                ->onlyMethods($hasArrayParam ? ['getOptions'] : [])
                 ->getMock();
-            $objects[] = [$className,$configOptionClassMock];
+            if ($hasArrayParam) {
+                $mock->method('getOptions')->willReturn([]);
+            }
+            $objects[] = [$className, $mock];
         }
         $objectManagerHelper->prepareObjectManager($objects);
         $this->object = new ConfigOptionsList(
@@ -223,8 +235,8 @@ class ConfigOptionsListTest extends TestCase
     /**
      * @param string $hosts
      * @param bool $expectedError
-     * @dataProvider validateCacheHostsDataProvider
      */
+    #[DataProvider('validateCacheHostsDataProvider')]
     public function testValidateCacheHosts($hosts, $expectedError)
     {
         $options = [
