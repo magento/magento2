@@ -118,16 +118,7 @@ class IndexerSetNoDdlModeCommand extends Command
     {
         $indexerId = (string)$input->getArgument(self::ARG_INDEXER);
         $mode = (string)$input->getArgument(self::ARG_MODE);
-
-        try {
-            $indexer = $this->loadIndexer($indexerId);
-        } catch (\InvalidArgumentException $e) {
-            $output->writeln($e->getMessage());
-            if ($output->isVerbose()) {
-                $output->writeln($e->getTraceAsString());
-            }
-            return Cli::RETURN_FAILURE;
-        }
+        $indexer = $this->loadIndexer($indexerId);
 
         switch ($mode) {
             case self::MODE_ENABLE:

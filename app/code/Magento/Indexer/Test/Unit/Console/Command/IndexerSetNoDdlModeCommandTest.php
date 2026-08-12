@@ -252,20 +252,17 @@ class IndexerSetNoDdlModeCommandTest extends TestCase
     /**
      * @return void
      */
-    public function testUnknownIndexerIdFailsGracefully(): void
+    public function testUnknownIndexerIdPropagatesException(): void
     {
         $this->indexerMock->method('load')
             ->with('bogus_indexer')
             ->willThrowException(new \InvalidArgumentException('bogus_indexer indexer does not exist.'));
 
-        $commandTester = new CommandTester($this->command);
-        $exitCode = $commandTester->execute(['indexer' => 'bogus_indexer', 'mode' => 'status']);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('bogus_indexer indexer does not exist.');
 
-        $this->assertSame(Cli::RETURN_FAILURE, $exitCode);
-        $this->assertSame(
-            'bogus_indexer indexer does not exist.' . PHP_EOL,
-            $commandTester->getDisplay()
-        );
+        $commandTester = new CommandTester($this->command);
+        $commandTester->execute(['indexer' => 'bogus_indexer', 'mode' => 'status']);
     }
 
     /**
