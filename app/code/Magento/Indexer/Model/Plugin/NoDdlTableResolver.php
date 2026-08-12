@@ -12,13 +12,6 @@ use Magento\Framework\Indexer\NoDdlModeInterface;
 
 /**
  * Appends the No-DDL reindex replica suffix to table name lookups for any indexer that declares support
- *
- * Catches consumers that resolve a No-DDL-aware indexer's table names via the shared
- * ResourceConnection::getTableName() chokepoint without going through that indexer's own table
- * maintainer directly (e.g. modules outside the owning one that read the index tables). Each adopting
- * indexer contributes its own physical table name(s) via the $tableIndexerMap constructor argument,
- * mapping the bare table name literal to that indexer's ID; this plugin never needs indexer-specific
- * knowledge beyond that map.
  */
 class NoDdlTableResolver
 {

@@ -14,11 +14,6 @@ interface NoDdlModeInterface
 {
     /**
      * Suffix appended to a table name when its replica (reserved) table is currently active
-     *
-     * This is a naming contract shared between every indexer's own table maintainer (which physically
-     * creates/populates the suffixed table) and the generic ResourceConnection::getTableName() resolver
-     * plugin (which appends it for callers that resolve table names without going through the table
-     * maintainer directly). Unlike a storage-format detail, both sides must agree on this value.
      */
     public const REPLICA_TABLE_SUFFIX = '_replica';
 
