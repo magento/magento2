@@ -16,6 +16,13 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
 {
     /**
+     * Authorization for deleting folder
+     *
+     * @see _isAllowed()
+     */
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::delete_folder';
+
+    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
