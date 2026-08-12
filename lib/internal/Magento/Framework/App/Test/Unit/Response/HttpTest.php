@@ -316,6 +316,34 @@ class HttpTest extends TestCase
     }
 
     /**
+     * Test that no-store is omitted when the page already has public cacheable headers.
+     *
+     * @return void
+     */
+    public function testSetNoCacheHeadersForCacheablePage(): void
+    {
+        $timestamp = 1000000;
+        $pragma = 'no-cache';
+        $cacheControl = 'max-age=0, must-revalidate, no-cache';
+        $expiresResult ='Thu, 01 Jan 1970 00:00:00 GMT';
+
+        $this->dateTimeMock->expects($this->once())
+            ->method('strToTime')
+            ->with('-1 year')
+            ->willReturn($timestamp);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmDate')
+            ->with(Http::EXPIRATION_TIMESTAMP_FORMAT, $timestamp)
+            ->willReturn($expiresResult);
+
+        $this->model->setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400', true);
+        $this->model->setNoCacheHeaders();
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')->getFieldValue());
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')->getFieldValue());
+        $this->assertEquals($expiresResult, $this->model->getHeader('Expires')->getFieldValue());
+    }
+
+    /**
      * Test setting body in JSON format.
      *
      * @return void
