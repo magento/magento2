@@ -10,6 +10,7 @@ namespace Magento\Indexer\Console\Command;
 use Magento\Framework\Console\Cli;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\IndexerFactory;
+use Magento\Indexer\Model\NoDdlModeSupport;
 use Magento\Framework\Indexer\NoDdlModeInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -38,38 +39,25 @@ class IndexerSetNoDdlModeCommand extends Command
     private $noDdlMode;
 
     /**
-     * Indexer IDs that declare support for No-DDL reindex mode, contributed by each adopting module's own di.xml
-     *
-     * @var string[]
+     * @var NoDdlModeSupport
      */
-    private $supportedIndexerIds;
-
-    /**
-     * Indexer ID to paired indexer ID, for indexers whose No-DDL flag only takes effect when both are enabled
-     * together, contributed by each adopting module's own di.xml
-     *
-     * @var string[]
-     */
-    private $pairedIndexerIds;
+    private $noDdlModeSupport;
 
     /**
      * @param IndexerFactory $indexerFactory
      * @param NoDdlModeInterface $noDdlMode
-     * @param string[] $supportedIndexerIds
-     * @param string[] $pairedIndexerIds
+     * @param NoDdlModeSupport $noDdlModeSupport
      * @param string|null $name
      */
     public function __construct(
         IndexerFactory $indexerFactory,
         NoDdlModeInterface $noDdlMode,
-        array $supportedIndexerIds,
-        array $pairedIndexerIds,
+        NoDdlModeSupport $noDdlModeSupport,
         ?string $name = null
     ) {
         $this->indexerFactory = $indexerFactory;
         $this->noDdlMode = $noDdlMode;
-        $this->supportedIndexerIds = $supportedIndexerIds;
-        $this->pairedIndexerIds = $pairedIndexerIds;
+        $this->noDdlModeSupport = $noDdlModeSupport;
         parent::__construct($name);
     }
 
@@ -142,7 +130,7 @@ class IndexerSetNoDdlModeCommand extends Command
      */
     private function handleEnable(Indexer $indexer, OutputInterface $output): int
     {
-        if (!in_array($indexer->getId(), $this->supportedIndexerIds, true)) {
+        if (!$this->noDdlModeSupport->isSupported($indexer->getId())) {
             $output->writeln(
                 "No-DDL reindex mode is not supported for '{$indexer->getTitle()}'."
             );
@@ -161,7 +149,7 @@ class IndexerSetNoDdlModeCommand extends Command
     }
 
     /**
-     * Warn if this indexer is paired with another one that also needs to be enabled to take effect
+     * Warn about any paired indexer (sharing a shared_index group) that also needs to be enabled
      *
      * @param Indexer $indexer
      * @param OutputInterface $output
@@ -169,12 +157,13 @@ class IndexerSetNoDdlModeCommand extends Command
      */
     private function warnIfPairedIndexerNotEnabled(Indexer $indexer, OutputInterface $output): void
     {
-        $pairedIndexerId = $this->pairedIndexerIds[$indexer->getId()] ?? null;
-        if ($pairedIndexerId !== null && !$this->noDdlMode->isEnabled($pairedIndexerId)) {
-            $output->writeln(
-                "Note: also run 'bin/magento indexer:set-no-ddl-mode {$pairedIndexerId} enable' "
-                . 'for this to take effect.'
-            );
+        foreach ($this->noDdlModeSupport->getPairedIndexerIds($indexer->getId()) as $pairedIndexerId) {
+            if (!$this->noDdlMode->isEnabled($pairedIndexerId)) {
+                $output->writeln(
+                    "Note: also run 'bin/magento indexer:set-no-ddl-mode {$pairedIndexerId} enable' "
+                    . 'for this to take effect.'
+                );
+            }
         }
     }
 
@@ -199,7 +188,27 @@ class IndexerSetNoDdlModeCommand extends Command
         }
         $this->setEnabled($indexer, false);
         $output->writeln("No-DDL reindex mode disabled for '{$indexer->getTitle()}'.");
+        $this->warnIfPairedIndexerStillEnabled($indexer, $output);
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Warn about any paired indexer that is still enabled and will now have no effect
+     *
+     * @param Indexer $indexer
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function warnIfPairedIndexerStillEnabled(Indexer $indexer, OutputInterface $output): void
+    {
+        foreach ($this->noDdlModeSupport->getPairedIndexerIds($indexer->getId()) as $pairedIndexerId) {
+            if ($this->noDdlMode->isEnabled($pairedIndexerId)) {
+                $output->writeln(
+                    "Note: '{$pairedIndexerId}' is still enabled but will have no effect until "
+                    . "'{$indexer->getId()}' is enabled again."
+                );
+            }
+        }
     }
 
     /**

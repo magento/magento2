@@ -31,7 +31,7 @@ class NoDdlTableResolver
      * @param NoDdlModeInterface $noDdlMode
      * @param string[] $tableIndexerMap
      */
-    public function __construct(NoDdlModeInterface $noDdlMode, array $tableIndexerMap)
+    public function __construct(NoDdlModeInterface $noDdlMode, array $tableIndexerMap = [])
     {
         $this->noDdlMode = $noDdlMode;
         $this->tableIndexerMap = $tableIndexerMap;

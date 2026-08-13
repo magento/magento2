@@ -69,17 +69,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Indexer\Console\Command\IndexerSetNoDdlModeCommand">
-        <arguments>
-            <argument name="supportedIndexerIds" xsi:type="array"/>
-            <argument name="pairedIndexerIds" xsi:type="array"/>
-        </arguments>
-    </type>
-    <type name="Magento\Indexer\Model\Plugin\NoDdlTableResolver">
-        <arguments>
-            <argument name="tableIndexerMap" xsi:type="array"/>
-        </arguments>
-    </type>
     <preference for="Magento\Framework\Indexer\BatchSizeManagementInterface" type="Magento\Framework\Indexer\BatchSizeManagement" />
     <type name="Magento\Indexer\Model\Indexer\DependencyDecorator">
         <arguments>

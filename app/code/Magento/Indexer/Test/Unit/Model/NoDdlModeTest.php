@@ -162,19 +162,11 @@ class NoDdlModeTest extends TestCase
                     'indexer_id' => 'sample_indexer_a',
                     'is_main_active' => true,
                 ],
-                ['indexer_id']
-            );
-
-        $this->connectionMock->expects($this->once())
-            ->method('update')
-            ->with(
-                self::TABLE_NAME,
-                $this->callback(function (array $data) {
-                    return isset($data['is_main_active'])
-                        && $data['is_main_active'] instanceof \Zend_Db_Expr
-                        && (string)$data['is_main_active'] === 'NOT is_main_active';
-                }),
-                ['indexer_id = ?' => 'sample_indexer_a']
+                $this->callback(function (array $fields) {
+                    return isset($fields['is_main_active'])
+                        && $fields['is_main_active'] instanceof \Zend_Db_Expr
+                        && (string)$fields['is_main_active'] === 'NOT is_main_active';
+                })
             );
 
         $this->poisonPillPutMock->expects($this->once())->method('put');
@@ -188,7 +180,6 @@ class NoDdlModeTest extends TestCase
     public function testFlipActiveTableInvalidatesCacheSoNextReadReQueriesDb(): void
     {
         $this->connectionMock->method('insertOnDuplicate');
-        $this->connectionMock->method('update');
 
         $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')->willReturnSelf();
@@ -207,7 +198,6 @@ class NoDdlModeTest extends TestCase
     public function testFlipActiveTableInvalidatesCachePerIndexerIdIndependently(): void
     {
         $this->connectionMock->method('insertOnDuplicate');
-        $this->connectionMock->method('update');
 
         $selectMock = $this->createMock(Select::class);
         $selectMock->method('from')->willReturnSelf();
