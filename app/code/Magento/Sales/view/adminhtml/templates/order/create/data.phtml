@@ -15,7 +15,7 @@
 script;
     ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
-    <div class="order-details<?php if ($block->getCustomerId()): ?> order-details-existing-customer<?php endif; ?>">
+    <div class="<?php if ($block->getCustomerId()): ?>order-details order-details-existing-customer<?php endif; ?>">
 
         <div id="order-additional_area" class="admin__page-section order-additional-area">
             <?= $block->getChildHtml('additional_area') ?>
