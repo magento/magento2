@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogRuleMultiselectDoesNotContainTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule with negative multiselect condition"/>
+            <title value="Catalog rule multiselect does not contain discounts products without the excluded option"/>
+            <description value="Products without multiselect value or with a different option must receive the discount; products with the excluded option must not."/>
+            <severity value="CRITICAL"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <createData entity="multipleSelectProductAttribute" stepKey="createMultiselectAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createOptionExcluded">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createOptionOther">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addAttributeToDefaultSet">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductWithoutValue">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductWithExcludedOption">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductWithOtherOption">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductWithExcludedOption">
+                <argument name="productId" value="$createProductWithExcludedOption.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiselectAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createOptionExcluded.option[store_labels][0][label]$"
+                          stepKey="setExcludedOptionOnProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithExcludedOption"/>
+
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductWithOtherOption">
+                <argument name="productId" value="$createProductWithOtherOption.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiselectAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createOptionOther.option[store_labels][0][label]$"
+                          stepKey="setOtherOptionOnProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductWithOtherOption"/>
+
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRules"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBefore">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductWithoutValue" stepKey="deleteProductWithoutValue"/>
+            <deleteData createDataKey="createProductWithExcludedOption" stepKey="deleteProductWithExcludedOption"/>
+            <deleteData createDataKey="createProductWithOtherOption" stepKey="deleteProductWithOtherOption"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createMultiselectAttribute" stepKey="deleteMultiselectAttribute"/>
+
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfter">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRuleForm"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfo">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleMultiselectConditionActionGroup" stepKey="fillDoesNotContainCondition">
+            <argument name="condition" value="$createMultiselectAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="conditionOperator" value="does not contain"/>
+            <argument name="conditionValue" value="$createOptionExcluded.option[store_labels][0][label]$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActions">
+            <argument name="discountAmount" value="50"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyRule"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexRules">
+            <argument name="indices" value="catalogrule_rule catalogrule_product catalog_product_price"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductWithoutValuePage">
+            <argument name="productUrlKey" value="$createProductWithoutValue.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertProductWithoutValueDiscounted">
+            <argument name="productPrice" value="$100.00"/>
+            <argument name="productFinalPrice" value="$50.00"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductWithOtherOptionPage">
+            <argument name="productUrlKey" value="$createProductWithOtherOption.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertProductWithOtherOptionDiscounted">
+            <argument name="productPrice" value="$100.00"/>
+            <argument name="productFinalPrice" value="$50.00"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductWithExcludedOptionPage">
+            <argument name="productUrlKey" value="$createProductWithExcludedOption.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertProductWithExcludedOptionFullPrice">
+            <argument name="productPrice" value="$100.00"/>
+            <argument name="productFinalPrice" value="$100.00"/>
+        </actionGroup>
+    </test>
+</tests>
