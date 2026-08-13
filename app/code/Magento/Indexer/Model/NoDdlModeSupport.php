@@ -28,16 +28,18 @@ class NoDdlModeSupport
     private $supportedIndexerIds;
 
     /**
-     * Physical table name to indexer ID, contributed by each adopting module's own di.xml
+     * Physical table name to indexer ID, pre-filtered to only indexers that declare support, so the
+     * per-call table lookup in getIndexerIdForTable() never needs a separate isSupported() scan
      *
      * @var string[]
      */
-    private $indexerTables;
+    private $supportedIndexerTables;
 
     /**
      * @param ConfigInterface $indexerConfig
      * @param string[] $supportedIndexerIds
-     * @param string[] $indexerTables
+     * @param string[] $indexerTables Physical table name to indexer ID, contributed by each adopting
+     *        module's own di.xml
      */
     public function __construct(
         ConfigInterface $indexerConfig,
@@ -46,7 +48,10 @@ class NoDdlModeSupport
     ) {
         $this->indexerConfig = $indexerConfig;
         $this->supportedIndexerIds = $supportedIndexerIds;
-        $this->indexerTables = $indexerTables;
+        $this->supportedIndexerTables = array_filter(
+            $indexerTables,
+            fn (string $indexerId): bool => in_array($indexerId, $supportedIndexerIds, true)
+        );
     }
 
     /**
@@ -94,7 +99,6 @@ class NoDdlModeSupport
      */
     public function getIndexerIdForTable(string $tableName): ?string
     {
-        $indexerId = $this->indexerTables[$tableName] ?? null;
-        return $indexerId !== null && $this->isSupported($indexerId) ? $indexerId : null;
+        return $this->supportedIndexerTables[$tableName] ?? null;
     }
 }
