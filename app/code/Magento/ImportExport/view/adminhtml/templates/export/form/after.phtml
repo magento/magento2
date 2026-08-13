@@ -11,7 +11,7 @@
     <legend class="admin__legend">
         <span><?= $block->escapeHtml(__('Entity Attributes')) ?></span>
     </legend>
-    <br />
+    <br/>
     <form id="export_filter_form" action="<?= $block->escapeUrl($block->getUrl('*/*/export')) ?>" method="post">
         <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
