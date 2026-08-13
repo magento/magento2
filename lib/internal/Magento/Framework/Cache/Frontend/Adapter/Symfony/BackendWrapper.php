@@ -13,6 +13,7 @@ use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\PruneableInterface;
 
 /**
  * Backend wrapper for Symfony cache adapter
@@ -115,12 +116,35 @@ class BackendWrapper implements BackendInterface
     {
         return match ($mode) {
             CacheConstants::CLEANING_MODE_ALL, 'all' => $this->clear(),
-            // OLD = garbage collection. Symfony auto-expires the data key by TTL but leaves the id in
-            // its tag SETs; sweep those orphaned members (legacy Cm Redis clean(OLD) -> _collectGarbage,
-            // run by the backend_clean_cache cron). No-op on adapters without such an index.
-            CacheConstants::CLEANING_MODE_OLD, 'old' => $this->adapter->garbageCollect() >= 0,
+            CacheConstants::CLEANING_MODE_OLD, 'old' => $this->cleanOld(),
             default => throw new InvalidArgumentException("Backend clean only supports ALL and OLD modes")
         };
+    }
+
+    /**
+     * Garbage-collect old entries: delete expired items from the store, then sweep orphaned tag-index
+     * members. Mirrors legacy clean(OLD) (Zend file backend automatic_cleaning_factor + Cm Redis
+     * _collectGarbage), run by the backend_clean_cache cron.
+     *
+     * @return bool
+     */
+    private function cleanOld(): bool
+    {
+        // Remove expired entries from the underlying store. FilesystemAdapter physically deletes
+        // expired files here (parity with the legacy file backend); Redis auto-expires so this no-ops.
+        $this->prune();
+        // Sweep orphaned tag-index members (ids whose data key already expired). No-op on file/generic.
+        return $this->adapter->garbageCollect() >= 0;
+    }
+
+    /**
+     * Prune expired entries from the underlying pool when it supports pruning (e.g. FilesystemAdapter).
+     *
+     * @return bool
+     */
+    public function prune(): bool
+    {
+        return $this->cache instanceof PruneableInterface ? $this->cache->prune() : false;
     }
 
     /**

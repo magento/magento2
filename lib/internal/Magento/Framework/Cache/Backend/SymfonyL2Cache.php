@@ -324,8 +324,30 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
             $this->clearLocal();
             return $this->remote->clean($mode, $tags);
         }
+        if ($mode === CacheConstants::CLEANING_MODE_OLD) {
+            // TTL garbage collection (run by the backend_clean_cache cron). Prune expired entries from
+            // BOTH tiers, mirroring legacy clean(OLD). The L1 FilesystemAdapter physically deletes
+            // expired files here; a tag-scoped local->clean() cannot (index_tags=false), so we prune the
+            // local backend directly. The remote's clean(OLD) sweeps the Redis tag index (data keys
+            // auto-expire via native TTL).
+            $this->pruneLocal();
+            return $this->remote->clean($mode, $tags);
+        }
         $this->local->clean($mode, $tags);
         return $this->remote->clean($mode, $tags);
+    }
+
+    /**
+     * Prune expired entries from the local (L1) tier when its backend supports pruning.
+     *
+     * @return void
+     */
+    private function pruneLocal(): void
+    {
+        $localBackend = $this->local->getBackend();
+        if (method_exists($localBackend, 'prune')) {
+            $localBackend->prune();
+        }
     }
 
     /**
