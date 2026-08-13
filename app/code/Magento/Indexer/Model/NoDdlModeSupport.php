@@ -28,13 +28,25 @@ class NoDdlModeSupport
     private $supportedIndexerIds;
 
     /**
+     * Physical table name to indexer ID, contributed by each adopting module's own di.xml
+     *
+     * @var string[]
+     */
+    private $indexerTables;
+
+    /**
      * @param ConfigInterface $indexerConfig
      * @param string[] $supportedIndexerIds
+     * @param string[] $indexerTables
      */
-    public function __construct(ConfigInterface $indexerConfig, array $supportedIndexerIds = [])
-    {
+    public function __construct(
+        ConfigInterface $indexerConfig,
+        array $supportedIndexerIds = [],
+        array $indexerTables = []
+    ) {
         $this->indexerConfig = $indexerConfig;
         $this->supportedIndexerIds = $supportedIndexerIds;
+        $this->indexerTables = $indexerTables;
     }
 
     /**
@@ -72,5 +84,17 @@ class NoDdlModeSupport
         }
 
         return $pairedIndexerIds;
+    }
+
+    /**
+     * Resolve the indexer ID that owns a given physical table, if that indexer supports No-DDL reindex mode
+     *
+     * @param string $tableName
+     * @return string|null
+     */
+    public function getIndexerIdForTable(string $tableName): ?string
+    {
+        $indexerId = $this->indexerTables[$tableName] ?? null;
+        return $indexerId !== null && $this->isSupported($indexerId) ? $indexerId : null;
     }
 }

@@ -9,6 +9,7 @@ namespace Magento\Indexer\Model\Plugin;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Indexer\NoDdlModeInterface;
+use Magento\Indexer\Model\NoDdlModeSupport;
 
 /**
  * Appends the No-DDL reindex replica suffix to table name lookups for any indexer that declares support
@@ -21,20 +22,18 @@ class NoDdlTableResolver
     private $noDdlMode;
 
     /**
-     * Physical table name to indexer ID, contributed by each adopting indexer's own di.xml
-     *
-     * @var string[]
+     * @var NoDdlModeSupport
      */
-    private $tableIndexerMap;
+    private $noDdlModeSupport;
 
     /**
      * @param NoDdlModeInterface $noDdlMode
-     * @param string[] $tableIndexerMap
+     * @param NoDdlModeSupport $noDdlModeSupport
      */
-    public function __construct(NoDdlModeInterface $noDdlMode, array $tableIndexerMap = [])
+    public function __construct(NoDdlModeInterface $noDdlMode, NoDdlModeSupport $noDdlModeSupport)
     {
         $this->noDdlMode = $noDdlMode;
-        $this->tableIndexerMap = $tableIndexerMap;
+        $this->noDdlModeSupport = $noDdlModeSupport;
     }
 
     /**
@@ -48,11 +47,15 @@ class NoDdlTableResolver
      */
     public function afterGetTableName(ResourceConnection $subject, string $result, $modelEntity): string
     {
-        if (is_array($modelEntity) || !isset($this->tableIndexerMap[$modelEntity])) {
+        if (is_array($modelEntity)) {
             return $result;
         }
 
-        $indexerId = $this->tableIndexerMap[$modelEntity];
+        $indexerId = $this->noDdlModeSupport->getIndexerIdForTable($modelEntity);
+        if ($indexerId === null) {
+            return $result;
+        }
+
         if ($this->noDdlMode->isEnabled($indexerId) && !$this->noDdlMode->isMainTableActive($indexerId)) {
             return $result . NoDdlModeInterface::REPLICA_TABLE_SUFFIX;
         }

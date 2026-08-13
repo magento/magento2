@@ -100,4 +100,46 @@ class NoDdlModeSupportTest extends TestCase
 
         $this->assertSame([], $support->getPairedIndexerIds('sample_indexer_a'));
     }
+
+    /**
+     * @return void
+     */
+    public function testGetIndexerIdForTableReturnsIndexerIdWhenTableIsMappedAndSupported(): void
+    {
+        $support = new NoDdlModeSupport(
+            $this->indexerConfigMock,
+            ['sample_indexer_a'],
+            ['sample_table' => 'sample_indexer_a']
+        );
+
+        $this->assertSame('sample_indexer_a', $support->getIndexerIdForTable('sample_table'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIndexerIdForTableReturnsNullWhenTableIsNotMapped(): void
+    {
+        $support = new NoDdlModeSupport(
+            $this->indexerConfigMock,
+            ['sample_indexer_a'],
+            ['sample_table' => 'sample_indexer_a']
+        );
+
+        $this->assertNull($support->getIndexerIdForTable('other_table'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIndexerIdForTableReturnsNullWhenMappedIndexerDoesNotDeclareSupport(): void
+    {
+        $support = new NoDdlModeSupport(
+            $this->indexerConfigMock,
+            [],
+            ['sample_table' => 'sample_indexer_a']
+        );
+
+        $this->assertNull($support->getIndexerIdForTable('sample_table'));
+    }
 }
