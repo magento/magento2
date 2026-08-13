@@ -47,11 +47,11 @@ class NoDdlTableResolver
      */
     public function afterGetTableName(ResourceConnection $subject, string $result, $modelEntity): string
     {
-        if (is_array($modelEntity)) {
+        if (!is_string($modelEntity)) {
             return $result;
         }
 
-        $indexerId = $this->noDdlModeSupport->getIndexerIdForTable((string)$modelEntity);
+        $indexerId = $this->noDdlModeSupport->getIndexerIdForTable($modelEntity);
         if ($indexerId === null) {
             return $result;
         }
