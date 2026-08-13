@@ -33,8 +33,8 @@
         <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeOperatorSelect"/>
         <click selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" stepKey="clickValueEllipsis"/>
         <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" stepKey="waitForValueInput"/>
+        <!-- Multiselect/select value chooser auto-applies on option select (no rule-param-apply control). -->
         <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" userInput="{{conditionValue}}" stepKey="selectConditionValue"/>
-        <click selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="clickApply"/>
-        <waitForElementNotVisible selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="waitForApplyButtonInvisibility"/>
+        <waitForPageLoad stepKey="waitAfterSelectConditionValue"/>
     </actionGroup>
 </actionGroups>

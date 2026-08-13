@@ -89,9 +89,14 @@
             <argument name="conditionOperator" value="does not contain"/>
             <argument name="conditionValue" value="$createOptionExcluded.option[store_labels][0][label]$"/>
         </actionGroup>
-        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActions">
-            <argument name="discountAmount" value="50"/>
-        </actionGroup>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActions"/>
+        <click selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="openActions"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" stepKey="waitForActionsFields"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.apply}}" userInput="{{_defaultCatalogRule.simple_action}}" stepKey="discountType"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleActions.discountAmount}}" userInput="50" stepKey="fillDiscountValue"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleActions.disregardRules}}" userInput="Yes" stepKey="discardSubsequentRules"/>
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForPageLoad stepKey="waitForActions"/>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyRule"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexRules">
             <argument name="indices" value="catalogrule_rule catalogrule_product catalog_product_price"/>
