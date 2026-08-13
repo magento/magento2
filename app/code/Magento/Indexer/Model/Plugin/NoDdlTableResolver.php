@@ -41,7 +41,7 @@ class NoDdlTableResolver
      *
      * @param ResourceConnection $subject
      * @param string $result
-     * @param string|string[] $modelEntity
+     * @param string|bool|string[] $modelEntity
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -51,7 +51,7 @@ class NoDdlTableResolver
             return $result;
         }
 
-        $indexerId = $this->noDdlModeSupport->getIndexerIdForTable($modelEntity);
+        $indexerId = $this->noDdlModeSupport->getIndexerIdForTable((string)$modelEntity);
         if ($indexerId === null) {
             return $result;
         }

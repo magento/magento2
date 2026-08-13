@@ -118,6 +118,22 @@ class NoDdlTableResolverTest extends TestCase
     /**
      * @return void
      */
+    public function testPassesThroughWhenModelEntityIsNonStringScalar(): void
+    {
+        $resolver = new NoDdlTableResolver(
+            $this->noDdlModeMock,
+            $this->createNoDdlModeSupport(['sample_table' => 'sample_indexer'])
+        );
+        $this->noDdlModeMock->expects($this->never())->method('isEnabled');
+
+        $result = $resolver->afterGetTableName($this->resourceConnectionMock, 'other_table', true);
+
+        $this->assertSame('other_table', $result);
+    }
+
+    /**
+     * @return void
+     */
     public function testAppendsReplicaSuffixWhenEnabledAndReplicaIsActive(): void
     {
         $resolver = new NoDdlTableResolver(
