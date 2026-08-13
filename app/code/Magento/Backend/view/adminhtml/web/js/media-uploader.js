@@ -43,6 +43,7 @@ define([
                 fileId = null,
                 allowedExt = ['jpeg', 'jpg', 'png', 'gif'],
                 allowedResize = false,
+                isGifFile = false,
                 options = {
                     proudlyDisplayPoweredByUppy: false,
                     target: targetElement,
@@ -75,6 +76,7 @@ define([
 
                     // check if file is allowed to upload and resize
                     allowedResize = $.inArray(currentFile.extension?.toLowerCase(), allowedExt) !== -1;
+                    isGifFile = currentFile.extension?.toLowerCase() === 'gif';
 
                     if (!allowedResize)  {
                         fileUploader.aggregateError(currentFile.name,
@@ -120,7 +122,7 @@ define([
                     maxHeight: this.options.maxHeight,
                     quality: 0.92,
                     beforeDraw() {
-                        if (!allowedResize) {
+                        if (!allowedResize || isGifFile) {
                             this.abort();
                         }
                     }
