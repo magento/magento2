@@ -99,11 +99,10 @@ define([
                     });
 
                     // code to allow duplicate files from same folder
-                    const modifiedFile = {
-                        ...currentFile,
-                        id:  currentFile.id + '-' + fileId,
-                        tempFileId:  fileId
-                    };
+                    const modifiedFile = Object.assign({}, currentFile, {
+                        id: currentFile.id + '-' + fileId,
+                        tempFileId: fileId
+                    });
 
                     $(tmpl).appendTo(self.element);
                     return modifiedFile;
