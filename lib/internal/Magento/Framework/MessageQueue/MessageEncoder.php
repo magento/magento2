@@ -176,10 +176,14 @@ class MessageEncoder
                             ->convertValue($message[$paramPosition], $paramType);
                     }
                 } else {
+                    $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
                     /** Encode parameters according to their names in method signature */
-                    if (isset($message[$paramName])) {
+                    if (isset($message[$paramName]) || isset($message[$snakeCaseParamName])) {
+                        $paramValue = isset($message[$paramName])
+                            ? $message[$paramName]
+                            : $message[$snakeCaseParamName];
                         $convertedMessage[$paramName] = $this->getConverter($direction)
-                            ->convertValue($message[$paramName], $paramType);
+                            ->convertValue($paramValue, $paramType);
                     }
                 }
 
