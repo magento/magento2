@@ -23,6 +23,9 @@ use Magento\Indexer\Setup\Recurring;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RecurringTest extends TestCase
 {
     /**
