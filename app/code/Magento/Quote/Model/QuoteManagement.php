@@ -771,6 +771,9 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
             if ($billing->getQuoteId()) {
                 $billingAddress = $billing->exportCustomerAddress();
+                if ($billing->getCustomerAddressId()) {
+                    $billingAddress->setId((int)$billing->getCustomerAddressId());
+                }
             } else {
                 $defaultBilling = $this->customerRepository->getById($customer->getId())->getDefaultBilling();
                 if ($defaultBilling) {

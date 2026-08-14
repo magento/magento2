@@ -18,7 +18,6 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface as QuoteAddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteAddressValidationService;
 use Psr\Log\LoggerInterface;
@@ -283,7 +282,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             !$shippingAddress->getCustomerAddressId()
         ) {
             $shippingAddressData = $shippingAddress->exportCustomerAddress();
-            $this->saveAddressesAsDefault($quote, $shippingAddressData, $billingAddress);
+            $this->saveAddressesAsDefault($quote, $shippingAddressData);
             $shippingAddressData->setCustomerId($quote->getCustomerId());
             $this->addressRepository->save($shippingAddressData);
             $quote->addCustomerAddress($shippingAddressData);
@@ -314,23 +313,23 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     /**
      * Save addresses as default shipping/ billing if they are not set yet.
      *
+     * The address is only ever passed here when it is shared as both shipping and billing,
+     * so it becomes the default for both when the customer has none.
+     *
      * @param Quote $quote
      * @param AddressInterface $shippingAddressData
-     * @param Address $billingAddress
      * @return void
      */
     private function saveAddressesAsDefault(
         Quote $quote,
-        AddressInterface $shippingAddressData,
-        Address $billingAddress
+        AddressInterface $shippingAddressData
     ): void {
         $customer = $quote->getCustomer();
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
         $hasDefaultShipping = (bool)$customer->getDefaultShipping();
         if (!$hasDefaultShipping) {
-            //Make provided address as default shipping address
             $shippingAddressData->setIsDefaultShipping(true);
-            if (!$hasDefaultBilling && !$billingAddress->getSaveInAddressBook()) {
+            if (!$hasDefaultBilling) {
                 $shippingAddressData->setIsDefaultBilling(true);
             }
         }
