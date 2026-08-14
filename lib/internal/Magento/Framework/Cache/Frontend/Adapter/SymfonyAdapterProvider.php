@@ -357,7 +357,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $database,
                     $persistent,
                     $timeout,
-                    $readTimeout
+                    $readTimeout,
+                    $slaveSpecs,
+                    $masterWriteOnly,
+                    $retryReadsOnMaster
                 );
             } else {
                 throw new \RuntimeException(
@@ -583,6 +586,9 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param bool $persistent
      * @param float|null $timeout
      * @param float|null $readTimeout
+     * @param array $slaveSpecs Read-replica targets [[host,port,db], ...] parsed from load_from_slave
+     * @param bool $masterWriteOnly phpredis-only refinement (Predis always routes reads to a replica)
+     * @param bool $retryReadsOnMaster phpredis-only refinement (see above)
      * @return OptimizedPredisClient
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -593,7 +599,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         int $database,
         bool $persistent,
         ?float $timeout,
-        ?float $readTimeout
+        ?float $readTimeout,
+        array $slaveSpecs = [],
+        bool $masterWriteOnly = false,
+        bool $retryReadsOnMaster = false
     ) {
         $params = [
             'scheme' => 'tcp',
@@ -606,11 +615,34 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             $params['password'] = $password;
         }
 
-        $options = [
-            'exceptions' => false,
-        ];
+        // Single node: no replica configured.
+        if (empty($slaveSpecs)) {
+            return new OptimizedPredisClient($params, ['exceptions' => false]);
+        }
 
-        return new OptimizedPredisClient($params, $options);
+        // Read replica(s): use Predis' native master/slave replication (load_from_slave parity). Reads
+        // are routed to a replica and writes/EVAL stay on the master (equivalent to phpredis
+        // SlaveAwareRedis with master_write_only=1); a failed replica transparently falls back to the
+        // master. Predis routes all reads to replicas, so master_write_only=0 (master shares reads) and
+        // retry_reads_on_master are phpredis-only refinements — on Predis reads always go to a replica
+        // with master fallback on connection error.
+        $params['role'] = 'master';
+        $connections = [$params];
+        foreach ($slaveSpecs as [$sHost, $sPort, $sDatabase]) {
+            $slave = [
+                'scheme' => 'tcp',
+                'host' => $sHost,
+                'port' => $sPort,
+                'database' => $sDatabase,
+                'role' => 'slave',
+            ];
+            if ($password) {
+                $slave['password'] = $password;
+            }
+            $connections[] = $slave;
+        }
+
+        return new OptimizedPredisClient($connections, ['replication' => 'predis', 'exceptions' => false]);
     }
 
     /**

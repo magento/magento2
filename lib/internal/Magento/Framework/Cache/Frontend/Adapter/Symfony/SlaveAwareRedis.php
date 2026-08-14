@@ -19,8 +19,12 @@ namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
  *
  * On any replica error the read transparently falls back to the master, so a flaky/lagging replica
  * degrades to master-reads rather than failing (legacy skips a bad slave the same way).
+ *
+ * Extends RedisBase, which is \Redis when the phpredis extension is present (and a stub otherwise so
+ * the file still loads/compiles on hosts without phpredis — this object is only ever instantiated on
+ * the phpredis code path). See RedisBase for why the base class is indirected.
  */
-class SlaveAwareRedis extends \Redis
+class SlaveAwareRedis extends RedisBase
 {
     /**
      * @var \Redis[]

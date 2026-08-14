@@ -315,15 +315,13 @@ LUA;
         $this->namespace = $namespace;
         $this->redis = $this->extractRedisClient($cachePool);
 
-        if ($this->isPredisClient()) {
-            $this->useLua = false;
-            $this->useLuaOnGc = false;
-        } else {
-            $this->useLua = $useLua;
-            $this->useLuaOnGc = $useLuaOnGc;
-        }
+        // Lua is honored on both drivers: RedisLuaHelper normalizes the phpredis vs Predis EVAL
+        // signatures, so use_lua=1 gives Predis the same atomic tag-index prune as phpredis instead
+        // of silently degrading to the non-atomic pipeline path.
+        $this->useLua = $useLua;
+        $this->useLuaOnGc = $useLuaOnGc;
 
-        if (($this->useLua || $this->useLuaOnGc) && !$this->isPredisClient()) {
+        if ($this->useLua || $this->useLuaOnGc) {
             $this->luaHelper = new RedisLuaHelper($this->redis, true);
         }
     }
@@ -787,7 +785,7 @@ LUA;
                 ],
                 array_values($tags)                                     // ARGV[7..] tag names
             );
-            $this->redis->eval(self::LUA_ONSAVE, $args, 0);
+            $this->evalNoKeys(self::LUA_ONSAVE, $args);
             return true;
         } catch (\Throwable $e) {
             return false;
@@ -874,8 +872,7 @@ LUA;
                     [self::TAG_INDEX_PREFIX, $this->namespace, $this->dataKeyPrefix()],
                     $chunk
                 );
-                // phpredis eval(script, args, numKeys): numKeys=0 => every arg is an ARGV entry
-                $this->redis->eval(self::LUA_PRUNE_INDEX, $args, 0);
+                $this->evalNoKeys(self::LUA_PRUNE_INDEX, $args);
             }
             return true;
         } catch (\Throwable $e) {
@@ -925,14 +922,92 @@ LUA;
     /**
      * Whether the underlying client supports atomic single-node EVAL with computed keys.
      *
-     * True only for phpredis standalone (\Redis). Excludes \RedisCluster (cross-slot EVAL) and
-     * Predis, which use the pipelined fallback.
+     * True for phpredis standalone (\Redis) and for Predis single-node/replication (EVAL runs on the
+     * master). Excludes \RedisCluster: these scripts compute their keys from ARGV (numKeys=0), which
+     * is unsafe across cluster slots, so a cluster still uses the pipelined fallback.
      *
      * @return bool
      */
     private function supportsAtomicEval(): bool
     {
-        return $this->redis instanceof \Redis;
+        return $this->redis instanceof \Redis || $this->isPredisClient();
+    }
+
+    /**
+     * Run a keyless Lua script (numKeys=0, every value passed as ARGV), normalizing the phpredis vs
+     * Predis EVAL argument order and turning a Predis error reply (exceptions=false clients) into a
+     * thrown exception so the callers' try/catch fallback behaves the same on both drivers.
+     *
+     * @param string $script
+     * @param array $argv
+     * @return mixed
+     */
+    private function evalNoKeys(string $script, array $argv)
+    {
+        return $this->evalScript($script, $argv, 0);
+    }
+
+    /**
+     * Run a Lua script, normalizing the phpredis vs Predis EVAL argument order.
+     *
+     * phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
+     *
+     * @param string $script
+     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
+     * @param int $numKeys
+     * @return mixed
+     */
+    private function evalScript(string $script, array $keysAndArgs, int $numKeys)
+    {
+        if ($this->isPredisClient()) {
+            return $this->unwrapPredisReply($this->redis->eval($script, $numKeys, ...$keysAndArgs));
+        }
+        return $this->redis->eval($script, $keysAndArgs, $numKeys);
+    }
+
+    /**
+     * Run a cached Lua script by SHA, normalizing the phpredis vs Predis EVALSHA argument order.
+     *
+     * @param string $sha
+     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
+     * @param int $numKeys
+     * @return mixed
+     */
+    private function evalShaScript(string $sha, array $keysAndArgs, int $numKeys)
+    {
+        if ($this->isPredisClient()) {
+            return $this->unwrapPredisReply($this->redis->evalsha($sha, $numKeys, ...$keysAndArgs));
+        }
+        return $this->redis->evalSha($sha, $keysAndArgs, $numKeys);
+    }
+
+    /**
+     * SCRIPT LOAD a Lua script and return its SHA, normalizing the Predis error reply.
+     *
+     * @param string $script
+     * @return mixed SHA string
+     */
+    private function scriptLoad(string $script)
+    {
+        if ($this->isPredisClient()) {
+            return $this->unwrapPredisReply($this->redis->script('load', $script));
+        }
+        return $this->redis->script('load', $script);
+    }
+
+    /**
+     * Turn a Predis error reply (exceptions=false clients) into a thrown exception so callers'
+     * try/catch fallbacks fire identically on phpredis and Predis.
+     *
+     * @param mixed $result
+     * @return mixed
+     */
+    private function unwrapPredisReply($result)
+    {
+        if ($result instanceof \Predis\Response\ErrorInterface) {
+            throw new \RuntimeException((string)$result->getMessage());
+        }
+        return $result;
     }
 
     /**
@@ -1226,11 +1301,11 @@ LUA;
 
         try {
             $sha = $this->loadLuaScript(self::LUA_CLEAN_MATCHING_ANY_TAGS);
-            return (int)$this->redis->evalSha($sha, $args, count($tags));
+            return (int)$this->evalShaScript($sha, $args, count($tags));
         } catch (\Throwable $e) {
             // Fallback: try executing the script directly
             try {
-                return (int)$this->redis->eval(self::LUA_CLEAN_MATCHING_ANY_TAGS, $args, count($tags));
+                return (int)$this->evalScript(self::LUA_CLEAN_MATCHING_ANY_TAGS, $args, count($tags));
             } catch (\Throwable $e) {
                 // Return -1 to signal error (will fall back to PHP)
                 return -1;
@@ -1257,11 +1332,11 @@ LUA;
 
         try {
             $sha = $this->loadLuaScript(self::LUA_CLEAN_MATCHING_ANY_TAGS_WITH_SCOPE);
-            return (int)$this->redis->evalSha($sha, $args, count($tags));
+            return (int)$this->evalShaScript($sha, $args, count($tags));
         } catch (\Throwable $e) {
             // Fallback: try executing script directly
             try {
-                return (int)$this->redis->eval(self::LUA_CLEAN_MATCHING_ANY_TAGS_WITH_SCOPE, $args, count($tags));
+                return (int)$this->evalScript(self::LUA_CLEAN_MATCHING_ANY_TAGS_WITH_SCOPE, $args, count($tags));
             } catch (\Throwable $e) {
                 // Return -1 to signal error (will fall back to PHP)
                 return -1;
@@ -1274,14 +1349,14 @@ LUA;
      *
      * @param string $script Lua script content
      * @return string SHA1 of the script
-     * @throws \RedisException
+     * @throws \RuntimeException
      */
     private function loadLuaScript(string $script): string
     {
         try {
-            return $this->redis->script('load', $script);
-        } catch (\RedisException $e) {
-            throw new \RedisException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
+            return (string)$this->scriptLoad($script);
+        } catch (\Throwable $e) {
+            throw new \RuntimeException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
         }
     }
 }
