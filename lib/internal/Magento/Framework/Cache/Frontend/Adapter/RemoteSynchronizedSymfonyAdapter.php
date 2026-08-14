@@ -25,22 +25,22 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     private ExtendedBackendInterface $backend;
 
     /**
-     * @var int
-     */
-    private int $defaultLifetime;
-
-    /**
      * Constructor
      *
+     * The default lifetime is NOT applied here: save() forwards the lifetime through untouched
+     * (including null => no expiry, matching legacy), and the actual default TTL is applied downstream
+     * by the underlying Symfony adapter. The $defaultLifetime parameter is kept only for backward-
+     * compatible DI wiring (the frontend Factory passes it) and is intentionally unused in this class.
+     *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
-     * @param int $defaultLifetime Default cache lifetime
+     * @param int $defaultLifetime Kept for DI wiring; applied by the underlying Symfony adapter, not here
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExtendedBackendInterface $backend,
         int $defaultLifetime = 7200
     ) {
         $this->backend = $backend;
-        $this->defaultLifetime = $defaultLifetime;
     }
 
     /**

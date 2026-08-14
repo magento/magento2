@@ -1011,6 +1011,79 @@ LUA;
     }
 
     /**
+     * Iterate keys matching $pattern using SCAN (cursor-based, non-blocking), normalizing phpredis vs
+     * Predis, and yield them in batches.
+     *
+     * Deliberately avoids the KEYS command: KEYS is O(N) over the WHOLE keyspace and blocks
+     * single-threaded Redis/Valkey for the entire scan, which would starve PHP workers when it runs
+     * from the backend_clean_cache cron / cache:flush. Legacy Cm_Cache_Backend_Redis GCs the same way
+     * (SSCAN over maintained sets), never KEYS. Errors are allowed to propagate so a failed sweep is
+     * surfaced, not masked.
+     *
+     * @param string $pattern
+     * @param int $count SCAN COUNT hint (batch size)
+     * @return \Generator<int, array>
+     */
+    private function scanKeys(string $pattern, int $count): \Generator
+    {
+        if ($this->isPredisClient()) {
+            $cursor = '0';
+            do {
+                [$cursor, $keys] = $this->unwrapPredisReply(
+                    $this->redis->scan($cursor, ['MATCH' => $pattern, 'COUNT' => $count])
+                );
+                if (!empty($keys)) {
+                    yield $keys;
+                }
+            } while ((string)$cursor !== '0');
+            return;
+        }
+
+        // phpredis: scan() returns a batch (possibly empty) and advances $iterator by reference,
+        // returning false once the full iteration is complete.
+        $iterator = null;
+        while (($keys = $this->redis->scan($iterator, $pattern, $count)) !== false) {
+            if (!empty($keys)) {
+                yield $keys;
+            }
+        }
+    }
+
+    /**
+     * Iterate the members of a Redis SET with SSCAN (cursor-based, non-blocking), normalizing phpredis
+     * vs Predis, and yield them in batches. This is how legacy Cm_Cache_Backend_Redis GC-scans its
+     * id/tag sets — it visits only the set's members, never the whole keyspace.
+     *
+     * @param string $key SET key
+     * @param int $count SSCAN COUNT hint (batch size)
+     * @return \Generator<int, array>
+     */
+    private function sscan(string $key, int $count): \Generator
+    {
+        if ($this->isPredisClient()) {
+            $cursor = '0';
+            do {
+                [$cursor, $members] = $this->unwrapPredisReply(
+                    $this->redis->sscan($key, $cursor, ['COUNT' => $count])
+                );
+                if (!empty($members)) {
+                    yield $members;
+                }
+            } while ((string)$cursor !== '0');
+            return;
+        }
+
+        // phpredis: sScan() returns a batch of members (possibly empty) and advances $iterator by
+        // reference, returning false once the full iteration is complete.
+        $iterator = null;
+        while (($members = $this->redis->sScan($key, $iterator, null, $count)) !== false) {
+            if (!empty($members)) {
+                yield $members;
+            }
+        }
+    }
+
+    /**
      * Acquire the stale-cache regeneration lock atomically (SET key token NX EX ttl).
      *
      * Returns true for exactly one caller cluster-wide; the token identifies the owner so the
@@ -1112,25 +1185,22 @@ LUA;
             return;
         }
 
-        // Fallback: PHP-based clearing (original implementation)
-        // Get all tag keys
-        $pattern = self::TAG_INDEX_PREFIX . $this->namespace . '*';
-        $tagKeys = $this->redis->keys($pattern);
-
-        if (is_array($tagKeys) && !empty($tagKeys)) {
+        // Fallback: PHP-based clearing. Enumerate with SCAN (cursor-based, non-blocking) rather than
+        // KEYS — this runs on every cache:flush / clean(ALL), and KEYS would block Redis/Valkey across
+        // the whole keyspace. Delete each batch as it is scanned.
+        $tagPattern = self::TAG_INDEX_PREFIX . $this->namespace . '*';
+        foreach ($this->scanKeys($tagPattern, 1000) as $chunk) {
             // PHP 8+ compatibility: use call_user_func_array to avoid spread operator issues
-            call_user_func_array([$this->redis, 'del'], $tagKeys);
+            call_user_func_array([$this->redis, 'del'], $chunk);
         }
 
         // Clear all_ids set
         $this->redis->del(self::ALL_IDS_SET);
 
         // Clear reverse index keys
-        $reversePattern = 'cache:id_tags:' . $this->namespace . '*';
-        $reverseKeys = $this->redis->keys($reversePattern);
-        if (is_array($reverseKeys) && !empty($reverseKeys)) {
-            // PHP 8+ compatibility: use call_user_func_array to avoid spread operator issues
-            call_user_func_array([$this->redis, 'del'], $reverseKeys);
+        $reversePattern = self::REVERSE_INDEX_PREFIX . $this->namespace . '*';
+        foreach ($this->scanKeys($reversePattern, 1000) as $chunk) {
+            call_user_func_array([$this->redis, 'del'], $chunk);
         }
     }
 
@@ -1186,40 +1256,31 @@ LUA;
     /**
      * Non-Lua garbage collection: prune tag-index members whose data key no longer exists.
      *
-     * Enumerates THIS namespace's reverse-index keys (cache:id_tags:<namespace><id>) — one per tagged
-     * id, so the sweep is namespace-scoped and never touches another frontend's entries (mirrors the
-     * keys() enumeration already used by clearAllIndices()). For each id whose data key has TTL-expired
-     * it hands the id to pruneTagIndex(), which removes it from its tag SETs, reverse index and
-     * all_ids. Only ids confirmed missing are pruned, so live entries are never touched. The data-key
-     * derivation (dataKeyPrefix() . id) is the same one the atomic prune's EXISTS guard already relies
-     * on.
+     * Enumerates the maintained id set (cache:all_ids) with SSCAN — the direct analogue of legacy Cm
+     * Redis GC-scanning its zc:ids set, and the same set getIdsNotMatchingTags() already treats as this
+     * frontend's ids. SSCAN visits only the set's members (not the whole keyspace) and never issues the
+     * blocking KEYS. For each id whose data key has TTL-expired it hands the id to pruneTagIndex(),
+     * which removes it from its tag SETs, reverse index and all_ids. Only ids confirmed missing are
+     * pruned, so live entries are never touched; the data-key derivation (dataKeyPrefix() . id) is the
+     * same one the atomic prune's EXISTS guard relies on.
+     *
+     * A scan/prune error is intentionally NOT swallowed: it propagates so garbageCollect() ->
+     * clean(OLD) reports a FAILURE (the cron logs it) rather than a successful no-op while the tag
+     * index silently grows. Mirrors legacy, which throws on a GC error (Zend_Cache::throwException).
      *
      * @param int $batchSize
      * @return int Number of orphaned index entries removed
      */
     private function garbageCollectClientSide(int $batchSize): int
     {
-        $reversePrefix = self::REVERSE_INDEX_PREFIX . $this->namespace;
-        try {
-            $reverseKeys = $this->redis->keys($reversePrefix . '*');
-        } catch (\Throwable $e) {
-            return 0;
-        }
-        if (!is_array($reverseKeys) || empty($reverseKeys)) {
-            return 0;
-        }
-
         $dataPrefix = $this->dataKeyPrefix();
-        $prefixLen = strlen($reversePrefix);
         $removed = 0;
 
-        foreach (array_chunk($reverseKeys, max(1, $batchSize)) as $chunk) {
-            // Map each reverse-index key back to its id and EXISTS-check its data key in one pipeline.
-            $ids = [];
+        foreach ($this->sscan(self::ALL_IDS_SET, max(1, $batchSize)) as $members) {
+            // EXISTS-check every id's data key in one pipeline.
+            $ids = array_values($members);
             $pipe = $this->createPipeline();
-            foreach ($chunk as $reverseKey) {
-                $id = substr((string)$reverseKey, $prefixLen);
-                $ids[] = $id;
+            foreach ($ids as $id) {
                 $pipe->exists($dataPrefix . $id);
             }
             $exists = $this->executePipeline($pipe);

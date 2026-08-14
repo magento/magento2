@@ -12,10 +12,12 @@ namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
  *
  * The object is itself connected to the MASTER (Symfony's RedisAdapter builds it through the normal
  * connection factory), so every command runs on the master by default — writes (SET/SETEX/DEL),
- * tag-index ops (SADD/SREM/SMEMBERS), Lua (EVAL) and pipelines all stay on the master. Only the two
- * commands Symfony's RedisAdapter uses to FETCH cache data — get() and mget() — are routed to a
- * replica. This mirrors legacy Cm_Cache_Backend_Redis, which sends only the data load() to
- * load_from_slave and keeps everything else on the master.
+ * tag-index ops (SADD/SREM/SMEMBERS), Lua (EVAL) and pipelines all stay on the master. The two data
+ * FETCH commands — mget() and get() — are routed to a replica. In practice Symfony's
+ * RedisTrait::doFetch fetches via mget(); get() is routed too (sharing the same pickReadClient logic)
+ * so a direct get() — or a future Symfony that fetches single keys via get() — is offloaded
+ * consistently rather than silently hitting the master. This mirrors legacy Cm_Cache_Backend_Redis,
+ * which sends only the data load() to load_from_slave and keeps everything else on the master.
  *
  * On any replica error the read transparently falls back to the master, so a flaky/lagging replica
  * degrades to master-reads rather than failing (legacy skips a bad slave the same way).
@@ -99,13 +101,19 @@ class SlaveAwareRedis extends RedisBase
         if ($this->masterWriteOnly) {
             return $count === 1 ? $this->slaves[0] : $this->slaves[array_rand($this->slaves)];
         }
-        // include the master (index 0) in the pool so it takes a share of reads, like legacy default
-        $idx = random_int(0, $count);
+        // include the master (index 0) in the pool so it takes a share of reads, like legacy default.
+        // mt_rand (not the CSPRNG random_int) on purpose: this is read load-balancing, not a security
+        // decision, and it runs on the hot read path — legacy Cm Redis likewise uses array_rand/mt.
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        $idx = mt_rand(0, $count);
         return $idx === 0 ? null : $this->slaves[$idx - 1];
     }
 
     /**
      * @inheritDoc
+     *
+     * Symfony's RedisTrait::doFetch fetches via mget(), not get(); this override is kept so a direct
+     * get() (or a future Symfony that uses it) is still served from a replica, sharing mget()'s routing.
      */
     public function get($key): mixed
     {

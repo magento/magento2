@@ -160,6 +160,14 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     {
         $this->ensurePreloaded();
 
+        // Nothing preloaded (the common case: no preload_keys configured, or all preload misses) — an
+        // empty index can never hit, so skip the id normalization (strtoupper+str_replace+preg_replace)
+        // entirely and go straight to the backend. This keeps the regex off the hot path unless preload
+        // is actually in use.
+        if ($this->normalizedIndex === []) {
+            return $this->adapter->load($identifier);
+        }
+
         // Fast path: served from the in-process preload cache (no Redis round-trip). Look up by the
         // normalized id so configured preload keys match the runtime ids regardless of case/separators.
         $normalized = $this->normalizeIdentifier((string)$identifier);
@@ -182,11 +190,14 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         $result = $this->adapter->save($data, $identifier, $tags, $lifeTime);
 
         // If this id is a configured preload key (matched on the normalized form), keep the preload
-        // cache fresh so a subsequent load() in this request serves the new value from memory.
-        $normalized = $this->normalizeIdentifier((string)$identifier);
-        if ($result && in_array($normalized, $this->normalizedPreloadKeys, true)) {
-            $this->localCache[$identifier] = $data;
-            $this->normalizedIndex[$normalized] = $data;
+        // cache fresh so a subsequent load() in this request serves the new value from memory. Skip the
+        // normalization entirely when no preload keys are configured (nothing can match).
+        if ($result && $this->normalizedPreloadKeys !== []) {
+            $normalized = $this->normalizeIdentifier((string)$identifier);
+            if (in_array($normalized, $this->normalizedPreloadKeys, true)) {
+                $this->localCache[$identifier] = $data;
+                $this->normalizedIndex[$normalized] = $data;
+            }
         }
 
         return $result;
@@ -209,8 +220,12 @@ class PreloadingSymfonyAdapter implements FrontendInterface
      */
     public function remove($identifier)
     {
-        // Remove from local cache if present (both the original-keyed view and the normalized index)
-        unset($this->localCache[$identifier], $this->normalizedIndex[$this->normalizeIdentifier((string)$identifier)]);
+        // Remove from local cache if present (both the original-keyed view and the normalized index).
+        // Only pay for normalization when something was actually preloaded.
+        unset($this->localCache[$identifier]);
+        if ($this->normalizedIndex !== []) {
+            unset($this->normalizedIndex[$this->normalizeIdentifier((string)$identifier)]);
+        }
 
         return $this->adapter->remove($identifier);
     }
