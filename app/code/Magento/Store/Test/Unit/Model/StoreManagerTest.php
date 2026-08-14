@@ -139,6 +139,32 @@ class StoreManagerTest extends TestCase
         $this->model->reinitStores();
     }
 
+    public function testHasSingleStoreIsMemoizedAndReinitialized(): void
+    {
+        $defaultStoreMock = $this->getMockForStoreInterfaceClass(0, 'default');
+        $storeMock = $this->getMockForStoreInterfaceClass(1, 'first_store');
+
+        $this->storeRepositoryMock->expects($this->exactly(2))
+            ->method('getList')
+            ->willReturn([$defaultStoreMock, $storeMock]);
+        $this->cache->expects($this->once())->method('clean')->with(
+            CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
+            [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
+        );
+        $this->scopeConfig->expects($this->once())->method('clean');
+        $this->storeRepositoryMock->expects($this->once())->method('clean');
+        $this->websiteRepository->expects($this->once())->method('clean');
+        $this->groupRepository->expects($this->once())->method('clean');
+
+        $this->assertTrue($this->model->hasSingleStore());
+        $this->assertTrue($this->model->hasSingleStore());
+
+        $this->model->reinitStores();
+
+        $this->assertTrue($this->model->hasSingleStore());
+        $this->assertTrue($this->model->hasSingleStore());
+    }
+
     #[DataProvider('getStoresDataProvider')]
     public function testGetStores($storesList, $withDefault, $codeKey, $expectedStores)
     {

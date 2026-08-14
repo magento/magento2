@@ -14,12 +14,16 @@ use Magento\Backend\Model\Menu\Config\Reader;
 use Magento\Backend\Model\MenuFactory;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends TestCase
 {
     /**
@@ -139,22 +143,56 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @param string $expectedException
+     * @param string $thrownException
      *
      * @return void
      */
     #[DataProvider('getMenuExceptionLoggedDataProvider')]
-    public function testGetMenuExceptionLogged(string $expectedException): void
+    public function testGetMenuExceptionLogged(string $thrownException): void
     {
-        $this->expectException($expectedException);
+        $this->expectException(LocalizedException::class);
+        $this->logger->expects($this->once())->method('critical');
         $this->menuBuilderMock->expects(
             $this->exactly(1)
         )->method(
             'getResult'
         )->willThrowException(
-            new $expectedException()
+            new $thrownException('test error message')
         );
 
+        $this->model->getMenu();
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetMenuExceptionMessageContainsOriginalError(): void
+    {
+        $originalMessage = 'Missing required param parent';
+        $this->menuBuilderMock->expects($this->once())
+            ->method('getResult')
+            ->willThrowException(new \BadMethodCallException($originalMessage));
+
+        try {
+            $this->model->getMenu();
+            $this->fail('Expected LocalizedException was not thrown');
+        } catch (LocalizedException $e) {
+            $this->assertStringContainsString($originalMessage, $e->getMessage());
+            $this->assertInstanceOf(\BadMethodCallException::class, $e->getPrevious());
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetMenuGenericExceptionIsWrappedInLocalizedException(): void
+    {
+        $this->logger->expects($this->once())->method('critical');
+        $this->menuBuilderMock->expects($this->exactly(1))
+            ->method('getResult')
+            ->willThrowException(new \Exception('unexpected error'));
+
+        $this->expectException(LocalizedException::class);
         $this->model->getMenu();
     }
 
@@ -175,7 +213,7 @@ class ConfigTest extends TestCase
      */
     public function testGetMenuGenericExceptionIsNotLogged(): void
     {
-        $this->logger->expects($this->never())->method('critical');
+        $this->logger->expects($this->once())->method('critical');
 
         $this->menuBuilderMock->expects(
             $this->exactly(1)
@@ -186,9 +224,9 @@ class ConfigTest extends TestCase
         );
         try {
             $this->model->getMenu();
-        } catch (\Exception $e) {
+        } catch (LocalizedException $e) {
             return;
         }
-        $this->fail("Generic \Exception was not thrown");
+        $this->fail('LocalizedException was not thrown for generic \\Exception');
     }
 }
