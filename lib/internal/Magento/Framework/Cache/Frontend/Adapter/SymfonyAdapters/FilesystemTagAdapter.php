@@ -15,6 +15,13 @@ use Psr\Cache\CacheItemPoolInterface;
 class FilesystemTagAdapter implements TagAdapterInterface
 {
     /**
+     * Bound on reopen retries in mutateFileLocked() when the file is unlink()ed from under an
+     * acquired lock by a concurrent worker. High enough to absorb realistic contention, finite so a
+     * pathological churn can never spin forever.
+     */
+    private const MUTATE_MAX_ATTEMPTS = 50;
+
+    /**
      * @var CacheItemPoolInterface
      */
     private CacheItemPoolInterface $cachePool;
@@ -201,42 +208,62 @@ class FilesystemTagAdapter implements TagAdapterInterface
             @mkdir($dir, 0770, true);
         }
 
-        $fp = @fopen($file, 'c+');
-        if ($fp === false) {
-            return;
-        }
-
-        if (!flock($fp, LOCK_EX)) {
-            fclose($fp);
-            return;
-        }
-
-        $emptied = false;
-        try {
-            $content = stream_get_contents($fp);
-            $current = $this->parseIds($content !== false ? $content : '');
-            $new = $transform($current);
-
-            if ($new === null) {
-                return; // no change; finally still unlocks/closes
+        // Retry loop guarding the open()->flock() window. fopen() resolves $file to an inode before
+        // we hold the lock; a concurrent worker that empties and unlink()s the file in that window
+        // leaves our handle bound to an orphaned inode with no directory entry, so any write we make
+        // is silently lost. After locking we confirm the handle still refers to the file on disk and,
+        // if not, reopen and retry. The unlink of an emptied file therefore also stays inside the
+        // lock, so it can never delete another worker's freshly written membership.
+        for ($attempt = 0; $attempt < self::MUTATE_MAX_ATTEMPTS; $attempt++) {
+            $fp = @fopen($file, 'c+');
+            if ($fp === false) {
+                return;
             }
 
-            if (empty($new)) {
-                ftruncate($fp, 0);
-                $emptied = true;
-            } else {
-                ftruncate($fp, 0);
-                rewind($fp);
-                fwrite($fp, implode("\n", $new) . "\n");
-                fflush($fp);
+            if (!flock($fp, LOCK_EX)) {
+                fclose($fp);
+                return;
             }
-        } finally {
-            flock($fp, LOCK_UN);
-            fclose($fp);
-        }
 
-        if ($emptied) {
-            @unlink($file);
+            // Our handle must still be the file currently linked at $file. If it was unlink()ed (and
+            // possibly recreated) between fopen() and the lock, dev/ino diverge (or the path is gone);
+            // drop the stale handle and retry with a fresh open under a fresh lock.
+            clearstatcache(true, $file);
+            $held = @fstat($fp);
+            $onDisk = @stat($file);
+            if ($held === false || $onDisk === false
+                || $held['ino'] !== $onDisk['ino'] || $held['dev'] !== $onDisk['dev']) {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+                continue;
+            }
+
+            try {
+                $content = stream_get_contents($fp);
+                $current = $this->parseIds($content !== false ? $content : '');
+                $new = $transform($current);
+
+                if ($new === null) {
+                    return; // no change; finally still unlocks/closes
+                }
+
+                if (empty($new)) {
+                    ftruncate($fp, 0);
+                    // Delete the now-empty file while still holding the lock and while our handle is
+                    // confirmed to be the linked file, so we cannot drop a membership another worker
+                    // writes after us.
+                    @unlink($file);
+                } else {
+                    ftruncate($fp, 0);
+                    rewind($fp);
+                    fwrite($fp, implode("\n", $new) . "\n");
+                    fflush($fp);
+                }
+            } finally {
+                flock($fp, LOCK_UN);
+                fclose($fp);
+            }
+            return;
         }
     }
 

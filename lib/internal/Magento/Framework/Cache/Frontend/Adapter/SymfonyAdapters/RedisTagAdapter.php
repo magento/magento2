@@ -261,7 +261,8 @@ for _, id in ipairs(filtered_ids) do
     redis.call('DEL', rev)
     redis.call('SREM', 'cache:all_ids', id)
 
-    local cache_key = namespace .. id
+    -- Delete the actual cache item (data key is "<namespace>:<id>", note the ':' separator)
+    local cache_key = namespace .. ':' .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
 end
