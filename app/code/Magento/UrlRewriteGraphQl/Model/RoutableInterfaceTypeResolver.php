@@ -17,25 +17,13 @@ class RoutableInterfaceTypeResolver implements TypeResolverInterface
     private const DEFAULT_TYPE = 'RoutableUrl';
 
     /**
-     * @var TypeResolverInterface[]
-     */
-    private array $productTypeNameResolvers;
-
-    /**
-     * @var string
-     */
-    private string $defaultType;
-
-    /**
      * @param TypeResolverInterface[] $productTypeNameResolvers
      * @param string $defaultType
      */
     public function __construct(
-        array $productTypeNameResolvers = [],
-        string $defaultType = self::DEFAULT_TYPE
+        private readonly array $productTypeNameResolvers = [],
+        private readonly string $defaultType = self::DEFAULT_TYPE
     ) {
-        $this->productTypeNameResolvers = $productTypeNameResolvers;
-        $this->defaultType = $defaultType;
     }
 
     /**
