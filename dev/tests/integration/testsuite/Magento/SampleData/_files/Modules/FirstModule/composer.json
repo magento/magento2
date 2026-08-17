@@ -4,8 +4,5 @@
   "suggest": {
     "magento/module-first-sample-data": "Sample Data version: 777.7.*"
   },
-  "type": "magento2-module",
-  "config": {
-    "sort-packages": true
-  }
+  "type": "magento2-module"
 }
