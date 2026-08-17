@@ -540,4 +540,15 @@ class FilesystemTagAdapter implements TagAdapterInterface
     {
         return 0;
     }
+
+    /**
+     * @inheritDoc
+     *
+     * No-op: the file backend has no server-memory concept analogous to Redis maxmemory. Local disk
+     * usage is tracked separately (SymfonyL2Cache's own L1 safety valve), not through this adapter.
+     */
+    public function getFillingPercentage(): int
+    {
+        return 0;
+    }
 }

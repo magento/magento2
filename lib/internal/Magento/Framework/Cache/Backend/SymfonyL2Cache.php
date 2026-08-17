@@ -458,12 +458,33 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * @inheritDoc
+     *
+     * Real remote (L2) storage filling percentage, matching legacy RemoteSynchronizedCache semantics
+     * (delegates to the remote backend, e.g. Cm_Cache_Backend_Redis::getFillingPercentage() computing
+     * used_memory/maxmemory). Kept distinct from the local L1 disk safety valve in
+     * getLocalFillingPercentage() — the two were separate public/private checks in legacy and
+     * collapsing them here would silently swap remote memory pressure for local disk usage in any
+     * caller of this public API. Returns 0 if the remote adapter can't report it (e.g. non-Redis tag
+     * adapter, or the remote is unavailable).
      */
     public function getFillingPercentage()
     {
-        // Disk-partition filling percentage of the L1 (file) cache dir, matching the legacy Zend file
-        // backend semantics (used only as a disk-full safety valve). Returns 0 when the L1 is not
-        // file-backed or the dir is unavailable, so eviction never triggers spuriously.
+        try {
+            return $this->remote->getLowLevelFrontend()->getTagAdapter()->getFillingPercentage();
+        } catch (\Throwable $e) {
+            return 0;
+        }
+    }
+
+    /**
+     * Disk-partition filling percentage of the L1 (file) cache dir, matching the legacy Zend file
+     * backend semantics (used only as a disk-full safety valve). Returns 0 when the L1 is not
+     * file-backed or the dir is unavailable, so eviction never triggers spuriously.
+     *
+     * @return int
+     */
+    private function getLocalFillingPercentage(): int
+    {
         if ($this->localCacheDir === null || !is_dir($this->localCacheDir)) {
             return 0;
         }
@@ -484,7 +505,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     private function isLocalCacheSpaceExceeded(): bool
     {
-        return $this->getFillingPercentage() >= $this->cleanupPercentage;
+        return $this->getLocalFillingPercentage() >= $this->cleanupPercentage;
     }
 
     /**
@@ -532,7 +553,25 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
             return false;
         }
 
-        return $this->save($data, $id, [], $extraLifetime);
+        // Do NOT route through save(): its isRemoteUpToDate() short-circuit skips the remote write
+        // when the data is unchanged, which is exactly the touch() case (same bytes, longer TTL) and
+        // would leave the remote lifetime untouched. Re-persist the data and its :hash to the remote
+        // directly so the L2 TTL is actually extended, then refresh the local (L1) copy to match.
+        try {
+            $remoteSaved = $this->remote->save($data, $id, [], $extraLifetime);
+            if ($remoteSaved === false) {
+                return false;
+            }
+            $hash = $this->getDataHash($data);
+            $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $extraLifetime);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        $this->local->save($data, $id, [], $extraLifetime);
+        $this->markValid($id);
+
+        return true;
     }
 
     /**

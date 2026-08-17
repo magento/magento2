@@ -96,4 +96,14 @@ interface TagAdapterInterface
      * @return int Number of orphaned index entries removed
      */
     public function garbageCollect(int $batchSize = 1000): int;
+
+    /**
+     * Return the filling percentage of the underlying storage server, if the backend can report one.
+     *
+     * Mirrors legacy Cm_Cache_Backend_Redis::getFillingPercentage() (used_memory / maxmemory). Adapters
+     * with no such server-level memory concept (filesystem, generic fallback) return 0.
+     *
+     * @return int Integer between 0 and 100
+     */
+    public function getFillingPercentage(): int;
 }

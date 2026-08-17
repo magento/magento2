@@ -752,6 +752,12 @@ LUA;
     public function onSave(string $id, array $tags): void
     {
         if (empty($tags)) {
+            // Tagless entry: still register it in all_ids so getIdsNotMatchingTags() (and GC) can see
+            // it. CLEANING_MODE_NOT_MATCHING_TAG must remove every entry that carries none of the
+            // given tags, which includes untagged ones; without this they would be invisible to the
+            // SDIFF and survive the clean. No forward tag SET or reverse index is written — there are
+            // no tags to link.
+            $this->registerId($id);
             return;
         }
 
@@ -763,6 +769,29 @@ LUA;
         }
 
         $this->onSavePipelined($id, $tags);
+    }
+
+    /**
+     * Register a (tagless) id in the all_ids set so NOT_MATCHING_TAG and GC can see it.
+     *
+     * Guarded on the data key existing so a failed or racing write cannot leave an all_ids entry
+     * with no data behind it — the same invariant the tagged onSave path enforces. The EXISTS+SADD
+     * pair is intentionally not atomic: a lost race only ever produces a transient orphan that
+     * garbageCollect() prunes (it drops all_ids members whose data key is gone), so a heavier EVAL
+     * is not warranted on this hot, per-save path.
+     *
+     * @param string $id
+     * @return void
+     */
+    private function registerId(string $id): void
+    {
+        try {
+            if ($this->redis->exists($this->dataKeyPrefix() . $id)) {
+                $this->redis->sadd(self::ALL_IDS_SET, $id);
+            }
+        } catch (\Throwable $e) {
+            // Best-effort index maintenance; the next save or GC self-heals a missed registration.
+        }
     }
 
     /**
@@ -1252,6 +1281,32 @@ LUA;
         // data key is gone. Mirrors legacy Cm Redis _collectGarbage() (which likewise reasons from the
         // tag/id sets, not a keyspace scan of already-deleted keys).
         return $this->garbageCollectClientSide($batchSize);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * Matches legacy Cm_Cache_Backend_Redis::getFillingPercentage() exactly: reads the configured
+     * ceiling via CONFIG GET (not INFO's maxmemory field, which is not always populated), and returns 1
+     * — not 0 — when no ceiling is configured, since "unlimited" has no meaningful fullness fraction and
+     * legacy treated that as effectively empty rather than ambiguous.
+     */
+    public function getFillingPercentage(): int
+    {
+        try {
+            $configReply = $this->unwrapPredisReply($this->redis->config('GET', 'maxmemory'));
+            $maxMemory = (int)($configReply['maxmemory'] ?? 0);
+            if ($maxMemory <= 0) {
+                return 1;
+            }
+
+            $info = $this->unwrapPredisReply($this->redis->info());
+            $usedMemory = (int)($this->isPredisClient() ? ($info['Memory']['used_memory'] ?? 0) : ($info['used_memory'] ?? 0));
+
+            return (int)round($usedMemory / $maxMemory * 100);
+        } catch (\Throwable $e) {
+            return 0;
+        }
     }
 
     /**

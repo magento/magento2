@@ -595,9 +595,12 @@ class Symfony implements FrontendInterface
             $cache->commit();
         }
 
-        // Notify helper about the save (for Redis/Filesystem to maintain indices)
-        // Note: onSave() already handles reverse index, no need for separate call
-        if ($success && !empty($cleanTags)) {
+        // Notify the tag adapter on EVERY successful save, including tagless ones, so the backend
+        // index can register the id (e.g. Redis all_ids). This lets CLEANING_MODE_NOT_MATCHING_TAG
+        // sweep untagged entries too. Adapters treat an empty tag set as "index membership only" —
+        // no forward/reverse tag links are written — so the extra call is a cheap SADD (Redis) or a
+        // no-op (Generic/Filesystem).
+        if ($success) {
             $this->adapter->onSave($cleanId, $cleanTags);
         }
     }

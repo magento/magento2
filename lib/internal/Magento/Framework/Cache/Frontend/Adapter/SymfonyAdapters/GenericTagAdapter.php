@@ -181,6 +181,17 @@ class GenericTagAdapter implements TagAdapterInterface
     {
         return 0;
     }
+
+    /**
+     * @inheritDoc
+     *
+     * No-op: this fallback wraps backends (Memcached, APCu, Database, ...) with no uniform
+     * server-memory concept exposed through this adapter.
+     */
+    public function getFillingPercentage(): int
+    {
+        return 0;
+    }
     // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**
