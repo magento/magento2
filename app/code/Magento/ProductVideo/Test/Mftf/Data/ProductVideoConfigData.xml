@@ -28,6 +28,6 @@
         <requiredEntity type="youtube_api_key_config">YouTubeApiKeyConfig</requiredEntity>
     </entity>
     <entity name="YouTubeApiKeyConfig" type="youtube_api_key_config">
-        <data key="value">AIzaSyCMnvVTNR8FE67D-ndv71wrFdf0gk56PJQ</data>
+        <data key="value">{{_CREDS.magento/youtube_api_key}}</data>
     </entity>
 </entities>
