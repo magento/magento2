@@ -11,6 +11,7 @@ use Magento\Customer\Model\ResourceModel\Customer;
 use Magento\Framework\Data\Collection\Db\FetchStrategy\Query;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
@@ -179,5 +180,29 @@ class CollectionTest extends TestCase
             ->willReturn($itemMock);
 
         $this->assertNull($this->model->resolveCustomerNames());
+    }
+
+    /**
+     * Loaded items must not be registered in the entity snapshot.
+     *
+     * @return void
+     */
+    public function testLoadedItemsAreNotRegisteredInSnapshot(): void
+    {
+        $this->fetchStrategyMock->expects($this->once())
+            ->method('fetchAll')
+            ->withAnyParameters()
+            ->willReturn([['entity_id' => 1, 'customer_id' => 1]]);
+
+        $this->entityFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(fn () => new DataObject());
+
+        $this->entitySnapshotMock->expects($this->never())
+            ->method('registerSnapshot');
+
+        $this->model->load();
+
+        $this->assertCount(1, $this->model->getItems());
     }
 }
