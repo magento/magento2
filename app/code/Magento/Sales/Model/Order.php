@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2017 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Sales\Model;
@@ -2157,7 +2157,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $format,
             $format,
             $this->localeResolver->getDefaultLocale(),
-            $this->timezone->getConfigTimezone('store', $this->getStore())
+            $this->timezone->getConfigTimezone(ScopeInterface::SCOPE_STORE, $this->getStore())
         );
     }
 
