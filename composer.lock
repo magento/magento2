@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "423c4d6bef815c81df6ce67fdf5dd31f",
+    "content-hash": "2547264ed5c4e551f61c8db7de7811a7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11907,16 +11907,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "dev-AC-17486",
+            "version": "41",
             "source": {
                 "type": "git",
-                "url": "git@github.com:magento-gl/magento-coding-standard.git",
-                "reference": "184af081f7a28f7e9037dba722f432163fedd29f"
+                "url": "https://github.com/magento/magento-coding-standard.git",
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento-gl/magento-coding-standard/zipball/184af081f7a28f7e9037dba722f432163fedd29f",
-                "reference": "184af081f7a28f7e9037dba722f432163fedd29f",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
                 "shasum": ""
             },
             "require": {
@@ -11935,36 +11935,25 @@
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
-                "classmap": [
-                    "PHP_CodeSniffer/Tokenizers/"
-                ],
                 "psr-4": {
                     "Magento2\\": "Magento2/",
                     "Magento2Framework\\": "Magento2Framework/"
-                }
-            },
-            "autoload-dev": {
-                "files": [
-                    "PHP_CodeSniffer/Tests/Standards/AbstractSniffUnitTest.php"
+                },
+                "classmap": [
+                    "PHP_CodeSniffer/Tokenizers/"
                 ]
             },
-            "scripts": {
-                "post-install-cmd": [
-                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../magento/php-compatibility-fork/PHPCompatibility"
-                ],
-                "post-update-cmd": [
-                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../magento/php-compatibility-fork/PHPCompatibility"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
-                "source": "https://github.com/magento-gl/magento-coding-standard/tree/AC-17486"
+                "issues": "https://github.com/magento/magento-coding-standard/issues",
+                "source": "https://github.com/magento/magento-coding-standard/tree/v41"
             },
-            "time": "2026-08-10T12:45:05+00:00"
+            "time": "2026-08-18T06:05:59+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -15185,7 +15174,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "magento/magento-coding-standard": 20,
         "pdepend/pdepend": 20,
         "phpmd/phpmd": 20
     },
