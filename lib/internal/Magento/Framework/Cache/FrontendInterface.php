@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Cache;
 
-use Magento\Framework\Cache\Backend\BackendInterface;
 use Magento\Framework\Cache\CacheConstants;
 
 /**
@@ -54,6 +53,9 @@ interface FrontendInterface
     /**
      * Clean cache records matching specified tags
      *
+     * The mode constants in CacheConstants share the exact string values of the legacy
+     * \Zend_Cache::CLEANING_MODE_* constants, so either may be passed interchangeably.
+     *
      * @param string $mode
      * @param array $tags
      * @return bool
@@ -63,14 +65,20 @@ interface FrontendInterface
     /**
      * Retrieve backend instance
      *
-     * @return \Psr\Cache\CacheItemPoolInterface
+     * Symfony-backed frontends return a PSR-6 pool / Magento BackendInterface; the legacy Zend
+     * adapter returns a \Zend_Cache_Backend_Interface. Both remain supported.
+     *
+     * @return \Psr\Cache\CacheItemPoolInterface|\Zend_Cache_Backend_Interface
      */
     public function getBackend();
 
     /**
      * Retrieve low-level frontend instance for compatibility
      *
-     * @return \Psr\Cache\CacheItemPoolInterface
+     * Symfony-backed frontends return a PSR-6 pool; the legacy Zend adapter returns a
+     * \Zend_Cache_Core (compatible with Zend Locale Data setCache()). Both remain supported.
+     *
+     * @return \Psr\Cache\CacheItemPoolInterface|\Zend_Cache_Core
      */
     public function getLowLevelFrontend();
 }

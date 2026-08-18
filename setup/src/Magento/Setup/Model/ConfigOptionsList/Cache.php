@@ -22,10 +22,10 @@ use Magento\Setup\Validator\RedisConnectionValidator;
 class Cache implements ConfigOptionsListInterface
 {
     public const INPUT_VALUE_CACHE_REDIS = 'redis';
-    public const CONFIG_VALUE_CACHE_REDIS = 'redis';
+    public const CONFIG_VALUE_CACHE_REDIS = \Magento\Framework\Cache\Backend\Redis::class;
 
     public const INPUT_VALUE_CACHE_VALKEY = 'valkey';
-    public const CONFIG_VALUE_CACHE_VALKEY = 'valkey';
+    public const CONFIG_VALUE_CACHE_VALKEY = \Magento\Framework\Cache\Backend\Valkey::class;
 
     public const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
@@ -338,9 +338,6 @@ class Cache implements ConfigOptionsListInterface
             } else {
                 $configData->set(self::CONFIG_PATH_CACHE_BACKEND, $options[self::INPUT_KEY_CACHE_BACKEND]);
             }
-        } else {
-            // If no backend specified, set igbinary as default serializer for file backend
-            $this->setDefaultFileConfig($deploymentConfig, $configData);
         }
 
         $this->applyCacheBackendConfig($options, $configData);
@@ -441,28 +438,28 @@ class Cache implements ConfigOptionsListInterface
                 );
         } else {
             $config['host'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_SERVER,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_SERVER,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER)
+                );
 
             $config['port'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_PORT,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_PORT,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PORT)
+                );
 
             $config['db'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_DATABASE,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE)
+                );
 
             $config['password'] = $options[self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD] ??
-            $deploymentConfig->get(
-                self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
-                $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
-            );
+                $deploymentConfig->get(
+                    self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD)
+                );
         }
         return $this->redisValidator->isValidConnection($config);
     }
@@ -477,6 +474,12 @@ class Cache implements ConfigOptionsListInterface
     private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends have no such option and
+            // ignore it), so it is not forced by default. It is still written when the operator passes
+            // it explicitly (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_CACHE_BACKEND_REDIS_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
         }
 
@@ -493,33 +496,12 @@ class Cache implements ConfigOptionsListInterface
     private function setDefaultValkeyConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
     {
         foreach ($this->inputKeyToValkeyConfigPathMap as $inputKey => $configPath) {
+            // 'serializer' is a Symfony-only option (legacy Zend/Cm backends ignore it); not forced
+            // by default — written only when explicitly provided (see applyCacheBackendConfig).
+            if ($inputKey === self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERIALIZER) {
+                continue;
+            }
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
-        }
-
-        return $configData;
-    }
-
-    /**
-     * Set default configuration for file backend (enables igbinary by default)
-     *
-     * When no backend is specified, Magento defaults to file cache.
-     * This method ensures igbinary serializer is enabled for optimal performance.
-     *
-     * Benefits of igbinary for file cache:
-     * - 70% faster serialization/deserialization
-     * - 58% smaller cache files
-     * - Works automatically with FilesystemAdapter
-     * - Graceful fallback if extension not available
-     *
-     * @param DeploymentConfig $deploymentConfig
-     * @param ConfigData $configData
-     * @return ConfigData
-     */
-    private function setDefaultFileConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
-    {
-        // Set igbinary as default serializer for file backend if not already configured
-        if (!$deploymentConfig->get(self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER)) {
-            $configData->set(self::CONFIG_PATH_CACHE_BACKEND_SERIALIZER, 'igbinary');
         }
 
         return $configData;

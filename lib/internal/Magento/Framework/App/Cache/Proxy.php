@@ -51,7 +51,7 @@ class Proxy implements
     /**
      * Get cache frontend API object
      *
-     * @return \Magento\Framework\Cache\FrontendInterface
+     * @return \Zend_Cache_Core|\Magento\Framework\Cache\FrontendInterface
      */
     public function getFrontend()
     {

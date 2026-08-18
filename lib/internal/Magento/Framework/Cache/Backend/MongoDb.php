@@ -3,39 +3,30 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
-declare(strict_types=1);
 
 /**
  * MongoDb cache backend
  */
 namespace Magento\Framework\Cache\Backend;
 
-use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\Exception\CacheException;
-
-/**
- * Magento-native MongoDB cache backend
- */
-class MongoDb extends AbstractBackend implements ExtendedBackendInterface
+class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
     /**
      * Infinite expiration time
      */
-    public const EXPIRATION_TIME_INFINITE = 0;
+    const EXPIRATION_TIME_INFINITE = 0;
 
     /**#@+
      * Available comparison modes. Used for composing queries to search by tags
      */
-    public const COMPARISON_MODE_MATCHING_TAG = CacheConstants::CLEANING_MODE_MATCHING_TAG;
+    const COMPARISON_MODE_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
 
-    public const COMPARISON_MODE_NOT_MATCHING_TAG = CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG;
+    const COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
 
-    public const COMPARISON_MODE_MATCHING_ANY_TAG = CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG;
+    const COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
     /**#@-*/
 
-    /**
-     * @var \MongoCollection|null
-     */
+    /**#@-*/
     protected $_collection = null;
 
     /**
@@ -56,12 +47,12 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
     public function __construct(array $options = [])
     {
         if (!extension_loaded('mongo') || !version_compare(\Mongo::VERSION, '1.2.11', '>=')) {
-            throw new CacheException(
-                __("At least 1.2.11 version of 'mongo' extension is required for using MongoDb cache backend")
+            \Zend_Cache::throwException(
+                "At least 1.2.11 version of 'mongo' extension is required for using MongoDb cache backend"
             );
         }
         if (empty($options['db'])) {
-            throw new CacheException(__("'db' option is not specified"));
+            \Zend_Cache::throwException("'db' option is not specified");
         }
         parent::__construct($options);
     }
@@ -171,7 +162,7 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
             self::COMPARISON_MODE_MATCHING_ANY_TAG => '$or',
         ];
         if (!isset($operators[$comparisonMode])) {
-            throw new CacheException(__("Incorrect comparison mode specified: %1", $comparisonMode));
+            \Zend_Cache::throwException("Incorrect comparison mode specified: {$comparisonMode}");
         }
         $operator = $operators[$comparisonMode];
         $query = [];
@@ -224,8 +215,7 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
         $time = time();
         $condition = ['_id' => $this->_quoteString($cacheId), 'expire' => ['$gt' => $time]];
         $update = ['$set' => ['mtime' => $time], '$inc' => ['expire' => (int)$extraLifetime]];
-        $result = $this->_getCollection()->update($condition, $update);
-        return (bool)($result['ok'] ?? false);
+        return $this->_getCollection()->update($condition, $update);
     }
 
     /**
@@ -259,8 +249,8 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param string $cacheId Cache id
-     * @param boolean $notTestCacheValidity If set to true, the cache validity won't be tested
+     * @param  string  $cacheId                     Cache id
+     * @param  boolean $notTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|bool cached data. Return false if nothing found
      */
     public function load($cacheId, $notTestCacheValidity = false)
@@ -303,13 +293,13 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param string $data Datas to cache
-     * @param string $cacheId Cache id
-     * @param string[] $tags Array of strings, the cache record will be tagged by each string entry
-     * @param int|bool $specificLifetime If != false, set a specific lifetime (null => infinite lifetime)
+     * @param  string $data            Datas to cache
+     * @param  string $cacheId              Cache id
+     * @param  string[] $tags             Array of strings, the cache record will be tagged by each string entry
+     * @param  int|bool $specificLifetime If != false, set a specific lifetime (null => infinite lifetime)
      * @return boolean true if no problem
      */
-    public function save($data, $cacheId, $tags = [], $specificLifetime = null)
+    public function save($data, $cacheId, $tags = [], $specificLifetime = false)
     {
         $lifetime = $this->getLifetime($specificLifetime);
         $time = time();
@@ -340,41 +330,40 @@ class MongoDb extends AbstractBackend implements ExtendedBackendInterface
      * Clean some cache records
      *
      * Available modes are :
-     * CacheConstants::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
-     * CacheConstants::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
-     * CacheConstants::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
+     * \Zend_Cache::CLEANING_MODE_ALL (default)    => remove all cache entries ($tags is not used)
+     * \Zend_Cache::CLEANING_MODE_OLD              => remove too old cache entries ($tags is not used)
+     * \Zend_Cache::CLEANING_MODE_MATCHING_TAG     => remove cache entries matching all given tags
      *                                               ($tags can be an array of strings or a single string)
-     * CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
+     * \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG => remove cache entries not {matching one of the given tags}
      *                                               ($tags can be an array of strings or a single string)
-     * CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
+     * \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG => remove cache entries matching any given tags
      *                                               ($tags can be an array of strings or a single string)
      *
      * @param  string $mode Clean mode
      * @param  string[] $tags Array of tags
      * @return bool true if no problem
      */
-    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
         $result = false;
         switch ($mode) {
-            case CacheConstants::CLEANING_MODE_ALL:
+            case \Zend_Cache::CLEANING_MODE_ALL:
                 $result = $this->_getCollection()->drop();
-                $result = (bool)($result['ok'] ?? false);
+                $result = (bool)$result['ok'];
                 break;
-            case CacheConstants::CLEANING_MODE_OLD:
+            case \Zend_Cache::CLEANING_MODE_OLD:
                 $query = ['expire' => ['$ne' => self::EXPIRATION_TIME_INFINITE, '$lte' => time()]];
                 break;
-            case CacheConstants::CLEANING_MODE_MATCHING_TAG:
-            case CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG:
-            case CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG:
+            case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
+            case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
+            case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
                 $query = $this->_getQueryMatchingTags((array)$tags, $mode);
                 break;
             default:
-                throw new CacheException(__('Unsupported cleaning mode: %1', $mode));
+                \Zend_Cache::throwException('Unsupported cleaning mode: ' . $mode);
         }
         if (!empty($query)) {
-            $removeResult = $this->_getCollection()->remove($query);
-            $result = (bool)($removeResult['ok'] ?? false);
+            $result = $this->_getCollection()->remove($query);
         }
 
         return $result;

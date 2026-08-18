@@ -15,6 +15,7 @@ use Magento\Framework\CurrencyInterface;
 use Magento\Framework\NumberFormatter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
+use Zend_Cache_Core;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -30,7 +31,7 @@ class Currency
     public const LEFT = 32;
 
     /**
-     * @var FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
+     * @var Zend_Cache_Core|FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
      */
     private static $cache = null;
 
@@ -408,7 +409,7 @@ class Currency
     /**
      * Returns the set cache.
      *
-     * @return FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
+     * @return Zend_Cache_Core|FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
      */
     public static function getCache()
     {
@@ -418,7 +419,7 @@ class Currency
     /**
      * Sets a cache for Currency
      *
-     * @param FrontendInterface|\Psr\Cache\CacheItemPoolInterface $cache
+     * @param Zend_Cache_Core|FrontendInterface|\Psr\Cache\CacheItemPoolInterface $cache
      * @return void
      */
     public static function setCache($cache)

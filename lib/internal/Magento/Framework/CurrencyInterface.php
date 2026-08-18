@@ -7,6 +7,7 @@ namespace Magento\Framework;
 
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Currency\Exception\CurrencyException;
+use Zend_Cache_Core;
 
 /**
  * @api
@@ -94,17 +95,17 @@ interface CurrencyInterface
     /**
      * Returns the set cache
      *
-     * @return FrontendInterface|null The set cache
+     * @return Zend_Cache_Core|FrontendInterface|null The set cache
      */
     public static function getCache();
 
     /**
      * Sets a cache for \Magento\Framework\Currency
      *
-     * @param  FrontendInterface $cache Cache to set
+     * @param  Zend_Cache_Core|FrontendInterface $cache Cache to set
      * @return void
      */
-    public static function setCache(FrontendInterface $cache);
+    public static function setCache(Zend_Cache_Core|FrontendInterface $cache);
 
     /**
      * Returns true when a cache is set
