@@ -119,7 +119,8 @@ class Adjustment implements AdjustmentInterface
         if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
             return $amount;
         }
-        return $amount + $this->getAmount($saleableItem);
+    
+        return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
     }
 
     /**
