@@ -185,4 +185,12 @@ class Field implements OutputFieldInterface
     {
         return $this->deprecated;
     }
+
+    /**
+     * Disable caching for the field
+     */
+    public function disableCaching(): void
+    {
+        $this->cache = [];
+    }
 }
