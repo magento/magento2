@@ -144,11 +144,6 @@ class ScopeOverriddenValue
                 $storeIds[] = $storeId;
             }
             $selects = [];
-            // PgCompat: this select is UNION ALL'd (below) with one of these per EAV
-            // backend type table (varchar/int/decimal/text/datetime) - MySQL coerces the
-            // differently-typed "value" columns across branches implicitly, Postgres
-            // requires them to already share one type. Same fix as the other EAV
-            // union-cast sites (union-cast-eav-abstract-collection.patch,
             // Eav\Model\ResourceModel\ReadHandler::execute(), ReadSnapshotPlugin).
             foreach ($attributeTables as $attributeTable => $attributeCodes) {
                 $select = $metadata->getEntityConnection()->select()

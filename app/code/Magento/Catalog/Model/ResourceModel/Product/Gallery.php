@@ -224,12 +224,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ),
             []
         )->columns([
-            // PgCompat: was hardcoded MySQL backtick identifiers ('`value`.`label`' etc)
-            // passed as plain strings - getIfNullSql() just interpolates its arguments
-            // verbatim, so these reached Postgres as literal, invalid backtick syntax
-            // instead of going through quoteIdentifier(). Unquoted identifiers are valid
-            // input to getIfNullSql() on both adapters (they build "COALESCE(a, b)"
-            // directly from the given text), so plain dotted names are enough here.
             'label' => $this->getConnection()->getIfNullSql('value.label', 'default_value.label'),
             'position' => $this->getConnection()->getIfNullSql('value.position', 'default_value.position'),
             'disabled' => $this->getConnection()->getIfNullSql('value.disabled', 'default_value.disabled'),
@@ -242,10 +236,6 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             $mainTableAlias . '.disabled = 0'
         )->order(
-            // PgCompat: was a bare string - Select::order() quotes plain-string
-            // arguments as if they were a single identifier, mangling this multi-word
-            // CASE expression into invalid, partially-quoted garbage. Zend_Db_Expr marks
-            // it as a raw SQL fragment instead, which order() passes through unquoted.
             new \Zend_Db_Expr($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC)
         );
 

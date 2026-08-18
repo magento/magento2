@@ -178,7 +178,6 @@ class Helper extends \Magento\Framework\DB\Helper
     {
         $dbConfig = $this->getConnection()->getConfig();
 
-        // PgCompat: getServerVersion() is portable (PDO ATTR_SERVER_VERSION).
         $versionRow = ['Value' => $this->getConnection()->getServerVersion()];
         $hostName = !empty($dbConfig['unix_socket'])
             ? $dbConfig['unix_socket']

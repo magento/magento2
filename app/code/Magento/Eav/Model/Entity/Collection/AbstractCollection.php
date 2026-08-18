@@ -1382,7 +1382,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {
-        // PgCompat: this select is UNION ALL'd with one of these per EAV backend type
         // (varchar/int/decimal/text/datetime) in _loadAttributes() below - MySQL
         // coerces the differently-typed "value" columns across branches implicitly,
         // Postgres requires them to already share one type before the UNION.

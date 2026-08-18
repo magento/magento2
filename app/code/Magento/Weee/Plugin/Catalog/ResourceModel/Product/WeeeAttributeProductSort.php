@@ -47,8 +47,6 @@ class WeeeAttributeProductSort
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select();
 
-        // PgCompat: getIfNullSql() renders per-dialect (IFNULL on MySQL, COALESCE on
-        // Postgres) instead of hardcoding MySQL's IFNULL() text.
         $weeeValue = $connection->getIfNullSql(
             'weee_child.value',
             (string) $connection->getIfNullSql('weee_parent.value', 0)

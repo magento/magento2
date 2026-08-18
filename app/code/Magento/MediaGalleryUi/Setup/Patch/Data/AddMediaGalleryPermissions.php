@@ -45,9 +45,6 @@ class AddMediaGalleryPermissions implements
 
         $select = $connection->select()
             ->from($tableName, ['role_id'])
-            // PgCompat: a double-quoted string is a valid MySQL string literal but a
-            // Postgres identifier - single quotes are required for it to mean the same
-            // thing on both databases.
             ->where("resource_id = 'Magento_Cms::media_gallery'");
 
         $insertData = $this->getInsertData($connection->fetchCol($select));

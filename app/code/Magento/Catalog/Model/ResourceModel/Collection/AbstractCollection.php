@@ -227,11 +227,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $storeId = $this->getStoreId();
         if ($storeId) {
             $connection = $this->getConnection();
-            // PgCompat: this select is UNION ALL'd with one of these per EAV backend
-            // type (varchar/int/decimal/text/datetime) in _loadAttributes() - MySQL
-            // coerces the differently-typed columns across branches implicitly,
-            // Postgres requires them to already share one type before the UNION. Same
-            // fix as the parent Eav\Model\Entity\Collection\AbstractCollection version
             // (union-cast-eav-abstract-collection.patch) this override replaces - that
             // patch only touched the parent method, missing this store-fallback
             // override entirely since it never calls parent in the $storeId branch.

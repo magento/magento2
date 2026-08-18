@@ -144,8 +144,6 @@ class BaseFinalPrice
         $specialTo = $this->joinAttributeProcessor->process($select, 'special_to_date');
         $currentDate = 'cwd.website_date';
 
-        // PgCompat: '~0' (MySQL's bitwise-NOT-of-zero, the max UNSIGNED BIGINT value)
-        // means something entirely different on Postgres, whose integers are signed -
         // '~0' there is bitwise NOT of a signed int, i.e. -1. Postgres' own bigint max
         // is used as the "effectively unbounded" sentinel instead; it doesn't need to
         // be the same numeric ceiling MySQL used, only larger than any real price.
@@ -262,8 +260,6 @@ class BaseFinalPrice
      */
     private function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
     {
-        // PgCompat: '~0' (MySQL's bitwise-NOT-of-zero, the max UNSIGNED BIGINT value)
-        // means something entirely different on Postgres, whose integers are signed -
         // '~0' there is bitwise NOT of a signed int, i.e. -1. Postgres' own bigint max
         // is used as the "effectively unbounded" sentinel instead; it doesn't need to
         // be the same numeric ceiling MySQL used, only larger than any real price.

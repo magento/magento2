@@ -1063,10 +1063,6 @@ abstract class AbstractEntity extends AbstractResource implements
             $attribute = current($this->_attributesByTable[$table]);
             $eavType = $attribute->getBackendType();
             $select = $this->_getLoadAttributesSelect($object, $table);
-            // PgCompat: was columns('*') - each per-type value table's "value" column is
-            // a different SQL type (varchar/int/decimal/text/datetime), so UNION ALL-ing
-            // them raw fails ("UNION types character varying and integer cannot be
-            // matched"). Only attribute_id/value_id/value are ever read back (see
             // _setAttributeValue() below), so an explicit column list - casting just
             // value to text - replaces the wildcard instead of trying to keep every
             // table's full, non-identical column set (e.g. Catalog's *_int/*_varchar

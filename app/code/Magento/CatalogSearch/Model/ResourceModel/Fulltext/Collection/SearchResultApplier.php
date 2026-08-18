@@ -54,9 +54,6 @@ class SearchResultApplier implements SearchResultApplierInterface
             $ids[] = (int)$item->getId();
         }
 
-        // PgCompat: FIELD() is MySQL-only - getFieldSql() isn't part of AdapterInterface,
-        // but every connection in this deployment is one of the two PgCompat providers,
-        // both of which implement it as a CASE-expression equivalent.
         $select = $this->collection->getSelect();
         $select->where('e.entity_id IN (?)', $ids)
             ->reset(\Magento\Framework\DB\Select::ORDER)

@@ -66,11 +66,6 @@ class SessionIDColumnCleanUp implements DataPatchInterface
     private function cleanAdminUserSessionTable()
     {
         $tableName = $this->moduleDataSetup->getTable('admin_user_session');
-        // PgCompat: was '... LIMIT 1000' - Postgres has no UPDATE...LIMIT. Safe to drop:
-        // the do-while loop below already terminates on rowCount() === 0, not on a
-        // fixed iteration count, so removing LIMIT just means one larger UPDATE instead
-        // of several 1000-row batches - same terminal state either way.
-        // phpcs:ignore Magento2.SQL.RawQuery
         $rawQuery = sprintf(
             'UPDATE %s SET session_id = NULL WHERE session_id IS NOT NULL',
             $tableName

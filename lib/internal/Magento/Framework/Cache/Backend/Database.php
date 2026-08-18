@@ -230,7 +230,6 @@ class Database extends AbstractBackend implements ExtendedBackendInterface
                 $time = time();
                 $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
 
-                // PgCompat: insertOnDuplicate() emits ON CONFLICT on Postgres.
                 $result = $connection->insertOnDuplicate(
                     $dataTable,
                     [

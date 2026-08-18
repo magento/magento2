@@ -124,9 +124,6 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     public function cleanProcessedBunches()
     {
         $connection = $this->getConnection();
-        // PgCompat: TIMESTAMPADD() is MySQL-only (getDateAddSql() renders per-dialect
-        // date arithmetic instead), and CURRENT_TIMESTAMP is a reserved keyword, not a
-        // function - MySQL tolerates the empty-parens call form, Postgres rejects it.
         $connection->delete(
             $this->getMainTable(),
             'is_processed = 1 OR '

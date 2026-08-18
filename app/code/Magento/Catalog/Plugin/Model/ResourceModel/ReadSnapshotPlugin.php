@@ -73,11 +73,6 @@ class ReadSnapshotPlugin
         if ($globalAttributes) {
             $selects = [];
             foreach ($globalAttributes as $table => $attributeIds) {
-                // PgCompat: this select is UNION ALL'd (below) with one of these per EAV
-                // backend type table (varchar/int/decimal/text/datetime) - MySQL coerces
-                // the differently-typed "value" columns across branches implicitly,
-                // Postgres requires them to already share one type. Same fix as the
-                // other EAV union-cast sites (union-cast-eav-abstract-collection.patch,
                 // Eav\Model\ResourceModel\ReadHandler::execute()).
                 $select = $connection->select()
                     ->from(

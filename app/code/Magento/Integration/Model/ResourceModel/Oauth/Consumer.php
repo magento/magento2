@@ -68,8 +68,6 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = $connection->select()
             ->from($this->getMainTable())
             ->reset(\Magento\Framework\DB\Select::COLUMNS)
-            // PgCompat: CURRENT_TIMESTAMP is a reserved keyword, not a function - MySQL
-            // tolerates the empty-parens call form, Postgres rejects it.
             ->columns(new \Zend_Db_Expr('CURRENT_TIMESTAMP - created_at'))
             ->where('entity_id = ?', $consumerId);
 

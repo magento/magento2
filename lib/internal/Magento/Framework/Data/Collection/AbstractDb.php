@@ -736,7 +736,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if (!$this->_isOrdersRendered) {
             foreach ($this->_orders as $field => $direction) {
                 if (isset($this->sqlReservedWords[strtoupper($field)])) {
-                    // PgCompat: was a hardcoded "`$field`" backtick literal - correct by
                     // coincidence only on MySQL (whose quote character happens to be a
                     // backtick), and it bypasses the adapter's own quoteIdentifier()
                     // entirely, so Postgres (whose reserved-word set differs anyway -

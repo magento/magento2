@@ -388,10 +388,6 @@ abstract class AbstractAction implements ResetAfterRequestInterface
                 [
                     'category_id' => 'cc.entity_id',
                     'product_id' => 'ccp.product_id',
-                    // PgCompat: bare ccp.position is non-aggregated under the GROUP BY
-                    // addFilteringByChildProductsToSelect() adds below; MIN() is a no-op
-                    // on MySQL (one ccp row per cc.entity_id/ccp.product_id group here)
-                    // and required by Postgres.
                     'position' => new \Zend_Db_Expr('MIN(ccp.position)'),
                     'is_parent' => new \Zend_Db_Expr('1'),
                     'store_id' => new \Zend_Db_Expr($store->getId()),
@@ -643,8 +639,6 @@ abstract class AbstractAction implements ResetAfterRequestInterface
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
-                // PgCompat: ccp2.position is non-aggregated under the GROUP BY
-                // addFilteringByChildProductsToSelect() adds below; MAX() is a no-op on
                 // MySQL (one ccp2 row per group here) and required by Postgres.
                 'position' => new \Zend_Db_Expr(
                     $this->connection->getIfNullSql('MAX(ccp2.position)', 'MIN(ccp.position) + 10000')
@@ -881,20 +875,11 @@ abstract class AbstractAction implements ResetAfterRequestInterface
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
                 $this->visibility->getVisibleInSiteIds()
             )->group(
-                // PgCompat: the visibility column below is a non-aggregated COALESCE
-                // expression selected under this GROUP BY - MySQL's non-ONLY_FULL_GROUP_BY
-                // leniency tolerated that; Postgres requires it grouped too. cpvs/cpvd are
-                // already filtered to at most one row per cp.entity_id (store_id/attribute_id
-                // predicates above), so this doesn't change which rows collapse together.
                 ['cp.entity_id', new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value'))]
             )->columns(
                 [
                     'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
                     'product_id' => 'cp.entity_id',
-                    // PgCompat: ccp.product_id IS NOT NULL is a non-aggregated column
-                    // reference in the CASE condition under the GROUP BY above; COUNT(...)>0
-                    // is the aggregate-safe equivalent (true iff at least one non-null
-                    // ccp.product_id exists in the group, same truth value as the original
                     // MySQL-tolerated condition).
                     'position' => new \Zend_Db_Expr(
                         $this->connection->getCheckSql('COUNT(ccp.product_id) > 0', 'MIN(ccp.position)', '10000')

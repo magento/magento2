@@ -336,7 +336,6 @@ class DataProvider
         if ($backendType == 'datetime') {
             $expr = $this->connection->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
         } else {
-            // PgCompat: the caller UNION ALL's one of these per EAV backend type
             // (varchar/int/decimal/text) - MySQL coerces the differently-typed values
             // implicitly, Postgres requires them to already share one type before the
             // UNION. getDateFormatSql() above already returns a formatted string, so

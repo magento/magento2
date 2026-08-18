@@ -174,7 +174,6 @@ class BatchIterator implements BatchIteratorInterface
             ]
         );
         $row = $this->connection->fetchRow($wrapperSelect);
-        // PgCompat: MAX() over zero matching rows is SQL NULL - when this batch is
         // empty (cnt below ends up 0 and the iterator stops right after this call
         // anyway), don't overwrite minValue with that null. A leftover null minValue
         // fed into initSelectObject()'s "> ?" bind is otherwise silently coerced to an

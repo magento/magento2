@@ -129,10 +129,6 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
             $connection = $collection->getConnection();
             $select = $connection->select();
-            // PgCompat: GROUP_CONCAT() is MySQL-only - getGroupConcatSql() isn't part
-            // of AdapterInterface, but every connection in this deployment is one of
-            // the two PgCompat providers, both of which implement it as a
-            // string_agg() equivalent.
             $select->from(
                 ['cpw' => $collection->getTable('catalog_product_website')],
                 ['product_id']

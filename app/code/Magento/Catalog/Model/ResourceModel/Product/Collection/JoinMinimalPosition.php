@@ -70,8 +70,6 @@ class JoinMinimalPosition
                     []
                 );
             }
-            // PgCompat: '~0' (MySQL's max UNSIGNED BIGINT via bitwise-NOT-of-zero) means
-            // something entirely different on Postgres (signed integers - '~0' there is
             // -1). Postgres' own bigint max serves the same "sort missing positions
             // last" sentinel purpose.
             $positions[] = $connection->getIfNullSql($table . '.position', '9223372036854775807');

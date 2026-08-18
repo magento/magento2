@@ -42,7 +42,6 @@ class SetCreditCardAsDefaultTokenType implements DataPatchInterface, PatchVersio
 
         // data update for Vault module < 2.0.1
         // update sets credit card as default token type
-        // PgCompat: was ' = ""' - a double-quoted empty-string literal, MySQL-only
         // (ANSI_QUOTES-off syntax); Postgres double quotes always mean an identifier, so
         // this rendered as a zero-length identifier reference instead of comparing
         // against an empty string. Single-quoted is valid on both.

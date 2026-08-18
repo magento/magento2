@@ -76,10 +76,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
         }
         $attributeId = $this->getAttribute()->getId();
         if (!isset($this->_options[$storeId][$attributeId])) {
-            // PgCompat: an attribute with no id yet (new/unsaved attribute model) can
-            // never have real eav_attribute_option rows - short-circuit instead of
-            // querying "attribute_id = ''" (MySQL tolerantly returns zero rows there via
-            // its '' -> 0 numeric coercion; Postgres rejects the comparison outright).
             // Same empty-result outcome either way, without the pointless query.
             if (!$attributeId) {
                 $this->_options[$storeId][$attributeId] = [];

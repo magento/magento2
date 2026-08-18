@@ -160,10 +160,6 @@ class Collection implements ResetAfterRequestInterface
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $childCollection->getSelect()->group('e.' . $linkField);
-        // PgCompat: GROUP_CONCAT() is MySQL-only - getGroupConcatSql() isn't part of
-        // AdapterInterface, but this deployment's adapter implements it as a
-        // string_agg() equivalent.
-        //
         // ChildCollection::_initSelect() unconditionally selects raw link_table.parent_id
         // (needed by every OTHER caller of that base collection, which don't group at
         // all); once this method's own group('e.' . $linkField) is added on top, that raw
