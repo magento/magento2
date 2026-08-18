@@ -37,6 +37,7 @@
                     <argument name="type" xsi:type="string">text</argument>
                     <argument name="index" xsi:type="string">order_items_name</argument>
                     <argument name="id" xsi:type="string">name</argument>
+					<argument name="sortable" xsi:type="string">0</argument>
                     <argument name="column_css_class" xsi:type="string">col-product</argument>
                     <argument name="header_css_class" xsi:type="string">col-product</argument>
                 </arguments>
@@ -47,6 +48,7 @@
                     <argument name="type" xsi:type="string">text</argument>
                     <argument name="index" xsi:type="string">order_items_sku</argument>
                     <argument name="id" xsi:type="string">sku</argument>
+					<argument name="sortable" xsi:type="string">0</argument>
                     <argument name="column_css_class" xsi:type="string">col-sku</argument>
                     <argument name="header_css_class" xsi:type="string">col-sku</argument>
                 </arguments>
@@ -57,6 +59,7 @@
                     <argument name="total" xsi:type="string">sum</argument>
                     <argument name="type" xsi:type="string">number</argument>
                     <argument name="index" xsi:type="string">ordered_qty</argument>
+					<argument name="sortable" xsi:type="string">0</argument>
                     <argument name="id" xsi:type="string">ordered_qty</argument>
                     <argument name="column_css_class" xsi:type="string">col-qty</argument>
                     <argument name="header_css_class" xsi:type="string">col-qty</argument>
