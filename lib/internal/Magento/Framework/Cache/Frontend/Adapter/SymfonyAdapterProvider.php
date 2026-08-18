@@ -481,7 +481,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             ];
         }
 
-        if ($password) {
+if ($password !== null && $password !== '') {
             $params['password'] = $password;
         }
 
