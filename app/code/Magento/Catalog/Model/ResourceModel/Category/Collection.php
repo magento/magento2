@@ -723,9 +723,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if (true === $addVisibilityFilter) {
             $select->where('cat_index.visibility in (?)', $this->catalogProductVisibility->getVisibleInSiteIds());
         }
-        if (count($categoryIds) > 1) {
-            $select->group('cat_index.category_id');
-        }
+        // PgCompat: was only grouped when count($categoryIds) > 1 - but this select
+        // always mixes a non-aggregated column (category_id) with an aggregate
+        // (count(...)), so the single-category case needs GROUP BY too. MySQL's
+        // non-ONLY_FULL_GROUP_BY mode tolerated the omission (trivially one group
+        // either way); Postgres requires it unconditionally. Grouping a single-value set
+        // is a no-op on both, so this fixes the real bug rather than working around it.
+        $select->group('cat_index.category_id');
 
         return $select;
     }

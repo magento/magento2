@@ -47,12 +47,13 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
             $originalTableName . '__temp' . $this->generateRandomSuffix()
         );
 
-        $this->resourceConnection->getConnection()->query(
-            sprintf(
-                'create table %s like %s',
-                $temporaryTableName,
-                $this->resourceConnection->getTableName($originalTableName)
-            )
+        // PgCompat: `CREATE TABLE x LIKE y` is MySQL shorthand with no direct Postgres
+        // equivalent (`CREATE TABLE x (LIKE y INCLUDING ALL)` instead) - createTableLike()
+        // isn't part of AdapterInterface, but every connection in this deployment is one
+        // of the two PgCompat providers, both of which implement it.
+        $this->resourceConnection->getConnection()->createTableLike(
+            $temporaryTableName,
+            $this->resourceConnection->getTableName($originalTableName)
         );
 
         return $temporaryTableName;

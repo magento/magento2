@@ -388,7 +388,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
                     $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD],
-                    $driverOptions
+                    $driverOptions,
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE] ?? null
                 );
             } catch (\Exception $exception) {
                 $errors[] = $exception->getMessage();

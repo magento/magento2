@@ -736,7 +736,16 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         if (!$this->_isOrdersRendered) {
             foreach ($this->_orders as $field => $direction) {
                 if (isset($this->sqlReservedWords[strtoupper($field)])) {
-                    $field = "`$field`";
+                    // PgCompat: was a hardcoded "`$field`" backtick literal - correct by
+                    // coincidence only on MySQL (whose quote character happens to be a
+                    // backtick), and it bypasses the adapter's own quoteIdentifier()
+                    // entirely, so Postgres (whose reserved-word set differs anyway -
+                    // e.g. "position" isn't reserved there, but this same $field is
+                    // wrapped unconditionally once it matches MySQL's list) received a
+                    // literal, invalid backtick instead of a real identifier quote.
+                    // quoteIdentifier() is exactly what every other quoting path in this
+                    // class already goes through.
+                    $field = $this->getConnection()->quoteIdentifier($field);
                 }
 
                 $this->_select->order(new \Zend_Db_Expr($field . ' ' . $direction));

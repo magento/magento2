@@ -109,7 +109,12 @@ class Eraser
             . 'product_table.' . $metadata->getLinkField(),
             []
         );
-        $select->where('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_DISABLED);
+        // PgCompat: getIfNullSql() renders per-dialect (IFNULL on MySQL, COALESCE on
+        // Postgres) instead of hardcoding MySQL's IFNULL() text.
+        $select->where(
+            $this->connection->getIfNullSql('status_attr.value', 'status_global_attr.value') . ' = ?',
+            Status::STATUS_DISABLED
+        );
 
         $result = $this->connection->query($select);
 

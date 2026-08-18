@@ -174,7 +174,17 @@ class BatchIterator implements BatchIteratorInterface
             ]
         );
         $row = $this->connection->fetchRow($wrapperSelect);
-        $this->minValue = $row['max'];
+        // PgCompat: MAX() over zero matching rows is SQL NULL - when this batch is
+        // empty (cnt below ends up 0 and the iterator stops right after this call
+        // anyway), don't overwrite minValue with that null. A leftover null minValue
+        // fed into initSelectObject()'s "> ?" bind is otherwise silently coerced to an
+        // empty-string parameter by PDO, which MySQL's loose bigint/string comparison
+        // tolerates (implicitly treating '' as 0) but Postgres rejects outright
+        // ("invalid input syntax for type bigint"). Real-world trigger: any
+        // FieldDataConverter::convert() call (e.g. Theme's ConvertSerializedData data
+        // patch) whose target rows are exhausted after fewer than batchSize rows, or -
+        // as first hit here - never existed at all.
+        $this->minValue = $row['max'] ?? $this->minValue;
         return (int)$row['cnt'];
     }
 

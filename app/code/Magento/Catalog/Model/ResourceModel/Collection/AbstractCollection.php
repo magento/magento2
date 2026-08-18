@@ -227,10 +227,26 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         $storeId = $this->getStoreId();
         if ($storeId) {
             $connection = $this->getConnection();
-            $valueExpr = $connection->getCheckSql('t_s.value_id IS NULL', 't_d.value', 't_s.value');
+            // PgCompat: this select is UNION ALL'd with one of these per EAV backend
+            // type (varchar/int/decimal/text/datetime) in _loadAttributes() - MySQL
+            // coerces the differently-typed columns across branches implicitly,
+            // Postgres requires them to already share one type before the UNION. Same
+            // fix as the parent Eav\Model\Entity\Collection\AbstractCollection version
+            // (union-cast-eav-abstract-collection.patch) this override replaces - that
+            // patch only touched the parent method, missing this store-fallback
+            // override entirely since it never calls parent in the $storeId branch.
+            $valueExpr = $connection->getCheckSql(
+                't_s.value_id IS NULL',
+                $connection->castToText('t_d.value'),
+                $connection->castToText('t_s.value')
+            );
 
             $select->columns(
-                ['default_value' => 't_d.value', 'store_value' => 't_s.value', 'value' => $valueExpr]
+                [
+                    'default_value' => $connection->castToText('t_d.value'),
+                    'store_value' => $connection->castToText('t_s.value'),
+                    'value' => $valueExpr,
+                ]
             );
         } else {
             $select = parent::_addLoadAttributesSelectValues($select, $table, $type);

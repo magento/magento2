@@ -44,14 +44,19 @@ class WeeeAttributeProductSort
         int $productId,
         int $storeId
     ):array {
-        $select = $this->resourceConnection->getConnection()->select();
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select();
 
+        // PgCompat: getIfNullSql() renders per-dialect (IFNULL on MySQL, COALESCE on
+        // Postgres) instead of hardcoding MySQL's IFNULL() text.
+        $weeeValue = $connection->getIfNullSql(
+            'weee_child.value',
+            (string) $connection->getIfNullSql('weee_parent.value', 0)
+        );
         foreach ($result as $select) {
             $select->columns(
                 [
-                    'weee_min_price' => new \Zend_Db_Expr(
-                        '(t.min_price + IFNULL(weee_child.value, IFNULL(weee_parent.value, 0)))'
-                    )
+                    'weee_min_price' => new \Zend_Db_Expr('(t.min_price + ' . $weeeValue . ')')
                 ]
             )->joinLeft(
                 ['weee_child' => $this->resourceConnection->getTableName('weee_tax')],

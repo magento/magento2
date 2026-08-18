@@ -89,6 +89,7 @@ class DbValidator
      * @param string $dbUser
      * @param string $dbPass
      * @param array $driverOptions
+     * @param string|null $engine Database engine (mysql, postgresql)
      * @return bool
      * @throws \Magento\Setup\Exception
      */
@@ -97,19 +98,22 @@ class DbValidator
         $dbHost,
         $dbUser,
         $dbPass = '',
-        $driverOptions = []
+        $driverOptions = [],
+        $engine = null
     ) {
         // establish connection to information_schema view to retrieve information about user and table privileges
-        $connection = $this->connectionFactory->create(
-            [
-                ConfigOptionsListConstants::KEY_NAME => 'information_schema',
-                ConfigOptionsListConstants::KEY_HOST => $dbHost,
-                ConfigOptionsListConstants::KEY_USER => $dbUser,
-                ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
-                ConfigOptionsListConstants::KEY_ACTIVE => true,
-                ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
-            ]
-        );
+        $connectionConfig = [
+            ConfigOptionsListConstants::KEY_NAME => 'information_schema',
+            ConfigOptionsListConstants::KEY_HOST => $dbHost,
+            ConfigOptionsListConstants::KEY_USER => $dbUser,
+            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+            ConfigOptionsListConstants::KEY_ACTIVE => true,
+            ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
+        ];
+        if ($engine !== null && $engine !== '') {
+            $connectionConfig[ConfigOptionsListConstants::KEY_ENGINE] = $engine;
+        }
+        $connection = $this->connectionFactory->create($connectionConfig);
 
         if (!$connection) {
             throw new \Magento\Setup\Exception('Database connection failure.');

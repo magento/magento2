@@ -43,16 +43,19 @@ class IdsSelectBuilder implements IdsSelectBuilderInterface
      */
     public function build(ChangelogInterface $changelog): Select
     {
-        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
-        $this->setGroupConcatMax($numberOfAttributes);
-
+        // PgCompat: no setGroupConcatMax() call here - that tunes MySQL's
+        // group_concat_max_len session variable, a length cap string_agg() (used below
+        // via getGroupConcatSql()) has no equivalent of or need for.
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
 
         $connection = $this->resourceConnection->getConnection();
 
+        // PgCompat: GROUP_CONCAT() is MySQL-only - getGroupConcatSql() isn't part of
+        // AdapterInterface, but every connection in this deployment is one of the two
+        // PgCompat providers, both of which implement it as a string_agg() equivalent.
         $columns = [
             $changelog->getColumnName(),
-            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
+            'attribute_ids' => $connection->getGroupConcatSql('attribute_id'),
             'store_id'
         ];
 

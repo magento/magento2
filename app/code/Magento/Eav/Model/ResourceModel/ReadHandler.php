@@ -153,10 +153,17 @@ class ReadHandler implements AttributeInterface
         if (count($attributeTables)) {
             $identifiers = null;
             foreach ($attributeTables as $attributeTable => $attributeIds) {
+                // PgCompat: this select is UNION ALL'd (below, via UnionExpression) with
+                // one of these per EAV backend type table (varchar/int/decimal/text/
+                // datetime) - MySQL coerces the differently-typed "value" columns across
+                // branches implicitly, Postgres requires them to already share one type.
+                // Same fix as the other two EAV union-cast sites (see
+                // union-cast-eav-abstract-collection.patch and
+                // Catalog\Model\ResourceModel\Collection\AbstractCollection's override).
                 $select = $connection->select()
                     ->from(
                         ['t' => $attributeTable],
-                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
+                        ['value' => $connection->castToText('t.value'), 'attribute_id' => 't.attribute_id']
                     )
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
                     ->where('attribute_id IN (?)', $attributeIds, \Zend_Db::INT_TYPE);

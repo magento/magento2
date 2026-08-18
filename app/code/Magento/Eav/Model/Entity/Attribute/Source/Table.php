@@ -76,15 +76,25 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
         }
         $attributeId = $this->getAttribute()->getId();
         if (!isset($this->_options[$storeId][$attributeId])) {
-            $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
-                'asc'
-            )->setAttributeFilter(
-                $attributeId
-            )->setStoreFilter(
-                $storeId
-            )->load();
-            $this->_options[$storeId][$attributeId] = $collection->toOptionArray();
-            $this->_optionsDefault[$storeId][$attributeId] = $collection->toOptionArray('default_value');
+            // PgCompat: an attribute with no id yet (new/unsaved attribute model) can
+            // never have real eav_attribute_option rows - short-circuit instead of
+            // querying "attribute_id = ''" (MySQL tolerantly returns zero rows there via
+            // its '' -> 0 numeric coercion; Postgres rejects the comparison outright).
+            // Same empty-result outcome either way, without the pointless query.
+            if (!$attributeId) {
+                $this->_options[$storeId][$attributeId] = [];
+                $this->_optionsDefault[$storeId][$attributeId] = [];
+            } else {
+                $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
+                    'asc'
+                )->setAttributeFilter(
+                    $attributeId
+                )->setStoreFilter(
+                    $storeId
+                )->load();
+                $this->_options[$storeId][$attributeId] = $collection->toOptionArray();
+                $this->_optionsDefault[$storeId][$attributeId] = $collection->toOptionArray('default_value');
+            }
         }
         $options = $defaultValues
             ? $this->_optionsDefault[$storeId][$attributeId]

@@ -189,7 +189,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             'i.entity_id = cpw.product_id AND sw.website_id = cpw.website_id',
             []
         )->group(
-            ['parent_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
+            // PgCompat: MySQL resolves a GROUP BY item against the SELECT alias list, so
+            // 'parent_id' here refers to the 'parent_id' => 'e.entity_id' column below;
+            // Postgres doesn't do alias resolution in GROUP BY, so it has to be the
+            // underlying expression directly.
+            ['e.entity_id', 'i.attribute_id', 'i.store_id', 'i.value', 'l.child_id']
         )->columns(
             [
                 'parent_id' => 'e.entity_id',

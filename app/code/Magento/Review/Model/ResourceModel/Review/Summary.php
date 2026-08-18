@@ -101,13 +101,15 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 "e.entity_id = review_summary.entity_pk_value AND review_summary.store_id = {$storeId}"
                 . " AND review_summary.entity_type = ({$summaryEntitySubSelect})"
             );
+            // PgCompat: getIfNullSql() renders per-dialect (IFNULL on MySQL, COALESCE on
+            // Postgres) instead of hardcoding MySQL's IFNULL() text.
             $productCollection->getSelect()
                 ->joinLeft(
                     ['review_summary' => $this->getMainTable()],
                     $joinCond,
                     [
-                        'reviews_count' => new \Zend_Db_Expr("IFNULL(review_summary.reviews_count, 0)"),
-                        'rating_summary' => new \Zend_Db_Expr("IFNULL(review_summary.rating_summary, 0)")
+                        'reviews_count' => $this->getConnection()->getIfNullSql('review_summary.reviews_count', 0),
+                        'rating_summary' => $this->getConnection()->getIfNullSql('review_summary.rating_summary', 0)
                     ]
                 );
         }

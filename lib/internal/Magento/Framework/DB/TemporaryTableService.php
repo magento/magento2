@@ -120,18 +120,7 @@ class TemporaryTableService
             $indexStatements[] = sprintf('%s(%s)', $indexType, $renderedColumns);
         }
 
-        $statement = sprintf(
-            'CREATE TEMPORARY TABLE %s %s ENGINE=%s IGNORE (%s)',
-            $adapter->quoteIdentifier($name),
-            $indexStatements ? '(' . implode(',', $indexStatements) . ')' : '',
-            $adapter->quoteIdentifier($dbEngine),
-            "{$select}"
-        );
-
-        $adapter->query(
-            $statement,
-            $select->getBind()
-        );
+        $adapter->createTemporaryTableFromSelect($name, $indexStatements, $select);
 
         $this->createdTableAdapters[$name] = $adapter;
 

@@ -300,7 +300,20 @@ class Collection extends AbstractCollection
      */
     public function addAttributeGrouping()
     {
-        $this->getSelect()->group('main_table.attribute_id');
+        $select = $this->getSelect();
+        $select->group('main_table.attribute_id');
+        // PgCompat: Catalog\Model\ResourceModel\Product\Attribute\Collection::_initSelect()
+        // unconditionally joins "additional_table" (catalog_eav_attribute) and selects
+        // additional_table.* - Postgres requires a table's OWN primary key in GROUP BY
+        // before it accepts that table's other columns un-aggregated (the join condition
+        // guaranteeing additional_table.attribute_id = main_table.attribute_id isn't
+        // enough; Postgres only applies the functional-dependency exception via a
+        // table's own PK). Guarded on the alias actually being joined - grouping by an
+        // alias that was never joined is a "missing FROM-clause entry" error, and not
+        // every Attribute\Collection subclass joins additional_table.
+        if (array_key_exists('additional_table', $select->getPart(Select::FROM))) {
+            $select->group('additional_table.attribute_id');
+        }
         return $this;
     }
 
@@ -343,15 +356,22 @@ class Collection extends AbstractCollection
             ]
         );
 
+        // PgCompat: joinLeft()'s 3rd arg selects columns from "ao" into the result set;
+        // neither of this method's two real callers (CatalogGraphQl\Model\Config\
+        // FilterAttributeReader, CatalogSearch\Model\Advanced) reads option_id off the
+        // loaded attributes - the join exists only for the ao.option_id > 0 filter below.
+        // Selecting it anyway (MySQL tolerates a non-aggregated, non-grouped column; not
+        // functionally dependent on the GROUP BY key since eav_attribute_option is a
+        // one-to-many join) makes every call to this method fail outright on Postgres.
+        // Selecting no columns from "ao" removes the violation with no behavior change.
         $this->getSelect()->joinLeft(
             ['ao' => $this->getTable('eav_attribute_option')],
             'ao.attribute_id = main_table.attribute_id',
-            'option_id'
-        )->group(
-            'main_table.attribute_id'
+            []
         )->where(
             $orWhere
         );
+        $this->addAttributeGrouping();
         return $this;
     }
 

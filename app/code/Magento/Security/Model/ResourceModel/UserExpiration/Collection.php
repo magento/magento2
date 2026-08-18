@@ -40,12 +40,12 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $currentTime = new \DateTime();
         $currentTime->format('Y-m-d H:i:s');
         $this->getSelect()->joinLeft(
-            ['user' => $this->getTable('admin_user')],
-            'main_table.user_id = user.user_id',
+            ['admin_user' => $this->getTable('admin_user')],
+            'main_table.user_id = admin_user.user_id',
             ['is_active']
         );
         $this->addFieldToFilter('expires_at', ['lt' => $currentTime])
-            ->addFieldToFilter('user.is_active', 1);
+            ->addFieldToFilter('admin_user.is_active', 1);
 
         return $this;
     }

@@ -160,8 +160,28 @@ class Collection implements ResetAfterRequestInterface
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $childCollection->getSelect()->group('e.' . $linkField);
-        $childCollection->getSelect()->columns([
-            'parent_ids' => new \Zend_Db_Expr('GROUP_CONCAT(link_table.parent_id)')
+        // PgCompat: GROUP_CONCAT() is MySQL-only - getGroupConcatSql() isn't part of
+        // AdapterInterface, but this deployment's adapter implements it as a
+        // string_agg() equivalent.
+        //
+        // ChildCollection::_initSelect() unconditionally selects raw link_table.parent_id
+        // (needed by every OTHER caller of that base collection, which don't group at
+        // all); once this method's own group('e.' . $linkField) is added on top, that raw
+        // column is no longer functionally dependent on the GROUP BY key (a child can
+        // have more than one parent) and Postgres rejects it outright - the whole reason
+        // parent_ids exists is to carry that same information aggregated instead. Drop
+        // the raw column here, narrowly, via setPart() rather than in the base class,
+        // since only this grouped call site is affected.
+        $select = $childCollection->getSelect();
+        $select->setPart(
+            \Magento\Framework\DB\Select::COLUMNS,
+            array_values(array_filter(
+                $select->getPart(\Magento\Framework\DB\Select::COLUMNS),
+                static fn(array $column) => !($column[0] === 'link_table' && $column[1] === 'parent_id')
+            ))
+        );
+        $select->columns([
+            'parent_ids' => $select->getAdapter()->getGroupConcatSql('link_table.parent_id')
         ]);
 
         $attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
