@@ -122,9 +122,7 @@ class BackendWrapper implements BackendInterface
     }
 
     /**
-     * Garbage-collect old entries: delete expired items from the store, then sweep orphaned tag-index
-     * members. Mirrors legacy clean(OLD) (Zend file backend automatic_cleaning_factor + Cm Redis
-     * _collectGarbage), run by the backend_clean_cache cron.
+     * Garbage-collect expired items and orphaned tag-index members, similar to legacy clean(OLD) behavior.
      *
      * @return bool
      */

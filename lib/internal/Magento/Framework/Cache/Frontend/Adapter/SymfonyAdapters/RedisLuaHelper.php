@@ -12,16 +12,9 @@ use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
 use Predis\Client as PredisClient;
 
 /**
- * Redis Lua script helper for advanced atomic operations
- *
- * Provides Lua script functionality for operations that benefit from
- * server-side execution and true atomicity beyond what pipelines offer.
- *
- * Works with both the phpredis extension (\Redis / \RedisCluster) and Predis. The two drivers expose
- * different EVAL signatures — phpredis takes eval($script, $keysAndArgs, $numKeys) while Predis takes
- * eval($script, $numKeys, ...$keysAndArgs) — so all script execution is funneled through rawEval()/
- * rawEvalSha(), which normalize that difference. This lets a Predis deployment get the same atomic
- * tag-index prune (use_lua=1) as phpredis instead of silently falling back to the non-atomic path.
+ * Provides Redis Lua helpers for advanced atomic operations beyond pipelines.
+ * Supports both phpredis and Predis by normalizing their different EVAL signatures.
+ * Enables atomic tag-index pruning with use_lua=1 across both drivers.
  */
 class RedisLuaHelper
 {
@@ -308,9 +301,7 @@ LUA;
     }
 
     /**
-     * Normalize a Predis reply to phpredis-like semantics: turn a server error response (e.g. NOSCRIPT
-     * when the client was built with exceptions=false) into a thrown exception so the callers' existing
-     * evalSha->eval fallback and try/catch handling fire the same way on both drivers.
+     * Normalizes Predis errors into exceptions, ensuring consistent evalSha → eval fallback behavior across drivers.
      *
      * @param mixed $result
      * @return mixed

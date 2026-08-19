@@ -430,9 +430,8 @@ class Factory
                 $options['local_backend_options']['cache_dir'] = $this->cachedDirectories['cache'];
                 break;
             default:
-                // For a custom (legacy) backend requested by class name, only accept it when it is
-                // a Zend cache backend. Symfony adapter classes never reach here;
-                // they are routed to the Symfony stack before createLegacyCache() is called.
+                // Accept custom legacy backend classes only when they implement the Zend cache interface.
+                // Symfony adapters are routed to the Symfony stack before this method is called.
                 if ($type != $this->_defaultBackend) {
                     try {
                         if (class_exists($type, true)) {
@@ -665,9 +664,8 @@ class Factory
             // Create initial cache pool
             $cachePool = $cacheFactory();
 
-            // Factory that (re)builds the tag adapter for a given pool. Passed to the Symfony adapter so
-            // that, after a fork, the tag adapter is rebuilt against the child's fresh pool/connection
-            // (otherwise it keeps the parent's extracted Redis socket and corrupts tag ops).
+            // Rebuild the tag adapter after a fork using the child's fresh pool and connection,
+            // preventing reuse of the parent's Redis socket and corrupted tag operations.
             $adapterFactory = function ($pool) use (
                 $adapterProvider,
                 $originalBackendType,
@@ -811,11 +809,8 @@ class Factory
     }
 
     /**
-     * Whether the backend value selects the single-tier Symfony implementation.
-     *
-     * Only the modern short identifiers 'file', 'redis' and 'valkey' route to Symfony. A
-     * fully-qualified legacy backend class (e.g. \Magento\Framework\Cache\Backend\Redis, which
-     * setup:install writes) or any other value routes to the legacy stack.
+     * Whether the backend selects single-tier Symfony caching.
+     * Only 'file', 'redis', and 'valkey' use Symfony; class names and other values use legacy caching.
      *
      * @param string $backendType
      * @return bool
@@ -840,9 +835,8 @@ class Factory
         $remoteBackend = $backendOptions['remote_backend'] ?? 'redis';
         $remoteBackendOptions = $backendOptions['remote_backend_options'] ?? [];
 
-        // Mirror legacy RemoteSynchronizedCache: top-level ("universal") backend_options that are not
-        // L2 structural keys flow into the remote tier, so preload_keys works in either backend_options
-        // or remote_backend_options (remote_backend_options wins on conflict, matching legacy merge order).
+        // Pass non-structural top-level options to the remote tier, matching legacy L2 behavior.
+        // Explicit remote_backend_options override them, including preload_keys.
         $l2StructuralKeys = [
             'remote_backend', 'remote_backend_custom_naming', 'remote_backend_autoload', 'remote_backend_options',
             'local_backend', 'local_backend_options', 'local_backend_custom_naming', 'local_backend_autoload',
@@ -854,17 +848,12 @@ class Factory
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
-        // Never maintain an on-disk L1 tag index (tags/ + idtags/). The L2 remote (Redis) is the
-        // source of truth for tags and the :hash marker, and the L1 self-heals on read when its
-        // hash no longer matches the remote. This keeps the L1 from accumulating hundreds of
-        // thousands of tiny index files on the node (the post-deploy warmup degradation / tmpfs
-        // ENOSPC); cache data itself is still written normally to the L1 cache_dir, and
-        // clean-by-tag continues to work through the remote.
+        // Disable the L1 disk tag index to prevent excessive tiny files and ENOSPC failures.
+        // L2 remains authoritative for tags/hash; L1 data self-heals and tag cleaning stays remote.
         $localBackendOptions['index_tags'] = false;
 
-        // Resolve the L1 file cache directory up front so both the local backend and the L2 wrapper
-        // agree on it. SymfonyL2Cache uses it to gauge disk fill for size-based L1 eviction (the
-        // legacy disk-full safety valve). Only meaningful for the default file L1.
+        // Resolve the default L1 file directory for both tiers; SymfonyL2Cache uses it to measure
+        // disk usage and trigger size-based L1 eviction.
         if (($localBackend === 'file') && empty($localBackendOptions['cache_dir'])) {
             if (!isset($this->cachedDirectories['cache'])) {
                 $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);

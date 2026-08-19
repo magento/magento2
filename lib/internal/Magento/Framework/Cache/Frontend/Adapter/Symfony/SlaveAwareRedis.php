@@ -8,23 +8,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
 
 /**
- * A phpredis \Redis connection whose READ path is served from a read replica.
- *
- * The object is itself connected to the MASTER (Symfony's RedisAdapter builds it through the normal
- * connection factory), so every command runs on the master by default — writes (SET/SETEX/DEL),
- * tag-index ops (SADD/SREM/SMEMBERS), Lua (EVAL) and pipelines all stay on the master. The two data
- * FETCH commands — mget() and get() — are routed to a replica. In practice Symfony's
- * RedisTrait::doFetch fetches via mget(); get() is routed too (sharing the same pickReadClient logic)
- * so a direct get() — or a future Symfony that fetches single keys via get() — is offloaded
- * consistently rather than silently hitting the master. This mirrors legacy Cm_Cache_Backend_Redis,
- * which sends only the data load() to load_from_slave and keeps everything else on the master.
- *
- * On any replica error the read transparently falls back to the master, so a flaky/lagging replica
- * degrades to master-reads rather than failing (legacy skips a bad slave the same way).
- *
- * Extends RedisBase, which is \Redis when the phpredis extension is present (and a stub otherwise so
- * the file still loads/compiles on hosts without phpredis — this object is only ever instantiated on
- * the phpredis code path). See RedisBase for why the base class is indirected.
+ * A Redis connection that routes read operations (get(), mget()) to a replica while keeping write
+ * and other operations (SET, DEL, tag operations, Lua, pipelines) on the master.
+ * Falls back to the master if the replica fails, matching legacy behavior.
+ * Extends RedisBase for phpredis compatibility and safe compilation without the extension.
  */
 class SlaveAwareRedis extends RedisBase
 {
@@ -34,17 +21,15 @@ class SlaveAwareRedis extends RedisBase
     private array $slaves = [];
 
     /**
-     * When true, the master serves NO reads (all reads go to replicas). When false (legacy default),
-     * the master participates in read load-balancing — a read has a ~1/(replicas+1) chance of being
-     * served by the master. Mirrors Cm Redis's master_write_only option.
+     * Controls whether reads are served only by replicas or load-balanced with the master
+     * ,mirroring Cm Redis's master_write_only option.
      *
      * @var bool
      */
     private bool $masterWriteOnly = false;
 
     /**
-     * When true, a replica MISS (nil) is retried on the master. When false (legacy default), a replica
-     * miss is returned as-is (treated as a cache miss). Mirrors Cm Redis's retry_reads_on_master.
+     * Controls whether replica misses are retried on the master, mirroring Cm Redis's retry_reads_on_master option.
      *
      * @var bool
      */
@@ -101,9 +86,7 @@ class SlaveAwareRedis extends RedisBase
         if ($this->masterWriteOnly) {
             return $count === 1 ? $this->slaves[0] : $this->slaves[array_rand($this->slaves)];
         }
-        // include the master (index 0) in the pool so it takes a share of reads, like legacy default.
-        // mt_rand (not the CSPRNG random_int) on purpose: this is read load-balancing, not a security
-        // decision, and it runs on the hot read path — legacy Cm Redis likewise uses array_rand/mt.
+        // Includes the master in read load-balancing, using fast non-cryptographic randomness like legacy Cm Redis.
         // phpcs:ignore Magento2.Security.InsecureFunction
         $idx = mt_rand(0, $count);
         return $idx === 0 ? null : $this->slaves[$idx - 1];

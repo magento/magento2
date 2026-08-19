@@ -119,10 +119,7 @@ class LowLevelFrontend
     }
 
     /**
-     * Get the backend-specific tag adapter (e.g. RedisTagAdapter) backing this frontend.
-     *
-     * Exposes the adapter so higher-level backends (SymfonyL2Cache) can reach adapter-specific
-     * capabilities such as the atomic regeneration lock, working through any frontend decorators.
+     * Gets the backend-specific tag adapter, enabling access to features like atomic regeneration locks.
      *
      * @return TagAdapterInterface
      */

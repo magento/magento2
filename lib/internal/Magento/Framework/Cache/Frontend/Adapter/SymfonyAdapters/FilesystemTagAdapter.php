@@ -15,9 +15,7 @@ use Psr\Cache\CacheItemPoolInterface;
 class FilesystemTagAdapter implements TagAdapterInterface
 {
     /**
-     * Bound on reopen retries in mutateFileLocked() when the file is unlink()ed from under an
-     * acquired lock by a concurrent worker. High enough to absorb realistic contention, finite so a
-     * pathological churn can never spin forever.
+     * Limits reopen retries after concurrent unlink() to handle contention without risking an infinite loop.
      */
     private const MUTATE_MAX_ATTEMPTS = 50;
 
@@ -32,18 +30,15 @@ class FilesystemTagAdapter implements TagAdapterInterface
     private string $tagDirectory;
 
     /**
-     * Directory holding the id -> tags reverse index (one file per tagged id). Lets onRemove and
-     * deleteByIds touch only the tag files a given id actually belongs to, instead of scanning the
-     * whole tag directory. Mirrors the reverse index the Redis tier already keeps.
+     * Stores an id-to-tags reverse index, allowing targeted tag cleanup without scanning the entire tag directory.
      *
      * @var string
      */
     private string $reverseDirectory;
 
     /**
-     * Whether to maintain the on-disk tag index. Disabled for an L1 tier that sits behind a
-     * Redis L2 (tags + :hash live in the remote, local self-heals on read); kept true for a
-     * file-only cache where the file tag index is the sole invalidation source.
+     * Controls whether the on-disk tag index is maintained, disabling it for Redis L2-backed L1 caches
+     * and enabling it for file-only caches.
      *
      * @var bool
      */
@@ -173,12 +168,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Read-modify-write a tag file while holding an exclusive lock for the whole cycle.
-     *
-     * flock(LOCK_EX) spans the read and the write, so concurrent PHP-FPM workers on the same host
-     * can no longer lose an update (the previous getTagIds/setTagIds pair only locked the write,
-     * leaving the read-modify-write racy). $transform receives the current ids and returns the new
-     * ids, or null to signal "no change" (skips the rewrite).
+     * Performs tag file read-modify-write under one exclusive lock to prevent concurrent update loss.
+     * $transform updates IDs or returns null to skip rewriting when no change is needed.
      *
      * @param string $tag
      * @param callable $transform fn(array $ids): ?array
@@ -190,12 +181,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Read-modify-write a line-per-entry index file while holding an exclusive lock for the whole
-     * cycle. Used for both tag files (tag -> ids) and reverse-index files (id -> tags).
-     *
-     * flock(LOCK_EX) spans the read and the write, so concurrent workers on the same host cannot
-     * lose an update. $transform receives the current entries and returns the new entries, or null
-     * to signal "no change" (skips the rewrite). An empty result deletes the file.
+     * Safely updates tag and reverse-index files under one exclusive lock to prevent concurrent update loss.
+     * $transform returns updated entries, null skips changes, and an empty result deletes the file.
      *
      * @param string $file
      * @param string $dir Directory that must exist before writing
@@ -208,12 +195,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
             @mkdir($dir, 0770, true);
         }
 
-        // Retry loop guarding the open()->flock() window. fopen() resolves $file to an inode before
-        // we hold the lock; a concurrent worker that empties and unlink()s the file in that window
-        // leaves our handle bound to an orphaned inode with no directory entry, so any write we make
-        // is silently lost. After locking we confirm the handle still refers to the file on disk and,
-        // if not, reopen and retry. The unlink of an emptied file therefore also stays inside the
-        // lock, so it can never delete another worker's freshly written membership.
+        // Retries if a concurrent unlink() occurs between fopen() and flock(), preventing writes to an orphaned inode.
+        // Verifies the locked handle still points to the on-disk file and reopens when necessary.
         for ($attempt = 0; $attempt < self::MUTATE_MAX_ATTEMPTS; $attempt++) {
             $fp = @fopen($file, 'c+');
             if ($fp === false) {
@@ -225,9 +208,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
                 return;
             }
 
-            // Our handle must still be the file currently linked at $file. If it was unlink()ed (and
-            // possibly recreated) between fopen() and the lock, dev/ino diverge (or the path is gone);
-            // drop the stale handle and retry with a fresh open under a fresh lock.
+            // Verifies the locked handle still matches the file on disk; if stale or unlinked, reopens and retries.
             clearstatcache(true, $file);
             $held = @fstat($fp);
             $onDisk = @stat($file);
@@ -414,9 +395,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
             $this->cachePool->commit();
         }
 
-        // Prune the deleted ids from the on-disk tag index so it does not outlive its data. Uses
-        // the id -> tags reverse index to touch only the affected tag files (grouped so each tag
-        // file is rewritten once), instead of scanning the whole tag directory.
+        // Prunes deleted IDs from the tag index using the reverse index, updating each affected tag file only once.
         if ($this->indexTags) {
             $this->pruneIdsFromIndex($ids);
         }
@@ -469,10 +448,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
             return;
         }
 
-        // Retag cleanup: drop the id from the forward file of any tag it no longer carries, so a
-        // re-save with a different tag set (e.g. [A,B] then [C]) does not leave the old A/B
-        // memberships dangling once the reverse index is replaced below. Mirrors the legacy
-        // Cm_Cache_Backend_Redis save() which array_diffs the previous tags and removes them.
+        // Removes the ID from tags it no longer carries, preventing stale memberships after retagging.
+        // Mirrors legacy Cm_Cache_Backend_Redis behavior by removing previous tag associations.
         foreach (array_diff($this->getIdTags($id), $tags) as $removedTag) {
             $this->removeIdFromTag($removedTag, $id);
         }

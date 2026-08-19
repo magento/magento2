@@ -32,19 +32,11 @@ class RedisTagAdapter implements TagAdapterInterface
     private const REGEN_LOCK_PREFIX = 'cache:regen_lock:';
 
     /**
-     * Atomically prune the tag index for a batch of ids using their reverse index.
+     * Atomically prunes tag indexes for a batch of IDs using their reverse index.
+     * Removes IDs from tag sets, reverse indexes, and all_ids in a single EVAL.
+     * Prunes only when the data key no longer exists, preventing concurrent-save inconsistencies.
+     * Uses tag prefix, namespace, data-key prefix, and IDs as Lua arguments.
      *
-     * For each id: read its reverse index (id -> tags), SREM the id from every tag SET, DEL the
-     * reverse index and SREM the id from all_ids. Running inside EVAL makes the whole
-     * read-modify-write atomic, so a concurrent onSave for the same id cannot be half-clobbered.
-     *
-     * Existence guard (finding #4): an id is pruned ONLY when its data key is gone. If a concurrent
-     * save has just (re)written the data, the index is left intact so the index never contradicts
-     * the data (no data-present / index-missing orphan). The guard fails safe: if the data-key
-     * prefix is wrong the EXISTS is 0 and pruning proceeds exactly as before.
-     *
-     * ARGV[1] = tag key prefix, ARGV[2] = namespace, ARGV[3] = data-key prefix (namespace + ':'),
-     * ARGV[4..] = ids to prune.
      */
     private const LUA_PRUNE_INDEX = <<<'LUA'
 local tag_prefix = ARGV[1]
@@ -69,17 +61,9 @@ return pruned
 LUA;
 
     /**
-     * Atomically (re)build the tag index for one id, but ONLY while its data key exists.
-     *
-     * The pair (LUA_ONSAVE guarded on data-present, LUA_PRUNE_INDEX guarded on data-absent) makes
-     * the two index operations each conditional on the current data state, so the tag index can
-     * never end up contradicting the data under a concurrent save/delete on the same id
-     * (finding #4). The data write is committed before onSave runs, so under normal (non-racing)
-     * saves EXISTS is 1 and the index is written exactly as the old pipeline did.
-     *
-     * ARGV[1] = data key (namespace + ':' + id), ARGV[2] = id, ARGV[3] = all_ids key,
-     * ARGV[4] = tag key prefix, ARGV[5] = namespace, ARGV[6] = reverse index key,
-     * ARGV[7..] = tag names.
+     * Atomically rebuilds the tag index only when the corresponding data key exists.
+     * Prevents tag-index/data inconsistencies during concurrent save/delete operations.
+     * Uses data key, ID, all_ids, tag prefix, namespace, reverse-index key, and tag names as arguments.
      */
     private const LUA_ONSAVE = <<<'LUA'
 if redis.call('EXISTS', ARGV[1]) == 0 then
@@ -122,10 +106,7 @@ LUA;
     private const SUNION_CHUNK_SIZE = 500;
 
     /**
-     * Maximum set size for which a single SINTER call is safe.
-     * SINTER is O(N*M) where N = smallest set size. If the smallest set exceeds
-     * this threshold, SINTER blocks Valkey long enough to saturate PHP-FPM workers.
-     * Above the threshold, SMEMBERS + PHP array_intersect is used instead.
+     * Limits SINTER to safe set sizes; larger sets use SMEMBERS with PHP array_intersect to avoid Valkey blocking.
      */
     private const SINTER_SAFE_SIZE = 500;
 
@@ -316,9 +297,7 @@ LUA;
         $this->namespace = $namespace;
         $this->redis = $this->extractRedisClient($cachePool);
 
-        // Lua is honored on both drivers: RedisLuaHelper normalizes the phpredis vs Predis EVAL
-        // signatures, so use_lua=1 gives Predis the same atomic tag-index prune as phpredis instead
-        // of silently degrading to the non-atomic pipeline path.
+        // Supports atomic Lua tag-index pruning on both phpredis and Predis by normalizing their EVAL signatures.
         $this->useLua = $useLua;
         $this->useLuaOnGc = $useLuaOnGc;
 
@@ -371,11 +350,7 @@ LUA;
     }
 
     /**
-     * Redis key prefix under which the Symfony adapter stores the actual cache DATA item.
-     *
-     * The data key is "<namespace>:<id>" (e.g. "792_:HOTKEY"), i.e. the tag-index namespace plus a
-     * ':' separator — distinct from the tag/reverse index keys which concatenate the namespace with
-     * no separator. Used by the existence guards that keep the index consistent with the data.
+     * Defines the Redis data-key prefix (<namespace>:) used by existence guards to keep cache indexes consistent with stored data.
      *
      * @return string
      */
@@ -428,10 +403,7 @@ LUA;
     /**
      * @inheritDoc
      *
-     * Size-adaptive intersection: uses SINTER when the smallest matching set is
-     * small enough to be safe, falls back to SMEMBERS + PHP array_intersect when
-     * any set is large. A bare SINTER on large sets blocks Valkey (single-threaded)
-     * for the full O(N*M) duration, starving all other PHP workers.
+     * Uses SINTER for small sets and SMEMBERS + PHP array_intersect for large sets to avoid blocking Valkey.
      */
     public function getIdsMatchingTags(array $tags): array
     {
@@ -600,9 +572,7 @@ LUA;
                     $success = false;
                 }
 
-                // Prune the index (tag sets + reverse index + all_ids) for this chunk so it does
-                // not outlive its data. pruneTagIndex owns the all_ids removal — and, on the atomic
-                // path, guards it on data-absence so a concurrent save is not clobbered (finding #4).
+                // Prunes tag sets, reverse index, and `all_ids` while protecting concurrent saves on the atomic path.
                 $this->pruneTagIndex($chunk);
 
                 // Commit each chunk separately (important for large operations)
@@ -616,10 +586,7 @@ LUA;
 
         $success = $this->cachePool->deleteItems($ids);
 
-        // Prune the index (tag sets + reverse index + all_ids) for the removed ids. all_ids removal
-        // lives inside pruneTagIndex now (data-existence-guarded on the atomic path), so we must NOT
-        // strip all_ids separately here — an unconditional srem would defeat the guard and re-create
-        // the data-present / index-missing orphan (finding #4).
+        // Prunes tag sets, reverse index, and `all_ids` via `pruneTagIndex`, preserving the data-existence guard.
         $this->pruneTagIndex($ids);
 
         // Ensure changes are committed immediately (important for MFTF and tests)
@@ -752,18 +719,13 @@ LUA;
     public function onSave(string $id, array $tags): void
     {
         if (empty($tags)) {
-            // Tagless entry: still register it in all_ids so getIdsNotMatchingTags() (and GC) can see
-            // it. CLEANING_MODE_NOT_MATCHING_TAG must remove every entry that carries none of the
-            // given tags, which includes untagged ones; without this they would be invisible to the
-            // SDIFF and survive the clean. No forward tag SET or reverse index is written — there are
-            // no tags to link.
+            // Registers tagless entries in `all_ids` so GC and `getIdsNotMatchingTags()` can find them.
+            // No tag or reverse-index entries are created because the item has no tags.
             $this->registerId($id);
             return;
         }
 
-        // Prefer the atomic, data-existence-guarded EVAL so a concurrent delete on the same id
-        // cannot leave the index contradicting the data (finding #4). Falls back to the pipeline
-        // when EVAL is unavailable (Predis/cluster) or fails.
+        // Uses atomic, data-guarded EVAL to prevent index/data inconsistencies, falling back to a pipeline when unavailable.
         if ($this->supportsAtomicEval() && $this->onSaveAtomic($id, $tags)) {
             return;
         }
@@ -772,13 +734,8 @@ LUA;
     }
 
     /**
-     * Register a (tagless) id in the all_ids set so NOT_MATCHING_TAG and GC can see it.
-     *
-     * Guarded on the data key existing so a failed or racing write cannot leave an all_ids entry
-     * with no data behind it — the same invariant the tagged onSave path enforces. The EXISTS+SADD
-     * pair is intentionally not atomic: a lost race only ever produces a transient orphan that
-     * garbageCollect() prunes (it drops all_ids members whose data key is gone), so a heavier EVAL
-     * is not warranted on this hot, per-save path.
+     * Registers tagless IDs in all_ids for NOT_MATCHING_TAG and GC, only when the data key exists.
+     * A non-atomic EXISTS + SADD is acceptable because GC removes any transient orphaned entries.
      *
      * @param string $id
      * @return void
@@ -833,10 +790,8 @@ LUA;
     {
         $idTagsKey = self::REVERSE_INDEX_PREFIX . $this->namespace . $id;
 
-        // Retag cleanup: read the id's previous tags and drop it from the forward SET of any tag it
-        // no longer carries, so stale memberships cannot linger after a re-save with a different tag
-        // set. A separate read is required because a pipeline cannot branch on a value; mirrors the
-        // legacy Cm_Cache_Backend_Redis save() array_diff of old vs new tags.
+        // Removes the ID from tags it no longer carries to prevent stale memberships after retagging.
+        // Reads previous tags separately because the pipeline cannot branch on returned values.
         $oldTags = $this->toIdsArray($this->redis->sMembers($idTagsKey));
         $removedTags = array_diff($oldTags, $tags);
 
@@ -878,9 +833,7 @@ LUA;
             return;
         }
 
-        // Prefer the atomic EVAL path: reading the reverse index and applying the removals in a
-        // single script eliminates the read/write gap that let a concurrent onSave get clobbered.
-        // Falls back to the pipelined path when EVAL is unavailable (Predis/cluster) or fails.
+        // Prefers atomic EVAL to prevent concurrent onSave conflicts, falling back to the pipeline when unavailable or failed.
         if ($this->supportsAtomicEval() && $this->pruneTagIndexAtomic($ids)) {
             return;
         }
@@ -932,9 +885,7 @@ LUA;
             return;
         }
 
-        // Drop each id from all_ids and its tag SETs, and delete its reverse index, in one
-        // pipeline. all_ids removal is unconditional here (this fallback owns it now that
-        // deleteByIds no longer removes it separately).
+        // Removes each ID from `all_ids` and tag sets and deletes its reverse index in one pipeline.
         $writePipe = $this->createPipeline();
         foreach (array_values($ids) as $i => $id) {
             $writePipe->srem(self::ALL_IDS_SET, $id);
@@ -950,11 +901,8 @@ LUA;
     }
 
     /**
-     * Whether the underlying client supports atomic single-node EVAL with computed keys.
-     *
-     * True for phpredis standalone (\Redis) and for Predis single-node/replication (EVAL runs on the
-     * master). Excludes \RedisCluster: these scripts compute their keys from ARGV (numKeys=0), which
-     * is unsafe across cluster slots, so a cluster still uses the pipelined fallback.
+     * Enables atomic EVAL for phpredis standalone and Predis single-node/replication clients.
+     * Excludes \RedisCluster because computed keys may span cluster slots; uses pipeline fallback instead.
      *
      * @return bool
      */
@@ -964,9 +912,7 @@ LUA;
     }
 
     /**
-     * Run a keyless Lua script (numKeys=0, every value passed as ARGV), normalizing the phpredis vs
-     * Predis EVAL argument order and turning a Predis error reply (exceptions=false clients) into a
-     * thrown exception so the callers' try/catch fallback behaves the same on both drivers.
+     * Runs keyless Lua scripts consistently across phpredis and Predis, normalizing EVAL arguments and error handling.
      *
      * @param string $script
      * @param array $argv
@@ -1041,14 +987,8 @@ LUA;
     }
 
     /**
-     * Iterate keys matching $pattern using SCAN (cursor-based, non-blocking), normalizing phpredis vs
-     * Predis, and yield them in batches.
-     *
-     * Deliberately avoids the KEYS command: KEYS is O(N) over the WHOLE keyspace and blocks
-     * single-threaded Redis/Valkey for the entire scan, which would starve PHP workers when it runs
-     * from the backend_clean_cache cron / cache:flush. Legacy Cm_Cache_Backend_Redis GCs the same way
-     * (SSCAN over maintained sets), never KEYS. Errors are allowed to propagate so a failed sweep is
-     * surfaced, not masked.
+     * Uses cursor-based SCAN to safely iterate matching keys in batches, normalizing phpredis and Predis behavior.
+     * Avoids blocking KEYS; errors propagate so failed cache sweeps are visible.
      *
      * @param string $pattern
      * @param int $count SCAN COUNT hint (batch size)
@@ -1080,9 +1020,8 @@ LUA;
     }
 
     /**
-     * Iterate the members of a Redis SET with SSCAN (cursor-based, non-blocking), normalizing phpredis
-     * vs Predis, and yield them in batches. This is how legacy Cm_Cache_Backend_Redis GC-scans its
-     * id/tag sets — it visits only the set's members, never the whole keyspace.
+     * Uses cursor-based SSCAN to safely iterate SET members in batches, normalizing phpredis and Predis
+     * without scanning the entire keyspace.
      *
      * @param string $key SET key
      * @param int $count SSCAN COUNT hint (batch size)
@@ -1114,10 +1053,8 @@ LUA;
     }
 
     /**
-     * Acquire the stale-cache regeneration lock atomically (SET key token NX EX ttl).
-     *
-     * Returns true for exactly one caller cluster-wide; the token identifies the owner so the
-     * lock can be released safely later. Any client error is treated as "not acquired".
+     * Atomically acquires the stale-cache regeneration lock using SET key token NX EX ttl.
+     * Returns true for one cluster-wide owner; the token enables safe release, while errors mean not acquired.
      *
      * @param string $id Cache id being regenerated
      * @param string $token Per-process ownership token
@@ -1141,10 +1078,7 @@ LUA;
     }
 
     /**
-     * Release the regeneration lock only if this process still owns it (ownership-safe delete).
-     *
-     * Uses a GET+DEL compare-and-delete in a single EVAL so a lock re-acquired by another owner
-     * (e.g. after TTL expiry) is never deleted out from under it.
+     * Safely releases the regeneration lock via atomic EVAL only when the current process still owns it.
      *
      * @param string $id Cache id
      * @param string $token The token used when acquiring
@@ -1215,9 +1149,7 @@ LUA;
             return;
         }
 
-        // Fallback: PHP-based clearing. Enumerate with SCAN (cursor-based, non-blocking) rather than
-        // KEYS — this runs on every cache:flush / clean(ALL), and KEYS would block Redis/Valkey across
-        // the whole keyspace. Delete each batch as it is scanned.
+        // Clears cache using non-blocking SCAN with batched deletes, avoiding KEYS on cache:flush/clean(ALL).
         $tagPattern = self::TAG_INDEX_PREFIX . $this->namespace . '*';
         foreach ($this->scanKeys($tagPattern, 1000) as $chunk) {
             // PHP 8+ compatibility: use call_user_func_array to avoid spread operator issues
@@ -1273,23 +1205,15 @@ LUA;
      */
     public function garbageCollect(int $batchSize = 1000): int
     {
-        // Always sweep via the reverse index. We deliberately do NOT use the Lua keyspace-scan GC
-        // (use_lua_on_gc): that script does SCAN MATCH "<namespace>*" and prunes keys whose TTL == -2,
-        // but a TTL-expired data key has already been removed from the keyspace by Redis, so SCAN
-        // never returns it — it can never find these orphans (it prunes 0). The tag SETs and reverse
-        // index persist after the data expires, so we walk the reverse index and prune the ids whose
-        // data key is gone. Mirrors legacy Cm Redis _collectGarbage() (which likewise reasons from the
-        // tag/id sets, not a keyspace scan of already-deleted keys).
+        // Always GC via the reverse index, since expired data keys are removed and cannot be found by keyspace SCAN.
+        // Prunes orphaned tag/reverse-index entries by checking missing data keys, matching legacy Cm Redis behavior.
         return $this->garbageCollectClientSide($batchSize);
     }
 
     /**
      * @inheritDoc
      *
-     * Matches legacy Cm_Cache_Backend_Redis::getFillingPercentage() exactly: reads the configured
-     * ceiling via CONFIG GET (not INFO's maxmemory field, which is not always populated), and returns 1
-     * — not 0 — when no ceiling is configured, since "unlimited" has no meaningful fullness fraction and
-     * legacy treated that as effectively empty rather than ambiguous.
+     * Matches legacy Cm_Cache_Backend_Redis::getFillingPercentage() by reading the memory ceiling via CONFIG GET.
      */
     public function getFillingPercentage(): int
     {
@@ -1310,19 +1234,9 @@ LUA;
     }
 
     /**
-     * Non-Lua garbage collection: prune tag-index members whose data key no longer exists.
-     *
-     * Enumerates the maintained id set (cache:all_ids) with SSCAN — the direct analogue of legacy Cm
-     * Redis GC-scanning its zc:ids set, and the same set getIdsNotMatchingTags() already treats as this
-     * frontend's ids. SSCAN visits only the set's members (not the whole keyspace) and never issues the
-     * blocking KEYS. For each id whose data key has TTL-expired it hands the id to pruneTagIndex(),
-     * which removes it from its tag SETs, reverse index and all_ids. Only ids confirmed missing are
-     * pruned, so live entries are never touched; the data-key derivation (dataKeyPrefix() . id) is the
-     * same one the atomic prune's EXISTS guard relies on.
-     *
-     * A scan/prune error is intentionally NOT swallowed: it propagates so garbageCollect() ->
-     * clean(OLD) reports a FAILURE (the cron logs it) rather than a successful no-op while the tag
-     * index silently grows. Mirrors legacy, which throws on a GC error (Zend_Cache::throwException).
+     * Performs non-Lua GC by SSCANning cache:all_ids and pruning IDs whose data keys are missing.
+     * pruneTagIndex() removes stale tag SET, reverse-index, and all_ids entries while preserving live data.
+     * GC errors propagate to ensure clean(OLD) reports failures instead of silently ignoring them.
      *
      * @param int $batchSize
      * @return int Number of orphaned index entries removed
@@ -1374,11 +1288,8 @@ LUA;
     }
 
     /**
-     * Clean expired items for specific tag using Lua
-     *
-     * Only deletes items that have expired (TTL = -2)
-     * More efficient than fetching all IDs and checking client-side
-     * Uses use_lua flag (general cache operations)
+     * Uses Lua to efficiently delete expired items for a specific tag
+     * , checking TTL = -2 server-side when use_lua is enabled.
      *
      * @param string $tag Tag to clean
      * @return int Number of items deleted
@@ -1411,9 +1322,8 @@ LUA;
             return 0;
         }
 
-        // phpredis expects a SINGLE [KEYS..., ARGV...] array plus the KEY count; passing ARGV as
-        // extra positional params (the previous code) throws ArgumentCountError and never reaches
-        // the script. ARGV order: [tag_prefix, namespace, chunk_size].
+        // phpredis requires a single `[KEYS..., ARGV...]` array plus key count;
+        // ARGV order: `[tag_prefix, namespace, chunk_size]`.
         $args = array_merge($tags, [self::TAG_INDEX_PREFIX, $this->namespace, 100]);
 
         try {

@@ -25,12 +25,8 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     private ExtendedBackendInterface $backend;
 
     /**
-     * Constructor
-     *
-     * The default lifetime is NOT applied here: save() forwards the lifetime through untouched
-     * (including null => no expiry, matching legacy), and the actual default TTL is applied downstream
-     * by the underlying Symfony adapter. The $defaultLifetime parameter is kept only for backward-
-     * compatible DI wiring (the frontend Factory passes it) and is intentionally unused in this class.
+     * Keeps $defaultLifetime only for backward-compatible DI wiring; actual TTL handling is delegated to the underlying Symfony adapter.
+     * save() forwards the lifetime unchanged, including null for no expiry, matching legacy behavior.
      *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
      * @param int $defaultLifetime Kept for DI wiring; applied by the underlying Symfony adapter, not here
@@ -86,10 +82,8 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
-        // Pass the lifetime through untouched (including null) so the underlying Symfony adapter's
-        // calculateActualLifetime() is the single place that applies legacy semantics: null => no
-        // expiration, false/0 => default lifetime. Coercing null to the default here forced a TTL on
-        // L2 entries that legacy stored permanently.
+        // Passes the lifetime unchanged so the Symfony adapter alone applies legacy
+        // expiration semantics, including `null` for no expiry.
         return $this->backend->save($data, $identifier, $tags, $lifeTime);
     }
 
