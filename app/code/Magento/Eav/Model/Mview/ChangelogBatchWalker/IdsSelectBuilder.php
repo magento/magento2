@@ -46,6 +46,7 @@ class IdsSelectBuilder implements IdsSelectBuilderInterface
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
 
         $connection = $this->resourceConnection->getConnection();
+        $this->setGroupConcatMax($this->calculateEavAttributeSize($changelog));
 
         $columns = [
             $changelog->getColumnName(),

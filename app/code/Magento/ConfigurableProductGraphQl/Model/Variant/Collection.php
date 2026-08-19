@@ -160,22 +160,8 @@ class Collection implements ResetAfterRequestInterface
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $childCollection->getSelect()->group('e.' . $linkField);
-        // ChildCollection::_initSelect() unconditionally selects raw link_table.parent_id
-        // (needed by every OTHER caller of that base collection, which don't group at
-        // all); once this method's own group('e.' . $linkField) is added on top, that raw
-        // column is no longer functionally dependent on the GROUP BY key (a child can
-        // have more than one parent) and Postgres rejects it outright - the whole reason
-        // parent_ids exists is to carry that same information aggregated instead. Drop
-        // the raw column here, narrowly, via setPart() rather than in the base class,
-        // since only this grouped call site is affected.
         $select = $childCollection->getSelect();
-        $select->setPart(
-            \Magento\Framework\DB\Select::COLUMNS,
-            array_values(array_filter(
-                $select->getPart(\Magento\Framework\DB\Select::COLUMNS),
-                static fn(array $column) => !($column[0] === 'link_table' && $column[1] === 'parent_id')
-            ))
-        );
+        $this->excludeRawParentIdFromGroupedSelect($select);
         $select->columns([
             'parent_ids' => $select->getAdapter()->getGroupConcatSql('link_table.parent_id')
         ]);
@@ -205,6 +191,20 @@ class Collection implements ResetAfterRequestInterface
             }
         }
         return $this->childrenMap;
+    }
+
+    /**
+     * Drop ungrouped link_table.parent_id so GROUP BY e.linkField is valid SQL.
+     */
+    private function excludeRawParentIdFromGroupedSelect(\Magento\Framework\DB\Select $select): void
+    {
+        $select->setPart(
+            \Magento\Framework\DB\Select::COLUMNS,
+            array_values(array_filter(
+                $select->getPart(\Magento\Framework\DB\Select::COLUMNS),
+                static fn (array $column) => !($column[0] === 'link_table' && $column[1] === 'parent_id')
+            ))
+        );
     }
 
     /**

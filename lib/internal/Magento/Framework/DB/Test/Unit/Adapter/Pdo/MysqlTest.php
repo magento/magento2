@@ -1132,7 +1132,7 @@ class MysqlTest extends TestCase
         $this->assertEquals(0, $adapter->getTransactionLevel());
     }
 
-    public function testGetGroupConcatSql(): void
+    public function testDialectHelpers(): void
     {
         $adapter = $this->getMysqlPdoAdapterMock(['query', 'quote']);
         $adapter->method('quote')->willReturnCallback(static function ($value) {
@@ -1147,59 +1147,42 @@ class MysqlTest extends TestCase
             "GROUP_CONCAT(DISTINCT sku ORDER BY sku SEPARATOR '|')",
             (string) $adapter->getGroupConcatSql('sku', '|', 'sku', true)
         );
-    }
-
-    public function testGetFieldSql(): void
-    {
-        $adapter = $this->getMysqlPdoAdapterMock([]);
         $this->assertSame('0', (string) $adapter->getFieldSql('status', []));
         $this->assertSame('0', (string) $adapter->getFieldSql('status', ['']));
         $this->assertSame(
             'FIELD(status, 1, 2, 3)',
             (string) $adapter->getFieldSql('status', [1, '', 2, 3])
         );
-    }
-
-    public function testCastHelpers(): void
-    {
-        $adapter = $this->getMysqlPdoAdapterMock([]);
         $this->assertSame('value', (string) $adapter->castToText('value'));
         $this->assertSame('CAST(value AS DECIMAL(20,6))', (string) $adapter->castToNumeric('value'));
     }
 
-    public function testCreateTableLike(): void
+    public function testCreateTableLikeAndTemporaryFromSelect(): void
     {
         $adapter = $this->getMysqlPdoAdapterMock(['query', 'quoteIdentifier']);
         $adapter->method('quoteIdentifier')->willReturnCallback(static function ($value) {
             return '`' . $value . '`';
         });
         $stmt = $this->createMock(\Zend_Db_Statement_Pdo::class);
-        $adapter->expects($this->once())
-            ->method('query')
-            ->with('CREATE TABLE `new_table` LIKE `origin_table`')
-            ->willReturn($stmt);
-
-        $this->assertSame($stmt, $adapter->createTableLike('new_table', 'origin_table'));
-    }
-
-    public function testCreateTemporaryTableFromSelect(): void
-    {
-        $adapter = $this->getMysqlPdoAdapterMock(['query', 'quoteIdentifier']);
-        $adapter->method('quoteIdentifier')->willReturnCallback(static function ($value) {
-            return '`' . $value . '`';
-        });
         $select = $this->createMock(Select::class);
         $select->method('__toString')->willReturn('SELECT 1');
         $select->method('getBind')->willReturn(['foo' => 'bar']);
-        $stmt = $this->createMock(\Zend_Db_Statement_Pdo::class);
-        $adapter->expects($this->once())
+        $adapter->expects($this->exactly(2))
             ->method('query')
-            ->with(
-                'CREATE TEMPORARY TABLE `tmp` (PRIMARY KEY(id)) ENGINE=`innodb` IGNORE (SELECT 1)',
-                ['foo' => 'bar']
-            )
-            ->willReturn($stmt);
+            ->willReturnCallback(function ($sql, $bind = []) use ($stmt) {
+                if ($sql === 'CREATE TABLE `new_table` LIKE `origin_table`') {
+                    $this->assertSame([], $bind);
+                    return $stmt;
+                }
+                $this->assertSame(
+                    'CREATE TEMPORARY TABLE `tmp` (PRIMARY KEY(id)) ENGINE=`innodb` IGNORE (SELECT 1)',
+                    $sql
+                );
+                $this->assertSame(['foo' => 'bar'], $bind);
+                return $stmt;
+            });
 
+        $this->assertSame($stmt, $adapter->createTableLike('new_table', 'origin_table'));
         $this->assertSame(
             $stmt,
             $adapter->createTemporaryTableFromSelect('tmp', ['PRIMARY KEY(id)'], $select)

@@ -57,7 +57,8 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
-     * @deprecated 100.0.6
+     * @deprecated 100.0.6 This method is unused. Use created_at on the consumer model instead.
+     * @see \Magento\Integration\Model\Oauth\Consumer
      *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds

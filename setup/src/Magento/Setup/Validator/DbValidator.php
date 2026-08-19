@@ -74,7 +74,8 @@ class DbValidator
      * @param string $dbPass
      * @return bool
      * @throws \Magento\Setup\Exception
-     * @deprecated
+     * @deprecated Use checkDatabaseConnectionWithDriverOptions() to pass PDO driver options.
+     * @see checkDatabaseConnectionWithDriverOptions()
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
@@ -119,20 +120,26 @@ class DbValidator
             throw new \Magento\Setup\Exception('Database connection failure.');
         }
 
-        $mysqlVersion = $connection->fetchOne('SELECT version()');
-        if ($mysqlVersion) {
-            if (preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
-                if (isset($matches[1]) && !empty($matches[1])) {
-                    if (version_compare($matches[1], Installer::MYSQL_VERSION_REQUIRED) < 0) {
-                        throw new \Magento\Setup\Exception(
-                            'Sorry, but we support MySQL version ' . Installer::MYSQL_VERSION_REQUIRED . ' or later.'
-                        );
-                    }
-                }
-            }
-        }
+        $this->assertSupportedMysqlVersion((string) $connection->fetchOne('SELECT version()'));
 
         return $this->checkDatabaseName($connection, $dbName) && $this->checkDatabasePrivileges($connection, $dbName);
+    }
+
+    /**
+     * Reject MySQL servers older than Magento's minimum version.
+     *
+     * @throws \Magento\Setup\Exception
+     */
+    private function assertSupportedMysqlVersion(string $mysqlVersion): void
+    {
+        if ($mysqlVersion === '' || !preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
+            return;
+        }
+        if (version_compare($matches[1], Installer::MYSQL_VERSION_REQUIRED) < 0) {
+            throw new \Magento\Setup\Exception(
+                'Sorry, but we support MySQL version ' . Installer::MYSQL_VERSION_REQUIRED . ' or later.'
+            );
+        }
     }
 
     /**

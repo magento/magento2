@@ -41,6 +41,8 @@ class ReadSnapshotPlugin
     }
 
     /**
+     * Merge global-scope catalog attribute values into the current-store snapshot.
+     *
      * @param ReadSnapshot $subject
      * @param array $entityData
      * @param string $entityType

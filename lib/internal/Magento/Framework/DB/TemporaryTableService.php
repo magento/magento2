@@ -16,8 +16,8 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  */
 class TemporaryTableService
 {
-    const INDEX_METHOD_HASH = 'HASH';
-    const DB_ENGINE_INNODB = 'INNODB';
+    public const INDEX_METHOD_HASH = 'HASH';
+    public const DB_ENGINE_INNODB = 'INNODB';
 
     /**
      * @var string[]

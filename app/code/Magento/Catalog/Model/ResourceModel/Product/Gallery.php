@@ -236,7 +236,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             $mainTableAlias . '.disabled = 0'
         )->order(
-            new \Zend_Db_Expr($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC)
+            $positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC
         );
 
         return $select;
