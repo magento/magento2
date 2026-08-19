@@ -167,6 +167,41 @@ class PriceRangeTest extends TestCase
     }
 
     /**
+     * Test that the deferred callback returns null when product is not found.
+     */
+    public function testDeferredCallbackReturnsNullWhenProductNotFound(): void
+    {
+        $sku = 'bundle-child-nonexistent';
+
+        $this->productDataProvider->method('addProductSku');
+        $this->productDataProvider->expects($this->once())
+            ->method('getProductBySku')
+            ->with($sku, $this->context)
+            ->willReturn([]);
+
+        $this->priceRangeDataProvider->expects($this->never())
+            ->method('prepare');
+
+        $capturedCallback = null;
+        $this->valueFactory->expects($this->once())
+            ->method('create')
+            ->willReturnCallback(function (callable $callback) use (&$capturedCallback) {
+                $capturedCallback = $callback;
+                return $this->createMock(Value::class);
+            });
+
+        $this->resolver->resolve(
+            $this->field,
+            $this->context,
+            $this->info,
+            ['sku' => $sku]
+        );
+
+        $this->assertNotNull($capturedCallback);
+        $this->assertNull($capturedCallback());
+    }
+
+    /**
      * Test that multiple resolve() calls all queue on the shared singleton
      * without triggering any DB fetch during resolve().
      */

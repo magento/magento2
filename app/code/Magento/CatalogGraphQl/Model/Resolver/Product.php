@@ -41,7 +41,7 @@ class Product implements ResolverInterface
      * @param ProductDataProvider $productDataProvider
      * @param ValueFactory $valueFactory
      * @param ProductFieldsSelector $productFieldsSelector
-     * @param ProductDataProviderFactory|null $productDataProviderFactory
+     * @param ProductDataProviderFactory|null $productDataProviderFactory @deprecated
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(

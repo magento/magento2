@@ -33,7 +33,7 @@ class Label implements ResolverInterface
     /**
      * @param ValueFactory $valueFactory
      * @param ProductDataProvider $product
-     * @param ProductDataProviderFactory|null $productFactory
+     * @param ProductDataProviderFactory|null $productFactory @deprecated
      * @param ProductDataProvider|null $productDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
