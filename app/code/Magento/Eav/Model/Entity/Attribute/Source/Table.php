@@ -103,19 +103,25 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
      * @param bool $withEmpty Add empty option to array
      * @return array
      */
-    public function getSpecificOptions($ids, $withEmpty = true)
+   public function getSpecificOptions($ids, $withEmpty = true)
     {
-        $options = $this->_attrOptionCollectionFactory->create()
-            ->setPositionOrder('asc')
-            ->setAttributeFilter($this->getAttribute()->getId())
-            ->addFieldToFilter('main_table.option_id', ['in' => $ids])
-            ->setStoreFilter($this->getAttribute()->getStoreId())
-            ->load()
-            ->toOptionArray();
-        if ($withEmpty) {
-            $options = $this->addEmptyOption($options);
+        $allOptions = $this->getAllOptions(false);
+        $specificOptions = [];
+        if (is_string($ids) && strpos($ids, ',') !== false) {
+            $ids = explode(',', $ids);
         }
-        return $options;
+        if (!is_array($ids)) {
+            $ids = (array)$ids;
+        }
+        foreach ($allOptions as $option) {
+            if (isset($option['value']) && in_array($option['value'], $ids)) {
+                $specificOptions[] = $option;
+            }
+        }
+        if ($withEmpty) {
+            $specificOptions = $this->addEmptyOption($specificOptions);
+        }
+        return $specificOptions;
     }
 
     /**
