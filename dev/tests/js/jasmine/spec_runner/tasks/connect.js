@@ -5,6 +5,7 @@
 
 'use strict';
 
+const serveStatic = require("serve-static");
 var tasks = {};
 
 function init(config) {
@@ -26,7 +27,9 @@ function init(config) {
     }
 
     middleware = function (connect, options, middlewares) {
-        var server = serveStatic(process.cwd());
+        var server = serveStatic(process.cwd(), {
+            dotfiles: 'allow'
+        });
 
         middlewares.unshift(function (req, res, next) {
             var url = req.url;
