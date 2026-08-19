@@ -3,26 +3,22 @@
  * All Rights Reserved.
  */
 
-'use strict';
-
-const serveStatic = require("serve-static");
 var tasks = {};
 
 function init(config) {
+    'use strict';
+
     var serveStatic = require('serve-static'),
-        grunt       = require('grunt'),
         _           = require('underscore'),
-        path        = require('path'),
-        ignoredPaths, middleware, themes, files, port;
+        ignoredPaths, middleware, themes, port;
 
     port         = config.port;
-    files        = config.files;
     themes       = config.themes;
     ignoredPaths = config.server.serveAsIs;
 
-    function serveAsIs(path) {
+    function serveAsIs(requestUrl) {
         return ignoredPaths.some(function (ignoredPath) {
-            return new RegExp(ignoredPath).test(path);
+            return new RegExp(ignoredPath).test(requestUrl);
         });
     }
 
@@ -58,6 +54,8 @@ function init(config) {
 }
 
 function getTasks() {
+    'use strict';
+
     return tasks;
 }
 
