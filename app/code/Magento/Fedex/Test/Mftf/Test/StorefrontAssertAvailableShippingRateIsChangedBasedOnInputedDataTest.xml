@@ -68,6 +68,7 @@
         </actionGroup>
         <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShippingLabel}}" stepKey="againWaitForFreeShippingLabelNotVisible"/>
         <actionGroup ref="StorefrontCheckForFlatRateShippingMethodAvailabilityActionGroup" stepKey="verifyFlatRateShippingMethodAfterCountryChangeToUS"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.fedexExpressShipping}}" stepKey="waitForFedexExpressShippingVisible"/>
         <executeJS function="return document.evaluate(&quot;{{CheckoutShippingMethodsSection.fedexExpressShipping}}&quot;, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null).snapshotLength" stepKey="federalExpressCount"/>
         <assertGreaterThanOrEqual stepKey="verifyFedexShippingMethodPrices">
             <actualResult type="const">$federalExpressCount</actualResult>

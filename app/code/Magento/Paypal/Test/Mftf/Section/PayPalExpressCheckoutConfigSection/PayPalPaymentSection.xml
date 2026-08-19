@@ -25,7 +25,7 @@
         <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
-        <element name="orderTotalOnPaypalCheckout" type="text" selector="//button[(@id='one-time-cta' and @data-atomic-wait-domain='xo') or @data-testid='submit-button-initial' or @data-id='payment-submit-btn']//div[starts-with(normalize-space(text()), '$')]"/>
+        <element name="orderTotalOnPaypalCheckout" type="text" selector="//button[contains(@data-dd-action-name, 'Order Tab')]//span[starts-with(normalize-space(text()), '$')]"/>
         <element name="orderTotalTabOnPaypalCheckout" type="text" selector="//div[contains(@class, 'group/accordion-item')]//button[contains(@data-dd-action-name, 'Order Tab')]"/>
         <element name="subtotal" type="text" selector="//span[text()='Subtotal']/following-sibling::span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
         <element name="shipping" type="text" selector="//span[text()='Shipping']/following-sibling::span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
