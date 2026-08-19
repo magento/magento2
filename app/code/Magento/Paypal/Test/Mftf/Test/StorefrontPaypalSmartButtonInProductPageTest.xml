@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-26167"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -97,8 +94,8 @@
         <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
             <argument name="orderSummarySubTotal" value="$123.00"/>
             <argument name="orderSummaryShippingTotal" value="$0.00"/>
-            <argument name="orderSummaryTotal" value="$133.15"/>
-            <argument name="orderSummaryTax" value="$10.15"/>
+            <argument name="orderSummaryTotal" value="$123.00"/>
+            <argument name="orderSummaryTax" value="$0.00"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>

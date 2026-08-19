@@ -35,6 +35,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutFromAdmin"/>
             <!-- Disable free shipping method -->
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>

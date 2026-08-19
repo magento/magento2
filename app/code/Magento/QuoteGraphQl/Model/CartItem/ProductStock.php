@@ -277,7 +277,23 @@ class ProductStock
     }
 
     /**
-     * Get product saleable qty when "Catalog > Inventory > Stock Options > Only X left Threshold" is greater than 0
+     * Check if product is available for sale
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    public function checkIfProductIsAvailable(ProductInterface $product): bool
+    {
+        $stockItem = $this->stockRegistry->getStockItem(
+            $product->getId(),
+            $product->getStore()->getWebsiteId()
+        );
+        return $stockItem->getIsInStock()
+            && (float) $stockItem->getQty() >= (float) $stockItem->getMinSaleQty();
+    }
+
+    /**
+     * Get product salable qty when "Catalog > Inventory > Stock Options > Only X left Threshold" is greater than 0
      *
      * @param ProductInterface $product
      * @param float|null $thresholdQty

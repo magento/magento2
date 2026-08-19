@@ -85,7 +85,7 @@ class AssociatedProductsTest extends TestCase
     private Escaper $escaper;
 
     /**
-     * @inhertidoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

@@ -153,18 +153,7 @@ class Factory
     {
         $options = $this->_getExpandedOptions($options);
 
-        // Optimize: Cache directory operations
-        foreach (['backend_options', 'slow_backend_options'] as $section) {
-            if (!empty($options[$section]['cache_dir'])) {
-                $cacheDir = $options[$section]['cache_dir'];
-                if (!isset($this->cachedDirectories[$cacheDir])) {
-                    $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-                    $directory->create($cacheDir);
-                    $this->cachedDirectories[$cacheDir] = $directory->getAbsolutePath($cacheDir);
-                }
-                $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheDir];
-            }
-        }
+        $this->prepareCacheDirectories($options);
 
         // Optimize: Use cached ID prefix or generate once
         $idPrefix = $this->getIdPrefix($options);
@@ -490,13 +479,29 @@ class Factory
             if (!empty($options[$section]['cache_dir'])) {
                 $cacheDir = $options[$section]['cache_dir'];
                 if (!isset($this->cachedDirectories[$cacheDir])) {
-                    $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-                    $directory->create($cacheDir);
-                    $this->cachedDirectories[$cacheDir] = $directory->getAbsolutePath($cacheDir);
+                    $this->cachedDirectories[$cacheDir] = $this->resolveCacheDir($cacheDir);
                 }
                 $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheDir];
             }
         }
+    }
+
+    /**
+     * Resolve a cache_dir value to an absolute path.
+     *
+     * Absolute paths (e.g. /dev/shm/magento_l1) are required for L2 cache configuration and returned as-is.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function resolveCacheDir(string $path): string
+    {
+        if (str_starts_with($path, DIRECTORY_SEPARATOR)) {
+            return $path;
+        }
+        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory->create($path);
+        return $directory->getAbsolutePath($path);
     }
 
     /**

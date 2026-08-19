@@ -7,17 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Validator;
 
-use Magento\Customer\Model\Address;
-use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Phrase;
 
 /**
- * Customer telephone fields validator.
+ * Customer telephone field validator.
  */
-class Telephone extends AbstractValidator
+class Telephone extends AbstractAddressFieldValidator
 {
-    /**
-     * Maximum allowed length for telephone value.
-     */
+    /** Matches customer_address_entity.telephone varchar(255) and quote_address.telephone varchar(255). */
     private const MAX_TELEPHONE_LENGTH = 255;
 
     /**
@@ -34,57 +31,53 @@ class Telephone extends AbstractValidator
     private const PATTERN_TELEPHONE_CHARSET = '/^[\d\s+().\/ -]+$/u';
 
     /**
-     * Validate telephone fields.
-     *
-     * @param \Magento\Customer\Model\Address $value
-     * @return bool
+     * @inheritdoc
      */
-    public function isValid($value): bool
+    public function getFieldKey(): string
     {
-        $telephoneValue = (string)$value->getTelephone();
-        if (!$this->isValidTelephoneLength($telephoneValue)) {
-            parent::_addMessages([[
-                'telephone' => __(
-                    'Invalid Phone Number. The phone number is too long. Enter no more than %1 characters.',
-                    self::MAX_TELEPHONE_LENGTH
-                )
-            ]]);
-        } elseif (!$this->isValidTelephoneCharset($telephoneValue)) {
-            parent::_addMessages([[
-                'telephone' => "Invalid Phone Number. Please use 0-9, +, -, (, ), ., / and space."
-            ]]);
-        }
-
-        return count($this->_messages) == 0;
+        return 'telephone';
     }
 
     /**
-     * Check if telephone field is valid.
-     *
-     * @param string|null $telephoneValue
-     * @return bool
+     * @inheritdoc
      */
-    private function isValidTelephoneLength(?string $telephoneValue): bool
+    public function getMaxLength(): int
     {
-        if ($telephoneValue !== null) {
-            return mb_strlen($telephoneValue) <= self::MAX_TELEPHONE_LENGTH;
-        }
-
-        return true;
+        return self::MAX_TELEPHONE_LENGTH;
     }
 
     /**
-     * Check if telephone field uses only allowed characters.
-     *
-     * @param string|null $telephoneValue
-     * @return bool
+     * @inheritdoc
      */
-    private function isValidTelephoneCharset(?string $telephoneValue): bool
+    public function getCharsetPattern(): string
     {
-        if ($telephoneValue !== null && $telephoneValue !== '') {
-            return preg_match(self::PATTERN_TELEPHONE_CHARSET, $telephoneValue) === 1;
-        }
+        return self::PATTERN_TELEPHONE_CHARSET;
+    }
 
-        return true;
+    /**
+     * @inheritdoc
+     */
+    public function getLengthErrorMessage(): Phrase
+    {
+        return __(
+            'Invalid Phone Number. The phone number is too long. Enter no more than %1 characters.',
+            self::MAX_TELEPHONE_LENGTH
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCharsetErrorMessage(): Phrase
+    {
+        return __('Invalid Phone Number. Please use 0-9, +, -, (, ), ., / and space.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getFieldValues(mixed $value): array
+    {
+        return [(string)$value->getTelephone()];
     }
 }

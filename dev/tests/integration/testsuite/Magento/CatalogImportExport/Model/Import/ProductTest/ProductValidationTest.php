@@ -31,6 +31,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * @magentoAppArea adminhtml
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductValidationTest extends ProductTestBase
 {
@@ -378,6 +379,29 @@ class ProductValidationTest extends ProductTestBase
         $this->assertEquals(
             "Value for 'weight' attribute contains incorrect value",
             $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
+        );
+    }
+
+    #[
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'attribute_set_code', 'product_type', 'name', 'price', 'weight'],
+                    ['simple-negative-price', '', 'Default', 'simple', 'Negative Price Product', '-10', '1'],
+                ]
+            ],
+            'file'
+        )
+    ]
+    public function testProductWithNegativePrice(): void
+    {
+        $pathToFile = DataFixtureStorageManager::getStorage()->get('file')->getAbsolutePath();
+        $errors = $this->createImportModel($pathToFile)->validateData();
+        $this->assertErrorsCount(1, $errors);
+        $this->assertStringContainsString(
+            "must be greater than or equal to",
+            $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
         );
     }
 

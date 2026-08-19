@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleProductExcludingTaxPriceConsistencyWithGbpCurrencyTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product excluding tax price display with GBP currency"/>
+            <title value="Bundle product excluding tax prices are consistent on PDP and cart with GBP currency"/>
+            <description value="Verify bundle excluding tax prices are consistent on PDP, customization, and cart with GBP currency and UK"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4673"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForGBP.value}},{{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencies"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyGBPConfig.scope}} --scope-code={{SetDefaultCurrencyGBPConfig.scope_code}} {{SetDefaultCurrencyGBPConfig.path}} {{SetDefaultCurrencyGBPConfig.value}}" stepKey="setDefaultDisplayCurrencyForMainWebsite"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="openCurrencyRatesPage"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setUsdToGbpRate">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="GBP"/>
+                <argument name="rate" value="0.74"/>
+            </actionGroup>
+            <!-- Create UK VAT 20% tax rate and rule -->
+            <createData entity="taxRateCustomRateUK" stepKey="createUkVatTaxRate">
+                <field key="code">UK VAT 20%</field>
+                <field key="rate">20.0000</field>
+                <field key="zip_is_range">0</field>
+                <field key="tax_postcode">*</field>
+                <field key="tax_region_id">0</field>
+            </createData>
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createUkVatTaxRule">
+                <argument name="taxRate" value="$$createUkVatTaxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <!-- Configure tax calculation and display settings -->
+            <magentoCLI command="config:set {{TaxCalculationUnitBaseAlgorithm.path}} {{TaxCalculationUnitBaseAlgorithm.value}}" stepKey="setTaxCalculationUnitPrice"/>
+            <magentoCLI command="config:set {{TaxCalculationBasedOnOrigin.path}} {{TaxCalculationBasedOnOrigin.value}}" stepKey="setTaxCalculationBasedOnOrigin"/>
+            <magentoCLI command="config:set {{CustomShippingPricesConfigData.path}} {{CustomShippingPricesConfigData.value}}" stepKey="setShippingPricesIncludingTax"/>
+            <magentoCLI command="config:set {{ApplyCustomerTaxBeforeDiscount.path}} {{ApplyCustomerTaxBeforeDiscount.value}}" stepKey="setApplyCustomerTaxBeforeDiscount"/>
+            <magentoCLI command="config:set {{ApplyDiscountOnPricesIncludingTax.path}} {{ApplyDiscountOnPricesIncludingTax.value}}" stepKey="setApplyDiscountOnPricesIncludingTax"/>
+            <magentoCLI command="config:set {{UkTaxDefaultCountry.path}} {{UkTaxDefaultCountry.value}}" stepKey="setDefaultTaxCountryUk"/>
+            <magentoCLI command="config:set {{ShippingTaxClassTaxableGoods.path}} {{ShippingTaxClassTaxableGoods.value}}" stepKey="setShippingTaxClassTaxableGoods"/>
+            <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="setCatalogDisplayBothPrices"/>
+            <magentoCLI command="config:set {{DisplayShippingPricesInCatalogIncludingTax.path}} {{DisplayShippingPricesInCatalogIncludingTax.value}}" stepKey="setCatalogShippingDisplayIncludingTax"/>
+            <magentoCLI command="config:set {{CustomCartDisplayPrice.path}} {{CustomCartDisplayPrice.value}}" stepKey="setCartDisplayBothPrices"/>
+            <magentoCLI command="config:set {{CustomCartDisplaySubtotal.path}} {{CustomCartDisplaySubtotal.value}}" stepKey="setCartSubtotalDisplayBothPrices"/>
+            <magentoCLI command="config:set {{CustomCartDisplayShipping.path}} {{CustomCartDisplayShipping.value}}" stepKey="setCartShippingDisplayBothPrices"/>
+            <magentoCLI command="config:set {{DisplaySubtotal.path}} {{DisplaySubtotal.value}}" stepKey="setSalesSubtotalDisplayBothPrices"/>
+            <magentoCLI command="config:set {{DisplayShippingAmount.path}} {{DisplayShippingAmount.value}}" stepKey="setSalesShippingDisplayBothPrices"/>
+            <magentoCLI command="config:set {{CustomDisplaySalesPrice.path}} {{CustomDisplaySalesPrice.value}}" stepKey="setSalesPriceDisplayBothPrices"/>
+            <!-- Create simple product and bundle with required option of 8x simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">29.79</field>
+                <field key="weight">1</field>
+            </createData>
+            <!-- Create bundle product -->
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">true</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkSimpleProductToBundle">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+                <field key="qty">8</field>
+                <field key="is_default">1</field>
+                <field key="can_change_quantity">0</field>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete products -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteUkVatTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="createUkVatTaxRate" stepKey="deleteUkVatTaxRate"/>
+            <!-- Revert currency configuration -->
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyUSDConfig.scope}} --scope-code={{SetDefaultCurrencyUSDConfig.scope_code}} {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultDisplayCurrencyForMainWebsite"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencies"/>
+            <!-- Revert tax configuration -->
+            <magentoCLI command="config:set {{DefaultTaxCalculationTotalBaseAlgorithm.path}} {{DefaultTaxCalculationTotalBaseAlgorithm.value}}" stepKey="resetTaxCalculationAlgorithm"/>
+            <magentoCLI command="config:set {{DefaultTaxCalculationBasedOnShipping.path}} {{DefaultTaxCalculationBasedOnShipping.value}}" stepKey="resetTaxCalculationBasedOn"/>
+            <magentoCLI command="config:set {{ShippingPricesConfigData.path}} {{ShippingPricesConfigData.value}}" stepKey="resetShippingPricesIncludingTax"/>
+            <magentoCLI command="config:set {{DefaultApplyCustomerTaxAfterDiscount.path}} {{DefaultApplyCustomerTaxAfterDiscount.value}}" stepKey="resetApplyCustomerTaxAfterDiscount"/>
+            <magentoCLI command="config:set {{DefaultApplyDiscountOnPricesExcludingTax.path}} {{DefaultApplyDiscountOnPricesExcludingTax.value}}" stepKey="resetApplyDiscountOnPricesExcludingTax"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{DefaultTaxDestinationCountry.value}}" stepKey="resetDefaultTaxCountry"/>
+            <magentoCLI command="config:set {{DefaultShippingTaxClass.path}} {{DefaultShippingTaxClass.value}}" stepKey="resetShippingTaxClass"/>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="resetCatalogDisplay"/>
+            <magentoCLI command="config:set {{DefaultDisplayShippingPricesInCatalog.path}} {{DefaultDisplayShippingPricesInCatalog.value}}" stepKey="resetCatalogShippingDisplay"/>
+            <magentoCLI command="config:set {{DefaultCartDisplayPrice.path}} {{DefaultCartDisplayPrice.value}}" stepKey="resetCartDisplay"/>
+            <magentoCLI command="config:set {{DefaultCartDisplaySubtotal.path}} {{DefaultCartDisplaySubtotal.value}}" stepKey="resetCartSubtotalDisplay"/>
+            <magentoCLI command="config:set {{DisplayShippingAmountConfigData.path}} {{DisplayShippingAmountConfigData.value}}" stepKey="resetCartShippingDisplay"/>
+            <magentoCLI command="config:set {{DefaultDisplaySubtotal.path}} {{DefaultDisplaySubtotal.value}}" stepKey="resetSalesSubtotalDisplay"/>
+            <magentoCLI command="config:set {{DefaultDisplayShippingAmount.path}} {{DefaultDisplayShippingAmount.value}}" stepKey="resetSalesShippingDisplay"/>
+            <magentoCLI command="config:set {{DefaultDisplaySalesPrice.path}} {{DefaultDisplaySalesPrice.value}}" stepKey="resetSalesPriceDisplay"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterRevert">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Open bundle product PDP and capture excluding tax price -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- grab PDP excluding tax price -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.excludingTaxPrice}}" stepKey="waitForPdpExcludingTaxPrice"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.excludingTaxPrice}}" stepKey="grabPdpExcludingTaxPrice"/>
+        <!-- Open customization section and verify excluding tax price matches PDP -->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <waitForElementVisible selector="{{StorefrontBundledSection.customizationExcludingTaxPrice}}" stepKey="waitForCustomizationExcludingTaxPrice"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.customizationExcludingTaxPrice}}" stepKey="grabCustomizationExcludingTaxPrice"/>
+        <assertEquals message="Excluding tax price on PDP must match customization section" stepKey="assertCustomizationExcludingTaxMatchesPdp">
+            <actualResult type="const">$grabCustomizationExcludingTaxPrice</actualResult>
+            <expectedResult type="const">$grabPdpExcludingTaxPrice</expectedResult>
+        </assertEquals>
+        <!-- grab bundle child product excluding tax price -->
+        <waitForElementVisible selector="{{StorefrontBundledSection.customizationChildExcludingTaxPrice($$createSimpleProduct.name$$)}}" stepKey="waitForCustomizationChildExcludingTaxPrice"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.customizationChildExcludingTaxPrice($$createSimpleProduct.name$$)}}" stepKey="grabCustomizationChildExcludingTaxPrice"/>
+        <!-- Add bundle to cart -->
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddBundleToCart"/>
+        <waitForPageLoad stepKey="waitForBundleAddedToCart"/>
+        <!-- Open shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCart"/>
+        <!-- Verify bundle product excluding tax price in cart -->
+        <waitForElementVisible selector="{{StorefrontBundledSection.cartItemSubtotalExcludingTaxByName($$createBundleProduct.name$$)}}" stepKey="waitForCartBundleSubtotalExcludingTax"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.cartItemSubtotalExcludingTaxByName($$createBundleProduct.name$$)}}" stepKey="grabCartBundleSubtotalExcludingTax"/>
+        <assertEquals message="Bundle product excluding tax price must match between PDP and cart" stepKey="assertCartBundleExcludingTaxMatchesPdp">
+            <actualResult type="const">$grabCartBundleSubtotalExcludingTax</actualResult>
+            <expectedResult type="const">$grabPdpExcludingTaxPrice</expectedResult>
+        </assertEquals>
+        <!-- Verify bundle child product excluding tax price in cart -->
+        <waitForElementVisible selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" stepKey="waitForCartBundleChildOptions"/>
+        <grabTextFrom selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" stepKey="grabCartBundleChildOptions"/>
+        <assertStringContainsString stepKey="assertCartChildExcludingTaxMatchesCustomization">
+            <actualResult type="const">$grabCartBundleChildOptions</actualResult>
+            <expectedResult type="const">$grabCustomizationChildExcludingTaxPrice</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

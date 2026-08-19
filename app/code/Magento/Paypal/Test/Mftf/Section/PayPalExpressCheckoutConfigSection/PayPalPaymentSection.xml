@@ -38,5 +38,8 @@
         <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])[1]" parameterized="true"/>
         <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
         <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
+        <!-- Union selector: resolves as soon as either the password field OR the use-password
+             button appears after the email step. Used as a stable gate before conditionalClick. -->
+        <element name="passwordOrUsePasswordButton" type="button" selector="(//input[contains(@name, 'password') and not(contains(@style, 'display:none'))] | //button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
     </section>
 </sections>

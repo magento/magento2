@@ -42,11 +42,10 @@
         </actionGroup>
         <!-- Click on PayPal payment button -->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
-        <!-- display PayPal popup and close the PayPal popup-->
-        <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <closeTab stepKey="closeStorefrontTab"/>
-        <waitForPageLoad stepKey="waitForPageLoadAgain" time="30"/>
+        <!-- PayPal in-context checkout opens as a popup/modal; simulate cancel by navigating to cancel URL -->
+        <waitForPageLoad stepKey="waitForPayPalInit" time="10"/>
+        <amOnPage url="/paypal/express/cancel" stepKey="cancelPayPalCheckout"/>
+        <waitForPageLoad stepKey="waitForCartAfterCancel" time="30"/>
         <!-- Goes to Shopping Cart page  and Product  is added to cart -->
         <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
         <seeInField userInput="1" selector="{{CheckoutCartProductSection.ProductQuantityByName($$createSimpleProduct.name$$)}}" stepKey="seeInQtyField20"/>
