@@ -7,18 +7,30 @@
 namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
 
 /**
- * PHPStan-only stub for RedisBase.
+ * PHPStan-only stub for RedisBase and RedisBaseStub.
  *
  * At runtime, lib/internal/Magento/Framework/Cache/Frontend/Adapter/Symfony/RedisBase.php resolves
  * RedisBase to \Redis via class_alias() when the phpredis extension is present (SlaveAwareRedis is
- * only ever instantiated on that code path); a stub class is aliased instead when phpredis is
- * absent. Static analysis cannot see through class_alias(), so without this stub PHPStan resolves
- * RedisBase to an empty class and flags every parent::get()/parent::mget() call in SlaveAwareRedis
- * as an undefined method.
+ * only ever instantiated on that code path); when phpredis is absent, it instead aliases RedisBase
+ * to RedisBaseStub (declared in the sibling RedisBaseStub.php).
+ *
+ * That file contains two class_alias() calls targeting RedisBase - one to \Redis, one to
+ * RedisBaseStub. PHPStan follows literal class_alias() calls itself, and resolves RedisBase through
+ * to RedisBaseStub (not \Redis), reporting undefined-method errors against RedisBaseStub. Both
+ * names are stubbed here as extending \Redis so that, whichever one PHPStan's alias-following
+ * lands on, SlaveAwareRedis's parent::get()/mget() calls resolve correctly instead of being flagged
+ * as undefined.
  *
  * This file is never loaded by the application or Composer's autoloader (registered only via
- * phpstan.neon's stubFiles) - it exists purely to describe RedisBase's real shape to PHPStan.
+ * phpstan.neon's stubFiles) - it exists purely to describe these classes' real shape to PHPStan.
  */
 class RedisBase extends \Redis
+{
+}
+
+/**
+ * @see RedisBase
+ */
+class RedisBaseStub extends \Redis
 {
 }
