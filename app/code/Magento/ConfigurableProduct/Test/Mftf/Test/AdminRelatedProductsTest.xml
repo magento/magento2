@@ -194,7 +194,7 @@
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$simple2Handle.name$$')}}" stepKey="checkRelatedProcut"/>
 
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
+            <argument name="productName" value="$$baseConfigProductHandle.name$$ and $$simple2Handle.name$$"/>
         </actionGroup>
 
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="2" stepKey="seeItemCounterInMiniCart"/>
