@@ -37,7 +37,7 @@ if (!class_exists(RedisBase::class, false)) {
         // optimized/authoritative Composer classmap can never resolve RedisBase to anything other
         // than this conditional (a literal "class RedisBase" in a second file would let the classmap
         // generator bind that name to the stub file, permanently shadowing the phpredis branch).
-        require __DIR__ . '/RedisBaseStub.php';
+        require_once __DIR__ . '/RedisBaseStub.php';
         class_alias(RedisBaseStub::class, RedisBase::class);
     }
 }
