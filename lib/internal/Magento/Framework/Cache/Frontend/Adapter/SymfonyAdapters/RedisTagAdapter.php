@@ -867,8 +867,7 @@ LUA;
     }
 
     /**
-     * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete its
-     * reverse-index key.
+     * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete its reverse-index key.
      *
      * Prefers an atomic EVAL and falls back to a pipelined path.
      *

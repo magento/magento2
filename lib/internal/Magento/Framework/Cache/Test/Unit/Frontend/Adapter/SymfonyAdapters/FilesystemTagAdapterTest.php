@@ -117,7 +117,6 @@ class FilesystemTagAdapterTest extends TestCase
         $withoutTrailingSlash = new FilesystemTagAdapter($this->cachePoolMock, $tempDir);
 
         $property = new \ReflectionProperty(FilesystemTagAdapter::class, 'tagDirectory');
-        $property->setAccessible(true);
 
         $this->assertSame($tempDir . '/tags/', $property->getValue($withTrailingSlash));
         $this->assertSame($tempDir . '/tags/', $property->getValue($withoutTrailingSlash));
