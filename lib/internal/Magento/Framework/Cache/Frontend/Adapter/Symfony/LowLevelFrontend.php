@@ -17,7 +17,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * Provides backward-compatible interface for legacy code
  * Used by code that needs direct access to cache internals
  */
-class LowLevelFrontend
+class LowLevelFrontend implements LowLevelFrontendInterface
 {
     /**
      * @var CacheItemPoolInterface

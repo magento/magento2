@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\Cache;
 
+use Magento\Framework\Cache\Backend\BackendInterface;
 use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontendInterface;
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
@@ -68,17 +70,17 @@ interface FrontendInterface
      * Symfony-backed frontends return a PSR-6 pool / Magento BackendInterface; the legacy Zend
      * adapter returns a \Zend_Cache_Backend_Interface. Both remain supported.
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|\Zend_Cache_Backend_Interface
+     * @return \Zend_Cache_Backend_Interface|BackendInterface
      */
     public function getBackend();
 
     /**
      * Retrieve low-level frontend instance for compatibility
      *
-     * Symfony-backed frontends return a PSR-6 pool; the legacy Zend adapter returns a
-     * \Zend_Cache_Core (compatible with Zend Locale Data setCache()). Both remain supported.
+     * Symfony-backed frontends return a Symfony low-level wrapper; the legacy Zend adapter returns
+     * a \Zend_Cache_Core (compatible with Zend Locale Data setCache()). Both remain supported.
      *
-     * @return \Psr\Cache\CacheItemPoolInterface|\Zend_Cache_Core
+     * @return \Zend_Cache_Core|LowLevelFrontendInterface
      */
     public function getLowLevelFrontend();
 }

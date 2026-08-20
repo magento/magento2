@@ -146,22 +146,6 @@ class BackendWrapper implements BackendInterface
     }
 
     /**
-     * Set an option
-     *
-     * @param string $name Option name
-     * @param mixed $value Option value
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    // phpcs:disable Magento2.CodeAnalysis.EmptyBlock
-    public function setOption($name, $value)
-    {
-        // Intentional no-op: Symfony backend options are not stored in the wrapper
-        // This method exists for BackendInterface compliance but does nothing
-    }
-    // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
-
-    /**
      * Clear all cache entries
      *
      * @return bool
@@ -173,16 +157,10 @@ class BackendWrapper implements BackendInterface
     }
 
     /**
-     * Get backend option
-     *
-     * @param string $name
-     * @return mixed
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
-    public function getOption($name)
+    public function setDirectives($directives)
     {
-        // Symfony backend options are not stored in the wrapper
-        // This method exists for Zend compatibility but returns null
-        return null;
+        // Intentional no-op: Symfony backend options are not stored in the wrapper
     }
 }

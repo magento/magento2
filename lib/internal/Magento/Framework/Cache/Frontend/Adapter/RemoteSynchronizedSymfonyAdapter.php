@@ -9,6 +9,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontendInterface;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
@@ -17,7 +18,9 @@ use Magento\Framework\Cache\FrontendInterface;
  * This adapter implements FrontendInterface and wraps a RemoteSynchronizedCache backend,
  * allowing L2 cache to work seamlessly with Symfony cache backends.
  */
-class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
+class RemoteSynchronizedSymfonyAdapter implements
+    FrontendInterface,
+    LowLevelFrontendInterface
 {
     /**
      * @var ExtendedBackendInterface
@@ -98,7 +101,7 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     /**
      * @inheritDoc
      */
-    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = []): bool
     {
         return $this->backend->clean($mode, $tags);
     }
