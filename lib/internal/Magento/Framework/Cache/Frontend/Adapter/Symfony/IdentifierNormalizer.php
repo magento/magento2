@@ -15,7 +15,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
  * case/separator (e.g. "SYSTEM_DEFAULT:hash") resolves to the same slot as the runtime id the app
  * loads (e.g. "system_default:hash") — both become "SYSTEM_DEFAULT_HASH".
  */
-final class IdentifierNormalizer
+class IdentifierNormalizer
 {
     /**
      * Normalize an identifier: upper-case, "." -> "__", and any other non [A-Za-z0-9_] char -> "_".

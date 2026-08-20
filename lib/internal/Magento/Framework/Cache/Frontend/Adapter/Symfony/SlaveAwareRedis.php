@@ -128,6 +128,7 @@ class SlaveAwareRedis extends RedisBase
                     return false;                        // legacy default: a replica miss stays a miss
                 }
                 // retry_reads_on_master: replica miss (e.g. replication lag) -> read master
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Throwable $e) {
                 // replica error -> read master (more resilient than legacy, which rethrows non-LOADING)
             }
@@ -137,6 +138,9 @@ class SlaveAwareRedis extends RedisBase
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function mget($keys): \Redis|array|false
     {
@@ -175,6 +179,7 @@ class SlaveAwareRedis extends RedisBase
                         $j++;
                     }
                 }
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Throwable $e) {
                 // keep the replica results on master error
             }

@@ -175,10 +175,10 @@ class FilesystemTagAdapter implements TagAdapterInterface
     /**
      * Read-modify-write a tag file while holding an exclusive lock for the whole cycle.
      *
-     * flock(LOCK_EX) spans the read and the write, so concurrent PHP-FPM workers on the same host
-     * can no longer lose an update (the previous getTagIds/setTagIds pair only locked the write,
-     * leaving the read-modify-write racy). $transform receives the current ids and returns the new
-     * ids, or null to signal "no change" (skips the rewrite).
+     * Holding flock(LOCK_EX) across the whole cycle means concurrent PHP-FPM workers on the same
+     * host can no longer lose an update (the previous getTagIds/setTagIds pair only locked the
+     * write, leaving the read-modify-write racy). $transform receives the current ids and returns
+     * the new ids, or null to signal "no change" (skips the rewrite).
      *
      * @param string $tag
      * @param callable $transform fn(array $ids): ?array
@@ -190,17 +190,19 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Read-modify-write a line-per-entry index file while holding an exclusive lock for the whole
-     * cycle. Used for both tag files (tag -> ids) and reverse-index files (id -> tags).
+     * Read-modify-write a line-per-entry index file while holding an exclusive lock for the whole cycle.
      *
-     * flock(LOCK_EX) spans the read and the write, so concurrent workers on the same host cannot
-     * lose an update. $transform receives the current entries and returns the new entries, or null
-     * to signal "no change" (skips the rewrite). An empty result deletes the file.
+     * Used for both tag files (tag -> ids) and reverse-index files (id -> tags). Holding
+     * flock(LOCK_EX) across the whole cycle means concurrent workers on the same host cannot lose
+     * an update. $transform receives the current entries and returns the new entries, or null to
+     * signal "no change" (skips the rewrite). An empty result deletes the file.
      *
      * @param string $file
      * @param string $dir Directory that must exist before writing
      * @param callable $transform fn(array $entries): ?array
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function mutateFileLocked(string $file, string $dir, callable $transform): void
     {

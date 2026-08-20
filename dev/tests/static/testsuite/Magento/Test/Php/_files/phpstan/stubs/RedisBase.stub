@@ -1,0 +1,24 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+
+namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
+
+/**
+ * PHPStan-only stub for RedisBase.
+ *
+ * At runtime, lib/internal/Magento/Framework/Cache/Frontend/Adapter/Symfony/RedisBase.php resolves
+ * RedisBase to \Redis via class_alias() when the phpredis extension is present (SlaveAwareRedis is
+ * only ever instantiated on that code path); a stub class is aliased instead when phpredis is
+ * absent. Static analysis cannot see through class_alias(), so without this stub PHPStan resolves
+ * RedisBase to an empty class and flags every parent::get()/parent::mget() call in SlaveAwareRedis
+ * as an undefined method.
+ *
+ * This file is never loaded by the application or Composer's autoloader (registered only via
+ * phpstan.neon's stubFiles) - it exists purely to describe RedisBase's real shape to PHPStan.
+ */
+class RedisBase extends \Redis
+{
+}

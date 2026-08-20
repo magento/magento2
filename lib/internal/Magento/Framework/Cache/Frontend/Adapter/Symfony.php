@@ -23,6 +23,7 @@ use Symfony\Component\Cache\CacheItem;
  * Symfony Cache adapter for Magento
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Symfony implements FrontendInterface
 {
@@ -51,9 +52,14 @@ class Symfony implements FrontendInterface
      * re-created after a fork, the tag adapter is rebuilt too — otherwise it keeps the extracted
      * PARENT Redis connection and corrupts tag operations in the child.
      *
-     * @var Closure|null
+     * Typed as `callable` (not `\Closure`) even though a Closure is always passed: the DI constructor
+     * validator (Magento\Framework\Code\Validator\TypeDuplication) flags a second constructor argument
+     * typed to the same concrete class as $cacheFactory. `callable` is a scalar/pseudo-type the
+     * validator explicitly exempts, and any Closure already satisfies it, so behavior is unchanged.
+     *
+     * @var callable|null
      */
-    private ?Closure $adapterFactory;
+    private $adapterFactory;
 
     /**
      * @var int
@@ -125,13 +131,15 @@ class Symfony implements FrontendInterface
      * @param TagAdapterInterface|null $adapter Backend-specific tag adapter
      * @param int $defaultLifetime Default cache lifetime in seconds
      * @param string $idPrefix Cache ID prefix
+     * @param callable|null $adapterFactory Factory that (re)builds the tag adapter; always a Closure
+     *        in practice, typed `callable` to avoid a duplicate-\Closure-type DI validator failure
      */
     public function __construct(
         Closure $cacheFactory,
         ?TagAdapterInterface $adapter = null,
         int $defaultLifetime = self::DEFAULT_LIFETIME,
         string $idPrefix = self::DEFAULT_CACHE_PREFIX,
-        ?Closure $adapterFactory = null
+        ?callable $adapterFactory = null
     ) {
         $this->cacheFactory = $cacheFactory;
         $this->adapterFactory = $adapterFactory;

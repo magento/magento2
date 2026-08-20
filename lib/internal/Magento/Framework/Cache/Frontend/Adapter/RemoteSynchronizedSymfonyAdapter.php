@@ -60,8 +60,10 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     }
 
     /**
-     * Batched multi-load (used by the preloading wrapper). Delegates to the L2 backend's loadMultiple()
-     * when available (one round-trip to the remote tier); otherwise falls back to per-key loads.
+     * Batched multi-load (used by the preloading wrapper).
+     *
+     * Delegates to the L2 backend's loadMultiple() when available (one round-trip to the remote
+     * tier); otherwise falls back to per-key loads.
      *
      * @param string[] $identifiers
      * @return array<string, mixed>

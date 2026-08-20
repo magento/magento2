@@ -70,6 +70,7 @@ class BackendWrapper implements BackendInterface
      * @param string $id Cache id
      * @param bool $doNotTestCacheValidity If true, validity not tested
      * @return string|false Cached data or false if not available
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load($id, $doNotTestCacheValidity = false)
     {

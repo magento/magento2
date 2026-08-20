@@ -27,6 +27,7 @@ use Magento\Framework\Cache\FrontendInterface;
  * - Sync: :hash mechanism detects stale local data
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 {
@@ -362,8 +363,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see an
-     * index_tags=false file index.
+     * Empty the local (L1) tier completely.
+     *
+     * Bypasses the tag-scoped clean() that cannot see an index_tags=false file index.
      *
      * @return void
      */
@@ -739,8 +741,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op
-     * otherwise). Cheap: only issues a call when this process is recorded as the lock holder.
+     * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op otherwise).
+     *
+     * Cheap: only issues a call when this process is recorded as the lock holder.
      *
      * @param string $id
      * @return void
@@ -816,8 +819,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Generate a unique per-process lock signature (pid-host-random) so lock ownership
-     * is unambiguous across servers.
+     * Generate a unique per-process lock signature (pid-host-random) so lock ownership is unambiguous across servers.
      *
      * @return string
      */

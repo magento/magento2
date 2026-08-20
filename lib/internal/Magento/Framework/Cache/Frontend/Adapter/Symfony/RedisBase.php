@@ -31,12 +31,13 @@ if (!class_exists(RedisBase::class, false)) {
         // phpredis present: base IS \Redis, so SlaveAwareRedis inherits the real client.
         class_alias(\Redis::class, RedisBase::class);
     } else {
-        /**
-         * Stub base used only when phpredis is absent. SlaveAwareRedis is never instantiated here, so
-         * this only has to make the subclass declarable and reflectable for di:compile.
-         */
-        class RedisBase
-        {
-        }
+        // phpredis absent: alias to the stub declared in its own file, under its own distinct class
+        // name (RedisBaseStub). This keeps this file to side effects only and, just as importantly,
+        // means no file anywhere statically declares a class literally named RedisBase — so an
+        // optimized/authoritative Composer classmap can never resolve RedisBase to anything other
+        // than this conditional (a literal "class RedisBase" in a second file would let the classmap
+        // generator bind that name to the stub file, permanently shadowing the phpredis branch).
+        require __DIR__ . '/RedisBaseStub.php';
+        class_alias(RedisBaseStub::class, RedisBase::class);
     }
 }

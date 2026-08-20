@@ -28,7 +28,7 @@ use UnexpectedValueException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     */
+ */
 class Factory
 {
     /**
@@ -725,6 +725,7 @@ class Factory
      * @param array $options
      * @return FrontendInterface
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function createSymfonyL2Cache(array $options): FrontendInterface
     {

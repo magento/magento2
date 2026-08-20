@@ -16,6 +16,11 @@ parameters:
         - %rootDir%/../../../dev/tests/static/framework/tests/unit/testsuite/Magento
         - %rootDir%/../../../dev/tests/integration/framework/tests/unit/testsuite/Magento
         - %rootDir%/../../../dev/tests/api-functional/_files/Magento
+    stubFiles:
+        # RedisBase is resolved to \Redis at runtime via class_alias() (see RedisBase.php), which
+        # static analysis cannot follow; this stub describes its real shape so SlaveAwareRedis's
+        # parent::get()/mget() calls resolve correctly instead of being flagged as undefined.
+        - %rootDir%/../../../dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/stubs/RedisBase.stub
     bootstrapFiles:
             - %rootDir%/../../../dev/tests/static/framework/autoload.php
             - %rootDir%/../../../dev/tests/integration/framework/autoload.php

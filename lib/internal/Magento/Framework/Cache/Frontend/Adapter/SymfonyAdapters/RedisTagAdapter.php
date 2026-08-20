@@ -617,9 +617,9 @@ LUA;
         $success = $this->cachePool->deleteItems($ids);
 
         // Prune the index (tag sets + reverse index + all_ids) for the removed ids. all_ids removal
-        // lives inside pruneTagIndex now (data-existence-guarded on the atomic path), so we must NOT
-        // strip all_ids separately here — an unconditional srem would defeat the guard and re-create
-        // the data-present / index-missing orphan (finding #4).
+        // is currently handled inside pruneTagIndex (data-existence-guarded on the atomic path), so we
+        // must NOT strip all_ids separately here — an unconditional srem would defeat the guard and
+        // re-create the data-present / index-missing orphan (finding #4).
         $this->pruneTagIndex($ids);
 
         // Ensure changes are committed immediately (important for MFTF and tests)
@@ -789,6 +789,7 @@ LUA;
             if ($this->redis->exists($this->dataKeyPrefix() . $id)) {
                 $this->redis->sadd(self::ALL_IDS_SET, $id);
             }
+        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Throwable $e) {
             // Best-effort index maintenance; the next save or GC self-heals a missed registration.
         }
@@ -866,8 +867,10 @@ LUA;
     }
 
     /**
-     * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete
-     * its reverse-index key. Prefers an atomic EVAL and falls back to a pipelined path.
+     * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete its
+     * reverse-index key.
+     *
+     * Prefers an atomic EVAL and falls back to a pipelined path.
      *
      * @param array $ids
      * @return void
@@ -898,6 +901,7 @@ LUA;
     {
         try {
             foreach (array_chunk(array_values($ids), self::LUA_MAX_CSTACK) as $chunk) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $args = array_merge(
                     [self::TAG_INDEX_PREFIX, $this->namespace, $this->dataKeyPrefix()],
                     $chunk
@@ -980,7 +984,8 @@ LUA;
     /**
      * Run a Lua script, normalizing the phpredis vs Predis EVAL argument order.
      *
-     * phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
+     * Argument order: phpredis uses eval($script, $keysAndArgs, $numKeys); Predis uses
+     * eval($script, $numKeys, ...$keysAndArgs).
      *
      * @param string $script
      * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
@@ -1026,8 +1031,9 @@ LUA;
     }
 
     /**
-     * Turn a Predis error reply (exceptions=false clients) into a thrown exception so callers'
-     * try/catch fallbacks fire identically on phpredis and Predis.
+     * Turn a Predis error reply (exceptions=false clients) into a thrown exception.
+     *
+     * This way callers' try/catch fallbacks fire identically on phpredis and Predis.
      *
      * @param mixed $result
      * @return mixed
@@ -1041,10 +1047,10 @@ LUA;
     }
 
     /**
-     * Iterate keys matching $pattern using SCAN (cursor-based, non-blocking), normalizing phpredis vs
-     * Predis, and yield them in batches.
+     * Iterate keys matching $pattern using SCAN, yielding them in batches.
      *
-     * Deliberately avoids the KEYS command: KEYS is O(N) over the WHOLE keyspace and blocks
+     * Cursor-based and non-blocking, normalizing phpredis vs Predis. Deliberately avoids the KEYS
+     * command: KEYS is O(N) over the WHOLE keyspace and blocks
      * single-threaded Redis/Valkey for the entire scan, which would starve PHP workers when it runs
      * from the backend_clean_cache cron / cache:flush. Legacy Cm_Cache_Backend_Redis GCs the same way
      * (SSCAN over maintained sets), never KEYS. Errors are allowed to propagate so a failed sweep is
@@ -1301,7 +1307,9 @@ LUA;
             }
 
             $info = $this->unwrapPredisReply($this->redis->info());
-            $usedMemory = (int)($this->isPredisClient() ? ($info['Memory']['used_memory'] ?? 0) : ($info['used_memory'] ?? 0));
+            $usedMemory = (int)($this->isPredisClient()
+                ? ($info['Memory']['used_memory'] ?? 0)
+                : ($info['used_memory'] ?? 0));
 
             return (int)round($usedMemory / $maxMemory * 100);
         } catch (\Throwable $e) {
