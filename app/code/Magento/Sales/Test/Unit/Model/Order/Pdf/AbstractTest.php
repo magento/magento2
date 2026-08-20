@@ -20,6 +20,7 @@ use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Pdf\AbstractPdf;
 use Magento\Sales\Model\Order\Pdf\Config;
+use Magento\Sales\Model\Order\Pdf\Items\AbstractItems;
 use Magento\Sales\Model\Order\Pdf\ItemsFactory;
 use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
 use Magento\Sales\Model\Order\Pdf\Total\Factory;
@@ -286,6 +287,81 @@ class AbstractTest extends TestCase
 
         $this->assertSame($pageTwo, $resultPage);
         $this->assertSame(['name-line-2', 'sku-line'], $drawnOnPageTwo);
+    }
+
+    /**
+     * A null renderer type must fall back to the 'default' renderer without emitting a
+     * "Using null as an array offset is deprecated" notice (PHP 8.5), which in production
+     * mode is promoted to an exception and breaks PDF generation.
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetRendererFallsBackToDefaultForNullType(): void
+    {
+        $paymentData = $this->createMock(Data::class);
+        $string = $this->createMock(StringUtils::class);
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $filesystem = $this->createMock(Filesystem::class);
+        $pdfConfig = $this->createMock(Config::class);
+        $pdfTotalFactory = $this->createMock(Factory::class);
+        $pdfItemsFactory = $this->createMock(ItemsFactory::class);
+        $localeMock = $this->createMock(TimezoneInterface::class);
+        $translate = $this->createMock(StateInterface::class);
+        $addressRenderer = $this->createMock(Renderer::class);
+        $taxHelper = $this->createMock(TaxHelper::class);
+        $fileStorageDatabase = $this->createMock(Database::class);
+        $rtlTextHandler = $this->createMock(RtlTextHandler::class);
+        $image = $this->createMock(Image::class);
+
+        $model = $this->getMockBuilder(AbstractPdf::class)
+            ->setConstructorArgs([
+                $paymentData,
+                $string,
+                $scopeConfig,
+                $filesystem,
+                $pdfConfig,
+                $pdfTotalFactory,
+                $pdfItemsFactory,
+                $localeMock,
+                $translate,
+                $addressRenderer,
+                [],
+                $fileStorageDatabase,
+                $rtlTextHandler,
+                $image,
+                $taxHelper
+            ])
+            ->onlyMethods(['getPdf'])
+            ->getMock();
+
+        $defaultRenderer = $this->createMock(AbstractItems::class);
+        $pdfItemsFactory->expects($this->once())
+            ->method('get')
+            ->with('default_renderer_model')
+            ->willReturn($defaultRenderer);
+
+        $renderersProperty = new \ReflectionProperty(AbstractPdf::class, '_renderers');
+        $renderersProperty->setValue(
+            $model,
+            ['default' => ['model' => 'default_renderer_model', 'renderer' => null]]
+        );
+
+        // Promote deprecations to exceptions so a null array offset regression fails the test.
+        set_error_handler(
+            static function (int $errno, string $errstr): bool {
+                throw new \RuntimeException($errstr);
+            },
+            E_DEPRECATED
+        );
+        try {
+            $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, '_getRenderer');
+            $actual = $reflectionMethod->invoke($model, null);
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertSame($defaultRenderer, $actual);
     }
 
     /**
