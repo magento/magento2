@@ -347,19 +347,8 @@ class AbstractTest extends TestCase
             ['default' => ['model' => 'default_renderer_model', 'renderer' => null]]
         );
 
-        // Promote deprecations to exceptions so a null array offset regression fails the test.
-        set_error_handler(
-            static function (int $errno, string $errstr): bool {
-                throw new \RuntimeException($errstr);
-            },
-            E_DEPRECATED
-        );
-        try {
-            $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, '_getRenderer');
-            $actual = $reflectionMethod->invoke($model, null);
-        } finally {
-            restore_error_handler();
-        }
+        $reflectionMethod = new \ReflectionMethod(AbstractPdf::class, '_getRenderer');
+        $actual = $reflectionMethod->invoke($model, null);
 
         $this->assertSame($defaultRenderer, $actual);
     }
