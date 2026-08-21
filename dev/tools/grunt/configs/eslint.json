@@ -1,8 +1,7 @@
 {
   "file": {
     "options": {
-      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/eslint.config.mjs",
-      "useEslintrc": false
+      "overrideConfigFile": "vendor/magento/magento-coding-standard/eslint/eslint.config.mjs"
     }
   },
   "test": {
