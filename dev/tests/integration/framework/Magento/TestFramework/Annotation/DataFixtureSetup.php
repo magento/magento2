@@ -46,6 +46,9 @@ class DataFixtureSetup
         $factory = $this->dataFixtureFactory->create($fixture['factory']);
         if (isset($fixture['scope'])) {
             $scope = DataFixtureStorageManager::getStorage()->get($fixture['scope']);
+            if (null === $scope) {
+                throw new \RuntimeException(sprintf('Scope "%s" does not exist.', $fixture['scope']));
+            }
             $fromScope = $this->scopeSwitcher->switch($scope);
             try {
                 $result = $factory->apply($data);
