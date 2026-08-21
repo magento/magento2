@@ -261,9 +261,10 @@ class SymfonyL2CacheTest extends TestCase
 
         $cacheId = 'test_id';
 
-        // Local cache returns data. Called 3 times: the initial data load, the isInvalid() check in
-        // load(), and the isInvalid() check markValid() now performs before clearing the marker.
-        $this->localCacheMock->expects($this->exactly(3))
+        // Local cache returns data. Called 2 times: the initial data load and the isInvalid() check
+        // in load(); handleInvalidKey() already knows the marker is set, so markValid() is told not
+        // to re-check it.
+        $this->localCacheMock->expects($this->exactly(2))
             ->method('load')
             ->willReturnCallback(function ($id) use ($cacheId) {
                 if ($id === $cacheId) {

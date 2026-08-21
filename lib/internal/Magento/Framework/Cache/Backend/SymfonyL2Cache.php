@@ -642,11 +642,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      * FilesystemTagAdapter::onRemove() it triggers — on every successful save.
      *
      * @param string $id
+     * @param bool $knownInvalid Set by callers that already confirmed the marker exists, to skip
+     *        the redundant re-check (e.g. handleInvalidKey(), which only runs after load() has
+     *        already called isInvalid() and found it true).
      * @return void
      */
-    private function markValid(string $id): void
+    private function markValid(string $id, bool $knownInvalid = false): void
     {
-        if ($this->isInvalid($id)) {
+        if ($knownInvalid || $this->isInvalid($id)) {
             $this->local->remove(self::INVALID_KEY_PREFIX . $id);
         }
     }
@@ -681,7 +684,8 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local->remove($id);
 
         if ($remoteCleanSuccess) {
-            $this->markValid($id);
+            // Caller (load()) already confirmed isInvalid($id) is true to reach this method.
+            $this->markValid($id, true);
         }
         return false;
     }

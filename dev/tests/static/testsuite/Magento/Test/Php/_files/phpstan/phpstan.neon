@@ -56,14 +56,6 @@ parameters:
         # Closures in data provider use $this via bindTo() at runtime (static context has no $this)
         - message: '#Undefined variable: \$this#'
           path: ../../../../../../../../tests/api-functional/testsuite/Magento/GraphQl/CustomerGraphQl/Model/Resolver/CustomerTest.php
-        # RedisBase.php resolves RedisBase to \Redis (phpredis present) or RedisBaseStub (phpredis
-        # absent) via class_alias(); PHPStan follows the literal class_alias() calls itself and
-        # resolves through to RedisBaseStub, an intentionally-empty stub never instantiated at
-        # runtime (SlaveAwareRedis, which owns these parent::*() calls, is only ever instantiated on
-        # the phpredis-present path). Static analysis cannot see through class_alias(), so these
-        # parent::get()/mget() calls are always flagged as undefined; suppressed rather than fixed.
-        - message: '#Call to an undefined static method Magento\\Framework\\Cache\\Frontend\\Adapter\\Symfony\\RedisBaseStub::(get|mget)\(\)#'
-          path: ../../../../../../../../../lib/internal/Magento/Framework/Cache/Frontend/Adapter/Symfony/SlaveAwareRedis.php
         # Test module classes in _files (excluded from scan) - loaded at runtime
         - '~FixtureCallStorage not found\.?~'
         - '~TestModule\\Controller\\Adminhtml\\Controller not found\.?~'

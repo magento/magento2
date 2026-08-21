@@ -3,6 +3,16 @@
  * Copyright 2026 Adobe
  * All Rights Reserved.
  */
+
+// phpcs:ignoreFile PSR1.Files.SideEffects -- must combine the conditional declaration and the
+// class_alias() side effect in this one file: Composer's classmap generator is a static token scan,
+// so an authoritative/optimized classmap (composer dump-autoload -o -a) can only resolve "RedisBase"
+// correctly if it maps back to this exact file's own runtime branch (see comment below). Splitting
+// the phpredis-absent declaration into a second file would leave no literal "class RedisBase" token
+// anywhere for the classmap to find at all, breaking autoloading under classmap-authoritative on
+// every host; declaring it in a second file under the SAME name would let the classmap bind
+// "RedisBase" to that file unconditionally, bypassing this file's phpredis-present branch even on
+// hosts that DO have phpredis. Neither alternative is safe, so this file is deliberately exempted.
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
@@ -31,13 +41,15 @@ if (!class_exists(RedisBase::class, false)) {
         // phpredis present: base IS \Redis, so SlaveAwareRedis inherits the real client.
         class_alias(\Redis::class, RedisBase::class);
     } else {
-        // phpredis absent: alias to the stub declared in its own file, under its own distinct class
-        // name (RedisBaseStub). This keeps this file to side effects only and, just as importantly,
-        // means no file anywhere statically declares a class literally named RedisBase — so an
-        // optimized/authoritative Composer classmap can never resolve RedisBase to anything other
-        // than this conditional (a literal "class RedisBase" in a second file would let the classmap
-        // generator bind that name to the stub file, permanently shadowing the phpredis branch).
-        require_once __DIR__ . '/RedisBaseStub.php';
-        class_alias(RedisBaseStub::class, RedisBase::class);
+        // phpredis absent: declare a real, empty class literally named RedisBase, in this same file,
+        // so Composer's classmap generator (a static token scan, not code execution) always resolves
+        // "RedisBase" back to this file regardless of which branch runs on a given host. Aliasing to a
+        // class declared in a second file would leave no file anywhere with a literal "class RedisBase"
+        // token, which an optimized/authoritative classmap (composer dump-autoload -o -a) cannot
+        // resolve at all — it fatals with "Class RedisBase not found" on every host, phpredis-present
+        // or absent, the moment SlaveAwareRedis needs its parent.
+        class RedisBase
+        {
+        }
     }
 }
