@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dafe45cf4c6d33c199ad8688c8bfafd",
+    "content-hash": "2547264ed5c4e551f61c8db7de7811a7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5833,26 +5833,27 @@
         },
         {
             "name": "predis/predis",
-            "version": "v2.4.1",
+            "version": "v3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/predis/predis.git",
-                "reference": "07105e050622ed80bd60808367ced9e379f31530"
+                "reference": "5c996db191ee2d9bafe651f454b1fca16754271b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/predis/predis/zipball/07105e050622ed80bd60808367ced9e379f31530",
-                "reference": "07105e050622ed80bd60808367ced9e379f31530",
+                "url": "https://api.github.com/repos/predis/predis/zipball/5c996db191ee2d9bafe651f454b1fca16754271b",
+                "reference": "5c996db191ee2d9bafe651f454b1fca16754271b",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8.0"
+                "php": "^7.2 || ^8.0",
+                "psr/http-message": "^1.0|^2.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.3",
                 "phpstan/phpstan": "^1.9",
                 "phpunit/phpcov": "^6.0 || ^8.0",
-                "phpunit/phpunit": "^8.0 || ^9.4"
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
             },
             "suggest": {
                 "ext-relay": "Faster connection with in-memory caching (>=0.6.2)"
@@ -5883,7 +5884,7 @@
             ],
             "support": {
                 "issues": "https://github.com/predis/predis/issues",
-                "source": "https://github.com/predis/predis/tree/v2.4.1"
+                "source": "https://github.com/predis/predis/tree/v3.5.1"
             },
             "funding": [
                 {
@@ -5891,7 +5892,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-12T18:00:11+00:00"
+            "time": "2026-06-11T16:56:53+00:00"
         },
         {
             "name": "psr/cache",
@@ -11906,16 +11907,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "40",
+            "version": "41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "808617f36009f0c9d6ca867c3d7322fdd0924186"
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/808617f36009f0c9d6ca867c3d7322fdd0924186",
-                "reference": "808617f36009f0c9d6ca867c3d7322fdd0924186",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
                 "shasum": ""
             },
             "require": {
@@ -11950,9 +11951,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v40"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v41"
             },
-            "time": "2026-03-06T05:38:38+00:00"
+            "time": "2026-08-18T06:05:59+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
