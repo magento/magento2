@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8708fc2d2780272af641b1772954acb",
+    "content-hash": "2547264ed5c4e551f61c8db7de7811a7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11907,16 +11907,16 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "40",
+            "version": "41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "808617f36009f0c9d6ca867c3d7322fdd0924186"
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/808617f36009f0c9d6ca867c3d7322fdd0924186",
-                "reference": "808617f36009f0c9d6ca867c3d7322fdd0924186",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
+                "reference": "e4af7c6c79d0bfa89deb06cba1a3d49405635afc",
                 "shasum": ""
             },
             "require": {
@@ -11951,9 +11951,9 @@
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
                 "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v40"
+                "source": "https://github.com/magento/magento-coding-standard/tree/v41"
             },
-            "time": "2026-03-06T05:38:38+00:00"
+            "time": "2026-08-18T06:05:59+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
