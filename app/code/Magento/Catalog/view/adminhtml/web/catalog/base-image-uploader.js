@@ -144,6 +144,9 @@ define([
                 fileId = null,
                 arrayFromObj = Array.from,
                 fileObj = [],
+                filePositions = {},
+                uploadedFiles = {},
+                totalFilesToUpload = 0,
                 uploaderContainer = this.element.find('input[type="file"]').closest('.image-placeholder'),
                 options = {
                     proudlyDisplayPoweredByUppy: false,
@@ -192,7 +195,12 @@ define([
                     };
 
                     uploaderContainer.addClass('loading');
+                    
+                    // Track file selection order for maintaining upload order
+                    const filePosition = fileObj.length;
+                    filePositions[modifiedFile.id] = filePosition;
                     fileObj.push(currentFile);
+                    
                     return modifiedFile;
                 },
 
@@ -230,6 +238,15 @@ define([
                 $dropPlaceholder.find('.progress-bar').addClass('in-progress').text(progressWidth + '%');
             });
 
+            uppy.on('files-added', (files) => {
+                totalFilesToUpload = files.length;
+                uploadedFiles = {};
+                
+                // Reset file tracking arrays
+                fileObj = [];
+                filePositions = {};
+            });
+
             uppy.on('upload-success', (file, response) => {
                 $dropPlaceholder.find('.progress-bar').text('').removeClass('in-progress');
 
@@ -238,7 +255,23 @@ define([
                 }
 
                 if (!response.body.error) {
-                    $galleryContainer.trigger('addItem', response.body);
+                    // Store upload result with position info
+                    const position = filePositions[file.id];
+                    uploadedFiles[position] = response.body;
+                    
+                    // Check if all files have been uploaded
+                    if (Object.keys(uploadedFiles).length === totalFilesToUpload) {
+                        // Add images in correct order (by position)
+                        const sortedPositions = Object.keys(uploadedFiles).sort((a, b) => parseInt(a) - parseInt(b));
+                        
+                        sortedPositions.forEach(position => {
+                            $galleryContainer.trigger('addItem', uploadedFiles[position]);
+                        });
+                        
+                        // Reset for next batch
+                        uploadedFiles = {};
+                        totalFilesToUpload = 0;
+                    }
                 } else {
                     alert({
                         content: $.mage.__('We don\'t recognize or support this file extension type.')
@@ -246,9 +279,42 @@ define([
                 }
             });
 
+            uppy.on('upload-error', (file, error, response) => {
+                $dropPlaceholder.find('.progress-bar').text('').removeClass('in-progress');
+                
+                // Reduce total count since this file failed
+                totalFilesToUpload--;
+                
+                // Check if remaining successful uploads should be processed
+                if (Object.keys(uploadedFiles).length === totalFilesToUpload && totalFilesToUpload > 0) {
+                    const sortedPositions = Object.keys(uploadedFiles).sort((a, b) => parseInt(a) - parseInt(b));
+                    
+                    sortedPositions.forEach(position => {
+                        $galleryContainer.trigger('addItem', uploadedFiles[position]);
+                    });
+                    
+                    // Reset for next batch
+                    uploadedFiles = {};
+                    totalFilesToUpload = 0;
+                }
+            });
+
             uppy.on('complete', () => {
                 uploaderContainer.removeClass('loading');
                 Array.from = arrayFromObj;
+                
+                // Handle any remaining uploaded files if some uploads failed
+                if (Object.keys(uploadedFiles).length > 0 && Object.keys(uploadedFiles).length < totalFilesToUpload) {
+                    const sortedPositions = Object.keys(uploadedFiles).sort((a, b) => parseInt(a) - parseInt(b));
+                    
+                    sortedPositions.forEach(position => {
+                        $galleryContainer.trigger('addItem', uploadedFiles[position]);
+                    });
+                    
+                    // Reset for next batch
+                    uploadedFiles = {};
+                    totalFilesToUpload = 0;
+                }
             });
         }
     });
