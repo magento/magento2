@@ -22,6 +22,10 @@
         <element name="emptyAttributeValueConstant" type="input" selector="#basic_behavior_import_empty_attribute_value_constant"/>
         <element name="imagesFileDirectory" type="input" selector="#import_images_file_dir"/>
         <element name="importImagesFileDirNote" type="input" selector="#import_images_file_dir-note"/>
+        <element name="productImageImportMode" type="select" selector="#product_image_import_mode"/>
+        <element name="productImageImportModeField" type="block" selector=".field-product_image_import_mode"/>
+        <element name="productImageDeleteUnused" type="checkbox" selector="#product_image_delete_unused"/>
+        <element name="productImageDeleteUnusedField" type="block" selector=".field-product_image_delete_unused"/>
         <element name="customImportBehavior" type="select" selector="#custom_behavior"/>
         <element name="customValidationStrategy" type="select" selector="#custom_behaviorvalidation_strategy"/>
         <element name="customAllowedErrorsCount" type="input" selector="#custom_behavior_allowed_error_count"/>

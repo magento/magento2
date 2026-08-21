@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductImageDeleteUnusedVisibilityTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import product images delete unused files"/>
+            <title value="Delete Unused Image Files checkbox is visible only for Products Add/Update + Replace image mode"/>
+            <description value="Checkbox is hidden by default, when image mode is Add, and for non-qualifying entity/behavior; shown only when Product Images Import Mode is Replace."/>
+            <severity value="AVERAGE"/>
+            <group value="importExport"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <waitForPageLoad stepKey="waitForImportPageLoad"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.entityType}}" stepKey="waitForEntityType"/>
+
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedHiddenActionGroup" stepKey="assertHiddenBeforeEntity"/>
+
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsEntity"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" time="30" stepKey="waitForImportBehavior"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.imagesFileDirectory}}" time="30" stepKey="waitForUploadFieldset"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehavior"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.productImageImportMode}}" time="30" stepKey="waitForImageMode"/>
+
+        <!-- Image mode defaults to Add: checkbox must stay hidden. -->
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedHiddenActionGroup" stepKey="assertHiddenWhenImageModeAdd"/>
+
+        <selectOption selector="{{AdminImportMainSection.productImageImportMode}}" userInput="Replace existing images with images from file" stepKey="selectReplaceImageMode"/>
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedVisibleActionGroup" stepKey="assertVisibleForReplaceImageMode"/>
+
+        <selectOption selector="{{AdminImportMainSection.productImageImportMode}}" userInput="Add new images only (default)" stepKey="selectAddImageMode"/>
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedHiddenActionGroup" stepKey="assertHiddenAfterSwitchBackToAdd"/>
+
+        <selectOption selector="{{AdminImportMainSection.productImageImportMode}}" userInput="Replace existing images with images from file" stepKey="selectReplaceImageModeAgain"/>
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedVisibleActionGroup" stepKey="assertVisibleAgainForReplace"/>
+
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Replace" stepKey="selectReplaceBehavior"/>
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedHiddenActionGroup" stepKey="assertHiddenForReplaceBehavior"/>
+
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Advanced Pricing" stepKey="selectAdvancedPricingEntity"/>
+        <waitForPageLoad stepKey="waitAfterNonProductEntity"/>
+        <actionGroup ref="AdminAssertProductImageDeleteUnusedHiddenActionGroup" stepKey="assertHiddenForNonProductEntity"/>
+    </test>
+</tests>

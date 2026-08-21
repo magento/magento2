@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductImageDeleteUnusedVisibleActionGroup">
+        <annotations>
+            <description>
+                Asserts Delete Unused Image Files checkbox is visible and enabled on the Import form.
+            </description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminImportMainSection.productImageDeleteUnused}}" time="30" stepKey="waitForDeleteUnusedVisible"/>
+        <seeElement selector="{{AdminImportMainSection.productImageDeleteUnused}}" stepKey="seeDeleteUnused"/>
+        <executeJS function="return (function () { var el = document.getElementById('product_image_delete_unused'); return (el &amp;&amp; !el.disabled &amp;&amp; window.getComputedStyle(el).display !== 'none') ? '1' : '0'; })();" stepKey="deleteUnusedEnabledVisible"/>
+        <assertEquals stepKey="assertDeleteUnusedEnabledVisible">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="variable">deleteUnusedEnabledVisible</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

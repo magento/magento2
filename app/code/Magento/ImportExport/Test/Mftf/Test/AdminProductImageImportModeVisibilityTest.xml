@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductImageImportModeVisibilityTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import product images mode"/>
+            <title value="Product Images Import Mode field visibility depends on entity and behavior"/>
+            <description value="Product Images Import Mode is shown only for Products + Add/Update; hidden for Replace/Delete and non-product entities."/>
+            <severity value="AVERAGE"/>
+            <group value="importExport"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <waitForPageLoad stepKey="waitForImportPageLoad"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.entityType}}" stepKey="waitForEntityType"/>
+
+        <!-- Field starts hidden until entity/behavior qualify. -->
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenBeforeEntity"/>
+
+        <!-- Products alone is not enough: explicitly set Add/Update (do not rely on empty-option fallback). -->
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsEntity"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" time="30" stepKey="waitForImportBehavior"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.imagesFileDirectory}}" time="30" stepKey="waitForUploadFieldset"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehavior"/>
+        <actionGroup ref="AdminAssertProductImageImportModeVisibleActionGroup" stepKey="assertVisibleForProductsAddUpdate"/>
+
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Replace" stepKey="selectReplaceBehavior"/>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForReplace"/>
+
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehaviorAgain"/>
+        <actionGroup ref="AdminAssertProductImageImportModeVisibleActionGroup" stepKey="assertVisibleAgainForAddUpdate"/>
+
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Delete" stepKey="selectDeleteBehavior"/>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForDelete"/>
+
+        <!-- Non-product entity: field must stay hidden even if behavior options change. -->
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Advanced Pricing" stepKey="selectAdvancedPricingEntity"/>
+        <waitForPageLoad stepKey="waitAfterNonProductEntity"/>
+        <actionGroup ref="AdminAssertProductImageImportModeHiddenActionGroup" stepKey="assertHiddenForNonProductEntity"/>
+    </test>
+</tests>

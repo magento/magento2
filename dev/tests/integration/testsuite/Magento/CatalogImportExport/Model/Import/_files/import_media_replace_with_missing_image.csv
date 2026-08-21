@@ -1,0 +1,2 @@
+sku,additional_images,base_image,small_image,thumbnail_image,swatch_image
+simple_new,"repro_replace_additional_a.jpg,does_not_exist_replace_fail.jpg",magento_image.jpg,magento_small_image.jpg,magento_thumbnail.jpg,magento_image.jpg

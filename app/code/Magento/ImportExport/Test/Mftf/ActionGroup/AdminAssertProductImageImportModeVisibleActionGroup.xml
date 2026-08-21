@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductImageImportModeVisibleActionGroup">
+        <annotations>
+            <description>
+                Asserts Product Images Import Mode is visible and enabled on the Import form.
+            </description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminImportMainSection.productImageImportMode}}" time="30" stepKey="waitForModeFieldVisible"/>
+        <seeElement selector="{{AdminImportMainSection.productImageImportMode}}" stepKey="seeModeField"/>
+        <!-- Ensure control is enabled (not only present in the DOM). -->
+        <executeJS function="return (function () { var el = document.getElementById('product_image_import_mode'); return (el &amp;&amp; !el.disabled &amp;&amp; window.getComputedStyle(el).display !== 'none') ? '1' : '0'; })();" stepKey="modeFieldEnabledVisible"/>
+        <assertEquals stepKey="assertModeFieldEnabledVisible">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="variable">modeFieldEnabledVisible</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

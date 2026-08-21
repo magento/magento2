@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertProductImageImportModeHiddenActionGroup">
+        <annotations>
+            <description>
+                Asserts Product Images Import Mode is not visible (hidden and/or disabled).
+            </description>
+        </annotations>
+        <waitForElementNotVisible selector="{{AdminImportMainSection.productImageImportMode}}" time="30" stepKey="waitForModeFieldNotVisible"/>
+        <executeJS function="return (function () { var el = document.getElementById('product_image_import_mode'); if (!el) { return '1'; } return (el.disabled || window.getComputedStyle(el).display === 'none' || window.getComputedStyle(el).visibility === 'hidden') ? '1' : '0'; })();" stepKey="modeFieldHiddenOrDisabled"/>
+        <assertEquals stepKey="assertModeFieldHiddenOrDisabled">
+            <expectedResult type="string">1</expectedResult>
+            <actualResult type="variable">modeFieldHiddenOrDisabled</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

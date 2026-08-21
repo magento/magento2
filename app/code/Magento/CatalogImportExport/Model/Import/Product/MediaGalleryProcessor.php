@@ -9,6 +9,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -78,6 +79,11 @@ class MediaGalleryProcessor
     private $productEntityTableName;
 
     /**
+     * @var MediaGalleryCleanup
+     */
+    private $mediaGalleryCleanup;
+
+    /**
      * MediaProcessor constructor.
      *
      * @param SkuProcessor $skuProcessor
@@ -85,19 +91,23 @@ class MediaGalleryProcessor
      * @param ResourceConnection $resourceConnection
      * @param ResourceModelFactory $resourceModelFactory
      * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param MediaGalleryCleanup|null $mediaGalleryCleanup
      */
     public function __construct(
         SkuProcessor $skuProcessor,
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
         ResourceModelFactory $resourceModelFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        ?MediaGalleryCleanup $mediaGalleryCleanup = null
     ) {
         $this->skuProcessor = $skuProcessor;
         $this->metadataPool = $metadataPool;
         $this->connection = $resourceConnection->getConnection();
         $this->resourceFactory = $resourceModelFactory;
         $this->errorAggregator = $errorAggregator;
+        $this->mediaGalleryCleanup = $mediaGalleryCleanup
+            ?? ObjectManager::getInstance()->get(MediaGalleryCleanup::class);
     }
 
     /**
@@ -270,6 +280,86 @@ class MediaGalleryProcessor
     }
 
     /**
+     * Remove product gallery images (delegates to MediaGalleryCleanup).
+     *
+     * @param array $removals
+     * @param bool $deleteUnusedFiles
+     * @return void
+     */
+    public function removeProductImages(array $removals, bool $deleteUnusedFiles = false): void
+    {
+        $this->mediaGalleryCleanup->removeProductImages($removals, $deleteUnusedFiles);
+    }
+
+    /**
+     * Load image role values for SKUs across all stores.
+     *
+     * @param string[] $skus
+     * @param string[] $roleAttributeCodes
+     * @return array
+     */
+    public function getProductImageRoles(array $skus, array $roleAttributeCodes): array
+    {
+        $result = [];
+        if (empty($skus) || empty($roleAttributeCodes)) {
+            return $result;
+        }
+        foreach ($skus as $sku) {
+            $result[mb_strtolower((string)$sku)] = [];
+        }
+
+        $attributeIdToCode = [];
+        $attributeIdsByTable = [];
+        foreach ($roleAttributeCodes as $attributeCode) {
+            $attribute = $this->getResource()->getAttribute($attributeCode);
+            if (!$attribute || !$attribute->getId()) {
+                continue;
+            }
+            $attributeId = (int)$attribute->getId();
+            $attributeIdToCode[$attributeId] = $attributeCode;
+            $backendTable = $attribute->getBackendTable();
+            $attributeIdsByTable[$backendTable][] = $attributeId;
+        }
+        if (empty($attributeIdToCode)) {
+            return $result;
+        }
+
+        $this->initMediaGalleryResources();
+        $linkField = $this->getProductEntityLinkField();
+        foreach ($attributeIdsByTable as $backendTable => $attributeIds) {
+            $select = $this->connection->select()
+                ->from(
+                    ['e' => $this->productEntityTableName],
+                    ['sku' => 'e.sku']
+                )->joinInner(
+                    ['v' => $backendTable],
+                    sprintf('e.%1$s = v.%1$s', $linkField),
+                    [
+                        'attribute_id' => 'v.attribute_id',
+                        'store_id' => 'v.store_id',
+                        'value' => 'v.value',
+                    ]
+                )->where(
+                    'e.sku IN (?)',
+                    $skus
+                )->where(
+                    'v.attribute_id IN (?)',
+                    $attributeIds
+                );
+            foreach ($this->connection->fetchAll($select) as $row) {
+                $skuKey = mb_strtolower((string)$row['sku']);
+                $code = $attributeIdToCode[(int)$row['attribute_id']] ?? null;
+                if ($code === null) {
+                    continue;
+                }
+                $result[$skuKey][$code][(int)$row['store_id']] = $row['value'];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Update media gallery labels.
      *
      * @param array $labels
@@ -355,7 +445,10 @@ class MediaGalleryProcessor
         );
         $select = $this->connection->select()->from(
             ['mg' => $this->mediaGalleryTableName],
-            ['value' => 'mg.value']
+            [
+                'value' => 'mg.value',
+                'media_type' => 'mg.media_type',
+            ]
         )->joinInner(
             ['mgvte' => $this->mediaGalleryEntityToValueTableName],
             '(mg.value_id = mgvte.value_id)',

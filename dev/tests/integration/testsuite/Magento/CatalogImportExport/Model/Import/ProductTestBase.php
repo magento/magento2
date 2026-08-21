@@ -204,6 +204,18 @@ class ProductTestBase extends TestCase
                 'source' => __DIR__ . '/_files/magento_additional_image_four.jpg',
                 'dest' => $dirPath . '/magento_additional_image_four.jpg',
             ],
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_a.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_a.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_b.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_b.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/_files/repro_replace_additional_c.jpg',
+                'dest' => $dirPath . '/repro_replace_additional_c.jpg',
+            ],
         ];
 
         foreach ($items as $item) {
@@ -284,11 +296,35 @@ class ProductTestBase extends TestCase
      *
      * @param string $fileName
      * @param int $expectedErrors
+     * @param string $imageImportMode
+     * @param int|null $bunchSize When set, forces import bunch size (for multi-bunch tests)
+     * @param bool $deleteUnusedImageFiles
      * @return void
      */
-    protected function importDataForMediaTest(string $fileName, int $expectedErrors = 0)
-    {
-        $this->createNewModel();
+    protected function importDataForMediaTest(
+        string $fileName,
+        int $expectedErrors = 0,
+        string $imageImportMode = Import::PRODUCT_IMAGE_IMPORT_MODE_ADD,
+        ?int $bunchSize = null,
+        bool $deleteUnusedImageFiles = false
+    ) {
+        if ($bunchSize !== null) {
+            $importExportData = $this->getMockBuilder(Data::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+            $importExportData->method('getBunchSize')->willReturn($bunchSize);
+            $this->_model = $this->objectManager->create(
+                ImportProduct::class,
+                [
+                    'logger' => $this->logger,
+                    'importExportData' => $importExportData,
+                ]
+            );
+        } else {
+            $this->createNewModel();
+        }
+        // StoreResolver is a shared service and caches store codes for the process lifetime.
+        $this->clearImportStoreResolverCache();
         $filesystem = $this->objectManager->get(Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -304,19 +340,31 @@ class ProductTestBase extends TestCase
         $tmpDir = $mediaDirPath . DIRECTORY_SEPARATOR . 'import' . DIRECTORY_SEPARATOR . 'images';
         $mediaDirectory->create('catalog' . DIRECTORY_SEPARATOR . 'product');
         $mediaDirectory->create('import' . DIRECTORY_SEPARATOR . 'images');
-        $this->_model->setParameters(
-            [
-                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
-                'entity' => 'catalog_product',
-                Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import'
-            ]
-        );
+        $parameters = [
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            Import::FIELD_NAME_IMG_FILE_DIR => $mediaDirPath . '/import',
+            Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE => $imageImportMode,
+        ];
+        if ($deleteUnusedImageFiles) {
+            $parameters[Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED] = '1';
+        }
+        $this->_model->setParameters($parameters);
         $uploader = $this->_model->getUploader();
         $this->assertTrue($uploader->setDestDir($destDir));
         $this->assertTrue($uploader->setTmpDir($tmpDir));
         $this->_model->setSource($source);
         $errors = $this->_model->validateData();
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue(
+            $errors->getErrorsCount() == 0,
+            array_reduce(
+                $errors->getAllErrors(),
+                static function ($output, $error) {
+                    return "$output\n{$error->getErrorMessage()}";
+                },
+                "Validation failed for {$fileName}:"
+            )
+        );
         $this->_model->importData();
         $this->assertEquals(
             $expectedErrors,
@@ -329,6 +377,26 @@ class ProductTestBase extends TestCase
                 ''
             )
         );
+    }
+
+    /**
+     * Reset CatalogImportExport store/website maps so newly created stores are visible.
+     *
+     * @return void
+     */
+    protected function clearImportStoreResolverCache(): void
+    {
+        $resolver = $this->objectManager->get(Product\StoreResolver::class);
+        $reflection = new \ReflectionClass($resolver);
+        foreach (['storeCodeToId', 'storeIdToWebsiteStoreIds', 'websiteCodeToId', 'websiteCodeToStoreIds'] as $property) {
+            if (!$reflection->hasProperty($property)) {
+                continue;
+            }
+            $prop = $reflection->getProperty($property);
+            $prop->setAccessible(true);
+            $prop->setValue($resolver, []);
+        }
+        $this->objectManager->get(StoreManagerInterface::class)->reinitStores();
     }
 
     /**

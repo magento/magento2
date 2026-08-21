@@ -255,6 +255,43 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
         $fieldset->addField(
+            Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE,
+            'select',
+            [
+                'name' => Import::FIELD_NAME_PRODUCT_IMAGE_IMPORT_MODE,
+                'label' => __('Product Images Import Mode'),
+                'title' => __('Product Images Import Mode'),
+                'required' => false,
+                'disabled' => true,
+                'css_class' => 'no-display',
+                'values' => [
+                    Import::PRODUCT_IMAGE_IMPORT_MODE_ADD => __('Add new images only (default)'),
+                    Import::PRODUCT_IMAGE_IMPORT_MODE_REPLACE => __('Replace existing images with images from file'),
+                ],
+                'value' => Import::PRODUCT_IMAGE_IMPORT_MODE_ADD,
+                'note' => __(
+                    'Add keeps existing images. Replace removes gallery images not listed in '
+                    . 'additional_images. Image roles are kept. No effect if additional_images is omitted.'
+                ),
+            ]
+        );
+        $fieldset->addField(
+            Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED,
+            'checkbox',
+            [
+                'name' => Import::FIELD_NAME_PRODUCT_IMAGE_DELETE_UNUSED,
+                'label' => __('Delete Unused Image Files'),
+                'title' => __('Delete Unused Image Files'),
+                'required' => false,
+                'disabled' => true,
+                'css_class' => 'no-display',
+                'value' => 1,
+                'note' => __(
+                    'Deletes media files unused by any product (including cache).'
+                ),
+            ]
+        );
+        $fieldset->addField(
             Import::FIELD_IMPORT_IDS,
             'hidden',
             [

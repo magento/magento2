@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectProductImageImportModeActionGroup">
+        <annotations>
+            <description>
+                Ensures Products + Add/Update are selected, then selects Product Images Import Mode.
+                The field is visible only for Products entity with Add/Update behavior.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="mode" type="string" defaultValue="Add new images only (default)"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminImportMainSection.entityType}}" time="30" stepKey="waitForEntityType"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsEntity"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" time="30" stepKey="waitForImportBehavior"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateBehavior"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.productImageImportMode}}" time="30" stepKey="waitForProductImageImportMode"/>
+        <selectOption selector="{{AdminImportMainSection.productImageImportMode}}" userInput="{{mode}}" stepKey="selectProductImageImportMode"/>
+    </actionGroup>
+</actionGroups>

@@ -16,7 +16,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 
 /**
- * Clean media gallery resolver cache for product SKUs after importing data to database
+ * Clean media gallery resolver cache after product import
  */
 class AfterImportDataObserver implements ObserverInterface
 {
@@ -58,10 +58,12 @@ class AfterImportDataObserver implements ObserverInterface
         $mediaGalleryEntriesChanged = (array) $observer->getEvent()->getMediaGallery();
         $mediaGalleryLabelsChanged = (array) $observer->getEvent()->getMediaGalleryLabels();
         $productIdsToDelete = (array) $observer->getEvent()->getIdsToDelete();
+        $mediaGalleryRemovedSkus = (array) $observer->getEvent()->getMediaGalleryRemovedSkus();
 
         if (empty($mediaGalleryEntriesChanged) &&
             empty($mediaGalleryLabelsChanged) &&
-            empty($productIdsToDelete)
+            empty($productIdsToDelete) &&
+            empty($mediaGalleryRemovedSkus)
         ) {
             return;
         }
@@ -76,16 +78,29 @@ class AfterImportDataObserver implements ObserverInterface
             $productSkusToInvalidate[] = [$label['imageData']['sku']];
         }
 
-        $productSkusToInvalidate = array_unique(array_merge(...$productSkusToInvalidate));
-        $products = $this->productRepository->getList(
-            $this->criteriaBuilder->addFilter('sku', $productSkusToInvalidate, 'in')->create()
-        )->getItems();
+        if (!empty($mediaGalleryRemovedSkus)) {
+            $productSkusToInvalidate[] = array_values($mediaGalleryRemovedSkus);
+        }
 
-        $productIds = array_map(function ($product) {
-            return $product->getId();
-        }, $products);
+        $productSkusToInvalidate = $productSkusToInvalidate
+            ? array_unique(array_merge(...$productSkusToInvalidate))
+            : [];
+
+        $productIds = [];
+        if (!empty($productSkusToInvalidate)) {
+            $products = $this->productRepository->getList(
+                $this->criteriaBuilder->addFilter('sku', $productSkusToInvalidate, 'in')->create()
+            )->getItems();
+
+            $productIds = array_map(function ($product) {
+                return (int) $product->getId();
+            }, $products);
+        }
 
         $productIdsToInvalidate = array_unique(array_merge($productIds, $productIdsToDelete));
+        if (empty($productIdsToInvalidate)) {
+            return;
+        }
 
         $tags = array_map(function ($productId) {
             return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $productId);
