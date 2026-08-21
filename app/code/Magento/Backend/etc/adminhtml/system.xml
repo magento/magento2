@@ -172,6 +172,17 @@
                     <comment>Translate, blocks and other output caches should be disabled for both Storefront and Admin inline translations.</comment>
                 </field>
             </group>
+            <group id="cache_warmup" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>CLI Cache Warmup</label>
+                <field id="urls" translate="label comment" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Warmup URLs</label>
+                    <comment>One URL per line. Used by bin/magento cache:flush --warmup, cache:clean --warmup, and cache:warmup. If empty, the storefront base URL is used.</comment>
+                </field>
+                <field id="timeout" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>HTTP Timeout (seconds)</label>
+                    <validate>validate-digits validate-greater-than-zero</validate>
+                </field>
+            </group>
             <group id="js" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>JavaScript Settings</label>
                 <field id="merge_files" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
