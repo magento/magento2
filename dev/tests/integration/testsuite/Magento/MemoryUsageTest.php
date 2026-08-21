@@ -10,12 +10,12 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     /**
      * Number of application reinitialization iterations to be conducted by tests
      */
-    const APP_REINITIALIZATION_LOOPS = 20;
+    private const APP_REINITIALIZATION_LOOPS = 20;
 
     /**
      * Number of warm-up reinitialization iterations conducted before measuring memory usage.
      */
-    const WARM_UP_LOOPS = 5;
+    private const WARM_UP_LOOPS = 5;
 
     /**
      * @var \Magento\TestFramework\Helper\Memory
