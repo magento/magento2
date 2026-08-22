@@ -63,18 +63,30 @@ class Memory
     /**
      * Retrieve the current process' memory usage using Unix command line interface
      *
+     * @link https://linux.die.net/man/5/proc
      * @link http://linux.die.net/man/1/ps
      * @param int $pid
      * @return int Memory usage in bytes
      */
     protected function _getUnixProcessMemoryUsage($pid)
     {
+        $output = null;
+
         // RSS - resident set size, the non-swapped physical memory
-        $command = 'ps --pid %s --format rss --no-headers';
-        if ($this->isMacOS()) {
-            $command = 'ps -p %s -o rss=';
+        if (file_exists($procStatusFile = sprintf('/proc/%d/status', $pid))) {
+            if (preg_match('/VmRSS:\s*(\d+)/', file_get_contents($procStatusFile), $matches)) {
+                $output = $matches[1];
+            }
         }
-        $output = $this->_shell->execute($command, [$pid]);
+
+        if (null === $output) {
+            // Fallback to 'ps' command
+            $command = 'ps --pid %s --format rss --no-headers';
+            if ($this->isMacOS()) {
+                $command = 'ps -p %s -o rss=';
+            }
+            $output = $this->_shell->execute($command, [$pid]);
+        }
         $result = $output . 'k';
         // kilobytes
         return self::convertToBytes($result);
