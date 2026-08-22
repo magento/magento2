@@ -315,7 +315,7 @@ class Config
     /**
      * Retrieve Media Type
      *
-     * @return string
+     * @return mixed
      */
     public function getMediaType()
     {
@@ -343,7 +343,7 @@ class Config
     /**
      * Retrieve Charset
      *
-     * @return string
+     * @return mixed
      */
     public function getCharset()
     {
@@ -371,7 +371,7 @@ class Config
     /**
      * Retrieve content for description tag
      *
-     * @return string
+     * @return mixed
      */
     public function getDescription()
     {
@@ -426,7 +426,7 @@ class Config
     /**
      * Retrieve content for keywords tag
      *
-     * @return string
+     * @return mixed
      */
     public function getKeywords()
     {
@@ -454,7 +454,7 @@ class Config
     /**
      * Retrieve URL to robots file
      *
-     * @return string
+     * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRobots()
