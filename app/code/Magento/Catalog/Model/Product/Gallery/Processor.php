@@ -173,6 +173,7 @@ class Processor
         $fileName = $this->getNotDuplicatedFilename($fileName, $dispersionPath);
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
+        $destinationMediaFile = $this->mediaConfig->getMediaPath($fileName);
 
         try {
             /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
@@ -184,6 +185,7 @@ class Processor
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             } else {
                 $this->mediaDirectory->copyFile($file, $destinationFile);
+                $this->mediaDirectory->copyFile($file, $destinationMediaFile);
 
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             }
@@ -471,10 +473,14 @@ class Processor
      */
     protected function getNotDuplicatedFilename($fileName, $dispersionPath)
     {
+        $mediaDir = $this->fileStorageDb->getMediaBaseDir() . DIRECTORY_SEPARATOR;
+        $mediaPath = $mediaDir . $this->mediaConfig->getMediaPath($fileName);
+        $tmpMediaPath = $mediaDir . $this->mediaConfig->getTmpMediaPath($fileName);
+
         $fileMediaName = $dispersionPath . '/'
-            . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getMediaPath($fileName));
+            . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($mediaPath);
         $fileTmpMediaName = $dispersionPath . '/'
-            . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getTmpMediaPath($fileName));
+            . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($tmpMediaPath);
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
