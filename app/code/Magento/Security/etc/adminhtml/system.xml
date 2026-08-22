@@ -34,6 +34,11 @@
                         <field id="password_reset_protection_type" separator="," negative="1">0</field>
                     </depends>
                 </field>
+                <field id="password_reset_service_email" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Password Reset Service Email</label>
+                    <comment>Service email address for password reset communication</comment>
+                    <validate>validate-email</validate>
+                </field>
             </group>
         </section>
         <section id="system">
@@ -80,6 +85,11 @@
                     <depends>
                         <field id="password_reset_protection_type" separator="," negative="1">0</field>
                     </depends>
+                </field>
+                <field id="password_reset_service_email" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Password Reset Service Email</label>
+                    <comment>Service email address for password reset communication</comment>
+                    <validate>validate-email</validate>
                 </field>
             </group>
         </section>
