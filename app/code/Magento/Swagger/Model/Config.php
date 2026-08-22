@@ -16,23 +16,13 @@ use Magento\Framework\App\State;
 class Config
 {
     /**
-     * @var State
-     */
-    private $state;
-
-    /**
-     * @var bool
-     */
-    private $enabledInProduction;
-
-    /**
      * @param State $state
      * @param bool $enabledInProduction
      */
-    public function __construct(State $state, bool $enabledInProduction = false)
-    {
-        $this->state = $state;
-        $this->enabledInProduction = $enabledInProduction;
+    public function __construct(
+        private readonly State $state,
+        private readonly bool $enabledInProduction = false
+    ) {
     }
 
     /**
