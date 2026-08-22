@@ -80,6 +80,12 @@ class DataObjectProcessorTest extends TestCase
     ) {
         $objectManager = new ObjectManager($this);
 
+        $objectKeyMap = [
+            TestDataInterface::class => [
+                'required_billing' => 'requiredBilling'
+            ],
+        ];
+
         $this->dataObjectProcessor = $objectManager->getObject(
             DataObjectProcessor::class,
             [
@@ -88,6 +94,7 @@ class DataObjectProcessorTest extends TestCase
                 'fieldNamer' => $objectManager->getObject(FieldNamer::class),
                 'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
                 'excludedMethodsClassMap' => $excludedMethodsClassMap,
+                'objectKeyMap' => $objectKeyMap,
             ]
         );
 
@@ -125,7 +132,7 @@ class DataObjectProcessorTest extends TestCase
             'id' => '1',
             'address' => 'someAddress',
             'default_shipping' => 'true',
-            'required_billing' => 'false',
+            'requiredBilling' => 'false'
         ];
 
         $extensionAttributes = [
