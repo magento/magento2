@@ -60,6 +60,9 @@ parameters:
         - '~FixtureCallStorage not found\.?~'
         - '~TestModule\\Controller\\Adminhtml\\Controller not found\.?~'
 
+includes:
+    - %rootDir%/../phpstan-deprecation-rules/rules.neon
+
 services:
     -
         class: Magento\PhpStan\Reflection\Php\DataObjectClassReflectionExtension
