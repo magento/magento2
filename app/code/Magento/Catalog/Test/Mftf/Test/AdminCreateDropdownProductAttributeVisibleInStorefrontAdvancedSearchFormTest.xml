@@ -46,7 +46,7 @@
         </after>
 
         <!-- Filter product attribute set by attribute set name -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="amOnAttributeSetPage"/>
         <actionGroup ref="FilterProductAttributeSetGridByAttributeSetNameActionGroup" stepKey="filterProductAttrSetGridByAttrSetName">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
