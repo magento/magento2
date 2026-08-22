@@ -75,7 +75,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'new-affected-attribute-set',
             'radio',
             [
-                'after_element_html' => __('Add configurable attributes to the new Attribute Set based on current'),
+                'after_element_html' => __('Add configurable attributes to a new Attribute Set based on current'),
                 'name' => 'affected-attribute-set',
                 'class' => 'admin__control-radio',
                 'css_class' => 'admin__field-option',
@@ -98,7 +98,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'existing-affected-attribute-set',
             'radio',
             [
-                'after_element_html' => __('Add configurable attributes to the existing Attribute Set'),
+                'after_element_html' => __('Add configurable attributes to an existing Attribute Set'),
                 'name' => 'affected-attribute-set',
                 'required' => true,
                 'class' => 'admin__control-radio no-display',
