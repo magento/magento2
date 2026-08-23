@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutWithInvalidCityTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer checkout address validation"/>
+            <title value="Customer cannot save checkout shipping address with invalid city characters"/>
+            <description value="Verify customer cannot save checkout shipping address with invalid city characters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-17476"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Pre Condition 1: Create customer and simple product -->
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Logout from storefront, delete product and customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Step 1: Log into storefront as the created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step 2: Add product to cart and click on checkout -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <!-- Step 3: Fill the checkout shipping form with invalid city value -->
+        <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="fillShippingAddressWithInvalidCity">
+            <argument name="address" value="InvalidCityCharsetAddressData"/>
+        </actionGroup>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{InvalidCityCharsetAddressData.state}}" stepKey="selectState"/>
+        <!-- Attempt to proceed to payment; server-side validation should block address save -->
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <!-- Step 3 Assertion: Validation error resulting in failure to save the address -->
+        <waitForText selector="{{StorefrontMessagesSection.error}}" userInput="{{InvalidCityCharsetErrorMessageData.message}}" stepKey="assertInvalidCityValidationError"/>
+        <dontSeeInCurrentUrl url="/checkout/#payment" stepKey="assertCheckoutDidNotProceedToPaymentStep"/>
+    </test>
+</tests>
