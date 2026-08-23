@@ -12,7 +12,7 @@ use Zend_Cache_Exception;
 /**
  * Extended Zend Cache Core with backend decorator support
  */
-class Core extends \Zend_Cache_Core
+class Core extends \Zend_Cache_Core implements LowLevelFrontendInterface
 {
     /**
      * Available options

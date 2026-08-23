@@ -7,7 +7,7 @@ namespace Magento\Framework\Cache;
 
 use Magento\Framework\Cache\Backend\BackendInterface;
 use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontendInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 
 /**
  * Interface of a cache frontend - an ultimate publicly available interface to an actual cache storage
@@ -77,10 +77,9 @@ interface FrontendInterface
     /**
      * Retrieve low-level frontend instance for compatibility
      *
-     * Symfony-backed frontends return a Symfony low-level wrapper; the legacy Zend adapter returns
-     * a \Zend_Cache_Core (compatible with Zend Locale Data setCache()). Both remain supported.
+     * Return the common low-level frontend contract for both Zend and Symfony cache implementations.
      *
-     * @return \Zend_Cache_Core|LowLevelFrontendInterface
+     * @return LowLevelFrontendInterface
      */
     public function getLowLevelFrontend();
 }

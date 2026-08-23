@@ -9,7 +9,6 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontendInterface;
 use Magento\Framework\Cache\FrontendInterface;
 
 /**
@@ -19,13 +18,14 @@ use Magento\Framework\Cache\FrontendInterface;
  * allowing L2 cache to work seamlessly with Symfony cache backends.
  */
 class RemoteSynchronizedSymfonyAdapter implements
-    FrontendInterface,
-    LowLevelFrontendInterface
+    FrontendInterface
 {
     /**
      * @var ExtendedBackendInterface
      */
     private ExtendedBackendInterface $backend;
+
+    private ?RemoteSynchronizedLowLevelFrontend $lowLevelFrontend = null;
 
     /**
      * Keeps $defaultLifetime only for backward-compatible DI wiring; actual TTL handling is delegated to the underlying Symfony adapter.
@@ -101,7 +101,7 @@ class RemoteSynchronizedSymfonyAdapter implements
     /**
      * @inheritDoc
      */
-    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = []): bool
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = []): bool
     {
         return $this->backend->clean($mode, $tags);
     }
@@ -123,7 +123,6 @@ class RemoteSynchronizedSymfonyAdapter implements
      */
     public function getLowLevelFrontend()
     {
-        // Return self as we are the frontend
-        return $this;
+        return $this->lowLevelFrontend ??= new RemoteSynchronizedLowLevelFrontend($this);
     }
 }

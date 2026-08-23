@@ -17,7 +17,7 @@ use Psr\Cache\CacheItemPoolInterface;
  * Provides backward-compatible interface for legacy code
  * Used by code that needs direct access to cache internals
  */
-class LowLevelFrontend implements LowLevelFrontendInterface
+class LowLevelFrontend implements \Magento\Framework\Cache\LowLevelFrontendInterface
 {
     /**
      * @var CacheItemPoolInterface
@@ -150,7 +150,7 @@ class LowLevelFrontend implements LowLevelFrontendInterface
      * @param array $tags Tags array
      * @return bool
      */
-    public function clean($mode = 'all', array $tags = []): bool
+    public function clean($mode = 'all', $tags = []): bool
     {
         // Delegate to Symfony frontend for proper Lua script integration
         return $this->symfony->clean($mode, $tags);
