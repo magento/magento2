@@ -594,7 +594,7 @@ class ConfirmTest extends TestCase
         $this->messageManagerMock->expects(self::once())->method('addNoticeMessage')->with(
             __(
                 'Your account is already active, or the confirmation code was incorrect.'
-                . ' Signing in, or request a new confirmation email.'
+                . ' Sign in or request a new confirmation email.'
             )
         );
 

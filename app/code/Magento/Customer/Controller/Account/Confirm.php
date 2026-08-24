@@ -193,7 +193,7 @@ class Confirm extends AbstractAccount implements HttpGetActionInterface
         } catch (StateException) {
             $this->messageManager->addNoticeMessage(__(
                 'Your account is already active, or the confirmation code was incorrect.'
-                . ' Signing in, or request a new confirmation email.'
+                . ' Sign in or request a new confirmation email.'
             ));
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('There was an error confirming the account'));
