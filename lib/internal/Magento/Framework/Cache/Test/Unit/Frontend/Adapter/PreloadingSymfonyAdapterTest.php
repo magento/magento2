@@ -28,6 +28,14 @@ class PreloadingSymfonyAdapterTest extends TestCase
     }
 
     /**
+     * Preloading is lazy (runs on first load()); trigger it directly for tests that only inspect stats.
+     */
+    private function triggerPreload(PreloadingSymfonyAdapter $adapter): void
+    {
+        (new \ReflectionMethod($adapter, 'ensurePreloaded'))->invoke($adapter);
+    }
+
+    /**
      * Preload keys that include the ID prefix (as documented) must be looked up with the logical
      * identifier so the underlying Symfony adapter, which applies the prefix itself, resolves them.
      */
@@ -45,6 +53,7 @@ class PreloadingSymfonyAdapterTest extends TestCase
             ['061_EAV_ENTITY_TYPES', '061_SYSTEM_DEFAULT'],
             '061_'
         );
+        $this->triggerPreload($adapter);
 
         $stats = $adapter->getPreloadStats();
         $this->assertSame(2, $stats['preload_keys_configured']);
@@ -78,6 +87,7 @@ class PreloadingSymfonyAdapterTest extends TestCase
             ->willReturn('eav');
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['EAV_ENTITY_TYPES'], '061_');
+        $this->triggerPreload($adapter);
 
         $this->assertSame(['EAV_ENTITY_TYPES'], $adapter->getPreloadStats()['cached_keys']);
     }
@@ -93,6 +103,7 @@ class PreloadingSymfonyAdapterTest extends TestCase
             ->willReturn(false);
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['061_EAV_ENTITY_TYPES'], '061_');
+        $this->triggerPreload($adapter);
 
         $stats = $adapter->getPreloadStats();
         $this->assertSame(1, $stats['preload_keys_configured']);
@@ -104,13 +115,18 @@ class PreloadingSymfonyAdapterTest extends TestCase
      */
     public function testSaveUpdatesLocalCacheForNormalizedPreloadKey(): void
     {
-        $this->adapter->method('load')->willReturn('old');
+        $this->adapter->expects($this->once())
+            ->method('load')
+            ->with('EAV_ENTITY_TYPES')
+            ->willReturn('old');
         $this->adapter->expects($this->once())
             ->method('save')
             ->with('new', 'EAV_ENTITY_TYPES', [], null)
             ->willReturn(true);
 
         $adapter = new PreloadingSymfonyAdapter($this->adapter, ['061_EAV_ENTITY_TYPES'], '061_');
+        $this->assertSame('old', $adapter->load('EAV_ENTITY_TYPES'));
+
         $adapter->save('new', 'EAV_ENTITY_TYPES');
 
         $this->assertSame('new', $adapter->load('EAV_ENTITY_TYPES'));
