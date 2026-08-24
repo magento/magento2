@@ -15,9 +15,9 @@ use Magento\Framework\Phrase;
  */
 class Config
 {
-    const CACHE_ID = 'backend_menu_config';
+    public const CACHE_ID = 'backend_menu_config';
 
-    const CACHE_MENU_OBJECT = 'backend_menu_object';
+    public const CACHE_MENU_OBJECT = 'backend_menu_object';
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
