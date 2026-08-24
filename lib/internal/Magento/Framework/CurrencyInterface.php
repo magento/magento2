@@ -7,7 +7,6 @@ namespace Magento\Framework;
 
 use Magento\Framework\Cache\LowLevelFrontendInterface;
 use Magento\Framework\Currency\Exception\CurrencyException;
-use Zend_Cache_Core;
 
 /**
  * @api

@@ -15,7 +15,6 @@ use Magento\Framework\CurrencyInterface;
 use Magento\Framework\NumberFormatter;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Currencies;
-use Zend_Cache_Core;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

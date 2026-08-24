@@ -437,7 +437,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function unlockAll()
     {
-        foreach ($this->lockList as $id) {
+        foreach (array_keys($this->lockList) as $id) {
             $this->unlock($id);
         }
     }
