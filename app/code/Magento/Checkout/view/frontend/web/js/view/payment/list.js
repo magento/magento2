@@ -108,7 +108,8 @@ define([
                 parent: '${ $.$data.parentName }',
                 name: '${ $.$data.name }',
                 displayArea: payment.displayArea,
-                component: payment.component
+                component: payment.component,
+                sortOrder: payment.sortOrder
             };
             rendererComponent = utils.template(rendererTemplate, templateData);
             utils.extend(rendererComponent, {
@@ -126,7 +127,8 @@ define([
          */
         createRenderer: function (paymentMethodData) {
             var isRendererForMethod = false,
-                currentGroup;
+                currentGroup,
+                sortOrder = _.pluck(paymentMethods(), 'method').indexOf(paymentMethodData.method);
 
             registry.get(this.configDefaultGroup.name, function (defaultGroup) {
                 _.each(rendererList(), function (renderer) {
@@ -152,7 +154,8 @@ define([
                                     name: renderer.type,
                                     method: paymentMethodData.method,
                                     item: paymentMethodData,
-                                    displayArea: currentGroup.displayArea
+                                    displayArea: currentGroup.displayArea,
+                                    sortOrder: sortOrder
                                 }
                             )]);
                     }
