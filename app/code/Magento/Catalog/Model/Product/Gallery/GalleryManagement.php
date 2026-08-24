@@ -129,11 +129,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
     public function create($sku, ProductAttributeMediaGalleryEntryInterface $entry)
     {
         /** @var $entry ProductAttributeMediaGalleryEntryInterface */
-        $entryContent = $entry->getContent();
-
-        if (!$this->contentValidator->isValid($entryContent)) {
-            throw new InputException(__('The image content is invalid. Verify the content and try again.'));
-        }
+        $this->validateEntryContent($entry->getContent());
         $product = $this->productRepository->get($sku, true);
 
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
@@ -170,6 +166,19 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             }
         }
         throw new StateException(__('The new media gallery entry failed to save.'));
+    }
+
+    /**
+     * Validate media gallery entry content
+     *
+     * @param ImageContentInterface|null $entryContent
+     * @throws InputException
+     */
+    private function validateEntryContent(?ImageContentInterface $entryContent): void
+    {
+        if ($entryContent === null || !$this->contentValidator->isValid($entryContent)) {
+            throw new InputException(__('The image content is invalid. Verify the content and try again.'));
+        }
     }
 
     /**

@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaStorage\Helper\File\Storage\Database as DatabaseStorageHelper;
 use Magento\MediaStorage\Model\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Storage\DatabaseFactory;
 use Magento\MediaStorage\Model\File\Storage\Synchronization;
@@ -19,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 class SynchronizationTest extends TestCase
 {
     use MockCreationTrait;
+
     public function testSynchronize(): void
     {
         $content = 'content';
@@ -57,10 +59,37 @@ class SynchronizationTest extends TestCase
             ->with($relativeFileName)
             ->willReturn($file);
 
+        $dbStorageHelper = $this->createStub(DatabaseStorageHelper::class);
+        $dbStorageHelper->method('checkDbUsage')
+            ->willReturn(true);
+
         $objectManager = new ObjectManager($this);
         $model = $objectManager->getObject(Synchronization::class, [
             'storageFactory' => $storageFactoryMock,
             'directory' => $directory,
+            'databaseStorageHelper' => $dbStorageHelper,
+        ]);
+        $model->synchronize($relativeFileName);
+    }
+
+    public function testSynchronizeWontExecuteWhileDisabled(): void
+    {
+        $relativeFileName = 'config.xml';
+
+        $storageFactoryMock = $this->createPartialMock(DatabaseFactory::class, ['create']);
+        $storageFactoryMock->expects($this->never())->method('create');
+
+        $directory = $this->createStub(WriteInterface::class);
+
+        $dbStorageHelper = $this->createStub(DatabaseStorageHelper::class);
+        $dbStorageHelper->method('checkDbUsage')
+            ->willReturn(false);
+
+        $objectManager = new ObjectManager($this);
+        $model = $objectManager->getObject(Synchronization::class, [
+            'storageFactory' => $storageFactoryMock,
+            'directory' => $directory,
+            'databaseStorageHelper' => $dbStorageHelper,
         ]);
         $model->synchronize($relativeFileName);
     }
