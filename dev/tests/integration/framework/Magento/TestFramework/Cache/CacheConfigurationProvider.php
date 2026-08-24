@@ -81,7 +81,7 @@ final class CacheConfigurationProvider
             // Use the integration-container service name when runtime config is unavailable.
         }
 
-        return 'redis';
+        return '127.0.0.1';
     }
 
     /**
