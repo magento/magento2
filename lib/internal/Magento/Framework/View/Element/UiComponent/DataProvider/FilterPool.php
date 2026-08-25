@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DB\Select;
 
@@ -21,32 +21,66 @@ use Magento\Framework\DB\Select;
 class FilterPool
 {
     /**
-     * @var FilterApplierInterface[]
-     */
-    protected $appliers;
-
-    /**
      * @param FilterApplierInterface[] $appliers
      */
-    public function __construct(array $appliers = [])
+    public function __construct(protected array $appliers = [])
     {
-        $this->appliers = $appliers;
     }
 
     /**
-     * Apply filters from search criteria
+     * Apply filters from search criteria.
      *
      * @param Collection|AbstractDb $collection
      * @param SearchCriteriaInterface $criteria
      * @return void
+     * @throws \Zend_Db_Select_Exception
      */
     public function applyFilters(Collection $collection, SearchCriteriaInterface $criteria)
     {
+        // MC-24195
+        if (!$collection instanceof AbstractDb) {
+            $this->applyFiltersToCollection($collection, $criteria);
+            return;
+        }
+
+        $this->applyFiltersToDbCollection($collection, $criteria);
+    }
+
+    /**
+     * Apply filters without touching Select (non-database collections).
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $criteria
+     * @return void
+     */
+    private function applyFiltersToCollection(
+        Collection $collection,
+        SearchCriteriaInterface $criteria
+    ): void {
+        foreach ($criteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                $this->getApplier($filter->getConditionType())->apply($collection, $filter);
+            }
+        }
+    }
+
+    /**
+     * Apply filters and regroup WHERE so OR applies within each filter group.
+     *
+     * @param AbstractDb $collection
+     * @param SearchCriteriaInterface $criteria
+     * @return void
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function applyFiltersToDbCollection(
+        AbstractDb $collection,
+        SearchCriteriaInterface $criteria
+    ): void {
         $groupedParts = $collection->getSelect()->getPart(Select::WHERE);
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $filterParts = [];
             foreach ($filterGroup->getFilters() as $filter) {
-                $filterApplier = $this->appliers[$filter->getConditionType()] ?? $this->appliers['regular'];
+                $filterApplier = $this->getApplier($filter->getConditionType());
                 $filterApplier->apply($collection, $filter);
                 $whereParts = $collection->getSelect()->getPart(Select::WHERE);
                 if (is_array($whereParts) && count($whereParts)) {
@@ -70,7 +104,18 @@ class FilterPool
     }
 
     /**
-     * Remove were join condition in the beginning of applied filter
+     * Resolve filter applier for the given condition type.
+     *
+     * @param string|null $conditionType
+     * @return FilterApplierInterface
+     */
+    private function getApplier(?string $conditionType): FilterApplierInterface
+    {
+        return $this->appliers[$conditionType] ?? $this->appliers['regular'];
+    }
+
+    /**
+     * Remove where join condition in the beginning of applied filter
      *
      * @param string $part
      * @return string
