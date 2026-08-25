@@ -111,6 +111,10 @@ class FileUploaderTest extends TestCase
             ->with($this->attributeMetadata, null, CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER)
             ->willReturn($formElement);
 
+        $this->attributeMetadata->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('file');
+
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'customer');
         $this->assertTrue($model->validate());
     }

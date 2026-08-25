@@ -169,11 +169,6 @@ class ValidatorTest extends TestCase
     #[DataProvider('getNlValidPostcodesDataProvider')]
     public function testValidateReturnsTrueForNlValidPostcodes(string $postCode, string $countryId): void
     {
-        if (!$this->validator->validate('7311', 'NL')) {
-            $this->markTestSkipped(
-                'NL 4-digit postcode pattern not in zip_codes.xml (Directory NL zip code fix not applied).'
-            );
-        }
         $this->assertSame(true, $this->validator->validate($postCode, $countryId));
     }
 

@@ -111,5 +111,11 @@
         <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="modalMessage" type="text" selector="aside.modal-popup div.modal-content div"/>
         <element name="errorMessage" type="text" selector="div.message.message-error.error"/>
+        <element name="actionsCondition" type="text" selector="//div[@data-index='actions']//span[@class='rule-param']/a[@class='label' and normalize-space()='{{arg}}']" parameterized="true"/>
+        <element name="actionsValueSelect" type="select" selector="//div[@data-index='actions']//span[contains(@class,'rule-param-edit')]//select[@id='actions__1__value']"/>
+        <element name="actionsAddCondition" type="button" selector="//ul[@id='actions__1__children']//span[contains(@class,'rule-param-new-child')]//a"/>
+        <element name="actionsChildAttributeSelect" type="select" selector="select[name='rule[actions][1][new_child]']"/>
+        <element name="actionsChildOperator" type="select" selector="//ul[@id='actions__1__children']//span[contains(@class,'rule-param-edit')]//select[@id='actions__1--1__operator']"/>
+        <element name="actionsChildValue" type="input" selector="[id='actions__1--1__value']"/>
     </section>
 </sections>

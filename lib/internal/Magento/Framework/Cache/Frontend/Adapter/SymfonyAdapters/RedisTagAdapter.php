@@ -32,6 +32,14 @@ class RedisTagAdapter implements TagAdapterInterface
     private const SUNION_CHUNK_SIZE = 500;
 
     /**
+     * Maximum set size for which a single SINTER call is safe.
+     * SINTER is O(N*M) where N = smallest set size. If the smallest set exceeds
+     * this threshold, SINTER blocks Valkey long enough to saturate PHP-FPM workers.
+     * Above the threshold, SMEMBERS + PHP array_intersect is used instead.
+     */
+    private const SINTER_SAFE_SIZE = 500;
+
+    /**
      * Maximum number of IDs to be removed at a time - matches Zend's $_removeChunkSize
      * @see vendor/colinmollenhour/cache-backend-redis/Cm/Cache/Backend/Redis.php line 99
      */
@@ -298,7 +306,10 @@ LUA;
     /**
      * @inheritDoc
      *
-     * Uses Redis SINTER for efficient set intersection (true AND logic)
+     * Size-adaptive intersection: uses SINTER when the smallest matching set is
+     * small enough to be safe, falls back to SMEMBERS + PHP array_intersect when
+     * any set is large. A bare SINTER on large sets blocks Valkey (single-threaded)
+     * for the full O(N*M) duration, starving all other PHP workers.
      */
     public function getIdsMatchingTags(array $tags): array
     {
@@ -306,12 +317,71 @@ LUA;
             return [];
         }
 
-        // Build tag keys for Redis SINTER
+        if (count($tags) === 1) {
+            return $this->toIdsArray($this->redis->sMembers($this->getTagKey($tags[0])));
+        }
+
         $tagKeys = array_map([$this, 'getTagKey'], $tags);
+        $sizes = $this->fetchSetSizes($tagKeys);
 
-        // Redis SINTER returns IDs present in ALL sets
-        $ids = $this->redis->sinter($tagKeys);
+        // Any empty set means the intersection is empty
+        if (in_array(0, $sizes, true)) {
+            return [];
+        }
 
+        // Sort ascending so the smallest set is first — SINTER is most efficient that way
+        array_multisort($sizes, SORT_ASC, $tagKeys);
+
+        // When the smallest set is large, a single SINTER would block Valkey, so distribute
+        // the work as multiple O(N) SMEMBERS calls intersected in PHP instead.
+        if ($sizes[0] > self::SINTER_SAFE_SIZE) {
+            return $this->intersectViaMembers($tagKeys);
+        }
+
+        return $this->toIdsArray($this->redis->sinter($tagKeys));
+    }
+
+    /**
+     * Fetch the cardinality of every set in a single pipeline round-trip
+     *
+     * @param string[] $tagKeys
+     * @return int[]
+     */
+    private function fetchSetSizes(array $tagKeys): array
+    {
+        $pipeline = $this->createPipeline();
+        foreach ($tagKeys as $key) {
+            $pipeline->scard($key);
+        }
+
+        return array_map('intval', (array)$this->executePipeline($pipeline));
+    }
+
+    /**
+     * Intersect the given sets client-side using SMEMBERS + array_intersect
+     *
+     * @param string[] $tagKeys
+     * @return string[]
+     */
+    private function intersectViaMembers(array $tagKeys): array
+    {
+        $pipeline = $this->createPipeline();
+        foreach ($tagKeys as $key) {
+            $pipeline->sMembers($key);
+        }
+        $sets = array_map([$this, 'toIdsArray'], (array)$this->executePipeline($pipeline));
+
+        return array_values(array_intersect(...$sets));
+    }
+
+    /**
+     * Normalize a Redis set result to a plain array of IDs
+     *
+     * @param mixed $ids
+     * @return array
+     */
+    private function toIdsArray($ids): array
+    {
         return is_array($ids) ? $ids : [];
     }
 

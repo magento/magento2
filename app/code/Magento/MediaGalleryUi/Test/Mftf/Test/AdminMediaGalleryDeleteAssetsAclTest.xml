@@ -43,6 +43,8 @@
             <!-- Delete User & Role -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin1"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
             <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
             <comment userInput="BIC workaround" stepKey="waitForRolesGridLoad"/>
             <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">

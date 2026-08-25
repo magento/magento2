@@ -34,6 +34,7 @@
                 <item name="layout_update_permissions" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\LayoutUpdatePermissions</item>
                 <item name="name" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Name</item>
                 <item name="backorders" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Backorders</item>
+                <item name="price" xsi:type="object">Magento\CatalogImportExport\Model\Import\Product\Validator\Price</item>
             </argument>
         </arguments>
     </type>

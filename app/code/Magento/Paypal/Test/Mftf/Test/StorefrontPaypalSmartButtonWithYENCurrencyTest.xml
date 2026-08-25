@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
@@ -52,7 +49,7 @@
         </actionGroup>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
             <argument name="payerName" value="{{Payer.firstName}}"/>
         </actionGroup>
 

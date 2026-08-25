@@ -217,6 +217,13 @@
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface" type="Magento\Framework\Mview\View\CompositeSubscriptionStatementPostprocessor" />
     <preference for="Magento\Framework\DB\Logger\QueryAnalyzerInterface" type="Magento\Framework\DB\Logger\QueryIndexAnalyzer" />
+    <preference for="Magento\Framework\DB\DeadlockRecoveryExecutorInterface" type="Magento\Framework\DB\DeadlockRecoveryExecutor"/>
+    <type name="Magento\Framework\DB\DeadlockRecoveryExecutor">
+        <arguments>
+            <argument name="attempts" xsi:type="number">10</argument>
+            <argument name="maxJitter" xsi:type="number">250000</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -1990,13 +1997,6 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\GraphQl\Query\Resolver\Argument\ValidatorInterface" type="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator"/>
-    <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
-        <arguments>
-            <argument name="validators" xsi:type="array">
-                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator">
         <arguments>
             <argument name="maxPageSize" xsi:type="number">300</argument>
@@ -2026,6 +2026,15 @@
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="redis" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\RedisRequestLogger</item>
+                <item name="valkey" xsi:type="string">\Magento\Framework\App\Backpressure\SlidingWindow\ValkeyRequestLogger</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Setup\Model\ConfigOptionsList\BackpressureLogger">
+        <arguments>
+            <argument name="validLoggerTypes" xsi:type="array">
+                <item name="redis" xsi:type="string">redis</item>
+                <item name="valkey" xsi:type="string">valkey</item>
             </argument>
         </arguments>
     </type>
