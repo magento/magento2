@@ -702,9 +702,6 @@ class Factory
                 $result = $this->applyCompressionDecorator($result, $backendOptions);
             }
 
-            // Apply other decorators
-            $result = $this->_applyDecorators($result);
-
             // Apply preloading wrapper if preload_keys configured
             if (!empty($backendOptions['preload_keys']) && is_array($backendOptions['preload_keys'])) {
                 $result = $this->_objectManager->create(

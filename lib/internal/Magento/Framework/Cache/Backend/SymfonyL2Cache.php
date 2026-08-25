@@ -214,12 +214,19 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $hashSaved = false;
 
         try {
-            if ($this->isRemoteUpToDate($data, $id)) {
+            $sameRemoteData = $this->isRemoteUpToDate($data, $id);
+            // A tagged save must reach the remote adapter even when the payload is unchanged;
+            // otherwise changed tag associations would be skipped with the data deduplication.
+            if (empty($tags) && $sameRemoteData) {
                 // Skip redundant data and hash writes when L2 already contains this exact value,
                 // avoiding duplicate Redis traffic for repeated saves.
                 $remoteSaved = true;
                 $hashSaved = true;
             } else {
+                if (!empty($tags) && $sameRemoteData) {
+                    // Remove first so all previous remote tag memberships are cleared before re-save.
+                    $this->remote->remove($id);
+                }
                 // Save data first to avoid hash pointing to non-existent data
                 $remoteSaved = $this->remote->save($data, $id, $tags, $specificLifetime);
 
@@ -491,18 +498,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function getMetadatas($id)
     {
-        // Get test result (timestamp)
-        $mtime = $this->remote->test($id);
-
-        if ($mtime === false) {
-            return false;
-        }
-
-        return [
-            'expire' => null,
-            'tags' => [],
-            'mtime' => $mtime,
-        ];
+        return $this->remote->getMetadatas($id);
     }
 
     /**
@@ -510,7 +506,15 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     public function touch($id, $extraLifetime)
     {
-        // Reload and resave with extended lifetime
+        // Extend the existing remaining lifetime, matching the legacy Redis backend.
+        $metadata = $this->remote->getMetadatas($id);
+        if ($metadata === false || !isset($metadata['expire']) || $metadata['expire'] === false
+            || $metadata['expire'] === null) {
+            return false;
+        }
+
+        $remainingLifetime = max(0, (int)$metadata['expire'] - time());
+        $lifetime = $remainingLifetime + (int)$extraLifetime;
         $data = $this->remote->load($id);
 
         if ($data === false) {
@@ -520,17 +524,17 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         // Write directly to L2 so touch() extends the TTL even when the data is unchanged, then
         // refresh the matching L1 entry; save() would skip the remote write.
         try {
-            $remoteSaved = $this->remote->save($data, $id, [], $extraLifetime);
+            $remoteSaved = $this->remote->save($data, $id, [], $lifetime);
             if ($remoteSaved === false) {
                 return false;
             }
             $hash = $this->getDataHash($data);
-            $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $extraLifetime);
+            $this->remote->save($hash, $id . self::HASH_SUFFIX, [], $lifetime);
         } catch (\Exception $e) {
             return false;
         }
 
-        $this->local->save($data, $id, [], $extraLifetime);
+        $this->local->save($data, $id, [], $lifetime);
         $this->markValid($id);
 
         return true;

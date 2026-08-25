@@ -230,6 +230,17 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     }
 
     /**
+     * Delegate metadata lookup so backend operations such as touch() can preserve expiration.
+     *
+     * @param string $id
+     * @return array|false
+     */
+    public function getMetadatas($id)
+    {
+        return $this->adapter->getMetadatas($id);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getLowLevelFrontend()

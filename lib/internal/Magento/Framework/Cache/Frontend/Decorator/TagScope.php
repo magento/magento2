@@ -65,6 +65,12 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      */
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
+        // The scope tag is present on every entry. Do not add it to the exclusion list for
+        // NOT_MATCHING_TAG, otherwise the operation would match nothing and silently no-op.
+        if ($mode == CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG) {
+            return parent::clean($mode, $tags);
+        }
+
         if ($mode == CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG) {
             // Same as Zend: Loop through tags and clean each with scope
             $result = false;

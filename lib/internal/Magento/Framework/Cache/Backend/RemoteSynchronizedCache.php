@@ -236,7 +236,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
         $isRemoteUpToDate = false;
-        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
+        $sameRemoteData = $remHash !== false && $this->getDataVersion($data) === $remHash;
+        // Tagged saves must reach the remote backend so a changed tag set is re-indexed even when
+        // the payload is identical. Keep the redundant-write optimization for tagless saves.
+        if (empty($tags) && $sameRemoteData) {
             $remoteData = $this->remote->load($id);
             if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
                 $isRemoteUpToDate = true;
@@ -244,6 +247,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             }
         }
         if (!$isRemoteUpToDate) {
+            if (!empty($tags) && $sameRemoteData) {
+                // Remove first so Redis backends drop the previous tag memberships before re-save.
+                $this->remote->remove($id);
+            }
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }
