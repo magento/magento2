@@ -301,7 +301,16 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         $retryReadsOnMaster = isset($options['retry_reads_on_master']) ? (bool)$options['retry_reads_on_master'] : false;
 
         $usePhpRedis = extension_loaded('redis');
-        $connectionKey = sprintf('redis:%s:%d:%d', $host, $port, $database);
+        // Pool entries must not mix connections with different lifecycle or timeout settings.
+        $connectionKey = 'redis:' . md5((string)json_encode([
+            $host,
+            $port,
+            $database,
+            $persistent,
+            $persistentId,
+            $timeout,
+            $readTimeout,
+        ]));
         // Keep replica-backed and plain connections to the same master in separate pool slots, so a
         // frontend that configures load_from_slave never reuses (or is reused as) a plain connection.
         if ($slaveSpecs) {
@@ -345,6 +354,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $password,
                     $database,
                     $persistent,
+                    $persistentId,
                     $timeout,
                     $readTimeout,
                     $slaveSpecs,
@@ -569,6 +579,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param string|null $password
      * @param int $database
      * @param bool $persistent
+     * @param string|null $persistentId
      * @param float|null $timeout
      * @param float|null $readTimeout
      * @param array $slaveSpecs Read-replica targets [[host,port,db], ...] parsed from load_from_slave
@@ -583,6 +594,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         ?string $password,
         int $database,
         bool $persistent,
+        ?string $persistentId,
         ?float $timeout,
         ?float $readTimeout,
         array $slaveSpecs = [],
@@ -595,6 +607,20 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             'port' => $port,
             'database' => $database,
         ];
+
+        // Predis uses `persistent` for socket persistence and `conn_uid` to distinguish
+        // persistent sockets to the same Redis endpoint. These are separate from CLIENT SETNAME.
+        if ($persistent) {
+            $params['persistent'] = true;
+            // A persistent socket must never be shared by parent/child processes after fork.
+            $params['conn_uid'] = ($persistentId ?: 'default') . ':' . getmypid();
+        }
+        if ($timeout !== null) {
+            $params['timeout'] = $timeout;
+        }
+        if ($readTimeout !== null) {
+            $params['read_write_timeout'] = $readTimeout;
+        }
 
         if ($password) {
             $params['password'] = $password;
@@ -618,6 +644,17 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                 'database' => $sDatabase,
                 'role' => 'slave',
             ];
+            if ($persistent) {
+                $slave['persistent'] = true;
+                $slave['conn_uid'] = ($persistentId ?: 'default') . ':' . getmypid()
+                    . '_slave_' . $sHost . '_' . $sPort . '_' . $sDatabase;
+            }
+            if ($timeout !== null) {
+                $slave['timeout'] = $timeout;
+            }
+            if ($readTimeout !== null) {
+                $slave['read_write_timeout'] = $readTimeout;
+            }
             if ($password) {
                 $slave['password'] = $password;
             }

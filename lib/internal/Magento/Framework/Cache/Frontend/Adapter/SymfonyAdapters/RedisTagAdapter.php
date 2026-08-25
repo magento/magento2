@@ -1144,9 +1144,12 @@ LUA;
     {
         // Use Lua script if enabled for atomic, efficient clearing
         if ($this->useLua && $this->luaHelper) {
-            $this->luaHelper->clearAllIndices($this->namespace);
-            // Lua script handles everything atomically
-            return;
+            $deleted = $this->luaHelper->clearAllIndices($this->namespace);
+            // A failed Lua/EVALSHA attempt is normalized to zero by the helper. Fall back to the
+            // scan implementation so cache:flush cannot silently leave forward/reverse indices.
+            if ($deleted > 0) {
+                return;
+            }
         }
 
         // Clears cache using non-blocking SCAN with batched deletes, avoiding KEYS on cache:flush/clean(ALL).
