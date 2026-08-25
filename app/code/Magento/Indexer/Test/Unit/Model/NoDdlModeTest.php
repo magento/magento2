@@ -160,7 +160,7 @@ class NoDdlModeTest extends TestCase
                 self::TABLE_NAME,
                 [
                     'indexer_id' => 'sample_indexer_a',
-                    'is_main_active' => true,
+                    'is_main_active' => false,
                 ],
                 $this->callback(function (array $fields) {
                     return isset($fields['is_main_active'])

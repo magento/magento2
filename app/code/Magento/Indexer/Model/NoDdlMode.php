@@ -124,11 +124,12 @@ class NoDdlMode implements NoDdlModeInterface, ResetAfterRequestInterface
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName(self::TABLE_NAME);
 
-        // Seeds is_main_active=true if the row doesn't exist yet, matching isMainTableActive()'s own
-        // default, and toggles it atomically on the existing row in the same statement.
+        // Seeds is_main_active=false on first insert, since isMainTableActive() already defaults a
+        // missing row to true. Seeding true here would make the very first flip a no-op. Existing rows
+        // toggle atomically in the same statement.
         $connection->insertOnDuplicate(
             $tableName,
-            ['indexer_id' => $indexerId, 'is_main_active' => true],
+            ['indexer_id' => $indexerId, 'is_main_active' => false],
             ['is_main_active' => new \Zend_Db_Expr('NOT is_main_active')]
         );
 
