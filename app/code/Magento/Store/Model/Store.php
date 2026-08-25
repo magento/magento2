@@ -911,6 +911,9 @@ class Store extends AbstractExtensibleModel implements
                 : $this->_storeManager->getWebsite()->getDefaultStore()->getDefaultCurrency()->getCode();
 
             $this->_httpContext->setValue(Context::CONTEXT_CURRENCY, $code, $defaultCode);
+            
+            // Force reload of current currency on currency code change
+            $this->unsetData('current_currency');
         }
         return $this;
     }
