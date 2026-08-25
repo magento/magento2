@@ -4,8 +4,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Symfony;
 
+use Magento\Framework\Cache\CacheConstants;
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Cache\CacheFrontendTestCase;
 

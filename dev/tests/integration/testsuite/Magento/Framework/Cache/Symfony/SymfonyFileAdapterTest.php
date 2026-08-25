@@ -5,10 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Symfony;
 
 use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -39,15 +41,8 @@ class SymfonyFileAdapterTest extends TestCase
 
         $this->cacheFactory = Bootstrap::getObjectManager()->get(Factory::class);
 
-        // Create Symfony cache adapter using Factory
-        $this->cache = $this->cacheFactory->create([
-            'frontend' => [
-                'backend' => 'file',
-                'backend_options' => [
-                    'cache_dir' => BP . '/var/cache/test_symfony'
-                ]
-            ]
-        ]);
+        $configuration = CacheConfigurationProvider::provide()['symfony-file'][1];
+        $this->cache = $this->cacheFactory->create($configuration);
     }
 
     /**
