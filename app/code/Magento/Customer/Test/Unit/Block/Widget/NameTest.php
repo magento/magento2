@@ -256,7 +256,7 @@ class NameTest extends TestCase
     /**
      * @return void
      */
-    public function testGetPrefixOptionsNotEmpty(): void
+    public function testGetPrefixOptionsAppendsMissingValue(): void
     {
         /**
          * Added some padding so that the trim() call on Customer::getPrefix() will remove it. Also added
@@ -269,11 +269,12 @@ class NameTest extends TestCase
 
         $this->_block->setObject($customer);
 
-        $prefixOptions = ['Mrs' => 'Mrs', 'Ms' => 'Ms', 'Miss' => 'Miss'];
+        // Numerically indexed list matching Options::prepareNamePrefixSuffixOptions()
+        $prefixOptions = ['Mrs', 'Ms', 'Miss'];
 
         $prefix = '&lt;' . self::PREFIX . '&gt;';
         $expectedOptions = $prefixOptions;
-        $expectedOptions[$prefix] = $prefix;
+        $expectedOptions[] = $prefix;
 
         $this->_options->expects(
             $this->once()
@@ -285,6 +286,30 @@ class NameTest extends TestCase
         $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($prefix);
 
         $this->assertSame($expectedOptions, $this->_block->getPrefixOptions());
+    }
+
+    /**
+     * When the saved prefix is already present in the options list, do not append a duplicate entry.
+     *
+     * @return void
+     */
+    public function testGetPrefixOptionsDoesNotDuplicateExistingValue(): void
+    {
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())->method('getPrefix')->willReturn(self::PREFIX);
+        $this->_block->setObject($customer);
+
+        $prefixOptions = [' ', 'Mr', 'Mrs', 'Ms'];
+
+        $this->_options->expects($this->once())
+            ->method('getNamePrefixOptions')
+            ->willReturn($prefixOptions);
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->with(self::PREFIX)
+            ->willReturn(self::PREFIX);
+
+        $this->assertSame($prefixOptions, $this->_block->getPrefixOptions());
     }
 
     /**
@@ -311,7 +336,7 @@ class NameTest extends TestCase
     /**
      * @return void
      */
-    public function testGetSuffixOptionsNotEmpty(): void
+    public function testGetSuffixOptionsAppendsMissingValue(): void
     {
         /**
          * Added padding and special characters to show that trim() works on Customer::getSuffix() and that
@@ -323,11 +348,11 @@ class NameTest extends TestCase
         $customer->expects($this->once())->method('getSuffix')->willReturn('  <' . self::SUFFIX . '>  ');
         $this->_block->setObject($customer);
 
-        $suffixOptions = ['Sr' => 'Sr'];
+        $suffixOptions = ['Sr'];
 
         $suffix = '&lt;' . self::SUFFIX . '&gt;';
         $expectedOptions = $suffixOptions;
-        $expectedOptions[$suffix] = $suffix;
+        $expectedOptions[] = $suffix;
 
         $this->_options->expects(
             $this->once()
@@ -339,6 +364,30 @@ class NameTest extends TestCase
         $this->_escaper->expects($this->once())->method('escapeHtml')->willReturn($suffix);
 
         $this->assertSame($expectedOptions, $this->_block->getSuffixOptions());
+    }
+
+    /**
+     * When the saved suffix is already present in the options list, do not append a duplicate entry.
+     *
+     * @return void
+     */
+    public function testGetSuffixOptionsDoesNotDuplicateExistingValue(): void
+    {
+        $customer = $this->createMock(CustomerInterface::class);
+        $customer->expects($this->once())->method('getSuffix')->willReturn(self::SUFFIX);
+        $this->_block->setObject($customer);
+
+        $suffixOptions = [' ', 'Jr', 'Sr'];
+
+        $this->_options->expects($this->once())
+            ->method('getNameSuffixOptions')
+            ->willReturn($suffixOptions);
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->with(self::SUFFIX)
+            ->willReturn(self::SUFFIX);
+
+        $this->assertSame($suffixOptions, $this->_block->getSuffixOptions());
     }
 
     /**
