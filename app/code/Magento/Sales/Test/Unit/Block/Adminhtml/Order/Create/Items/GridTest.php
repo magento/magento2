@@ -108,6 +108,7 @@ class GridTest extends TestCase
             ->getMock();
 
         $storeMock = $this->createMock(Store::class);
+
         $this->priceCurrency->expects($this->any())
             ->method('convertAndFormat')
             ->willReturnArgument(0);
