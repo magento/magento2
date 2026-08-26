@@ -302,7 +302,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
 
         $usePhpRedis = extension_loaded('redis');
         // Pool entries must not mix connections with different lifecycle or timeout settings.
-        $connectionKey = 'redis:' . md5((string)json_encode([
+        $connectionKey = 'redis:' . hash('sha256', (string)json_encode([
             $host,
             $port,
             $database,
@@ -314,7 +314,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // Keep replica-backed and plain connections to the same master in separate pool slots, so a
         // frontend that configures load_from_slave never reuses (or is reused as) a plain connection.
         if ($slaveSpecs) {
-            $connectionKey .= ':slave=' . md5((string)json_encode([$slaveSpecs, $masterWriteOnly, $retryReadsOnMaster]));
+            $connectionKey .= ':slave=' . hash(
+                'sha256',
+                (string)json_encode([$slaveSpecs, $masterWriteOnly, $retryReadsOnMaster])
+            );
         }
 
         if (!isset($this->connectionPool[$connectionKey])) {
@@ -743,7 +746,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             foreach ($options['servers'] as $server) {
                 $servers[] = [$server[0] ?? '127.0.0.1', $server[1] ?? 11211];
             }
-            $connectionKey = 'memcached:' . md5((string)json_encode($servers));
+            $connectionKey = 'memcached:' . hash('sha256', (string)json_encode($servers));
         } else {
             // Single server - fast path
             $host = $options['server'] ?? $options['host'] ?? '127.0.0.1';
