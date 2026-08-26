@@ -17,7 +17,7 @@ use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\SerializerInterface;
 use Predis\Client as PredisClient;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
@@ -51,9 +51,9 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     public const REDIS_DEFAULT_CONNECT_RETRIES = 1;
 
     /**
-     * @var Serialize
+     * @var SerializerInterface
      */
-    private Serialize $serializer;
+    private SerializerInterface $serializer;
 
     /**
      * @var array<string, mixed>
@@ -102,12 +102,12 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     /**
      * @param Filesystem $filesystem
      * @param ResourceConnection $resource
-     * @param Serialize $serializer PHP native serializer
+     * @param SerializerInterface $serializer Magento serializer
      */
     public function __construct(
         Filesystem $filesystem,
         ResourceConnection $resource,
-        Serialize $serializer
+        SerializerInterface $serializer
     ) {
         $this->filesystem = $filesystem;
         $this->resource = $resource;
@@ -743,8 +743,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             foreach ($options['servers'] as $server) {
                 $servers[] = [$server[0] ?? '127.0.0.1', $server[1] ?? 11211];
             }
-            // phpcs:ignore Magento2.Security.InsecureFunction,Magento2.Functions.DiscouragedFunction
-            $connectionKey = 'memcached:' . md5(serialize($servers));
+            $connectionKey = 'memcached:' . md5((string)json_encode($servers));
         } else {
             // Single server - fast path
             $host = $options['server'] ?? $options['host'] ?? '127.0.0.1';
