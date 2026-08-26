@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
             <group value="Swatches"/>
             <skip>
-                <issueId value="AC-18036">Skipped because of AC bug</issueId>
+                <issueId value="AC-18036">StorefrontSwatchProductWithFileCustomOptionTest failing due to alert message not appearing on product details page on frontend</issueId>
             </skip>
         </annotations>
 
