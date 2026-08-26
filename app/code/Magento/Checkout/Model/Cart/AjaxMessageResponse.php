@@ -40,7 +40,7 @@ class AjaxMessageResponse
     public function getInlineErrorMessages(bool $clearMessages): ?array
     {
         $messages = $this->messageManager->getMessages($clearMessages);
-        $errorMessages = $this->getErrorMessages($messages);
+        $errorMessages = $this->getRelevantMessages($messages);
         if (!$errorMessages->getCount()) {
             return null;
         }
@@ -48,24 +48,35 @@ class AjaxMessageResponse
         $block = $this->layoutFactory->create()->createBlock(Messages::class);
         $block->setMessages($errorMessages);
 
+        // Match the role="alert" wrapper the storefront Knockout messages component renders,
+        // so MFTF assertions waiting on [role=alert] can find AJAX-injected messages too.
+        $html = str_replace(
+            '<div class="messages">',
+            '<div aria-atomic="true" role="alert" class="messages">',
+            $block->getGroupedHtml()
+        );
+
         return [
-            'html' => $block->getGroupedHtml(),
+            'html' => $html,
         ];
     }
 
     /**
-     * Extract error messages from the message collection.
+     * Extract error/notice messages from the message collection.
      *
      * @param Collection $messages
      * @return Collection
      */
-    private function getErrorMessages(Collection $messages): Collection
+    private function getRelevantMessages(Collection $messages): Collection
     {
-        $errorMessages = $this->messageCollectionFactory->create();
+        $relevantMessages = $this->messageCollectionFactory->create();
         foreach ($messages->getItemsByType(MessageInterface::TYPE_ERROR) as $message) {
-            $errorMessages->addMessage($message);
+            $relevantMessages->addMessage($message);
+        }
+        foreach ($messages->getItemsByType(MessageInterface::TYPE_NOTICE) as $message) {
+            $relevantMessages->addMessage($message);
         }
 
-        return $errorMessages;
+        return $relevantMessages;
     }
 }
