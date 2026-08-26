@@ -10,7 +10,7 @@
     <test name="EndToEndB2CGuestUserTest">
         <annotations>
             <skip>
-                <issueId value="AC-18038">Skipped because of AC bug</issueId>
+                <issueId value="AC-18038">EndToEndB2CGuestUserTest failing because notice message not appearing</issueId>
             </skip>
         </annotations>
         <before>
