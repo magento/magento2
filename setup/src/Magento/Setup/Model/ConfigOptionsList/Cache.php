@@ -27,6 +27,12 @@ class Cache implements ConfigOptionsListInterface
     public const INPUT_VALUE_CACHE_VALKEY = 'valkey';
     public const CONFIG_VALUE_CACHE_VALKEY = \Magento\Framework\Cache\Backend\Valkey::class;
 
+    public const INPUT_VALUE_CACHE_SYMFONY_REDIS = 'symfony_redis';
+    public const CONFIG_VALUE_CACHE_SYMFONY_REDIS = 'redis';
+
+    public const INPUT_VALUE_CACHE_SYMFONY_VALKEY = 'symfony_valkey';
+    public const CONFIG_VALUE_CACHE_SYMFONY_VALKEY = 'valkey';
+
     public const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE = 'cache-backend-redis-db';
@@ -95,7 +101,9 @@ class Cache implements ConfigOptionsListInterface
      */
     private $validBackendCacheOptions = [
         self::INPUT_VALUE_CACHE_REDIS,
-        self::INPUT_VALUE_CACHE_VALKEY
+        self::INPUT_VALUE_CACHE_VALKEY,
+        self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+        self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
     ];
 
     /**
@@ -329,11 +337,27 @@ class Cache implements ConfigOptionsListInterface
         }
 
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
-            if ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_REDIS) {
-                $configData->set(self::CONFIG_PATH_CACHE_BACKEND, self::CONFIG_VALUE_CACHE_REDIS);
+            if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_REDIS,
+                self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_REDIS
+                        ? self::CONFIG_VALUE_CACHE_SYMFONY_REDIS
+                        : self::CONFIG_VALUE_CACHE_REDIS
+                );
                 $this->setDefaultRedisConfig($deploymentConfig, $configData);
-            } elseif ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_VALKEY) {
-                $configData->set(self::CONFIG_PATH_CACHE_BACKEND, self::CONFIG_VALUE_CACHE_VALKEY);
+            } elseif (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_VALKEY,
+                self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+            ], true)) {
+                $configData->set(
+                    self::CONFIG_PATH_CACHE_BACKEND,
+                    $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
+                        ? self::CONFIG_VALUE_CACHE_SYMFONY_VALKEY
+                        : self::CONFIG_VALUE_CACHE_VALKEY
+                );
                 $this->setDefaultValkeyConfig($deploymentConfig, $configData);
             } else {
                 $configData->set(self::CONFIG_PATH_CACHE_BACKEND, $options[self::INPUT_KEY_CACHE_BACKEND]);
@@ -356,7 +380,10 @@ class Cache implements ConfigOptionsListInterface
     private function applyCacheBackendConfig(array $options, ConfigData $configData): void
     {
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
-            $map = $options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_VALKEY
+            $map = in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+                self::INPUT_VALUE_CACHE_VALKEY,
+                self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+            ], true)
                 ? $this->inputKeyToValkeyConfigPathMap
                 : $this->inputKeyToConfigPathMap;
 
@@ -379,7 +406,12 @@ class Cache implements ConfigOptionsListInterface
         $currentBackend = $deploymentConfig->get(Cache::CONFIG_PATH_CACHE_BACKEND);
 
         // Validate if selected backend is Redis or Valkey
-        if (in_array($selectedBackend, [self::INPUT_VALUE_CACHE_REDIS, self::INPUT_VALUE_CACHE_VALKEY], true)) {
+        if (in_array($selectedBackend, [
+            self::INPUT_VALUE_CACHE_REDIS,
+            self::INPUT_VALUE_CACHE_VALKEY,
+            self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
+            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+        ], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
                 $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
             }
@@ -411,7 +443,10 @@ class Cache implements ConfigOptionsListInterface
     private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $config = [];
-        if ($options[self::INPUT_KEY_CACHE_BACKEND] == self::INPUT_VALUE_CACHE_VALKEY
+        if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
+            self::INPUT_VALUE_CACHE_VALKEY,
+            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+        ], true)
             || $options[PageCache::INPUT_KEY_PAGE_CACHE_BACKEND] == PageCache::INPUT_VALUE_PAGE_CACHE_VALKEY) {
             $config['host'] = $options[self::INPUT_KEY_CACHE_BACKEND_VALKEY_SERVER] ??
                 $deploymentConfig->get(
