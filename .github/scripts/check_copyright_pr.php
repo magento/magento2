@@ -66,7 +66,7 @@ function normalizeHeader(string $text): string
 {
     $text = preg_replace('/<\?xml[^?]*\?>/', '', $text);           // strip XML PI
     $text = preg_replace('/\bdeclare\s*\([^)]*\)\s*;?/', '', $text); // strip declare()
-    return strtolower((string) preg_replace('/[\s#\/\*\-<>!?\[\]]+/', '', $text));
+    return strtolower((string) preg_replace('/[\s#\/\*\-<>!?\[\].,]+/', '', $text));
 }
 
 /**
