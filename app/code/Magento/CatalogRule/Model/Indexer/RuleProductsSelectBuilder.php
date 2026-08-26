@@ -139,12 +139,6 @@ class RuleProductsSelectBuilder
             . $attributeId
             . ') and %1$s.store_id=%2$s';
 
-        $select->join(
-            ['pp_default' => $priceTable],
-            sprintf($joinCondition, 'pp_default', Store::DEFAULT_STORE_ID),
-            []
-        );
-
         $website = $this->storeManager->getWebsite($websiteId);
         $defaultGroup = $website->getDefaultGroup();
         if ($defaultGroup instanceof Group) {
@@ -170,7 +164,7 @@ class RuleProductsSelectBuilder
         );
         $select->columns(
             [
-                'default_price' => $connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
+                'default_price' => $connection->getIfNullSql($tableAlias . '.value', '0'),
             ]
         );
 
