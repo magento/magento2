@@ -285,4 +285,45 @@ class AttributeSetRepositoryTest extends WebapiAbstract
         }
         return $attributeSet;
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Eav/_files/attribute_set_for_search.php
+     */
+    public function testGetListWithoutSortOrder()
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()
+            ->create(SearchCriteriaBuilder::class);
+
+        $searchCriteriaBuilder->setPageSize(20);
+        $searchCriteriaBuilder->setCurrentPage(1);
+
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/eav/attribute-sets/list' . '?' . http_build_query($requestData),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => 'eavAttributeSetRepositoryV1',
+                'serviceVersion' => 'V1',
+                'operation' => 'eavAttributeSetRepositoryV1GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertGreaterThan(1, $searchResult['total_count']);
+
+        $items = $searchResult['items'];
+        for ($i = 1; $i < count($items); $i++) {
+            $this->assertGreaterThan(
+                $items[$i - 1]['attribute_set_id'],
+                $items[$i]['attribute_set_id'],
+                'Items are not sorted by attribute_set_id ASC'
+            );
+        }
+    }
 }

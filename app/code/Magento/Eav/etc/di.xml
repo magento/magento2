@@ -154,11 +154,18 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetSortingProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor">
+        <arguments>
+            <argument name="defaultOrders" xsi:type="array">
+                <item name="attribute_set_id" xsi:type="string">ASC</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Eav\Model\Api\SearchCriteria\AttributeSetCollectionProcessor" type="Magento\Framework\Api\SearchCriteria\CollectionProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
                 <item name="filters" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetFilterProcessor</item>
-                <item name="sorting" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\SortingProcessor</item>
+                <item name="sorting" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor\AttributeSetSortingProcessor</item>
                 <item name="pagination" xsi:type="object">Magento\Framework\Api\SearchCriteria\CollectionProcessor\PaginationProcessor</item>
             </argument>
         </arguments>
