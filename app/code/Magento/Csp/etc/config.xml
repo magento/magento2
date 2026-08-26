@@ -13,7 +13,8 @@
                     <report_only>1</report_only>
                 </storefront>
                 <admin>
-                    <report_only>1</report_only>
+                    <!-- Enforce CSP in admin by default (defense-in-depth against stored XSS). -->
+                    <report_only>0</report_only>
                 </admin>
             </mode>
             <policies>
