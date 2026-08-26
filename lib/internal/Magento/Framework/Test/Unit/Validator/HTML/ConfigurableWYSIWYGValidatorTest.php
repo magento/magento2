@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2024 Adobe.
+ * Copyright 2024 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -225,6 +225,42 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
                 [],
                 '',
                 false,
+                [],
+                []
+            ],
+            'anchor-with-absolute-url-and-trailing-attributes' => [
+                ['a'],
+                ['href', 'target', 'rel'],
+                [],
+                '<a href="https://new.abb.com/drives" target="_blank" rel="noopener">Drives</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-domain-only-url-and-trailing-attribute' => [
+                ['a'],
+                ['href', 'target'],
+                [],
+                '<a href="https://example.com" target="_blank">Example</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-multi-segment-relative-url-and-trailing-attribute' => [
+                ['a'],
+                ['href', 'target'],
+                [],
+                '<a href="/category1/category2" target="_blank">Example</a>',
+                true,
+                [],
+                []
+            ],
+            'anchor-with-multi-segment-url-as-last-attribute' => [
+                ['a'],
+                ['href'],
+                [],
+                '<a href="https://example.com/category1/category2">Example</a>',
+                true,
                 [],
                 []
             ]
