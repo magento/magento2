@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="AC-18036">Skipped because of AC bug</issueId>
+            </skip>
         </annotations>
 
         <before>
