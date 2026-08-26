@@ -280,6 +280,26 @@ class FilePermissions
     }
 
     /**
+     * Checks writable paths for saving the deployment configuration, returns paths that require write permission
+     *
+     * Saving the deployment configuration (setup:config:set) writes to app/etc only, so the other installation
+     * directories (var, pub/media, generated, pub/static) are not checked here.
+     *
+     * @return array List of paths that require write permission to save the deployment configuration
+     */
+    public function getMissingWritablePathsForDeploymentConfig()
+    {
+        if ($this->isWritable(DirectoryList::CONFIG)) {
+            return [];
+        }
+        $path = $this->directoryList->getPath(DirectoryList::CONFIG);
+        if ($this->checkRecursiveDirectories($path)) {
+            return [];
+        }
+        return $this->nonWritablePathsInDirectories[$path] ?? [$path];
+    }
+
+    /**
      * Checks writable paths for database upgrade, returns array of directory paths that requires write permission
      *
      * @return array List of directories that requires write permission for database upgrade
