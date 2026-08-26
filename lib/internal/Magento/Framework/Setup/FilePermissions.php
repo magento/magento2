@@ -282,12 +282,14 @@ class FilePermissions
     /**
      * Checks writable paths for database upgrade, returns array of directory paths that requires write permission
      *
+     * Database upgrade only writes to var/. Deployment configuration (app/etc) is not touched, so it may stay
+     * read-only, which is the expected state for immutable/read-only deployments.
+     *
      * @return array List of directories that requires write permission for database upgrade
      */
     public function getMissingWritableDirectoriesForDbUpgrade()
     {
         $writableDirectories = [
-            DirectoryList::CONFIG,
             DirectoryList::VAR_DIR
         ];
 
