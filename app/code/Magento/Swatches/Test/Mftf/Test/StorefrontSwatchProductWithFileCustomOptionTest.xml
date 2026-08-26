@@ -18,6 +18,9 @@
             <testCaseId value="MAGETWO-93101"/>
             <group value="ConfigurableProduct"/>
             <group value="Swatches"/>
+            <skip>
+                <issueId value="AC-18036">Skipped because of AC bug</issueId>
+            </skip>
         </annotations>
 
         <before>
