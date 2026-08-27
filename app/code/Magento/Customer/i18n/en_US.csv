@@ -556,3 +556,5 @@ VAT,VAT
 "Invalid Street Address. The street address is too long. Enter no more than %1 characters.","Invalid Street Address. The street address is too long. Enter no more than %1 characters."
 "Invalid Street Address. The street address contains invalid characters.","Invalid Street Address. The street address contains invalid characters."
 "Address not found.","Address not found."
+"The search criteria filter field is invalid.","The search criteria filter field is invalid."
+"The search criteria sort field is invalid.","The search criteria sort field is invalid."
