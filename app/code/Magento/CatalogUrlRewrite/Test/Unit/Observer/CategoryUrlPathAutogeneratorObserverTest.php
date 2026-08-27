@@ -369,7 +369,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testShouldUpdateUrlPathForLeafCategoryWhenUrlKeyIsResetToDefaultAtStoreScope(): void
+    public function testShouldUpdateUrlPathForChildCategoryWhenUrlKeyIsResetToDefaultAtStoreScope(): void
     {
         $storeId = 2;
         $rowId = 6;
@@ -448,7 +448,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testShouldNotUpdateUrlPathForLeafCategoryWhenUrlKeyWasNeverOverriddenAtStoreScope(): void
+    public function testShouldNotUpdateUrlPathForChildCategoryWhenUrlKeyWasNeverOverriddenAtStoreScope(): void
     {
         $storeId = 2;
         $rowId = 6;

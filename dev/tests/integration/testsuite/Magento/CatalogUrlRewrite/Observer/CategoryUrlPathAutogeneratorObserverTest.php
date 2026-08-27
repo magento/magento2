@@ -167,7 +167,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
         ),
         DataFixture(CategoryFixture::class, ['url_key' => 'default-store-category1'], as:'category1')
     ]
-    public function testLeafCategoryUrlPathIsRecalculatedWhenUrlKeyIsResetToDefaultAtStoreScope(): void
+    public function testChildCategoryUrlPathIsRecalculatedWhenUrlKeyIsResetToDefaultAtStoreScope(): void
     {
         $category1 = $this->fixtures->get('category1');
         $secondStore = $this->fixtures->get('store2');
@@ -211,7 +211,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
         $this->assertEquals(
             'default-store-category1/category-2',
             $finalCategory2->getUrlPath(),
-            'A leaf category reverted to the default URL Key at store scope must recalculate its own url_path'
+            'A child category reverted to the default URL Key at store scope must recalculate its own url_path'
         );
     }
 }
