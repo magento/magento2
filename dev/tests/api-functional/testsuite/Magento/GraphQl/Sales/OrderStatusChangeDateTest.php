@@ -81,7 +81,11 @@ class OrderStatusChangeDateTest extends GraphQlAbstract
         //Update order status
         $order->setStatus($status);
         $order->setState($status);
-        Bootstrap::getObjectManager()->get(OrderRepository::class)->save($order);
+        $orderRepository = Bootstrap::getObjectManager()->get(OrderRepository::class);
+        $orderRepository->save($order);
+
+        // Re-fetch order to get the actual stored updated_at (avoids flaky 1-second timing issues)
+        $order = $orderRepository->get($order->getEntityId());
 
         $updatedGuestOrder = $this->graphQlMutation($this->getQuery(
             $order->getIncrementId(),
