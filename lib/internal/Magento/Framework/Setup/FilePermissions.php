@@ -327,8 +327,8 @@ class FilePermissions
     /**
      * Checks writable directories for installation
      *
-     * @deprecated 100.1.0 Use getMissingWritablePathsForInstallation()
-     * to get all missing writable paths required for install.
+     * @deprecated 100.1.0 Checks directories only; use the replacement to also cover files required for install.
+     * @see getMissingWritablePathsForInstallation()
      * @return array
      */
     public function getMissingWritableDirectoriesForInstallation()
