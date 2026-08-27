@@ -3,27 +3,23 @@
  * Copyright 2014 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View;
 
 class DesignLoader
 {
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
-     * Application
-     *
      * @var \Magento\Framework\App\AreaList
      */
     protected $_areaList;
 
     /**
-     * Layout
-     *
      * @var \Magento\Framework\App\State
      */
     protected $appState;
