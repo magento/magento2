@@ -400,6 +400,10 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
                     ['row_id', null, $rowId],
                 ]
             );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(true);
         $this->getDefaultUrlKey->expects($this->once())
             ->method('execute')
             ->with($rowId)
@@ -425,13 +429,61 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
             ]);
         $this->categoryResource->method('getConnection')->willReturn($connection);
 
+        $this->compositeUrlValidator->expects($this->once())
+            ->method('validate')
+            ->with('one-point-one-one-one')
+            ->willReturn([]);
+        $this->categoryUrlPathGenerator->expects($this->once())
+            ->method('getUrlPath')
+            ->with($this->category)
+            ->willReturn('one/one-point-one/one-point-one-one/one-point-one-one-one');
         $this->categoryResource->expects($this->once())
             ->method('saveAttribute')
             ->with($this->category, 'url_path');
 
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
-        $this->assertFalse($this->category->getUrlKey());
-        $this->assertNull($this->category->getUrlPath());
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testShouldNotUpdateUrlPathForLeafCategoryWhenUrlKeyWasNeverOverriddenAtStoreScope(): void
+    {
+        $storeId = 2;
+        $rowId = 6;
+        $categoryData = [
+            'use_default' => ['url_key' => 1],
+            'url_key' => null,
+            'url_path' => 'one/one-point-one/one-point-one-one/one-point-one-one-one',
+            'row_id' => $rowId,
+        ];
+
+        $this->category->setData($categoryData);
+        $this->category->isObjectNew(false);
+        $this->category->method('getStoreId')->willReturn($storeId);
+        $this->category->expects($this->once())
+            ->method('hasChildren')
+            ->willReturn(false);
+        $this->category->method('getUrlKey')
+            ->willReturn(false);
+        $this->category->method('getData')
+            ->willReturnMap(
+                [
+                    ['use_default', null, ['url_key' => 1]],
+                    ['row_id', null, $rowId],
+                ]
+            );
+        $this->storeViewService->expects($this->once())
+            ->method('doesEntityHaveOverriddenUrlKeyForStore')
+            ->with($storeId, $this->anything(), Category::ENTITY)
+            ->willReturn(false);
+        $this->getDefaultUrlKey->expects($this->never())
+            ->method('execute');
+        $this->categoryResource->expects($this->never())
+            ->method('saveAttribute');
+
+        $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
     }
 
     /**

@@ -133,8 +133,16 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     private function restoreDefaultUrlKeyIfNeeded(Category $category): void
     {
         $isStoreScopedRevert = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
-        if (!$category->hasChildren() && !$isStoreScopedRevert) {
-            return;
+        if (!$category->hasChildren()) {
+            $hasStoreScopedOverride = $isStoreScopedRevert
+                && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+                    $category->getStoreId(),
+                    $category->getId(),
+                    Category::ENTITY
+                );
+            if (!$hasStoreScopedOverride) {
+                return;
+            }
         }
         $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
         $linkField = $metadata->getLinkField();
