@@ -837,41 +837,52 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
      * Return children ids of category
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @param boolean $recursive
+     * @param bool $recursive
+     * @param bool $isActive
+     * @param bool $sortByPosition
      * @return array
      */
-    public function getChildren($category, $recursive = true)
+    public function getChildren($category, $recursive = true, $isActive = true, $sortByPosition = false)
     {
         $linkField = $this->getLinkField();
-        $attributeId = $this->getIsActiveAttributeId();
-        $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
-        $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
         $bind = [
-            'attribute_id' => $attributeId,
-            'store_id' => $category->getStoreId(),
-            'scope' => 1,
             'c_path' => $category->getPath() . '/%',
         ];
-        $select = $this->getConnection()->select()->from(
+        $select = $connection->select()->from(
             ['m' => $this->getEntityTable()],
             'entity_id'
-        )->joinLeft(
-            ['d' => $backendTable],
-            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
-            []
-        )->joinLeft(
-            ['c' => $backendTable],
-            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
-            []
-        )->where(
-            $checkSql . ' = :scope'
         )->where(
             $connection->quoteIdentifier('path') . ' LIKE :c_path'
         );
+
+        if ($isActive) {
+            $attributeId = $this->getIsActiveAttributeId();
+            $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
+            $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+            $bind['attribute_id'] = $attributeId;
+            $bind['store_id'] = $category->getStoreId();
+            $bind['scope'] = 1;
+            $select->joinLeft(
+                ['d' => $backendTable],
+                "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
+                []
+            )->joinLeft(
+                ['c' => $backendTable],
+                "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
+                []
+            )->where(
+                $checkSql . ' = :scope'
+            );
+        }
+
         if (!$recursive) {
             $select->where($connection->quoteIdentifier('level') . ' <= :c_level');
             $bind['c_level'] = $category->getLevel() + 1;
+        }
+
+        if ($sortByPosition) {
+            $select->order('position ASC');
         }
 
         return $connection->fetchCol($select, $bind);
