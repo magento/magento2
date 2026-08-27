@@ -119,6 +119,34 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     }
 
     /**
+     * Resolve a configured backend type to the canonical Symfony adapter type
+     *
+     * Unknown backend types fall back to the filesystem adapter.
+     *
+     * @param string $backendType
+     * @return string
+     */
+    private function resolveAdapterType(string $backendType): string
+    {
+        return $this->adapterTypeMap[strtolower($backendType)] ?? 'filesystem';
+    }
+
+    /**
+     * Check whether the given backend type resolves to the filesystem adapter
+     *
+     * Only the filesystem adapter stores cache entries in a cache_dir on disk, so callers can use this
+     * to decide whether a cache directory has to exist at all. Unknown backend types fall back to the
+     * filesystem adapter in createAdapter(), so they are reported as file-based too.
+     *
+     * @param string $backendType
+     * @return bool
+     */
+    public function isFilesystemBackend(string $backendType): bool
+    {
+        return $this->resolveAdapterType($backendType) === 'filesystem';
+    }
+
+    /**
      * Create Symfony cache adapter based on backend type and options
      *
      * @param string $backendType
@@ -135,8 +163,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         ?int $defaultLifetime = null
     ): CacheItemPoolInterface {
         // Optimize: Use pre-built map instead of switch
-        $backendTypeLower = strtolower($backendType);
-        $resolvedType = $this->adapterTypeMap[$backendTypeLower] ?? 'filesystem';
+        $resolvedType = $this->resolveAdapterType($backendType);
 
         // Create adapter based on resolved type with fallback to filesystem
         try {
@@ -180,8 +207,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         array $backendOptions = []
     ): TagAdapterInterface {
         // Resolve backend type
-        $backendTypeLower = strtolower($backendType);
-        $resolvedType = $this->adapterTypeMap[$backendTypeLower] ?? 'filesystem';
+        $resolvedType = $this->resolveAdapterType($backendType);
 
         // Check if Lua scripts are enabled (separate flags for different operations)
         $useLua = !empty($backendOptions['use_lua']) && $backendOptions['use_lua'] === '1';
