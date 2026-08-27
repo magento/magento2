@@ -68,7 +68,7 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Setup\Validator\DbValidator;
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+    use PHPUnit\Framework\Attributes\DataProvider;
     use ReflectionException;
 
     /**
@@ -355,7 +355,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @param array $logMetaMessages
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installDataProvider')]
+        #[DataProvider('installDataProvider')]
         public function testInstall(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -680,7 +680,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws LocalizedException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
+        #[DataProvider('installWithOrderIncrementPrefixDataProvider')]
         public function testInstallWithOrderIncrementPrefix(array $request, array $logMessages, array $logMetaMessages)
         {
             $this->moduleList->method('getOne')
@@ -950,7 +950,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfiguration(bool $isDeploymentConfigWritable)
         {
             $request = self::$request;
@@ -1369,7 +1369,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
          * @throws \Magento\Framework\Exception\RuntimeException
          * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
          */
-    #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
+        #[DataProvider('installWithInvalidRemoteStorageConfigurationWithEarlyExceptionDataProvider')]
         public function testInstallWithInvalidRemoteStorageConfigurationWithEarlyException(\Exception $exception)
         {
             $request = self::$request;
