@@ -140,7 +140,7 @@ class AddProductsToCart
 
         if ($cartItem->getQuantity() <= 0) {
             $errors[] = $this->error->create(
-                __('The product quantity should be greater than 0')->render(),
+                __('The product quantity should be greater than 0'),
                 $cartItemPosition,
                 $stockItemQuantity
             );
@@ -152,7 +152,7 @@ class AddProductsToCart
         if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
             return [
                 $this->error->create(
-                    __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
+                    __('Could not find a product with SKU "%sku"', ['sku' => $sku]),
                     $cartItemPosition,
                     $stockItemQuantity
                 )
