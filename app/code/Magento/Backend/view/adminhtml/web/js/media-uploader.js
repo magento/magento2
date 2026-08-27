@@ -43,6 +43,8 @@ define([
                 fileId = null,
                 allowedExt = ['jpeg', 'jpg', 'png', 'gif'],
                 allowedResize = false,
+                uploadQueue = [],
+                uploadResults = {},
                 options = {
                     proudlyDisplayPoweredByUppy: false,
                     target: targetElement,
@@ -100,6 +102,11 @@ define([
                         tempFileId:  fileId
                     };
 
+                    // preserve the order files were selected/dropped in, so the gallery can
+                    // restore it once the batch finishes uploading (uploads resolve concurrently
+                    // and out of order)
+                    uploadQueue.push(modifiedFile.id);
+
                     $(tmpl).appendTo(self.element);
                     return modifiedFile;
                 },
@@ -147,7 +154,7 @@ define([
 
             uppy.on('upload-success', (file, response) => {
                 if (response.body && !response.body.error) {
-                    self.element.trigger('addItem', response.body);
+                    uploadResults[file.id] = response.body;
                 } else {
                     fileUploader.aggregateError(file.name, response.body.error);
                 }
@@ -172,6 +179,14 @@ define([
             });
 
             uppy.on('complete', () => {
+                uploadQueue.forEach(function (queuedFileId) {
+                    if (uploadResults[queuedFileId]) {
+                        self.element.trigger('addItem', uploadResults[queuedFileId]);
+                    }
+                });
+                uploadQueue = [];
+                uploadResults = {};
+
                 fileUploader.uploaderConfig.stop();
                 $(window).trigger('reload.MediaGallery');
                 Array.from = arrayFromObj;
