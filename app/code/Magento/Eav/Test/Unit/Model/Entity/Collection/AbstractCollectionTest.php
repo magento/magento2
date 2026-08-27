@@ -19,6 +19,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Pdo\Mysql;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\UniversalFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -281,6 +282,66 @@ class AbstractCollectionTest extends TestCase
             ['values' => [['id' => 1], ['id' => 2]]],
             ['values' => [['id' => 2], ['id' => 3]]]
         ];
+    }
+
+    /**
+     * Invalid numeric attribute id (e.g. REST field=1) must raise LocalizedException, not TypeError.
+     *
+     * @return void
+     */
+    public function testAddAttributeToFilterWithInvalidNumericAttributeThrowsLocalizedException(): void
+    {
+        $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
+        $selectMock = $this->createMock(Select::class);
+        $connectionMock->expects($this->any())->method('select')->willReturn($selectMock);
+
+        $entityMock = $this->createMock(AbstractEntity::class);
+        $entityMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+        $entityMock->expects($this->any())->method('getDefaultAttributes')->willReturn([]);
+        $entityMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
+        $entityMock->expects($this->once())
+            ->method('getAttribute')
+            ->with('1')
+            ->willReturn(false);
+
+        $validatorFactoryMock = $this->createMock(UniversalFactory::class);
+        $validatorFactoryMock->expects($this->any())
+            ->method('create')
+            ->with('test_entity_model')
+            ->willReturn($entityMock);
+
+        $coreResourceMock = $this->createMock(ResourceConnection::class);
+        $coreResourceMock->expects($this->any())->method('getConnection')->willReturn($connectionMock);
+
+        $model = new AbstractCollectionStub(
+            $this->coreEntityFactoryMock,
+            $this->loggerMock,
+            $this->fetchStrategyMock,
+            $this->eventManagerMock,
+            $this->configMock,
+            $coreResourceMock,
+            $this->entityFactoryMock,
+            $this->resourceHelperMock,
+            $validatorFactoryMock,
+            null
+        );
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid attribute identifier for filter (1)');
+        $model->addAttributeToFilter('1', ['eq' => 1]);
+    }
+
+    /**
+     * Non-string / non-array attribute that cannot build a condition must raise LocalizedException safely.
+     *
+     * @return void
+     */
+    public function testAddAttributeToFilterWithInvalidAttributeTypeThrowsLocalizedException(): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Invalid attribute identifier for filter ()');
+        // Empty array of conditions is not used; false is not numeric/string/array/AttributeInterface
+        $this->model->addAttributeToFilter(false);
     }
 
     /**
