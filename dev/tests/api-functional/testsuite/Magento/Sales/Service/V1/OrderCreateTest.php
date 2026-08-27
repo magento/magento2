@@ -15,6 +15,8 @@ class OrderCreateTest extends WebapiAbstract
 {
     private const RESOURCE_PATH = '/V1/orders';
 
+    private const RESOURCE_PATH_CREATE = '/V1/orders/create';
+
     private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
     private const SERVICE_VERSION = 'V1';
@@ -34,7 +36,7 @@ class OrderCreateTest extends WebapiAbstract
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function prepareOrder()
+    protected function prepareOrder(string $sku = 'sku#1')
     {
         /** @var \Magento\Sales\Model\Order $orderBuilder */
         $orderFactory = $this->objectManager->get(\Magento\Sales\Model\OrderFactory::class);
@@ -58,7 +60,7 @@ class OrderCreateTest extends WebapiAbstract
         );
 
         $email = uniqid() . 'email@example.com';
-        $orderItem->setSku('sku#1');
+        $orderItem->setSku($sku);
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $orderItem->setData('parent_item', $orderItem->getData() + ['parent_item' => null]);
             $orderItem->setAdditionalData('test');
@@ -230,10 +232,10 @@ class OrderCreateTest extends WebapiAbstract
                 $returnValue = '2015-09-09 07:16:00';
                 break;
             case 'drop_down':
-                $returnValue = '3-1-select';
-                break;
             case 'radio':
-                $returnValue = '4-1-radio';
+                $optionValues = $option->getValues();
+                $optionValue = reset($optionValues);
+                $returnValue = (string)$optionValue->getOptionTypeId();
                 break;
         }
         return $returnValue;
@@ -300,5 +302,55 @@ class OrderCreateTest extends WebapiAbstract
         $this->assertEquals(0.50, $orderItemTaxItem['base_amount']);
         $this->assertEquals(0.50, $orderItemTaxItem['real_amount']);
         $this->assertEquals($result['items'][0]['item_id'], $orderItemTaxItem['item_id']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testOrderCreateEndpointPersistsGeneratedProductOptions(): void
+    {
+        $this->_markTestAsRestOnly();
+        $order = $this->prepareOrder('simple');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH_CREATE,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+        ];
+
+        $result = $this->_webApiCall($serviceInfo, ['entity' => $order]);
+        $this->assertOrderItemProductOptionsAreGenerated((int)$result['items'][0]['item_id']);
+    }
+
+    /**
+     * Assert direct order Web API item options are expanded into persisted product_options metadata.
+     *
+     * @param int $itemId
+     * @return void
+     */
+    private function assertOrderItemProductOptionsAreGenerated(int $itemId): void
+    {
+        /** @var \Magento\Sales\Api\OrderItemRepositoryInterface $orderItemRepository */
+        $orderItemRepository = $this->objectManager->get(\Magento\Sales\Api\OrderItemRepositoryInterface::class);
+        $productOptions = $orderItemRepository->get($itemId)->getProductOptions();
+
+        $this->assertArrayHasKey('info_buyRequest', $productOptions);
+        $this->assertArrayHasKey('options', $productOptions);
+        $this->assertCount(4, $productOptions['options']);
+
+        $optionLabels = array_column($productOptions['options'], 'label');
+        $this->assertContains('Test Field', $optionLabels);
+        $this->assertContains('Test Date and Time', $optionLabels);
+        $this->assertContains('Test Select', $optionLabels);
+        $this->assertContains('Test Radio', $optionLabels);
+
+        foreach ($productOptions['options'] as $option) {
+            $this->assertArrayHasKey('value', $option);
+            $this->assertArrayHasKey('print_value', $option);
+            $this->assertArrayHasKey('option_id', $option);
+            $this->assertArrayHasKey('option_type', $option);
+            $this->assertArrayHasKey('option_value', $option);
+        }
     }
 }
