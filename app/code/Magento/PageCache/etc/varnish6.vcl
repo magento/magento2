@@ -150,6 +150,7 @@ sub process_graphql_headers {
 sub vcl_backend_response {
 
     set beresp.grace = 3d;
+    set beresp.keep = 1d;
 
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
@@ -248,7 +249,7 @@ sub vcl_hit {
             return (deliver);
         } else {
             # Hit after TTL and grace expiration
-            return (restart);
+            return (miss);
         }
     } else {
         # server is not healthy, retrieve from cache
