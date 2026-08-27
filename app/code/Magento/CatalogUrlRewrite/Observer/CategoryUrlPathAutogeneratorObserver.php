@@ -155,7 +155,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             return;
         }
         if ($isStoreScopedRevert) {
-            $this->removeStoreScopedUrlKeyOverride($category, $linkField);
+            $this->removeStoreScopedAttributeOverride($category, $linkField, 'url_key');
         }
         $this->updateUrlKey($category, $defaultUrlKey);
         if ($isStoreScopedRevert) {
@@ -164,19 +164,23 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     }
 
     /**
-     * Remove a store-scoped url_key override row directly, without disturbing other stores.
+     * Remove a store-scoped attribute override row directly, without disturbing other stores.
      *
      * Category's resource model (unlike Product's) does not scope saveAttribute()/getAttributeRow()
      * by store, so a store-scoped removal must be done explicitly here rather than through it.
      *
      * @param Category $category
      * @param string $linkField
+     * @param string $attributeCode
      * @return void
      */
-    private function removeStoreScopedUrlKeyOverride(Category $category, string $linkField): void
-    {
+    private function removeStoreScopedAttributeOverride(
+        Category $category,
+        string $linkField,
+        string $attributeCode
+    ): void {
         $resource = $category->getResource();
-        $attribute = $resource->getAttribute('url_key');
+        $attribute = $resource->getAttribute($attributeCode);
         $resource->getConnection()->delete(
             $attribute->getBackendTable(),
             [
