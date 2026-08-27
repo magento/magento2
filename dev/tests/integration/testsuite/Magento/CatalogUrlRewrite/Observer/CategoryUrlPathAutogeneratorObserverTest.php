@@ -12,6 +12,8 @@ use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store as StoreModel;
 use Magento\Store\Model\StoreManagerInterface;
@@ -57,6 +59,17 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
      * @var CollectionFactory
      */
     private $categoryCollectionFactory;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -65,7 +78,43 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->categoryFactory = $this->objectManager->get(CategoryFactory::class);
         $this->categoryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
+        $this->resourceConnection = $this->objectManager->get(ResourceConnection::class);
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->fixtures = DataFixtureStorageManager::getStorage();
+    }
+
+    /**
+     * Count the store-scoped url_path rows persisted for a category at a given store.
+     *
+     * @param int $categoryId
+     * @param int $storeId
+     * @return int
+     */
+    private function countStoreScopedUrlPathRows(int $categoryId, int $storeId): int
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $linkField = $this->metadataPool->getMetadata(
+            \Magento\Catalog\Api\Data\CategoryInterface::class
+        )->getLinkField();
+        return (int) $connection->fetchOne(
+            $connection->select()
+                ->from(
+                    ['v' => $this->resourceConnection->getTableName('catalog_category_entity_varchar')],
+                    ['COUNT(*)']
+                )
+                ->join(
+                    ['a' => $this->resourceConnection->getTableName('eav_attribute')],
+                    'a.attribute_id = v.attribute_id AND a.attribute_code = \'url_path\'',
+                    []
+                )
+                ->join(
+                    ['e' => $this->resourceConnection->getTableName('catalog_category_entity')],
+                    "e.entity_id = v.{$linkField}",
+                    []
+                )
+                ->where('e.entity_id = ?', $categoryId)
+                ->where('v.store_id = ?', $storeId)
+        );
     }
 
     #[
@@ -197,6 +246,11 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
             $overriddenCategory2->getUrlPath(),
             'The store-scoped override should compose the parent default key with the overridden key'
         );
+        $this->assertSame(
+            1,
+            $this->countStoreScopedUrlPathRows((int) $category2->getId(), (int) $secondStore->getId()),
+            'Overriding the URL Key should persist exactly one store-scoped url_path row'
+        );
 
         $revertedCategory2 = $this->categoryFactory->create()->setStoreId($secondStore->getId());
         $revertedCategory2->load($category2->getId());
@@ -212,6 +266,12 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
             'default-store-category1/category-2',
             $finalCategory2->getUrlPath(),
             'A child category reverted to the default URL Key at store scope must recalculate its own url_path'
+        );
+        $this->assertSame(
+            0,
+            $this->countStoreScopedUrlPathRows((int) $category2->getId(), (int) $secondStore->getId()),
+            'Reverting to the default URL Key must remove the store-scoped url_path row entirely, '
+            . 'not just correct its value, otherwise it is left as an orphan with no matching url_key override'
         );
     }
 }
