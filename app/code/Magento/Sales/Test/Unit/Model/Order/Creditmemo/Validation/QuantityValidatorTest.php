@@ -281,6 +281,17 @@ class QuantityValidatorTest extends TestCase
             [
                 'orderId' => 1,
                 'orderItemId' => 1,
+                'qtyToRequest' => '1.0000',
+                'qtyToRefund' => '1.0000',
+                'sku' => 'sku',
+                'total' => 15,
+                'expected' => [],
+                'isQtyDecimalAllowed' => false,
+                'isAllowZeroGrandTotal' => true
+            ],
+            [
+                'orderId' => 1,
+                'orderItemId' => 1,
                 'qtyToRequest' => 0,
                 'qtyToRefund' => 0,
                 'sku' => 'sku',
