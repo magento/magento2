@@ -327,12 +327,22 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
         );
 
+        // Indexed by id so a descendant that is not a direct child can still be given its actual,
+        // already-refreshed parent from this same pass, instead of falling through to a parentless
+        // recompute that relies on a repository lookup which can return a stale cached instance.
+        $overriddenChildrenById = [];
         foreach ($overriddenChildren as $child) {
-            if ((int)$child->getParentId() === (int)$category->getId()) {
-                $this->updateUrlPathForCategory($child, $storeScopedCategory);
+            $overriddenChildrenById[(int)$child->getId()] = $child;
+        }
+
+        foreach ($overriddenChildren as $child) {
+            $parentId = (int)$child->getParentId();
+            if ($parentId === (int)$category->getId()) {
+                $parent = $storeScopedCategory;
             } else {
-                $this->updateUrlPathForCategory($child);
+                $parent = $overriddenChildrenById[$parentId] ?? null;
             }
+            $this->updateUrlPathForCategory($child, $parent);
         }
     }
 

@@ -922,7 +922,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathGenerator->method('getUrlPath')
             ->willReturnCallback(function ($cat, $parent = null) use (&$processedIds, $directChildId, $grandChildId) {
                 if ($cat->getId() === $directChildId || $cat->getId() === $grandChildId) {
-                    $processedIds[] = ['id' => $cat->getId(), 'hasParent' => $parent !== null];
+                    $processedIds[] = ['id' => $cat->getId(), 'parentId' => $parent ? $parent->getId() : null];
                 }
                 return 'generated_url_path';
             });
@@ -930,11 +930,12 @@ class CategoryUrlPathAutogeneratorObserverTest extends TestCase
         $this->categoryUrlPathAutogeneratorObserver->execute($this->observer);
 
         // The direct child is processed first (lower level) and is linked to the store-scoped parent;
-        // the grandchild is processed after and resolves its url_path without an explicit parent.
+        // the grandchild is processed after and must be linked to the direct child's own,
+        // already-refreshed instance from this same pass, not left to resolve a parent independently.
         $this->assertSame($directChildId, $processedIds[0]['id']);
-        $this->assertTrue($processedIds[0]['hasParent']);
+        $this->assertSame($categoryId, $processedIds[0]['parentId']);
         $this->assertSame($grandChildId, $processedIds[1]['id']);
-        $this->assertFalse($processedIds[1]['hasParent']);
+        $this->assertSame($directChildId, $processedIds[1]['parentId']);
     }
 
     /**

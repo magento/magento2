@@ -109,7 +109,7 @@ class CategoryUrlPathAutogeneratorObserverTest extends AbstractController
                 )
                 ->join(
                     ['e' => $this->resourceConnection->getTableName('catalog_category_entity')],
-                    "e.entity_id = v.{$linkField}",
+                    "e.{$linkField} = v.{$linkField}",
                     []
                 )
                 ->where('e.entity_id = ?', $categoryId)
