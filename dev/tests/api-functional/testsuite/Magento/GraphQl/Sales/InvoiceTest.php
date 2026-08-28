@@ -503,6 +503,7 @@ QUERY;
             'parent_id' => '$invoice.id$',
             'comment' => 'visible_comment',
             'is_visible_on_front' => 1,
+            'created_at' => '2026-01-15 10:00:00',
         ], as: 'invoiceComment'),
     ]
     public function testInvoiceCommentTimestampCalendarValueIsCorrectUnderFrenchLocale()
