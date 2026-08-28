@@ -10,6 +10,13 @@ use Laminas\Validator\EmailAddress as LaminasEmailAddress;
 class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
 {
     /**
+     * Quoted Pattern
+     *
+     * @var string
+     */
+    private const QUOTED_LOCAL_PART_PATTERN = '/^"/';
+
+    /**
      * @var string[]
      */
     protected $messageTemplates = [
@@ -54,5 +61,19 @@ class EmailAddress extends LaminasEmailAddress implements ValidatorInterface
     public function setValidateTld(bool $shouldValidate)
     {
         $this->getHostnameValidator()->setOptions(['useTldCheck' => $shouldValidate]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isValid($value)
+    {
+        if (is_string($value) && preg_match(self::QUOTED_LOCAL_PART_PATTERN, $value)) {
+            $this->setValue($value);
+            $this->error(self::INVALID_FORMAT);
+            return false;
+        }
+
+        return parent::isValid($value);
     }
 }
