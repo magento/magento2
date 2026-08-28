@@ -32,6 +32,7 @@ use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Tests the Invoice query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceTest extends GraphQlAbstract
 {

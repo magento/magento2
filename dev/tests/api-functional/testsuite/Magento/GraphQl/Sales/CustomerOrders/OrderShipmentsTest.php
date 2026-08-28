@@ -35,6 +35,10 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests the Order Shipments query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderShipmentsTest extends GraphQlAbstract
 {
     /**
