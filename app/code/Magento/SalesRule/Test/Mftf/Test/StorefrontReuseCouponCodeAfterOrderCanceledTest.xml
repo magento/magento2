@@ -132,12 +132,15 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
             <argument name="indices" value=""/>
         </actionGroup>
-            
+
         <!-- Reuse coupon code -->
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="clickToDiscountTab"/>
         <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{CatPriceRule.coupon_code}}" stepKey="fillCouponCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForPageLoad stepKey="waitForSettleBeforeRetryCheck"/>
+        <conditionalClick selector="{{DiscountSection.ApplyCodeBtn}}" dependentSelector="{{StorefrontMessagesSection.success}}" visible="false" stepKey="retryApplyCodeIfNotYetSuccessful"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterRetry"/>
         <waitForText userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="waitForText2"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput='You used coupon code "{{CatPriceRule.coupon_code}}"' stepKey="seeSuccessMessage2"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" time="30" stepKey="waitForElementDiscountVisible1"/>
