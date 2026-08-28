@@ -12,7 +12,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
  *
  * Shared by frontend and preload lookup to ensure consistent key resolution.
  */
-final class IdentifierNormalizer
+class IdentifierNormalizer
 {
     /**
      * Normalize an identifier: upper-case, "." -> "__", and any other non [A-Za-z0-9_] char -> "_".

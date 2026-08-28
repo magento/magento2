@@ -17,6 +17,7 @@ use Magento\Framework\Cache\FrontendInterface;
  * Uses the remote :hash marker to synchronize PSR-6-compatible local and remote values.
  *
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 {

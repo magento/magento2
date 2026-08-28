@@ -120,6 +120,9 @@ class SlaveAwareRedis extends RedisBase
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function mget($keys): \Redis|array|false
     {

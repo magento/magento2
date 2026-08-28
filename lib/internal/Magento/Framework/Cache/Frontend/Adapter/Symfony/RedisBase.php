@@ -3,6 +3,16 @@
  * Copyright 2026 Adobe
  * All Rights Reserved.
  */
+
+// phpcs:ignoreFile PSR1.Files.SideEffects -- must combine the conditional declaration and the
+// class_alias() side effect in this one file: Composer's classmap generator is a static token scan,
+// so an authoritative/optimized classmap (composer dump-autoload -o -a) can only resolve "RedisBase"
+// correctly if it maps back to this exact file's own runtime branch (see comment below). Splitting
+// the phpredis-absent declaration into a second file would leave no literal "class RedisBase" token
+// anywhere for the classmap to find at all, breaking autoloading under classmap-authoritative on
+// every host; declaring it in a second file under the SAME name would let the classmap bind
+// "RedisBase" to that file unconditionally, bypassing this file's phpredis-present branch even on
+// hosts that DO have phpredis. Neither alternative is safe, so this file is deliberately exempted.
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;

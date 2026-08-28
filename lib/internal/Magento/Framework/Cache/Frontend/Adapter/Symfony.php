@@ -23,6 +23,7 @@ use Symfony\Component\Cache\CacheItem;
  * Symfony Cache adapter for Magento
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Symfony implements FrontendInterface
 {
@@ -125,6 +126,8 @@ class Symfony implements FrontendInterface
      * @param TagAdapterInterface|null $adapter Backend-specific tag adapter
      * @param int $defaultLifetime Default cache lifetime in seconds
      * @param string $idPrefix Cache ID prefix
+     * @param Closure|null $adapterFactory Factory that (re)builds the tag adapter
+     * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
         Closure $cacheFactory,

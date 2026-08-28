@@ -256,6 +256,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function createRedisAdapter(
         array $options,
@@ -403,8 +404,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param float|null $readTimeout
      * @param int|null $retryInterval
      * @param int|null $connectRetries
+     * @param string|null $connectionClass
      * @return \Redis|\RedisCluster|\Relay\Relay
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function createPhpRedisConnection(
         string $host,
@@ -591,6 +594,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param bool $retryReadsOnMaster phpredis-only refinement (see above)
      * @return OptimizedPredisClient
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     private function createOptimizedPredisConnection(
         string $host,

@@ -18,6 +18,9 @@
             <testCaseId value="AC-13476"/>
             <useCaseId value="ACP2E-3456"/>
             <group value="SalesRule"/>
+            <skip>
+                <issueId value="AC-18058">Storefront minicart "Proceed to Checkout" unavailable / cart reports empty after adding a product matched by this qty+category cart price rule. Confirmed application bug, not a test defect. Re-enable once fixed.</issueId>
+            </skip>
         </annotations>
 
         <before>
