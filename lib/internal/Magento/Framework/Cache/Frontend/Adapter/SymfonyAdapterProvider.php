@@ -426,7 +426,8 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         if ($persistent) {
             $dsnParams[] = 'persistent=1';
             // Includes the current PID in `persistent_id` so each forked process uses its own persistent connection.
-            $forkSafePersistentId = ($persistentId ?? 'default') . ':' . getmypid();
+            // databases (e.g. default vs page_cache) never collapse onto one shared persistent socket.
+            $forkSafePersistentId = ($persistentId ?? 'default') . ':' . $database . ':' . getmypid();
             $dsnParams[] = 'persistent_id=' . urlencode($forkSafePersistentId);
         }
 
@@ -616,7 +617,8 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         if ($persistent) {
             $params['persistent'] = true;
             // A persistent socket must never be shared by parent/child processes after fork.
-            $params['conn_uid'] = ($persistentId ?: 'default') . ':' . getmypid();
+            // Include the database so connections to different databases never share one persistent socket.
+            $params['conn_uid'] = ($persistentId ?: 'default') . ':' . $database . ':' . getmypid();
         }
         if ($timeout !== null) {
             $params['timeout'] = $timeout;
