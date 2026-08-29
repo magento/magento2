@@ -233,21 +233,21 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb i
     {
         // as needed, reduce the postcode to the correct length
         $len = $this->_taxData->getPostCodeSubStringLength();
-        $postcode = $postcode !== null ? substr($postcode, 0, $len) : '';
+        $postcode = $postcode !== null ? mb_substr($postcode, 0, $len) : '';
 
         // begin creating the search template array
         $strArr = [$postcode, $postcode . '*'];
 
         // if supplied, use the exact postcode as the basis for the search templates
         if ($exactPostcode) {
-            $postcode = substr($exactPostcode, 0, $len);
+            $postcode = mb_substr($exactPostcode, 0, $len);
             $strArr[] = $postcode;
         }
 
         // finish building out the search template array
-        $strlen = strlen($postcode);
+        $strlen = mb_strlen($postcode);
         for ($i = 1; $i < $strlen; $i++) {
-            $strArr[] = sprintf('%s*', substr($postcode, 0, -$i));
+            $strArr[] = sprintf('%s*', mb_substr($postcode, 0, -$i));
         }
 
         return $strArr;
@@ -346,8 +346,8 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb i
             $zipFrom = null;
             $zipTo = null;
             if (is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches)) {
-                if ((self::USA_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 4 === strlen($matches[2])) ||
-                    (self::PORTUGAL_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 3 === strlen($matches[2]))
+                if ((self::USA_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 4 === mb_strlen($matches[2])) ||
+                    (self::PORTUGAL_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 3 === mb_strlen($matches[2]))
                 ) {
                     $postcodeIsNumeric = true;
                     $originalPostcode = $postcode;
