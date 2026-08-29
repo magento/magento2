@@ -64,6 +64,13 @@ abstract class AbstractCacheTypeManageCommand extends AbstractCacheManageCommand
         $this->performAction($types);
         $output->writeln($this->getDisplayMessage());
         $output->writeln(join(PHP_EOL, $types));
+        $excludeTypes = $input->getOption(self::EXCLUDE_KEY_TYPES);
+        if (!empty($excludeTypes)) {
+            $output->writeln('Excluded Cache Type');
+            foreach (explode(',', $excludeTypes) as $type) {
+                $output->writeln($type);
+            }
+        }
 
         return Cli::RETURN_SUCCESS;
     }
