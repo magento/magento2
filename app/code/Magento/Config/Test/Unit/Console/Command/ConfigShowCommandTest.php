@@ -3,6 +3,7 @@
  * Copyright 2017 Adobe
  * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Console\Command;
@@ -89,7 +90,8 @@ class ConfigShowCommandTest extends TestCase
         $this->configSourceMock = $this->createMock(ConfigSourceInterface::class);
         $this->pathValidatorMock = $this->createMock(PathValidator::class);
         $pathValidatorFactoryMock = $this->createMock(PathValidatorFactory::class);
-        $pathValidatorFactoryMock->expects($this->atMost(1))
+        // The command no longer pre-validates the path via PathValidator, so it must never be created.
+        $pathValidatorFactoryMock->expects($this->never())
             ->method('create')
             ->willReturn($this->pathValidatorMock);
 
@@ -202,12 +204,25 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
-     * Test get config value for not existed path.
+     * Test that a path which resolves to no configuration value (e.g. a made up or invalid
+     * partial path) still produces an error, even though it is no longer rejected up front by
+     * PathValidator.
      *
      * @return void
      */
     public function testConfigPathNotExist(): void
     {
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, '')
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->exactly(2))
+            ->method('resolve')
+            ->willReturn('default//' . self::CONFIG_PATH);
+        $this->configSourceMock->expects($this->exactly(3))
+            ->method('get')
+            ->willReturn(null);
+
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willReturnCallback(function ($function) {
@@ -258,7 +273,8 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
-     * Test that design configuration paths are validated correctly using Theme PathValidator
+     * Test that design configuration paths are still resolved correctly now that the command
+     * no longer runs them through PathValidator before resolving.
      *
      * @return void
      */
@@ -277,7 +293,8 @@ class ConfigShowCommandTest extends TestCase
         // Use Theme PathValidator mock instead of base PathValidator
         $themePathValidatorMock = $this->createMock(\Magento\Theme\Model\Config\PathValidator::class);
         $pathValidatorFactoryMock = $this->createMock(PathValidatorFactory::class);
-        $pathValidatorFactoryMock->expects($this->atMost(1))
+        // The command no longer pre-validates the path, so PathValidator must never be created/invoked.
+        $pathValidatorFactoryMock->expects($this->never())
             ->method('create')
             ->willReturn($themePathValidatorMock);
 
@@ -302,7 +319,7 @@ class ConfigShowCommandTest extends TestCase
             ->with(ScopeConfigInterface::SCOPE_TYPE_DEFAULT, '')
             ->willReturn(true);
 
-        $themePathValidatorMock->expects($this->once())
+        $themePathValidatorMock->expects($this->never())
             ->method('validate')
             ->with($designPath)
             ->willReturn(true);
