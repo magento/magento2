@@ -1146,6 +1146,11 @@ class Category extends AbstractResource implements ResetAfterRequestInterface
     public function delete($object)
     {
         $this->entityManager->delete($object);
+        // catalog_category_product rows for the deleted category are removed via FK cascade,
+        // bypassing Product\CategoryLink's own invalidation, so the per-request cache must be
+        // reset explicitly to avoid serving stale category links for products still cached
+        // with a reference to the now-deleted category id.
+        $this->productCategoryLink->resetCategoryLinksCache();
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
             ['product' => $object, 'category' => $object]
