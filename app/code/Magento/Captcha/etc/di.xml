@@ -11,6 +11,8 @@
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
+        <plugin name="publish_captcha_image_to_remote_storage"
+                type="Magento\Captcha\Plugin\PublishImageToRemoteStorage"/>
     </type>
     <type name="Magento\Captcha\Observer\CheckUserCreateObserver">
         <arguments>

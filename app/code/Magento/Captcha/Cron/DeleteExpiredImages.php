@@ -8,8 +8,10 @@ namespace Magento\Captcha\Cron;
 use Magento\Captcha\Cron\Magento\Framework\Filesystem\Io\File;
 use Magento\Captcha\Helper\Data;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Store\Model\StoreManager;
 
@@ -46,24 +48,32 @@ class DeleteExpiredImages
     protected $_fileInfo;
 
     /**
+     * @var TargetDirectory
+     */
+    private $targetDirectory;
+
+    /**
      * @param Data $helper
      * @param \Magento\Captcha\Helper\Adminhtml\Data $adminHelper
      * @param Filesystem $filesystem
      * @param StoreManager $storeManager
      * @param File $fileInfo
+     * @param TargetDirectory|null $targetDirectory
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Captcha\Helper\Adminhtml\Data $adminHelper,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManager $storeManager,
-        \Magento\Framework\Filesystem\Io\File $fileInfo
+        \Magento\Framework\Filesystem\Io\File $fileInfo,
+        ?TargetDirectory $targetDirectory = null
     ) {
         $this->_helper = $helper;
         $this->_adminHelper = $adminHelper;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA, DriverPool::FILE);
         $this->_storeManager = $storeManager;
         $this->_fileInfo = $fileInfo;
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -98,12 +108,14 @@ class DeleteExpiredImages
     ) {
         $expire = time() - (int)$helper->getConfig('timeout', $store) * 60;
         $imageDirectory = $this->_mediaDirectory->getRelativePath($helper->getImgDir($website));
-        foreach ($this->_mediaDirectory->read($imageDirectory) as $filePath) {
-            if ($this->_mediaDirectory->isFile($filePath)
+        // Images are generated locally, but stored in the configured media storage, which may be remote.
+        $mediaDirectory = $this->targetDirectory->getDirectoryWrite(DirectoryList::MEDIA);
+        foreach ($mediaDirectory->read($imageDirectory) as $filePath) {
+            if ($mediaDirectory->isFile($filePath)
                 && $this->_fileInfo->getPathInfo($filePath)['extension'] === 'png'
-                && $this->_mediaDirectory->stat($filePath)['mtime'] < $expire
+                && $mediaDirectory->stat($filePath)['mtime'] < $expire
             ) {
-                $this->_mediaDirectory->delete($filePath);
+                $mediaDirectory->delete($filePath);
             }
         }
     }
