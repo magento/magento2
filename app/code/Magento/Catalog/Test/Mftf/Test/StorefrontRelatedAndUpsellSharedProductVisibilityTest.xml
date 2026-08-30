@@ -12,7 +12,11 @@
         <annotations>
             <stories value="Related Products and Up-Sell Products"/>
             <title value="Product shared between Related and Up-Sell blocks stays visible in both blocks"/>
-            <description value="Verifies that when the same product is assigned as both a Related Product and an Up-Sell Product, each block renders the shared item with its own unique DOM id so one block's limit/shuffle logic cannot hide the other block's entry."/>
+            <description value="
+                Verifies that when the same product is assigned as both a Related Product and an Up-Sell Product,
+                each block renders the shared item with its own unique DOM id so one block's limit/shuffle logic
+                cannot hide the other block's entry.
+            "/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
         </annotations>
@@ -65,42 +69,58 @@
         </actionGroup>
 
         <!-- Both blocks must display the shared product -->
-        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSharedProductInRelatedBlock">
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup"
+                     stepKey="seeSharedProductInRelatedBlock">
             <argument name="productName" value="$$productShared.name$$"/>
         </actionGroup>
         <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToUpSellHeading"/>
-        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSharedProductInUpSellBlock">
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup"
+                     stepKey="seeSharedProductInUpSellBlock">
             <argument name="productName" value="$$productShared.name$$"/>
         </actionGroup>
 
         <!-- The two <li> nodes rendered for the shared product must use distinct, block-namespaced ids -->
-        <executeJS function="return document.querySelectorAll('.block.related li#product-item-related_$$productShared.id$$').length" stepKey="grabRelatedNodeCount"/>
+        <executeJS
+            function="var s='.block.related li#product-item-related_$$productShared.id$$';
+                      return document.querySelectorAll(s).length"
+            stepKey="grabRelatedNodeCount"/>
         <assertEquals stepKey="assertRelatedNodeIdIsUnique">
             <actualResult type="const">$grabRelatedNodeCount</actualResult>
             <expectedResult type="int">1</expectedResult>
         </assertEquals>
 
-        <executeJS function="return document.querySelectorAll('.block.upsell li#product-item-upsell_$$productShared.id$$').length" stepKey="grabUpsellNodeCount"/>
+        <executeJS
+            function="var s='.block.upsell li#product-item-upsell_$$productShared.id$$';
+                      return document.querySelectorAll(s).length"
+            stepKey="grabUpsellNodeCount"/>
         <assertEquals stepKey="assertUpsellNodeIdIsUnique">
             <actualResult type="const">$grabUpsellNodeCount</actualResult>
             <expectedResult type="int">1</expectedResult>
         </assertEquals>
 
         <!-- The legacy, non-namespaced id must no longer be emitted for either block -->
-        <executeJS function="return document.querySelectorAll('li#product-item_$$productShared.id$$').length" stepKey="grabLegacyNodeCount"/>
+        <executeJS
+            function="return document.querySelectorAll('li#product-item_$$productShared.id$$').length"
+            stepKey="grabLegacyNodeCount"/>
         <assertEquals stepKey="assertLegacyIdIsGone">
             <actualResult type="const">$grabLegacyNodeCount</actualResult>
             <expectedResult type="int">0</expectedResult>
         </assertEquals>
 
         <!-- Neither node was hidden by the other block's style rule -->
-        <executeJS function="return getComputedStyle(document.querySelector('.block.related li#product-item-related_$$productShared.id$$')).display" stepKey="grabRelatedNodeDisplay"/>
+        <executeJS
+            function="var s='.block.related li#product-item-related_$$productShared.id$$';
+                      return getComputedStyle(document.querySelector(s)).display"
+            stepKey="grabRelatedNodeDisplay"/>
         <assertNotEquals stepKey="assertRelatedNodeIsVisible">
             <actualResult type="const">$grabRelatedNodeDisplay</actualResult>
             <expectedResult type="string">none</expectedResult>
         </assertNotEquals>
 
-        <executeJS function="return getComputedStyle(document.querySelector('.block.upsell li#product-item-upsell_$$productShared.id$$')).display" stepKey="grabUpsellNodeDisplay"/>
+        <executeJS
+            function="var s='.block.upsell li#product-item-upsell_$$productShared.id$$';
+                      return getComputedStyle(document.querySelector(s)).display"
+            stepKey="grabUpsellNodeDisplay"/>
         <assertNotEquals stepKey="assertUpsellNodeIsVisible">
             <actualResult type="const">$grabUpsellNodeDisplay</actualResult>
             <expectedResult type="string">none</expectedResult>
