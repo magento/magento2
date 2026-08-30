@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Config\Plugin\Framework\App\Cache\TypeList;
 
-use Magento\Config\App\Config\Type\System;
+use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Cache\Type\Config as TypeConfig;
 use Magento\Framework\App\Cache\TypeList;
 
@@ -18,14 +18,14 @@ use Magento\Framework\App\Cache\TypeList;
 class WarmConfigCache
 {
     /**
-     * @var System
+     * @var ConfigTypeInterface
      */
     private $system;
 
     /**
-     * @param System $system
+     * @param ConfigTypeInterface $system
      */
-    public function __construct(System $system)
+    public function __construct(ConfigTypeInterface $system)
     {
         $this->system = $system;
     }

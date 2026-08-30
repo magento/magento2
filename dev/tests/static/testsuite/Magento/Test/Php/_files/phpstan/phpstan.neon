@@ -29,6 +29,10 @@ parameters:
         - '#Attribute class Magento\\TestFramework\\Fixture\\DataFixture is not repeatable#'
         # Ignore Config attribute class issues (Config is IS_REPEATABLE in framework)
         - '#Attribute class Magento\\TestFramework\\Fixture\\Config is not repeatable#'
+        # DataFixtureBeforeTransaction is IS_REPEATABLE; PHPStan still flags multiple per method
+        - '#Attribute class Magento\\TestFramework\\Fixture\\DataFixtureBeforeTransaction is not repeatable#'
+        # Ignore TestWith attribute class issues (TestWith is IS_REPEATABLE in PHPUnit)
+        - '#Attribute class PHPUnit\\Framework\\Attributes\\TestWith is not repeatable#'
         # Ignore setCustomErrorHandler function not found in bootstrap files
         - '#Function setCustomErrorHandler not found#'
         # Ignore 'return statement is missing' error when 'void' is present in return type list
@@ -52,6 +56,15 @@ parameters:
         # Closures in data provider use $this via bindTo() at runtime (static context has no $this)
         - message: '#Undefined variable: \$this#'
           path: ../../../../../../../../tests/api-functional/testsuite/Magento/GraphQl/CustomerGraphQl/Model/Resolver/CustomerTest.php
+        # RedisBase.php declares RedisBase as an empty class (phpredis-absent branch) or aliases it to
+        # \Redis via class_alias() (phpredis-present branch). PHPStan resolves the name to the literal,
+        # unconditional declaration and cannot follow the conditional class_alias(), so it never sees
+        # \Redis's real shape. SlaveAwareRedis (which owns these parent::*() calls) is only ever
+        # instantiated on the phpredis-present path, where the alias makes them real \Redis methods at
+        # runtime; suppressed here rather than fixed, since static analysis cannot see through
+        # class_alias().
+        - message: '#Call to an undefined static method Magento\\Framework\\Cache\\Frontend\\Adapter\\Symfony\\RedisBase::(get|mget)\(\)#'
+          path: ../../../../../../../../../lib/internal/Magento/Framework/Cache/Frontend/Adapter/Symfony/SlaveAwareRedis.php
         # Test module classes in _files (excluded from scan) - loaded at runtime
         - '~FixtureCallStorage not found\.?~'
         - '~TestModule\\Controller\\Adminhtml\\Controller not found\.?~'

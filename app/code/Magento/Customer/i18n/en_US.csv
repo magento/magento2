@@ -551,3 +551,7 @@ T,T
 F,F
 VAT,VAT
 "Something went wrong while logging out customer.","Something went wrong while logging out customer."
+"Invalid City. The city name is too long. Enter no more than %1 characters.","Invalid City. The city name is too long. Enter no more than %1 characters."
+"Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )","Invalid City. Please use letters, numbers, spaces, and the following characters: - _ ' \u{2019} . , & ( )"
+"Invalid Street Address. The street address is too long. Enter no more than %1 characters.","Invalid Street Address. The street address is too long. Enter no more than %1 characters."
+"Invalid Street Address. The street address contains invalid characters.","Invalid Street Address. The street address contains invalid characters."
