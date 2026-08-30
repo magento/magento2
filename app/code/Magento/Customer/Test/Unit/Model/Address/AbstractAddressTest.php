@@ -192,6 +192,196 @@ class AbstractAddressTest extends TestCase
         $this->assertEquals(0, $this->model->getRegionId());
     }
 
+    #[DataProvider('numericRegionProvider')]
+    public function testGetRegionIdValidatesNumericRegionCountry(
+        string $countryId,
+        string $region,
+        ?string $regionCountryId,
+        ?int $expectedRegionId
+    ): void {
+        $regionByCode = $this->createPartialMockWithReflection(
+            Region::class,
+            ['__wakeup', 'loadByCode', 'getId']
+        );
+        $regionByCode->method('loadByCode')
+            ->willReturnSelf();
+        $regionByCode->method('getId')
+            ->willReturn(null);
+
+        $regionById = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', '__wakeup', 'load', 'getId']
+        );
+        $regionById->method('getId')
+            ->willReturn((int)$region);
+        $regionById->method('getCountryId')
+            ->willReturn($regionCountryId);
+
+        $this->regionFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($regionByCode, $regionById);
+
+        $this->model->setData('country_id', $countryId);
+        $this->model->setData('region', $region);
+
+        $this->assertSame($expectedRegionId, $this->model->getRegionId());
+        $this->assertSame($expectedRegionId, $this->model->getData('region_id'));
+    }
+
+    public static function numericRegionProvider(): array
+    {
+        return [
+            'DE region for DE' => ['DE', '80', 'DE', 80],
+            'DE region for NL' => ['NL', '80', 'DE', null],
+            'DE region for LU' => ['LU', '80', 'DE', null],
+            'DE region for AT' => ['AT', '80', 'DE', null],
+            'DE region for CH' => ['CH', '80', 'DE', null],
+            'CH region for CH' => ['CH', '104', 'CH', 104],
+        ];
+    }
+
+    public function testGetRegionIdKeepsNumericRegionForValidRegionId(): void
+    {
+        $regionByCode = $this->createPartialMockWithReflection(
+            Region::class,
+            ['__wakeup', 'loadByCode', 'getId']
+        );
+        $regionByCode->method('loadByCode')
+            ->with('80', 'DE')
+            ->willReturnSelf();
+        $regionByCode->method('getId')
+            ->willReturn(null);
+
+        $regionById = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', 'getName', 'getCode', '__wakeup', 'load', 'getId']
+        );
+        $regionById->method('getId')
+            ->willReturn(80);
+        $regionById->method('getCountryId')
+            ->willReturn('DE');
+        $regionById->method('getName')
+            ->willReturn('Baden-Württemberg');
+        $regionById->method('getCode')
+            ->willReturn('BAW');
+
+        $this->regionFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($regionByCode, $regionById);
+
+        $this->model->setData('country_id', 'DE');
+        $this->model->setData('region', '80');
+
+        $this->assertSame(80, $this->model->getRegionId());
+        $this->assertSame(80, $this->model->getData('region_id'));
+        $this->assertSame('80', $this->model->getData('region'));
+
+        $this->assertSame('Baden-Württemberg', $this->model->getRegion());
+        $this->assertSame('Baden-Württemberg', $this->model->getData('region'));
+        $this->assertSame('BAW', $this->model->getRegionCode());
+    }
+
+    public function testGetRegionIdResolvesRegionCode(): void
+    {
+        $region = $this->createPartialMockWithReflection(
+            Region::class,
+            ['__wakeup', 'loadByCode', 'getId']
+        );
+        $region->method('loadByCode')
+            ->with('BAW', 'DE')
+            ->willReturnSelf();
+        $region->method('getId')
+            ->willReturn(80);
+
+        $this->regionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($region);
+
+        $this->model->setData('country_id', 'DE');
+        $this->model->setData('region', 'BAW');
+
+        $this->assertSame(80, $this->model->getRegionId());
+        $this->assertSame(80, $this->model->getData('region_id'));
+        $this->assertNull($this->model->getData('region'));
+    }
+
+    #[DataProvider('unresolvedRegionProvider')]
+    public function testGetRegionIdKeepsUnresolvedRegionIdNull(?string $region): void
+    {
+        $regionModel = $this->createPartialMockWithReflection(
+            Region::class,
+            ['__wakeup', 'loadByCode', 'getId']
+        );
+        $regionModel->method('loadByCode')
+            ->willReturnSelf();
+        $regionModel->method('getId')
+            ->willReturn(null);
+
+        $this->regionFactoryMock->expects($this->atMost(1))
+            ->method('create')
+            ->willReturn($regionModel);
+
+        $this->model->setData('country_id', 'NL');
+        $this->model->setData('region', $region);
+
+        $this->assertNull($this->model->getRegionId());
+        $this->assertNull($this->model->getData('region_id'));
+    }
+
+    public static function unresolvedRegionProvider(): array
+    {
+        return [
+            'name' => ['Some Province'],
+            'null' => [null],
+        ];
+    }
+
+    public function testGetRegionIdPreservesExistingValue(): void
+    {
+        $this->regionFactoryMock->expects($this->never())
+            ->method('create');
+
+        $this->model->setData('country_id', 'NL');
+        $this->model->setData('region', '80');
+        $this->model->setData('region_id', 123);
+
+        $this->assertSame(123, $this->model->getRegionId());
+        $this->assertSame(123, $this->model->getData('region_id'));
+    }
+
+    public function testGetRegionIdKeepsInvalidNumericRegionValue(): void
+    {
+        $regionByCode = $this->createPartialMockWithReflection(
+            Region::class,
+            ['__wakeup', 'loadByCode', 'getId']
+        );
+        $regionByCode->method('loadByCode')
+            ->with('80', 'NL')
+            ->willReturnSelf();
+        $regionByCode->method('getId')
+            ->willReturn(null);
+
+        $regionById = $this->createPartialMockWithReflection(
+            Region::class,
+            ['getCountryId', '__wakeup', 'load', 'getId']
+        );
+        $regionById->method('getId')
+            ->willReturn(80);
+        $regionById->method('getCountryId')
+            ->willReturn('DE');
+
+        $this->regionFactoryMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($regionByCode, $regionById);
+
+        $this->model->setData('country_id', 'NL');
+        $this->model->setData('region', '80');
+
+        $this->assertNull($this->model->getRegionId());
+        $this->assertNull($this->model->getData('region_id'));
+        $this->assertSame('80', $this->model->getData('region'));
+    }
+
     public function testGetRegionCodeWithRegion()
     {
         $countryId = 2;
