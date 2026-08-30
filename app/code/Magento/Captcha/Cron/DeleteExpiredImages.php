@@ -5,7 +5,7 @@
  */
 namespace Magento\Captcha\Cron;
 
-use Magento\Captcha\Cron\Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Captcha\Helper\Data;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -17,6 +17,8 @@ use Magento\Store\Model\StoreManager;
 
 /**
  * Captcha cron actions
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeleteExpiredImages
 {
