@@ -132,7 +132,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
      * Get customer register url
      * @return string
      */
-    private function getCustomerRegisterUrl()
+    public function getCustomerRegisterUrl()
     {
         return $this->getUrl('customer/account/create');
     }
