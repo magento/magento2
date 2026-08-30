@@ -475,8 +475,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             } else {
                 $regionModel = $this->getRegionModel((int)$region);
 
-                if (
-                    $regionModel->getId()
+                if ($regionModel->getId()
                     && (string)$regionModel->getCountryId() === (string)$this->getCountryId()
                 ) {
                     $regionId = (int)$regionModel->getId();
