@@ -75,6 +75,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
      * Sets the state and status of the order
      *
      * @deprecated 100.1.9 Replaced by a StatusResolver class call.
+     * @see \Magento\Sales\Model\Order\StatusResolver::getOrderStatusByState()
      *
      * @param Order $order
      * @param string $status
