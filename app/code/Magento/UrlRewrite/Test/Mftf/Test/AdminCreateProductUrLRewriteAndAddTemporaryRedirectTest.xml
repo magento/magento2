@@ -27,7 +27,7 @@
             <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
             <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearUrlRewriteFilter"/>
+            <actionGroup ref="AdminResetFilterInUrlRewriteGridActionGroup" stepKey="resetUrlRewriteGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

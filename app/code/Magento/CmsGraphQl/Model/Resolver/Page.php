@@ -53,11 +53,12 @@ class Page implements ResolverInterface
 
         try {
             if (isset($args['id'])) {
-                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
+                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id'], $info);
             } elseif (isset($args['identifier'])) {
                 $pageData = $this->pageDataProvider->getDataByPageIdentifier(
                     (string)$args['identifier'],
-                    (int)$context->getExtensionAttributes()->getStore()->getId()
+                    (int)$context->getExtensionAttributes()->getStore()->getId(),
+                    $info
                 );
             }
         } catch (NoSuchEntityException $e) {
