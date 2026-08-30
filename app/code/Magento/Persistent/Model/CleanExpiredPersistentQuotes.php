@@ -74,14 +74,14 @@ class CleanExpiredPersistentQuotes
 
             foreach ($quotesToProcess as $quote) {
                 $count++;
+                $lastProcessedId = (int)$quote->getId();
                 try {
                     $this->quoteRepository->delete($quote);
-                    $lastProcessedId = (int)$quote->getId();
                 } catch (Exception $e) {
                     $this->logger->error(sprintf(
                         'Unable to delete expired quote (ID: %s): %s',
                         $quote->getId(),
-                        (string)$e
+                        $e->getMessage()
                     ));
                 }
                 if ($count % $this->batchSize === 0) {
