@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRelatedAndUpsellSharedProductVisibilityTest">
+        <annotations>
+            <stories value="Related Products and Up-Sell Products"/>
+            <title value="Product shared between Related and Up-Sell blocks stays visible in both blocks"/>
+            <description value="Verifies that when the same product is assigned as both a Related Product and an Up-Sell Product, each block renders the shared item with its own unique DOM id so one block's limit/shuffle logic cannot hide the other block's entry."/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <!-- Create Category -->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Main product whose Product Page is visited on the storefront -->
+            <createData entity="ApiSimplePrice100Qty100" stepKey="productA">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Product assigned as BOTH a Related Product and an Up-Sell Product of productA -->
+            <createData entity="ApiSimplePrice100Qty100" stepKey="productShared">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+
+            <createData entity="AssignProductToCategory" stepKey="assignProductsToCategory">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="productA"/>
+                <requiredEntity createDataKey="productShared"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productA" stepKey="deleteProductA"/>
+            <deleteData createDataKey="productShared" stepKey="deleteProductShared"/>
+        </after>
+
+        <!-- Assign productShared as a Related Product of productA -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductAEditPage">
+            <argument name="productId" value="$$productA.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addSharedProductAsRelated">
+            <argument name="sku" value="$$productShared.sku$$"/>
+        </actionGroup>
+
+        <!-- Assign the SAME productShared as an Up-Sell Product of productA -->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addSharedProductAsUpSell">
+            <argument name="sku" value="$$productShared.sku$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductA"/>
+
+        <!-- Open productA on the storefront -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductAStorefrontPage">
+            <argument name="productUrl" value="$$productA.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Both blocks must display the shared product -->
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeSharedProductInRelatedBlock">
+            <argument name="productName" value="$$productShared.name$$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" stepKey="scrollToUpSellHeading"/>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSharedProductInUpSellBlock">
+            <argument name="productName" value="$$productShared.name$$"/>
+        </actionGroup>
+
+        <!-- The two <li> nodes rendered for the shared product must use distinct, block-namespaced ids -->
+        <executeJS function="return document.querySelectorAll('.block.related li#product-item-related_$$productShared.id$$').length" stepKey="grabRelatedNodeCount"/>
+        <assertEquals stepKey="assertRelatedNodeIdIsUnique">
+            <actualResult type="const">$grabRelatedNodeCount</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+
+        <executeJS function="return document.querySelectorAll('.block.upsell li#product-item-upsell_$$productShared.id$$').length" stepKey="grabUpsellNodeCount"/>
+        <assertEquals stepKey="assertUpsellNodeIdIsUnique">
+            <actualResult type="const">$grabUpsellNodeCount</actualResult>
+            <expectedResult type="int">1</expectedResult>
+        </assertEquals>
+
+        <!-- The legacy, non-namespaced id must no longer be emitted for either block -->
+        <executeJS function="return document.querySelectorAll('li#product-item_$$productShared.id$$').length" stepKey="grabLegacyNodeCount"/>
+        <assertEquals stepKey="assertLegacyIdIsGone">
+            <actualResult type="const">$grabLegacyNodeCount</actualResult>
+            <expectedResult type="int">0</expectedResult>
+        </assertEquals>
+
+        <!-- Neither node was hidden by the other block's style rule -->
+        <executeJS function="return getComputedStyle(document.querySelector('.block.related li#product-item-related_$$productShared.id$$')).display" stepKey="grabRelatedNodeDisplay"/>
+        <assertNotEquals stepKey="assertRelatedNodeIsVisible">
+            <actualResult type="const">$grabRelatedNodeDisplay</actualResult>
+            <expectedResult type="string">none</expectedResult>
+        </assertNotEquals>
+
+        <executeJS function="return getComputedStyle(document.querySelector('.block.upsell li#product-item-upsell_$$productShared.id$$')).display" stepKey="grabUpsellNodeDisplay"/>
+        <assertNotEquals stepKey="assertUpsellNodeIsVisible">
+            <actualResult type="const">$grabUpsellNodeDisplay</actualResult>
+            <expectedResult type="string">none</expectedResult>
+        </assertNotEquals>
+    </test>
+</tests>
