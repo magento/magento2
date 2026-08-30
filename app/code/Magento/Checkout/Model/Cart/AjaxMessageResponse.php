@@ -11,119 +11,61 @@ use Magento\Framework\Message\Collection;
 use Magento\Framework\Message\CollectionFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\LayoutFactory;
 
 /**
- * Prepares storefront messages for AJAX add to cart responses.
+ * Prepares storefront error messages for AJAX add to cart responses.
  */
 class AjaxMessageResponse
 {
     /**
      * @param ManagerInterface $messageManager
      * @param LayoutFactory $layoutFactory
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionFactory $messageCollectionFactory
      */
     public function __construct(
         private readonly ManagerInterface $messageManager,
         private readonly LayoutFactory $layoutFactory,
-        private readonly CollectionFactory $collectionFactory
+        private readonly CollectionFactory $messageCollectionFactory
     ) {
     }
 
     /**
-     * Whether messages should be rendered on the current page instead of relying on redirect.
+     * Returns rendered error messages for inline AJAX display.
      *
-     * @param string|null $backUrl
-     * @param string|null $refererUrl
-     * @return bool
+     * @param bool $clearMessages
+     * @return array{html: string}|null
      */
-    public function shouldDisplayInline(?string $backUrl, ?string $refererUrl): bool
+    public function getInlineErrorMessages(bool $clearMessages): ?array
     {
-        if ($backUrl === null || $backUrl === '') {
-            return false;
-        }
-
-        if ($refererUrl === null || $refererUrl === '') {
-            return false;
-        }
-
-        return $this->normalizeUrl($backUrl) === $this->normalizeUrl($refererUrl);
-    }
-
-    /**
-     * Returns rendered blocking messages for inline AJAX display.
-     *
-     * @param string|null $backUrl
-     * @param string|null $refererUrl
-     * @return array{html: string, displayMessages: bool}|null
-     */
-    public function resolve(?string $backUrl, ?string $refererUrl): ?array
-    {
-        if (!$this->shouldDisplayInline($backUrl, $refererUrl)) {
+        $messages = $this->messageManager->getMessages($clearMessages);
+        $errorMessages = $this->getErrorMessages($messages);
+        if (!$errorMessages->getCount()) {
             return null;
         }
 
-        $sessionMessages = $this->messageManager->getMessages(false);
-        $blockingMessages = $this->createBlockingMessagesCollection($sessionMessages);
-        if (!$blockingMessages->getCount()) {
-            return null;
-        }
-
-        $block = $this->layoutFactory->create()->getMessagesBlock();
-        $block->setMessages($blockingMessages);
-
-        $this->clearBlockingMessages($sessionMessages);
+        $block = $this->layoutFactory->create()->createBlock(Messages::class);
+        $block->setMessages($errorMessages);
 
         return [
             'html' => $block->getGroupedHtml(),
-            'displayMessages' => true,
         ];
     }
 
     /**
-     * Creates collection that contains only blocking storefront messages.
-     *
-     * @param Collection $source
-     * @return Collection
-     */
-    private function createBlockingMessagesCollection(Collection $source): Collection
-    {
-        $collection = $this->collectionFactory->create();
-        foreach ([MessageInterface::TYPE_ERROR, MessageInterface::TYPE_NOTICE] as $type) {
-            foreach ($source->getItemsByType($type) as $message) {
-                $collection->addMessage($message);
-            }
-        }
-
-        return $collection;
-    }
-
-    /**
-     * Removes blocking messages from session after inline rendering.
+     * Extract error messages from the message collection.
      *
      * @param Collection $messages
-     * @return void
+     * @return Collection
      */
-    private function clearBlockingMessages(Collection $messages): void
+    private function getErrorMessages(Collection $messages): Collection
     {
-        foreach ([MessageInterface::TYPE_ERROR, MessageInterface::TYPE_NOTICE] as $type) {
-            foreach ($messages->getItemsByType($type) as $message) {
-                $messages->deleteMessageByIdentifier($message->getIdentifier());
-            }
+        $errorMessages = $this->messageCollectionFactory->create();
+        foreach ($messages->getItemsByType(MessageInterface::TYPE_ERROR) as $message) {
+            $errorMessages->addMessage($message);
         }
-    }
 
-    /**
-     * Normalizes a URL path for comparison by stripping query, fragment, and trailing slash.
-     *
-     * @param string $url
-     * @return string
-     */
-    private function normalizeUrl(string $url): string
-    {
-        $normalizedUrl = explode('?', $url, 2)[0];
-        $normalizedUrl = explode('#', $normalizedUrl, 2)[0];
-
-        return rtrim($normalizedUrl, '/');
+        return $errorMessages;
     }
 }
