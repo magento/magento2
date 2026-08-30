@@ -182,7 +182,7 @@ class ProductStock
             $itemQty,
             $requiredQuantity,
             $prevQty,
-            $cartItem->getStore()->getId()
+            $cartItem->getStore()->getWebsiteId()
         );
 
         return ($this->getProductStockStatus($product)->getStockStatus() &&

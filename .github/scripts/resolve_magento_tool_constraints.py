@@ -8,7 +8,7 @@ Resolve PHP version + magento/magento2 composer.json the same way as pr-quality-
 
 Used in GitHub Actions (writes GITHUB_OUTPUT and /tmp/magento2-composer.json) and locally:
 
-  REPO_NAME=magento2b2b BASE_REF=2.4.8-p3 \\
+  REPO_NAME=magento2ce BASE_REF=2.4-develop \\
     python3 .github/scripts/resolve_magento_tool_constraints.py --print-summary
 
 See emulate_ci_tools_locally.sh for a full local QA-tools install.
@@ -46,6 +46,27 @@ def read_pkg_constraint(data: dict[str, Any], pkg: str) -> str:
     return v if isinstance(v, str) else ""
 
 
+def read_locked_reference(lock_data: dict[str, Any] | None, pkg: str) -> str:
+    """Locked commit for a package, so floating dev-branch tools can be pinned."""
+    if not lock_data:
+        return ""
+    for section in ("packages", "packages-dev"):
+        for entry in lock_data.get(section) or []:
+            if entry.get("name") == pkg:
+                return (entry.get("source") or {}).get("reference", "") or ""
+    return ""
+
+
+def load_composer_lock(ref: str) -> dict[str, Any] | None:
+    try:
+        return load_json_url(
+            f"https://raw.githubusercontent.com/magento/magento2/{ref}/composer.lock"
+        )
+    except Exception as exc:
+        print(f"Could not load magento/magento2 composer.lock from ref '{ref}': {exc}", file=sys.stderr)
+        return None
+
+
 def resolve(
     repo_name: str,
     base_ref: str,
@@ -54,25 +75,8 @@ def resolve(
     """
     Returns (php_version, source_ref, composer_json_data, raw_php_constraint_or_empty).
     """
-    # Normalize known repo-name aliases used across forks/exceptions.
-    repo_alias_map = {
-        "magento2inventory": "inventory",
-    }
-    normalized_repo_name = repo_alias_map.get(repo_name, repo_name)
-
-    repo_package_map = {
-        "magento2ce": "magento/magento2-base",
-        "magento2ee": "magento/magento2-ee-base",
-        "magento2b2b": "magento/magento2-b2b-base",
-        "inventory": "magento/inventory-metapackage",
-        "magento2-page-builder": "magento/module-page-builder",
-        "magento2-page-builder-ee": "magento/page-builder-commerce",
-        "security-package": "magento/security-package",
-        "security-package-ee": "magento/security-package-ee",
-    }
-
     selected_release = ""
-    package_key = repo_package_map.get(normalized_repo_name, "")
+    package_key = os.environ.get("REPO_PACKAGE_KEY", "")
     base_ref = (base_ref or "").strip()
 
     def base_ref_candidates(ref: str) -> list[str]:
@@ -223,22 +227,17 @@ def resolve(
 def merge_tool_constraints(
     magento_data: dict[str, Any] | None,
     mcs_composer_path: Path | None,
-) -> tuple[str, str]:
+) -> str:
     phpmd_c = ""
-    stan_c = ""
     if mcs_composer_path and mcs_composer_path.is_file():
         try:
             mcs = json.loads(mcs_composer_path.read_text(encoding="utf-8"))
             phpmd_c = read_pkg_constraint(mcs, "phpmd/phpmd")
-            stan_c = read_pkg_constraint(mcs, "phpstan/phpstan")
         except Exception as exc:
             print(f"Could not read {mcs_composer_path}: {exc}", file=sys.stderr)
-    if magento_data:
-        if not phpmd_c:
-            phpmd_c = read_pkg_constraint(magento_data, "phpmd/phpmd")
-        if not stan_c:
-            stan_c = read_pkg_constraint(magento_data, "phpstan/phpstan")
-    return phpmd_c, stan_c
+    if magento_data and not phpmd_c:
+        phpmd_c = read_pkg_constraint(magento_data, "phpmd/phpmd")
+    return phpmd_c
 
 
 def main() -> int:
@@ -246,7 +245,7 @@ def main() -> int:
     p.add_argument(
         "--repo-name",
         default=os.environ.get("REPO_NAME", ""),
-        help="GitHub repository name (e.g. magento2b2b). Env: REPO_NAME",
+        help="GitHub repository name (e.g. magento2ce). Env: REPO_NAME",
     )
     p.add_argument(
         "--base-ref",
@@ -272,7 +271,7 @@ def main() -> int:
     p.add_argument(
         "--print-summary",
         action="store_true",
-        help="Print phpmd/phpstan constraints after resolution",
+        help="Print phpmd constraint after resolution",
     )
     args = p.parse_args()
 
@@ -287,11 +286,22 @@ def main() -> int:
             json.dumps(composer_json_data, indent=2) + "\n", encoding="utf-8"
         )
         print(
-            f"Wrote {out_path} from magento/magento2 ref '{source_ref}' (for PHPMD/PHPStan pins)."
+            f"Wrote {out_path} from magento/magento2 ref '{source_ref}' (for PHPMD pins)."
         )
     else:
         print("ERROR: No composer.json data to write.", file=sys.stderr)
         return 1
+
+    phpmd_locked_ref = ""
+    mcs_locked_ref = ""
+    if source_ref:
+        lock_data = load_composer_lock(source_ref)
+        phpmd_locked_ref = read_locked_reference(lock_data, "phpmd/phpmd")
+        mcs_locked_ref = read_locked_reference(lock_data, "magento/magento-coding-standard")
+        if phpmd_locked_ref:
+            print(f"Locked phpmd/phpmd reference from ref '{source_ref}': {phpmd_locked_ref}")
+        if mcs_locked_ref:
+            print(f"Locked magento/magento-coding-standard reference from ref '{source_ref}': {mcs_locked_ref}")
 
     github_output = os.environ.get("GITHUB_OUTPUT")
     if github_output:
@@ -300,6 +310,10 @@ def main() -> int:
             fh.write(f"php_version={php_version}\n")
             if source_ref:
                 fh.write(f"magento_composer_ref={source_ref}\n")
+            if phpmd_locked_ref:
+                fh.write(f"phpmd_locked_ref={phpmd_locked_ref}\n")
+            if mcs_locked_ref:
+                fh.write(f"mcs_locked_ref={mcs_locked_ref}\n")
 
     mcs_path = args.mcs_composer
     if mcs_path is None:
@@ -308,13 +322,14 @@ def main() -> int:
             mcs_path = Path(env_mcs)
 
     if args.print_summary or not github_output:
-        phpmd_c, stan_c = merge_tool_constraints(composer_json_data, mcs_path)
+        phpmd_c = merge_tool_constraints(composer_json_data, mcs_path)
         print("")
         print("--- Tool constraints (mcs first, then magento2 composer) ---")
         print(f"magento_composer_ref={source_ref}")
         print(f"php_version={php_version}")
         print(f"phpmd_constraint={phpmd_c or '(missing)'}")
-        print(f"phpstan_constraint={stan_c or '(missing)'}")
+        print(f"phpmd_locked_ref={phpmd_locked_ref or '(missing)'}")
+        print(f"mcs_locked_ref={mcs_locked_ref or '(missing)'}")
 
     return 0
 
