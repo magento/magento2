@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache;
 
-use Magento\TestFramework\Cache\CacheFrontendTestCase;
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
+use Magento\TestFramework\Cache\CacheFrontendTestCase;
 use PHPUnit\Framework\Attributes\DataProviderExternal;
-use Qameta\Allure\Attribute\DisplayName;
-use Qameta\Allure\Attribute\SubSuite;
 
 /**
  * Verifies Magento's public cache frontend contract against all supported configurations.
@@ -21,8 +19,6 @@ use Qameta\Allure\Attribute\SubSuite;
  */
 class FrontendContractTest extends CacheFrontendTestCase
 {
-    #[SubSuite('FrontendContractTest')]
-    #[DisplayName('testSaveLoadAndRemove')]
     #[DataProviderExternal(CacheConfigurationProvider::class, 'provide')]
     public function testSaveLoadAndRemove(string $configurationName, array $configuration): void
     {
@@ -40,9 +36,6 @@ class FrontendContractTest extends CacheFrontendTestCase
         }
     }
 
-
-    #[SubSuite('FrontendContractTest')]
-    #[DisplayName('testMatchingTagUsesAndSemantics')]
     #[DataProviderExternal(CacheConfigurationProvider::class, 'provide')]
     public function testMatchingTagUsesAndSemantics(
         string $configurationName,
@@ -71,8 +64,6 @@ class FrontendContractTest extends CacheFrontendTestCase
         }
     }
 
-    #[SubSuite('FrontendContractTest')]
-    #[DisplayName('testMatchingAnyTagUsesOrSemantics')]
     #[DataProviderExternal(CacheConfigurationProvider::class, 'provide')]
     public function testMatchingAnyTagUsesOrSemantics(
         string $configurationName,
@@ -101,8 +92,6 @@ class FrontendContractTest extends CacheFrontendTestCase
         }
     }
 
-    #[SubSuite('FrontendContractTest')]
-    #[DisplayName('testCleanAllRemovesEntries')]
     #[DataProviderExternal(CacheConfigurationProvider::class, 'provide')]
     public function testCleanAllRemovesEntries(
         string $configurationName,
