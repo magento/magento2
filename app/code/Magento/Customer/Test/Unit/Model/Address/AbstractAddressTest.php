@@ -302,7 +302,7 @@ class AbstractAddressTest extends TestCase
 
         $this->assertSame(80, $this->model->getRegionId());
         $this->assertSame(80, $this->model->getData('region_id'));
-        $this->assertNull($this->model->getData('region'));
+        $this->assertSame('BAW', $this->model->getData('region'));
     }
 
     #[DataProvider('unresolvedRegionProvider')]
