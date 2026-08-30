@@ -180,7 +180,7 @@ class BackupTest extends TestCase
         $raised = [];
         set_error_handler(
             static function ($errno, $errstr) use (&$raised) {
-                $raised[] = $errstr;
+                $raised[] = sprintf('[%d] %s', $errno, $errstr);
                 return true;
             },
             E_ALL
