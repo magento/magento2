@@ -25,7 +25,7 @@
         <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
         <element name="paypalCart" type="text" selector="#transactionCart"/>
         <element name="productNamePosition" type="text" selector=".itemName"/>
-        <element name="orderTotalOnPaypalCheckout" type="text" selector="//button[(@id='one-time-cta' and @data-atomic-wait-domain='xo') or @data-testid='submit-button-initial' or @data-id='payment-submit-btn']//div[starts-with(normalize-space(text()), '$')]"/>
+        <element name="orderTotalOnPaypalCheckout" type="text" selector="//button[contains(@data-dd-action-name, 'Order Tab')]//span[starts-with(normalize-space(text()), '$')]"/>
         <element name="orderTotalTabOnPaypalCheckout" type="text" selector="//div[contains(@class, 'group/accordion-item')]//button[contains(@data-dd-action-name, 'Order Tab')]"/>
         <element name="subtotal" type="text" selector="//span[text()='Subtotal']/following-sibling::span[contains(text(),'{{subtotal}}')]" parameterized="true"/>
         <element name="shipping" type="text" selector="//span[text()='Shipping']/following-sibling::span[contains(text(),'{{shippingAmount}}')]" parameterized="true"/>
@@ -35,8 +35,12 @@
         <element name="paypalPopupButton1" type="button" selector="//button[span[text()='Pay with Debit or Credit Card']]"/>
         <element name="paypalPopupButton2" type="button" selector="//button[span[text()='Create an Account']]"/>
         <element name="changeShippingAddressButton" type="button" selector="//button[@data-dd-action-name='Ship to Tab']"/>
-        <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])[1]" parameterized="true"/>
+        <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])" parameterized="true"/>
+        <element name="shippingAddressRadioButton" type="button" selector="//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]]//button[@role='radio']" parameterized="true"/>
         <element name="selectedShippingAddress" type="text" selector="//div/p[contains(text(), '{{selectedAddress}}')]" parameterized="true"/>
         <element name="usePasswordInsteadButton" type="button" selector="(//button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
+        <!-- Union selector: resolves as soon as either the password field OR the use-password
+             button appears after the email step. Used as a stable gate before conditionalClick. -->
+        <element name="passwordOrUsePasswordButton" type="button" selector="(//input[contains(@name, 'password') and not(contains(@style, 'display:none'))] | //button[text()='Use Password Instead'] | //*[normalize-space(text())='Try another way'])[1]"/>
     </section>
 </sections>
