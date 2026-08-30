@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Tests that a single product to category link is written without discarding the rest of the category product list.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 #[
     AppArea('adminhtml'),
