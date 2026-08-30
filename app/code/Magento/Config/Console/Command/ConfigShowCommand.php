@@ -86,10 +86,11 @@ class ConfigShowCommand extends Command
     private $inputPath;
 
     /**
+     * Unused since partial paths became supported: the path is no longer pre-validated against the
+     * system.xml structure, an unknown path is detected from the resolved value instead. Retained
+     * so the constructor signature stays backward compatible.
+     *
      * @var PathValidatorFactory
-     * @deprecated The path is no longer pre-validated here; an invalid/partial path is now detected
-     * by checking the resolved configuration value instead. Kept only for backward compatibility of the
-     * constructor signature.
      */
     private $pathValidatorFactory;
 
