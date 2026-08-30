@@ -166,6 +166,58 @@ class ConfigShowCommandTest extends TestCase
     }
 
     /**
+     * A stored "0" is a real value, not a missing path.
+     *
+     * Every disabled flag in the config tree is stored as "0", so treating a falsy
+     * value as "path doesn't exist" would break `config:show web/seo/use_rewrites`
+     * and everything like it.
+     *
+     * @return void
+     */
+    public function testExecuteWithFalsyConfigValue(): void
+    {
+        $resolvedConfigPath = 'someScope/someScopeCode/web/seo/use_rewrites';
+
+        $this->scopeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with(self::SCOPE, self::SCOPE_CODE)
+            ->willReturn(true);
+        $this->pathResolverMock->expects($this->any())
+            ->method('resolve')
+            ->willReturn($resolvedConfigPath);
+        $this->configSourceMock->expects($this->any())
+            ->method('get')
+            ->willReturn('0');
+        $this->valueProcessorMock->expects($this->once())
+            ->method('process')
+            ->with(self::SCOPE, self::SCOPE_CODE, '0', self::CONFIG_PATH)
+            ->willReturn('0');
+        $this->emulatedAreProcessorMock->expects($this->once())
+            ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
+
+        $tester = $this->getConfigShowCommandTester(
+            self::CONFIG_PATH,
+            self::SCOPE,
+            self::SCOPE_CODE
+        );
+
+        $this->assertEquals(
+            Cli::RETURN_SUCCESS,
+            $tester->getStatusCode(),
+            'A stored "0" must be reported as a value, not as a missing path'
+        );
+        $this->assertStringContainsString('0', $tester->getDisplay());
+    }
+
+    /**
      * Test not valid scope or scope code
      *
      * @return void

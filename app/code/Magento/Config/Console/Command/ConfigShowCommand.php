@@ -202,7 +202,10 @@ class ConfigShowCommand extends Command
                 });
             });
 
-            if (empty($configValue)) {
+            // ConfigSourceInterface::get() returns '' or [] when the path holds nothing.
+            // Do not use empty() here: a stored "0" is a legitimate value for every
+            // disabled flag in the tree (web/seo/use_rewrites and friends).
+            if ($configValue === null || $configValue === '' || $configValue === []) {
                 throw new ValidatorException(
                     __('The "%1" path doesn\'t exist. Verify and try again.', $this->inputPath)
                 );
