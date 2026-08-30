@@ -98,7 +98,6 @@ class StoreTest extends TestCase
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
-            'getOriginalPathInfo'
         ]);
 
         $this->filesystemMock = $this->createMock(Filesystem::class);
@@ -410,8 +409,7 @@ class StoreTest extends TestCase
             ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
                 return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
             });
-
-        $this->requestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->once())
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
             ->willReturn('test_script.php');
@@ -436,42 +434,34 @@ class StoreTest extends TestCase
     }
 
     /**
-     * @dataProvider getCliBaseUrlDataProvider
+     * Entry point appended to the base URL when web server rewrites are disabled
      *
      * @covers \Magento\Store\Model\Store::getBaseUrl
-     * @covers \Magento\Store\Model\Store::getCode
      * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
-     * @covers \Magento\Store\Model\Store::getConfig
      *
-     * @param string $type
-     * @param boolean $secure
-     * @param boolean $isCustomEntryPoint
-     * @param string $expectedPath
+     * @param string|null $scriptFilename
+     * @param bool $isCustomEntryPoint
      * @param string $expectedBaseUrl
+     * @return void
      */
-    public function testGetBaseUrlFromCli(
-        $type,
-        $secure,
+    #[DataProvider('getBaseUrlEntryPointDataProvider')]
+    public function testGetBaseUrlEntryPointResolution(
+        $scriptFilename,
         $isCustomEntryPoint,
-        $expectedPath,
         $expectedBaseUrl
     ) {
-        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
-        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $expectedPath = 'web/unsecure/base_link_url';
+        /** @var ReinitableConfigInterface $configMock */
+        $configMock = $this->createMock(ReinitableConfigInterface::class);
         $configMock->expects($this->atLeastOnce())
             ->method('getValue')
-            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
-                $url = $secure ? '{{base_url}}' : 'http://domain.com/';
-                return $expectedPath == $path ? $url . $path . '/' : null;
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
+                return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
             });
-        $this->requestMock->expects($this->any())
-            ->method('getDistroBaseUrl')
-            ->willReturn('http://distro.com/');
-
         $this->requestMock->expects($this->any())
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
-            ->willReturn('bin/magento');
+            ->willReturn($scriptFilename);
 
         /** @var Store $model */
         $model = $this->objectManagerHelper->getObject(
@@ -488,36 +478,47 @@ class StoreTest extends TestCase
 
         $this->assertEquals(
             $expectedBaseUrl,
-            $model->getBaseUrl($type, $secure)
+            $model->getBaseUrl(UrlInterface::URL_TYPE_LINK, false)
         );
     }
 
     /**
      * @return array
      */
-    public function getCliBaseUrlDataProvider()
+    public static function getBaseUrlEntryPointDataProvider()
     {
+        $baseUrl = 'http://domain.com/web/unsecure/base_link_url/';
+
         return [
-            [
-                UrlInterface::URL_TYPE_LINK,
+            'web request through the default entry point' => [
+                '/var/www/html/pub/index.php',
                 false,
-                false,
-                'web/unsecure/base_link_url',
-                'http://domain.com/web/unsecure/base_link_url/'
+                $baseUrl . 'index.php/',
             ],
-            [
-                UrlInterface::URL_TYPE_DIRECT_LINK,
+            'web request through a custom entry point script' => [
+                '/var/www/html/pub/custom_entry.php',
                 false,
-                false,
-                'web/unsecure/base_link_url',
-                'http://domain.com/web/unsecure/base_link_url/'
+                $baseUrl . 'custom_entry.php/',
             ],
-            [
-                UrlInterface::URL_TYPE_LINK,
+            'console command executed via bin/magento' => [
+                '/var/www/html/bin/magento',
+                false,
+                $baseUrl . 'index.php/',
+            ],
+            'entry point forced by the custom_entry_point parameter' => [
+                '/var/www/html/bin/magento',
                 true,
+                $baseUrl . 'index.php/',
+            ],
+            'empty SCRIPT_FILENAME' => [
+                '',
                 false,
-                'web/secure/base_link_url',
-                'http://distro.com/web/secure/base_link_url/'
+                $baseUrl . 'index.php/',
+            ],
+            'missing SCRIPT_FILENAME' => [
+                null,
+                false,
+                $baseUrl . 'index.php/',
             ],
         ];
     }
