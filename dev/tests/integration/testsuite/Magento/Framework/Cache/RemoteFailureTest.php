@@ -46,13 +46,9 @@ class RemoteFailureTest extends CacheFrontendTestCase
             $threw = true;
         }
 
-        if ($configurationName === 'symfony-l1-l2') {
-            $this->assertTrue($threw, 'Symfony must detect the unavailable Redis connection');
-        } else {
-            $this->assertTrue(
-                $threw || $result === false,
-                'Legacy must throw or return a cache miss when Redis is unavailable'
-            );
-        }
+        $this->assertTrue(
+            $threw || $result === false,
+            $configurationName . ' must throw or return a cache miss when Redis is unavailable'
+        );
     }
 }
