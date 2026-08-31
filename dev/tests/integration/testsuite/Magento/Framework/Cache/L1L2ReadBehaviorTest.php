@@ -9,22 +9,14 @@ namespace Magento\Framework\Cache;
 
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Cache\CacheFrontendTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Verifies common L1-first and L2-fallback behavior for Zend and Symfony caches.
  */
 class L1L2ReadBehaviorTest extends CacheFrontendTestCase
 {
-    public static function l1L2Configurations(): array
-    {
-        return array_filter(
-            CacheConfigurationProvider::provide(),
-            static fn(array $case): bool => str_ends_with($case[0], '-l1-l2')
-        );
-    }
-
-    #[DataProvider('l1L2Configurations')]
+    #[DataProviderExternal(CacheConfigurationProvider::class, 'l1L2Configurations')]
     public function testL1HitAndL2Fallback(string $configurationName, array $configuration): void
     {
         $frontendA = $this->createFrontend($configuration, $configurationName, 'IT_READ_BEHAVIOR');

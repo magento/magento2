@@ -9,25 +9,14 @@ namespace Magento\Framework\Cache;
 
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Cache\CacheFrontendTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Verifies behavior when the remote tier is unavailable.
  */
 class RemoteFailureTest extends CacheFrontendTestCase
 {
-    /**
-     * @return array<string, array{string, array<string, mixed>}> 
-     */
-    public static function l1L2ConfigurationProvider(): array
-    {
-        return array_filter(
-            CacheConfigurationProvider::provide(),
-            static fn(array $case): bool => str_ends_with($case[0], '-l1-l2')
-        );
-    }
-
-    #[DataProvider('l1L2ConfigurationProvider')]
+    #[DataProviderExternal(CacheConfigurationProvider::class, 'l1L2Configurations')]
     public function testUnavailableRemoteFailsFrontendCreation(
         string $configurationName,
         array $configuration

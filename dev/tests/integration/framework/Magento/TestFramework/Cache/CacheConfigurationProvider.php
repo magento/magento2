@@ -66,6 +66,30 @@ final class CacheConfigurationProvider
     }
 
     /**
+     * @return array<string, array{string, array<string, mixed>}>
+     */
+    public static function redisConfigurations(): array
+    {
+        $configurations = self::provide();
+        return [
+            'zend-redis' => $configurations['zend-redis'],
+            'symfony-redis' => $configurations['symfony-redis'],
+        ];
+    }
+
+    /**
+     * @return array<string, array{string, array<string, mixed>}>
+     */
+    public static function l1L2Configurations(): array
+    {
+        $configurations = self::provide();
+        return [
+            'zend-l1-l2' => $configurations['zend-l1-l2'],
+            'symfony-l1-l2' => $configurations['symfony-l1-l2'],
+        ];
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private static function getRedisServer(): string

@@ -9,7 +9,7 @@ namespace Magento\Framework\Cache;
 
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Cache\CacheFrontendTestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Verifies local/remote synchronization for Zend and Symfony L1/L2 frontends.
@@ -19,18 +19,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class L1L2SynchronizationTest extends CacheFrontendTestCase
 {
-    /**
-     * @return array<string, array{string, array<string, mixed>}>
-     */
-    public static function l1L2ConfigurationProvider(): array
-    {
-        return array_filter(
-            CacheConfigurationProvider::provide(),
-            static fn(array $case): bool => str_ends_with($case[0], '-l1-l2')
-        );
-    }
-
-    #[DataProvider('l1L2ConfigurationProvider')]
+    #[DataProviderExternal(CacheConfigurationProvider::class, 'l1L2Configurations')]
     public function testL1HitAndL2Fallback(
         string $configurationName,
         array $configuration
@@ -54,7 +43,7 @@ class L1L2SynchronizationTest extends CacheFrontendTestCase
         }
     }
 
-    #[DataProvider('l1L2ConfigurationProvider')]
+    #[DataProviderExternal(CacheConfigurationProvider::class, 'l1L2Configurations')]
     public function testRemoteUpdateConvergesAcrossBothTiers(
         string $configurationName,
         array $configuration

@@ -16,18 +16,7 @@ use PHPUnit\Framework\Attributes\DataProviderExternal;
  */
 class FullFlushTest extends CacheFrontendTestCase
 {
-    /**
-     * @return array<string, array{string, array<string, mixed>}> 
-     */
-    public static function l1L2Configurations(): array
-    {
-        return array_filter(
-            CacheConfigurationProvider::provide(),
-            static fn(array $case): bool => str_ends_with($case[0], '-l1-l2')
-        );
-    }
-
-    #[DataProviderExternal(self::class, 'l1L2Configurations')]
+    #[DataProviderExternal(CacheConfigurationProvider::class, 'l1L2Configurations')]
     public function testFullFlushRemovesEntriesFromBothTiers(
         string $configurationName,
         array $configuration

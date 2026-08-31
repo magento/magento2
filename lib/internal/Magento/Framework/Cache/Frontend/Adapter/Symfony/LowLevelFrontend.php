@@ -157,6 +157,42 @@ class LowLevelFrontend implements \Magento\Framework\Cache\LowLevelFrontendInter
     }
 
     /**
+     * Remove a cache entry using Magento's frontend contract.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function remove(string $id): bool
+    {
+        return $this->symfony->remove($id);
+    }
+
+    /**
+     * Load a cache entry using Magento's frontend contract.
+     *
+     * @param string $id
+     * @return mixed
+     */
+    public function load(string $id)
+    {
+        return $this->symfony->load($id);
+    }
+
+    /**
+     * Save a cache entry using Magento's frontend contract.
+     *
+     * @param mixed $data
+     * @param string $id
+     * @param array $tags
+     * @param int|false|null $lifetime
+     * @return bool
+     */
+    public function save($data, string $id, array $tags = [], $lifetime = false): bool
+    {
+        return $this->symfony->save($data, $id, $tags, $lifetime);
+    }
+
+    /**
      * Delegate all other method calls to the cache
      *
      * @param string $method
