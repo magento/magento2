@@ -13,7 +13,7 @@
             <features value="Captcha"/>
             <stories value="Paypal PayflowPro and Captcha"/>
             <title value="Storefront order creation with Paypal PayflowPro and Captcha"/>
-            <description value="Test for checking captcha while order creation in storefront with Paypal PayflowPro. Skipped: blocked by open application bug AC-17981 (PayPal Payflow Pro/Payments Pro checkout order placement fails after Place Order)."/>
+            <description value="Test for checking captcha while order creation in storefront with Paypal PayflowPro."/>
             <testCaseId value="MC-41750" />
             <useCaseId value="MC-41572"/>
             <severity value="AVERAGE"/>
