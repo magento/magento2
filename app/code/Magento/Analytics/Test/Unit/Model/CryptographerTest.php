@@ -234,13 +234,33 @@ class CryptographerTest extends TestCase
     public static function encodeToFileDataProvider()
     {
         return [
-            'Empty source' => [0],
             'Shorter than one block' => [9],
             'Exactly one block' => [16],
             'One block plus a byte' => [17],
             'Two blocks' => [32],
             'Spanning multiple read chunks' => [5003],
         ];
+    }
+
+    /**
+     * An empty source must be rejected, mirroring encode()'s empty-input guard.
+     *
+     * @return void
+     */
+    public function testEncodeToFileThrowsOnEmptySource()
+    {
+        $this->analyticsTokenMock
+            ->method('getToken')
+            ->willReturn('some-token-value');
+
+        $sourceMock = $this->createMock(FileReadInterface::class);
+        $sourceMock->method('read')->willReturn('');
+
+        $destinationMock = $this->createMock(FileWriteInterface::class);
+        $destinationMock->expects($this->never())->method('write');
+
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->cryptographer->encodeToFile($sourceMock, $destinationMock);
     }
 
     #[DataProvider('encodeNotValidSourceDataProvider')]

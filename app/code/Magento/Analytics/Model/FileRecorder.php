@@ -105,16 +105,25 @@ class FileRecorder
             /** @var EncodedContext $encodedContext */
             $encodedContext = $writer($file);
         } catch (\Throwable $e) {
-            // Remove the partially written, unregistered file so failed runs do not accumulate orphans.
-            $directory->delete($fileRelativePath);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $directoryName = dirname($fileRelativePath);
-            if ($directoryName !== '.') {
-                $directory->delete($directoryName);
+            // Close before deleting so cleanup never runs against an open handle.
+            $file->close();
+            $file = null;
+            try {
+                $directory->delete($fileRelativePath);
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $directoryName = dirname($fileRelativePath);
+                if ($directoryName !== '.') {
+                    $directory->delete($directoryName);
+                }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+            } catch (\Throwable $cleanupError) {
+                // Cleanup failure must not mask the original error.
             }
             throw $e;
         } finally {
-            $file->close();
+            if ($file !== null) {
+                $file->close();
+            }
         }
 
         $fileInfo = $this->fileInfoManager->load();

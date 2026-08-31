@@ -115,6 +115,7 @@ class Cryptographer
         $blockSize = openssl_cipher_iv_length($this->cipherMethod);
         $chainingVector = $initializationVector;
         $buffer = '';
+        $hasData = false;
         $reachedEnd = false;
 
         while (!$reachedEnd) {
@@ -123,6 +124,7 @@ class Cryptographer
                 $reachedEnd = true;
                 break;
             }
+            $hasData = true;
             $buffer .= $chunk;
 
             // Encrypt whole blocks only and always retain at least one byte, so the final pass below
@@ -139,20 +141,29 @@ class Cryptographer
                 OPENSSL_RAW_DATA | OPENSSL_ZERO_PADDING,
                 $chainingVector
             );
+            if ($cipherChunk === false) {
+                throw new LocalizedException(__('The data could not be encrypted. Try again.'));
+            }
             $destination->write($cipherChunk);
             $chainingVector = substr($cipherChunk, -$blockSize);
             $buffer = substr($buffer, $alignedLength);
         }
 
-        $destination->write(
-            openssl_encrypt(
-                $buffer,
-                $this->cipherMethod,
-                $key,
-                OPENSSL_RAW_DATA,
-                $chainingVector
-            )
+        if (!$hasData) {
+            throw new LocalizedException(__('The data is invalid. Enter the data as a string and try again.'));
+        }
+
+        $finalChunk = openssl_encrypt(
+            $buffer,
+            $this->cipherMethod,
+            $key,
+            OPENSSL_RAW_DATA,
+            $chainingVector
         );
+        if ($finalChunk === false) {
+            throw new LocalizedException(__('The data could not be encrypted. Try again.'));
+        }
+        $destination->write($finalChunk);
 
         return $this->encodedContextFactory->create([
             'content' => '',
