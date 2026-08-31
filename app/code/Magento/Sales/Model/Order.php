@@ -559,7 +559,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function loadByIncrementId($incrementId)
     {
-        return $this->loadByAttribute('increment_id', $incrementId);
+        return $this->loadByAttribute('increment_id', (string) $incrementId);
     }
 
     /**
@@ -573,7 +573,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $orderCollection = $this->getSalesOrderCollection(
             [
-                'increment_id' => $incrementId,
+                'increment_id' => (string) $incrementId,
                 'store_id' => $storeId
             ]
         );
