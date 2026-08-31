@@ -69,6 +69,30 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
+     * Batched multi-load passthrough (used by the preloading wrapper). Delegates to the wrapped
+     * frontend's loadMultiple() when it has one; otherwise falls back to per-key loads so the chain
+     * still works for non-batching backends.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        $frontend = $this->_getFrontend();
+        if (method_exists($frontend, 'loadMultiple')) {
+            return $frontend->loadMultiple($identifiers);
+        }
+        $out = [];
+        foreach ($identifiers as $id) {
+            $value = $frontend->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)

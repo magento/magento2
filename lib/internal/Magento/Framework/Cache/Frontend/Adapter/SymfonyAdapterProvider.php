@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\MagentoDatabaseAdapter;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\SlaveAwareRedis;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\FilesystemTagAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\GenericTagAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
@@ -58,6 +59,19 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @var array<string, mixed>
      */
     private array $connectionPool = [];
+
+    /**
+     * PID that owns the pooled connections.
+     *
+     * This provider is a shared singleton, so a process that forks (e.g. parallel indexers) hands the
+     * child a connection pool that still points at the PARENT's sockets. Sharing one socket across
+     * processes interleaves the Redis/Valkey protocol and corrupts reads (garbled describeTable() etc.).
+     * Detecting a PID change lets us drop the inherited connections so the child reconnects on its own
+     * socket — mirroring the legacy Zend adapter, which re-creates its connection when the PID changes.
+     *
+     * @var int|null
+     */
+    private ?int $poolPid = null;
 
     /**
      * Cached adapter type mappings (lowercase => canonical)
@@ -116,6 +130,25 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->connectionPool = [];
+        $this->poolPid = null;
+    }
+
+    /**
+     * Drop pooled connections after a fork so a child process never reuses the parent's socket.
+     *
+     * We intentionally do NOT close the inherited handles: persistent connections are process-shared,
+     * and closing a forked socket could disturb the parent. Dropping our references is enough — the
+     * child then opens a fresh connection (see the PID-scoped persistent_id in createPhpRedisConnection).
+     *
+     * @return void
+     */
+    private function resetPooledConnectionsOnFork(): void
+    {
+        $pid = getmypid();
+        if ($this->poolPid !== $pid) {
+            $this->connectionPool = [];
+            $this->poolPid = $pid;
+        }
     }
 
     /**
@@ -138,21 +171,17 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         $backendTypeLower = strtolower($backendType);
         $resolvedType = $this->adapterTypeMap[$backendTypeLower] ?? 'filesystem';
 
-        // Create adapter based on resolved type with fallback to filesystem
-        try {
-            $adapter = match ($resolvedType) {
-                'redis' => $this->createRedisAdapter($backendOptions, $namespace, $defaultLifetime),
-                'memcached' => $this->createMemcachedAdapter($backendOptions, $namespace, $defaultLifetime),
-                'filesystem' => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
-                'database' => $this->createDatabaseAdapter($backendOptions, $namespace, $defaultLifetime),
-                'apcu' => $this->createApcuAdapter($namespace, $defaultLifetime),
-                'twolevel' => $this->createTwoLevelAdapter($backendOptions, $namespace, $defaultLifetime),
-                default => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
-            };
-        } catch (\Exception $e) {
-            // Fallback to filesystem adapter if the requested adapter fails
-            $adapter = $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime);
-        }
+        // Create adapter based on resolved type. No fallback to filesystem: a backend (e.g. Redis)
+        // outage propagates instead of silently degrading to var/cache, matching legacy fail-fast.
+        $adapter = match ($resolvedType) {
+            'redis' => $this->createRedisAdapter($backendOptions, $namespace, $defaultLifetime),
+            'memcached' => $this->createMemcachedAdapter($backendOptions, $namespace, $defaultLifetime),
+            'filesystem' => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
+            'database' => $this->createDatabaseAdapter($backendOptions, $namespace, $defaultLifetime),
+            'apcu' => $this->createApcuAdapter($namespace, $defaultLifetime),
+            'twolevel' => $this->createTwoLevelAdapter($backendOptions, $namespace, $defaultLifetime),
+            default => $this->createFilesystemAdapter($backendOptions, $namespace, $defaultLifetime),
+        };
 
         // Skip TagAwareAdapter for Redis/Filesystem (native tag support)
         if (in_array($resolvedType, ['redis', 'filesystem'], true)) {
@@ -198,7 +227,8 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                 ),
                 'filesystem' => new FilesystemTagAdapter(
                     $cachePool,
-                    $this->getCacheDirectory()
+                    !empty($backendOptions['cache_dir']) ? $backendOptions['cache_dir'] : $this->getCacheDirectory(),
+                    (bool)($backendOptions['index_tags'] ?? true)
                 ),
                 default => new GenericTagAdapter(
                     $cachePool,
@@ -234,12 +264,17 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function createRedisAdapter(
         array $options,
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
+        // Fork-safety: if this process forked since the pool was built (parallel indexers, queue
+        // consumers), discard the inherited connections so we reconnect on our own socket.
+        $this->resetPooledConnectionsOnFork();
+
         // Extract connection parameters (optimized with null coalescing)
         $host = $options['server'] ?? $options['host'] ?? '127.0.0.1';
         $port = (int)($options['port'] ?? 6379);
@@ -269,12 +304,30 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // For Predis with Ultra-Optimized client: use connection pooling like phpredis
         // The client's internal cache is cleared on writes and database switches,
         // so connection pooling is safe and provides better performance
+        // Read-replica support (legacy parity with Cm Redis load_from_slave): data reads (get/mget)
+        // are served from a replica, writes/tags/EVAL stay on the master. Empty => no offload.
+        $slaveSpecs = $this->parseSlaveOption($options['load_from_slave'] ?? null, $port, $database);
+        // Legacy default: master participates in reads. master_write_only=1 => all reads to replicas.
+        $masterWriteOnly = isset($options['master_write_only']) ? (bool)$options['master_write_only'] : false;
+        // Legacy default (false): a replica miss is NOT retried on the master; =1 retries on miss.
+        $retryReadsOnMaster = isset($options['retry_reads_on_master'])
+            ? (bool)$options['retry_reads_on_master']
+            : false;
+
         $usePhpRedis = extension_loaded('redis');
         $connectionKey = sprintf('redis:%s:%d:%d', $host, $port, $database);
+        // Keep replica-backed and plain connections to the same master in separate pool slots, so a
+        // frontend that configures load_from_slave never reuses (or is reused as) a plain connection.
+        if ($slaveSpecs) {
+            $connectionKey .= ':slave=' . hash(
+                'sha256',
+                (string)json_encode([$slaveSpecs, $masterWriteOnly, $retryReadsOnMaster])
+            );
+        }
 
         if (!isset($this->connectionPool[$connectionKey])) {
             if ($usePhpRedis) {
-                $this->connectionPool[$connectionKey] = $this->createPhpRedisConnection(
+                $master = $this->createPhpRedisConnection(
                     $host,
                     $port,
                     $password,
@@ -284,8 +337,24 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $timeout,
                     $readTimeout,
                     $retryInterval,
-                    $connectRetries
+                    $connectRetries,
+                    $slaveSpecs ? SlaveAwareRedis::class : null
                 );
+                if ($slaveSpecs && $master instanceof SlaveAwareRedis) {
+                    $master->setSlaves($this->createSlaveConnections(
+                        $slaveSpecs,
+                        $password,
+                        $persistent,
+                        $persistentId,
+                        $timeout,
+                        $readTimeout,
+                        $retryInterval,
+                        $connectRetries
+                    ));
+                    $master->setMasterWriteOnly($masterWriteOnly);
+                    $master->setRetryReadsOnMaster($retryReadsOnMaster);
+                }
+                $this->connectionPool[$connectionKey] = $master;
             } elseif (class_exists(PredisClient::class)) {
                 $this->connectionPool[$connectionKey] = $this->createOptimizedPredisConnection(
                     $host,
@@ -294,7 +363,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $database,
                     $persistent,
                     $timeout,
-                    $readTimeout
+                    $readTimeout,
+                    $slaveSpecs,
+                    $masterWriteOnly,
+                    $retryReadsOnMaster
                 );
             } else {
                 throw new \RuntimeException(
@@ -335,8 +407,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param float|null $readTimeout
      * @param int|null $retryInterval
      * @param int|null $connectRetries
+     * @param string|null $connectionClass
      * @return \Redis|\RedisCluster|\Relay\Relay
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function createPhpRedisConnection(
         string $host,
@@ -348,7 +422,8 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         ?float $timeout,
         ?float $readTimeout,
         ?int $retryInterval,
-        ?int $connectRetries
+        ?int $connectRetries,
+        ?string $connectionClass = null
     ) {
         // Build optimized DSN with all connection parameters
         $dsnParams = [];
@@ -356,9 +431,12 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // Add persistent connection parameters
         if ($persistent) {
             $dsnParams[] = 'persistent=1';
-            if ($persistentId) {
-                $dsnParams[] = 'persistent_id=' . urlencode($persistentId);
-            }
+            // Scope the persistent_id to the current PID. phpredis keys persistent connections by
+            // persistent_id, so after a fork a child re-running pconnect() with the SAME id would get
+            // the parent's shared socket back. Including the PID makes each process open its OWN
+            // persistent connection (stable within a long-lived FPM/CLI worker, isolated per fork).
+            $forkSafePersistentId = ($persistentId ?? 'default') . ':' . getmypid();
+            $dsnParams[] = 'persistent_id=' . urlencode($forkSafePersistentId);
         }
 
         // Add connection timeout parameters
@@ -387,8 +465,125 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // Append DSN parameters
         $dsn = $dsnParams ? $baseDsn . '?' . implode('&', $dsnParams) : $baseDsn;
 
-        // Create and return the connection using Symfony's factory
-        return RedisAdapter::createConnection($dsn);
+        // Create and return the connection using Symfony's factory. When a connectionClass is given
+        // (read-replica support), Symfony instantiates that \Redis subclass and runs all its normal
+        // connection setup (auth, select, options, persistent) on it.
+        return $connectionClass !== null
+            ? RedisAdapter::createConnection($dsn, ['class' => $connectionClass])
+            : RedisAdapter::createConnection($dsn);
+    }
+
+    /**
+     * Parse the load_from_slave option into a list of [host, port] replica targets.
+     *
+     * Accepts the legacy Cm Redis shapes: a "host" / "host:port" string, a single
+     * ['server'=>, 'port'=>] array, or a list of those. Empty/unset => no replicas.
+     *
+     * @param mixed $option
+     * @param int $defaultPort master port, used when a replica entry omits its port
+     * @param int $defaultDatabase master db, used when a replica entry omits its database
+     * @return array<int, array{0:string,1:int,2:int}>
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function parseSlaveOption($option, int $defaultPort, int $defaultDatabase): array
+    {
+        if (empty($option)) {
+            return [];
+        }
+        if (is_string($option)) {
+            return [$this->splitHostPort($option, $defaultPort, $defaultDatabase)];
+        }
+        if (!is_array($option)) {
+            return [];
+        }
+        // single slave: ['server' => ..., 'port' => ..., 'database' => ...]
+        if (isset($option['server'])) {
+            return [[
+                (string)$option['server'],
+                (int)($option['port'] ?? $defaultPort),
+                (int)($option['database'] ?? $defaultDatabase),
+            ]];
+        }
+        // list of slaves (strings and/or ['server'=>,'port'=>,'database'=>] arrays)
+        $out = [];
+        foreach ($option as $entry) {
+            if (is_string($entry) && $entry !== '') {
+                $out[] = $this->splitHostPort($entry, $defaultPort, $defaultDatabase);
+            } elseif (is_array($entry) && isset($entry['server'])) {
+                $out[] = [
+                    (string)$entry['server'],
+                    (int)($entry['port'] ?? $defaultPort),
+                    (int)($entry['database'] ?? $defaultDatabase),
+                ];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Split "host" or "host:port" into [host, port, database].
+     *
+     * @param string $server
+     * @param int $defaultPort
+     * @param int $defaultDatabase
+     * @return array{0:string,1:int,2:int}
+     */
+    private function splitHostPort(string $server, int $defaultPort, int $defaultDatabase): array
+    {
+        if (strpos($server, ':') !== false) {
+            [$host, $port] = explode(':', $server, 2);
+            return [$host, (int)$port, $defaultDatabase];
+        }
+        return [$server, $defaultPort, $defaultDatabase];
+    }
+
+    /**
+     * Build the replica \Redis connections for SlaveAwareRedis. Unreachable replicas are skipped
+     * (legacy skips a bad slave and keeps the rest / falls back to master).
+     *
+     * @param array<int,array{0:string,1:int,2:int}> $slaveSpecs
+     * @param string|null $password
+     * @param bool $persistent
+     * @param string|null $persistentId
+     * @param float|null $timeout
+     * @param float|null $readTimeout
+     * @param int|null $retryInterval
+     * @param int|null $connectRetries
+     * @return \Redis[]
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    private function createSlaveConnections(
+        array $slaveSpecs,
+        ?string $password,
+        bool $persistent,
+        ?string $persistentId,
+        ?float $timeout,
+        ?float $readTimeout,
+        ?int $retryInterval,
+        ?int $connectRetries
+    ): array {
+        $slaves = [];
+        foreach ($slaveSpecs as $i => [$sHost, $sPort, $sDatabase]) {
+            try {
+                $slaves[] = $this->createPhpRedisConnection(
+                    $sHost,
+                    $sPort,
+                    $password,
+                    $sDatabase,
+                    $persistent,
+                    // distinct persistent id per replica so it doesn't collide with the master socket
+                    ($persistentId ?? 'default') . '_slave' . $i,
+                    $timeout,
+                    $readTimeout,
+                    $retryInterval,
+                    $connectRetries
+                );
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (\Throwable $e) {
+                // skip an unreachable replica; reads fall back to the master
+            }
+        }
+        return $slaves;
     }
 
     /**
@@ -401,8 +596,12 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param bool $persistent
      * @param float|null $timeout
      * @param float|null $readTimeout
+     * @param array $slaveSpecs Read-replica targets [[host,port,db], ...] parsed from load_from_slave
+     * @param bool $masterWriteOnly phpredis-only refinement (Predis always routes reads to a replica)
+     * @param bool $retryReadsOnMaster phpredis-only refinement (see above)
      * @return OptimizedPredisClient
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     private function createOptimizedPredisConnection(
         string $host,
@@ -411,7 +610,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         int $database,
         bool $persistent,
         ?float $timeout,
-        ?float $readTimeout
+        ?float $readTimeout,
+        array $slaveSpecs = [],
+        bool $masterWriteOnly = false,
+        bool $retryReadsOnMaster = false
     ) {
         $params = [
             'scheme' => 'tcp',
@@ -424,11 +626,34 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
             $params['password'] = $password;
         }
 
-        $options = [
-            'exceptions' => false,
-        ];
+        // Single node: no replica configured.
+        if (empty($slaveSpecs)) {
+            return new OptimizedPredisClient($params, ['exceptions' => false]);
+        }
 
-        return new OptimizedPredisClient($params, $options);
+        // Read replica(s): use Predis' native master/slave replication (load_from_slave parity). Reads
+        // are routed to a replica and writes/EVAL stay on the master (equivalent to phpredis
+        // SlaveAwareRedis with master_write_only=1); a failed replica transparently falls back to the
+        // master. Predis routes all reads to replicas, so master_write_only=0 (master shares reads) and
+        // retry_reads_on_master are phpredis-only refinements — on Predis reads always go to a replica
+        // with master fallback on connection error.
+        $params['role'] = 'master';
+        $connections = [$params];
+        foreach ($slaveSpecs as [$sHost, $sPort, $sDatabase]) {
+            $slave = [
+                'scheme' => 'tcp',
+                'host' => $sHost,
+                'port' => $sPort,
+                'database' => $sDatabase,
+                'role' => 'slave',
+            ];
+            if ($password) {
+                $slave['password'] = $password;
+            }
+            $connections[] = $slave;
+        }
+
+        return new OptimizedPredisClient($connections, ['replication' => 'predis', 'exceptions' => false]);
     }
 
     /**
@@ -500,6 +725,9 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
+        // Fork-safety: drop connections inherited from a parent process (see resetPooledConnectionsOnFork).
+        $this->resetPooledConnectionsOnFork();
+
         // Build server list (optimized)
         if (isset($options['servers'])) {
             // Multiple servers - optimize with direct assignment
@@ -508,7 +736,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                 $servers[] = [$server[0] ?? '127.0.0.1', $server[1] ?? 11211];
             }
             // phpcs:ignore Magento2.Security.InsecureFunction,Magento2.Functions.DiscouragedFunction
-            $connectionKey = 'memcached:' . md5(serialize($servers));
+            $connectionKey = 'memcached:' . hash('sha256', serialize($servers));
         } else {
             // Single server - fast path
             $host = $options['server'] ?? $options['host'] ?? '127.0.0.1';
@@ -542,19 +770,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         string $namespace,
         ?int $defaultLifetime
     ): AdapterInterface {
-        // Get cache directory (optimized path)
-        if (isset($options['cache_dir'])) {
-            $cacheDir = $options['cache_dir'];
-        } else {
-            // Cache the directory path for reuse
-            static $defaultCacheDir = null;
-            if ($defaultCacheDir === null) {
-                $directory = $this->filesystem->getDirectoryWrite(DirectoryList::CACHE);
-                $defaultCacheDir = $directory->getAbsolutePath();
-                $directory->create();
-            }
-            $cacheDir = $defaultCacheDir;
-        }
+        $cacheDir = !empty($options['cache_dir']) ? $options['cache_dir'] : $this->getCacheDirectory();
 
         // Add igbinary marshaller support for file cache (70% faster, 58% smaller)
         $serializer = $options['serializer'] ?? null;
