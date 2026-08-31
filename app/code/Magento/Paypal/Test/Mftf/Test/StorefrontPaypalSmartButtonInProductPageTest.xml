@@ -28,7 +28,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create Customer -->
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Utah_Customer" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferCartLineConfigData.path}} {{StorefrontPaypalDisableTransferCartLineConfigData.value}}" stepKey="disableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferShippingOptionConfigData.path}} {{StorefrontPaypalDisableTransferShippingOptionConfigData.value}}" stepKey="disableTransferShippingOption"/>
