@@ -162,9 +162,11 @@ sub vcl_backend_response {
     if (beresp.status != 200 && beresp.status != 404) {
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
+        set beresp.grace = 0s;
         return (deliver);
     } elsif (beresp.http.Cache-Control ~ "private") {
         set beresp.uncacheable = true;
+        set beresp.grace = 0s;
         set beresp.ttl = 86400s;
         return (deliver);
     }
@@ -182,6 +184,7 @@ sub vcl_backend_response {
          && beresp.http.set-cookie ~ "X-Magento-Vary=") {
            set beresp.ttl = 0s;
            set beresp.uncacheable = true;
+           set beresp.grace = 0s;
         }
         unset beresp.http.set-cookie;
     }
@@ -195,12 +198,14 @@ sub vcl_backend_response {
         # Mark as Hit-For-Pass for the next 2 minutes
         set beresp.ttl = 120s;
         set beresp.uncacheable = true;
+        set beresp.grace = 0s;
     }
 
     # If the cache key in the Magento response doesn't match the one that was sent in the request, don't cache under the request's key
     if (bereq.url ~ "/graphql" && bereq.http.X-Magento-Cache-Id && bereq.http.X-Magento-Cache-Id != beresp.http.X-Magento-Cache-Id) {
         set beresp.ttl = 0s;
         set beresp.uncacheable = true;
+        set beresp.grace = 0s;
     }
 
     return (deliver);
