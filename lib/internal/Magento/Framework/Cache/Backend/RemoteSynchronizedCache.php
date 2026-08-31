@@ -230,6 +230,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {

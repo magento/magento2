@@ -188,6 +188,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
      * @param string $dir Directory that must exist before writing
      * @param callable $transform fn(array $entries): ?array
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function mutateFileLocked(string $file, string $dir, callable $transform): void
     {

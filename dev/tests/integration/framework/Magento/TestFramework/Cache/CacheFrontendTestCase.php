@@ -12,10 +12,21 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Base test case that builds real cache frontends from named configurations for integration tests.
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
+ */
 abstract class CacheFrontendTestCase extends TestCase
 {
+    /**
+     * @var Factory
+     */
     protected Factory $cacheFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +34,12 @@ abstract class CacheFrontendTestCase extends TestCase
     }
 
     /**
+     * Create a cache frontend for the given configuration.
+     *
      * @param array<string, mixed> $configuration
+     * @param string $configurationName
+     * @param string $prefix
+     * @return FrontendInterface
      */
     protected function createFrontend(
         array $configuration,
@@ -38,6 +54,14 @@ abstract class CacheFrontendTestCase extends TestCase
         return $this->cacheFactory->create($configuration);
     }
 
+    /**
+     * Build a unique cache id for the given configuration and logical name.
+     *
+     * @param string $configurationName
+     * @param string $name
+     * @param string $prefix
+     * @return string
+     */
     protected function cacheId(
         string $configurationName,
         string $name,
@@ -47,7 +71,10 @@ abstract class CacheFrontendTestCase extends TestCase
     }
 
     /**
+     * Ensure any configured cache directories exist before the backend is created.
+     *
      * @param array<string, mixed> $configuration
+     * @return void
      */
     private function createCacheDirectories(array $configuration): void
     {
@@ -62,6 +89,12 @@ abstract class CacheFrontendTestCase extends TestCase
         }
     }
 
+    /**
+     * Create the given directory (recursively) if it does not already exist.
+     *
+     * @param string $directory
+     * @return void
+     */
     private function ensureDirectory(string $directory): void
     {
         if (!is_dir($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {

@@ -1,7 +1,11 @@
 <?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
 declare(strict_types=1);
 
-namespace MagentoFrameworkCacheSymfony;
+namespace Magento\Framework\Cache\Symfony;
 
 use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Cache\CacheFrontendTestCase;

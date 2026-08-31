@@ -10,9 +10,14 @@ namespace Magento\TestFramework\Cache;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
-final class CacheConfigurationProvider
+/**
+ * Provides cache backend configurations used by the cache integration test matrix.
+ */
+class CacheConfigurationProvider
 {
     /**
+     * Provide the full set of cache backend configurations keyed by name.
+     *
      * @return array<string, array{string, array<string, mixed>}>
      */
     public static function provide(): array
@@ -66,6 +71,8 @@ final class CacheConfigurationProvider
     }
 
     /**
+     * Provide only the Redis-based configurations.
+     *
      * @return array<string, array{string, array<string, mixed>}>
      */
     public static function redisConfigurations(): array
@@ -78,6 +85,8 @@ final class CacheConfigurationProvider
     }
 
     /**
+     * Provide only the two-level (L1/L2) configurations.
+     *
      * @return array<string, array{string, array<string, mixed>}>
      */
     public static function l1L2Configurations(): array
@@ -90,6 +99,8 @@ final class CacheConfigurationProvider
     }
 
     /**
+     * Resolve the Redis server host from deployment config, falling back to localhost.
+     *
      * @return array<string, mixed>
      */
     private static function getRedisServer(): string
@@ -109,6 +120,8 @@ final class CacheConfigurationProvider
     }
 
     /**
+     * Build the Redis backend option set for the given server host.
+     *
      * @param string $server
      * @return array<string, mixed>
      */

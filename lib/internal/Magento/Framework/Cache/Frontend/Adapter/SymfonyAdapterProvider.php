@@ -477,6 +477,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @param int $defaultPort master port, used when a replica entry omits its port
      * @param int $defaultDatabase master db, used when a replica entry omits its database
      * @return array<int, array{0:string,1:int,2:int}>
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function parseSlaveOption($option, int $defaultPort, int $defaultDatabase): array
     {
@@ -595,6 +596,8 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
      * @return OptimizedPredisClient
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function createOptimizedPredisConnection(
         string $host,

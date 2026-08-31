@@ -209,6 +209,8 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save($data, $id, $tags = [], $specificLifetime = null)
     {
