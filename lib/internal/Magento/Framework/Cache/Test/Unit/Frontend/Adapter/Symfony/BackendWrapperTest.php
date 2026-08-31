@@ -15,6 +15,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\PruneableInterface;
 
 /**
  * Unit test for BackendWrapper
@@ -321,28 +322,42 @@ class BackendWrapperTest extends TestCase
     }
 
     /**
-     * Test setOption() is a no-op
+     * Test setDirectives() is a no-op
      */
-    public function testSetOptionIsNoOp(): void
+    public function testSetDirectivesIsNoOp(): void
     {
-        // Should not throw any exceptions
-        $this->backendWrapper->setOption('some_option', 'some_value');
-        $this->backendWrapper->setOption('another_option', 123);
+        // Should not throw any exceptions and Symfony backend options are not stored in the wrapper
+        $this->backendWrapper->setDirectives(['lifetime' => 3600]);
+        $this->backendWrapper->setDirectives([]);
 
         // No assertions needed - just verify it doesn't crash
         $this->assertTrue(true);
     }
 
     /**
-     * Test getOption() returns null for any option
+     * Test prune() returns false when the underlying pool is not pruneable
      */
-    public function testGetOptionReturnsNull(): void
+    public function testPruneReturnsFalseWhenPoolNotPruneable(): void
     {
-        $result1 = $this->backendWrapper->getOption('any_option');
-        $result2 = $this->backendWrapper->getOption('another_option');
+        // The plain CacheItemPoolInterface mock does not implement PruneableInterface
+        $this->assertFalse($this->backendWrapper->prune());
+    }
 
-        $this->assertNull($result1);
-        $this->assertNull($result2);
+    /**
+     * Test prune() delegates to the pool when it is pruneable
+     */
+    public function testPruneDelegatesToPruneablePool(): void
+    {
+        $pruneablePool = $this->createMockForIntersectionOfInterfaces(
+            [CacheItemPoolInterface::class, PruneableInterface::class]
+        );
+        $pruneablePool->expects($this->once())
+            ->method('prune')
+            ->willReturn(true);
+
+        $backendWrapper = new BackendWrapper($pruneablePool, $this->adapterMock, $this->symfonyMock);
+
+        $this->assertTrue($backendWrapper->prune());
     }
 
     /**

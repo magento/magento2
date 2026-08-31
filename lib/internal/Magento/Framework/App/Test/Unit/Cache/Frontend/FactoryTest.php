@@ -27,8 +27,6 @@ use Magento\Framework\Serialize\Serializer\Serialize;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
  * Unit tests for Cache Frontend Factory
@@ -46,7 +44,7 @@ class FactoryTest extends TestCase
     public function testCreate()
     {
         $model = $this->_buildModelForCreate();
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $result = $model->create(['backend' => 'file']);
 
         $this->assertInstanceOf(
             FrontendInterface::class,
@@ -74,7 +72,7 @@ class FactoryTest extends TestCase
         $model = $this->_buildModelForCreate();
         $result = $model->create(
             [
-                'backend' => FilesystemAdapter::class,
+                'backend' => 'file',
                 'frontend_options' => ['lifetime' => 2601],
                 'backend_options' => ['file_extension' => '.wtf'],
             ]
@@ -85,18 +83,18 @@ class FactoryTest extends TestCase
 
         $this->assertEquals(2601, $frontend->getOption('lifetime'));
 
-        // For Symfony, backend options are not stored in the wrapper (returns null)
-        $fileExtension = $backend->getOption('file_extension');
-        $this->assertNull(
-            $fileExtension,
-            'Backend options are not stored in Symfony wrapper, should return null'
+        // For Symfony, backend options are not stored in the wrapper; the backend is a BackendWrapper
+        $this->assertInstanceOf(
+            BackendWrapper::class,
+            $backend,
+            'Backend options are not stored in Symfony wrapper'
         );
     }
 
     public function testCreateEnforcedOptions()
     {
-        $model = $this->_buildModelForCreate(['backend' => FilesystemAdapter::class]);
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $model = $this->_buildModelForCreate(['backend' => 'file']);
+        $result = $model->create(['backend' => 'redis']);
 
         // The enforced option test verifies that enforced options override regular options
         // Since Symfony uses wrappers, we verify the backend has the correct interface
@@ -113,7 +111,7 @@ class FactoryTest extends TestCase
     #[DataProvider('idPrefixDataProvider')]
     public function testIdPrefix($options, $expectedPrefix)
     {
-        $model = $this->_buildModelForCreate(['backend' => FilesystemAdapter::class]);
+        $model = $this->_buildModelForCreate(['backend' => 'file']);
         $result = $model->create($options);
 
         $frontend = $result->getLowLevelFrontend();
@@ -127,13 +125,13 @@ class FactoryTest extends TestCase
     {
         return [
             // start of md5('DIR')
-            'default id prefix' => [['backend' => NullAdapter::class], 'c15_'],
+            'default id prefix' => [['backend' => 'file'], 'c15_'],
             'id prefix in "id_prefix" option' => [
-                ['backend' => NullAdapter::class, 'id_prefix' => 'id_prefix_value'],
+                ['backend' => 'file', 'id_prefix' => 'id_prefix_value'],
                 'id_prefix_value',
             ],
             'id prefix in "prefix" option' => [
-                ['backend' => NullAdapter::class, 'prefix' => 'prefix_value'],
+                ['backend' => 'file', 'prefix' => 'prefix_value'],
                 'prefix_value',
             ]
         ];
@@ -150,7 +148,7 @@ class FactoryTest extends TestCase
                 ]
             ]
         );
-        $result = $model->create(['backend' => NullAdapter::class]);
+        $result = $model->create(['backend' => 'file']);
 
         $this->assertInstanceOf(
             CacheDecoratorDummy::class,
@@ -280,13 +278,26 @@ class FactoryTest extends TestCase
      */
     public function testResolveCacheDirAbsolutePathReturnedAsIs(): void
     {
+        // The default CACHE directory is still resolved by _getBackendOptions; only the VAR_DIR
+        // resolution done by resolveCacheDir() must be skipped for an absolute cache_dir.
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('CACHE_DIR');
+        $cacheDirMock->expects($this->any())->method('create')->willReturn(true);
+
         $filesystem = $this->createMock(Filesystem::class);
-        // Absolute path must never reach getDirectoryWrite; the fix short-circuits on DIRECTORY_SEPARATOR prefix.
-        $filesystem->expects($this->never())->method('getDirectoryWrite');
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturnCallback(function ($dir) use ($cacheDirMock) {
+                // Absolute cache_dir must never trigger the VAR_DIR resolution branch.
+                if ($dir === DirectoryList::VAR_DIR) {
+                    $this->fail('Absolute cache_dir must not be resolved under VAR_DIR');
+                }
+                return $cacheDirMock;
+            });
 
         $model = $this->buildModelWithFilesystem($filesystem);
         $model->create([
-            'backend'         => NullAdapter::class,
+            'backend'         => 'file',
             'backend_options' => ['cache_dir' => '/dev/shm/magento_l1'],
             'id_prefix'       => 'test_',
         ]);
@@ -303,19 +314,26 @@ class FactoryTest extends TestCase
         $relativePath = 'custom/cache/dir';
         $resolved     = '/var/www/html/var/' . $relativePath;
 
-        $writeDirMock = $this->createMock(WriteInterface::class);
-        $writeDirMock->expects($this->once())->method('create')->with($relativePath)->willReturn(true);
-        $writeDirMock->expects($this->once())->method('getAbsolutePath')->with($relativePath)->willReturn($resolved);
+        // resolveCacheDir() must resolve the relative path under VAR_DIR.
+        $varDirMock = $this->createMock(WriteInterface::class);
+        $varDirMock->expects($this->once())->method('create')->with($relativePath)->willReturn(true);
+        $varDirMock->expects($this->once())->method('getAbsolutePath')->with($relativePath)->willReturn($resolved);
+
+        // _getBackendOptions still resolves the default CACHE directory for the "file" backend.
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('CACHE_DIR');
+        $cacheDirMock->expects($this->any())->method('create')->willReturn(true);
 
         $filesystem = $this->createMock(Filesystem::class);
-        $filesystem->expects($this->once())
+        $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::VAR_DIR)
-            ->willReturn($writeDirMock);
+            ->willReturnCallback(function ($dir) use ($varDirMock, $cacheDirMock) {
+                return $dir === DirectoryList::VAR_DIR ? $varDirMock : $cacheDirMock;
+            });
 
         $model = $this->buildModelWithFilesystem($filesystem);
         $model->create([
-            'backend'         => NullAdapter::class,
+            'backend'         => 'file',
             'backend_options' => ['cache_dir' => $relativePath],
             'id_prefix'       => 'test_',
         ]);

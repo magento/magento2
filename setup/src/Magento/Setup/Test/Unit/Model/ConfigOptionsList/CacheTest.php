@@ -155,7 +155,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'redis',
+                        'backend' => Cache::CONFIG_VALUE_CACHE_REDIS,
                         'backend_options' => [
                             'server' => '127.0.0.1',
                             'port' => '6379',
@@ -165,7 +165,6 @@ class CacheTest extends TestCase
                             'compression_lib' => '',
                             'use_lua' => '0',
                             'use_lua_on_gc' => '1',
-                            'serializer' => 'igbinary'
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
@@ -200,7 +199,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => 'redis',
+                        'backend' => Cache::CONFIG_VALUE_CACHE_REDIS,
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -210,7 +209,6 @@ class CacheTest extends TestCase
                             'compression_lib' => 'gzip',
                             'use_lua' => '0',
                             'use_lua_on_gc' => '1',
-                            'serializer' => 'igbinary'
                         ],
                     ]
                 ],
@@ -244,9 +242,6 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $this->expectedIdPrefix(),
-                        'backend_options' => [
-                            'serializer' => 'igbinary'
-                        ]
                     ]
                 ]
             ]
@@ -270,9 +265,6 @@ class CacheTest extends TestCase
                 'frontend' => [
                     'default' => [
                         'id_prefix' => $explicitPrefix,
-                        'backend_options' => [
-                            'serializer' => 'igbinary'
-                        ]
                     ]
                 ]
             ]

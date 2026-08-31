@@ -12,7 +12,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Currency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontendInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 
 /**
  * Test for Magento\Framework\Currency
