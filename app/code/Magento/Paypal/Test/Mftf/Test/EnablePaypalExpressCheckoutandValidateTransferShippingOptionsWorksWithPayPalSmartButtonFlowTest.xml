@@ -23,7 +23,7 @@
             <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentActionOrder"/>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferShippingOptionConfigData.path}} {{StorefrontPaypalEnableTransferShippingOptionConfigData.value}}" stepKey="enableTransferShippingOption"/>
-            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="configPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
