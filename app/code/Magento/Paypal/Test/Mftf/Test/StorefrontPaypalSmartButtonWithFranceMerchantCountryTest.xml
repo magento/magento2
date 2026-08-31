@@ -30,7 +30,9 @@
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <!--Restore skip_order_review_step to the application default (1); the previous
+                cleanup left it at 0, breaking downstream tests that rely on the default-->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <!--Set default merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
