@@ -170,10 +170,8 @@ class Options extends \Magento\Framework\View\Element\Template
         $optionPrice = $option->getPrice(true);
         $optionOldPrice = $option->getRegularPrice();
         if ($option->getPriceType() !== Value::TYPE_PERCENT) {
-            $optionPrice = $this->pricingHelper
-                ->currency($optionPrice, false, false);
-            $optionOldPrice = $this->pricingHelper
-                ->currency($optionOldPrice, false, false);
+            $optionPrice = $this->pricingHelper->currency($optionPrice, false, false);
+            $optionOldPrice = $this->pricingHelper->currency($optionOldPrice, false, false);
         }
         $data = [
             'prices' => [
