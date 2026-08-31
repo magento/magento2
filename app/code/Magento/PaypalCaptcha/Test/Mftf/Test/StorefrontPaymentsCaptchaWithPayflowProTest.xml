@@ -21,7 +21,7 @@
             <group value="3rd_party_integration" />
             <group value="pr_exclude" />
             <skip>
-                <issueId value="AC-17981"/>
+                <issueId value="AC-17981">PayPal Payflow Pro / Payments Pro checkout order placement fails after Place Order (endless spinner / decline) — confirmed application bug, not a test defect. Re-enable once fixed.</issueId>
             </skip>
         </annotations>
         <before>
