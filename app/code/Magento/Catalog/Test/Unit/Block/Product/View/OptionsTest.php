@@ -136,7 +136,8 @@ class OptionsTest extends TestCase
         $catalogDataMock->method('getTaxPrice')
             ->willReturnMap([
                 [$productMock, 17.842134, true, null, null, null, null, null, false, 17.842134],
-                [$productMock, 17.842134, false, null, null, null, null, null, false, 17.842134]
+                [$productMock, 17.842134, false, null, null, null, null, null, false, 17.842134],
+                [$productMock, 35.67, true, null, null, null, null, null, false, 35.67]
             ]);
 
         $jsonEncoderMock = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
