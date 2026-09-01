@@ -32,6 +32,8 @@ class Cache implements ConfigOptionsListInterface
 
     public const INPUT_VALUE_CACHE_SYMFONY_VALKEY = 'symfony_valkey';
     public const CONFIG_VALUE_CACHE_SYMFONY_VALKEY = 'valkey';
+    public const INPUT_VALUE_CACHE_ZEND_L1_L2 = 'zend_l2';
+    public const INPUT_VALUE_CACHE_SYMFONY_L1_L2 = 'symfony_l2';
 
     public const INPUT_KEY_CACHE_BACKEND = 'cache-backend';
     public const INPUT_KEY_CACHE_BACKEND_REDIS_SERVER = 'cache-backend-redis-server';
@@ -103,7 +105,9 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_VALUE_CACHE_REDIS,
         self::INPUT_VALUE_CACHE_VALKEY,
         self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
-        self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
+        self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+        self::INPUT_VALUE_CACHE_ZEND_L1_L2,
+        self::INPUT_VALUE_CACHE_SYMFONY_L1_L2
     ];
 
     /**
@@ -143,14 +147,18 @@ class Cache implements ConfigOptionsListInterface
      */
     private $redisValidator;
 
+    /** @var L1L2Cache */
+    private $l1L2Cache;
+
     /**
      * Construct the Cache ConfigOptionsList
      *
      * @param RedisConnectionValidator $redisValidator
      */
-    public function __construct(RedisConnectionValidator $redisValidator)
+    public function __construct(RedisConnectionValidator $redisValidator, L1L2Cache $l1L2Cache)
     {
         $this->redisValidator = $redisValidator;
+        $this->l1L2Cache = $l1L2Cache;
     }
 
     /**
@@ -337,6 +345,14 @@ class Cache implements ConfigOptionsListInterface
         }
 
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
+            if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_ZEND_L1_L2) {
+                $this->l1L2Cache->applyZend($configData, $options);
+                return $configData;
+            }
+            if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_L1_L2) {
+                $this->l1L2Cache->applySymfony($configData, $options);
+                return $configData;
+            }
             if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
                 self::INPUT_VALUE_CACHE_REDIS,
                 self::INPUT_VALUE_CACHE_SYMFONY_REDIS,

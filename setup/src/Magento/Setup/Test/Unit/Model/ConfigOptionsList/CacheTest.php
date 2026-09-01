@@ -13,6 +13,7 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Cache;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
+use Magento\Setup\Model\ConfigOptionsList\L1L2Cache;
 use Magento\Setup\Validator\RedisConnectionValidator;
 use PHPUnit\Framework\TestCase;
 
@@ -42,7 +43,8 @@ class CacheTest extends TestCase
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->configOptionsList = new CacheConfigOptionsList(
-            $this->validatorMock
+            $this->validatorMock,
+            new L1L2Cache()
         );
     }
 
