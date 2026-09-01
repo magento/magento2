@@ -62,7 +62,7 @@ define([
          * @return {Boolean}
          */
         validateAddressData: function (address) {
-            return validators.some(function (validator) {
+            return validators.every(function (validator) {
                 return validator.validate(address);
             });
         },
