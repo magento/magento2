@@ -38,7 +38,7 @@ class L1L2Cache
             'id_prefix' => $options[Cache::INPUT_KEY_CACHE_ID_PREFIX] ?? '69d_',
             'backend' => \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
             'backend_options' => [
-                'remote_backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                'remote_backend' => \Magento\Framework\Cache\Backend\Valkey::class,
                 'remote_backend_options' => $remote,
                 'local_backend' => 'Cm_Cache_Backend_File',
                 'local_backend_options' => ['cache_dir' => '/dev/shm/'],
@@ -72,7 +72,7 @@ class L1L2Cache
             'id_prefix' => $options[Cache::INPUT_KEY_CACHE_ID_PREFIX] ?? '69d_',
             'backend' => 'symfony_l2',
             'backend_options' => [
-                'remote_backend' => 'redis',
+                'remote_backend' => 'valkey',
                 'remote_backend_options' => $remote,
                 'local_backend' => 'file',
                 'local_backend_options' => ['cache_dir' => '/dev/shm/magento_l1'],
