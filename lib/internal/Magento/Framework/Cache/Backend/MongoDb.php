@@ -14,16 +14,16 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Infinite expiration time
      */
-    const int EXPIRATION_TIME_INFINITE = 0;
+    private const int EXPIRATION_TIME_INFINITE = 0;
 
     /**#@+
      * Available comparison modes. Used for composing queries to search by tags
      */
-    const string COMPARISON_MODE_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
+    private const string COMPARISON_MODE_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
 
-    const string COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
+    private const string COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
 
-    const string COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
+    private const string COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
     /**#@-*/
 
     /**
@@ -295,9 +295,9 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      * Note : $data is always "string" (serialization is done by the
      * core not by the backend)
      *
-     * @param  string $data            Datas to cache
-     * @param  string $cacheId              Cache id
-     * @param  string[] $tags             Array of strings, the cache record will be tagged by each string entry
+     * @param  string $data Datas to cache
+     * @param  string $cacheId Cache id
+     * @param  string[] $tags Array of strings, the cache record will be tagged by each string entry
      * @param  int|bool $specificLifetime If != false, set a specific lifetime (null => infinite lifetime)
      * @return boolean true if no problem
      */

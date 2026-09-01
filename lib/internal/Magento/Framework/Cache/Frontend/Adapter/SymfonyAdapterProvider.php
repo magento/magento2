@@ -576,7 +576,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $retryInterval,
                     $connectRetries
                 );
-            } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
+            } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 // skip an unreachable replica; reads fall back to the master
             }
         }

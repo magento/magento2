@@ -750,7 +750,7 @@ LUA;
             if ($this->redis->exists($this->dataKeyPrefix() . $id)) {
                 $this->redis->sadd(self::ALL_IDS_SET, $id);
             }
-        } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
+        } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             // Best-effort index maintenance; the next save or GC self-heals a missed registration.
         }
     }

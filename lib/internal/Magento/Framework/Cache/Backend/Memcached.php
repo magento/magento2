@@ -15,12 +15,12 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     /**
      * Maximum chunk of data that could be saved in one memcache cell (1 MiB)
      */
-    const int DEFAULT_SLAB_SIZE = 1048576;
+    private const int DEFAULT_SLAB_SIZE = 1048576;
 
     /**
      * Used to tell chunked data from ordinary
      */
-    const string CODE_WORD = '{splitted}';
+    private const string CODE_WORD = '{splitted}';
 
     /**
      * Constructor

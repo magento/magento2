@@ -160,8 +160,7 @@ class BackendWrapper implements BackendInterface
     /**
      * @inheritdoc
      */
-    // phpcs:ignore SomeStandard.SomeSniff
-    public function setDirectives($directives)
+    public function setDirectives($directives) // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {
         // Intentional no-op: Symfony backend options are not stored in the wrapper
     }

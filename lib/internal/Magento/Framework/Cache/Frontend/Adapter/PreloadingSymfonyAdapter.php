@@ -100,6 +100,7 @@ class PreloadingSymfonyAdapter implements FrontendInterface
      *
      * With per-key fallback if batching is unsupported.
      * Keys must match the application’s runtime IDs and should not include the backend id_prefix.
+     *
      * @return void
      */
     private function ensurePreloaded(): void
