@@ -109,5 +109,4 @@ class FrontendContractTest extends CacheFrontendTestCase
             $frontend->remove($id);
         }
     }
-
 }

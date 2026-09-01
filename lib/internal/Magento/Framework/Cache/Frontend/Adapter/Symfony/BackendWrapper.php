@@ -160,6 +160,7 @@ class BackendWrapper implements BackendInterface
     /**
      * @inheritdoc
      */
+    // phpcs:ignore SomeStandard.SomeSniff
     public function setDirectives($directives)
     {
         // Intentional no-op: Symfony backend options are not stored in the wrapper

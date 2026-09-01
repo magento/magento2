@@ -181,7 +181,7 @@ class Factory
         if ($this->isSymfonyL2Cache($backendType)) {
             // SymfonyL2Cache backend for L2 cache with Symfony
             $result = $this->createSymfonyL2Cache($options);
-        } elseif ($this->isSymfonyBackend($backendType))  {
+        } elseif ($this->isSymfonyBackend($backendType)) {
             // Single-tier Symfony cache for the modern short identifiers 'file' / 'redis' / 'valkey'.
             $result = $this->createSymfonyCache($options);
         } else {
@@ -240,8 +240,7 @@ class Factory
     }
 
     /**
-     * Fallback legacy frontend using default backend options (used when the configured backend
-     * cannot be created).
+     * Fallback legacy frontend using default backend options (used when the configured backend cannot be created).
      *
      * @param array $options
      * @return FrontendInterface
@@ -808,6 +807,7 @@ class Factory
 
     /**
      * Whether the backend selects single-tier Symfony caching.
+     *
      * Only 'file', 'redis', and 'valkey' use Symfony; class names and other values use legacy caching.
      *
      * @param string $backendType

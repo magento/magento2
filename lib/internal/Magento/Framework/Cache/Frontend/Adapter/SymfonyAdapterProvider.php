@@ -130,6 +130,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
 
     /**
      * Drops inherited pooled connection references after a fork so child processes create their own connections.
+     *
      * Avoids closing shared persistent sockets, preventing disruption to the parent process.
      *
      * @return void
@@ -299,7 +300,9 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
         // Legacy default: master participates in reads. master_write_only=1 => all reads to replicas.
         $masterWriteOnly = isset($options['master_write_only']) ? (bool)$options['master_write_only'] : false;
         // Legacy default (false): a replica miss is NOT retried on the master; =1 retries on miss.
-        $retryReadsOnMaster = isset($options['retry_reads_on_master']) ? (bool)$options['retry_reads_on_master'] : false;
+        $retryReadsOnMaster = isset($options['retry_reads_on_master'])
+            ? (bool)$options['retry_reads_on_master']
+            : false;
 
         $usePhpRedis = extension_loaded('redis');
         // Pool entries must not mix connections with different lifecycle or timeout settings.
@@ -533,9 +536,10 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
 
     /**
      * Build the replica \Redis connections for SlaveAwareRedis. Unreachable replicas are skipped
+     *
      * (legacy skips a bad slave and keeps the rest / falls back to master).
      *
-     * @param array<int, array{0:string,1:int,2:int}> $slaveSpecs
+     * @param array $slaveSpecs
      * @param string|null $password
      * @param bool $persistent
      * @param string|null $persistentId
@@ -572,7 +576,7 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
                     $retryInterval,
                     $connectRetries
                 );
-            } catch (\Throwable $e) {
+            } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
                 // skip an unreachable replica; reads fall back to the master
             }
         }

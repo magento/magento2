@@ -36,7 +36,7 @@ abstract class CacheFrontendTestCase extends TestCase
     /**
      * Create a cache frontend for the given configuration.
      *
-     * @param array<string, mixed> $configuration
+     * @param array $configuration
      * @param string $configurationName
      * @param string $prefix
      * @return FrontendInterface
@@ -73,7 +73,7 @@ abstract class CacheFrontendTestCase extends TestCase
     /**
      * Ensure any configured cache directories exist before the backend is created.
      *
-     * @param array<string, mixed> $configuration
+     * @param array $configuration
      * @return void
      */
     private function createCacheDirectories(array $configuration): void

@@ -102,5 +102,4 @@ class TtlTest extends CacheFrontendTestCase
             $frontend->remove($freshId);
         }
     }
-
 }

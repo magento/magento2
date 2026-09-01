@@ -14,19 +14,21 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     /**
      * Infinite expiration time
      */
-    const EXPIRATION_TIME_INFINITE = 0;
+    const int EXPIRATION_TIME_INFINITE = 0;
 
     /**#@+
      * Available comparison modes. Used for composing queries to search by tags
      */
-    const COMPARISON_MODE_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
+    const string COMPARISON_MODE_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_TAG;
 
-    const COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
+    const string COMPARISON_MODE_NOT_MATCHING_TAG = \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG;
 
-    const COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
+    const string COMPARISON_MODE_MATCHING_ANY_TAG = \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var null
+     */
     protected $_collection = null;
 
     /**
@@ -249,8 +251,8 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      *
      * Note : return value is always "string" (unserialization is done by the core not by the backend)
      *
-     * @param  string  $cacheId                     Cache id
-     * @param  boolean $notTestCacheValidity If set to true, the cache validity won't be tested
+     * @param string $cacheId Cache id
+     * @param boolean $notTestCacheValidity If set to true, the cache validity won't be tested
      * @return string|bool cached data. Return false if nothing found
      */
     public function load($cacheId, $notTestCacheValidity = false)

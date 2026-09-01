@@ -25,10 +25,15 @@ class RemoteSynchronizedSymfonyAdapter implements
      */
     private ExtendedBackendInterface $backend;
 
+    /**
+     * @var RemoteSynchronizedLowLevelFrontend|null
+     */
     private ?RemoteSynchronizedLowLevelFrontend $lowLevelFrontend = null;
 
     /**
-     * Keeps $defaultLifetime only for backward-compatible DI wiring; actual TTL handling is delegated to the underlying Symfony adapter.
+     * Keeps $defaultLifetime only for backward-compatible DI wiring;
+     *
+     * Actual TTL handling is delegated to the underlying Symfony adapter.
      * save() forwards the lifetime unchanged, including null for no expiry, matching legacy behavior.
      *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
@@ -60,7 +65,8 @@ class RemoteSynchronizedSymfonyAdapter implements
 
     /**
      * Batched multi-load (used by the preloading wrapper). Delegates to the L2 backend's loadMultiple()
-     * when available (one round-trip to the remote tier); otherwise falls back to per-key loads.
+     *
+     * When available (one round-trip to the remote tier); otherwise falls back to per-key loads.
      *
      * @param string[] $identifiers
      * @return array<string, mixed>

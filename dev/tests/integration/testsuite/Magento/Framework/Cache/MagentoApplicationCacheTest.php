@@ -20,6 +20,9 @@ use PHPUnit\Framework\TestCase;
  */
 class MagentoApplicationCacheTest extends TestCase
 {
+    /**
+     * @var CacheInterface
+     */
     private CacheInterface $cache;
 
     protected function setUp(): void

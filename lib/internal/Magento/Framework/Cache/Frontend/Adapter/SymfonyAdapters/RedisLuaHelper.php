@@ -269,7 +269,7 @@ LUA;
     /**
      * Execute a Lua script, normalizing the phpredis vs Predis EVAL argument order.
      *
-     * phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
+     * Phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
      *
      * @param string $script
      * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values

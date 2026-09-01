@@ -170,6 +170,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * Batch-load hot keys from the remote L2 in one round-trip for preloading.
+     *
      * L1/hash validation is deferred to normal load(), since L2 is authoritative for warm-up data.
      *
      * @param string[] $ids
@@ -346,8 +347,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see an
-     * index_tags=false file index.
+     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see an index_tags=false
      *
      * @return void
      */
@@ -374,6 +374,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * Whether L2 already holds this exact value, allowing a redundant write to be skipped.
+     *
      * Checks the cheap :hash first, then confirms the data still exists and matches it.
      *
      * @param string $data
@@ -453,8 +454,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Return the L1 file-cache directory usage for disk-full protection; return 0 when unavailable
-     * or when L1 is not file-backed.
+     * Return the L1 file-cache directory usage for disk-full protection;
+     *
+     * Return 0 when unavailable or when L1 is not file-backed.
      *
      * @return int
      */
@@ -484,8 +486,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Throttle disk-space checks to avoid a filesystem stat on every save; the protected seam enables
-     * deterministic eviction-path tests.
+     * Throttle disk-space checks to avoid a filesystem stat on every save;
+     *
+     * The protected seam enables deterministic eviction-path tests.
      *
      * @return bool
      */
@@ -602,6 +605,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * Mark a cache key as synchronized with L2, removing its L1 invalid marker only when present.
+     *
      * This avoids an unnecessary L1 remove and tag-adapter callback on every successful save.
      *
      * @param string $id
@@ -682,6 +686,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 
     /**
      * Try to acquire the non-blocking regeneration lock; exactly one reader wins when Redis is used.
+     *
      * Uses atomic SET NX EX on Redis and a best-effort fallback for non-Redis remotes.
      *
      * @param string $id
@@ -703,8 +708,9 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op
-     * otherwise). Cheap: only issues a call when this process is recorded as the lock holder.
+     * Release the regeneration lock for $id if this process acquired it (ownership-safe, no-op otherwise).
+     *
+     * Cheap: only issues a call when this process is recorded as the lock holder.
      *
      * @param string $id
      * @return void
@@ -780,8 +786,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Generate a unique per-process lock signature (pid-host-random) so lock ownership
-     * is unambiguous across servers.
+     * Generate a unique per-process lock signature (pid-host-random) so lock ownership is unambiguous across servers.
      *
      * @return string
      */

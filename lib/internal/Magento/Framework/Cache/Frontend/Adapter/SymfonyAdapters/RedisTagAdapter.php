@@ -350,7 +350,9 @@ LUA;
     }
 
     /**
-     * Defines the Redis data-key prefix (<namespace>:) used by existence guards to keep cache indexes consistent with stored data.
+     * Defines the Redis data-key prefix (<namespace>:)
+     *
+     * Used by existence guards to keep cache indexes consistent with stored data.
      *
      * @return string
      */
@@ -725,7 +727,8 @@ LUA;
             return;
         }
 
-        // Uses atomic, data-guarded EVAL to prevent index/data inconsistencies, falling back to a pipeline when unavailable.
+        // Uses atomic, data-guarded EVAL to prevent index/data inconsistencies,
+        // falling back to a pipeline when unavailable.
         if ($this->supportsAtomicEval() && $this->onSaveAtomic($id, $tags)) {
             return;
         }
@@ -735,6 +738,7 @@ LUA;
 
     /**
      * Registers tagless IDs in all_ids for NOT_MATCHING_TAG and GC, only when the data key exists.
+     *
      * A non-atomic EXISTS + SADD is acceptable because GC removes any transient orphaned entries.
      *
      * @param string $id
@@ -746,7 +750,7 @@ LUA;
             if ($this->redis->exists($this->dataKeyPrefix() . $id)) {
                 $this->redis->sadd(self::ALL_IDS_SET, $id);
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
             // Best-effort index maintenance; the next save or GC self-heals a missed registration.
         }
     }
@@ -822,7 +826,8 @@ LUA;
 
     /**
      * Bulk-prune the tag index for the given ids: remove each id from its tag SETs and delete
-     * its reverse-index key. Prefers an atomic EVAL and falls back to a pipelined path.
+     *
+     * Its reverse-index key. Prefers an atomic EVAL and falls back to a pipelined path.
      *
      * @param array $ids
      * @return void
@@ -833,7 +838,8 @@ LUA;
             return;
         }
 
-        // Prefers atomic EVAL to prevent concurrent onSave conflicts, falling back to the pipeline when unavailable or failed.
+        // Prefers atomic EVAL to prevent concurrent onSave conflicts,
+        // falling back to the pipeline when unavailable or failed.
         if ($this->supportsAtomicEval() && $this->pruneTagIndexAtomic($ids)) {
             return;
         }
@@ -902,6 +908,7 @@ LUA;
 
     /**
      * Enables atomic EVAL for phpredis standalone and Predis single-node/replication clients.
+     *
      * Excludes \RedisCluster because computed keys may span cluster slots; uses pipeline fallback instead.
      *
      * @return bool
@@ -926,7 +933,7 @@ LUA;
     /**
      * Run a Lua script, normalizing the phpredis vs Predis EVAL argument order.
      *
-     * phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
+     * Phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
      *
      * @param string $script
      * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
@@ -973,7 +980,8 @@ LUA;
 
     /**
      * Turn a Predis error reply (exceptions=false clients) into a thrown exception so callers'
-     * try/catch fallbacks fire identically on phpredis and Predis.
+     *
+     * Try/catch fallbacks fire identically on phpredis and Predis.
      *
      * @param mixed $result
      * @return mixed
@@ -988,6 +996,7 @@ LUA;
 
     /**
      * Uses cursor-based SCAN to safely iterate matching keys in batches, normalizing phpredis and Predis behavior.
+     *
      * Avoids blocking KEYS; errors propagate so failed cache sweeps are visible.
      *
      * @param string $pattern
@@ -1020,8 +1029,9 @@ LUA;
     }
 
     /**
-     * Uses cursor-based SSCAN to safely iterate SET members in batches, normalizing phpredis and Predis
-     * without scanning the entire keyspace.
+     * Uses cursor-based SSCAN to safely iterate SET members in batches,
+     *
+     * Normalizing phpredis and Predis without scanning the entire keyspace.
      *
      * @param string $key SET key
      * @param int $count SSCAN COUNT hint (batch size)
@@ -1054,6 +1064,7 @@ LUA;
 
     /**
      * Atomically acquires the stale-cache regeneration lock using SET key token NX EX ttl.
+     *
      * Returns true for one cluster-wide owner; the token enables safe release, while errors mean not acquired.
      *
      * @param string $id Cache id being regenerated
@@ -1228,7 +1239,9 @@ LUA;
             }
 
             $info = $this->unwrapPredisReply($this->redis->info());
-            $usedMemory = (int)($this->isPredisClient() ? ($info['Memory']['used_memory'] ?? 0) : ($info['used_memory'] ?? 0));
+            $usedMemory = (int)($this->isPredisClient()
+                ? ($info['Memory']['used_memory'] ?? 0)
+                : ($info['used_memory'] ?? 0));
 
             return (int)round($usedMemory / $maxMemory * 100);
         } catch (\Throwable $e) {

@@ -731,7 +731,8 @@ abstract class AbstractType
      */
     public function save($product)
     {
-        // OPTIMIZATION: Use beginBatch()/endBatch() when supported (Symfony cache only); legacy backends safely fall back to individual save() calls.
+        // OPTIMIZATION: Use beginBatch()/endBatch() when supported (Symfony cache only);
+        // legacy backends safely fall back to individual save() calls.
         $cache = $this->getCache();
         $batchingStarted = false;
 

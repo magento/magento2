@@ -423,8 +423,7 @@ class Currency
      */
     public static function setCache(
         LowLevelFrontendInterface $cache
-    ): void
-    {
+    ): void {
         self::$cache = $cache;
     }
 

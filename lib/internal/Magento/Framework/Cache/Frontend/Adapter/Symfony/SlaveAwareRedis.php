@@ -105,13 +105,13 @@ class SlaveAwareRedis extends RedisBase
             try {
                 $value = $slave->get($key);
                 if ($value !== false) {
-                    return $value;                       // replica hit
+                    return $value; // replica hit
                 }
                 if (!$this->retryReadsOnMaster) {
-                    return false;                        // legacy default: a replica miss stays a miss
+                    return false; // legacy default: a replica miss stays a miss
                 }
                 // retry_reads_on_master: replica miss (e.g. replication lag) -> read master
-            } catch (\Throwable $e) {
+            } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
                 // replica error -> read master (more resilient than legacy, which rethrows non-LOADING)
             }
         }
@@ -161,7 +161,7 @@ class SlaveAwareRedis extends RedisBase
                         $j++;
                     }
                 }
-            } catch (\Throwable $e) {
+            } catch (\Throwable $e) { // phpcs:ignore Magento2.CodeAnalysis.EmptyCatch
                 // keep the replica results on master error
             }
         }

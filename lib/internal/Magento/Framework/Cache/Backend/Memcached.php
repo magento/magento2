@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Cache\Backend;
 
+use Magento\Framework\Cache\Exception\CacheException;
+
 /**
  * Memcached cache model
  */
@@ -13,12 +15,12 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     /**
      * Maximum chunk of data that could be saved in one memcache cell (1 MiB)
      */
-    const DEFAULT_SLAB_SIZE = 1048576;
+    const int DEFAULT_SLAB_SIZE = 1048576;
 
     /**
      * Used to tell chunked data from ordinary
      */
-    const CODE_WORD = '{splitted}';
+    const string CODE_WORD = '{splitted}';
 
     /**
      * Constructor
@@ -48,7 +50,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     /**
      * Returns ID of a specific chunk on the basis of data's ID
      *
-     * @param string $id    Main data's ID
+     * @param string $id Main data's ID
      * @param int $index Particular chunk number to return ID for
      * @return string
      */
@@ -60,7 +62,7 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     /**
      * Remove saved chunks in case something gone wrong (e.g. some chunk from the chain can not be found)
      *
-     * @param string $id     ID of data's info cell
+     * @param string $id ID of data's info cell
      * @param int $chunks Number of chunks to remove (basically, the number after '{splitted}|')
      * @return null
      */
@@ -76,11 +78,12 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     /**
      * Save data to memcached, split it into chunks if data size is bigger than memcached slab size.
      *
-     * @param string $data             @see \Zend_Cache_Backend_Memcached::save()
-     * @param string $id               @see \Zend_Cache_Backend_Memcached::save()
-     * @param string[] $tags           @see \Zend_Cache_Backend_Memcached::save()
-     * @param bool $specificLifetime   @see \Zend_Cache_Backend_Memcached::save()
+     * @param string $data @see \Zend_Cache_Backend_Memcached::save()
+     * @param string $id @see \Zend_Cache_Backend_Memcached::save()
+     * @param string[] $tags @see \Zend_Cache_Backend_Memcached::save()
+     * @param bool $specificLifetime @see \Zend_Cache_Backend_Memcached::save()
      * @return bool
+     * @throws CacheException
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
@@ -103,9 +106,9 @@ class Memcached extends \Zend_Cache_Backend_Memcached implements \Zend_Cache_Bac
     }
 
     /**
-     * Load data from memcached, glue from several chunks if it was splitted upon save.
+     * Load data from memcached, glue from several chunks if it was split upon save.
      *
-     * @param string $id                     @see \Zend_Cache_Backend_Memcached::load()
+     * @param string $id @see \Zend_Cache_Backend_Memcached::load()
      * @param bool $doNotTestCacheValidity @see \Zend_Cache_Backend_Memcached::load()
      * @return bool|false|string
      */

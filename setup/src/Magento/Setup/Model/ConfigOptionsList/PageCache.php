@@ -97,8 +97,7 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB =>
-            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERIALIZER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
     ];
 
@@ -111,8 +110,7 @@ class PageCache implements ConfigOptionsListInterface
         self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PORT => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PORT,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD => self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESS_DATA => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESS_DATA,
-        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB =>
-            self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
+        self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_COMPRESSION_LIB => self::CONFIG_PATH_PAGE_CACHE_BACKEND_COMPRESSION_LIB,
         self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_SERIALIZER => self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERIALIZER,
     ];
 
@@ -377,9 +375,9 @@ class PageCache implements ConfigOptionsListInterface
 
             $config['password'] =
                 $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD] ?? $deploymentConfig->get(
-                self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
-                $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD)
-            );
+                    self::CONFIG_PATH_PAGE_CACHE_BACKEND_PASSWORD,
+                    $this->getDefaultConfigValue(self::INPUT_KEY_PAGE_CACHE_BACKEND_VALKEY_PASSWORD)
+                );
         } else {
             $config['host'] = $options[self::INPUT_KEY_PAGE_CACHE_BACKEND_REDIS_SERVER] ?? $deploymentConfig->get(
                 self::CONFIG_PATH_PAGE_CACHE_BACKEND_SERVER,
@@ -446,7 +444,6 @@ class PageCache implements ConfigOptionsListInterface
 
         return $configData;
     }
-
 
     /**
      * Get the default value for input key

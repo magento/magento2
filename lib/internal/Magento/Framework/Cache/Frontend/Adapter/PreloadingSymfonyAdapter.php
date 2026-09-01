@@ -70,14 +70,14 @@ class PreloadingSymfonyAdapter implements FrontendInterface
         // Normalizes raw and pre-prefixed keys to prevent double-prefixing and ensure cache lookup hits.
         $this->preloadKeys = ($idPrefix !== '')
             ? array_map(
-                static fn(string $key): string => str_starts_with($key, $idPrefix)
+                static fn (string $key): string => str_starts_with($key, $idPrefix)
                     ? substr($key, strlen($idPrefix))
                     : $key,
                 $preloadKeys
             )
             : $preloadKeys;
         $this->normalizedPreloadKeys = array_map(
-            fn(string $key): string => $this->normalizeIdentifier($key),
+            fn (string $key): string => $this->normalizeIdentifier($key),
             $this->preloadKeys
         );
     }
@@ -97,7 +97,8 @@ class PreloadingSymfonyAdapter implements FrontendInterface
 
     /**
      * Preloads all configured keys in one batched request and serves them from local memory
-     * , with per-key fallback if batching is unsupported.
+     *
+     * With per-key fallback if batching is unsupported.
      * Keys must match the application’s runtime IDs and should not include the backend id_prefix.
      * @return void
      */
