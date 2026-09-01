@@ -48,17 +48,40 @@ class AjaxMessageResponse
         $block = $this->layoutFactory->create()->createBlock(Messages::class);
         $block->setMessages($errorMessages);
 
-        // Match the role="alert" wrapper the storefront Knockout messages component renders,
-        // so MFTF assertions waiting on [role=alert] can find AJAX-injected messages too.
-        $html = str_replace(
-            '<div class="messages">',
-            '<div aria-atomic="true" role="alert" class="messages">',
-            $block->getGroupedHtml()
-        );
-
         return [
-            'html' => $html,
+            'html' => $this->addAlertAttributes($block->getGroupedHtml()),
         ];
+    }
+
+    /**
+     * Add the role="alert" wrapper the storefront Knockout messages component renders
+     *
+     * @param string $html
+     * @return string
+     */
+    private function addAlertAttributes(string $html): string
+    {
+        if ($html === '') {
+            return $html;
+        }
+
+        $document = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $document->loadHTML(
+            '<?xml encoding="UTF-8">' . $html,
+            LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+        );
+        libxml_clear_errors();
+
+        $wrapper = $document->documentElement;
+        if (!$wrapper instanceof \DOMElement) {
+            return $html;
+        }
+
+        $wrapper->setAttribute('role', 'alert');
+        $wrapper->setAttribute('aria-atomic', 'true');
+
+        return $document->saveHTML($wrapper);
     }
 
     /**
