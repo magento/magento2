@@ -255,7 +255,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->local->save($data, $id, $tags, $specificLifetime);
 
         if ($remoteSaved !== false && $hashSaved !== false) {
-            $this->markValid($id);
+            $this->markValid($id, true);
         } else {
             if ($this->useStaleCache) {
                 $this->markInvalid($id);
@@ -291,7 +291,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         }
 
         if ($result !== false && $hashRemoved !== false) {
-            $this->markValid($id);
+            $this->markValid($id, true);
         } else {
             if ($this->useStaleCache) {
                 $this->markInvalid($id);
@@ -541,7 +541,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         }
 
         $this->local->save($data, $id, [], $lifetime);
-        $this->markValid($id);
+        $this->markValid($id, true);
 
         return true;
     }
@@ -609,11 +609,12 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      * This avoids an unnecessary L1 remove and tag-adapter callback on every successful save.
      *
      * @param string $id
+     * @param bool $knownInvalid
      * @return void
      */
-    private function markValid(string $id): void
+    private function markValid(string $id, bool $knownInvalid = false): void
     {
-        if ($this->isInvalid($id)) {
+        if ($knownInvalid && $this->isInvalid($id)) {
             $this->local->remove(self::INVALID_KEY_PREFIX . $id);
         }
     }
