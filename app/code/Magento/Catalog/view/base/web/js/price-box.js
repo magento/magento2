@@ -36,7 +36,10 @@ define([
 
             box.trigger('updatePrice');
             this.cache.displayPrices = utils.deepClone(this.options.prices);
-            this.updateProductTierPrice();
+            
+            if (this.options.priceConfig && this.options.priceConfig.tierPrices) {
+                this.updateProductTierPrice();
+            }
         },
 
         /**
