@@ -10,7 +10,9 @@ namespace Magento\GraphQlResolverCache;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Test\Fixture\Page as PageFixture;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -43,9 +45,20 @@ class GraphQlCmsCacheTest extends TestCase
         }
     }
 
-    /**
-     * @magentoDataFixture Magento/GraphQlResolverCache/_files/cms_page.php
-     */
+    #[
+        DataFixture(
+            PageFixture::class,
+            [
+                'identifier' => 'graphql_cache_page',
+                'title' => 'GraphQL Cache Page',
+                'content' => '<p>GraphQL cache page content</p>',
+                'active' => true,
+                'page_layout' => '1column',
+                'stores' => [0],
+            ],
+            'child_page'
+        )
+    ]
     public function testCmsPageUpdateInvalidatesResolverCache(): void
     {
         $objectManager = Bootstrap::getObjectManager();

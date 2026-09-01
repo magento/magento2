@@ -10,7 +10,9 @@ namespace Magento\GraphQlResolverCache;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -43,9 +45,16 @@ class GraphQlCategoryCacheTest extends TestCase
         }
     }
 
-    /**
-     * @magentoDataFixture Magento/GraphQlResolverCache/_files/category.php
-     */
+    #[
+        DataFixture(
+            CategoryFixture::class,
+            [
+                'name' => 'GraphQL Cache Category',
+                'available_sort_by' => ['position', 'name'],
+            ],
+            'category'
+        ),
+    ]
     public function testCategoryUpdateInvalidatesResolverCache(): void
     {
         $objectManager = Bootstrap::getObjectManager();

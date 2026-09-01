@@ -856,11 +856,10 @@ LUA;
     private function pruneTagIndexAtomic(array $ids): bool
     {
         try {
+            $prefix = [self::TAG_INDEX_PREFIX, $this->namespace, $this->dataKeyPrefix()];
             foreach (array_chunk(array_values($ids), self::LUA_MAX_CSTACK) as $chunk) {
-                $args = array_merge(
-                    [self::TAG_INDEX_PREFIX, $this->namespace, $this->dataKeyPrefix()],
-                    $chunk
-                );
+                $args = $prefix;
+                array_push($args, ...$chunk);
                 $this->evalNoKeys(self::LUA_PRUNE_INDEX, $args);
             }
             return true;
