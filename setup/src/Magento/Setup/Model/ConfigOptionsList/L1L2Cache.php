@@ -27,7 +27,7 @@ class L1L2Cache
         $remote = [
             'persistent' => 0,
             'server' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER, self::CACHE_HOST),
-            'database' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE, '3'),
+            'database' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE, '5'),
             'port' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_PORT, '6379'),
             'password' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD, ''),
             'compress_data' => '0',
@@ -57,7 +57,7 @@ class L1L2Cache
         $preloadKeys = $this->getPreloadKeys($options, ':hash');
         $remote = [
             'server' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER, self::CACHE_HOST),
-            'database' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE, '3'),
+            'database' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE, '5'),
             'port' => (int)$this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_PORT, '6379'),
             'password' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD, ''),
             'serializer' => 'igbinary',
