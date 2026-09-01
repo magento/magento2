@@ -105,7 +105,7 @@ class PrepareCatalogProductCollectionPricesObserver implements ObserverInterface
         if ($observer->getEvent()->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = (new \DateTime())->setTimestamp($this->localeDate->scopeTimeStamp($store));
+            $date = $this->localeDate->scopeDate($store->getId());
         }
 
         $productIds = [];
