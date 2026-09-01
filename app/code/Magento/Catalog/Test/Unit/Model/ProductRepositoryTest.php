@@ -926,6 +926,30 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
+     * A save that blows up must still hand the lock back.
+     *
+     * @return void
+     */
+    public function testSaveReleasesTheLockWhenTheSaveFails(): void
+    {
+        $this->resourceModel->method('getIdBySku')->willReturn(100);
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->resourceModel->method('validate')->with($this->product)->willReturn(true);
+        $this->resourceModel->method('save')->with($this->product)
+            ->willThrowException(new \Exception('boom'));
+        $this->extensibleDataObjectConverter->method('toNestedArray')->willReturn($this->productData);
+        $this->product->method('getSku')->willReturn('ERP-1001');
+
+        try {
+            $this->model->save($this->product);
+            $this->fail('The save was expected to throw.');
+        } catch (CouldNotSaveException $e) {
+            $this->assertCount(1, $this->acquiredLocks);
+            $this->assertSame($this->acquiredLocks, $this->releasedLocks);
+        }
+    }
+
+    /**
      * Minimal stubbing for a save of an already existing product.
      *
      * @return void
