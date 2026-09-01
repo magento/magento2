@@ -24,12 +24,19 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
 
     /**
-     * Pattern to detect malformed syntax
+     * Pattern to detect malformed or unsupported markup syntax.
      *
      * @var string
      */
     private static string $contentFiltrationPattern =
-        '#<\w+[^>]*/[^\s/>]+/[^>]*=|<\w+/[^\s>]*on\w+\s*=|<\w+[^>]*//[^>]*=|(<body)#i';
+        '#<!---?>'
+        . '|<\s*<[a-zA-Z]'
+        . '|\x00'
+        . '|<\w+[^>]*/[^\s/>]+/[^>]*='
+        . '|<\w+/[^\s>]*on\w+\s*='
+        . '|<\w+[^>]*//[^>]*='
+        . '|(?<body><body)'
+        . '#i';
 
     /**
      * @var string[]
@@ -256,12 +263,11 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         );
         $matches = [];
         preg_match_all(self::$contentFiltrationPattern, $content, $matches);
-        $valueCounts = array_count_values($matches[0]);
+        $bodyMatchCount = count(array_filter($matches['body'] ?? []));
+        $otherMatchCount = count($matches[0]) - $bodyMatchCount;
 
-        $hasMultipleBody = isset($valueCounts['<body']) && $valueCounts['<body'] > 1;
-        $hasOtherMalicious = count($matches[0]) > 0 && !isset($valueCounts['<body']);
-
-        $loaded = !($hasMultipleBody || $hasOtherMalicious)
+        $loaded = $bodyMatchCount <= 1
+            && $otherMatchCount === 0
             && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
 
         restore_error_handler();

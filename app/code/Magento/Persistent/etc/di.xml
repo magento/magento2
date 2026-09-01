@@ -25,6 +25,9 @@
     <type name="Magento\Quote\Model\QuoteManagement">
         <plugin name="persistent_convert_customer_cart_to_guest_cart" type="Magento\Persistent\Model\Plugin\ConvertCustomerCartToGuest" />
     </type>
+    <type name="Magento\Quote\Model\GuestCart\GetGuestCart">
+        <plugin name="persistent_allow_guest_cart_access" type="Magento\Persistent\Model\Plugin\AllowPersistentCustomerGuestCart" />
+    </type>
     <type name="Magento\Persistent\Model\CleanExpiredPersistentQuotes">
         <arguments>
             <argument name="batchSize" xsi:type="number">500</argument>
