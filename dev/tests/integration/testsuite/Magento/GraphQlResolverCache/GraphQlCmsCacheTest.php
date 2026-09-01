@@ -54,7 +54,6 @@ class GraphQlCmsCacheTest extends TestCase
                 'content' => '<p>GraphQL cache page content</p>',
                 'active' => true,
                 'page_layout' => '1column',
-                'stores' => [0],
             ],
             'child_page'
         )
