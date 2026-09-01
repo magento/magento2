@@ -113,6 +113,23 @@ class ListProductTest extends TestCase
      */
     private CollectionFactory $collectionFactory;
 
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    private $eventManagerMock;
+
+    /**
+     * @var StoreInterface|MockObject
+     */
+    private $storeMock;
+
+    /**
+     * Data of every event the block dispatched, by event name
+     *
+     * @var array
+     */
+    private array $dispatchedEvents = [];
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -135,15 +152,15 @@ class ListProductTest extends TestCase
         $this->urlHelperMock = $this->createMock(Data::class);
         $this->context = $this->createMock(Context::class);
         $this->renderer = $this->createMock(Render::class);
-        $eventManager = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
 
         $this->context->expects($this->any())->method('getRegistry')->willReturn($this->registryMock);
         $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
         $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
-        $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $this->context->expects($this->any())->method('getEventManager')->willReturn($this->eventManagerMock);
         $storeManager = $this->createMock(StoreManagerInterface::class);
-        $store = $this->createMock(StoreInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->storeMock = $this->createMock(StoreInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($this->storeMock);
         $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $this->context->expects($this->any())->method('getScopeConfig')->willReturn($scopeConfig);
@@ -300,5 +317,74 @@ class ListProductTest extends TestCase
             ->willReturn($this->renderer);
         $this->block->setCollection($this->prodCollectionMock);
         $this->block->getProductPrice($this->productMock);
+    }
+
+    /**
+     * A loaded listing gets its tier prices and catalog rule prices in one pass, not per product.
+     *
+     * @return void
+     */
+    public function testBeforeToHtmlPreparesListingPricesInBulk(): void
+    {
+        $this->storeMock->method('getId')->willReturn(1);
+        $this->prodCollectionMock->method('isLoaded')->willReturn(true);
+        $this->prodCollectionMock->method('count')->willReturn(2);
+        $this->prodCollectionMock->expects($this->once())->method('addTierPriceData');
+        $this->mockListingLayer();
+
+        $this->recordDispatchedEvents();
+        $this->block->toHtml();
+
+        $this->assertSame(
+            [['collection' => $this->prodCollectionMock, 'store_id' => 1]],
+            $this->dispatchedEvents['prepare_catalog_product_collection_prices'] ?? []
+        );
+    }
+
+    /**
+     * An empty listing has no prices to prepare.
+     *
+     * @return void
+     */
+    public function testBeforeToHtmlSkipsPricePreparationForEmptyListing(): void
+    {
+        $this->prodCollectionMock->method('isLoaded')->willReturn(true);
+        $this->prodCollectionMock->method('count')->willReturn(0);
+        $this->prodCollectionMock->expects($this->never())->method('addTierPriceData');
+        $this->mockListingLayer();
+
+        $this->recordDispatchedEvents();
+        $this->block->toHtml();
+
+        $this->assertArrayNotHasKey('prepare_catalog_product_collection_prices', $this->dispatchedEvents);
+    }
+
+    /**
+     * Serve the product collection mock as the current category's listing.
+     *
+     * @return void
+     */
+    private function mockListingLayer(): void
+    {
+        $currentCategory = $this->createMock(\Magento\Catalog\Model\Category::class);
+        $currentCategory->method('getId')->willReturn('1');
+        $this->layerMock->method('getCurrentCategory')->willReturn($currentCategory);
+        $this->layerMock->expects($this->once())
+            ->method('getProductCollection')
+            ->willReturn($this->prodCollectionMock);
+    }
+
+    /**
+     * Record the data of every event the block dispatches, by event name.
+     *
+     * @return void
+     */
+    private function recordDispatchedEvents(): void
+    {
+        $this->eventManagerMock->method('dispatch')->willReturnCallback(
+            function (string $eventName, array $data = []): void {
+                $this->dispatchedEvents[$eventName][] = $data;
+            }
+        );
     }
 }
