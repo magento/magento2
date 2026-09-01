@@ -9,6 +9,7 @@ namespace Magento\CatalogRule\Test\Unit\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule;
+use Magento\CatalogRule\Observer\RulePricesStorage;
 use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\Adjustment\Calculator;
@@ -76,6 +77,11 @@ class CatalogRulePriceTest extends TestCase
     private $priceCurrencyMock;
 
     /**
+     * @var RulePricesStorage|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $rulePricesStorageMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -91,6 +97,7 @@ class CatalogRulePriceTest extends TestCase
         $this->calculator = $this->createMock(Calculator::class);
         $qty = 1;
         $this->priceCurrencyMock = $this->createMock(PriceCurrencyInterface::class);
+        $this->rulePricesStorageMock = $this->createMock(RulePricesStorage::class);
 
         $this->object = new CatalogRulePrice(
             $this->saleableItemMock,
@@ -100,7 +107,8 @@ class CatalogRulePriceTest extends TestCase
             $this->dataTimeMock,
             $this->storeManagerMock,
             $this->customerSessionMock,
-            $this->catalogRuleResourceMock
+            $this->catalogRuleResourceMock,
+            $this->rulePricesStorageMock
         );
     }
 
@@ -131,6 +139,11 @@ class CatalogRulePriceTest extends TestCase
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
             ->willReturn($customerGroupId);
+        $this->rulePricesStorageMock->expects($this->once())
+            ->method('hasRulePrice')
+            ->willReturn(false);
+        $this->rulePricesStorageMock->expects($this->once())
+            ->method('setRulePrice');
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
             ->with($date, $coreWebsiteId, $customerGroupId, $productId)
@@ -141,6 +154,46 @@ class CatalogRulePriceTest extends TestCase
         $this->priceCurrencyMock->expects($this->once())
             ->method('convertAndRound')
             ->with($catalogRulePrice, null, null, 4)
+            ->willReturn($convertedPrice);
+
+        $this->assertEquals($convertedPrice, $this->object->getValue());
+    }
+
+    /**
+     * A rule price already loaded for the whole collection is reused instead of
+     * being queried again for the individual product being rendered.
+     */
+    public function testGetValueUsesPreloadedRulePrice()
+    {
+        $storeId = 5;
+        $coreWebsiteId = 2;
+        $productId = 4;
+        $customerGroupId = 3;
+        $date = new \DateTime('2026-01-01 00:00:00');
+        $preloadedPrice = 55.12;
+        $convertedPrice = 45.34;
+
+        $this->coreStoreMock->method('getId')->willReturn($storeId);
+        $this->coreStoreMock->method('getWebsiteId')->willReturn($coreWebsiteId);
+        $this->dataTimeMock->method('scopeDate')->with($storeId)->willReturn($date);
+        $this->customerSessionMock->method('getCustomerGroupId')->willReturn($customerGroupId);
+        $this->saleableItemMock->method('getId')->willReturn($productId);
+
+        $expectedKey = '2026-01-01 00:00:00|' . $coreWebsiteId . '|' . $customerGroupId . '|' . $productId;
+
+        $this->rulePricesStorageMock->expects($this->once())
+            ->method('hasRulePrice')
+            ->with($expectedKey)
+            ->willReturn(true);
+        $this->rulePricesStorageMock->expects($this->once())
+            ->method('getRulePrice')
+            ->with($expectedKey)
+            ->willReturn($preloadedPrice);
+
+        $this->catalogRuleResourceMock->expects($this->never())->method('getRulePrice');
+
+        $this->priceCurrencyMock->method('convertAndRound')
+            ->with($preloadedPrice, null, null, 4)
             ->willReturn($convertedPrice);
 
         $this->assertEquals($convertedPrice, $this->object->getValue());
@@ -166,6 +219,7 @@ class CatalogRulePriceTest extends TestCase
 
     public function testGetAmountNoBaseAmount()
     {
+        $this->dataTimeMock->method('scopeDate')->willReturn(new \DateTime());
         $this->catalogRuleResourceMock->expects($this->once())
             ->method('getRulePrice')
             ->willReturn(false);
@@ -176,6 +230,7 @@ class CatalogRulePriceTest extends TestCase
 
     public function testGetValueWithNullAmount()
     {
+        $this->dataTimeMock->method('scopeDate')->willReturn(new \DateTime());
         $catalogRulePrice = null;
         $convertedPrice = 0.0;
 
