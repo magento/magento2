@@ -28,19 +28,12 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create Customer -->
-            <createData entity="Simple_US_Utah_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressOrderPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferCartLineConfigData.path}} {{StorefrontPaypalDisableTransferCartLineConfigData.value}}" stepKey="disableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalDisableTransferShippingOptionConfigData.path}} {{StorefrontPaypalDisableTransferShippingOptionConfigData.value}}" stepKey="disableTransferShippingOption"/>
             <!-- Enable free shipping method -->
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
-
-            <!-- Create Tax Rule -->
-            <createData entity="US_CA_Rate_1" stepKey="initialTaxRate"/>
-            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
-                <argument name="taxRate" value="$$initialTaxRate$$"/>
-                <argument name="taxRule" value="SimpleTaxRule"/>
-            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
@@ -56,11 +49,6 @@
             <!--Delete customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
-
-            <!--Delete Tax Rule-->
-            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
-                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
-            </actionGroup>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
