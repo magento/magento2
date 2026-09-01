@@ -61,6 +61,11 @@ class Field implements OutputFieldInterface
     private $deprecated;
 
     /**
+     * @var bool
+     */
+    private bool $itemsRequired;
+
+    /**
      * @param string $name
      * @param string $type
      * @param bool $required
@@ -83,7 +88,8 @@ class Field implements OutputFieldInterface
         string $description = '',
         array $arguments = [],
         array $cache = [],
-        array $deprecated = []
+        array $deprecated = [],
+        bool $itemsRequired = false
     ) {
         $this->name = $name;
         $this->type = $isList ? $itemType : $type;
@@ -94,6 +100,7 @@ class Field implements OutputFieldInterface
         $this->arguments = $arguments;
         $this->cache = $cache;
         $this->deprecated = $deprecated;
+        $this->itemsRequired = $itemsRequired;
     }
 
     /**
@@ -184,5 +191,15 @@ class Field implements OutputFieldInterface
     public function getDeprecated() : array
     {
         return $this->deprecated;
+    }
+
+    /**
+     * Return true if item is a list, and if that list must be populated by at least one item. False otherwise.
+     *
+     * @return bool
+     */
+    public function areItemsRequired() : bool
+    {
+        return $this->itemsRequired;
     }
 }
