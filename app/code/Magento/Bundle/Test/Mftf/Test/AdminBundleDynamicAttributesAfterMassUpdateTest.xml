@@ -22,6 +22,7 @@
             <createData entity="ApiFixedBundleProduct" stepKey="createBundleProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createBundleProduct" stepKey="deleteFixedBundleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

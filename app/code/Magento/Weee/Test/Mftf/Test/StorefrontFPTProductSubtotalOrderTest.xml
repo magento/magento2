@@ -97,11 +97,11 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
 
-        <!-- Open summary section for product -->
+        <!-- Open summary section for product (conditionalClick handles B2B where the section may already be expanded) -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
-        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
-        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="clickItemInCart"/>
-        <waitForPageLoad stepKey="waitForCartItemLoaded"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsActive"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsAreaActive}}" visible="false" stepKey="clickItemInCart"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemLoaded"/>
         <grabTextFrom selector="{{StorefrontCheckoutCartItemWeeeSection.productWeeeSubtotalIncludingTax}}" stepKey="grabProductSubtotalWithFPT"/>
         <grabTextFrom selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" stepKey="grabCartSubtotal"/>
 

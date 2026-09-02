@@ -44,7 +44,6 @@ class CollectionTest extends TestCase
             Collection::class,
             '_getMapper'
         );
-        $mapper->setAccessible(true);
         $map = $mapper->invoke($gridCollection);
 
         self::assertIsArray($map);

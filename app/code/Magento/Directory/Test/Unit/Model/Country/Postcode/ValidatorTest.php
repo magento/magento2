@@ -13,18 +13,26 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit test for postcode Validator (country-specific postcode validation).
+ *
+ * @covers \Magento\Directory\Model\Country\Postcode\Validator
+ */
 class ValidatorTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var Config|MockObject
      */
-    protected $postcodesConfigMock;
+    private MockObject $postcodesConfigMock;
 
     /**
      * @var Validator
      */
-    protected $model;
+    private Validator $model;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->postcodesConfigMock = $this->createMock(Config::class);
@@ -38,55 +46,90 @@ class ValidatorTest extends TestCase
                 'pattern_2' => ['pattern' => '^[1-9][0-9]{3}$']
             ]
         ];
-        $this->postcodesConfigMock->expects($this->once())->method('getPostCodes')->willReturn($postCodes);
+        $this->postcodesConfigMock->expects($this->atLeastOnce())
+            ->method('getPostCodes')
+            ->willReturn($postCodes);
         $this->model = new Validator($this->postcodesConfigMock);
     }
 
     /**
+     * Test validate returns true for valid postcode and country combinations.
+     *
+     * @covers \Magento\Directory\Model\Country\Postcode\Validator::validate
      * @param string $postCode
      * @param string $countryId
      * @return void
      */
-    #[DataProvider('getCountryPostcodes')]
-    public function testValidatePositive(string $postCode, string $countryId): void
+    #[DataProvider('getValidPostcodesDataProvider')]
+    public function testValidateReturnsTrueForValidPostcode(string $postCode, string $countryId): void
     {
-        $this->assertTrue($this->model->validate($postCode, $countryId));
-    }
-
-    public function testValidateNegative()
-    {
-        $postcode = 'POST-CODE';
-        $countryId = 'US';
-        $this->assertFalse($this->model->validate($postcode, $countryId));
-    }
-
-    public function testValidateThrowExceptionIfCountryDoesNotExist()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Provided countryId does not exist.');
-        $postcode = '12345-6789';
-        $countryId = 'QQ';
-        $this->assertFalse($this->model->validate($postcode, $countryId));
+        $this->assertSame(true, $this->model->validate($postCode, $countryId));
     }
 
     /**
-     * @return \string[][]
+     * Data provider for valid postcode/country combinations.
+     *
+     * @return array[]
      */
-    public static function getCountryPostcodes(): array
+    public static function getValidPostcodesDataProvider(): array
     {
         return [
-            [
-                'postCode' => '12345-6789',
-                'countryId' => 'US'
-            ],
-            [
-                'postCode' => '1234',
-                'countryId' => 'NL'
-            ],
-            [
-                'postCode' => '1234AB',
-                'countryId' => 'NL'
-            ]
+            'US full zip with dash' => ['postCode' => '12345-6789', 'countryId' => 'US'],
+            'US 5-digit zip' => ['postCode' => '12345', 'countryId' => 'US'],
+            'NL 4-digit only' => ['postCode' => '1234', 'countryId' => 'NL'],
+            'NL 4-digit regression value' => ['postCode' => '7311', 'countryId' => 'NL'],
+            'NL full format no space' => ['postCode' => '1234AB', 'countryId' => 'NL'],
+            'NL full format with space' => ['postCode' => '1234 AB', 'countryId' => 'NL'],
         ];
+    }
+
+    /**
+     * Test validate returns false for invalid postcode and country combinations.
+     *
+     * @covers \Magento\Directory\Model\Country\Postcode\Validator::validate
+     * @param string $postCode
+     * @param string $countryId
+     * @return void
+     */
+    #[DataProvider('getInvalidPostcodesDataProvider')]
+    public function testValidateReturnsFalseForInvalidPostcode(string $postCode, string $countryId): void
+    {
+        $this->assertSame(false, $this->model->validate($postCode, $countryId));
+    }
+
+    /**
+     * Data provider for invalid postcode/country combinations (edge cases).
+     *
+     * @return array[]
+     */
+    public static function getInvalidPostcodesDataProvider(): array
+    {
+        return [
+            'US non-numeric postcode' => ['postCode' => 'POST-CODE', 'countryId' => 'US'],
+            'US too short' => ['postCode' => '1234', 'countryId' => 'US'],
+            'US too long' => ['postCode' => '123456', 'countryId' => 'US'],
+            'NL too few digits' => ['postCode' => '123', 'countryId' => 'NL'],
+            'NL two digits only' => ['postCode' => '12', 'countryId' => 'NL'],
+            'NL one letter suffix' => ['postCode' => '1234 A', 'countryId' => 'NL'],
+            'NL three letter suffix' => ['postCode' => '1234 ABC', 'countryId' => 'NL'],
+            'NL space without letters' => ['postCode' => '12 34', 'countryId' => 'NL'],
+            'NL five digits' => ['postCode' => '12345', 'countryId' => 'NL'],
+            'NL leading zero' => ['postCode' => '0234', 'countryId' => 'NL'],
+            'NL letters only' => ['postCode' => 'ABCD', 'countryId' => 'NL'],
+        ];
+    }
+
+    /**
+     * Test validate throws InvalidArgumentException when country does not exist in config.
+     *
+     * @covers \Magento\Directory\Model\Country\Postcode\Validator::validate
+     * @return void
+     */
+    public function testValidateThrowsExceptionWhenCountryDoesNotExist(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided countryId does not exist.');
+
+        $this->model->validate('12345-6789', 'QQ');
     }
 }

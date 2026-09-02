@@ -17,6 +17,7 @@ use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Customer\Model\ResourceModel\Group\GetCustomerGroupCodesByIds;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\Exception\InputException;
 use PHPUnit\Framework\TestCase;
 
 class TierPriceStorageTest extends TestCase
@@ -340,5 +341,131 @@ class TierPriceStorageTest extends TestCase
             ->with([2]);
 
         $this->assertEmpty($this->tierPriceStorage->delete([$price]));
+    }
+
+    /**
+     * Test delete method with different website IDs.
+     *
+     * @return void
+     */
+    public function testDeleteWithMultipleWebsites(): void
+    {
+        $priceWebsite1 = $this->createMock(TierPriceInterface::class);
+        $priceWebsite1->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn('simple');
+        $priceWebsite2 = $this->createMock(TierPriceInterface::class);
+        $priceWebsite2->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn('simple');
+        $result = $this->createMock(PriceValidationResult::class);
+        $result->expects($this->once())
+            ->method('getFailedRowIds')
+            ->willReturn([]);
+        $this->tierPriceValidator->expects($this->once())
+            ->method('retrieveValidationResult')
+            ->willReturn($result);
+        $this->productIdLocator->expects($this->atLeastOnce())
+            ->method('retrieveProductIdsBySkus')
+            ->willReturn(['simple' => ['2' => 'simple']]);
+        $this->tierPricePersistence->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    [
+                        'value_id' => 10,
+                        'entity_id' => 2,
+                        'all_groups' => 1,
+                        'customer_group_id' => 0,
+                        'qty' => 5.0000,
+                        'value' => 6.0000,
+                        'percentage_value' => null,
+                        'website_id' => 1
+                    ],
+                    [
+                        'value_id' => 11,
+                        'entity_id' => 2,
+                        'all_groups' => 1,
+                        'customer_group_id' => 0,
+                        'qty' => 5.0000,
+                        'value' => 6.0000,
+                        'percentage_value' => null,
+                        'website_id' => 2
+                    ]
+                ]
+            );
+        $this->tierPriceFactory->expects($this->exactly(2))
+            ->method('createSkeleton')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'entity_id' => 2,
+                    'all_groups' => 1,
+                    'customer_group_id' => 0,
+                    'qty' => 5,
+                    'value' => 6,
+                    'percentage_value' => null,
+                    'website_id' => 1
+                ],
+                [
+                    'entity_id' => 2,
+                    'all_groups' => 1,
+                    'customer_group_id' => 0,
+                    'qty' => 5,
+                    'value' => 6,
+                    'percentage_value' => null,
+                    'website_id' => 2
+                ]
+            );
+        $this->tierPricePersistence->expects($this->once())
+            ->method('delete')
+            ->with([10, 11]);
+        $this->priceIndexProcessor->expects($this->once())
+            ->method('reindexList')
+            ->with([2]);
+        $this->assertEmpty($this->tierPriceStorage->delete([$priceWebsite1, $priceWebsite2]));
+    }
+
+    /**
+     * Test delete method with null input - should throw InputException
+     */
+    public function testDeleteWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete(null);
+    }
+
+    /**
+     * Test delete method with non-array input - should throw InputException
+     */
+    public function testDeleteWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->delete('invalid_string');
+    }
+
+    /**
+     * Test update method with null input - should throw InputException
+     */
+    public function testUpdateWithNullInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update(null);
+    }
+
+    /**
+     * Test update method with non-array input - should throw InputException
+     */
+    public function testUpdateWithInvalidInput(): void
+    {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('Invalid input data format. Expected an array of prices.');
+
+        $this->tierPriceStorage->update('invalid_string');
     }
 }

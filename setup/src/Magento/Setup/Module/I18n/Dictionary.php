@@ -35,7 +35,9 @@ class Dictionary
     public function addPhrase(Phrase $phrase)
     {
         $this->_phrases[] = $phrase;
-        $this->_phrasesByKey[$phrase->getKey()][] = $phrase;
+        // Normalize null keys to empty string to avoid deprecated null array offset on PHP 8.1+
+        $key = (string)($phrase->getKey() ?? '');
+        $this->_phrasesByKey[$key][] = $phrase;
     }
 
     /**

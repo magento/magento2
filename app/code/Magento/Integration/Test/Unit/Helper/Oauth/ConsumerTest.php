@@ -187,7 +187,6 @@ class ConsumerTest extends TestCase
         $dateHelperMock->expects($this->any())->method('gmtDate');
 
         $dateHelper = new \ReflectionProperty(OauthService::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->_oauthService, $dateHelperMock);
 
         $this->_consumerMock->expects($this->once())->method('getId')->willReturn($consumerId);

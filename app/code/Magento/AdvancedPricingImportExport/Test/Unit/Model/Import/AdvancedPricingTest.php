@@ -1070,7 +1070,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1089,7 +1088,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -1109,7 +1107,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     {
         $class = new \ReflectionClass(AdvancedPricing::class);
         $method = $class->getMethod($method);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $args);
     }
@@ -1158,7 +1155,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
         );
         $reflection = new \ReflectionClass(AdvancedPricing::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($advancedPricingMock, $metadataPoolMock);
 
         return $advancedPricingMock;

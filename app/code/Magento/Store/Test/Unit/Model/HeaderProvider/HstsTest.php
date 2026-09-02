@@ -12,18 +12,19 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\HeaderProvider\Hsts;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class HstsTest extends TestCase
 {
     /** Strict-Transport-Security (HSTS) Header name */
-    const HEADER_NAME = 'Strict-Transport-Security';
+    private const HEADER_NAME = 'Strict-Transport-Security';
 
     /**
      * Strict-Transport-Security (HSTS) header value
      */
-    const HEADER_VALUE = 'max-age=31536000';
+    private const HEADER_VALUE = 'max-age=31536000';
 
     /**
      * @var Hsts
@@ -60,8 +61,8 @@ class HstsTest extends TestCase
     /**
      * @param [] $configValuesMap
      * @param bool $expected
-     * @dataProvider canApplyDataProvider
      */
+    #[DataProvider('canApplyDataProvider')]
     public function testCanApply($configValuesMap, $expected)
     {
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturnMap(

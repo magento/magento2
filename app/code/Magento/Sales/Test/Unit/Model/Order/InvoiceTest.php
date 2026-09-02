@@ -418,7 +418,6 @@ class InvoiceTest extends TestCase
 
         $refObject = new \ReflectionClass($this->order);
         $refProperty = $refObject->getProperty('_invoices');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->order, $collection);
 
         return $collection;
@@ -487,5 +486,84 @@ class InvoiceTest extends TestCase
             [Invoice::STATE_PAID, Invoice::STATE_PAID],
             [Invoice::STATE_CANCELED, Invoice::STATE_CANCELED],
         ];
+    }
+
+    /**
+     * Test that getComments() and getCommentsCollection() work together without type conflicts
+     *
+     * This test verifies the fix for the issue where calling getComments() before addComment()
+     * would cause a fatal error because getComments() stores an array while
+     * getCommentsCollection() expects a Collection object.
+     */
+    public function testCommentsAndCommentsCollectionTypeCompatibility()
+    {
+        $commentCollection = $this->getMockBuilder(
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection::class
+        )->disableOriginalConstructor()
+            ->onlyMethods(['setInvoiceFilter', 'setCreatedAtOrder', 'load', 'getItems', 'getIterator'])
+            ->getMock();
+        $commentCollection->expects($this->any())
+            ->method('setInvoiceFilter')
+            ->willReturnSelf();
+        $commentCollection->expects($this->any())
+            ->method('setCreatedAtOrder')
+            ->willReturnSelf();
+        $commentCollection->expects($this->any())
+            ->method('load')
+            ->willReturnSelf();
+        $commentCollection->expects($this->any())
+            ->method('getItems')
+            ->willReturn([]);
+        $commentCollection->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
+
+        $commentCollectionFactory = $this->createMock(CommentCollectionFactory::class);
+        $commentCollectionFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($commentCollection);
+
+        $objectManager = new ObjectManager($this);
+        $invoice = $objectManager->getObject(
+            Invoice::class,
+            [
+                'commentCollectionFactory' => $commentCollectionFactory,
+            ]
+        );
+        $invoice->setId(1);
+
+        // Test scenario 1: getComments() returns array
+        $comments = $invoice->getComments();
+        $this->assertIsArray($comments, 'getComments() should return an array');
+
+        // Test scenario 2: getCommentsCollection() returns Collection even after getComments() stored array
+        $collection = $invoice->getCommentsCollection();
+        $this->assertInstanceOf(
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection::class,
+            $collection,
+            'getCommentsCollection() should return Collection instance even after getComments() was called'
+        );
+
+        // Test scenario 3: getComments() returns array even after getCommentsCollection() stored Collection
+        $invoice->getCommentsCollection();
+        $commentsAfterCollection = $invoice->getComments();
+        $this->assertIsArray(
+            $commentsAfterCollection,
+            'getComments() should always return array, even after getCommentsCollection() was called'
+        );
+
+        // Test scenario 4: Multiple calls maintain type consistency
+        $collection2 = $invoice->getCommentsCollection();
+        $this->assertInstanceOf(
+            \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection::class,
+            $collection2,
+            'getCommentsCollection() should consistently return Collection instance'
+        );
+
+        $comments2 = $invoice->getComments();
+        $this->assertIsArray(
+            $comments2,
+            'getComments() should consistently return array'
+        );
     }
 }

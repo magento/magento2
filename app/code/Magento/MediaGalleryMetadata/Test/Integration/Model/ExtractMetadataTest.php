@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for ExtractMetadata
@@ -51,14 +52,13 @@ class ExtractMetadataTest extends TestCase
 
     /**
      * Test for ExtractMetadata::execute
-     *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param null|array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testExecute(
         string $fileName,
         string $title,

@@ -10,19 +10,25 @@ namespace Magento\CatalogInventory\Api;
  * @api
  * @since 100.0.2
  *
- * @deprecated 100.3.0 Replaced with Multi Source Inventory
- * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
- * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory (MSI) because legacy APIs cannot represent salable
+ *    quantity per source.
+ * @see \Magento\InventorySalesApi\Api\StockResolverInterface
+ * @see https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @see https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 interface StockRegistryInterface
 {
     /**
+     * Returns stock metadata for the given scope.
+     *
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
     public function getStock($scopeId = null);
 
     /**
+     * Returns the stock item for a product ID.
+     *
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
@@ -30,6 +36,8 @@ interface StockRegistryInterface
     public function getStockItem($productId, $scopeId = null);
 
     /**
+     * Returns the stock item for a product SKU.
+     *
      * @param string $productSku
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
@@ -38,6 +46,8 @@ interface StockRegistryInterface
     public function getStockItemBySku($productSku, $scopeId = null);
 
     /**
+     * Returns the stock status for a product ID.
+     *
      * @param int $productId
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -45,6 +55,8 @@ interface StockRegistryInterface
     public function getStockStatus($productId, $scopeId = null);
 
     /**
+     * Returns the stock status for a product SKU.
+     *
      * @param string $productSku
      * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
@@ -62,10 +74,12 @@ interface StockRegistryInterface
     public function getProductStockStatus($productId, $scopeId = null);
 
     /**
+     * Returns the numeric stock status for a product SKU.
+     *
      * @param string $productSku
      * @param int $scopeId
      * @return int
-     * @throw \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getProductStockStatusBySku($productSku, $scopeId = null);
 
@@ -81,6 +95,8 @@ interface StockRegistryInterface
     public function getLowStockItems($scopeId, $qty, $currentPage = 1, $pageSize = 0);
 
     /**
+     * Updates the stock item for a product SKU.
+     *
      * @param string $productSku
      * @param \Magento\CatalogInventory\Api\Data\StockItemInterface $stockItem
      * @return int

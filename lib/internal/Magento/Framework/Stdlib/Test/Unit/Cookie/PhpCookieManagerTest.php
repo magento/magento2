@@ -30,6 +30,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
     use PHPUnit\Framework\MockObject\MockObject;
     use PHPUnit\Framework\TestCase;
     use Psr\Log\LoggerInterface;
+    use PHPUnit\Framework\Attributes\DataProvider;
 
     // @codingStandardsIgnoreEnd
 
@@ -135,10 +136,9 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             $this->scopeMock = $this->getMockBuilder(CookieScopeInterface::class)
                 ->onlyMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
-                ->getMockForAbstractClass();
-            $this->readerMock = $this->getMockForAbstractClass(CookieReaderInterface::class);
-            $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-                ->getMockForAbstractClass();
+                ->getMock();
+            $this->readerMock = $this->createMock(CookieReaderInterface::class);
+            $this->loggerMock = $this->createMock(LoggerInterface::class);
             $this->httpHeaderMock = $this->getMockBuilder(HttpHeader::class)
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -253,11 +253,11 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         /**
          * @param string $cookieName
          * @param bool $secure
-         * @dataProvider isCurrentlySecureDataProvider
          */
-        public function testSetSensitiveCookieNoMetadata($cookieName, $secure)
-        {
-            self::$isSetCookieInvoked = false;
+    #[DataProvider('isCurrentlySecureDataProvider')]
+    public function testSetSensitiveCookieNoMetadata($cookieName, $secure)
+    {
+        self::$isSetCookieInvoked = false;
             /** @var SensitiveCookieMetadata $sensitiveCookieMetadata */
             $sensitiveCookieMetadata = $this->objectManager
                 ->getObject(
@@ -284,16 +284,16 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             $this->assertTrue(self::$isSetCookieInvoked);
         }
 
-        /**
-         * @return array
-         */
-        public static function isCurrentlySecureDataProvider()
-        {
-            return [
-                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
-                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, false]
-            ];
-        }
+    /**
+     * @return array
+     */
+    public static function isCurrentlySecureDataProvider()
+    {
+        return [
+            [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
+            [self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, false]
+        ];
+    }
 
         public function testSetSensitiveCookieNullDomainAndPath()
         {

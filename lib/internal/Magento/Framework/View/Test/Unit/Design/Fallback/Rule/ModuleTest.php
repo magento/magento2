@@ -33,8 +33,8 @@ class ModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->rule = $this->getMockForAbstractClass(RuleInterface::class);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
+        $this->rule = $this->createMock(RuleInterface::class);
+        $this->componentRegistrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->model = new Module($this->rule, $this->componentRegistrar);
