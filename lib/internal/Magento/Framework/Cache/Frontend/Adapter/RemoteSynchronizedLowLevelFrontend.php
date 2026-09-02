@@ -29,4 +29,38 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
     {
         return $this->frontend->clean($mode, $tags);
     }
+
+    /**
+     * Load a cache entry through the Magento frontend contract.
+     */
+    public function load(string $id)
+    {
+        return $this->frontend->load($id);
+    }
+
+    /**
+     * Save a cache entry through the Magento frontend contract.
+     */
+    public function save($data, string $id, array $tags = [], $lifetime = false): bool
+    {
+        return $this->frontend->save($data, $id, $tags, $lifetime);
+    }
+
+    /**
+     * Remove a cache entry through the Magento frontend contract.
+     */
+    public function remove(string $id): bool
+    {
+        return $this->frontend->remove($id);
+    }
+
+    /**
+     * Return metadata through the wrapped frontend when supported.
+     */
+    public function getMetadatas(string $id)
+    {
+        return method_exists($this->frontend, 'getMetadatas')
+            ? $this->frontend->getMetadatas($id)
+            : false;
+    }
 }

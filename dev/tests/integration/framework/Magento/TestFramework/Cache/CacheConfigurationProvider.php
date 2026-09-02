@@ -40,7 +40,7 @@ class CacheConfigurationProvider
                     'remote_backend_options' => self::redisOptions(self::getRedisServer()),
                     'local_backend' => 'Cm_Cache_Backend_File',
                     'local_backend_options' => [
-                        'cache_dir' => '/dev/shm/zend_tests_l1',
+                        'cache_dir' => BP . '/var/cache/zend_tests_l1',
                     ],
                 ],
             ]],
