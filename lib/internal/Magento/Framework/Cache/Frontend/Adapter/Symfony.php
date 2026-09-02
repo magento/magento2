@@ -815,7 +815,7 @@ class Symfony implements FrontendInterface
             // Add cache ID prefix to tags (to match Zend behavior)
             $storedTags = $wrappedData['tags'] ?? [];
             $tags = array_values(array_map(function ($tag) {
-                return self::DEFAULT_CACHE_PREFIX . $tag;
+                return $this->idPrefix . $tag;
             }, $storedTags));
 
             return [
@@ -855,7 +855,7 @@ class Symfony implements FrontendInterface
         if (isset($metadata[CacheItem::METADATA_TAGS])) {
             $rawTags = $metadata[CacheItem::METADATA_TAGS];
             $tags = array_values(array_map(function ($tag) {
-                return self::DEFAULT_CACHE_PREFIX . $tag;
+                return $this->idPrefix . $tag;
             }, $rawTags));
         }
 
