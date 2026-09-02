@@ -66,12 +66,13 @@ class AjaxMessageResponse
         }
 
         $document = new \DOMDocument();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
         $document->loadHTML(
             '<?xml encoding="UTF-8">' . $html,
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
         );
         libxml_clear_errors();
+        libxml_use_internal_errors($useInternalErrors);
 
         $wrapper = $document->documentElement;
         if (!$wrapper instanceof \DOMElement) {
