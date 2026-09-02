@@ -11,6 +11,8 @@ use Magento\Checkout\Api\Data\PaymentDetailsInterface;
 use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
@@ -115,6 +117,23 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     private $quoteAddressValidationService;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    private $customerAddressRepository;
+
+    /**
+     * Address book of the customer the cart belongs to, loaded once per saveAddressInformation() call.
+     *
+     * @var CustomerAddressInterface[]|null
+     */
+    private $customerAddressBook;
+
+    /**
      * @param PaymentMethodManagementInterface $paymentMethodManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param CartTotalRepositoryInterface $cartTotalsRepository
@@ -129,6 +148,8 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param ShippingFactory|null $shippingFactory
      * @param AddressComparatorInterface|null $addressComparator
      * @param QuoteAddressValidationService|null $quoteAddressValidationService
+     * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param AddressRepositoryInterface|null $customerAddressRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -145,7 +166,9 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         ?ShippingAssignmentFactory $shippingAssignmentFactory = null,
         ?ShippingFactory $shippingFactory = null,
         ?AddressComparatorInterface $addressComparator = null,
-        ?QuoteAddressValidationService $quoteAddressValidationService = null
+        ?QuoteAddressValidationService $quoteAddressValidationService = null,
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ?AddressRepositoryInterface $customerAddressRepository = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -166,6 +189,10 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             ?? ObjectManager::getInstance()->get(AddressComparatorInterface::class);
         $this->quoteAddressValidationService = $quoteAddressValidationService ?: ObjectManager::getInstance()
             ->get(QuoteAddressValidationService::class);
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
+            ->get(SearchCriteriaBuilder::class);
+        $this->customerAddressRepository = $customerAddressRepository ?: ObjectManager::getInstance()
+            ->get(AddressRepositoryInterface::class);
     }
 
     /**
@@ -182,6 +209,8 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         $cartId,
         ShippingInformationInterface $addressInformation
     ): PaymentDetailsInterface {
+        $this->customerAddressBook = null;
+
         /** @var Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->validateQuote($quote);
@@ -322,7 +351,10 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     }
 
     /**
-     * Update customer shipping address ID if the address is the same as the quote shipping address.
+     * Update customer shipping address ID
+     *
+     * Reuses the ID of the quote shipping address, or of an entry that is already saved in the
+     * customer's address book, so that a duplicate address is not created.
      *
      * @param Quote $quote
      * @param AddressInterface $address
@@ -330,17 +362,26 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      */
     private function updateCustomerShippingAddressId(Quote $quote, AddressInterface $address): void
     {
+        if ($address->getCustomerAddressId()) {
+            return;
+        }
+
         $quoteShippingAddress = $quote->getShippingAddress();
-        if (!$address->getCustomerAddressId() &&
-            $quoteShippingAddress->getCustomerAddressId() &&
+        if ($quoteShippingAddress->getCustomerAddressId() &&
             $this->addressComparator->isEqual($address, $quoteShippingAddress)
         ) {
             $address->setCustomerAddressId($quoteShippingAddress->getCustomerAddressId());
+            return;
         }
+
+        $this->linkToExistingCustomerAddress($quote, $address);
     }
 
     /**
-     * Update customer billing address ID if the address is the same as the quote billing address.
+     * Update customer billing address ID
+     *
+     * Reuses the ID of the quote billing address, or of an entry that is already saved in the
+     * customer's address book, so that a duplicate address is not created.
      *
      * @param Quote $quote
      * @param AddressInterface $billingAddress
@@ -353,6 +394,220 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             $this->addressComparator->isEqual($billingAddress, $quoteBillingAddress)
         ) {
             $billingAddress->setCustomerAddressId($quoteBillingAddress->getCustomerAddressId());
+            return;
         }
+
+        $this->linkToExistingCustomerAddress($quote, $billingAddress);
+    }
+
+    /**
+     * Point the address at a matching address book entry instead of letting a duplicate be created.
+     *
+     * Addresses the case where a customer uses "Add new address" and manually re-enters the details
+     * of an address that is already stored in their address book.
+     *
+     * @param Quote $quote
+     * @param AddressInterface $address
+     * @return void
+     */
+    private function linkToExistingCustomerAddress(Quote $quote, AddressInterface $address): void
+    {
+        // Only an address that is about to be written to the address book can produce a duplicate.
+        if (!$address->getSaveInAddressBook()) {
+            return;
+        }
+
+        $matchingAddressId = $this->findMatchingCustomerAddressId($quote, $address);
+        if (!$matchingAddressId) {
+            return;
+        }
+
+        $address->setCustomerAddressId($matchingAddressId);
+        // The entry already exists, so there is nothing left to write. Skipping the write also keeps
+        // the data that is not part of the comparison - custom attributes, default billing/shipping
+        // flags - on the stored address untouched.
+        $address->setSaveInAddressBook(0);
+        // QuoteManagement::_prepareCustomerQuote() re-saves the address as a new one whenever
+        // getCustomerId() is empty, regardless of the save-in-address-book flag or the address ID
+        // set above - exportCustomerAddress() does not carry customer_address_id over as the id of
+        // the exported object. Setting the owner here closes that gate and keeps the order pointed
+        // at the existing address book entry instead of a freshly duplicated one.
+        $address->setCustomerId((int)$quote->getCustomerId());
+    }
+
+    /**
+     * Search the customer's address book for an address equal to the given quote address.
+     *
+     * @param Quote $quote
+     * @param AddressInterface $address
+     * @return int|null
+     */
+    private function findMatchingCustomerAddressId(Quote $quote, AddressInterface $address): ?int
+    {
+        $customerId = (int)$quote->getCustomerId();
+        if (!$customerId) {
+            return null;
+        }
+
+        $addressData = $this->extractQuoteAddressData($address);
+        foreach ($this->getCustomerAddressBook($customerId) as $customerAddress) {
+            if ($this->isSameAddress($addressData, $this->extractCustomerAddressData($customerAddress))) {
+                return (int)$customerAddress->getId();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Load the address book of the given customer, once per saveAddressInformation() call.
+     *
+     * @param int $customerId
+     * @return CustomerAddressInterface[]
+     */
+    private function getCustomerAddressBook(int $customerId): array
+    {
+        if ($this->customerAddressBook !== null) {
+            return $this->customerAddressBook;
+        }
+
+        // Addresses of the customer_address EAV entity reference their owner through parent_id;
+        // customer_id is not an attribute of that collection and is rejected by the collection processor.
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('parent_id', $customerId)
+            ->create();
+
+        try {
+            $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+        } catch (\Exception $e) {
+            // A failed lookup only means the duplicate cannot be detected, so checkout continues.
+            $this->logger->error($e);
+            $addresses = [];
+        }
+
+        // An address book that already contains duplicates must always resolve to the same entry.
+        usort(
+            $addresses,
+            static fn (CustomerAddressInterface $left, CustomerAddressInterface $right)
+                => (int)$left->getId() <=> (int)$right->getId()
+        );
+        $this->customerAddressBook = $addresses;
+
+        return $this->customerAddressBook;
+    }
+
+    /**
+     * Bring a quote address to the form used for comparison.
+     *
+     * @param AddressInterface $address
+     * @return array
+     */
+    private function extractQuoteAddressData(AddressInterface $address): array
+    {
+        return [
+            'prefix' => $this->normalize($address->getPrefix()),
+            'firstname' => $this->normalize($address->getFirstname()),
+            'middlename' => $this->normalize($address->getMiddlename()),
+            'lastname' => $this->normalize($address->getLastname()),
+            'suffix' => $this->normalize($address->getSuffix()),
+            'company' => $this->normalize($address->getCompany()),
+            'street' => $this->normalizeStreet($address->getStreet()),
+            'city' => $this->normalize($address->getCity()),
+            'region_id' => $this->normalize($address->getRegionId()),
+            'region' => $this->normalize($address->getRegion()),
+            'postcode' => $this->normalize($address->getPostcode()),
+            'country_id' => $this->normalize($address->getCountryId()),
+            'telephone' => $this->normalize($address->getTelephone()),
+            'fax' => $this->normalize($address->getFax()),
+            'vat_id' => $this->normalize($address->getVatId()),
+        ];
+    }
+
+    /**
+     * Bring an address book entry to the form used for comparison.
+     *
+     * @param CustomerAddressInterface $address
+     * @return array
+     */
+    private function extractCustomerAddressData(CustomerAddressInterface $address): array
+    {
+        $region = $address->getRegion();
+
+        return [
+            'prefix' => $this->normalize($address->getPrefix()),
+            'firstname' => $this->normalize($address->getFirstname()),
+            'middlename' => $this->normalize($address->getMiddlename()),
+            'lastname' => $this->normalize($address->getLastname()),
+            'suffix' => $this->normalize($address->getSuffix()),
+            'company' => $this->normalize($address->getCompany()),
+            'street' => $this->normalizeStreet($address->getStreet()),
+            'city' => $this->normalize($address->getCity()),
+            'region_id' => $this->normalize($address->getRegionId()),
+            'region' => $this->normalize($region === null ? null : $region->getRegion()),
+            'postcode' => $this->normalize($address->getPostcode()),
+            'country_id' => $this->normalize($address->getCountryId()),
+            'telephone' => $this->normalize($address->getTelephone()),
+            'fax' => $this->normalize($address->getFax()),
+            'vat_id' => $this->normalize($address->getVatId()),
+        ];
+    }
+
+    /**
+     * Compare two addresses that were brought to their comparable form.
+     *
+     * @param array $quoteAddressData
+     * @param array $customerAddressData
+     * @return bool
+     */
+    private function isSameAddress(array $quoteAddressData, array $customerAddressData): bool
+    {
+        // A region is stored as an id for countries with a predefined region list and as free text
+        // for the remaining ones. Where both sides carry an id it decides, and the text - which the
+        // checkout does not always fill in - is left out of the comparison.
+        if ($quoteAddressData['region_id'] !== '' && $customerAddressData['region_id'] !== '') {
+            if ($quoteAddressData['region_id'] !== $customerAddressData['region_id']) {
+                return false;
+            }
+            unset($quoteAddressData['region'], $customerAddressData['region']);
+        }
+        unset($quoteAddressData['region_id'], $customerAddressData['region_id']);
+
+        return $quoteAddressData == $customerAddressData;
+    }
+
+    /**
+     * Bring a single address field to a comparable form.
+     *
+     * The value is cast rather than type hinted because REST and GraphQL payloads deliver numeric
+     * postcodes and phone numbers as integers, which would fail the strict types of this file.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    private function normalize($value): string
+    {
+        return mb_strtolower(trim((string)$value));
+    }
+
+    /**
+     * Bring the street of an address to a comparable form.
+     *
+     * The number of stored lines differs between an address entered in checkout and one loaded from
+     * the address book, so empty lines are dropped and the remaining ones are re-indexed.
+     *
+     * @param string[]|string|null $street
+     * @return string[]
+     */
+    private function normalizeStreet($street): array
+    {
+        $lines = [];
+        foreach ((array)$street as $line) {
+            $line = $this->normalize($line);
+            if ($line !== '') {
+                $lines[] = $line;
+            }
+        }
+
+        return $lines;
     }
 }

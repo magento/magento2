@@ -12,6 +12,11 @@ use Magento\Checkout\Api\Data\ShippingInformationInterface;
 use Magento\Checkout\Model\PaymentDetailsFactory;
 use Magento\Checkout\Model\ShippingInformationManagement;
 use Magento\Checkout\Model\AddressComparatorInterface;
+use Magento\Customer\Api\Data\AddressInterface as CustomerAddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Api\Data\RegionInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -151,6 +156,16 @@ class ShippingInformationManagementTest extends TestCase
     private $addressComparatorMock;
 
     /**
+     * @var SearchCriteriaBuilder|MockObject
+     */
+    private $searchCriteriaBuilderMock;
+
+    /**
+     * @var AddressRepositoryInterface|MockObject
+     */
+    private $customerAddressRepositoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -178,6 +193,8 @@ class ShippingInformationManagementTest extends TestCase
         $this->totalsCollectorMock = $this->createMock(TotalsCollector::class);
         $this->addressComparatorMock = $this->createMock(AddressComparatorInterface::class);
         $quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
+        $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
+        $this->customerAddressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
 
         $this->model = new ShippingInformationManagement(
             $this->paymentMethodManagementMock,
@@ -193,7 +210,9 @@ class ShippingInformationManagementTest extends TestCase
             $this->shippingAssignmentFactoryMock,
             $this->shippingFactoryMock,
             $this->addressComparatorMock,
-            $quoteAddressValidationServiceMock
+            $quoteAddressValidationServiceMock,
+            $this->searchCriteriaBuilderMock,
+            $this->customerAddressRepositoryMock
         );
     }
 
@@ -597,6 +616,142 @@ class ShippingInformationManagementTest extends TestCase
             ->willReturn($cartTotalsMock);
 
         $this->assertEquals(
+            $paymentDetailsMock,
+            $this->model->saveAddressInformation($cartId, $addressInformationMock)
+        );
+    }
+
+    /**
+     * A new address equal to one already in the address book is linked to it instead of being duplicated
+     *
+     * @return void
+     */
+    public function testSaveAddressInformationReusesMatchingCustomerAddress(): void
+    {
+        $cartId = self::STUB_CART_ID;
+        $carrierCode = self::STUB_CARRIER_CODE;
+        $shippingMethod = self::STUB_SHIPPING_METHOD;
+        $existingAddressId = 7;
+
+        // The address the customer typed into the "Add new address" form. The postcode arrives as an
+        // integer, which is what a REST payload delivers, and the street carries a trailing empty line.
+        $this->shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getCountryId',
+                'getShippingMethod',
+                'getShippingRateByCode',
+                'getCustomerAddressId',
+                'setCustomerAddressId',
+                'getSaveInAddressBook',
+                'setSaveInAddressBook',
+                'setLimitCarrier',
+                'getPrefix',
+                'getFirstname',
+                'getMiddlename',
+                'getLastname',
+                'getSuffix',
+                'getCompany',
+                'getStreet',
+                'getCity',
+                'getRegionId',
+                'getRegion',
+                'getPostcode',
+                'getTelephone',
+                'getFax',
+                'getVatId',
+            ]
+        );
+        $this->shippingAddressMock->method('getCountryId')->willReturn('US');
+        $this->shippingAddressMock->method('getSaveInAddressBook')->willReturn(1);
+        $this->shippingAddressMock->method('getFirstname')->willReturn('John');
+        $this->shippingAddressMock->method('getLastname')->willReturn('Doe');
+        $this->shippingAddressMock->method('getStreet')->willReturn(['Green str, 67', '']);
+        $this->shippingAddressMock->method('getCity')->willReturn('CityM');
+        $this->shippingAddressMock->method('getRegionId')->willReturn(1);
+        $this->shippingAddressMock->method('getRegion')->willReturn(null);
+        $this->shippingAddressMock->method('getPostcode')->willReturn(75477);
+        $this->shippingAddressMock->method('getTelephone')->willReturn('3468676');
+        // Empty before the lookup, resolved to the existing entry afterwards.
+        $this->shippingAddressMock->method('getCustomerAddressId')
+            ->willReturnOnConsecutiveCalls(null, $existingAddressId);
+
+        // The very same address, as it is already stored in the address book. It differs only in the
+        // way the equal values are represented: string postcode, no trailing street line, upper case.
+        $regionMock = $this->createMock(RegionInterface::class);
+        $regionMock->method('getRegion')->willReturn('Alabama');
+        $existingAddressMock = $this->createMock(CustomerAddressInterface::class);
+        $existingAddressMock->method('getId')->willReturn($existingAddressId);
+        $existingAddressMock->method('getFirstname')->willReturn('John');
+        $existingAddressMock->method('getLastname')->willReturn('Doe');
+        $existingAddressMock->method('getStreet')->willReturn(['Green Str, 67']);
+        $existingAddressMock->method('getCity')->willReturn('CityM');
+        $existingAddressMock->method('getCountryId')->willReturn('US');
+        $existingAddressMock->method('getRegionId')->willReturn(1);
+        $existingAddressMock->method('getRegion')->willReturn($regionMock);
+        $existingAddressMock->method('getPostcode')->willReturn('75477');
+        $existingAddressMock->method('getTelephone')->willReturn('3468676');
+
+        $searchResultsMock = $this->createMock(AddressSearchResultsInterface::class);
+        $searchResultsMock->method('getItems')->willReturn([$existingAddressMock]);
+        $this->searchCriteriaBuilderMock->method('addFilter')->willReturnSelf();
+        $this->searchCriteriaBuilderMock->method('create')
+            ->willReturn($this->createMock(SearchCriteria::class));
+        $this->customerAddressRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->willReturn($searchResultsMock);
+
+        // The existing entry is reused and nothing is written to the address book.
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCustomerAddressId')
+            ->with($existingAddressId);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setSaveInAddressBook')
+            ->with(0);
+
+        $quoteShippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['getCustomerAddressId', 'getShippingMethod', 'getShippingRateByCode']
+        );
+        $quoteShippingAddressMock->method('getCustomerAddressId')->willReturn(null);
+        $quoteShippingAddressMock->method('getShippingMethod')->willReturn($shippingMethod);
+        $quoteShippingAddressMock->method('getShippingRateByCode')->with($shippingMethod)->willReturn('rates');
+
+        /** @var ShippingInformationInterface|MockObject $addressInformationMock */
+        $addressInformationMock = $this->createMock(ShippingInformationInterface::class);
+        $addressInformationMock->method('getShippingAddress')->willReturn($this->shippingAddressMock);
+        $addressInformationMock->method('getShippingCarrierCode')->willReturn($carrierCode);
+        $addressInformationMock->method('getShippingMethodCode')->willReturn($shippingMethod);
+        $addressInformationMock->method('getBillingAddress')->willReturn(null);
+
+        // getCustomerId() is served by the magic getter of the model, so it has to be declared explicitly.
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getItemsCount',
+                'getCustomerId',
+                'getShippingAddress',
+                'setIsMultiShipping',
+                'getIsVirtual',
+                'getExtensionAttributes',
+                'setExtensionAttributes',
+            ]
+        );
+        $this->quoteRepositoryMock->method('getActive')->with($cartId)->willReturn($this->quoteMock);
+        $this->quoteMock->method('getItemsCount')->willReturn(self::STUB_ITEMS_COUNT);
+        $this->quoteMock->method('getCustomerId')->willReturn(42);
+        $this->quoteMock->method('getIsVirtual')->willReturn(false);
+        $this->quoteMock->method('getShippingAddress')->willReturn($quoteShippingAddressMock);
+
+        $this->setShippingAssignmentsMocks($carrierCode . '_' . $shippingMethod);
+
+        $paymentDetailsMock = $this->createMock(PaymentDetailsInterface::class);
+        $this->paymentDetailsFactoryMock->method('create')->willReturn($paymentDetailsMock);
+        $this->paymentMethodManagementMock->method('getList')->with($cartId)->willReturn([]);
+        $this->cartTotalsRepositoryMock->method('get')->with($cartId)
+            ->willReturn($this->createMock(TotalsInterface::class));
+
+        $this->assertSame(
             $paymentDetailsMock,
             $this->model->saveAddressInformation($cartId, $addressInformationMock)
         );
