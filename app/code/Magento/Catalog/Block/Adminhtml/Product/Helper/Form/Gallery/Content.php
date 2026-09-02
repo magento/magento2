@@ -19,7 +19,9 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Store\Model\Store;
 
 /**
  * Block for gallery content.
@@ -180,8 +182,13 @@ class Content extends \Magento\Backend\Block\Widget
         ) {
             $mediaDir = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
             $images = $this->sortImagesByPosition($value['images']);
+            // The admin renders its own preview of a file that is shared by every store view, so the
+            // media base URL is taken from the admin scope instead of the selected store view. A URL
+            // pointing at another website domain is rejected by the admin Content Security Policy.
+            $mediaBaseUrl = $this->_storeManager->getStore(Store::DEFAULT_STORE_ID)
+                ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
             foreach ($images as &$image) {
-                $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                $image['url'] = $mediaBaseUrl . $this->_mediaConfig->getMediaShortUrl($image['file']);
                 if ($this->fileStorageDatabase->checkDbUsage() &&
                     !$mediaDir->isFile($this->_mediaConfig->getMediaPath($image['file']))
                 ) {
