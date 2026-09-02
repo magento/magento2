@@ -166,8 +166,9 @@ for _, id in ipairs(ids_to_delete) do
     redis.call('DEL', rev)
     redis.call('SREM', 'cache:all_ids', id)
 
-    -- Delete the actual cache item (data key is "<namespace>:<id>", note the ':' separator)
-    local cache_key = namespace .. ':' .. id
+    -- Delete the actual cache item (data key is "<namespace><id>", matching Symfony's
+    -- AbstractAdapter::getId(), which concatenates with no separator)
+    local cache_key = namespace .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
 end
@@ -242,8 +243,9 @@ for _, id in ipairs(filtered_ids) do
     redis.call('DEL', rev)
     redis.call('SREM', 'cache:all_ids', id)
 
-    -- Delete the actual cache item (data key is "<namespace>:<id>", note the ':' separator)
-    local cache_key = namespace .. ':' .. id
+    -- Delete the actual cache item (data key is "<namespace><id>", matching Symfony's
+    -- AbstractAdapter::getId(), which concatenates with no separator)
+    local cache_key = namespace .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
 end
@@ -352,13 +354,17 @@ LUA;
     /**
      * Defines the Redis data-key prefix (<namespace>:)
      *
-     * Used by existence guards to keep cache indexes consistent with stored data.
+     * Matches Symfony's AbstractAdapter, which stores each item under "<namespace>:<id>" —
+     * a non-empty namespace is suffixed with a ':' separator (empty namespace has none). The
+     * data-existence guards in LUA_ONSAVE / LUA_PRUNE_INDEX must use this exact prefix, otherwise
+     * EXISTS never matches the stored data key: onSave then skips building the tag index and prune
+     * always removes it, leaving data-present / index-missing orphans.
      *
      * @return string
      */
     private function dataKeyPrefix(): string
     {
-        return $this->namespace . ':';
+        return $this->namespace === '' ? '' : $this->namespace . ':';
     }
 
     /**

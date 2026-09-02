@@ -41,7 +41,7 @@ class L1L2Cache
                 'remote_backend' => \Magento\Framework\Cache\Backend\Valkey::class,
                 'remote_backend_options' => $remote,
                 'local_backend' => 'Cm_Cache_Backend_File',
-                'local_backend_options' => ['cache_dir' => '/dev/shm/'],
+                'local_backend_options' => ['cache_dir' => BP . '/var/cache/zend_tests_l1'],
             ],
             'frontend_options' => ['write_control' => false],
         ];
@@ -50,6 +50,14 @@ class L1L2Cache
         $staleFrontend = $frontend;
         $staleFrontend['backend_options']['use_stale_cache'] = true;
         $configData->set('cache/frontend/stale_cache_enabled', $staleFrontend);
+
+        // full_page is intentionally omitted: the full-page cache must stay on its dedicated
+        // 'page_cache' frontend. Routing it to 'stale_cache_enabled' would move FPC onto the shared
+        // default-cache L2 (same Redis db), where default-cache tag invalidations collide with FPC
+        // entries and drop unrelated pages. Keep this list aligned with applySymfony().
+        foreach (['layout', 'block_html', 'reflection', 'config_integration', 'config_integration_api', 'translate'] as $type) {
+            $configData->set('cache/type/' . $type . '/frontend', 'stale_cache_enabled');
+        }
     }
 
     public function applySymfony(ConfigData $configData, array $options): void
@@ -75,18 +83,23 @@ class L1L2Cache
                 'remote_backend' => 'valkey',
                 'remote_backend_options' => $remote,
                 'local_backend' => 'file',
-                'local_backend_options' => ['cache_dir' => '/dev/shm/magento_l1'],
+                'local_backend_options' => ['cache_dir' => BP . '/var/cache/magento_l1'],
             ],
         ];
 
         $configData->set('cache/frontend/default', $frontend);
         $stale = $frontend;
         $stale['backend_options']['remote_backend_options']['persistent_id'] = 'magento_l2_stale';
-        $stale['backend_options']['local_backend_options']['cache_dir'] = '/dev/shm/magento_l1_stale';
+        $stale['backend_options']['local_backend_options']['cache_dir'] = BP . '/var/cache/magento_l1_stale';
         $stale['backend_options']['use_stale_cache'] = true;
         $configData->set('cache/frontend/stale_cache_enabled', $stale);
 
-        foreach (['layout', 'block_html', 'reflection', 'config_integration', 'config_integration_api', 'full_page', 'translate'] as $type) {
+        // full_page is intentionally omitted: like the Zend profile (applyZend routes no cache type to
+        // the stale frontend), the full-page cache must stay on its dedicated 'page_cache' frontend.
+        // Routing it to 'stale_cache_enabled' would move FPC onto the shared default-cache L2 (same
+        // Redis db), where default-cache tag invalidations collide with FPC entries and drop unrelated
+        // pages (e.g. invalidating one CMS page evicts another).
+        foreach (['layout', 'block_html', 'reflection', 'config_integration', 'config_integration_api', 'translate'] as $type) {
             $configData->set('cache/type/' . $type . '/frontend', 'stale_cache_enabled');
         }
     }
