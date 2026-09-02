@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
- * Class Reader
+ * Reads and merges system.xml configuration files describing the admin configuration structure.
+ *
  * @api
  * @since 100.0.2
  */
