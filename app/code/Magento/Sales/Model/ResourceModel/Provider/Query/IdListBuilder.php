@@ -111,7 +111,6 @@ class IdListBuilder
             $select->where('main_table.entity_id <= ?', $endEntityId);
         }
         $select->where('grid_table.entity_id IS NULL');
-        $select->limit(Grid::BATCH_SIZE);
         foreach ($this->additionalGridTables as $table) {
             $select->joinLeft(
                 [$table => $table],
