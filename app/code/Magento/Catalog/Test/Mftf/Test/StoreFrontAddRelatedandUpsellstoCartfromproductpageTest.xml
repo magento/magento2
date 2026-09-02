@@ -181,9 +181,23 @@
 
 
         <!--Click Add to Cart-->
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="clickAddToCart">
-            <argument name="productName" value="$$productA.name$$, $$productB.name$$ and $$productU.name$$"/>
-        </actionGroup>
+        <!-- Inlined from AddToCartFromStorefrontProductPageActionGroup, skipping its fixed-order assertion since B/U order in the message isn't guaranteed; verified below via assertRegExp instead -->
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="clickAddToCartWaitForAddToCartButtonToRemoveDisabledState"/>
+        <scrollTo selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickAddToCartScrollToAddToCartButton"/>
+        <wait time="1" stepKey="clickAddToCartWaitForScrollToComplete"/>
+        <executeJS function="
+            var element = document.querySelector('#product-addtocart-button');
+            if (element) {
+                element.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+        " stepKey="clickAddToCartScrollToAddToCartButtonWithJS"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickAddToCartWaitForAddToCartButton"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickAddToCartAddToCart"/>
+        <waitForPageLoad stepKey="clickAddToCartWaitForAddToCart"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="clickAddToCartWaitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="clickAddToCartWaitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <waitForPageLoad stepKey="clickAddToCartWaitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="clickAddToCartWaitForSuccessMessage"/>
 
         <!-- See There are 5 items in the cart now -->
         <see userInput="5" selector="{{StorefrontMinicartSection.quantity}}" stepKey="assertQuantity"/>
@@ -197,7 +211,11 @@
 
         <!-- See  Success message appears:  'You added Product A to your shopping cart.' -->
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAddedAgain"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productA.name$$, $$productB.name$$ and $$productU.name$$ to your shopping cart." stepKey="seeSucessMessage"/>
+        <grabTextFrom selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="grabSuccessMessageABU"/>
+        <assertRegExp message="incorrectAddToCartMessageABU" stepKey="seeSucessMessage">
+            <actualResult type="variable">$grabSuccessMessageABU</actualResult>
+            <expectedResult type="string">/^You added $$productA.name$$, ($$productB.name$$ and $$productU.name$$|$$productU.name$$ and $$productB.name$$) to your shopping cart\.$/</expectedResult>
+        </assertRegExp>
 
         <!--Untick B CheckBox-->
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="untickProductB"/>
@@ -291,9 +309,23 @@
 
 
         <!--Click Add to Cart for Product V-->
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductVToCart">
-            <argument name="productName" value="$$productV.name$$, $$productB.name$$ and $$productU.name$$"/>
-        </actionGroup>
+        <!-- Inlined from AddToCartFromStorefrontProductPageActionGroup, skipping its fixed-order assertion since B/U order in the message isn't guaranteed; verified below via assertRegExp instead -->
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartDisabled}}" stepKey="addProductVToCartWaitForAddToCartButtonToRemoveDisabledState"/>
+        <scrollTo selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductVToCartScrollToAddToCartButton"/>
+        <wait time="1" stepKey="addProductVToCartWaitForScrollToComplete"/>
+        <executeJS function="
+            var element = document.querySelector('#product-addtocart-button');
+            if (element) {
+                element.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+        " stepKey="addProductVToCartScrollToAddToCartButtonWithJS"/>
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductVToCartWaitForAddToCartButton"/>
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductVToCartAddToCart"/>
+        <waitForPageLoad stepKey="addProductVToCartWaitForAddToCart"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="addProductVToCartWaitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="addProductVToCartWaitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <waitForPageLoad stepKey="addProductVToCartWaitForPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="addProductVToCartWaitForSuccessMessage"/>
 
         <!-- Verify 5 Products there -->
         <see userInput="5" selector="{{StorefrontMinicartSection.quantity}}" stepKey="verifyItemsQuantity"/>
@@ -306,7 +338,11 @@
 
         <!-- See  Success message appears:  'You added Product V to your shopping cart.' -->
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitforLoad"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$productV.name$$, $$productB.name$$ and $$productU.name$$ to your shopping cart." stepKey="seeAddedToCartMessageForProductV"/>
+        <grabTextFrom selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="grabSuccessMessageVBU"/>
+        <assertRegExp message="incorrectAddToCartMessageVBU" stepKey="seeAddedToCartMessageForProductV">
+            <actualResult type="variable">$grabSuccessMessageVBU</actualResult>
+            <expectedResult type="string">/^You added $$productV.name$$, ($$productB.name$$ and $$productU.name$$|$$productU.name$$ and $$productB.name$$) to your shopping cart\.$/</expectedResult>
+        </assertRegExp>
 
         <!--Untick B-->
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$productB.name$$')}}" stepKey="untickcheckboxB"/>

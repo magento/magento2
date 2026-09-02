@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-93059"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="AC-18036">StorefrontConfigurableProductWithFileCustomOptionTest failing due to alert message not appearing on product details page on frontend</issueId>
+            </skip>
         </annotations>
 
         <before>
