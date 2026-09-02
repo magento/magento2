@@ -85,13 +85,13 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);
-        $this->persistentSessionHelper = $this->objectManager->create(\Magento\Persistent\Helper\Session::class);
+        $this->persistentSessionHelper = $this->objectManager->get(\Magento\Persistent\Helper\Session::class);
         $this->customerFactory = $this->objectManager->create(
             \Magento\Customer\Model\CustomerFactory::class
         );
-        $this->checkoutSession = $this->objectManager->create(\Magento\Checkout\Model\Session::class);
-        $this->cartRepository = $this->objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
-        $this->cartManagement = $this->objectManager->create(\Magento\Quote\Api\CartManagementInterface::class);
+        $this->checkoutSession = $this->objectManager->get(\Magento\Checkout\Model\Session::class);
+        $this->cartRepository = $this->objectManager->get(\Magento\Quote\Api\CartRepositoryInterface::class);
+        $this->cartManagement = $this->objectManager->get(\Magento\Quote\Api\CartManagementInterface::class);
         $this->cartItemRepository = $this->objectManager->create(\Magento\Quote\Api\CartItemRepositoryInterface::class);
         $this->quoteIdMaskFactory = $this->objectManager->create(\Magento\Quote\Model\QuoteIdMaskFactory::class);
         $this->paymentMethodManagement = $this->objectManager->create(
@@ -111,6 +111,15 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         );
     }
 
+    protected function tearDown(): void
+    {
+        $this->objectManager->create(\Magento\Persistent\Model\Session::class)
+            ->deleteByCustomerId(1, false);
+
+        // Clear the shared Persistent\Helper\Session singleton so this test's persistent
+        $this->persistentSessionHelper->setSession(null);
+    }
+
     /**
      * Test builds out a persistent customer shopping cart, emulates a
      * session expiring, and checks out with the persisted cart as a guest.
@@ -121,6 +130,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
      * @magentoConfigFixture current_store persistent/options/enabled 1
      * @magentoConfigFixture current_store persistent/options/remember_enabled 1
      * @magentoConfigFixture current_store persistent/options/remember_default 1
+     * @magentoConfigFixture current_store persistent/options/shopping_cart 1
      * @magentoConfigFixture current_store payment/substitution/active 1
      * @magentoAppArea frontend
      * @magentoAppIsolation enabled
@@ -132,7 +142,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
      */
     public function testBeforeSavePaymentInformationAndPlaceOrder()
     {
-        $guestEmail = 'customer@example.com';
+        $guestEmail = 'guest@example.com';
 
         //Retrieve customer from repository
         /** @var \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository */
@@ -202,10 +212,12 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->checkoutSession->clearQuote();
         $this->checkoutSession->setQuoteId($quote->getId());
 
-        //Set up persistent session data and expire customer session
-        $this->persistentSessionHelper->getSession()->setCustomerId($customer->getId())
-            ->setPersistentCookie(10000, '');
-        $this->persistentSessionHelper->getSession()->removePersistentCookie()->setPersistentCookie(100000000, '');
+        //Set up a real, saved persistent session for the customer
+        /** @var \Magento\Persistent\Model\Session $persistentSessionModel */
+        $persistentSessionModel = $this->objectManager->create(\Magento\Persistent\Model\Session::class);
+        $persistentSessionModel->loadByCustomerId($customer->getId());
+        $persistentSessionModel->setCustomerId($customer->getId())->save();
+        $this->persistentSessionHelper->setSession($persistentSessionModel);
         $this->customerSession->setIsCustomerEmulated(true)->expireSessionCookie();
 
         //Grab masked quote Id to pass to payment manager
@@ -214,11 +226,6 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $quoteIdMask->setQuoteId($this->checkoutSession->getQuote()->getId());
         $quoteIdMask->save();
         $maskedCartId = $quoteIdMask->getMaskedId();
-
-        //Convert customer quote to guest.
-        /** @var \Magento\Persistent\Model\QuoteManager $quoteManager */
-        $quoteManager = $this->objectManager->get(\Magento\Persistent\Model\QuoteManager::class);
-        $quoteManager->convertCustomerCartToGuest($quote);
 
         //Submit order as expired/emulated customer
         /** @var \Magento\Checkout\Model\GuestPaymentInformationManagement $paymentManagement */

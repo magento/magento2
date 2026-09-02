@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Cron;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Sales\Cron\CleanExpiredQuotes;
 use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
@@ -46,6 +48,11 @@ class CleanExpiredQuotesTest extends TestCase
     private LoggerInterface|MockObject $logger;
 
     /**
+     * @var Snapshot|MockObject
+     */
+    private Snapshot|MockObject $quoteSnapshot;
+
+    /**
      * @var CleanExpiredQuotes
      */
     private CleanExpiredQuotes $cron;
@@ -59,12 +66,14 @@ class CleanExpiredQuotesTest extends TestCase
         $this->expiredQuotesCollection = $this->createMock(ExpiredQuotesCollection::class);
         $this->quoteDelete            = $this->createMock(Delete::class);
         $this->logger                  = $this->createMock(LoggerInterface::class);
+        $this->quoteSnapshot           = $this->createMock(Snapshot::class);
 
         $this->cron = new CleanExpiredQuotes(
             $this->storeManager,
             $this->expiredQuotesCollection,
             $this->quoteDelete,
             $this->logger,
+            $this->quoteSnapshot,
             self::BATCH_SIZE
         );
     }
@@ -88,6 +97,7 @@ class CleanExpiredQuotesTest extends TestCase
         $collection->method('setCurPage')->willReturnSelf();
         $collection->method('getSelect')->willReturn($select);
         $collection->method('getColumnValues')->with('entity_id')->willReturn($ids);
+        $collection->method('getNewEmptyItem')->willReturn($this->createMock(DataObject::class));
 
         return $collection;
     }
@@ -142,6 +152,39 @@ class CleanExpiredQuotesTest extends TestCase
     }
 
     /**
+     * The version-control snapshot must be cleared once per processed batch so
+     * loaded quotes are not retained across iterations (memory leak fix).
+     */
+    public function testExecuteClearsQuoteSnapshotAfterEachBatch(): void
+    {
+        $firstBatch  = ['1', '2', '3'];  // equals batchSize → loop continues
+        $secondBatch = ['4'];            // less than batchSize → loop stops
+
+        $store = $this->createMock(StoreInterface::class);
+        $this->storeManager->method('getStores')->willReturn([$store]);
+
+        $firstCollection  = $this->buildCollectionMock($firstBatch);
+        $secondCollection = $this->buildCollectionMock($secondBatch);
+        $this->expiredQuotesCollection->method('getExpiredQuotes')
+            ->willReturnOnConsecutiveCalls($firstCollection, $secondCollection);
+
+        $this->quoteDelete->method('deleteByIds');
+
+        $clearedItems = [];
+        $this->quoteSnapshot->expects($this->exactly(2))
+            ->method('clear')
+            ->willReturnCallback(function ($item) use (&$clearedItems) {
+                $clearedItems[] = $item;
+            });
+
+        $this->cron->execute();
+
+        $this->assertCount(2, $clearedItems, 'Snapshot must be cleared exactly once per batch');
+        $this->assertSame($firstCollection->getNewEmptyItem(), $clearedItems[0]);
+        $this->assertSame($secondCollection->getNewEmptyItem(), $clearedItems[1]);
+    }
+
+    /**
      * When a store has no expired quotes deleteByIds is never called.
      */
     public function testExecuteSkipsDeleteWhenNoExpiredQuotes(): void
@@ -180,6 +223,7 @@ class CleanExpiredQuotesTest extends TestCase
         $secondCollection->method('setCurPage')->willReturnSelf();
         $secondCollection->method('getSelect')->willReturn($select);
         $secondCollection->method('getColumnValues')->with('entity_id')->willReturn([]);
+        $secondCollection->method('getNewEmptyItem')->willReturn($this->createMock(DataObject::class));
 
         $capturedCursor = null;
         $secondCollection->method('addFieldToFilter')
