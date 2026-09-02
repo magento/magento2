@@ -47,9 +47,9 @@ class L1L2Cache
         ];
 
         $configData->set('cache/frontend/default', $frontend);
-        $configData->set('cache/frontend/stale_cache_enabled', $frontend + [
-            'backend_options' => $frontend['backend_options'] + ['use_stale_cache' => true],
-        ]);
+        $staleFrontend = $frontend;
+        $staleFrontend['backend_options']['use_stale_cache'] = true;
+        $configData->set('cache/frontend/stale_cache_enabled', $staleFrontend);
     }
 
     public function applySymfony(ConfigData $configData, array $options): void
