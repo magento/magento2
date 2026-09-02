@@ -73,7 +73,7 @@ class PriceTest extends TestCase
 
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->registry = $this->createMock(Registry::class);
-        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layout = $this->createMock(LayoutInterface::class);
         $this->product = $this->createMock(Product::class);
 
         $context = $this->createMock(Context::class);
@@ -143,7 +143,6 @@ class PriceTest extends TestCase
 
         $reflection = new ReflectionClass(Price::class);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
 
         $this->assertSame($form, $this->block->getForm());
@@ -170,7 +169,6 @@ class PriceTest extends TestCase
 
         $reflection = new ReflectionClass(Price::class);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
     }
 
@@ -216,7 +214,6 @@ class PriceTest extends TestCase
 
         $reflection = new ReflectionClass(Price::class);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
 
         $this->assertSame($form, $this->block->getForm());
@@ -264,7 +261,6 @@ class PriceTest extends TestCase
 
         $reflection = new ReflectionClass(Price::class);
         $method = $reflection->getMethod('_prepareForm');
-        $method->setAccessible(true);
         $method->invoke($this->block);
 
         $this->assertSame($form, $this->block->getForm());

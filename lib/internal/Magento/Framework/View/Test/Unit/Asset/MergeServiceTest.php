@@ -21,6 +21,7 @@ use Magento\Framework\View\Asset\MergeStrategy\FileExists;
 use Magento\Framework\View\Asset\Remote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -59,10 +60,8 @@ class MergeServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,12 +94,11 @@ class MergeServiceTest extends TestCase
      * @param array $assets
      * @param string $contentType
      * @param string $appMode
-     * @param string $mergeStrategy
-     * @dataProvider getMergedAssetsDataProvider
-     */
+     * @param string $mergeStrategy     */
+    #[DataProvider('getMergedAssetsDataProvider')]
     public function testGetMergedAssets(array $assets, $contentType, $appMode, $mergeStrategy)
     {
-        $mergedAsset = $this->getMockForAbstractClass(AssetInterface::class);
+        $mergedAsset = $this->createMock(AssetInterface::class);
         $mergeStrategyMock = $this->createMock($mergeStrategy);
 
         $this->configMock->expects($this->once())->method('isMergeCssFiles')->willReturn(true);

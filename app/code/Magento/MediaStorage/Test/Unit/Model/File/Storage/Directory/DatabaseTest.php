@@ -95,7 +95,6 @@ class DatabaseTest extends TestCase
         );
         $reflection = new \ReflectionClass($this->directoryMock);
         $dataProperty = $reflection->getProperty('_data');
-        $dataProperty->setAccessible(true);
         $dataProperty->setValue($this->directoryMock, [
             'path' => '',
             'name' => '',

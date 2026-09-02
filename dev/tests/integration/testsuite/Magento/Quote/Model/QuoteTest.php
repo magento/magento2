@@ -38,6 +38,7 @@ use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
@@ -169,31 +170,46 @@ class QuoteTest extends TestCase
     public function testGetAddressWithVirtualProduct(): void
     {
         $quote = $this->objectManager->create(Quote::class);
-        $billingAddress = $this->addressFactory->create();
-        $billingAddress->setFirstname('Joe')
-            ->setLastname('Doe')
-            ->setCountryId('US')
-            ->setRegion('TX')
-            ->setCity('Austin')
-            ->setStreet('1000 West Parmer Line')
-            ->setPostcode('11501')
-            ->setTelephone('123456789');
-        $quote->setBillingAddress($billingAddress);
-        $shippingAddress = $this->addressFactory->create();
-        $shippingAddress->setFirstname('Joe')
-            ->setLastname('Doe')
-            ->setCountryId('US')
-            ->setRegion('NJ')
-            ->setCity('Newark')
-            ->setStreet('2775  Granville Lane')
-            ->setPostcode('07102')
-            ->setTelephone('9734685221');
-        $quote->setShippingAddress($shippingAddress);
-        $product = $this->productRepository->get('virtual-product', false, null, true);
-        $quote->addProduct($product);
-        $quote->save();
-        $expectedAddress = $quote->getBillingAddress();
-        $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
+        $storeManager = $this->objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $originalStore = $storeManager->getStore();
+        $defaultStoreView = $storeManager->getDefaultStoreView();
+        $storeManager->setCurrentStore($defaultStoreView);
+
+        try {
+            $quote->setStore($defaultStoreView);
+
+            $billingAddress = $this->addressFactory->create();
+            $billingAddress->setFirstname('Joe')
+                ->setLastname('Doe')
+                ->setCountryId('US')
+                ->setRegion('TX')
+                ->setCity('Austin')
+                ->setStreet('1000 West Parmer Line')
+                ->setPostcode('11501')
+                ->setTelephone('123456789');
+            $quote->setBillingAddress($billingAddress);
+            $shippingAddress = $this->addressFactory->create();
+            $shippingAddress->setFirstname('Joe')
+                ->setLastname('Doe')
+                ->setCountryId('US')
+                ->setRegion('NJ')
+                ->setCity('Newark')
+                ->setStreet('2775  Granville Lane')
+                ->setPostcode('07102')
+                ->setTelephone('9734685221');
+            $quote->setShippingAddress($shippingAddress);
+
+            $product = $this->productRepository->get('virtual-product', false, (int) $defaultStoreView->getId(), true);
+            $item = $this->objectManager->create(\Magento\Quote\Model\Quote\Item::class);
+            $item->setProduct($product);
+            $item->setQty(1);
+            $quote->addItem($item);
+            $quote->save();
+            $expectedAddress = $quote->getBillingAddress();
+            $this->assertEquals($expectedAddress, $quote->getAllItems()[0]->getAddress());
+        } finally {
+            $storeManager->setCurrentStore($originalStore);
+        }
     }
 
     /**
@@ -467,9 +483,9 @@ class QuoteTest extends TestCase
      * @param int|null $expectedOrderGiftMessageId
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider giftMessageDataProvider
      * @return void
      */
+    #[DataProvider('giftMessageDataProvider')]
     public function testMerge(
         ?int $guestItemGiftMessageId,
         ?int $customerItemGiftMessageId,

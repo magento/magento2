@@ -10,6 +10,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AllowedIpsTest extends TestCase
@@ -24,9 +25,7 @@ class AllowedIpsTest extends TestCase
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventMangerMock = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $eventMangerMock = $this->createMock(ManagerInterface::class);
         $contextMock->expects($this->any())
             ->method('getEventDispatcher')
             ->willReturn($eventMangerMock);
@@ -45,9 +44,9 @@ class AllowedIpsTest extends TestCase
     /**
      * @param string $value
      * @param string $expected
-     * @dataProvider beforeSaveDataProvider
      * @return void
      */
+    #[DataProvider('beforeSaveDataProvider')]
     public function testBeforeSave($value, $expected)
     {
         $this->assertNull($this->model->getValue());

@@ -35,10 +35,13 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Createdat test for check report totals calculate
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatedatTest extends TestCase
 {
@@ -63,7 +66,7 @@ class CreatedatTest extends TestCase
     private $reportCollection;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -75,9 +78,9 @@ class CreatedatTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/SalesRule/_files/order_with_coupon.php
-     * @dataProvider orderParamsDataProvider()
      * @param $orderParams
      */
+    #[DataProvider('orderParamsDataProvider')]
     public function testTotals($orderParams)
     {
         /** @var Order $order */

@@ -391,8 +391,8 @@ abstract class AbstractType
                     $this->_indexValueAttributes
                 );
             }
-            $commonAttributes[$attributeId] = $cachedAttribute;
-            $attributeCodeToId[$attributeCode] = $attributeId;
+            $commonAttributes[$attributeId ?? ''] = $cachedAttribute;
+            $attributeCodeToId[$attributeCode ?? ''] = $attributeId;
         }
 
         foreach (array_chunk($attributesToLoadFromTable, 1000) as $ids) {

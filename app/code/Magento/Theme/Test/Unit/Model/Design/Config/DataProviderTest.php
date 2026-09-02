@@ -15,6 +15,7 @@ use Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Theme\Model\Design\Config\DataProvider\DataLoader as ConfigDataLoader;
 use Magento\Theme\Model\Design\Config\DataProvider\MetadataLoader as ConfigMetadataLoader;
 use Magento\Theme\Model\ResourceModel\Design\Config\Collection;
+use PHPUnit\Framework\Attributes\DataProvider as DataProviderAttribute;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -90,9 +91,7 @@ class DataProviderTest extends TestCase
             ->method('create')
             ->willReturn($this->collection);
 
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -142,8 +141,8 @@ class DataProviderTest extends TestCase
      * @param array $inputMeta
      * @param array $expectedMeta
      * @param array $request
-     * @dataProvider getMetaDataProvider
      */
+    #[DataProviderAttribute('getMetaDataProvider')]
     public function testGetMeta(array $inputMeta, array $expectedMeta, array $request)
     {
         $this->requestMock->expects($this->any())

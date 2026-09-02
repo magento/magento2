@@ -32,6 +32,7 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\CartMutexInterface;
+use Magento\Quote\Model\CustomerCartMutexInterface;
 use Magento\Quote\Model\CustomerManagement;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -46,6 +47,7 @@ use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\QuoteManagement;
+use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\SubmitQuoteValidator;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -65,6 +67,7 @@ use PHPUnit\Framework\TestCase;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 class QuoteManagementTest extends TestCase
 {
@@ -216,7 +219,17 @@ class QuoteManagementTest extends TestCase
     private $cartMutexMock;
 
     /**
-     * @inheriDoc
+     * @var CustomerCartMutexInterface|MockObject
+     */
+    private $customerCartMutexMock;
+
+    /**
+     * @var QuoteAddressValidator|MockObject
+     */
+    private $quoteAddressValidatorMock;
+
+    /**
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -292,6 +305,8 @@ class QuoteManagementTest extends TestCase
         $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
 
         $this->cartMutexMock = $this->createMock(CartMutexInterface::class);
+        $this->customerCartMutexMock = $this->createMock(CustomerCartMutexInterface::class);
+        $this->quoteAddressValidatorMock = $this->createMock(QuoteAddressValidator::class);
 
         $this->model = $objectManager->getObject(
             QuoteManagement::class,
@@ -317,7 +332,9 @@ class QuoteManagementTest extends TestCase
                 'accountManagement' => $this->accountManagementMock,
                 'quoteFactory' => $this->quoteFactoryMock,
                 'addressRepository' => $this->addressRepositoryMock,
-                'lockManager' => $this->lockManagerMock
+                'lockManager' => $this->lockManagerMock,
+                'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                'customerCartMutex' => $this->customerCartMutexMock
             ]
         );
 
@@ -400,6 +417,14 @@ class QuoteManagementTest extends TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($storeMock);
 
+        $this->customerCartMutexMock->expects($this->once())
+            ->method('execute')
+            ->willReturnCallback(
+                function (int $customerId, int $storeId, callable $callable, array $args) {
+                    return $callable(...$args);
+                }
+            );
+
         $this->assertEquals($quoteId, $this->model->createEmptyCartForCustomer($userId));
     }
 
@@ -435,6 +460,14 @@ class QuoteManagementTest extends TestCase
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->expects($this->once())->method('getStore')
             ->willReturn($storeMock);
+
+        $this->customerCartMutexMock->expects($this->once())
+            ->method('execute')
+            ->willReturnCallback(
+                function (int $customerId, int $websiteId, callable $callable, array $args) {
+                    return $callable(...$args);
+                }
+            );
 
         $this->model->createEmptyCartForCustomer($userId);
     }
@@ -827,7 +860,7 @@ class QuoteManagementTest extends TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     #[DataProvider('guestPlaceOrderDataProvider')]
-    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $countSetAddress): void
+    public function testPlaceOrderIfCustomerIsGuest(?string $settledEmail, int $expectedSetEmailCalls): void
     {
         $cartId = 100;
         $orderId = 332;
@@ -852,11 +885,11 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCustomer')
             ->willReturn($customerMock);
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->any())
             ->method('getCustomerEmail')
             ->willReturn($settledEmail);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
-        $this->quoteMock->expects($this->exactly($countSetAddress))
+        $this->quoteMock->expects($this->exactly($expectedSetEmailCalls))
             ->method('setCustomerEmail')
             ->with($email)
             ->willReturnSelf();
@@ -870,7 +903,7 @@ class QuoteManagementTest extends TestCase
                 'getMiddlename'
             ]
         );
-        $addressMock->expects($this->exactly($countSetAddress))->method('getEmail')->willReturn($email);
+        $addressMock->expects($this->any())->method('getEmail')->willReturn($email);
         $this->quoteMock->expects($this->any())->method('getBillingAddress')->with()->willReturn($addressMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomerIsGuest')->with(true)->willReturnSelf();
@@ -932,7 +965,9 @@ class QuoteManagementTest extends TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
-                    'cartMutex' => $this->cartMutexMock
+                    'cartMutex' => $this->cartMutexMock,
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                    'customerCartMutex' => $this->customerCartMutexMock
                 ]
             )
             ->getMock();
@@ -968,8 +1003,9 @@ class QuoteManagementTest extends TestCase
     public static function guestPlaceOrderDataProvider(): array
     {
         return [
-            [null, 1],
-            ['test@example.com', 0],
+            'empty quote email is backfilled from billing address' => [null, 1],
+            'matching quote email is left unchanged' => ['email@mail.com', 0],
+            'stale quote email is re-synced from billing address' => ['test@example.com', 1],
         ];
     }
 
@@ -1015,7 +1051,9 @@ class QuoteManagementTest extends TestCase
                     'addressRepository' => $this->addressRepositoryMock,
                     'request' => $this->requestMock,
                     'remoteAddress' => $this->remoteAddressMock,
-                    'cartMutex' => $this->cartMutexMock
+                    'cartMutex' => $this->cartMutexMock,
+                    'quoteAddressValidator' => $this->quoteAddressValidatorMock,
+                    'customerCartMutex' => $this->customerCartMutexMock
                 ]
             )
             ->getMock();
@@ -1254,7 +1292,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
     }
@@ -1270,7 +1307,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
@@ -1397,7 +1433,6 @@ class QuoteManagementTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

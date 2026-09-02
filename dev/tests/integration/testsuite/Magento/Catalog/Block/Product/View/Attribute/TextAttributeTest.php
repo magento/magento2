@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks text attribute displaying on frontend
@@ -45,13 +46,13 @@ class TextAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider attributeWithTagsProvider
      * @magentoAppArea frontend
      * @param bool $allowHtmlTags
      * @param string $attributeValue
      * @param string $expectedAttributeValue
      * @return void
      */
+    #[DataProvider('attributeWithTagsProvider')]
     public function testAttributeWithHtmlTags(
         bool $allowHtmlTags,
         string $attributeValue,

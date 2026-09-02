@@ -18,9 +18,6 @@
             <testCaseId value="MC-20613"/>
             <useCaseId value="MC-18457"/>
             <group value="shipping"/>
-            <skip>
-                <issueId value="ACQE-6511"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">

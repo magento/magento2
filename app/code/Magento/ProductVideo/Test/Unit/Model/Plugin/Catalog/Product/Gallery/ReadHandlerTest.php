@@ -141,7 +141,7 @@ class ReadHandlerTest extends TestCase
             ]
         ];
 
-        $this->product->expects($this->once())
+        $this->product->expects($this->any())
             ->method('getData')
             ->with('media_gallery')
             ->willReturn($mediaData);

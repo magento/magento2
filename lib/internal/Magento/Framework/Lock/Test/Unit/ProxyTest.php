@@ -39,7 +39,7 @@ class ProxyTest extends TestCase
     protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(LockBackendFactory::class);
-        $this->lockerMock = $this->getMockForAbstractClass(LockManagerInterface::class);
+        $this->lockerMock = $this->createMock(LockManagerInterface::class);
         $this->proxy = new Proxy($this->factoryMock);
     }
 

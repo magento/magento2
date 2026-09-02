@@ -31,5 +31,9 @@
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted." stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomersGridIsLoaded"/>
+        <!-- Remove previous filters using Clear All -->
+        <waitForElementClickable selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="waitForClearAllFiltersClickable"/>
+        <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="clickClearAllFiltersAfterDeletion"/>
+        <waitForPageLoad stepKey="waitAfterClearingAllFilters"/>
     </actionGroup>
 </actionGroups>

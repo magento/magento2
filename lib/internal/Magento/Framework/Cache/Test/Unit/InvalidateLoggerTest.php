@@ -39,7 +39,7 @@ class InvalidateLoggerTest extends TestCase
     protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Http::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->invalidateLogger = new InvalidateLogger(
             $this->requestMock,
             $this->loggerMock
@@ -75,7 +75,6 @@ class InvalidateLoggerTest extends TestCase
     {
         $expected = ['method' => $this->method, 'url' => $this->url, 'invalidateInfo' => $this->params];
         $method = new \ReflectionMethod($this->invalidateLogger, 'makeParams');
-        $method->setAccessible(true);
         $this->assertEquals(
             $expected,
             $method->invoke($this->invalidateLogger, $this->params)
