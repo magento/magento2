@@ -92,6 +92,20 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
     }
 
     /**
+     * Get the remote (L2) tier's backend, for backward compatibility with code that expects direct backend access.
+     *
+     * @return mixed|null
+     */
+    public function getBackend()
+    {
+        $lowLevel = $this->getRemoteLowLevelFrontend();
+
+        return ($lowLevel !== null && method_exists($lowLevel, 'getBackend'))
+            ? $lowLevel->getBackend()
+            : null;
+    }
+
+    /**
      * Reach through the RemoteSynchronizedCache backend to the remote (L2) tier's low-level frontend.
      *
      * @return mixed|null

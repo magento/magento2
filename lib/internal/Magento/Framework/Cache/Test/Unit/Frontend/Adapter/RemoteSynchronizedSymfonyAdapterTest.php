@@ -120,6 +120,20 @@ class RemoteSynchronizedSymfonyAdapterTest extends TestCase
     }
 
     /**
+     * getMetadatas() delegates to the backend.
+     */
+    public function testGetMetadatasDelegatesToBackend(): void
+    {
+        $metadata = ['expire' => 123, 'tags' => ['TAG'], 'mtime' => 100];
+        $this->backend->expects($this->once())
+            ->method('getMetadatas')
+            ->with('id')
+            ->willReturn($metadata);
+
+        $this->assertSame($metadata, $this->model->getMetadatas('id'));
+    }
+
+    /**
      * getLowLevelFrontend() returns a memoized low-level frontend wrapper.
      */
     public function testGetLowLevelFrontendReturnsMemoizedWrapper(): void

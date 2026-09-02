@@ -105,6 +105,17 @@ class RemoteSynchronizedSymfonyAdapter implements
     }
 
     /**
+     * Get cache entry metadata (Zend compatibility)
+     *
+     * @param string $id
+     * @return array|false
+     */
+    public function getMetadatas($id)
+    {
+        return $this->backend->getMetadatas($id);
+    }
+
+    /**
      * @inheritDoc
      */
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = []): bool

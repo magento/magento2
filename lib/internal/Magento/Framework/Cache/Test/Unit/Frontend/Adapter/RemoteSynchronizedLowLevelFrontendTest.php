@@ -70,4 +70,61 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
 
         $this->assertFalse($this->model->clean());
     }
+
+    /**
+     * getBackend() must reach through frontend->getBackend()->getRemote()->getLowLevelFrontend()->getBackend().
+     */
+    public function testGetBackendReachesThroughToRemoteLowLevelFrontendBackend(): void
+    {
+        $remoteBackend = new class {
+            public function getIdsMatchingTags(array $tags): array
+            {
+                return ['id1'];
+            }
+        };
+        $remoteLowLevelFrontend = new class ($remoteBackend) {
+            public function __construct(private $backend)
+            {
+            }
+
+            public function getBackend()
+            {
+                return $this->backend;
+            }
+        };
+        $remote = new class ($remoteLowLevelFrontend) {
+            public function __construct(private $lowLevelFrontend)
+            {
+            }
+
+            public function getLowLevelFrontend()
+            {
+                return $this->lowLevelFrontend;
+            }
+        };
+        $backend = new class ($remote) {
+            public function __construct(private $remote)
+            {
+            }
+
+            public function getRemote()
+            {
+                return $this->remote;
+            }
+        };
+
+        $this->frontend->expects($this->once())
+            ->method('getBackend')
+            ->willReturn($backend);
+
+        $this->assertSame($remoteBackend, $this->model->getBackend());
+    }
+
+    /**
+     * getBackend() must return null when the wrapped frontend can't expose a backend.
+     */
+    public function testGetBackendReturnsNullWhenUnavailable(): void
+    {
+        $this->assertNull($this->model->getBackend());
+    }
 }
