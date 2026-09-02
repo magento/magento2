@@ -36,3 +36,5 @@ lib/web/chartjs/Chart.min.js
 
 // TEST
 vendor/magento/magento-coding-standard/Magento2/Tests/Eslint/*
+// ESLint plugin sources (ESM) — not Magento storefront/admin JS under test
+vendor/magento/magento-coding-standard/eslint/**/*.js
