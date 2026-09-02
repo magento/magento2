@@ -82,9 +82,6 @@
         <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$110.70" stepKey="verifyOrderTotalOnPaypalPage"/>
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
-        <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod">
-            <argument name="shippingMethod" value="Free - $0.00"/>
-        </actionGroup>
         <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
