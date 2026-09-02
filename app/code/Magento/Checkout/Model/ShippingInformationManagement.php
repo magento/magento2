@@ -122,11 +122,6 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
     private $searchCriteriaBuilder;
 
     /**
-     * @var AddressRepositoryInterface
-     */
-    private $customerAddressRepository;
-
-    /**
      * Address book of the customer the cart belongs to, loaded once per saveAddressInformation() call.
      *
      * @var CustomerAddressInterface[]|null
@@ -149,7 +144,6 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
      * @param AddressComparatorInterface|null $addressComparator
      * @param QuoteAddressValidationService|null $quoteAddressValidationService
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
-     * @param AddressRepositoryInterface|null $customerAddressRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -167,8 +161,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
         ?ShippingFactory $shippingFactory = null,
         ?AddressComparatorInterface $addressComparator = null,
         ?QuoteAddressValidationService $quoteAddressValidationService = null,
-        ?SearchCriteriaBuilder $searchCriteriaBuilder = null,
-        ?AddressRepositoryInterface $customerAddressRepository = null
+        ?SearchCriteriaBuilder $searchCriteriaBuilder = null
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -191,8 +184,6 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             ->get(QuoteAddressValidationService::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
-        $this->customerAddressRepository = $customerAddressRepository ?: ObjectManager::getInstance()
-            ->get(AddressRepositoryInterface::class);
     }
 
     /**
@@ -478,7 +469,7 @@ class ShippingInformationManagement implements ShippingInformationManagementInte
             ->create();
 
         try {
-            $addresses = $this->customerAddressRepository->getList($searchCriteria)->getItems();
+            $addresses = $this->addressRepository->getList($searchCriteria)->getItems();
         } catch (\Exception $e) {
             // A failed lookup only means the duplicate cannot be detected, so checkout continues.
             $this->logger->error($e);

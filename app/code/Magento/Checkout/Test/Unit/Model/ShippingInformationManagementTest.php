@@ -161,11 +161,6 @@ class ShippingInformationManagementTest extends TestCase
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var AddressRepositoryInterface|MockObject
-     */
-    private $customerAddressRepositoryMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -194,7 +189,6 @@ class ShippingInformationManagementTest extends TestCase
         $this->addressComparatorMock = $this->createMock(AddressComparatorInterface::class);
         $quoteAddressValidationServiceMock = $this->createMock(QuoteAddressValidationService::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->customerAddressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
 
         $this->model = new ShippingInformationManagement(
             $this->paymentMethodManagementMock,
@@ -211,8 +205,7 @@ class ShippingInformationManagementTest extends TestCase
             $this->shippingFactoryMock,
             $this->addressComparatorMock,
             $quoteAddressValidationServiceMock,
-            $this->searchCriteriaBuilderMock,
-            $this->customerAddressRepositoryMock
+            $this->searchCriteriaBuilderMock
         );
     }
 
@@ -697,7 +690,7 @@ class ShippingInformationManagementTest extends TestCase
         $this->searchCriteriaBuilderMock->method('addFilter')->willReturnSelf();
         $this->searchCriteriaBuilderMock->method('create')
             ->willReturn($this->createMock(SearchCriteria::class));
-        $this->customerAddressRepositoryMock->expects($this->once())
+        $this->addressRepositoryMock->expects($this->once())
             ->method('getList')
             ->willReturn($searchResultsMock);
 
