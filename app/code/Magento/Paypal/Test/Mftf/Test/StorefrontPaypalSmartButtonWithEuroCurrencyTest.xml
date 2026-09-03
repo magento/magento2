@@ -27,7 +27,6 @@
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
             <!--Set default merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
