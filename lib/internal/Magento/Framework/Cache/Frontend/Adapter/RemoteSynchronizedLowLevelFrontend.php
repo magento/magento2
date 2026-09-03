@@ -106,7 +106,7 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
     }
 
     /**
-     * Reach through the RemoteSynchronizedCache backend to the remote (L2) tier's low-level frontend.
+     * Reach through the RemoteSynchronizedLowLevelFrontend backend to the remote (L2) tier's low-level frontend.
      *
      * @return mixed|null
      */

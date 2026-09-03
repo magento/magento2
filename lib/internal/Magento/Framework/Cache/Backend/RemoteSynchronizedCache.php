@@ -20,6 +20,8 @@ use Magento\Framework\Cache\StaleCacheNotifierInterface;
  */
 class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache adapter
      *
@@ -461,28 +463,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $this->unlockAll();
     }
 
-    /**
-     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
-     *
-     * @return string
-     */
-    private function generateLockSign()
-    {
-        $sign = \implode(
-            '-',
-            [
-                \getmypid(), \crc32(\gethostname())
-            ]
-        );
-
-        try {
-            $sign .= '-' . \bin2hex(\random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . \uniqid('-uniqid-');
-        }
-
-        return $sign;
-    }
 
     /**
      * Function that notifies configured cache types to be switched off.

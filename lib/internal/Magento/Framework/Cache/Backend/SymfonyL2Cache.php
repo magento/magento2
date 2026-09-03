@@ -21,6 +21,8 @@ use Magento\Framework\Cache\FrontendInterface;
  */
 class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache (L1)
      *
@@ -784,24 +786,6 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         }
 
         return $this->lockAdapter;
-    }
-
-    /**
-     * Generate a unique per-process lock signature (pid-host-random) so lock ownership is unambiguous across servers.
-     *
-     * @return string
-     */
-    private function generateLockSign(): string
-    {
-        $sign = implode('-', [getmypid(), crc32((string)gethostname())]);
-
-        try {
-            $sign .= '-' . bin2hex(random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . uniqid('-uniqid-');
-        }
-
-        return $sign;
     }
 
     /**

@@ -21,6 +21,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
  */
 class RedisTagAdapter implements TagAdapterInterface
 {
+    use RedisScriptEvalTrait;
+
     private const TAG_INDEX_PREFIX = 'cache:tags:';
     private const ALL_IDS_SET = 'cache:all_ids';
     private const REVERSE_INDEX_PREFIX = 'cache:id_tags:';
@@ -97,6 +99,13 @@ for i = 7, #ARGV do
 end
 return 1
 LUA;
+
+    /**
+     * Release the regeneration lock only when the caller still owns it (compare-and-delete).
+     * KEYS[1] = lock key, ARGV[1] = owner token.
+     */
+    private const LUA_RELEASE_LOCK =
+        "if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) else return 0 end";
 
     /**
      * SUNION chunk size
@@ -280,14 +289,6 @@ LUA;
     private ?RedisLuaHelper $luaHelper = null;
 
     /**
-     * Cached SCRIPT LOAD SHAs, keyed by a hash of the script body, so hot paths (every save/prune)
-     * use EVALSHA instead of resending the full script over the wire on each call.
-     *
-     * @var array<string, string>
-     */
-    private array $scriptShas = [];
-
-    /**
      * @var bool
      */
     private bool $useLua;
@@ -381,15 +382,6 @@ LUA;
         return $this->namespace === '' ? '' : $this->namespace . ':';
     }
 
-    /**
-     * Check if using Predis client (vs phpredis extension)
-     *
-     * @return bool
-     */
-    private function isPredisClient(): bool
-    {
-        return $this->redis instanceof PredisClient || $this->redis instanceof OptimizedPredisClient;
-    }
 
     /**
      * Create Redis pipeline compatible with both phpredis and Predis
@@ -965,70 +957,6 @@ LUA;
     }
 
     /**
-     * Run a Lua script, normalizing the phpredis vs Predis EVAL argument order.
-     *
-     * Phpredis: eval($script, $keysAndArgs, $numKeys); Predis: eval($script, $numKeys, ...$keysAndArgs).
-     *
-     * @param string $script
-     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
-     * @param int $numKeys
-     * @return mixed
-     */
-    private function evalScript(string $script, array $keysAndArgs, int $numKeys)
-    {
-        if ($this->isPredisClient()) {
-            return $this->unwrapPredisReply($this->redis->eval($script, $numKeys, ...$keysAndArgs));
-        }
-        return $this->redis->eval($script, $keysAndArgs, $numKeys);
-    }
-
-    /**
-     * Run a cached Lua script by SHA, normalizing the phpredis vs Predis EVALSHA argument order.
-     *
-     * @param string $sha
-     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
-     * @param int $numKeys
-     * @return mixed
-     */
-    private function evalShaScript(string $sha, array $keysAndArgs, int $numKeys)
-    {
-        if ($this->isPredisClient()) {
-            return $this->unwrapPredisReply($this->redis->evalsha($sha, $numKeys, ...$keysAndArgs));
-        }
-        return $this->redis->evalSha($sha, $keysAndArgs, $numKeys);
-    }
-
-    /**
-     * SCRIPT LOAD a Lua script and return its SHA, normalizing the Predis error reply.
-     *
-     * @param string $script
-     * @return mixed SHA string
-     */
-    private function scriptLoad(string $script)
-    {
-        if ($this->isPredisClient()) {
-            return $this->unwrapPredisReply($this->redis->script('load', $script));
-        }
-        return $this->redis->script('load', $script);
-    }
-
-    /**
-     * Turn a Predis error reply (exceptions=false clients) into a thrown exception so callers'
-     *
-     * Try/catch fallbacks fire identically on phpredis and Predis.
-     *
-     * @param mixed $result
-     * @return mixed
-     */
-    private function unwrapPredisReply($result)
-    {
-        if ($result instanceof \Predis\Response\ErrorInterface) {
-            throw new \RuntimeException((string)$result->getMessage());
-        }
-        return $result;
-    }
-
-    /**
      * Uses cursor-based SCAN to safely iterate matching keys in batches, normalizing phpredis and Predis behavior.
      *
      * Avoids blocking KEYS; errors propagate so failed cache sweeps are visible.
@@ -1132,12 +1060,16 @@ LUA;
     public function releaseLock(string $id, string $token): bool
     {
         $key = self::REGEN_LOCK_PREFIX . $this->namespace . $id;
-        $lua = "if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) else return 0 end";
 
         try {
-            $result = $this->isPredisClient()
-                ? $this->redis->eval($lua, 1, $key, $token)
-                : $this->redis->eval($lua, [$key, $token], 1);
+            // Reuse the shared SHA cache (EVALSHA) instead of re-sending the script body each release;
+            // fall back to a direct EVAL only if the SHA is unknown to this Redis (NOSCRIPT).
+            try {
+                $sha = $this->loadLuaScript(self::LUA_RELEASE_LOCK);
+                $result = $this->evalShaScript($sha, [$key, $token], 1);
+            } catch (\Throwable $e) {
+                $result = $this->evalScript(self::LUA_RELEASE_LOCK, [$key, $token], 1);
+            }
 
             return (int)$result === 1;
         } catch (\Throwable $e) {
@@ -1421,26 +1353,4 @@ LUA;
         }
     }
 
-    /**
-     * Load Lua script and return SHA1
-     *
-     * @param string $script Lua script content
-     * @return string SHA1 of the script
-     * @throws \RuntimeException
-     */
-    private function loadLuaScript(string $script): string
-    {
-        $hash = hash('sha256', $script);
-        if (isset($this->scriptShas[$hash])) {
-            return $this->scriptShas[$hash];
-        }
-
-        try {
-            $sha = (string)$this->scriptLoad($script);
-            $this->scriptShas[$hash] = $sha;
-            return $sha;
-        } catch (\Throwable $e) {
-            throw new \RuntimeException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
-        }
-    }
 }
