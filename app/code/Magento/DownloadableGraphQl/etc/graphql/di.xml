@@ -74,4 +74,16 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="downloadable_disable_guest_checkout" xsi:type="string">catalog/downloadable/disable_guest_checkout</item>
+                <item name="downloadable_shareable" xsi:type="string">catalog/downloadable/shareable</item>
+                <item name="downloadable_links_target_new_window" xsi:type="string">catalog/downloadable/links_target_new_window</item>
+                <item name="downloadable_samples_title" xsi:type="string">catalog/downloadable/samples_title</item>
+                <item name="downloadable_links_title" xsi:type="string">catalog/downloadable/links_title</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
