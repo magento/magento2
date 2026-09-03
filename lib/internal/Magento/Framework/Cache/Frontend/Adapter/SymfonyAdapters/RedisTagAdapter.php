@@ -133,12 +133,15 @@ LUA;
     private const LUA_CLEAN_MATCHING_ANY_TAGS = <<<'LUA'
 -- KEYS: array of tags to match (e.g., ["product", "category", "config"])
 -- ARGV[1]: tag prefix (e.g., "cache:tags:")
--- ARGV[2]: namespace prefix (e.g., "69d_")
+-- ARGV[2]: namespace prefix, used for index keys only (e.g., "69d_")
 -- ARGV[3]: chunk size for SUNION operations
+-- ARGV[4]: data key prefix for the actual cache item (e.g., "69d_:"); differs from ARGV[2] by
+--          the trailing ':' separator Symfony's AbstractAdapter appends to a non-empty namespace
 
 local tag_prefix = ARGV[1]
 local namespace = ARGV[2]
 local chunk_size = tonumber(ARGV[3]) or 100
+local data_key_prefix = ARGV[4]
 
 -- Build prefixed tag keys
 local prefixed_tags = {}
@@ -166,9 +169,9 @@ for _, id in ipairs(ids_to_delete) do
     redis.call('DEL', rev)
     redis.call('SREM', 'cache:all_ids', id)
 
-    -- Delete the actual cache item (data key is "<namespace><id>", matching Symfony's
-    -- AbstractAdapter::getId(), which concatenates with no separator)
-    local cache_key = namespace .. id
+    -- Delete the actual cache item. Must use data_key_prefix (not namespace): a non-empty
+    -- namespace is suffixed with ':' at storage time, so the two prefixes differ.
+    local cache_key = data_key_prefix .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
 end
@@ -186,12 +189,15 @@ LUA;
     private const LUA_CLEAN_MATCHING_ANY_TAGS_WITH_SCOPE = <<<'LUA'
 -- KEYS: array of tags to match (e.g., ["product", "category"])
 -- ARGV[1]: tag prefix (e.g., "cache:tags:")
--- ARGV[2]: namespace prefix (e.g., "69d_")
+-- ARGV[2]: namespace prefix, used for index keys only (e.g., "69d_")
 -- ARGV[3]: scope tag (e.g., "FPC")
+-- ARGV[4]: data key prefix for the actual cache item (e.g., "69d_:"); differs from ARGV[2] by
+--          the trailing ':' separator Symfony's AbstractAdapter appends to a non-empty namespace
 
 local tag_prefix = ARGV[1]
 local namespace = ARGV[2]
 local scope_tag = ARGV[3]
+local data_key_prefix = ARGV[4]
 
 -- Build prefixed tag keys
 local prefixed_tags = {}
@@ -243,9 +249,9 @@ for _, id in ipairs(filtered_ids) do
     redis.call('DEL', rev)
     redis.call('SREM', 'cache:all_ids', id)
 
-    -- Delete the actual cache item (data key is "<namespace><id>", matching Symfony's
-    -- AbstractAdapter::getId(), which concatenates with no separator)
-    local cache_key = namespace .. id
+    -- Delete the actual cache item. Must use data_key_prefix (not namespace): a non-empty
+    -- namespace is suffixed with ':' at storage time, so the two prefixes differ.
+    local cache_key = data_key_prefix .. id
     redis.call('DEL', cache_key)
     deleted = deleted + 1
 end
@@ -272,6 +278,14 @@ LUA;
      * @var RedisLuaHelper|null
      */
     private ?RedisLuaHelper $luaHelper = null;
+
+    /**
+     * Cached SCRIPT LOAD SHAs, keyed by a hash of the script body, so hot paths (every save/prune)
+     * use EVALSHA instead of resending the full script over the wire on each call.
+     *
+     * @var array<string, string>
+     */
+    private array $scriptShas = [];
 
     /**
      * @var bool
@@ -926,13 +940,28 @@ LUA;
     /**
      * Runs keyless Lua scripts consistently across phpredis and Predis, normalizing EVAL arguments and error handling.
      *
+     * Uses EVALSHA against a cached SCRIPT LOAD result so hot paths (every save/prune) do not resend
+     * the full script body on each call; falls back to a fresh SCRIPT LOAD if the SHA is unknown to
+     * this Redis server (e.g. after a SCRIPT FLUSH or failover to a replica that never loaded it).
+     *
      * @param string $script
      * @param array $argv
      * @return mixed
      */
     private function evalNoKeys(string $script, array $argv)
     {
-        return $this->evalScript($script, $argv, 0);
+        $hash = hash('sha256', $script);
+        if (isset($this->scriptShas[$hash])) {
+            try {
+                return $this->evalShaScript($this->scriptShas[$hash], $argv, 0);
+            } catch (\Throwable $e) {
+                unset($this->scriptShas[$hash]);
+            }
+        }
+
+        $sha = (string)$this->scriptLoad($script);
+        $this->scriptShas[$hash] = $sha;
+        return $this->evalShaScript($sha, $argv, 0);
     }
 
     /**
@@ -1326,7 +1355,7 @@ LUA;
 
         return $this->luaHelper->cleanByTagConditional(
             $tagKey,
-            $this->namespace,
+            $this->dataKeyPrefix(),
             'expired'
         );
     }
@@ -1344,8 +1373,8 @@ LUA;
         }
 
         // phpredis requires a single `[KEYS..., ARGV...]` array plus key count;
-        // ARGV order: `[tag_prefix, namespace, chunk_size]`.
-        $args = array_merge($tags, [self::TAG_INDEX_PREFIX, $this->namespace, 100]);
+        // ARGV order: `[tag_prefix, namespace, chunk_size, data_key_prefix]`.
+        $args = array_merge($tags, [self::TAG_INDEX_PREFIX, $this->namespace, 100, $this->dataKeyPrefix()]);
 
         try {
             $sha = $this->loadLuaScript(self::LUA_CLEAN_MATCHING_ANY_TAGS);
@@ -1375,8 +1404,8 @@ LUA;
         }
 
         // Single [KEYS..., ARGV...] array + KEY count (see cleanMatchingAnyTagsLua).
-        // ARGV order: [tag_prefix, namespace, scope_tag].
-        $args = array_merge($tags, [self::TAG_INDEX_PREFIX, $this->namespace, $scopeTag]);
+        // ARGV order: [tag_prefix, namespace, scope_tag, data_key_prefix].
+        $args = array_merge($tags, [self::TAG_INDEX_PREFIX, $this->namespace, $scopeTag, $this->dataKeyPrefix()]);
 
         try {
             $sha = $this->loadLuaScript(self::LUA_CLEAN_MATCHING_ANY_TAGS_WITH_SCOPE);
@@ -1401,8 +1430,15 @@ LUA;
      */
     private function loadLuaScript(string $script): string
     {
+        $hash = hash('sha256', $script);
+        if (isset($this->scriptShas[$hash])) {
+            return $this->scriptShas[$hash];
+        }
+
         try {
-            return (string)$this->scriptLoad($script);
+            $sha = (string)$this->scriptLoad($script);
+            $this->scriptShas[$hash] = $sha;
+            return $sha;
         } catch (\Throwable $e) {
             throw new \RuntimeException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
         }

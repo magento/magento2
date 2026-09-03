@@ -43,7 +43,8 @@ class RedisLuaHelper
      */
     private const SCRIPT_CLEAN_BY_TAG_CONDITIONAL = <<<'LUA'
 -- KEYS[1]: tag set key (e.g., "cache:tags:69d_config")
--- KEYS[2]: namespace prefix (e.g., "69d_")
+-- KEYS[2]: data key prefix for the actual cache item (e.g., "69d_:"); a non-empty namespace
+--          must be suffixed with ':' here to match the real stored key (see PHP dataKeyPrefix())
 -- ARGV[1]: current timestamp (for TTL checks)
 -- ARGV[2]: condition type ("expired"|"all")
 

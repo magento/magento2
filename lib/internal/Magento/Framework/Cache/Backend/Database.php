@@ -234,7 +234,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                     "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE {$dataCol}=VALUES({$dataCol}), " .
                     "{$updateCol}=VALUES({$updateCol}), {$expireCol}=VALUES({$expireCol})";
 
-                $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
+                $result = (bool)$connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
             }
             if ($result) {
                 $result = $this->_saveTags($id, $tags);
@@ -282,6 +282,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
+        // Default to false so a reentrant call (infinite_loop_flag already set) returns a
+        // well-typed bool instead of an undefined variable.
+        $result = false;
         if (!$this->_options['infinite_loop_flag']) {
             $this->_options['infinite_loop_flag'] = true;
             $connection = $this->_getConnection();

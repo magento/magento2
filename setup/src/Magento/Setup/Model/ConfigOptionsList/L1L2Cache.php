@@ -21,9 +21,9 @@ class L1L2Cache
 
     public const CACHE_HOST = '127.0.0.1';
 
-    public function applyZend(ConfigData $configData, array $options): void
+    public function applyZend(ConfigData $configData, array $options, string $idPrefix): void
     {
-        $preloadKeys = $this->getPreloadKeys($options);
+        $preloadKeys = $this->getPreloadKeys($idPrefix);
         $remote = [
             'persistent' => 0,
             'server' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER, self::CACHE_HOST),
@@ -35,7 +35,7 @@ class L1L2Cache
         ];
 
         $frontend = [
-            'id_prefix' => $options[Cache::INPUT_KEY_CACHE_ID_PREFIX] ?? '69d_',
+            'id_prefix' => $idPrefix,
             'backend' => \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
             'backend_options' => [
                 'remote_backend' => \Magento\Framework\Cache\Backend\Valkey::class,
@@ -60,9 +60,9 @@ class L1L2Cache
         }
     }
 
-    public function applySymfony(ConfigData $configData, array $options): void
+    public function applySymfony(ConfigData $configData, array $options, string $idPrefix): void
     {
-        $preloadKeys = $this->getPreloadKeys($options, ':hash');
+        $preloadKeys = $this->getPreloadKeys($idPrefix, ':hash');
         $remote = [
             'server' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_SERVER, self::CACHE_HOST),
             'database' => $this->value($options, Cache::INPUT_KEY_CACHE_BACKEND_REDIS_DATABASE, '5'),
@@ -77,7 +77,7 @@ class L1L2Cache
         ];
 
         $frontend = [
-            'id_prefix' => $options[Cache::INPUT_KEY_CACHE_ID_PREFIX] ?? '69d_',
+            'id_prefix' => $idPrefix,
             'backend' => 'symfony_l2',
             'backend_options' => [
                 'remote_backend' => 'valkey',
@@ -113,12 +113,10 @@ class L1L2Cache
      * Build preload keys using the same prefix configured for the frontend.
      * Zend stores the plain IDs; Symfony stores the tag-hash marker suffix.
      */
-    private function getPreloadKeys(array $options, string $suffix = ''): array
+    private function getPreloadKeys(string $idPrefix, string $suffix = ''): array
     {
-        $prefix = (string)($options[Cache::INPUT_KEY_CACHE_ID_PREFIX] ?? '69d_');
-
         return array_map(
-            static fn (string $key): string => $prefix . $key . $suffix,
+            static fn (string $key): string => $idPrefix . $key . $suffix,
             self::PRELOAD_KEY_NAMES
         );
     }

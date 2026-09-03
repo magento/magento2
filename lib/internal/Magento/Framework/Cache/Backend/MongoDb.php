@@ -217,7 +217,19 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
         $time = time();
         $condition = ['_id' => $this->_quoteString($cacheId), 'expire' => ['$gt' => $time]];
         $update = ['$set' => ['mtime' => $time], '$inc' => ['expire' => (int)$extraLifetime]];
-        return $this->_getCollection()->update($condition, $update);
+        return $this->_toBoolResult($this->_getCollection()->update($condition, $update));
+    }
+
+    /**
+     * Normalize a MongoDB write result (a write-concern array, or a plain bool for
+     * unacknowledged writes) into the strict bool this backend's contract documents.
+     *
+     * @param mixed $result
+     * @return bool
+     */
+    private function _toBoolResult($result): bool
+    {
+        return is_array($result) ? (bool)($result['ok'] ?? false) : (bool)$result;
     }
 
     /**
@@ -314,7 +326,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
             'mtime' => $time,
             'expire' => $expire,
         ];
-        return $this->_getCollection()->save($document);
+        return $this->_toBoolResult($this->_getCollection()->save($document));
     }
 
     /**
@@ -325,7 +337,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
      */
     public function remove($cacheId)
     {
-        return $this->_getCollection()->remove(['_id' => $this->_quoteString($cacheId)]);
+        return $this->_toBoolResult($this->_getCollection()->remove(['_id' => $this->_quoteString($cacheId)]));
     }
 
     /**
@@ -350,8 +362,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
         $result = false;
         switch ($mode) {
             case \Zend_Cache::CLEANING_MODE_ALL:
-                $result = $this->_getCollection()->drop();
-                $result = (bool)$result['ok'];
+                $result = $this->_toBoolResult($this->_getCollection()->drop());
                 break;
             case \Zend_Cache::CLEANING_MODE_OLD:
                 $query = ['expire' => ['$ne' => self::EXPIRATION_TIME_INFINITE, '$lte' => time()]];
@@ -365,7 +376,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
                 \Zend_Cache::throwException('Unsupported cleaning mode: ' . $mode);
         }
         if (!empty($query)) {
-            $result = $this->_getCollection()->remove($query);
+            $result = $this->_toBoolResult($this->_getCollection()->remove($query));
         }
 
         return $result;

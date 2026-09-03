@@ -338,19 +338,24 @@ class Cache implements ConfigOptionsListInterface
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
-        if (isset($options[self::INPUT_KEY_CACHE_ID_PREFIX])) {
-            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $options[self::INPUT_KEY_CACHE_ID_PREFIX]);
-        } elseif (!$deploymentConfig->get(self::CONFIG_PATH_CACHE_ID_PREFIX)) {
-            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $this->generateCachePrefix());
+        $idPrefix = $options[self::INPUT_KEY_CACHE_ID_PREFIX] ?? null;
+        if ($idPrefix !== null) {
+            $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $idPrefix);
+        } else {
+            $idPrefix = $deploymentConfig->get(self::CONFIG_PATH_CACHE_ID_PREFIX);
+            if (!$idPrefix) {
+                $idPrefix = $this->generateCachePrefix();
+                $configData->set(self::CONFIG_PATH_CACHE_ID_PREFIX, $idPrefix);
+            }
         }
 
         if (isset($options[self::INPUT_KEY_CACHE_BACKEND])) {
             if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_ZEND_L1_L2) {
-                $this->l1L2Cache->applyZend($configData, $options);
+                $this->l1L2Cache->applyZend($configData, $options, $idPrefix);
                 return $configData;
             }
             if ($options[self::INPUT_KEY_CACHE_BACKEND] === self::INPUT_VALUE_CACHE_SYMFONY_L1_L2) {
-                $this->l1L2Cache->applySymfony($configData, $options);
+                $this->l1L2Cache->applySymfony($configData, $options, $idPrefix);
                 return $configData;
             }
             if (in_array($options[self::INPUT_KEY_CACHE_BACKEND], [
@@ -421,12 +426,15 @@ class Cache implements ConfigOptionsListInterface
         $selectedBackend = $options[self::INPUT_KEY_CACHE_BACKEND] ?? null;
         $currentBackend = $deploymentConfig->get(Cache::CONFIG_PATH_CACHE_BACKEND);
 
-        // Validate if selected backend is Redis or Valkey
+        // Validate if selected backend is Redis or Valkey (or an L1/L2 profile, which always
+        // connects to a Redis-compatible L2 server regardless of the L1 tier chosen)
         if (in_array($selectedBackend, [
             self::INPUT_VALUE_CACHE_REDIS,
             self::INPUT_VALUE_CACHE_VALKEY,
             self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
             self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
+            self::INPUT_VALUE_CACHE_ZEND_L1_L2,
+            self::INPUT_VALUE_CACHE_SYMFONY_L1_L2,
         ], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
                 $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
