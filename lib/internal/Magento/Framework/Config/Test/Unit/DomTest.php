@@ -131,6 +131,13 @@ class DomTest extends TestCase
                 'xsi:type',
                 'attributes_merged.xml',
             ],
+            'numeric zero id attribute value preserves existing nodes (issue #36861)' => [
+                'numeric_id_zero.xml',
+                'numeric_id_zero_new.xml',
+                ['/root/item' => 'name'],
+                null,
+                'numeric_id_zero_merged.xml',
+            ],
         ];
     }
 
