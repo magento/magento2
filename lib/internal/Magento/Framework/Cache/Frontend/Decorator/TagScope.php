@@ -65,15 +65,10 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
      */
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
-        // NOT_MATCHING_TAG has no safe implementation here: adding the scope tag to the exclusion
-        // list makes it match nothing (every entry in scope carries the scope tag), while forwarding
-        // the caller's tags unmodified drops scope enforcement entirely and can delete entries
-        // belonging to other cache types sharing this backend. Refuse it, matching the legacy Zend
-        // adapter's own prohibition of this mode (see Frontend\Adapter\Zend::clean()).
+        // The scope tag is present on every entry. Do not add it to the exclusion list for
+        // NOT_MATCHING_TAG, otherwise the operation would match nothing and silently no-op.
         if ($mode == CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG) {
-            throw new \InvalidArgumentException(
-                "Tag-scoped cache frontend does not support the cleaning mode '{$mode}'."
-            );
+            return parent::clean($mode, $tags);
         }
 
         if ($mode == CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG) {
