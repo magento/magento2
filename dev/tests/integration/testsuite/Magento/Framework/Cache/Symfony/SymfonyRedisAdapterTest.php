@@ -603,7 +603,15 @@ class SymfonyRedisAdapterTest extends TestCase
         $this->cache->save('data3', $id3, ['tagZ']);
 
         // Clean items NOT matching BOTH tagX AND tagY
-        $cleanResult = $this->cache->clean(CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tagX', 'tagY']);
+        //
+        // Exercised via getLowLevelFrontend() to bypass the TagScope decorator that wraps
+        // $this->cache in real Magento usage (see app/etc/di.xml): TagScope refuses this mode
+        // because it has no safe scope-aware implementation. This test targets the underlying
+        // Redis adapter's SDIFF-based capability, not TagScope.
+        $cleanResult = $this->cache->getLowLevelFrontend()->clean(
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            ['tagX', 'tagY']
+        );
         $this->assertTrue($cleanResult, 'Clean not matching tag should succeed');
 
         // id1 should remain (has both tags)

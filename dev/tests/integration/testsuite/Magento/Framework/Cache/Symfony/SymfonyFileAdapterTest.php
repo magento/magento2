@@ -292,7 +292,17 @@ class SymfonyFileAdapterTest extends TestCase
 
         // Clean items NOT matching ALL of [tagA, tagB]
         // This means: remove items that don't have BOTH tagA AND tagB
-        $cleanResult = $this->cache->clean(CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tagA', 'tagB']);
+        //
+        // NOT_MATCHING_TAG is exercised via getLowLevelFrontend(), which bypasses the TagScope
+        // decorator that wraps $this->cache in real Magento usage (see app/etc/di.xml). TagScope
+        // refuses this mode because it has no safe scope-aware implementation: forwarding tags
+        // unmodified would ignore scope isolation, and adding the scope tag to the exclusion list
+        // would match nothing. This test targets the underlying Symfony adapter's raw capability,
+        // not TagScope, so it talks to the adapter directly.
+        $cleanResult = $this->cache->getLowLevelFrontend()->clean(
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            ['tagA', 'tagB']
+        );
         $this->assertTrue($cleanResult, 'Clean not matching tag should succeed');
 
         // id1 should still exist (has both tagA and tagB)
