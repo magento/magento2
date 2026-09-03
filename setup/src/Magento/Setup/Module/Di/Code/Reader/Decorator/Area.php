@@ -11,30 +11,18 @@ use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Interception\PluginListGenerator;
 
-class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
+readonly class Area implements \Magento\Setup\Module\Di\Code\Reader\ClassesScannerInterface
 {
-    /**
-     * @var ClassReaderDecorator
-     */
-    private $classReaderDecorator;
-
-    /**
-     * @var ClassesScanner
-     */
-    private $classesScanner;
-
     /**
      * @param ClassesScanner $classesScanner
      * @param ClassReaderDecorator $classReaderDecorator
      * @param PluginListGenerator $pluginListGenerator
      */
     public function __construct(
-        ClassesScanner $classesScanner,
-        ClassReaderDecorator $classReaderDecorator,
-        private readonly PluginListGenerator $pluginListGenerator
+        private ClassesScanner $classesScanner,
+        private ClassReaderDecorator $classReaderDecorator,
+        private PluginListGenerator $pluginListGenerator
     ) {
-        $this->classReaderDecorator = $classReaderDecorator;
-        $this->classesScanner = $classesScanner;
     }
 
     /**

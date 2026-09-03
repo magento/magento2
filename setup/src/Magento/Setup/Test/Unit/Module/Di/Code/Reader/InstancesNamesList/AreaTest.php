@@ -55,9 +55,6 @@ class AreaTest extends TestCase
             ->onlyMethods(['isOrphanedPlugin'])
             ->getMock();
 
-        // Default: treat no classes as orphaned plugins (normal resolution)
-        $this->pluginListGeneratorMock->method('isOrphanedPlugin')->willReturn(false);
-
         $this->model = new Area(
             $this->classesScannerMock,
             $this->classReaderDecoratorMock,
@@ -113,25 +110,13 @@ class AreaTest extends TestCase
             ->with($normalClass)
             ->willReturn(['arg1' => 'NameSpace1\class5']);
 
-        // Configure the generator mock to report the plugin as orphaned
-        $this->pluginListGeneratorMock = $this->getMockBuilder(PluginListGenerator::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['isOrphanedPlugin'])
-            ->getMock();
         $this->pluginListGeneratorMock->method('isOrphanedPlugin')
             ->willReturnMap([
                 [$normalClass, false],
                 [$orphanedPluginClass, true],
             ]);
 
-        // Re-instantiate with the specific mock for this test
-        $model = new Area(
-            $this->classesScannerMock,
-            $this->classReaderDecoratorMock,
-            $this->pluginListGeneratorMock
-        );
-
-        $result = $model->getList($path);
+        $result = $this->model->getList($path);
 
         $this->assertArrayHasKey($normalClass, $result);
         $this->assertArrayNotHasKey($orphanedPluginClass, $result);
