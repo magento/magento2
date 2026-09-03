@@ -234,7 +234,10 @@ class Factory
                     },
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            // Catches \Error too (e.g. a misconfigured/unresolvable backend class name), not just
+            // \Exception, so a bad legacy backend config degrades to the default file cache instead
+            // of fataling the whole request during cache bootstrap.
             return $this->createCacheWithDefaultOptions($options);
         }
     }
