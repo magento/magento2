@@ -112,5 +112,84 @@ define([
                 expect(sidebar._hideItemButton).toHaveBeenCalledWith(elem);
             });
         });
+
+        describe('Check _showItemButton uses relative sibling lookup.', function () {
+            it('Shows sibling update button when qty is valid', function () {
+                var container = $('<div></div>'),
+                    qtyInput = $('<input class="cart-item-qty">')
+                        .data('cart-item', 5)
+                        .data('item-qty', 1)
+                        .val('2'),
+                    updateButton = $('<button class="update-cart-item">').hide();
+
+                container.append(qtyInput).append(updateButton);
+
+                sidebar.options = sidebar.options || {};
+                sidebar.options.item = {
+                    qty: ':input.cart-item-qty',
+                    button: ':button.update-cart-item'
+                };
+
+                spyOn($.fn, 'show');
+                sidebar._showItemButton(qtyInput);
+
+                expect($.fn.show).toHaveBeenCalled();
+            });
+        });
+
+        describe('Check _hideItemButton uses relative sibling lookup.', function () {
+            it('Hides sibling update button', function () {
+                var container = $('<div></div>'),
+                    qtyInput = $('<input class="cart-item-qty">')
+                        .data('cart-item', 5),
+                    updateButton = $('<button class="update-cart-item">');
+
+                container.append(qtyInput).append(updateButton);
+
+                sidebar.options = sidebar.options || {};
+                sidebar.options.item = {
+                    qty: ':input.cart-item-qty',
+                    button: ':button.update-cart-item'
+                };
+
+                spyOn($.fn, 'hide');
+                sidebar._hideItemButton(qtyInput);
+
+                expect($.fn.hide).toHaveBeenCalled();
+            });
+        });
+
+        describe('Check _updateItemQty uses relative sibling lookup.', function () {
+            it('Reads qty from sibling input', function () {
+                var container = $('<div></div>'),
+                    updateButton = $('<button class="update-cart-item">')
+                        .data('cart-item', 5),
+                    qtyInput = $('<input class="cart-item-qty">').val('3');
+
+                container.append(updateButton).append(qtyInput);
+
+                sidebar.options = sidebar.options || {};
+                sidebar.options.item = {
+                    qty: ':input.cart-item-qty',
+                    button: ':button.update-cart-item'
+                };
+                sidebar.options.url = {
+                    update: 'http://example.com/updateItemQty'
+                };
+
+                spyOn(sidebar, '_ajax');
+                sidebar._updateItemQty(updateButton);
+
+                expect(sidebar._ajax).toHaveBeenCalledWith(
+                    'http://example.com/updateItemQty',
+                    jasmine.objectContaining({
+                        'item_id': 5,
+                        'item_qty': '3'
+                    }),
+                    updateButton,
+                    sidebar._updateItemQtyAfter
+                );
+            });
+        });
     });
 });

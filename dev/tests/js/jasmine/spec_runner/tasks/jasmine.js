@@ -3,12 +3,24 @@
  * All Rights Reserved.
  */
 
-'use strict';
-
 var tasks = {},
     _ = require('underscore');
 
+function renderTemplate(data, template) {
+    'use strict';
+
+    return _.template(template)(data);
+}
+
+function cutJsExtension(filePath) {
+    'use strict';
+
+    return filePath.replace(/\.js$/, '');
+}
+
 function init(config) {
+    'use strict';
+
     var grunt  = require('grunt'),
         expand = grunt.file.expand.bind(grunt.file),
         staticMode = 'quick',
@@ -53,6 +65,7 @@ function init(config) {
         tasks[themeName] = {
             src: configs,
             options: {
+                version: '5.1.2',
                 host: host,
                 template: render(files.template),
                 templateOptions: {
@@ -60,7 +73,7 @@ function init(config) {
                 },
                 vendor: requireJs,
                 junit: {
-                    path: "var/log/js-unit/",
+                    path: 'var/log/js-unit/',
                     consolidate: true
                 },
 
@@ -77,15 +90,9 @@ function init(config) {
     });
 }
 
-function renderTemplate(data, template) {
-    return _.template(template)(data);
-}
-
-function cutJsExtension(path) {
-    return path.replace(/\.js$/, '');
-}
-
 function getTasks() {
+    'use strict';
+
     return tasks;
 }
 

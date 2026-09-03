@@ -18,7 +18,10 @@
         <waitForElementClickable selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="waitForChangeShippingAddressButton"/>
         <click selector="{{PayPalPaymentSection.changeShippingAddressButton}}" stepKey="clickChangeShippingAddressButton"/>
         <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="waitForAddressDropdown"/>
-        <click selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="selectShippingAddress"/>
+        <scrollTo selector="{{PayPalPaymentSection.shippingAddressDropdown(address.ShippingAddress)}}" stepKey="scrollToShippingAddressRow"/>
+        <waitForElementClickable selector="{{PayPalPaymentSection.shippingAddressRadioButton(address.ShippingAddress)}}" stepKey="waitForAddressRadioButton"/>
+        <!-- PayPal's fixed bottom "Pay" bar overlaps this row in the viewport, so a native click is intercepted. Dispatch the click via JS. -->
+        <executeJS function="document.evaluate(&quot;{{PayPalPaymentSection.shippingAddressRadioButton(address.ShippingAddress)}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click();" stepKey="selectShippingAddress"/>
     </actionGroup>
 </actionGroups>
 

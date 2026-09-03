@@ -74,9 +74,9 @@ class StoreManager implements
     protected $currentStoreId = null;
 
     /**
-     * Flag that shows that system has only one store view
+     * Flag that shows that system has only one store view; null is used as the cache sentinel.
      *
-     * @var bool
+     * @var bool|null
      */
     protected $_hasSingleStore;
 
@@ -137,8 +137,11 @@ class StoreManager implements
      */
     public function hasSingleStore()
     {
-        // TODO: MAGETWO-39902 add cache, move value to consts
-        return $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        if ($this->_hasSingleStore === null) {
+            $this->_hasSingleStore = $this->isSingleStoreAllowed && count($this->getStores(true)) < 3;
+        }
+
+        return $this->_hasSingleStore;
     }
 
     /**
@@ -237,6 +240,7 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
+        $this->_hasSingleStore = null;
         $this->cache->clean(
             CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
             [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
@@ -340,5 +344,6 @@ class StoreManager implements
     public function _resetState(): void
     {
         $this->currentStoreId = null;
+        $this->_hasSingleStore = null;
     }
 }

@@ -9,9 +9,9 @@
   },
   "homepage": "https://magento.com/",
   "devDependencies": {
-    "eslint-formatter-junit": "~8.40.0",
-    "glob": "~11.0.0",
-    "grunt": "~1.6.1",
+    "eslint-formatter-junit": "~9.0.1",
+    "glob": "~13.0.0",
+    "grunt": "~1.6.2",
     "grunt-banner": "~0.6.0",
     "grunt-continue": "~0.1.0",
     "grunt-contrib-clean": "~2.0.1",
@@ -21,66 +21,88 @@
     "grunt-contrib-jasmine": "~4.0.0",
     "grunt-contrib-less": "~3.0.0",
     "grunt-contrib-watch": "~1.1.0",
-    "grunt-eslint": "~25.0.0",
+    "grunt-eslint": "~26.0.0",
     "grunt-exec": "~3.0.0",
     "grunt-replace": "~2.0.2",
     "grunt-styledocco": "~0.3.0",
     "grunt-template-jasmine-requirejs": "~0.2.3",
     "grunt-text-replace": "~0.4.0",
-    "imagemin-svgo": "~9.0.0",
-    "less": "4.6.6",
+    "imagemin-svgo": "~12.0.0",
+    "less": "~4.6.7",
     "load-grunt-config": "~4.0.1",
-    "morgan": "~1.10.0",
+    "morgan": "~1.11.0",
     "node-minify": "~3.6.0",
     "path": "~0.12.7",
-    "serve-static": "~1.16.2",
+    "serve-static": "~2.2.1",
     "squirejs": "~0.2.1",
     "strip-comments": "~2.0.1",
     "time-grunt": "~2.0.0",
-    "underscore": "1.13.7"
+    "underscore": "~1.13.8"
   },
   "overrides": {
     "styledocco": {
-      "uglify-js": "~3.4.9",
-      "marked": "~5.1.0",
-      "clean-css": "~5.3.2"
+      "uglify-js": "~3.19.3",
+      "marked": "~18.0.5",
+      "clean-css": "~5.3.3"
     },
     "mkdirp": {
-      "minimist": "~1.2.6"
+      "minimist": "~1.2.8"
     },
     "optimist": {
-      "minimist": "~1.2.6"
+      "minimist": "~1.2.8"
     },
     "meow": {
-      "trim-newlines": "~3.0.1"
+      "trim-newlines": "~5.0.0"
     },
     "node-minify": {
-      "terser": "~5.18.0"
+      "terser": "~5.48.0",
+      "babel-core": "npm:empty-npm-package@1.0.0",
+      "html-minifier": "npm:empty-npm-package@1.0.0"
     },
     "grunt-contrib-imagemin": {
-      "css-select": "~5.1.0",
-      "nth-check": "~2.1.1"
+      "css-select": "~7.0.0",
+      "nth-check": "~3.0.1"
     },
     "bin-version-check": {
-      "semver-regex": "~3.1.4"
+      "semver-regex": "~4.0.5"
     },
     "cacheable-request": {
-      "http-cache-semantics": "~4.1.1"
+      "http-cache-semantics": "~4.2.0"
     },
     "babel-core": {
       "json5": "~2.2.3"
     },
     "svgo": {
-      "js-yaml": "~4.1.0"
+      "js-yaml": "~4.3.0"
+    },
+    "grunt": {
+      "js-yaml": "~4.3.0"
+    },
+    "load-grunt-config": {
+      "js-yaml": "~4.3.0",
+      "lodash": "~4.18.1"
     },
     "css-select": {
-      "nth-check": "~2.1.1"
+      "nth-check": "~3.0.1"
     },
     "latest-version": {
-      "package-json": "~7.0.0"
+      "package-json": "~10.0.1"
     },
     "fast-glob": {
       "glob-parent": "~6.0.2"
+    },
+    "cross-spawn": "~7.0.6",
+    "decompress": "npm:@xhmikosr/decompress@^11.1.3",
+    "is-svg": "~6.1.0",
+    "uuid": "~14.0.1",
+    "tempfile": "~6.0.1",
+    "braces": "~3.0.3",
+    "micromatch": "~4.0.8",
+    "got": "~11.8.5",
+    "grunt-contrib-jasmine": {
+      "grunt-eslint": "~26.0.0",
+      "puppeteer": "^25.0.0",
+      "pacote": "^22.0.0"
     }
   },
   "dependencies": {
