@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Magento\ProductAlert\Block\Customer\Link"
+                   name="customer-account-navigation-product-alerts-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">productalert/customer/index</argument>
+                    <argument name="label" xsi:type="string" translate="true">My Product Alerts</argument>
+                    <argument name="sortOrder" xsi:type="number">45</argument>
+                    <argument name="alert_type" xsi:type="string">all</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerProductAlertsDisabledNavTest">
+        <annotations>
+            <features value="ProductAlert"/>
+            <stories value="Customer product alerts account page"/>
+            <title value="My Product Alerts nav hidden when both alert types disabled"/>
+            <description value="When both price and stock alerts are disabled, My Product Alerts is not in account navigation"/>
+            <severity value="AVERAGE"/>
+            <group value="product_alert"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set catalog/productalert/allow_price 0" stepKey="disablePrice"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 0" stepKey="disableStock"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="openAccountDashboard"/>
+        <waitForPageLoad stepKey="waitAccount"/>
+        <actionGroup ref="StorefrontAssertCustomerSidebarItemIsNotPresentActionGroup" stepKey="assertProductAlertsNavMissing">
+            <argument name="itemName" value="My Product Alerts"/>
+        </actionGroup>
+    </test>
+</tests>
