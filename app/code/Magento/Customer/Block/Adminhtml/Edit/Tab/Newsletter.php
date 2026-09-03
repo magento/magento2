@@ -316,18 +316,76 @@ class Newsletter extends Generic implements TabInterface
         if ($customer === null) {
             return [];
         }
+        $storeToWebsite = [];
+        $storeCountByWebsite = [];
+        foreach ($this->_storeManager->getStores() as $store) {
+            $websiteId = (int)$store->getWebsiteId();
+            $storeToWebsite[(int)$store->getId()] = $websiteId;
+            $storeCountByWebsite[$websiteId] = ($storeCountByWebsite[$websiteId] ?? 0) + 1;
+        }
+        $subscriberRowByWebsite = $this->getSubscriberRowsByWebsite(
+            (int)$customer->getId(),
+            $storeToWebsite
+        );
 
         $subscriptions = [];
         foreach ($this->_storeManager->getWebsites() as $website) {
+            $websiteId = (int)$website->getId();
             /** Skip websites without stores */
-            if ($website->getStoresCount() === 0) {
+            if (($storeCountByWebsite[$websiteId] ?? 0) === 0) {
                 continue;
             }
-            $websiteId = (int)$website->getId();
-            $subscriptions[$websiteId] = $this->retrieveSubscriberData($customer, $websiteId);
+            $subscriptions[$websiteId] = $this->buildSubscriberData(
+                $websiteId,
+                $subscriberRowByWebsite[$websiteId] ?? []
+            );
         }
 
         return $subscriptions;
+    }
+
+    /**
+     * Map each website to the customer's first matching subscription row
+     *
+     * @param int $customerId
+     * @param array $storeToWebsite
+     * @return array
+     */
+    private function getSubscriberRowsByWebsite(int $customerId, array $storeToWebsite): array
+    {
+        /** @var \Magento\Newsletter\Model\ResourceModel\Subscriber $resource */
+        $resource = $this->_subscriberFactory->create()->getResource();
+        $rows = $resource->loadByCustomerAcrossWebsites($customerId);
+        $rowByWebsite = [];
+        foreach ($rows as $row) {
+            $websiteId = $storeToWebsite[(int)$row['store_id']] ?? null;
+            if ($websiteId !== null && !isset($rowByWebsite[$websiteId])) {
+                $rowByWebsite[$websiteId] = $row;
+            }
+        }
+        return $rowByWebsite;
+    }
+
+    /**
+     * Build the subscriber data array for a website from a pre-loaded row
+     *
+     * @param int $websiteId
+     * @param array $subscriberRow
+     * @return array
+     */
+    private function buildSubscriberData(int $websiteId, array $subscriberRow): array
+    {
+        $subscriber = $this->_subscriberFactory->create();
+        $subscriber->addData($subscriberRow);
+        $subscriber->setOrigData();
+        $subscriberData = $subscriber->getData();
+        $subscriberData['last_updated'] = $this->getSubscriberStatusChangeDate($subscriber);
+        $subscriberData['website_id'] = $websiteId;
+        $subscriberData['website_name'] = $this->systemStore->getWebsiteName($websiteId);
+        $subscriberData['status'] = $subscriber->isSubscribed();
+        $subscriberData['store_options'] = $this->systemStore->getStoreOptionsTree(false, [], [], [$websiteId]);
+
+        return $subscriberData;
     }
 
     /**
@@ -340,15 +398,7 @@ class Newsletter extends Generic implements TabInterface
     private function retrieveSubscriberData(CustomerInterface $customer, int $websiteId): array
     {
         $subscriber = $this->_subscriberFactory->create()->loadByCustomer((int)$customer->getId(), $websiteId);
-        $storeOptions = $this->systemStore->getStoreOptionsTree(false, [], [], [$websiteId]);
-        $subscriberData = $subscriber->getData();
-        $subscriberData['last_updated'] = $this->getSubscriberStatusChangeDate($subscriber);
-        $subscriberData['website_id'] = $websiteId;
-        $subscriberData['website_name'] = $this->systemStore->getWebsiteName($websiteId);
-        $subscriberData['status'] = $subscriber->isSubscribed();
-        $subscriberData['store_options'] = $storeOptions;
-
-        return $subscriberData;
+        return $this->buildSubscriberData($websiteId, $subscriber->getData());
     }
 
     /**
