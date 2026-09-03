@@ -382,7 +382,6 @@ LUA;
         return $this->namespace === '' ? '' : $this->namespace . ':';
     }
 
-
     /**
      * Create Redis pipeline compatible with both phpredis and Predis
      *
@@ -1352,5 +1351,4 @@ LUA;
             }
         }
     }
-
 }

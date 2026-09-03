@@ -154,6 +154,7 @@ class Cache implements ConfigOptionsListInterface
      * Construct the Cache ConfigOptionsList
      *
      * @param RedisConnectionValidator $redisValidator
+     * @param L1L2Cache $l1L2Cache
      */
     public function __construct(RedisConnectionValidator $redisValidator, L1L2Cache $l1L2Cache)
     {
@@ -334,6 +335,8 @@ class Cache implements ConfigOptionsListInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {

@@ -38,8 +38,7 @@ trait RedisScriptEvalTrait
     }
 
     /**
-     * Turn a Predis error reply (exceptions=false clients) into a thrown exception so callers'
-     * try/catch fallbacks fire identically on phpredis and Predis.
+     * Convert Predis error replies into exceptions for consistent phpredis and Predis fallbacks.
      *
      * @param mixed $result
      * @return mixed

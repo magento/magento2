@@ -463,7 +463,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $this->unlockAll();
     }
 
-
     /**
      * Function that notifies configured cache types to be switched off.
      */

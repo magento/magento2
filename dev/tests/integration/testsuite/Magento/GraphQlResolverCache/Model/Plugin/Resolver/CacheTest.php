@@ -124,7 +124,7 @@ class CacheTest extends TestCase
      */
     public function testCachingNotSkippedWhenKeysOk(): void
     {
-        // Allow at most 1 warning - may occur due to test environment specifics  
+        // Allow at most 1 warning - may occur due to test environment specifics
         $this->loggerMock->expects($this->atMost(1))
             ->method('warning');
 

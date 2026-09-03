@@ -221,8 +221,7 @@ class MongoDb extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extende
     }
 
     /**
-     * Normalize a MongoDB write result (a write-concern array, or a plain bool for
-     * unacknowledged writes) into the strict bool this backend's contract documents.
+     * Normalize a MongoDB write result into the strict bool required by this backend's contract.
      *
      * @param mixed $result
      * @return bool

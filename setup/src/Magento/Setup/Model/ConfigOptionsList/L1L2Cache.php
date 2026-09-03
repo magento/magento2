@@ -21,6 +21,14 @@ class L1L2Cache
 
     public const CACHE_HOST = '127.0.0.1';
 
+    /**
+     * Apply the legacy Zend Redis L1/L2 cache configuration.
+     *
+     * @param ConfigData $configData
+     * @param array $options
+     * @param string $idPrefix
+     * @return void
+     */
     public function applyZend(ConfigData $configData, array $options, string $idPrefix): void
     {
         $preloadKeys = $this->getPreloadKeys($idPrefix);
@@ -55,11 +63,27 @@ class L1L2Cache
         // 'page_cache' frontend. Routing it to 'stale_cache_enabled' would move FPC onto the shared
         // default-cache L2 (same Redis db), where default-cache tag invalidations collide with FPC
         // entries and drop unrelated pages. Keep this list aligned with applySymfony().
-        foreach (['layout', 'block_html', 'reflection', 'config_integration', 'config_integration_api', 'translate'] as $type) {
+        $staleCacheTypes = [
+            'layout',
+            'block_html',
+            'reflection',
+            'config_integration',
+            'config_integration_api',
+            'translate',
+        ];
+        foreach ($staleCacheTypes as $type) {
             $configData->set('cache/type/' . $type . '/frontend', 'stale_cache_enabled');
         }
     }
 
+    /**
+     * Apply the Symfony Redis L1/L2 cache configuration.
+     *
+     * @param ConfigData $configData
+     * @param array $options
+     * @param string $idPrefix
+     * @return void
+     */
     public function applySymfony(ConfigData $configData, array $options, string $idPrefix): void
     {
         $preloadKeys = $this->getPreloadKeys($idPrefix, ':hash');
@@ -99,11 +123,27 @@ class L1L2Cache
         // Routing it to 'stale_cache_enabled' would move FPC onto the shared default-cache L2 (same
         // Redis db), where default-cache tag invalidations collide with FPC entries and drop unrelated
         // pages (e.g. invalidating one CMS page evicts another).
-        foreach (['layout', 'block_html', 'reflection', 'config_integration', 'config_integration_api', 'translate'] as $type) {
+        $staleCacheTypes = [
+            'layout',
+            'block_html',
+            'reflection',
+            'config_integration',
+            'config_integration_api',
+            'translate',
+        ];
+        foreach ($staleCacheTypes as $type) {
             $configData->set('cache/type/' . $type . '/frontend', 'stale_cache_enabled');
         }
     }
 
+    /**
+     * Return a string option value or its default.
+     *
+     * @param array $options
+     * @param string $key
+     * @param string $default
+     * @return string
+     */
     private function value(array $options, string $key, string $default): string
     {
         return (string)($options[$key] ?? $default);
@@ -111,7 +151,12 @@ class L1L2Cache
 
     /**
      * Build preload keys using the same prefix configured for the frontend.
+     *
      * Zend stores the plain IDs; Symfony stores the tag-hash marker suffix.
+     *
+     * @param string $idPrefix
+     * @param string $suffix
+     * @return array
      */
     private function getPreloadKeys(string $idPrefix, string $suffix = ''): array
     {

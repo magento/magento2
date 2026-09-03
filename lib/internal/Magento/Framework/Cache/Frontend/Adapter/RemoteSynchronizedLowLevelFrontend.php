@@ -32,6 +32,9 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 
     /**
      * Load a cache entry through the Magento frontend contract.
+     *
+     * @param string $id
+     * @return mixed
      */
     public function load(string $id)
     {
@@ -40,6 +43,12 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 
     /**
      * Save a cache entry through the Magento frontend contract.
+     *
+     * @param mixed $data
+     * @param string $id
+     * @param array $tags
+     * @param int|false|null $lifetime
+     * @return bool
      */
     public function save($data, string $id, array $tags = [], $lifetime = false): bool
     {
@@ -48,6 +57,9 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 
     /**
      * Remove a cache entry through the Magento frontend contract.
+     *
+     * @param string $id
+     * @return bool
      */
     public function remove(string $id): bool
     {
@@ -56,6 +68,9 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 
     /**
      * Return metadata through the wrapped frontend when supported.
+     *
+     * @param string $id
+     * @return array|false
      */
     public function getMetadatas(string $id)
     {
@@ -66,6 +81,9 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 
     /**
      * Get a cache option (e.g. 'cache_id_prefix', 'lifetime') from the remote (L2) tier's low-level frontend.
+     *
+     * @param string $name
+     * @return mixed
      */
     public function getOption(string $name)
     {
@@ -117,6 +135,10 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
         }
 
         $backend = $this->frontend->getBackend();
+        if ($backend === null) {
+            return null;
+        }
+
         if (!method_exists($backend, 'getRemote')) {
             return null;
         }
