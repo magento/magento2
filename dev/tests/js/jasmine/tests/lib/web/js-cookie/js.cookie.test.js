@@ -8,10 +8,15 @@ define(['js-cookie/js.cookie'], (Cookies) => {
     'use strict';
 
     describe('js-cookie/js.cookie', () => {
-        let lastSetCookie;
+        let lastSetCookie,
+            originalCookieDescriptor;
 
         beforeEach(() => {
             lastSetCookie = '';
+
+            originalCookieDescriptor =
+                Object.getOwnPropertyDescriptor(Document.prototype, 'cookie') ||
+                Object.getOwnPropertyDescriptor(HTMLDocument.prototype, 'cookie');
 
             Object.defineProperty(document, 'cookie', {
                 configurable: true,
@@ -20,6 +25,12 @@ define(['js-cookie/js.cookie'], (Cookies) => {
                     lastSetCookie = value;
                 }
             });
+        });
+
+        afterEach(() => {
+            if (originalCookieDescriptor) {
+                Object.defineProperty(document, 'cookie', originalCookieDescriptor);
+            }
         });
 
         describe('CVE-2026-46625', () => {
