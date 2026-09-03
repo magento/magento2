@@ -140,6 +140,8 @@ class DefaultCreditmemo extends \Magento\Sales\Model\Order\Pdf\Items\AbstractIte
                 ) ? $option['print_value'] : $this->filterManager->stripTags(
                     $option['value']
                 );
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $printValue = html_entity_decode((string)$printValue);
 
                 $values = explode(PHP_EOL, $printValue);
                 $text = [];
