@@ -108,6 +108,9 @@ class SwitchAction extends Action implements HttpGetActionInterface, HttpPostAct
             '___from_store',
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
+        if (!$fromStoreCode) {
+            $fromStoreCode = $this->storeManager->getStore()->getCode();
+        }
 
         $requestedUrlToRedirect = $this->_redirect->getRedirectUrl();
         $redirectUrl = $requestedUrlToRedirect;
