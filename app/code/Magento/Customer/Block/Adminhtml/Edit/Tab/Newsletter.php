@@ -84,6 +84,7 @@ class Newsletter extends Generic implements TabInterface
      * @param Share $shareConfig
      * @param array $data
      * @param SubscriberCollectionFactory|null $subscriberCollectionFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
