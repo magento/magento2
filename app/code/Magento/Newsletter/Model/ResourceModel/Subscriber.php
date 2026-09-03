@@ -161,22 +161,6 @@ class Subscriber extends AbstractDb
     }
 
     /**
-     * Load every subscriber record for a customer across all stores in a single query.
-     *
-     * @param int $customerId
-     * @return array[]
-     * @throws LocalizedException
-     */
-    public function loadByCustomerAcrossWebsites(int $customerId): array
-    {
-        $select = $this->connection->select()
-            ->from($this->getMainTable())
-            ->where('customer_id = ?', $customerId)
-            ->order('subscriber_id ASC');
-        return $this->connection->fetchAll($select);
-    }
-
-    /**
      * Generates random code for subscription confirmation
      *
      * @return string

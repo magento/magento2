@@ -25,6 +25,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\Collection as SubscriberCollection;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory as SubscriberCollectionFactory;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
@@ -109,6 +111,11 @@ class NewsletterTest extends TestCase
     protected $localeDateMock;
 
     /**
+     * @var SubscriberCollectionFactory|MockObject
+     */
+    private $subscriberCollectionFactoryMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -137,6 +144,10 @@ class NewsletterTest extends TestCase
         $this->systemStore = $this->createMock(SystemStore::class);
         $this->customerRepository = $this->createMock(CustomerRepositoryInterface::class);
         $this->shareConfig = $this->createMock(Share::class);
+        $this->subscriberCollectionFactoryMock = $this->createPartialMock(
+            SubscriberCollectionFactory::class,
+            ['create']
+        );
 
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->method('get')
@@ -150,8 +161,27 @@ class NewsletterTest extends TestCase
             $this->accountManagementMock,
             $this->systemStore,
             $this->customerRepository,
-            $this->shareConfig
+            $this->shareConfig,
+            [],
+            $this->subscriberCollectionFactoryMock
         );
+    }
+
+    /**
+     * Configure the subscriber collection factory to return a collection of the given subscribers
+     *
+     * @param array $subscribers
+     * @return SubscriberCollection|MockObject
+     */
+    private function stubSubscriberCollection(array $subscribers = [])
+    {
+        $collection = $this->createMock(SubscriberCollection::class);
+        $collection->method('addFieldToFilter')->willReturnSelf();
+        $collection->method('addOrder')->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator($subscribers));
+        $this->subscriberCollectionFactoryMock->method('create')->willReturn($collection);
+
+        return $collection;
     }
 
     /**
@@ -239,13 +269,8 @@ class NewsletterTest extends TestCase
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
-        $resourceMock = $this->createPartialMockWithReflection(
-            \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
-            ['loadByCustomerAcrossWebsites']
-        );
-        $resourceMock->method('loadByCustomerAcrossWebsites')->with($customerId)->willReturn([]);
+        $this->stubSubscriberCollection();
         $subscriberMock = $this->createMock(Subscriber::class);
-        $subscriberMock->method('getResource')->willReturn($resourceMock);
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
         $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
         $subscriberMock->method('getData')->willReturn([]);
@@ -333,16 +358,17 @@ class NewsletterTest extends TestCase
         $this->shareConfig->method('isGlobalScope')->willReturn(true);
         $this->systemStore->method('getStoreOptionsTree')->willReturn([]);
         $this->systemStore->method('getWebsiteName')->willReturn('Website');
-        $resourceMock = $this->createPartialMockWithReflection(
-            \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
-            ['loadByCustomerAcrossWebsites']
-        );
-        $resourceMock->expects($this->once())
-            ->method('loadByCustomerAcrossWebsites')
-            ->with($customerId)
-            ->willReturn([]);
+        $collection = $this->createMock(SubscriberCollection::class);
+        $collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('customer_id', $customerId)
+            ->willReturnSelf();
+        $collection->method('addOrder')->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator([]));
+        $this->subscriberCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collection);
         $subscriberMock = $this->createMock(Subscriber::class);
-        $subscriberMock->method('getResource')->willReturn($resourceMock);
         $subscriberMock->expects($this->never())->method('loadByCustomer');
         $subscriberMock->method('isSubscribed')->willReturn(false);
         $subscriberMock->method('getData')->willReturn([]);
@@ -377,13 +403,8 @@ class NewsletterTest extends TestCase
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepository->method('getById')->with($customerId)->willReturn($customer);
-        $resourceMock = $this->createPartialMockWithReflection(
-            \Magento\Newsletter\Model\ResourceModel\Subscriber::class,
-            ['loadByCustomerAcrossWebsites']
-        );
-        $resourceMock->method('loadByCustomerAcrossWebsites')->with($customerId)->willReturn([]);
+        $this->stubSubscriberCollection();
         $subscriberMock = $this->createMock(Subscriber::class);
-        $subscriberMock->method('getResource')->willReturn($resourceMock);
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
         $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
         $subscriberMock->method('getData')->willReturn([]);

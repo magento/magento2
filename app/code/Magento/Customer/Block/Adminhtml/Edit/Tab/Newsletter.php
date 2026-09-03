@@ -13,11 +13,14 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Block\Adminhtml\Form\Element\Newsletter\Subscriptions as SubscriptionsElement;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Config\Share;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory as SubscriberCollectionFactory;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\System\Store as SystemStore;
@@ -66,6 +69,11 @@ class Newsletter extends Generic implements TabInterface
     private $shareConfig;
 
     /**
+     * @var SubscriberCollectionFactory
+     */
+    private $subscriberCollectionFactory;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -75,6 +83,7 @@ class Newsletter extends Generic implements TabInterface
      * @param CustomerRepositoryInterface $customerRepository
      * @param Share $shareConfig
      * @param array $data
+     * @param SubscriberCollectionFactory|null $subscriberCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -85,7 +94,8 @@ class Newsletter extends Generic implements TabInterface
         SystemStore $systemStore,
         CustomerRepositoryInterface $customerRepository,
         Share $shareConfig,
-        array $data = []
+        array $data = [],
+        ?SubscriberCollectionFactory $subscriberCollectionFactory = null
     ) {
         $this->_subscriberFactory = $subscriberFactory;
         $this->customerAccountManagement = $customerAccountManagement;
@@ -93,6 +103,8 @@ class Newsletter extends Generic implements TabInterface
         $this->systemStore = $systemStore;
         $this->customerRepository = $customerRepository;
         $this->shareConfig = $shareConfig;
+        $this->subscriberCollectionFactory = $subscriberCollectionFactory
+            ?? ObjectManager::getInstance()->get(SubscriberCollectionFactory::class);
     }
 
     /**
@@ -323,7 +335,7 @@ class Newsletter extends Generic implements TabInterface
             $storeToWebsite[(int)$store->getId()] = $websiteId;
             $storeCountByWebsite[$websiteId] = ($storeCountByWebsite[$websiteId] ?? 0) + 1;
         }
-        $subscriberRowByWebsite = $this->getSubscriberRowsByWebsite(
+        $subscriberByWebsite = $this->getSubscribersByWebsite(
             (int)$customer->getId(),
             $storeToWebsite
         );
@@ -337,7 +349,7 @@ class Newsletter extends Generic implements TabInterface
             }
             $subscriptions[$websiteId] = $this->buildSubscriberData(
                 $websiteId,
-                $subscriberRowByWebsite[$websiteId] ?? []
+                $subscriberByWebsite[$websiteId] ?? null
             );
         }
 
@@ -345,39 +357,40 @@ class Newsletter extends Generic implements TabInterface
     }
 
     /**
-     * Map each website to the customer's first matching subscription row
+     * Load all the customer's subscriptions in one query and map them to websites
      *
      * @param int $customerId
      * @param array $storeToWebsite
-     * @return array
+     * @return Subscriber[]
      */
-    private function getSubscriberRowsByWebsite(int $customerId, array $storeToWebsite): array
+    private function getSubscribersByWebsite(int $customerId, array $storeToWebsite): array
     {
-        /** @var \Magento\Newsletter\Model\ResourceModel\Subscriber $resource */
-        $resource = $this->_subscriberFactory->create()->getResource();
-        $rows = $resource->loadByCustomerAcrossWebsites($customerId);
-        $rowByWebsite = [];
-        foreach ($rows as $row) {
-            $websiteId = $storeToWebsite[(int)$row['store_id']] ?? null;
-            if ($websiteId !== null && !isset($rowByWebsite[$websiteId])) {
-                $rowByWebsite[$websiteId] = $row;
+        $collection = $this->subscriberCollectionFactory->create();
+        $collection->addFieldToFilter('customer_id', $customerId);
+        $collection->addOrder('subscriber_id', Collection::SORT_ORDER_ASC);
+
+        $subscriberByWebsite = [];
+        foreach ($collection as $subscriber) {
+            $websiteId = $storeToWebsite[(int)$subscriber->getStoreId()] ?? null;
+            if ($websiteId !== null && !isset($subscriberByWebsite[$websiteId])) {
+                $subscriberByWebsite[$websiteId] = $subscriber;
             }
         }
-        return $rowByWebsite;
+        return $subscriberByWebsite;
     }
 
     /**
-     * Build the subscriber data array for a website from a pre-loaded row
+     * Build the subscriber data array for a website from a pre-loaded subscriber
      *
      * @param int $websiteId
-     * @param array $subscriberRow
+     * @param Subscriber|null $subscriber
      * @return array
      */
-    private function buildSubscriberData(int $websiteId, array $subscriberRow): array
+    private function buildSubscriberData(int $websiteId, ?Subscriber $subscriber): array
     {
-        $subscriber = $this->_subscriberFactory->create();
-        $subscriber->addData($subscriberRow);
-        $subscriber->setOrigData();
+        if ($subscriber === null) {
+            $subscriber = $this->_subscriberFactory->create();
+        }
         $subscriberData = $subscriber->getData();
         $subscriberData['last_updated'] = $this->getSubscriberStatusChangeDate($subscriber);
         $subscriberData['website_id'] = $websiteId;
@@ -398,7 +411,7 @@ class Newsletter extends Generic implements TabInterface
     private function retrieveSubscriberData(CustomerInterface $customer, int $websiteId): array
     {
         $subscriber = $this->_subscriberFactory->create()->loadByCustomer((int)$customer->getId(), $websiteId);
-        return $this->buildSubscriberData($websiteId, $subscriber->getData());
+        return $this->buildSubscriberData($websiteId, $subscriber);
     }
 
     /**
