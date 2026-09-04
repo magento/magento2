@@ -3,6 +3,7 @@
  * Copyright 2015 Adobe
  * All Rights Reserved.
  */
+
 namespace Magento\Captcha\Model\ResourceModel;
 
 use PhpDb\Sql\Expression;

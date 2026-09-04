@@ -6,8 +6,6 @@
 
 /**
  * Captcha helper for adminhtml area
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Helper\Adminhtml;
 
@@ -42,6 +40,7 @@ class Data extends \Magento\Captcha\Helper\Data
      * @param string $key The last part of XML_PATH_$area_CAPTCHA_ constant (case insensitive)
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Framework\App\Config\Element
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getConfig($key, $store = null)
     {
@@ -53,6 +52,7 @@ class Data extends \Magento\Captcha\Helper\Data
      *
      * @param mixed $website
      * @return string
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getWebsiteCode($website = null)
     {
