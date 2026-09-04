@@ -679,7 +679,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     /**
      * Get customer default billing address
      *
-     * @return Address
+     * @return Address|false
      */
     public function getPrimaryBillingAddress()
     {
@@ -689,7 +689,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     /**
      * Get customer default billing address
      *
-     * @return Address
+     * @return Address|false
      */
     public function getDefaultBillingAddress()
     {
@@ -699,7 +699,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     /**
      * Get default customer shipping address
      *
-     * @return Address
+     * @return Address|false
      */
     public function getPrimaryShippingAddress()
     {
@@ -709,7 +709,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     /**
      * Get default customer shipping address
      *
-     * @return Address
+     * @return Address|false
      */
     public function getDefaultShippingAddress()
     {
