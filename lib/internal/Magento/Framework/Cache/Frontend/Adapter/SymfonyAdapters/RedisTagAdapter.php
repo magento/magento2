@@ -530,19 +530,16 @@ LUA;
         // Matches Zend's implementation to prevent Redis slowdowns
         // @see vendor/colinmollenhour/cache-backend-redis/Cm/Cache/Backend/Redis.php line 777-778
         if (count($tags) > self::SUNION_CHUNK_SIZE) {
-            $allIds = [];
+            $idsPerChunk = [];
             $chunks = array_chunk($tags, self::SUNION_CHUNK_SIZE);
 
             foreach ($chunks as $chunk) {
                 $tagKeys = array_map([$this, 'getTagKey'], $chunk);
                 $chunkIds = $this->redis->sUnion($tagKeys);
-                $chunkIds = is_array($chunkIds) ? $chunkIds : [];
-
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $allIds = array_merge($allIds, $chunkIds);
+                $idsPerChunk[] = is_array($chunkIds) ? $chunkIds : [];
             }
 
-            return array_unique($allIds);
+            return array_unique(array_merge(...$idsPerChunk));
         }
 
         $tagKeys = array_map([$this, 'getTagKey'], $tags);
