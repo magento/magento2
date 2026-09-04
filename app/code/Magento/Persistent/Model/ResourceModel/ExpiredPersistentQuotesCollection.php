@@ -97,7 +97,10 @@ class ExpiredPersistentQuotesCollection
                 Select::SQL_UNION_ALL
             );
 
-        $quotes->getSelect()->where('main_table.entity_id IN (' . $selectQuoteIds . ')');
+        $quotes->getSelect()
+            ->where('main_table.entity_id IN (' . $selectQuoteIds . ')')
+            ->order('main_table.entity_id ' . Select::SQL_ASC)
+            ->limit($batchSize);
 
         return $quotes;
     }

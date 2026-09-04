@@ -141,6 +141,16 @@ class ExpiredPersistentQuotesCollectionTest extends TestCase
             ->with($this->stringContains('main_table.entity_id IN ('))
             ->willReturnSelf();
 
+        $dbSelectMock3->method('where')
+            ->with($this->stringContains('main_table.entity_id IN ('))
+            ->willReturnSelf();
+        $dbSelectMock3->method('order')
+            ->with('main_table.entity_id ' . Select::SQL_ASC)
+            ->willReturnSelf();
+        $dbSelectMock3->method('limit')
+            ->with(100)
+            ->willReturnSelf();
+
         $result = $this->model->getExpiredPersistentQuotes($storeMock, 0, 100);
         $this->assertSame($quoteCollectionMock, $result);
     }
