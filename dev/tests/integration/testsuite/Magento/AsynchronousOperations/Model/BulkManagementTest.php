@@ -84,6 +84,11 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
             array_column($storedData, 'id'),
             array_map(static fn (OperationInterface $operation) => $operation->getId(), $operations)
         );
+        // The operations of this bulk carry no status, so scheduling has to open them
+        $this->assertSame(
+            array_fill(0, $operationCount, OperationInterface::STATUS_TYPE_OPEN),
+            array_map('intval', array_column($storedData, 'status'))
+        );
     }
 
     public function testScheduleBulkKeepsOperationKeysProvidedByCaller()

@@ -240,6 +240,11 @@ class BulkManagement implements BulkManagementInterface
     {
         $identifiedOperations = [];
         foreach ($operations as $operation) {
+            if ($operation->getStatus() === null) {
+                // A status is not a required input of scheduleBulk(), while consumers and the bulk status API
+                // only understand a row holding one of the statuses of OperationStatusPool.
+                $operation->setStatus(OperationInterface::STATUS_TYPE_OPEN);
+            }
             if ($operation->getId() === null) {
                 $this->entityManager->save($operation);
             } else {

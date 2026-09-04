@@ -157,6 +157,8 @@ class BulkManagementTest extends TestCase
                 return $entity;
             });
         $this->saveMultipleOperations->expects($this->never())->method('execute');
+        $operation->expects($this->exactly(2))->method('setStatus')
+            ->with(OperationInterface::STATUS_TYPE_OPEN)->willReturnSelf();
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->exactly(2))->method('getTopicName')
             ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
@@ -193,10 +195,14 @@ class BulkManagementTest extends TestCase
         $topicName = 'topic.name.0';
         $firstOperation = $this->createMock(OperationInterface::class);
         $firstOperation->method('getId')->willReturn(0);
+        $firstOperation->method('getStatus')->willReturn(OperationInterface::STATUS_TYPE_OPEN);
         $firstOperation->method('getTopicName')->willReturn($topicName);
+        $firstOperation->expects($this->never())->method('setStatus');
         $secondOperation = $this->createMock(OperationInterface::class);
         $secondOperation->method('getId')->willReturn(1);
+        $secondOperation->method('getStatus')->willReturn(OperationInterface::STATUS_TYPE_REJECTED);
         $secondOperation->method('getTopicName')->willReturn($topicName);
+        $secondOperation->expects($this->never())->method('setStatus');
         $metadata = $this->createMock(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
             ->with(BulkSummaryInterface::class)
