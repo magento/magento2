@@ -21,28 +21,16 @@ class Index extends Action implements HttpGetActionInterface
     public const DEV_PREFIX = 'dev-';
 
     /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
-
-    /**
-     * @var RawResponseFactory
-     */
-    private $rawFactory;
-
-    /**
      * @param Context $context
      * @param RawResponseFactory $rawFactory
      * @param ProductMetadataInterface $productMetadata
      */
     public function __construct(
         Context $context,
-        RawResponseFactory $rawFactory,
-        ProductMetadataInterface $productMetadata
+        private readonly RawResponseFactory $rawFactory,
+        private readonly ProductMetadataInterface $productMetadata
     ) {
         parent::__construct($context);
-        $this->rawFactory = $rawFactory;
-        $this->productMetadata = $productMetadata;
     }
 
     /**
