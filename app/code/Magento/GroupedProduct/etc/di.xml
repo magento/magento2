@@ -39,6 +39,9 @@
     <type name="Magento\Catalog\Model\Product\Type">
         <plugin name="grouped_output" type="Magento\GroupedProduct\Model\Product\Type\Plugin" />
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Action\GetSearchableProductsSelect">
+        <plugin name="grouped_product_has_website_child" type="Magento\GroupedProduct\Plugin\CatalogSearch\Model\Indexer\Fulltext\Action\GetSearchableProductsSelect"/>
+    </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="isProductConfigured" type="Magento\GroupedProduct\Model\Product\Cart\Configuration\Plugin\Grouped" />
     </type>
