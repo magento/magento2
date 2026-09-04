@@ -239,6 +239,7 @@ class SchemaBuilder
             $resource = $this->getStructuralElementResource($tableData);
             $tableData['resource'] = $resource;
             $tableData['comment'] = $tableData['comment'] ?? null;
+            $tableData = $this->normalizeIndexesDeclaredAsConstraints($tableData);
             /** @var Table $table */
             $table = $this->elementFactory->create('table', $tableData);
             $columns = $this->processColumns($tableData, $resource, $table);
@@ -315,7 +316,7 @@ class SchemaBuilder
             $indexData['name'] = $this->elementNameResolver->getFullIndexName(
                 $table,
                 $indexData['column'],
-                $indexData['indexType'] ?? null
+                $indexData['indexType'] ?? $indexData['type'] ?? null
             );
             $indexData = $this->processGenericData($indexData, $resource, $table);
             $indexData['columns'] = $this->convertColumnNamesToObjects($indexData['column'], $table);
@@ -324,6 +325,30 @@ class SchemaBuilder
         }
 
         return $indexes;
+    }
+
+    /**
+     * Move index declarations from constraints to indexes.
+     *
+     * @param array $tableData
+     * @return array
+     */
+    private function normalizeIndexesDeclaredAsConstraints(array $tableData): array
+    {
+        if (!isset($tableData['constraint'])) {
+            return $tableData;
+        }
+
+        foreach ($tableData['constraint'] as $referenceId => $constraintData) {
+            if (($constraintData['type'] ?? null) !== 'index') {
+                continue;
+            }
+
+            $tableData['index'][$referenceId] = $constraintData;
+            unset($tableData['constraint'][$referenceId]);
+        }
+
+        return $tableData;
     }
 
     /**

@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\SchemaBuilder;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\ValidationComposite;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer;
@@ -308,6 +309,104 @@ class SchemaBuilderTest extends TestCase
         );
     }
 
+    /**
+     * @throws LocalizedException
+     */
+    public function testIndexConstraintIsAddedAsIndex(): void
+    {
+        $tableData = [
+            'test_table' => [
+                'name' => 'test_table',
+                'engine' => 'innodb',
+                'resource' => 'default',
+                'column' => [
+                    'indexed_column' => [
+                        'name' => 'indexed_column',
+                        'type' => 'int',
+                        'padding' => 10,
+                    ],
+                ],
+                'constraint' => [
+                    'TEST_TABLE_INDEXED_COLUMN' => [
+                        'name' => 'TEST_TABLE_INDEXED_COLUMN',
+                        'type' => 'index',
+                        'column' => [
+                            'indexed_column'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $indexName = 'TEST_TABLE_INDEXED_COLUMN';
+        $table = $this->createTable('test_table');
+        $column = $this->createIntegerColumn('indexed_column', $table);
+        $index = $this->createIndex($indexName, $table, [$column]);
+        $elementNameResolverMock = $this->getMockBuilder(ElementNameResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $elementNameResolverMock->expects(self::once())
+            ->method('getFullIndexName')
+            ->with($table, ['indexed_column'], 'index')
+            ->willReturn($indexName);
+        $model = $this->objectManagerHelper->getObject(
+            SchemaBuilder::class,
+            [
+                'elementFactory' => $this->elementFactoryMock,
+                'booleanUtils' => new BooleanUtils(),
+                'sharding' => $this->shardingMock,
+                'validationComposite' => $this->validationCompositeMock,
+                'resourceConnection' => $this->resourceConnectionMock,
+                'elementNameResolver' => $elementNameResolverMock
+            ]
+        );
+        $this->elementFactoryMock->expects(self::exactly(3))
+            ->method('create')
+            ->willReturnCallback(
+                function ($type, array $data) use ($table, $column, $index) {
+                    if ($type === 'table') {
+                        return $table;
+                    }
+                    if ($type === 'int') {
+                        return $column;
+                    }
+                    if ($type === 'index') {
+                        self::assertSame(['indexed_column'], $data['column']);
+                        self::assertSame([$column], $data['columns']);
+
+                        return $index;
+                    }
+                }
+            );
+        $this->shardingMock->expects(self::once())
+            ->method('canUseResource')
+            ->with('default')
+            ->willReturn(true);
+        $this->validationCompositeMock->expects(self::once())
+            ->method('validate')
+            ->willReturn([]);
+        $resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resourceConnectionMock->method('getTableName')
+            ->willReturnCallback(
+                function ($tableName) {
+                    return $tableName;
+                }
+            );
+        /** @var Schema $schema */
+        $schema = $this->objectManagerHelper->getObject(
+            Schema::class,
+            ['resourceConnection' => $resourceConnectionMock]
+        );
+
+        $model->addTablesData($tableData);
+        $model->build($schema);
+        $resultTable = $schema->getTableByName('test_table');
+
+        self::assertSame([$indexName => $index], $resultTable->getIndexes());
+        self::assertSame([], $resultTable->getConstraints());
+    }
+
     /**     * @param array $tablesData
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @throws LocalizedException
@@ -366,7 +465,7 @@ class SchemaBuilderTest extends TestCase
         $resourceConnectionMock->expects(self::exactly(6))
             ->method('getTableName')
             ->willReturnCallback(
-                function($arg1) {
+                function ($arg1) {
                     if ($arg1 == 'first_table') {
                         return 'first_table';
                     } elseif ($arg1 == 'second_table') {
