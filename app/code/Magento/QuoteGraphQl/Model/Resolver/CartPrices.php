@@ -13,13 +13,21 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
+use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Cart\Totals as CartTotals;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Quote\Model\Quote\Address;
 
 /**
  * @inheritdoc
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartPrices implements ResolverInterface
 {
@@ -29,20 +37,43 @@ class CartPrices implements ResolverInterface
     private $totalsCollector;
 
     /**
+     * @var string
+     */
+    private const QUERY_TYPE = 'query';
+
+    /**
      * @var ScopeConfigInterface
      */
     private ScopeConfigInterface $scopeConfig;
 
     /**
+     * @var TotalsInterfaceFactory
+     */
+    private TotalsInterfaceFactory $totalsFactory;
+
+    /**
+     * @var DataObjectHelper
+     */
+    private DataObjectHelper $dataObjectHelper;
+
+    /**
      * @param TotalsCollector $totalsCollector
      * @param ScopeConfigInterface|null $scopeConfig
-     */
+     * @param TotalsInterfaceFactory|null $totalsFactory
+     * @param DataObjectHelper|null $dataObjectHelper
+     * */
     public function __construct(
         TotalsCollector $totalsCollector,
-        ?ScopeConfigInterface $scopeConfig = null
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?TotalsInterfaceFactory $totalsFactory = null,
+        ?DataObjectHelper $dataObjectHelper = null
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->scopeConfig = $scopeConfig ??  ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->totalsFactory = $totalsFactory ??
+            ObjectManager::getInstance()->get(TotalsInterfaceFactory::class);
+        $this->dataObjectHelper = $dataObjectHelper ??
+            ObjectManager::getInstance()->get(DataObjectHelper::class);
     }
 
     /**
@@ -56,16 +87,39 @@ class CartPrices implements ResolverInterface
 
         /** @var Quote $quote */
         $quote = $value['model'];
-        /**
-         * To calculate a right discount value
-         * before calculate totals
-         * need to reset Cart Fixed Rules in the quote
-         */
-        $quote->setCartFixedRules([]);
-        $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
-        $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        // check scenarios require force recollecting totals
+        // discounts should return rule details, which are calculated as part of collectTotals
+        if (!$quote->isVirtual() && $quote->getTriggerRecollect() != 1 &&
+            $info->operation->operation == self::QUERY_TYPE &&
+            !array_key_exists('discounts', $info->getFieldSelection(1))
+        ) {
+            $addressTotalsData = $quote->getShippingAddress()->getData();
+            unset($addressTotalsData[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]);
+            $cartTotals = $this->totalsFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $cartTotals,
+                $addressTotalsData,
+                QuoteTotalsInterface::class
+            );
+
+            if (isset($addressTotalsData['discount_description'])) {
+                $cartTotals->setDiscountDescription($addressTotalsData['discount_description']);
+            }
+
+            $appliedTaxes = $this->getAppliedTaxes($quote->getShippingAddress(), $currency);
+        } else {
+            /**
+             * To calculate a right discount value
+             * before calculate totals
+             * need to reset Cart Fixed Rules in the quote
+             */
+            $quote->setCartFixedRules([]);
+            $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
+            $appliedTaxes = $this->getAppliedTaxes($cartTotals, $currency);
+        }
+
         $grandTotal = $cartTotals->getGrandTotal();
 
         $totalAppliedTaxes = 0;
@@ -92,14 +146,19 @@ class CartPrices implements ResolverInterface
     /**
      * Returns taxes applied to the current quote
      *
-     * @param Total $total
+     * @param Address|Total $addressOrTotals
      * @param string $currency
      * @return array
+     * @throws \InvalidArgumentException
      */
-    private function getAppliedTaxes(Total $total, string $currency): array
+    private function getAppliedTaxes(Address|Total $addressOrTotals, string $currency): array
     {
+        if (!$addressOrTotals instanceof Total && !$addressOrTotals instanceof Address) {
+            throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($addressOrTotals));
+        }
+
         $appliedTaxesData = [];
-        $appliedTaxes = $total->getAppliedTaxes();
+        $appliedTaxes = $addressOrTotals->getAppliedTaxes();
 
         if (empty($appliedTaxes)) {
             return $appliedTaxesData;
@@ -133,37 +192,59 @@ class CartPrices implements ResolverInterface
     /**
      * Returns information about an applied discount
      *
-     * @param Total $total
+     * @param Total|CartTotals $totals
      * @param string $currency
      * @return array|null
+     * @throws \InvalidArgumentException
      */
-    private function getDiscount(Total $total, string $currency)
+    private function getDiscount(Total|CartTotals $totals, string $currency)
     {
-        if ($total->getDiscountAmount() === 0) {
+        $this->validateTotalsInstance($totals);
+
+        if ($totals->getDiscountAmount() == 0) {
             return null;
         }
         return [
-            'label' => $total->getDiscountDescription() !== null ? explode(', ', $total->getDiscountDescription()) : [],
-            'amount' => ['value' => $total->getDiscountAmount(), 'currency' => $currency]
+            'label' => $totals->getDiscountDescription() !== null ?
+                explode(', ', $totals->getDiscountDescription()) : [],
+            'amount' => ['value' => $totals->getDiscountAmount(), 'currency' => $currency]
         ];
     }
 
     /**
      * Get Subtotal with discount excluding tax.
      *
-     * @param Total $cartTotals
+     * @param Total|CartTotals $totals
      * @return float
+     * @throws \InvalidArgumentException
      */
-    private function getSubtotalWithDiscountExcludingTax(Total $cartTotals): float
+    private function getSubtotalWithDiscountExcludingTax(Total|CartTotals $totals): float
     {
+        $this->validateTotalsInstance($totals);
+
         $discountIncludeTax = $this->scopeConfig->getValue(
             'tax/calculation/discount_tax',
             ScopeInterface::SCOPE_STORE
         ) ?? 0;
         $discountExclTax = $discountIncludeTax ?
-            $cartTotals->getDiscountAmount() + $cartTotals->getDiscountTaxCompensationAmount() :
-            $cartTotals->getDiscountAmount();
+            $totals->getDiscountAmount() + $totals->getDiscountTaxCompensationAmount() :
+            $totals->getDiscountAmount();
 
-        return $cartTotals->getSubtotal() +  $discountExclTax;
+        return $totals->getSubtotal() +  $discountExclTax;
+    }
+
+    /**
+     * Validates the provided totals instance to ensure it is of a supported type.
+     *
+     * @param Total|CartTotals $totals
+     * @return void
+     * @throws \InvalidArgumentException If the provided totals instance is of an unsupported type.
+     */
+    private function validateTotalsInstance($totals): void
+    {
+
+        if (!$totals instanceof Total && !$totals instanceof CartTotals) {
+            throw new \InvalidArgumentException('Unsupported totals type: ' . get_class($totals));
+        }
     }
 }
