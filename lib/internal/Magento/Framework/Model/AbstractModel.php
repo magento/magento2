@@ -372,9 +372,7 @@ abstract class AbstractModel extends DataObject
             }
             $this->_data = $key;
         } else {
-            $this->checkAndConvertNumericValue($key, $value);
-            $key = $key ?? '';
-            if (!array_key_exists($key, $this->_data) || $this->_data[$key] !== $value) {
+            if (!array_key_exists($key, $this->_data) || !$this->isDataEqual($this->_data[$key], $value)) {
                 $this->_hasDataChanges = true;
             }
             $this->_data[$key] = $value;
@@ -1032,25 +1030,29 @@ abstract class AbstractModel extends DataObject
     }
 
     /**
-     * Check and Convert Numeric Value for Proper Type Matching
+     * Check whether the current and the new value are equal for change detection.
      *
-     * @param mixed $key
-     * @param mixed $value
-     * @return void
+     * Values loaded from the database are always strings, while setters frequently pass int or
+     * float values (and vice versa). A strict comparison would treat numerically identical values
+     * of different types as a change, marking the object as modified and triggering redundant
+     * UPDATE queries on save. Numeric comparison is only used when at least one value is a native
+     * int or float. Two numeric strings with different representations, such as "007" and "7",
+     * must still count as a change.
+     *
+     * @param mixed $currentValue
+     * @param mixed $newValue
+     * @return bool
      */
-    private function checkAndConvertNumericValue(mixed $key, mixed $value): void
+    private function isDataEqual(mixed $currentValue, mixed $newValue): bool
     {
-        $key = $key ?? '';
-        if (array_key_exists($key, $this->_data) && is_numeric($this->_data[$key])
-            && $value !== null
-        ) {
-            if (is_float($value) ||
-                (is_string($value) && preg_match('/^-?\d*\.\d+$/', $value))
-            ) {
-                $this->_data[$key] = (float) $this->_data[$key];
-            } elseif (is_int($value)) {
-                $this->_data[$key] = (int) $this->_data[$key];
-            }
+        if ($currentValue === $newValue) {
+            return true;
         }
+        $hasNativeNumeric = is_int($currentValue) || is_float($currentValue)
+            || is_int($newValue) || is_float($newValue);
+        if ($hasNativeNumeric && is_numeric($currentValue) && is_numeric($newValue)) {
+            return (float) $currentValue === (float) $newValue;
+        }
+        return false;
     }
 }
