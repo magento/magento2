@@ -154,6 +154,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb impl
             }
             if ($data) {
                 $connection->insertOnDuplicate($this->_currencyRateTable, $data, ['rate']);
+                $this->_resetState();
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the rates received'));
