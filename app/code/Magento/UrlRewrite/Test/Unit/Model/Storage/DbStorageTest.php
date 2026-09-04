@@ -584,6 +584,43 @@ class DbStorageTest extends TestCase
     }
 
     /**
+     * Verify that replace() handles an empty urls array gracefully
+     * without throwing ArgumentCountError from array_merge(...$entities).
+     *
+     * @return void
+     */
+    public function testReplaceWithEmptyUrlsArray(): void
+    {
+        $result = $this->storage->replace([]);
+
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * Verify that replace() succeeds when URL rewrite has an empty string request path,
+     * which creates an entity entry that could trigger the array_merge spread issue.
+     *
+     * @return void
+     */
+    public function testReplaceWithEmptyRequestPathDoesNotThrowError(): void
+    {
+        $url = $this->createMock(UrlRewrite::class);
+        $url->method('toArray')->willReturn(['row1']);
+        $url->method('getEntityType')->willReturn('product');
+        $url->method('getEntityId')->willReturn('1');
+        $url->method('getStoreId')->willReturn('1');
+        $url->method('getRequestPath')->willReturn('');
+        $this->connectionMock->method('quoteIdentifier')->willReturnArgument(0);
+        $this->select->method($this->anything())->willReturnSelf();
+        $this->resource->method('getTableName')->with(DbStorage::TABLE_NAME)->willReturn('table_name');
+        $this->connectionMock->method('fetchOne')->willReturn(false);
+
+        $result = $this->storage->replace([$url]);
+
+        $this->assertEquals([$url], $result);
+    }
+
+    /**
      * @return void
      */
     public function testDeleteByData(): void
