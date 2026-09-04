@@ -77,9 +77,47 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
 
         // schedule bulk
         $this->assertTrue($this->model->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId));
-        $storedData = $this->getStoredOperationData();
-        // No operations should be saved to database during bulk creation
-        $this->assertCount(0, $storedData);
+        $storedData = $this->getStoredOperationData($bulkUuid);
+        $this->assertCount($operationCount, $storedData);
+        // Consumers address the created row by the identifier assigned to the operation on insert
+        $this->assertEqualsCanonicalizing(
+            array_column($storedData, 'id'),
+            array_map(static fn (OperationInterface $operation) => $operation->getId(), $operations)
+        );
+        // The operations of this bulk carry no status, so scheduling has to open them
+        $this->assertSame(
+            array_fill(0, $operationCount, OperationInterface::STATUS_TYPE_OPEN),
+            array_map('intval', array_column($storedData, 'status'))
+        );
+    }
+
+    public function testScheduleBulkKeepsOperationKeysProvidedByCaller()
+    {
+        $bulkUuid = '0f8b1a52-0b8f-4f0e-9c4a-2d0c2f9b7a11';
+        $bulkDescription = 'Bulk General Information';
+        $topicName = 'example.topic.name';
+        $userId = 1;
+
+        $operationCount = 10;
+        $operations = [];
+        $operationFactory = $this->objectManager->get(OperationInterfaceFactory::class);
+        for ($index = 0; $index < $operationCount; $index++) {
+            /** @var OperationInterface $operation */
+            $operation = $operationFactory->create();
+            $operation->setId($index);
+            $operation->setBulkUuid($bulkUuid);
+            $operation->setTopicName($topicName);
+            $operation->setSerializedData(json_encode(['entity_id' => $index]));
+            $operations[] = $operation;
+        }
+
+        $this->assertTrue($this->model->scheduleBulk($bulkUuid, $operations, $bulkDescription, $userId));
+        $storedData = $this->getStoredOperationData($bulkUuid);
+        $this->assertCount($operationCount, $storedData);
+        $this->assertEqualsCanonicalizing(
+            range(0, $operationCount - 1),
+            array_column($storedData, 'operation_key')
+        );
     }
 
     /**
@@ -125,10 +163,11 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve stored operation data
      *
+     * @param string $bulkUuid
      * @return array
      * @throws \Exception
      */
-    private function getStoredOperationData()
+    private function getStoredOperationData(string $bulkUuid)
     {
         /** @var MetadataPool $metadataPool */
         $metadataPool = $this->objectManager->get(MetadataPool::class);
@@ -137,6 +176,8 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
         $resourceConnection = $this->objectManager->get(ResourceConnection::class);
         $connection = $resourceConnection->getConnectionByName($operationMetadata->getEntityConnectionName());
 
-        return $connection->fetchAll($connection->select()->from($operationMetadata->getEntityTable()));
+        return $connection->fetchAll(
+            $connection->select()->from($operationMetadata->getEntityTable())->where('bulk_uuid = ?', $bulkUuid)
+        );
     }
 }
