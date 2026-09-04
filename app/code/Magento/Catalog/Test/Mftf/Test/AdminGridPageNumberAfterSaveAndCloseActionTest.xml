@@ -55,7 +55,7 @@
         </actionGroup>
         <!--Go to the next page and edit the product-->
         <comment userInput="Go to the next page and edit the product" stepKey="commentEdiProduct"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageOrderGrid"/>
+        <actionGroup ref="AdminGridGoToNextPageActionGroup" stepKey="clickNextPageOrderGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$product2$$"/>
