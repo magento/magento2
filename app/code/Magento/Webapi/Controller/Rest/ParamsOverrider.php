@@ -82,7 +82,6 @@ class ParamsOverrider
     {
         //Converting input data to camelCase in order to process both snake and camel style data equally.
         $currentArray = $this->dataObjectConverter->convertKeysToCamelCase($nestedArray);
-
         foreach ($arrayKeys as $key) {
             $key = SimpleDataObjectConverter::snakeCaseToCamelCase($key);
             if (!isset($currentArray[$key])) {
@@ -96,9 +95,9 @@ class ParamsOverrider
     /**
      * Set a nested array value.
      *
-     * @param array &$nestedArray
+     * @param array   &$nestedArray
      * @param string[] $arrayKeys
-     * @param string $valueToSet
+     * @param string   $valueToSet
      * @return void
      */
     protected function setNestedArrayValue(&$nestedArray, $arrayKeys, $valueToSet)
@@ -116,14 +115,13 @@ class ParamsOverrider
             }
             $currentArray = &$currentArray[$key];
         }
-
-        //In case input data uses camelCase format
         $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase($lastKey);
-        if (array_key_exists($camelCaseKey, $currentArray)) {
-            $lastKey = $camelCaseKey;
+        if (is_array($currentArray)) {
+            if (array_key_exists($camelCaseKey, $currentArray)) {
+                $lastKey = $camelCaseKey;
+            }
+            $currentArray[$lastKey] = $valueToSet;
         }
-
-        $currentArray[$lastKey] = $valueToSet;
     }
 
     /**
@@ -237,6 +235,7 @@ class ParamsOverrider
      * @return \Magento\Framework\Reflection\MethodsMap
      *
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getMethodsMap()
     {
