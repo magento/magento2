@@ -9,14 +9,10 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 
 /**
  * Price types mode source
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Price implements ProductPriceOptionsInterface
 {
     /**
-     * Store manager.
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
@@ -30,7 +26,7 @@ class Price implements ProductPriceOptionsInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      *
      * @codeCoverageIgnore
      */
