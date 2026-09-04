@@ -731,6 +731,24 @@
         <arguments>
             <argument name="state" xsi:type="object" shared="false">Magento\Indexer\Model\Mview\View\State</argument>
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\Changelog</argument>
+            <!--
+                changelogMaxSize: keyed by mview view_id.
+                When the number of distinct pending entity IDs in the changelog exceeds this value,
+                a full reindex (executeFull) is triggered instead of an incremental update.
+                The indexer action class must have an executeFull() method.
+
+                This is an array argument - any module can contribute entries from their own di.xml
+                and they will be merged, exactly like changelogBatchSize. Example in a module di.xml:
+
+                <type name="Magento\Framework\Mview\View">
+                    <arguments>
+                        <argument name="changelogMaxSize" xsi:type="array">
+                            <item name="inventory" xsi:type="number">20000</item>
+                        </argument>
+                    </arguments>
+                </type>
+            -->
+            <argument name="changelogMaxSize" xsi:type="array"/>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\Config">
