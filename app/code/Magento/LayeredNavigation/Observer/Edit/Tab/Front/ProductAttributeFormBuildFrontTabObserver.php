@@ -60,8 +60,8 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
                 'title' => __('Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price'),
                 'note' => __(
                     'Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.
-                    <br>Price is not compatible with <b>\'Filterable (no results)\'</b> option - 
-                     it will make no affect on Price filter.'
+                    <br>Price is not compatible with <b>\'Filterable (no results)\'</b> option -'.
+                     'it will make no affect on Price filter.'
                 ),
                 'values' => [
                     ['value' => '0', 'label' => __('No')],
