@@ -132,7 +132,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             if ($applyTaxAfterDiscount) {
                 //TODO: handle originalDiscountAmount
                 $taxableAmount = max($rowTotalForTaxCalculation - $discountAmount, 0);
-                if ($taxableAmount && !$applyTaxAfterDiscount) {
+                if ($taxableAmount) {
                     $taxableAmount = $rowTotalForTaxCalculation;
                 }
                 $rowTaxAfterDiscount = $this->calculationTool->calcTaxAmount(
@@ -160,7 +160,13 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         }
         $rowTax = array_sum($rowTaxes);
         $rowTaxBeforeDiscount = array_sum($rowTaxesBeforeDiscount);
-        $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;
+        $rowTotalInclTax = $rowTotal + $rowTax;
+
+        if (!$applyTaxAfterDiscount) {
+            $rowTotalInclTax = $rowTotal + $rowTaxBeforeDiscount;
+            $rowTax = $rowTaxBeforeDiscount;
+        }
+
         $priceInclTax = $rowTotalInclTax / $quantity;
 
         if ($round) {
