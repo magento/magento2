@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,9 @@ namespace Magento\Catalog\Model\Attribute\Source;
 use Magento\Catalog\Api\ProductTypeListInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
+/**
+ * Options for the product attribute "Apply To" field: the available product types.
+ */
 class ApplyTo implements OptionSourceInterface
 {
     /**
@@ -20,9 +23,8 @@ class ApplyTo implements OptionSourceInterface
     /**
      * @param ProductTypeListInterface $productTypeList
      */
-    public function __construct(
-        ProductTypeListInterface $productTypeList
-    ) {
+    public function __construct(ProductTypeListInterface $productTypeList)
+    {
         $this->productTypeList = $productTypeList;
     }
 
