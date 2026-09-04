@@ -67,7 +67,7 @@ class LowestPriceOptionsProviderTest extends TestCase
     {
         $this->connection = $this->createMock(AdapterInterface::class);
         $this->resourceConnection = $this->createPartialMock(ResourceConnection::class, ['getConnection']);
-        $this->resourceConnection->expects($this->once())->method('getConnection')->willReturn($this->connection);
+        $this->resourceConnection->method('getConnection')->willReturn($this->connection);
         $this->linkedProductSelectBuilder = $this->createPartialMock(
             LinkedProductSelectBuilderInterface::class,
             ['build']
@@ -77,7 +77,7 @@ class LowestPriceOptionsProviderTest extends TestCase
             ['addAttributeToSelect', 'addIdFilter', 'getItems']
         );
         $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($this->productCollection);
+        $this->collectionFactory->method('create')->willReturn($this->productCollection);
         $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->storeMock = $this->createMock(StoreInterface::class);
 
@@ -116,5 +116,31 @@ class LowestPriceOptionsProviderTest extends TestCase
         $this->storeMock->method('getId')->willReturn(Store::DEFAULT_STORE_ID);
 
         $this->assertEquals($linkedProducts, $this->model->getProducts($product));
+    }
+
+    public function testResetStateClearsCachedLinkedProducts()
+    {
+        $productId = 1;
+        $storeId = 1;
+        $firstLoad = ['first', 'load'];
+        $secondLoad = ['second', 'load'];
+        $product = $this->createMock(Product::class);
+        $product->method('getId')->willReturn($productId);
+        $product->method('getStoreId')->willReturn($storeId);
+        $this->linkedProductSelectBuilder->method('build')->with($productId)->willReturn([]);
+        $this->productCollection->method('addAttributeToSelect')->willReturnSelf();
+        $this->productCollection->method('addIdFilter')->willReturnSelf();
+        // getItems() is only reached on an actual load; a cached resolution never calls it.
+        $this->productCollection->expects($this->exactly(2))
+            ->method('getItems')
+            ->willReturnOnConsecutiveCalls($firstLoad, $secondLoad);
+
+        // First resolution loads and caches.
+        $this->assertEquals($firstLoad, $this->model->getProducts($product));
+        // Second resolution of the same product is served from cache (still the first load's items).
+        $this->assertEquals($firstLoad, $this->model->getProducts($product));
+        // After a state reset the cache is dropped, so the next resolution loads again.
+        $this->model->_resetState();
+        $this->assertEquals($secondLoad, $this->model->getProducts($product));
     }
 }
