@@ -6,7 +6,11 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\DataObject;
 use Magento\Framework\Reflection\MethodsMap;
+
+use function get_class;
+use function is_subclass_of;
 
 /**
  * Service class allow populating object from array data
@@ -220,16 +224,15 @@ class DataObjectHelper
                             $value[$extensionAttributeKey][$key] = $extensionAttribute;
                         }
                     } else {
-                        $value[$extensionAttributeKey] = $this->objectFactory->create(
-                            $extensionAttributeType,
-                            ['data' => $extensionAttributeValue]
-                        );
+                        $object = $this->createSubObject($extensionAttributeType, $extensionAttributeValue);
+
+                        $value[$extensionAttributeKey] = $object;
                     }
                 }
             }
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);
         } else {
-            $object = $this->objectFactory->create($returnType, $value);
+            $object = $this->createSubObject($returnType, $value);
         }
         $dataObject->$methodName($object);
         return $this;
@@ -338,5 +341,45 @@ class DataObjectHelper
             }
         }
         return $data;
+    }
+
+    /**
+     * Check if the object is a DataObject or similar, then its value is already prepared. Expand object instead.
+     *
+     * @param string $returnType
+     * @param array  $value
+     *
+     * @return object
+     */
+    private function createSubObject(string $returnType, array $value): object
+    {
+        $object = $this->objectFactory->create($returnType, []);
+
+        if ($this->isValueForDataObject(get_class($object), $value)) {
+            $value = $value['data'];
+        }
+
+        $this->populateWithArray(
+            $object,
+            $value,
+            $returnType
+        );
+
+        return $object;
+    }
+
+    /**
+     * Check if the value is already prepared to be created for a DataObject.
+     *
+     * @param string $returnType
+     * @param array  $value
+     * @return bool
+     */
+    private function isValueForDataObject(string $returnType, array $value): bool
+    {
+        $isDataObject = is_subclass_of($returnType, DataObject::class) ||
+            is_subclass_of($returnType, AbstractSimpleObject::class);
+
+        return $isDataObject && isset($value['data']);
     }
 }
