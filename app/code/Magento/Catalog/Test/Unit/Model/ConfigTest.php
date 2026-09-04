@@ -56,8 +56,12 @@ class ConfigTest extends TestCase
         $setItem->expects($this->once())->method('getAttributeSetName')->willReturn('name');
         $setCollection = $this->createPartialMock(
             Collection::class,
-            ['load']
+            ['addFieldToSelect', 'load']
         );
+        $setCollection->expects($this->once())
+            ->method('addFieldToSelect')
+            ->with(['entity_type_id', 'attribute_set_name'])
+            ->willReturnSelf();
         $setCollection->expects($this->once())->method('load')->willReturn([1 => $setItem]);
         $setCollectionFactory->method('create')->willReturn($setCollection);
         $model->loadAttributeSets();
@@ -100,8 +104,12 @@ class ConfigTest extends TestCase
         $setItem->expects($this->once())->method('getAttributeGroupName')->willReturn('name');
         $groupCollection = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection::class,
-            ['load']
+            ['addFieldToSelect', 'load']
         );
+        $groupCollection->expects($this->once())
+            ->method('addFieldToSelect')
+            ->with(['attribute_set_id', 'attribute_group_name'])
+            ->willReturnSelf();
         $groupCollection->expects($this->once())->method('load')->willReturn([1 => $setItem]);
         $groupCollectionFactory
             ->method('create')->willReturn($groupCollection);
