@@ -128,7 +128,7 @@ class CacheCleaner
 
         $statuses = [];
         foreach ($this->getConnection()->fetchAll($select) as $item) {
-            $statuses[$item['product_id']] = $item;
+            $statuses[$item['product_id'].($item['parent_id']? '-'.$item['parent_id']: '')] = $item;
         }
         return $statuses;
     }
@@ -142,27 +142,29 @@ class CacheCleaner
      */
     private function getProductIdsForCacheClean(array $productStatusesBefore, array $productStatusesAfter)
     {
-        $disabledProductsIds = array_diff(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
-        $enabledProductsIds = array_diff(array_keys($productStatusesAfter), array_keys($productStatusesBefore));
-        $commonProductsIds = array_intersect(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
+        $beforeProductIds = array_unique(array_column($productStatusesBefore, 'product_id'));
+        $afterProductIds = array_unique(array_column($productStatusesAfter, 'product_id'));
+        $disabledProductsIds = array_diff($beforeProductIds, $afterProductIds);
+        $enabledProductsIds = array_diff($afterProductIds, $beforeProductIds);
+        $commonRelations = array_intersect(array_keys($productStatusesBefore), array_keys($productStatusesAfter));
         $productIds = array_merge($disabledProductsIds, $enabledProductsIds);
 
         $stockThresholdQty = $this->stockConfiguration->getStockThresholdQty();
 
-        foreach ($commonProductsIds as $productId) {
-            $statusBefore = $productStatusesBefore[$productId];
-            $statusAfter = $productStatusesAfter[$productId];
+        foreach ($commonRelations as $commonRelationId) {
+            $statusBefore = $productStatusesBefore[$commonRelationId];
+            $statusAfter = $productStatusesAfter[$commonRelationId];
 
             if ($statusBefore['stock_status'] !== $statusAfter['stock_status']
                 || ($stockThresholdQty && $statusAfter['qty'] <= $stockThresholdQty)) {
-                $productIds[] = $productId;
+                $productIds[] = $statusAfter['product_id'];
                 if (isset($statusAfter['parent_id'])) {
                     $productIds[] = $statusAfter['parent_id'];
                 }
             }
         }
 
-        return array_map('intval', $productIds);
+        return array_unique($productIds);
     }
 
     /**
