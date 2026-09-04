@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddCustomerAddressWithInvalidCityTest">
+        <annotations>
+            <features value="Customer address"/>
+            <stories value="Storefront customer address validation"/>
+            <title value="Customer cannot save address with invalid city characters"/>
+            <description value="Verify customer cannot save address with invalid city characters"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-4527"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <!-- Pre Condition: Create customer without address -->
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Logout from storefront and delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Step 1: Log into storefront as the created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Step 2: Open Address Book and add a new address -->
+        <actionGroup ref="StorefrontGoToCustomerAddressesPageActionGroup" stepKey="goToCustomerAddressBook"/>
+        <waitForElementClickable selector="{{StorefrontCustomerAddressesSection.addNewAddress}}" stepKey="waitForAddNewAddressButton"/>
+        <click selector="{{StorefrontCustomerAddressesSection.addNewAddress}}" stepKey="clickAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForNewAddressFormLoad"/>
+        <!-- Step 3: Fill address form with invalid city value -->
+        <actionGroup ref="EnterAddressDetailsActionGroup" stepKey="fillAddressFormWithInvalidCity">
+            <argument name="Address" value="InvalidCityCharsetAddressData"/>
+        </actionGroup>
+        <!-- Attempt to save address; server-side validation should block save -->
+        <waitForElementClickable selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="waitForSaveAddressButtonClickable"/>
+        <click selector="{{StorefrontCustomerAddressFormSection.saveAddress}}" stepKey="clickSaveAddressButton"/>
+        <!-- Step 3 Assertion: Validation error resulting in failure to save the address -->
+        <waitForText selector="{{StorefrontMessagesSection.error}}" userInput="{{InvalidCityCharsetErrorMessageData.message}}" stepKey="assertInvalidCityValidationError"/>
+        <waitForElementNotVisible selector="{{StorefrontMessagesSection.success}}" stepKey="assertAddressWasNotSaved"/>
+    </test>
+</tests>

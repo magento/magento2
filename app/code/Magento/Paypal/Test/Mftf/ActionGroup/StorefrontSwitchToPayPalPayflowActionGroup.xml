@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontSwitchToPayPalPayflowActionGroup">
+        <annotations>
+            <description>Switch to Paypal Payflow IFrame</description>
+        </annotations>
+        <arguments>
+            <argument name="elementNumber" type="string" defaultValue="0"/>
+        </arguments>
+        <!--set ID for iframe of PayPal group button-->
+        <executeJS function="document.getElementsByClassName('paypal iframe')[{{elementNumber}}].setAttribute('name', 'paypalFrame');" stepKey="setIDForIframe"/>
+        <!--switch to iframe of PayPal group button-->
+        <switchToIFrame userInput="paypalFrame" stepKey="switchToIframe"/>
+    </actionGroup>
+</actionGroups>

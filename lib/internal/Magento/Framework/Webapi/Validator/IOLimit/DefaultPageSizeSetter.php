@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -36,7 +36,7 @@ class DefaultPageSizeSetter
      */
     public function processSearchCriteria(
         SearchCriteriaInterface $searchCriteria,
-        int $defaultPageSizeFallback = null
+        ?int $defaultPageSizeFallback = null
     ): void {
         if ($searchCriteria->getPageSize() === null
             && $this->validationConfigProvider->isInputLimitingEnabled()

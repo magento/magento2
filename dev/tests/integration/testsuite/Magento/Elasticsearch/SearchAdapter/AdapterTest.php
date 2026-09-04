@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter;
 
@@ -11,16 +11,18 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class AdapterTest
  *
+ * @magentoAppIsolation enabled
  * @magentoDbIsolation disabled
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  *
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
  * achieve this, use @ magentoConfigFixture to pass unique value for index_prefix for every test
- * method. E.g. '@ magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix adaptertest'
+ * method. E.g. '@magentoConfigFixture current_store catalog/search/elasticsearch8_index_prefix adaptertest'
  *
  * In ElasticSearch, a reindex is required if the test includes a new data fixture with new items to search, see
  * testAdvancedSearchDateField().
@@ -378,7 +380,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * Sample Advanced search request test
      *
-     * @dataProvider elasticSearchAdvancedSearchDataProvider
      * @magentoAppIsolation enabled
      * @param string $nameQuery
      * @param string $descriptionQuery
@@ -386,6 +387,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param int $expectedRecordsCount
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
+    #[DataProvider('elasticSearchAdvancedSearchDataProvider')]
     public function testSimpleAdvancedSearch(
         $nameQuery,
         $descriptionQuery,
@@ -461,11 +463,11 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
-     * @dataProvider filterByAttributeValuesDataProvider
      * @param string $requestName
      * @param array $additionalData
      * @return void
      */
+    #[DataProvider('filterByAttributeValuesDataProvider')]
     public function testFilterByAttributeValues($requestName, $additionalData)
     {
         // Reindex Elastic Search since filterable_attribute data fixture added new fields to be indexed
@@ -500,8 +502,8 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
      * @magentoAppIsolation enabled
-     * @dataProvider dateDataProvider
      */
+    #[DataProvider('dateDataProvider')]
     public function testAdvancedSearchDateField($rangeFilter, $expectedRecordsCount)
     {
         // Reindex Elastic Search since date_attribute data fixture added new fields to be indexed

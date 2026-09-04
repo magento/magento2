@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Backend Model for product alerts
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Cron\Model\Config\Backend\Product;
 
@@ -21,12 +19,12 @@ class Alert extends \Magento\Framework\App\Config\Value
     /**
      * Cron string path for product alerts
      */
-    const CRON_STRING_PATH = 'crontab/default/jobs/catalog_product_alert/schedule/cron_expr';
+    public const CRON_STRING_PATH = 'crontab/default/jobs/catalog_product_alert/schedule/cron_expr';
 
     /**
      * Cron model path for product alerts
      */
-    const CRON_MODEL_PATH = 'crontab/default/jobs/catalog_product_alert/run/model';
+    public const CRON_MODEL_PATH = 'crontab/default/jobs/catalog_product_alert/run/model';
 
     /**
      * @var \Magento\Framework\App\Config\ValueFactory
@@ -55,8 +53,8 @@ class Alert extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $runModelPath = '',
         array $data = []
     ) {

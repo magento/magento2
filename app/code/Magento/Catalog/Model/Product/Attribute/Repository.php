@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute;
 
@@ -57,6 +56,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Eav\Model\Validator\Attribute\Code
+     */
+    protected $attributeCodeValidator;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -64,6 +68,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -72,7 +77,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Eav\Model\Validator\Attribute\Code $attributeCodeValidator
     ) {
         $this->attributeResource = $attributeResource;
         $this->productHelper = $productHelper;
@@ -81,6 +87,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $this->eavConfig = $eavConfig;
         $this->inputtypeValidatorFactory = $validatorFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->attributeCodeValidator = $attributeCodeValidator;
     }
 
     /**
@@ -109,6 +116,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(\Magento\Catalog\Api\Data\ProductAttributeInterface $attribute)
     {
@@ -133,6 +141,18 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
                 ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
                 ->getId()
         );
+        if (!$attribute->getAttributeId() && $attribute->getAttributeCode()) {
+            try {
+                $existingAttribute = $this->get($attribute->getAttributeCode());
+                if ($existingAttribute->getAttributeId()) {
+                    $attribute->setAttributeId($existingAttribute->getAttributeId());
+                }
+            } catch (NoSuchEntityException $e) {// phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // It's a new attribute, proceed as usual
+            }
+        }
+
+        $validOptionIds = [];
         if ($attribute->getAttributeId()) {
             $existingModel = $this->get($attribute->getAttributeCode());
 
@@ -148,6 +168,13 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setBackendModel($existingModel->getBackendModel());
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
+
+            $source = $existingModel->getSource();
+            if ($source) {
+                foreach ($source->getAllOptions() as $opt) {
+                    $validOptionIds[] = $opt['value'];
+                }
+            }
         } else {
             $attribute->setAttributeId(null);
 
@@ -157,15 +184,18 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
 
             $frontendLabel = $this->updateDefaultFrontendLabel($attribute, null);
 
+            $this->validateFrontendInput($attribute->getFrontendInput());
+
             $attribute->setAttributeCode(
                 $attribute->getAttributeCode() ?: $this->generateCode($frontendLabel)
             );
             $this->validateCode($attribute->getAttributeCode());
-            $this->validateFrontendInput($attribute->getFrontendInput());
 
-            $attribute->setBackendType(
-                $attribute->getBackendTypeByInput($attribute->getFrontendInput())
-            );
+            $backendType = $attribute->getBackendTypeByInput($attribute->getFrontendInput());
+            if ($attribute->getBackendType() && $attribute->getBackendType() !== $backendType) {
+                throw InputException::invalidFieldValue('backend_type', $attribute->getBackendType());
+            }
+            $attribute->setBackendType($backendType);
             $attribute->setSourceModel(
                 $this->productHelper->getAttributeSourceModelByInputType($attribute->getFrontendInput())
             );
@@ -181,7 +211,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $optionIndex = 0;
             foreach ($attribute->getOptions() as $option) {
                 $optionIndex++;
-                $optionId = $option->getValue() ?: 'option_' . $optionIndex;
+                $optionId = $option->getValue();
+                if ($optionId && is_numeric($optionId) && !in_array($optionId, $validOptionIds)) {
+                    $optionId = null;
+                }
+                $optionId = $optionId ?: 'option_' . $optionIndex;
                 $options['value'][$optionId][0] = $option->getLabel();
                 $options['order'][$optionId] = $option->getSortOrder() ?: $sortOrder++;
                 if (is_array($option->getStoreLabels())) {
@@ -244,6 +278,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             0,
             Attribute::ATTRIBUTE_CODE_MAX_LENGTH
         );
+
         $validatorAttrCode = new Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(hash('sha256', time()), 0, 8));
@@ -261,10 +296,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new Regex(
-            ['pattern' => '/^[a-z][a-z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']
-        );
-        if (!$validatorAttrCode->isValid($code)) {
+        $isValid = $this->attributeCodeValidator->isValid($code);
+        if (!$isValid) {
             throw InputException::invalidFieldValue('attribute_code', $code);
         }
     }

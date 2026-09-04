@@ -1,8 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\ImportExport\Block\Adminhtml\Export;
 
 use Magento\Eav\Model\Entity\Attribute;
@@ -27,8 +28,6 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_helper;
 
     /**
-     * Import export data
-     *
      * @var \Magento\ImportExport\Helper\Data
      */
     protected $_importExportData = null;
@@ -167,7 +166,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
             $arguments = [
                 'name' => $this->getFilterElementName($attribute->getAttributeCode()) . '[]',
                 'id' => $this->getFilterElementId($attribute->getAttributeCode()),
-                'class' => 'multiselect multiselect-export-filter',
+                'class' => 'admin__control-multiselect multiselect multiselect-export-filter',
                 'extra_params' => 'multiple="multiple" size="' . ($size > 5 ? 5 : ($size < 2 ? 2 : $size)) . '"',
             ];
             /** @var $selectBlock \Magento\Framework\View\Element\Html\Select */
@@ -176,7 +175,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 '',
                 ['data' => $arguments]
             );
-            return $selectBlock->setOptions($options)->setValue($value)->getHtml();
+            return $selectBlock->setOptions($options)->setValue($value !== '' ? $value : null)->getHtml();
         } else {
             return __('We can\'t filter an attribute with no attribute options.');
         }

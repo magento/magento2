@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model;
 
@@ -183,8 +183,8 @@ class Config implements ResetAfterRequestInterface
         \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        SerializerInterface $serializer = null,
-        ScopeConfigInterface $scopeConfig = null,
+        ?SerializerInterface $serializer = null,
+        ?ScopeConfigInterface $scopeConfig = null,
         $attributesForPreload = [],
         ?StoreManagerInterface $storeManager = null,
     ) {
@@ -288,6 +288,8 @@ class Config implements ResetAfterRequestInterface
         } else {
             $websiteId = 0;
         }
+        $entityTypeCode = (string)$entityTypeCode;
+        $attributeCode = (string)$attributeCode;
         $this->attributes[$websiteId][$entityTypeCode][$attributeCode] = $attribute;
     }
 
@@ -326,6 +328,8 @@ class Config implements ResetAfterRequestInterface
      */
     protected function _addAttributeReference($id, $code, $entityTypeCode)
     {
+        $entityTypeCode = (string)$entityTypeCode;
+        $id = (string)$id;
         $this->_references['attribute'][$entityTypeCode][$id] = $code;
         return $this;
     }

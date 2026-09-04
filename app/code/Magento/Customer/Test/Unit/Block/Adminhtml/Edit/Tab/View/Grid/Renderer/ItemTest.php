@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -100,9 +101,8 @@ class ItemTest extends TestCase
         $this->itemBlock->render($this->item);
     }
 
-    /**
-     * @dataProvider optionHtmlProvider
-     */
+    /** */
+    #[DataProvider('optionHtmlProvider')]
     public function testRender($amountOption, $expectedHtml)
     {
         $this->configure($amountOption);
@@ -115,6 +115,7 @@ class ItemTest extends TestCase
      */
     public static function optionHtmlProvider()
     {
+        //phpcs:disable
         return [
             [
                 2,
@@ -123,9 +124,9 @@ class ItemTest extends TestCase
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">
                                 <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                                 <dt>testLabel2</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                             </dl>
                         </xhtml>
 HTML
@@ -137,11 +138,11 @@ HTML
                             <div class="product-title">testProductName</div>
                             <dl class="item-options">
                                 <dt>testLabel1</dt>
-                                <dd>1 x Configurable Product 49-option 3 <span class="price">$10.00</span></dd>
+                                <dd>1 x Configurable Product 49-option 3 &lt;span class="price"&gt;$10.00&lt;/span&gt;</dd>
                             </dl>
                         </xhtml>
 HTML
             ],
-        ];
+        ];//phpcs:enable
     }
 }

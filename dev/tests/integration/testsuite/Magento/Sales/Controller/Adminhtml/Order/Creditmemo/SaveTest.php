@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,11 @@ use PHPUnit\Framework\Constraint\StringContains;
  */
 class SaveTest extends AbstractCreditmemoControllerTest
 {
+    /**
+     * @var string
+     */
+    protected $resource = 'Magento_Sales::creditmemo';
+
     /**
      * @var string
      */
@@ -56,7 +61,7 @@ class SaveTest extends AbstractCreditmemoControllerTest
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
+        $this->assertThat(quoted_printable_decode($message->getBody()->bodyToString()), $messageConstraint);
     }
 
     /**

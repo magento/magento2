@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -160,7 +160,7 @@ class Stat
      * @param string|null $filterPattern
      * @return array
      */
-    public function getFilteredTimerIds(array $thresholds = null, $filterPattern = null)
+    public function getFilteredTimerIds(?array $thresholds = null, $filterPattern = null)
     {
         $timerIds = $this->_getOrderedTimerIds();
         if (!$thresholds && !$filterPattern) {

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\CardinalCommerce\Test\Unit\Model\Response;
 
+use DateTimeZone;
 use Magento\CardinalCommerce\Model\Response\JwtPayloadValidator;
 use Magento\Framework\Intl\DateTimeFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JwtPayloadValidatorTest extends TestCase
 {
@@ -30,8 +32,8 @@ class JwtPayloadValidatorTest extends TestCase
      * Tests successful cases.
      *
      * @param array $token
-     * @dataProvider validateSuccessDataProvider
      */
+    #[DataProvider('validateSuccessDataProvider')]
     public function testValidateSuccess(array $token)
     {
         $this->assertTrue(
@@ -65,6 +67,7 @@ class JwtPayloadValidatorTest extends TestCase
      * @param array $token
      * @dataProvider validationEciFailsDataProvider
      */
+    #[DataProvider('validationEciFailsDataProvider')]
     public function testValidationEciFails(array $token)
     {
         $this->assertFalse(
@@ -93,8 +96,8 @@ class JwtPayloadValidatorTest extends TestCase
      * Case when resulting state of the transaction is negative.
      *
      * @param array $token
-     * @dataProvider validationActionCodeFailsDataProvider
      */
+    #[DataProvider('validationActionCodeFailsDataProvider')]
     public function testValidationActionCodeFails(array $token)
     {
         $this->assertFalse(
@@ -180,7 +183,7 @@ class JwtPayloadValidatorTest extends TestCase
     private static function getValidExpTimestamp()
     {
         $dateTimeFactory = new DateTimeFactory();
-        $currentDate = $dateTimeFactory->create('now', new \DateTimeZone('UTC'));
+        $currentDate = $dateTimeFactory->create('now', new DateTimeZone('UTC'));
 
         return $currentDate->getTimestamp() + 3600;
     }
@@ -193,7 +196,7 @@ class JwtPayloadValidatorTest extends TestCase
     private function getOutdatedExpTimestamp()
     {
         $dateTimeFactory = new DateTimeFactory();
-        $currentDate = $dateTimeFactory->create('now', new \DateTimeZone('UTC'));
+        $currentDate = $dateTimeFactory->create('now', new DateTimeZone('UTC'));
 
         return $currentDate->getTimestamp() - 3600;
     }

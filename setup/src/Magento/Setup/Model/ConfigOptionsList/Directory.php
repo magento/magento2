@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,7 +15,8 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 
 /**
  * Deployment configuration options for the folders.
- * @deprecared Magento always uses the pub directory
+ * @deprecated Magento always uses the pub directory
+ * @see Nothing
  */
 class Directory implements ConfigOptionsListInterface
 {
@@ -27,7 +28,7 @@ class Directory implements ConfigOptionsListInterface
     /**
      * Path in in configuration.
      */
-    const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
+    public const CONFIG_PATH_DOCUMENT_ROOT_IS_PUB = 'directories/document_root_is_pub';
 
     /**
      * The available configuration values.

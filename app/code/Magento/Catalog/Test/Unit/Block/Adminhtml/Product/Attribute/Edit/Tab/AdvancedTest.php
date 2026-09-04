@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
-use Magento\Backend\Block\Widget\Form\Element\ElementCreator;
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
@@ -22,11 +21,11 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,78 +36,83 @@ use PHPUnit\Framework\TestCase;
  */
 class AdvancedTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Advanced
      */
-    private $block;
+    protected $block;
 
     /**
      * @var FormFactory|MockObject
      */
-    private $formFactoryMock;
+    protected $formFactory;
 
     /**
      * @var Registry|MockObject
      */
-    private $registryMock;
+    protected $registry;
 
     /**
      * @var TimezoneInterface|MockObject
      */
-    private $localeDateMock;
+    protected $localeDate;
 
     /**
      * @var Yesno|MockObject
      */
-    private $yesNoMock;
+    protected $yesNo;
 
     /**
      * @var EavHelper|MockObject
      */
-    private $eavDataMock;
+    protected $eavData;
 
     /**
      * @var Filesystem|MockObject
      */
-    private $filesystemMock;
+    protected $filesystem;
 
     /**
      * @var PropertyLocker|MockObject
      */
-    private $propertyLockerMock;
+    protected $propertyLocker;
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->registryMock = $this->createMock(Registry::class);
-        $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->yesNoMock = $this->createMock(Yesno::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->eavDataMock = $this->createMock(EavHelper::class);
-        $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->propertyLockerMock = $this->createMock(PropertyLocker::class);
+        $objects = [
+            [
+                JsonHelper::class,
+                $this->createMock(JsonHelper::class)
+            ],
+            [
+                DirectoryHelper::class,
+                $this->createMock(DirectoryHelper::class)
+            ]
+        ];
+        $objectManager->prepareObjectManager($objects);
 
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $objectManagerMock->method('get')
-            ->willReturnMap([
-                [ElementCreator::class, $objectManager->getObject(ElementCreator::class)],
-                [JsonHelper::class, $objectManager->getObject(JsonHelper::class)]
-            ]);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        $this->registry = $this->createMock(Registry::class);
+        $this->formFactory = $this->createMock(FormFactory::class);
+        $this->yesNo = $this->createMock(Yesno::class);
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->eavData = $this->createMock(EavHelper::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->propertyLocker = $this->createMock(PropertyLocker::class);
 
         $this->block = $objectManager->getObject(
             Advanced::class,
             [
-                'registry' => $this->registryMock,
-                'formFactory' => $this->formFactoryMock,
-                'localeDate' => $this->localeDateMock,
-                'yesNo' => $this->yesNoMock,
-                'eavData' => $this->eavDataMock,
-                'filesystem' => $this->filesystemMock,
-                'propertyLocker' => $this->propertyLockerMock
+                'registry' => $this->registry,
+                'formFactory' => $this->formFactory,
+                'localeDate' => $this->localeDate,
+                'yesNo' => $this->yesNo,
+                'eavData' => $this->eavData,
+                'filesystem' => $this->filesystem,
+                'propertyLocker' => $this->propertyLocker,
             ]
         );
     }
@@ -125,42 +129,32 @@ class AdvancedTest extends TestCase
         $timeFormat = 'H:i:s:';
         $timeZone = 'America/Chicago';
 
-        $fieldsetMock = $this->createMock(Fieldset::class);
-        $formMock = $this->createMock(Form::class);
-        $attributeModelMock = $this->getMockBuilder(Attribute::class)
-            ->addMethods(['setDisabled'])
-            ->onlyMethods(
-                [
-                    'getDefaultValue',
-                    'getId',
-                    'getEntityType',
-                    'getIsUserDefined',
-                    'getAttributeCode',
-                    'getFrontendInput'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $entityTypeMock = $this->createMock(EntityType::class);
-        $formElementMock = $this->getMockBuilder(Text::class)
-            ->addMethods(['setDisabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $directoryReadInterfaceMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $fieldSet = $this->createMock(Fieldset::class);
+        $form = $this->createMock(Form::class);
+        $attributeModel = $this->createPartialMock(Attribute::class, [
+            'getDefaultValue',
+            'getId',
+            'getEntityType',
+            'getIsUserDefined',
+            'getAttributeCode',
+            'getFrontendInput'
+        ]);
+        $entityType = $this->createMock(EntityType::class);
+        $formElement = $this->createPartialMockWithReflection(Text::class, ['setDisabled']);
+        $directoryReadInterface = $this->createMock(ReadInterface::class);
 
-        $this->registryMock->method('registry')->with('entity_attribute')
-            ->willReturn($attributeModelMock);
-        $this->formFactoryMock->method('create')->willReturn($formMock);
-        $formMock->method('addFieldset')->willReturn($fieldsetMock);
-        $formMock->method('getElement')->willReturn($formElementMock);
-        $fieldsetMock->method('addField')->willReturnSelf();
-        $attributeModelMock->method('getDefaultValue')->willReturn($defaultValue);
-        $attributeModelMock->method('setDisabled')->willReturnSelf();
-        $attributeModelMock->method('getId')->willReturn(1);
-        $attributeModelMock->method('getEntityType')->willReturn($entityTypeMock);
-        $attributeModelMock->method('getIsUserDefined')->willReturn(false);
-        $attributeModelMock->method('getAttributeCode')->willReturn('attribute_code');
-        $attributeModelMock->method('getFrontendInput')->willReturn($frontendInput);
+        $this->registry->expects($this->any())->method('registry')->with('entity_attribute')
+            ->willReturn($attributeModel);
+        $this->formFactory->method('create')->willReturn($form);
+        $form->method('addFieldset')->willReturn($fieldSet);
+        $form->method('getElement')->willReturn($formElement);
+        $fieldSet->expects($this->any())->method('addField')->willReturnSelf();
+        $attributeModel->method('getDefaultValue')->willReturn($defaultValue);
+        $attributeModel->method('getId')->willReturn(1);
+        $attributeModel->method('getEntityType')->willReturn($entityType);
+        $attributeModel->method('getIsUserDefined')->willReturn(false);
+        $attributeModel->method('getAttributeCode')->willReturn('attribute_code');
+        $attributeModel->method('getFrontendInput')->willReturn($frontendInput);
 
         $dateTimeMock = $this->createMock(\DateTime::class);
         $dateTimeMock->expects($this->once())->method('setTimezone')->with(new \DateTimeZone($timeZone));
@@ -168,21 +162,21 @@ class AdvancedTest extends TestCase
             ->method('format')
             ->with(DateTime::DATETIME_PHP_FORMAT)
             ->willReturn($localizedDefaultValue);
-        $this->localeDateMock->method('getDateFormat')->willReturn($dateFormat);
-        $this->localeDateMock->method('getTimeFormat')->willReturn($timeFormat);
-        $this->localeDateMock->expects($this->once())->method('getConfigTimezone')->willReturn($timeZone);
-        $this->localeDateMock->expects($this->once())
+        $this->localeDate->method('getDateFormat')->willReturn($dateFormat);
+        $this->localeDate->method('getTimeFormat')->willReturn($timeFormat);
+        $this->localeDate->expects($this->once())->method('getConfigTimezone')->willReturn($timeZone);
+        $this->localeDate->expects($this->once())
             ->method('date')
             ->with($defaultValue, null, false)
             ->willReturn($dateTimeMock);
 
-        $entityTypeMock->method('getEntityTypeCode')->willReturn('entity_type_code');
-        $this->eavDataMock->method('getFrontendClasses')->willReturn([]);
-        $formElementMock->expects($this->exactly(3))->method('setDisabled')->willReturnSelf();
-        $this->yesNoMock->method('toOptionArray')->willReturn(['yes', 'no']);
-        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryReadInterfaceMock);
-        $directoryReadInterfaceMock->method('getRelativePath')->willReturn('relative_path');
-        $this->propertyLockerMock->expects($this->once())->method('lock')->with($formMock);
+        $entityType->method('getEntityTypeCode')->willReturn('entity_type_code');
+        $this->eavData->method('getFrontendClasses')->willReturn([]);
+        $formElement->expects($this->exactly(2))->method('setDisabled')->willReturnSelf();
+        $this->yesNo->method('toOptionArray')->willReturn(['yes', 'no']);
+        $this->filesystem->method('getDirectoryRead')->willReturn($directoryReadInterface);
+        $directoryReadInterface->method('getRelativePath')->willReturn('relative_path');
+        $this->propertyLocker->expects($this->once())->method('lock')->with($form);
 
         $this->block->setData(['action' => 'save']);
         $this->block->toHtml();

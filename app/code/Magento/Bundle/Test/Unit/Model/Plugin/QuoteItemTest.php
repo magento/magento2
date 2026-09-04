@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\Option;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Quote\Model\Quote\Item\ToOrderItem;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test class for \Magento\Bundle\Model\Plugin\QuoteItem
+ */
 class QuoteItemTest extends TestCase
 {
     /**
@@ -29,7 +32,7 @@ class QuoteItemTest extends TestCase
     /** @var MockObject|AbstractItem */
     protected $quoteItemMock;
 
-    /** @var MockObject|OrderItemInterface */
+    /** @var MockObject|Item */
     protected $orderItemMock;
 
     /**
@@ -39,24 +42,12 @@ class QuoteItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->orderItemMock = $this->getMockForAbstractClass(
-            OrderItemInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getProductOptions', 'setProductOptions']
-        );
-        $this->quoteItemMock = $this->getMockForAbstractClass(
-            AbstractItem::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getProduct']
-        );
+        $this->orderItemMock = $this->createPartialMock(Item::class, [
+            'getProductOptions', 'setProductOptions'
+        ]);
+        $this->quoteItemMock = $this->createPartialMock(AbstractItem::class, [
+            'getProduct', 'getQuote', 'getAddress', 'getOptionByCode'
+        ]);
         $this->subjectMock = $this->createMock(ToOrderItem::class);
         $this->productMock = $this->createMock(Product::class);
         $this->model = new QuoteItem();

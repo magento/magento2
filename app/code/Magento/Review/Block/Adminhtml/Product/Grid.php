@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Block\Adminhtml\Product;
 
@@ -72,6 +72,16 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         parent::_construct();
         $this->setRowClickCallback('review.gridRowClick');
         $this->setUseAjax(true);
+    }
+
+    /**
+     * Require review JS before grid row click callback is assigned.
+     *
+     * @return string[]
+     */
+    public function getRequireJsDependencies()
+    {
+        return ['Magento_Review/js/new-review'];
     }
 
     /**

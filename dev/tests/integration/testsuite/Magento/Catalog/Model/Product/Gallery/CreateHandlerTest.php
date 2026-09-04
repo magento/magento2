@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,10 +9,14 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for media gallery images creation during product save.
@@ -20,6 +24,8 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
  * @magentoDataFixture Magento/Catalog/_files/product_image.php
  * @magentoDbIsolation enabled
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreateHandlerTest extends \PHPUnit\Framework\TestCase
 {
@@ -102,9 +108,9 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * Check sanity of posted image file name.
      *
      * @param string $imageFileName
-     * @dataProvider illegalFilenameDataProvider
      * @return void
      */
+    #[DataProvider('illegalFilenameDataProvider')]
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
         $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
@@ -132,13 +138,13 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing with different image roles.
      *
-     * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
      * @param string $thumbnail
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithImageRoles(
         string $image,
         string $smallImage,
@@ -160,13 +166,13 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing without images.
      *
-     * @dataProvider executeDataProvider
      * @param string $image
      * @param string $smallImage
      * @param string $swatchImage
      * @param string $thumbnail
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecuteWithoutImages(
         string $image,
         string $smallImage,
@@ -214,12 +220,12 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests gallery processing with variations of additional gallery image fields.
      *
-     * @dataProvider additionalGalleryFieldsProvider
      * @param string $mediaField
      * @param string $value
      * @param string|null $expectedValue
      * @return void
      */
+    #[DataProvider('additionalGalleryFieldsProvider')]
     public function testExecuteWithAdditionalGalleryFields(
         string $mediaField,
         string $value,
@@ -275,6 +281,59 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             $product->getStoreId()
         );
         $this->assertEquals(self::$fileName, $mediaAttributeValue);
+    }
+
+    /**
+     * Ensures alt text (label) is persisted for a newly added image on a brand-new product.
+     *
+     * @return void
+     */
+    public function testExecutePersistsLabelForNewProductImage(): void
+    {
+        $label = 'Alt Text Label';
+
+        $mediaConfig = $this->objectManager->get(\Magento\Catalog\Model\Product\Media\Config::class);
+        $mediaDirectory = $this->objectManager->get(\Magento\Framework\Filesystem::class)
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        $mediaDirectory->writeFile($mediaConfig->getMediaPath(self::$fileName), 'existing');
+
+        $product = $this->objectManager->create(Product::class);
+        $product->isObjectNew(true);
+        $product->setTypeId(Type::TYPE_SIMPLE)
+            ->setAttributeSetId(4)
+            ->setWebsiteIds([1])
+            ->setName('New Alt Product')
+            ->setSku('new-alt-product')
+            ->setPrice(10)
+            ->setVisibility(Visibility::VISIBILITY_BOTH)
+            ->setStatus(Status::STATUS_ENABLED)
+            ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_in_stock' => 1])
+            ->setImage(self::$fileName)
+            ->setSmallImage(self::$fileName)
+            ->setThumbnail(self::$fileName)
+            ->setData(
+                'media_gallery',
+                ['images' => [
+                    [
+                        'file' => self::$fileName,
+                        'position' => 1,
+                        'label' => $label,
+                        'disabled' => 0,
+                        'media_type' => 'image',
+                    ],
+                ]]
+            )
+            ->setCanSaveCustomOptions(true);
+        $product->save();
+
+        $labels = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            ['image_label', 'small_image_label', 'thumbnail_label'],
+            0
+        );
+        $this->assertEquals($label, $labels['image_label'] ?? null);
+        $this->assertEquals($label, $labels['small_image_label'] ?? null);
+        $this->assertEquals($label, $labels['thumbnail_label'] ?? null);
     }
 
     /**

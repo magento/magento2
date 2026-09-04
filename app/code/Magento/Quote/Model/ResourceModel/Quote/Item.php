@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Quote\Model\ResourceModel\Quote;
 
@@ -11,8 +11,6 @@ use Magento\Quote\Model\Quote\Item\Option;
 
 /**
  * Quote resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Item extends AbstractDb
 {
@@ -27,7 +25,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(AbstractModel $object)
     {
@@ -63,7 +61,7 @@ class Item extends AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function prepareDataForUpdate($object)
     {

@@ -1,14 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
 
 /**
  * Cache frontend decorator that attaches no additional responsibility to a decorated instance.
  * To be used as an ancestor for concrete decorators to conveniently override only methods of interest.
  */
 namespace Magento\Framework\Cache\Frontend\Decorator;
+
+use Magento\Framework\Cache\CacheConstants;
 
 class Bare implements \Magento\Framework\Cache\FrontendInterface
 {
@@ -66,6 +69,30 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
+     * Batched multi-load passthrough (used by the preloading wrapper). Delegates to the wrapped
+     * frontend's loadMultiple() when it has one; otherwise falls back to per-key loads so the chain
+     * still works for non-batching backends.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        $frontend = $this->_getFrontend();
+        if (method_exists($frontend, 'loadMultiple')) {
+            return $frontend->loadMultiple($identifiers);
+        }
+        $out = [];
+        foreach ($identifiers as $id) {
+            $value = $frontend->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
@@ -84,7 +111,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     /**
      * @inheritdoc
      */
-    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, array $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, array $tags = [])
     {
         return $this->_getFrontend()->clean($mode, $tags);
     }

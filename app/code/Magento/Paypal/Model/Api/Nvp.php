@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\Api;
@@ -1190,7 +1190,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      * @param array $request
      * @return Curl
      */
-    private function getCurl(array $request = null): Curl
+    private function getCurl(?array $request = null): Curl
     {
         if (!$this->curl) {
             $this->curl = $this->_curlFactory->create();
@@ -1596,7 +1596,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             }
             $this->_importStreetFromAddress($shippingAddress, $to, 'SHIPTOSTREET', 'SHIPTOSTREET2');
             $this->_importStreetFromAddress($billingAddress, $to, 'STREET', 'STREET2');
-            $to['SHIPTONAME'] = $shippingAddress->getName();
+            $to['SHIPTONAME'] = $this->formatShipToName($shippingAddress);
         }
         return $to;
     }
@@ -1797,6 +1797,21 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
                 unset($requestFields[$key]);
             }
         }
+    }
+
+    /**
+     * Format shipping address name for PayPal SHIPTONAME field.
+     *
+     * PayPal provides a single SHIPTONAME field that is parsed into first and last name
+     * by splitting on the first space. Address::getName() includes prefix, middle name
+     * and suffix, which causes salutation to appear in the first name field
+     *
+     * @param DataObject $address
+     * @return string
+     */
+    private function formatShipToName(DataObject $address): string
+    {
+        return trim($address->getFirstname() . ' ' . $address->getLastname());
     }
 
     /**

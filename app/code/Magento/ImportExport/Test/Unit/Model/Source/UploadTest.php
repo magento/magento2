@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Test\Unit\Model\Source;
 
-use Laminas\File\Transfer\Adapter\Http;
+use Magento\Framework\File\Http;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
@@ -65,17 +65,11 @@ class UploadTest extends TestCase
         $directoryAbsolutePath = 'importexport/';
         $this->httpFactoryMock = $this->createPartialMock(FileTransferFactory::class, ['create']);
         $this->importExportDataMock = $this->createMock(DataHelper::class);
-        $this->uploaderFactoryMock = $this->getMockBuilder(UploaderFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->randomMock = $this->getMockBuilder(Random::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->uploaderFactoryMock = $this->createMock(UploaderFactory::class);
+        $this->randomMock = $this->createMock(Random::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->adapterMock = $this->createMock(Http::class);
-        $directoryWriteMock = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $directoryWriteMock = $this->createMock(WriteInterface::class);
         $directoryWriteMock->expects($this->once())->method('getAbsolutePath')->willReturn($directoryAbsolutePath);
         $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryWriteMock);
         $this->upload = new Upload(

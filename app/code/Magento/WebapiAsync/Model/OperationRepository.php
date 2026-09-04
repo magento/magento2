@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -42,6 +43,12 @@ class OperationRepository implements OperationRepositoryInterface
      * @var MessageValidator
      */
     private $messageValidator;
+
+    /**
+     * @var MessageEncoder
+     */
+    private $messageEncoder;
+
     /**
      * @var InputParamsResolver
      */
@@ -61,6 +68,7 @@ class OperationRepository implements OperationRepositoryInterface
      * @param Json $jsonSerializer
      * @param InputParamsResolver $inputParamsResolver
      * @param StoreManagerInterface|null $storeManager
+     * @param MessageEncoder|null $messageEncoder
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
@@ -68,7 +76,8 @@ class OperationRepository implements OperationRepositoryInterface
         MessageValidator $messageValidator,
         Json $jsonSerializer,
         InputParamsResolver $inputParamsResolver,
-        StoreManagerInterface $storeManager = null
+        ?StoreManagerInterface $storeManager = null,
+        ?MessageEncoder $messageEncoder = null
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;
@@ -76,6 +85,7 @@ class OperationRepository implements OperationRepositoryInterface
         $this->entityManager = $entityManager;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->storeManager = $storeManager?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->messageEncoder = $messageEncoder ?: ObjectManager::getInstance()->get(MessageEncoder::class);
     }
 
     /**
@@ -83,15 +93,15 @@ class OperationRepository implements OperationRepositoryInterface
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
-
-        $this->messageValidator->validate($topicName, $entityParams);
         $requestData = $this->inputParamsResolver->getInputData();
         if ($operationId === null || !isset($requestData[$operationId])) {
             throw new \InvalidArgumentException(
                 'Parameter "$operationId" must not be NULL and must exist in input data'
             );
         }
-        $encodedMessage = $this->jsonSerializer->serialize($requestData[$operationId]);
+
+        $this->messageValidator->validate($topicName, $entityParams);
+        $encodedMessage = $this->messageEncoder->encode($topicName, $entityParams);
 
         $serializedData = [
             'entity_id'        => null,

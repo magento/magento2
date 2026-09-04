@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -15,6 +15,8 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="encryption_update_key_command" xsi:type="object">Magento\EncryptionKey\Console\Command\UpdateEncryptionKeyCommand</item>
+                <item name="encryption_data_re-encrypt_command" xsi:type="object">Magento\EncryptionKey\Console\Command\ReEncryptDataCommand</item>
+                <item name="encryption_data_list-re-encryptors_command" xsi:type="object">Magento\EncryptionKey\Console\Command\ListReEncryptorsCommand</item>
             </argument>
         </arguments>
     </type>

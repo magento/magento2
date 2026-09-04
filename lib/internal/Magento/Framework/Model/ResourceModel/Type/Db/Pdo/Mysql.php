@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Model\ResourceModel\Type\Db\Pdo;
 
@@ -35,7 +35,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      */
     public function __construct(
         array $config,
-        MysqlFactory $mysqlFactory = null
+        ?MysqlFactory $mysqlFactory = null
     ) {
         $this->connectionConfig = $this->getValidConfig($config);
         $this->mysqlFactory = $mysqlFactory ?: ObjectManager::getInstance()->get(MysqlFactory::class);
@@ -43,9 +43,9 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getConnection(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
+    public function getConnection(?DB\LoggerInterface $logger = null, ?SelectFactory $selectFactory = null)
     {
         $connection = $this->getDbConnectionInstance($logger, $selectFactory);
 
@@ -65,7 +65,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      * @param SelectFactory|null $selectFactory
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function getDbConnectionInstance(DB\LoggerInterface $logger = null, SelectFactory $selectFactory = null)
+    protected function getDbConnectionInstance(?DB\LoggerInterface $logger = null, ?SelectFactory $selectFactory = null)
     {
         return $this->mysqlFactory->create(
             $this->getDbConnectionClassName(),
@@ -93,7 +93,7 @@ class Mysql extends \Magento\Framework\Model\ResourceModel\Type\Db implements
      */
     private function getValidConfig(array $config)
     {
-        $default = ['initStatements' => 'SET NAMES utf8', 'type' => 'pdo_mysql', 'active' => false];
+        $default = ['type' => 'pdo_mysql', 'active' => false];
         foreach ($default as $key => $value) {
             if (!isset($config[$key])) {
                 $config[$key] = $value;

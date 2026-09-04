@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -126,8 +126,8 @@ class Transparent extends Payflowpro implements TransparentInterface
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         \Magento\Paypal\Model\CartFactory $payPalCartFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(
@@ -244,7 +244,7 @@ class Transparent extends Payflowpro implements TransparentInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritDoc
      */
     public function getConfigInterface()
     {
@@ -284,7 +284,7 @@ class Transparent extends Payflowpro implements TransparentInterface
      */
     private function getExpirationDate(Payment $payment)
     {
-        $expDate = new \DateTime(
+        $cardExpDate = new \DateTime(
             $payment->getCcExpYear()
             . '-'
             . $payment->getCcExpMonth()
@@ -294,8 +294,13 @@ class Transparent extends Payflowpro implements TransparentInterface
             . '00:00:00',
             new \DateTimeZone('UTC')
         );
-        $expDate->add(new \DateInterval('P1M'));
-        return $expDate->format('Y-m-d 00:00:00');
+        $cardExpDate->add(new \DateInterval('P1M'));
+        $oneYearFromNow = new \DateTime('now', new \DateTimeZone('UTC'));
+        $oneYearFromNow->add(new \DateInterval('P1Y'));
+        if ($cardExpDate <= $oneYearFromNow) {
+            return $cardExpDate->format('Y-m-d 00:00:00');
+        }
+        return $oneYearFromNow->format('Y-m-d 00:00:00');
     }
 
     /**

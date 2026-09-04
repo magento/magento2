@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
@@ -69,5 +69,8 @@
     </event>
     <event name="admin_system_config_changed_section_general">
         <observer name="move_store_level_catalog_data_to_website_scope_on_single_store_mode" instance="Magento\Catalog\Observer\MoveStoreLevelCatalogDataToWebsiteScopeOnSingleStoreMode" />
+    </event>
+    <event name="catalog_entity_attribute_save_before">
+        <observer name="catalog_attribute_price_scope_change" instance="Magento\Catalog\Observer\ChangePriceAttributeScopeOnCreate" />
     </event>
 </config>

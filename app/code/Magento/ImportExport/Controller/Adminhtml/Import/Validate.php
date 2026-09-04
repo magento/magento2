@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\View\Result\Layout;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result;
 use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import validate controller action.
@@ -51,10 +52,16 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             $import = $this->getImport()->setData($data);
             try {
                 $source = $import->uploadFileAndGetSource();
+                $this->_eventManager->dispatch('log_admin_import');
                 $this->processValidationResult($import->validateSource($source), $resultBlock);
                 $ids = $import->getValidatedIds();
                 if (count($ids) > 0) {
                     $resultBlock->addAction('value', Import::FIELD_IMPORT_IDS, $ids);
+                    $resultBlock->addAction(
+                        'value',
+                        '_import_history_id',
+                        $this->historyModel->getId()
+                    );
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $resultBlock->addError($e->getMessage());
@@ -132,7 +139,9 @@ class Validate extends ImportResultController implements HttpPostActionInterface
         $errors = $errorAggregator->getAllErrors();
         $rowNumber = [];
         foreach ($errors as $error) {
-            $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            if ($error->getRowNumber()) {
+                $rowNumber = array_unique([...$rowNumber , ...[$error->getRowNumber()]]);
+            }
         }
         (count($rowNumber) < $totalRows)? $this->_validateRowError = true : $this->_validateRowError = false;
         return $this->_validateRowError;
@@ -164,7 +173,10 @@ class Validate extends ImportResultController implements HttpPostActionInterface
     private function addMessageToSkipErrors(Result $resultBlock)
     {
         $import = $this->getImport();
-        if (!$import->getErrorAggregator()->hasFatalExceptions()) {
+        $validationStrategy = $import->getData(Import::FIELD_NAME_VALIDATION_STRATEGY);
+        if ($validationStrategy === ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+            && !$import->getErrorAggregator()->hasFatalExceptions()
+        ) {
             $resultBlock->addSuccess(
                 __('Please fix errors and re-upload file or simply press "Import" button to skip rows with errors'),
                 true

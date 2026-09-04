@@ -1,23 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Framework\Config\Test\Unit;
 
 use Magento\Framework\Config\Dom;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XsdTest extends TestCase
 {
     /**
      * @param string $xsdFile
      * @param string $invalidXmlFile
-     * @param int $expectedErrorsQty
-     * @dataProvider invalidXmlFileDataProvider
+     * @param int $expectedErrorsQty     * @throws \Exception
      */
+    #[DataProvider('invalidXmlFileDataProvider')]
     public function testInvalidXmlFile($xsdFile, $invalidXmlFile, $expectedErrorsQty)
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
@@ -43,6 +45,6 @@ class XsdTest extends TestCase
      */
     public static function invalidXmlFileDataProvider()
     {
-        return [['view.xsd', 'view_invalid.xml', 8], ['theme.xsd', 'theme_invalid.xml', 1]];
+        return [['view.xsd', 'view_invalid.xml', 10], ['theme.xsd', 'theme_invalid.xml', 1]];
     }
 }

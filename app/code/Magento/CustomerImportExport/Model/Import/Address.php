@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites as CountryWithWebsitesSource;
+use Magento\CustomerImportExport\Model\Import\CountryWithWebsites as CountryWithWebsitesSource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -365,7 +365,7 @@ class Address extends AbstractCustomer
         if ($attribute->getAttributeCode() === 'country_id') {
             //If we want to get available options for country field then we have to use alternative source
             // to get actual data for each website.
-            $options = $this->countryWithWebsites->getAllOptions();
+            $options = $this->countryWithWebsites->getCountiesPerWebsite();
             //Available country options now will be sorted by websites.
             $code = $attribute->getAttributeCode();
             $websiteOptions = [Store::DEFAULT_STORE_ID => $standardOptions];

@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\ResourceModel\Report\Invoiced\Collection;
 
 /**
  * Sales report invoiced collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Invoiced extends Order
 {
@@ -26,7 +24,7 @@ class Invoiced extends Order
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\ResourceModel\Report $resource,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
         $resource->init('sales_invoiced_aggregated');

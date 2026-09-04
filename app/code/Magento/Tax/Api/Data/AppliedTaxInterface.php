@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Tax\Api\Data;
 
@@ -70,7 +70,7 @@ interface AppliedTaxInterface extends \Magento\Framework\Api\ExtensibleDataInter
      * @param \Magento\Tax\Api\Data\AppliedTaxRateInterface[] $rates
      * @return $this
      */
-    public function setRates(array $rates = null);
+    public function setRates(?array $rates = null);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

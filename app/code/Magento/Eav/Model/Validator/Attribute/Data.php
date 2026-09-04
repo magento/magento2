@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Eav\Model\Validator\Attribute;
@@ -60,7 +60,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
      */
     public function __construct(
         AttributeDataFactory $attrDataFactory,
-        Config $eavConfig = null,
+        ?Config $eavConfig = null,
         array $ignoredAttributesByTypesList = []
     ) {
         $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -56,8 +56,8 @@ class ZipTest extends TestCase
         $targetDirectory = $this->createMock(TargetDirectory::class);
         $this->subjectMock = $this->createMock(\Magento\Framework\Archive\Zip::class);
         $this->configMock = $this->createMock(Config::class);
-        $this->tmpDirectoryWriteMock = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->remoteDirectoryWriteMock = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->tmpDirectoryWriteMock = $this->createMock(WriteInterface::class);
+        $this->remoteDirectoryWriteMock = $this->createMock(WriteInterface::class);
         $filesystem->expects(self::once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::TMP)
@@ -97,8 +97,8 @@ class ZipTest extends TestCase
 
     public function testRemoteStorageIsNotEnabled()
     {
-        $remoteDriverMock = $this->getMockForAbstractClass(DriverInterface::class);
-        $tmpDriverMock = $this->getMockForAbstractClass(DriverInterface::class);
+        $remoteDriverMock = $this->createMock(DriverInterface::class);
+        $tmpDriverMock = $this->createMock(DriverInterface::class);
         $this->configMock->expects(self::once())
             ->method('isEnabled')
             ->willReturn(true);

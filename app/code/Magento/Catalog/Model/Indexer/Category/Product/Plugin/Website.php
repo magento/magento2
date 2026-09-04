@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
@@ -29,7 +29,7 @@ class Website
      */
     public function __construct(
         TableMaintainer $tableMaintainer,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        ?\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
     ) {
         $this->tableMaintainer = $tableMaintainer;
         $this->pillPut = $pillPut ?: ObjectManager::getInstance()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GiftMessage\Block\Message;
 
@@ -10,8 +10,6 @@ use Magento\GiftMessage\Model\Message;
 
 /**
  * Gift message inline edit form
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Inline extends \Magento\Framework\View\Element\Template
 {

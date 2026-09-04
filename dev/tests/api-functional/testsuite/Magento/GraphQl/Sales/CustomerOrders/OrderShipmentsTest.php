@@ -1,24 +1,44 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales\CustomerOrders;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Registry;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
+use Magento\Store\Test\Fixture\Store;
 use Magento\GraphQl\Sales\Fixtures\CustomerPlaceOrder;
+use Magento\Quote\Test\Fixture\AddProductToCart;
+use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests the Order Shipments query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderShipmentsTest extends GraphQlAbstract
 {
     /**
@@ -96,25 +116,120 @@ class OrderShipmentsTest extends GraphQlAbstract
         $this->assertNotEmpty($shipment['comments'][0]['timestamp']);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/customer_order_with_multiple_shipments.php
-     */
+    #[
+        DataFixture(Store::class),
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product1.id$', 'qty' => 2]),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product2.id$', 'qty' => 2]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product1.id$', 'qty' => 1]]
+            ],
+            'shipment1'
+        ),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product2.id$', 'qty' => 1]]
+            ],
+            'shipment2'
+        ),
+
+    ]
     public function testGetOrderShipmentsMultiple()
     {
-        $query = $this->getQuery('100000555');
-        $authHeader = $this->getCustomerAuthHeader->execute('customer_uk_address@test.com', 'password');
-
+        $order = DataFixtureStorageManager::getStorage()->get('order');
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $shipment1 = DataFixtureStorageManager::getStorage()->get('shipment1');
+        $shipment2 = DataFixtureStorageManager::getStorage()->get('shipment2');
+        $query = $this->getQuery($order->getIncrementId());
+        $authHeader = $this->getCustomerAuthHeader->execute($customer->getEmail(), 'password');
         $result = $this->graphQlQuery($query, [], '', $authHeader);
         $this->assertArrayNotHasKey('errors', $result);
         $order = $result['customer']['orders']['items'][0];
         $shipments = $order['shipments'];
         $this->assertCount(2, $shipments);
-        $this->assertEquals('0000000098', $shipments[0]['number']);
+        $this->assertEquals($shipment1->getIncrementId(), $shipments[0]['number']);
         $this->assertCount(1, $shipments[0]['items']);
-        $this->assertEquals('0000000099', $shipments[1]['number']);
+        $this->assertEquals($shipment2->getIncrementId(), $shipments[1]['number']);
         $this->assertCount(1, $shipments[1]['items']);
     }
 
+    #[
+        Config('general/locale/code', 'fr_FR'),
+        Config('general/locale/timezone', 'Europe/Paris'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product.id$', 'qty' => 1]]
+            ],
+            'shipment'
+        ),
+    ]
+    public function testShipmentCommentTimestampCalendarValueIsCorrectUnderFrenchLocale()
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $order = DataFixtureStorageManager::getStorage()->get('order');
+        /** @var Shipment $shipment */
+        $shipment = DataFixtureStorageManager::getStorage()->get('shipment');
+
+        $shipment->addComment('visible_comment', false, true);
+        /** @var ShipmentRepositoryInterface $shipmentRepository */
+        $shipmentRepository = Bootstrap::getObjectManager()->get(ShipmentRepositoryInterface::class);
+        $shipmentRepository->save($shipment);
+        $shipmentComment = $shipment->getCommentsCollection()->getLastItem();
+
+        $authHeader = $this->getCustomerAuthHeader->execute($customer->getEmail(), 'password');
+        $result = $this->graphQlQuery($this->getQuery($order->getIncrementId()), [], '', $authHeader);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $comments = $result['customer']['orders']['items'][0]['shipments'][0]['comments'];
+        $this->assertCount(1, $comments);
+        $timestamp = $comments[0]['timestamp'];
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $timestamp);
+
+        // Independent computation - deliberately does NOT go through
+        // Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug (AC-18084).
+        $expectedTimestamp = (new \DateTime($shipmentComment->getCreatedAt(), new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('Europe/Paris'))
+            ->format('Y-m-d H:i:s');
+
+        $this->assertSame(
+            $expectedTimestamp,
+            $timestamp,
+            sprintf(
+                'Shipment comment timestamp should equal its created_at (%s, UTC) converted to the '
+                . 'Europe/Paris store timezone under the fr_FR locale.',
+                $shipmentComment->getCreatedAt()
+            )
+        );
+    }
+    
     /**
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/customer_order_with_ups_shipping.php
@@ -211,7 +326,7 @@ class OrderShipmentsTest extends GraphQlAbstract
      * @param string|null $orderId
      * @return string
      */
-    private function getQuery(string $orderId = null)
+    private function getQuery(?string $orderId = null)
     {
         $filter = $orderId ? "(filter:{number:{eq:\"$orderId\"}})" : "";
         return <<<QUERY

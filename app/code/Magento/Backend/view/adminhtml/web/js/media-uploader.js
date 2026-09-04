@@ -1,7 +1,6 @@
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /* eslint-disable no-undef */
@@ -44,6 +43,7 @@ define([
                 fileId = null,
                 allowedExt = ['jpeg', 'jpg', 'png', 'gif'],
                 allowedResize = false,
+                isGifFile = false,
                 options = {
                     proudlyDisplayPoweredByUppy: false,
                     target: targetElement,
@@ -75,7 +75,11 @@ define([
                         byteConvert(currentFile.size);
 
                     // check if file is allowed to upload and resize
-                    allowedResize = $.inArray(currentFile.extension?.toLowerCase(), allowedExt) !== -1;
+                    allowedResize = $.inArray(
+                        currentFile.extension && currentFile.extension.toLowerCase(),
+                        allowedExt
+                    ) !== -1;
+                    isGifFile = currentFile.extension && currentFile.extension.toLowerCase() === 'gif';
 
                     if (!allowedResize)  {
                         fileUploader.aggregateError(currentFile.name,
@@ -95,11 +99,10 @@ define([
                     });
 
                     // code to allow duplicate files from same folder
-                    const modifiedFile = {
-                        ...currentFile,
-                        id:  currentFile.id + '-' + fileId,
-                        tempFileId:  fileId
-                    };
+                    const modifiedFile = Object.assign({}, currentFile, {
+                        id: currentFile.id + '-' + fileId,
+                        tempFileId: fileId
+                    });
 
                     $(tmpl).appendTo(self.element);
                     return modifiedFile;
@@ -121,7 +124,7 @@ define([
                     maxHeight: this.options.maxHeight,
                     quality: 0.92,
                     beforeDraw() {
-                        if (!allowedResize) {
+                        if (!allowedResize || isGifFile) {
                             this.abort();
                         }
                     }

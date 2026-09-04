@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\GiftMessage\Model;
@@ -108,6 +108,7 @@ class GiftMessageManager
      */
     public function setMessage(\Magento\Quote\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {
+        $entityId = $entityId ?? '';
         $message[$type][$entityId] = [
             'from' => $giftMessage->getSender(),
             'to' => $giftMessage->getRecipient(),

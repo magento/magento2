@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,8 +16,12 @@ use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote\Item\CartItemOptionsProcessor;
 use Magento\Quote\Model\Quote\Item\Repository;
+use Magento\Quote\Model\Quote\Item\CartItemValidatorInterface;
+use Magento\Quote\Model\Quote\Item\CartItemValidatorResultInterface;
+use Magento\Quote\Model\QuoteMutexInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class RepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Repository
      */
@@ -83,35 +88,42 @@ class RepositoryTest extends TestCase
     private $optionsProcessorMock;
 
     /**
+     * @var CartItemValidatorInterface|MockObject
+     */
+    private $cartItemValidatorMock;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
-        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->productRepositoryMock = $this->createMock(ProductRepositoryInterface::class);
         $this->itemDataFactoryMock = $this->createPartialMock(CartItemInterfaceFactory::class, ['create']);
         $this->itemMock = $this->createMock(Item::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->quoteItemMock =
-            $this->getMockBuilder(Item::class)
-                ->addMethods(['addProduct'])
-                ->onlyMethods(['getId', 'getSku', 'getQty', 'setData', '__wakeUp', 'getProduct'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->quoteItemMock = $this->createMock(Item::class);
         $this->customOptionProcessor = $this->createMock(CustomOptionProcessor::class);
-        $this->shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['setCollectShippingRates'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shippingAddressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            ['setCollectShippingRates']
+        );
         $this->optionsProcessorMock = $this->createMock(CartItemOptionsProcessor::class);
+
+        $this->cartItemValidatorMock = $this->createMock(CartItemValidatorInterface::class);
+        $validatorResult = $this->createMock(CartItemValidatorResultInterface::class);
+        $validatorResult->method('getErrors')->willReturn([]);
+        $this->cartItemValidatorMock->method('validate')->willReturn($validatorResult);
 
         $this->repository = new Repository(
             $this->quoteRepositoryMock,
             $this->productRepositoryMock,
             $this->itemDataFactoryMock,
             $this->optionsProcessorMock,
-            ['custom_options' => $this->customOptionProcessor]
+            ['custom_options' => $this->customOptionProcessor],
+            $this->createMock(QuoteMutexInterface::class),
+            $this->cartItemValidatorMock
         );
     }
 
@@ -123,11 +135,10 @@ class RepositoryTest extends TestCase
         $cartId = 13;
         $itemId = 20;
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['getLastAddedItem'])
-            ->onlyMethods(['getItems', 'setItems', 'collectTotals'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getLastAddedItem', 'getItems', 'setItems', 'collectTotals']
+        );
 
         $this->itemMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
         $this->quoteRepositoryMock->expects($this->once())
@@ -164,7 +175,6 @@ class RepositoryTest extends TestCase
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Controller\Transparent;
 
@@ -81,8 +81,8 @@ class Response extends \Magento\Framework\App\Action\Action implements CsrfAware
         ResponseValidator $responseValidator,
         LayoutFactory $resultLayoutFactory,
         Transparent $transparent,
-        Session $sessionTransparent = null,
-        PaymentFailuresInterface $paymentFailures = null
+        ?Session $sessionTransparent = null,
+        ?PaymentFailuresInterface $paymentFailures = null
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;

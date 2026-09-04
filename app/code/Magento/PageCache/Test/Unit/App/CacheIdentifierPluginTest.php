@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\View\DesignExceptions;
 use Magento\PageCache\Model\App\CacheIdentifierPlugin;
 use Magento\PageCache\Model\Config;
 use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -72,8 +73,8 @@ class CacheIdentifierPluginTest extends TestCase
      * @param string|false $result
      * @param string $uaException
      * @param string $expected
-     * @dataProvider afterGetValueDataProvider
      */
+    #[DataProvider('afterGetValueDataProvider')]
     public function testAfterGetValue($cacheType, $isPageCacheEnabled, $result, $uaException, $expected)
     {
         $identifierMock = $this->createMock(Identifier::class);

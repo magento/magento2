@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,12 +20,15 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Validate
      */
@@ -57,7 +60,7 @@ class ValidateTest extends TestCase
     protected function setUp(): void
     {
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
         $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
 
@@ -116,10 +119,10 @@ class ValidateTest extends TestCase
         $this->resultJsonFactoryMock->method('create')
             ->willReturn($resultJson);
 
-        $validateResponseMock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['getError', 'setMessages'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $validateResponseMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getError', 'setMessages']
+        );
         $validateResponseMock->method('setMessages')->willReturnSelf();
         $validateResponseMock->method('getError')->willReturn(1);
 

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
@@ -18,5 +18,20 @@
                 <multi_address_error_message>The current cart does not match multi shipping criteria, please review or contact the store administrator</multi_address_error_message>
             </minimum_order>
         </sales>
+        <csp>
+            <mode>
+                <storefront_multishipping_checkout_billing>
+                    <report_only>0</report_only>
+                </storefront_multishipping_checkout_billing>
+            </mode>
+            <policies>
+                <storefront_multishipping_checkout_billing>
+                    <scripts>
+                        <inline>0</inline>
+                        <event_handlers>1</event_handlers>
+                    </scripts>
+                </storefront_multishipping_checkout_billing>
+            </policies>
+        </csp>
     </default>
 </config>

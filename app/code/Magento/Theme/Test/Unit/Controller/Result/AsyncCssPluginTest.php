@@ -1,16 +1,20 @@
 <?php
+
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Controller\Result;
 
 use Magento\Theme\Controller\Result\AsyncCssPlugin;
+use Magento\Csp\Api\InlineUtilInterface;
 use Magento\Framework\App\Response\Http;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\View\Result\Layout;
@@ -21,7 +25,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  */
 class AsyncCssPluginTest extends TestCase
 {
-    const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
+    private const STUB_XML_PATH_USE_CSS_CRITICAL_PATH = 'dev/css/use_css_critical_path';
 
     /**
      * @var AsyncCssPlugin
@@ -38,27 +42,33 @@ class AsyncCssPluginTest extends TestCase
      */
     private $httpMock;
 
-    /** @var Layout|MockObject */
+    /**
+     * @var Layout|MockObject
+     */
     private $layoutMock;
+
+    /**
+     * @var InlineUtilInterface|MockObject
+     */
+    private $cspInlineUtilMock;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->onlyMethods(['isSetFlag'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
 
         $this->httpMock = $this->createMock(Http::class);
         $this->layoutMock = $this->createMock(Layout::class);
+        $this->cspInlineUtilMock = $this->createMock(InlineUtilInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->plugin = $objectManager->getObject(
             AsyncCssPlugin::class,
             [
-                'scopeConfig' => $this->scopeConfigMock
+                'scopeConfig' => $this->scopeConfigMock,
+                'cspInlineUtil' => $this->cspInlineUtilMock
             ]
         );
     }
@@ -137,8 +147,8 @@ class AsyncCssPluginTest extends TestCase
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider renderResultDataProvider
      */
+    #[DataProvider('renderResultDataProvider')]
     public function testAfterRenderResult(string $content, bool $isSetFlag, string $result): void
     {
         // Given (context)
@@ -149,6 +159,14 @@ class AsyncCssPluginTest extends TestCase
             ->with(self::STUB_XML_PATH_USE_CSS_CRITICAL_PATH, ScopeInterface::SCOPE_STORE)
             ->willReturn($isSetFlag);
 
+        if ($isSetFlag) {
+            $this->cspInlineUtilMock->expects($this->any())
+                ->method('renderEventListener')
+                ->with(
+                    'onload',
+                    "this.onload=null;this.media='all'"
+                )->willReturn('onload="this.onload=null;this.media=\'all\'"');
+        }
         // Expects
         $this->httpMock->expects($this->any())
             ->method('setContent')
@@ -177,8 +195,8 @@ class AsyncCssPluginTest extends TestCase
      *
      * @param $content
      * @return void
-     * @dataProvider ifGetContentIsNotAStringDataProvider
      */
+    #[DataProvider('ifGetContentIsNotAStringDataProvider')]
     public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
         $this->scopeConfigMock->method('isSetFlag')

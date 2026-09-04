@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\App\View\Deployment;
@@ -49,7 +49,7 @@ class Version
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\View\Deployment\Version\StorageInterface $versionStorage,
-        DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->appState = $appState;
         $this->versionStorage = $versionStorage;

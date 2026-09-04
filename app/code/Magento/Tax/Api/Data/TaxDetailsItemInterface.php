@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Tax\Api\Data;
@@ -191,7 +191,7 @@ interface TaxDetailsItemInterface extends \Magento\Framework\Api\ExtensibleDataI
      * @param \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes
      * @return $this
      */
-    public function setAppliedTaxes(array $appliedTaxes = null);
+    public function setAppliedTaxes(?array $appliedTaxes = null);
 
     /**
      * Return associated item code if this item is associated with another item, null otherwise

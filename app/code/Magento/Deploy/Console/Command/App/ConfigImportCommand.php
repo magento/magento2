@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Deploy\Console\Command\App;
@@ -28,7 +28,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConfigImportCommand extends Command
 {
-    const COMMAND_NAME = 'app:config:import';
+    public const COMMAND_NAME = 'app:config:import';
 
     /**
      * Configuration importer.
@@ -60,9 +60,9 @@ class ConfigImportCommand extends Command
      */
     public function __construct(
         Processor $processor,
-        DeploymentConfig $deploymentConfig = null,
-        EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
-        AreaList $areaList = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?EmulatedAdminhtmlAreaProcessor $adminhtmlAreaProcessor = null,
+        ?AreaList $areaList = null
     ) {
         $this->processor = $processor;
         $this->deploymentConfig = $deploymentConfig
@@ -95,7 +95,7 @@ class ConfigImportCommand extends Command
      * @return int
      * @throws \Exception
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
             if ($this->canEmulateAdminhtmlArea()) {

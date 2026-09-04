@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\SalesRule\Model;
@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory;
 use Magento\SalesRule\Model\Rule\CustomerFactory;
 
@@ -58,12 +59,18 @@ class Utility
     private $validateCoupon;
 
     /**
+     * @var OrderEditUsageOffset
+     */
+    private $orderEditUsageOffset;
+
+    /**
      * @param UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
      * @param DataObjectFactory $objectFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ValidateCoupon|null $validateCoupon
+     * @param OrderEditUsageOffset|null $orderEditUsageOffset
      */
     public function __construct(
         UsageFactory $usageFactory,
@@ -71,7 +78,8 @@ class Utility
         CustomerFactory $customerFactory,
         DataObjectFactory $objectFactory,
         PriceCurrencyInterface $priceCurrency,
-        ValidateCoupon $validateCoupon = null
+        ?ValidateCoupon $validateCoupon = null,
+        ?OrderEditUsageOffset $orderEditUsageOffset = null
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;
@@ -79,6 +87,8 @@ class Utility
         $this->objectFactory = $objectFactory;
         $this->priceCurrency = $priceCurrency;
         $this->validateCoupon = $validateCoupon ?: ObjectManager::getInstance()->get(ValidateCoupon::class);
+        $this->orderEditUsageOffset = $orderEditUsageOffset
+            ?: ObjectManager::getInstance()->get(OrderEditUsageOffset::class);
     }
 
     /**
@@ -92,7 +102,9 @@ class Utility
      */
     public function canProcessRule(Rule $rule, Address $address): bool
     {
-        if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew()) {
+        $ruleId = (int)$rule->getId();
+        $orderEditOffset = $this->orderEditUsageOffset->getOffset($address, $ruleId);
+        if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew() && $orderEditOffset === 0) {
             return $rule->getIsValidForAddress($address);
         }
 
@@ -103,14 +115,15 @@ class Utility
         /**
          * check per rule usage limit
          */
-        $ruleId = $rule->getId();
         if ($ruleId && $rule->getUsesPerCustomer()) {
             $customerId = $address->getQuote()->getCustomerId();
             /** @var \Magento\SalesRule\Model\Rule\Customer $ruleCustomer */
             $ruleCustomer = $this->customerFactory->create();
             $ruleCustomer->loadByCustomerRule($customerId, $ruleId);
             if ($ruleCustomer->getId()) {
-                if ($ruleCustomer->getTimesUsed() >= $rule->getUsesPerCustomer()) {
+                $timesUsed = $ruleCustomer->getTimesUsed();
+                $timesUsed -= $orderEditOffset;
+                if ($timesUsed >= $rule->getUsesPerCustomer()) {
                     $rule->setIsValidForAddress($address, false);
                     return false;
                 }
@@ -118,17 +131,140 @@ class Utility
         }
         $rule->afterLoad();
         /**
-         * quote does not meet rule's conditions
+         * When the rule has item-level actions (e.g. "Apply to SKU is not X"), address-level
+         * conditions (subtotal, total qty, weight) must be evaluated against eligible items
+         * only, so that excluded items do not count toward the condition threshold.
          */
-        if (!$rule->validate($address)) {
-            $rule->setIsValidForAddress($address, false);
-            return false;
+        $savedTotals = null;
+        if ($this->ruleHasItemRestrictions($rule) && $this->hasEligibleLineItemsForRule($rule, $address)) {
+            $savedTotals = $this->setEligibleItemsTotalsOnAddress($rule, $address);
+        }
+        try {
+            if (!$rule->validate($address)) {
+                $rule->setIsValidForAddress($address, false);
+                return false;
+            }
+        } finally {
+            if ($savedTotals !== null) {
+                $this->restoreAddressTotals($address, $savedTotals);
+            }
         }
         /**
          * passed all validations, remember to be valid
          */
         $rule->setIsValidForAddress($address, true);
         return true;
+    }
+
+    /**
+     * Check if the rule has item-level action conditions (e.g. apply to specific SKUs)
+     *
+     * @param Rule $rule
+     * @return bool
+     */
+    private function ruleHasItemRestrictions(Rule $rule): bool
+    {
+        try {
+            $actions = $rule->getActions();
+        } catch (\Throwable $e) {
+            return false;
+        }
+        if (!$actions instanceof \Magento\Rule\Model\Condition\Combine) {
+            return false;
+        }
+        $conditions = $actions->getConditions();
+
+        return !empty($conditions) && is_array($conditions);
+    }
+
+    /**
+     * Whether at least one cart line item matches the rule's actions (eligible for the discount on items)
+     *
+     * @param Rule $rule
+     * @param Address $address
+     * @return bool
+     */
+    private function hasEligibleLineItemsForRule(Rule $rule, Address $address): bool
+    {
+        foreach ($address->getAllItems() as $item) {
+            if ($this->isItemEligibleForRuleTotals($item, $rule)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Compute totals for matching items, set them on the address, and return saved totals for later restoration
+     *
+     * @param Rule $rule
+     * @param Address $address
+     * @return array Saved address totals to restore after validation
+     */
+    private function setEligibleItemsTotalsOnAddress(Rule $rule, Address $address): array
+    {
+        $baseSubtotal = $baseSubtotalInclTax = $totalQty = $weight = 0;
+
+        foreach ($address->getAllItems() as $item) {
+            if (!$this->isItemEligibleForRuleTotals($item, $rule)) {
+                continue;
+            }
+            $baseSubtotal += (float) $item->getBaseRowTotal();
+            $baseSubtotalInclTax += (float) $item->getBaseRowTotalInclTax();
+            $totalQty += (float) $item->getQty();
+            $weight += (float) $item->getRowWeight();
+        }
+
+        $saved = [
+            'base_subtotal' => $address->getBaseSubtotal(),
+            'base_subtotal_with_discount' => $address->getBaseSubtotalWithDiscount(),
+            'base_subtotal_total_incl_tax' => $address->getBaseSubtotalTotalInclTax(),
+            'total_qty' => $address->getTotalQty(),
+            'weight' => $address->getWeight(),
+        ];
+
+        $address->setBaseSubtotal($baseSubtotal);
+        $address->setBaseSubtotalWithDiscount($baseSubtotal);
+        $address->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $address->setTotalQty($totalQty);
+        $address->setWeight($weight);
+
+        return $saved;
+    }
+
+    /**
+     * Whether the item counts toward rule condition totals (matches actions, no double-count)
+     *
+     * @param AbstractItem $item
+     * @param Rule $rule
+     * @return bool
+     */
+    private function isItemEligibleForRuleTotals(AbstractItem $item, Rule $rule): bool
+    {
+        if (($item->getParentItem() && $item->getParentItem()->getProductType() === 'configurable') ||
+            (($item->getHasChildren() || $item->getChildren()) && $item->isChildrenCalculated()) ||
+            ($item->getNoDiscount())) {
+            return false;
+        }
+
+        return $rule->getActions()->validate($item);
+    }
+
+    /**
+     * Restore address totals after rule condition validation
+     *
+     * @param Address $address
+     * @param array $savedTotals
+     * @return void
+     */
+    private function restoreAddressTotals(Address $address, array $savedTotals): void
+    {
+        $address->setBaseSubtotal($savedTotals['base_subtotal'] ?? 0);
+        $address->setBaseSubtotalWithDiscount($savedTotals['base_subtotal_with_discount'] ?? 0);
+        $address->setBaseSubtotalTotalInclTax($savedTotals['base_subtotal_total_incl_tax'] ?? 0);
+        $address->setTotalQty($savedTotals['total_qty'] ?? 0);
+        $address->setWeight($savedTotals['weight'] ?? 0);
     }
 
     /**

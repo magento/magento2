@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Unserialize;
@@ -24,7 +24,7 @@ class Unserialize
     /**
      * @param Serialize|null $serializer Optional parameter for backward compatibility.
      */
-    public function __construct(Serialize $serializer = null)
+    public function __construct(?Serialize $serializer = null)
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Serialize::class);
     }

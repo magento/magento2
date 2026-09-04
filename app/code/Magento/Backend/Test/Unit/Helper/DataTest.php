@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Route\Config;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Math\Random;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +38,7 @@ class DataTest extends TestCase
         $this->_helper = new Data(
             $this->createMock(Context::class),
             $this->createMock(Config::class),
-            $this->getMockForAbstractClass(ResolverInterface::class),
+            $this->createMock(ResolverInterface::class),
             $this->createMock(Url::class),
             $this->createMock(Auth::class),
             $this->_frontResolverMock,
@@ -61,9 +62,8 @@ class DataTest extends TestCase
     /**
      * @param array $inputString
      * @param array $expected
-     *
-     * @dataProvider getPrepareFilterStringValuesDataProvider
      */
+    #[DataProvider('getPrepareFilterStringValuesDataProvider')]
     public function testPrepareFilterStringValues(array $inputString, array $expected)
     {
         $inputString = base64_encode(http_build_query($inputString));

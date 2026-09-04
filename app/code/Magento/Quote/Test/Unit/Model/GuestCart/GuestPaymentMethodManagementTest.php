@@ -1,22 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Api\Data\PaymentMethodInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
 use Magento\Quote\Model\GuestCart\GuestPaymentMethodManagement;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\Quote\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GuestPaymentMethodManagementTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var GuestPaymentMethodManagement
      */
@@ -63,11 +67,14 @@ class GuestPaymentMethodManagementTest extends TestCase
         $this->maskedCartId = 'f216207248d65c789b17be8545e0aa73';
         $this->cartId = 11;
 
-        $guestCartTestHelper = new GuestCartTestHelper($this);
-        list($this->quoteIdMaskFactoryMock, $this->quoteIdMaskMock) = $guestCartTestHelper->mockQuoteIdMask(
-            $this->maskedCartId,
-            $this->cartId
-        );
+        // Create QuoteIdMask mock
+        $this->quoteIdMaskMock = $this->createPartialMockWithReflection(QuoteIdMask::class, ["load", "getQuoteId"]);
+        $this->quoteIdMaskMock->method("load")->willReturnSelf();
+        $this->quoteIdMaskMock->method("getQuoteId")->willReturn($this->cartId);
+        
+        // Create QuoteIdMaskFactory mock
+        $this->quoteIdMaskFactoryMock = $this->createMock(QuoteIdMaskFactory::class);
+        $this->quoteIdMaskFactoryMock->method("create")->willReturn($this->quoteIdMaskMock);
 
         $this->model = $objectManager->getObject(
             GuestPaymentMethodManagement::class,
@@ -86,7 +93,7 @@ class GuestPaymentMethodManagementTest extends TestCase
 
     public function testGetList()
     {
-        $paymentMethod = $this->getMockForAbstractClass(PaymentMethodInterface::class);
+        $paymentMethod = $this->createMock(PaymentMethodInterface::class);
         $this->paymentMethodManagementMock->expects($this->once())->method('getList')->willReturn([$paymentMethod]);
         $this->assertEquals([$paymentMethod], $this->model->getList($this->maskedCartId));
     }

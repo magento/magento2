@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -67,6 +67,9 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
 
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="deselectEditedImageInGrid">
+            <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
@@ -75,7 +78,9 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwygToFilterIMage"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
-
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminMediaGalleryApplyUsedInFilterActionGroup" stepKey="applyUsedInCategoryFilter">
             <argument name="entityType" value="Categories"/>
