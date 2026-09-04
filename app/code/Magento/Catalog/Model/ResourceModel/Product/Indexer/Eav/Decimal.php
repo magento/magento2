@@ -12,8 +12,6 @@ use Zend_Db;
 
 /**
  * Catalog Product Eav Decimal Attributes Indexer resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Decimal extends AbstractEav
 {

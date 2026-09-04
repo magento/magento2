@@ -33,8 +33,6 @@ class Link extends AbstractDb
     protected $_catalogProductRelation;
 
     /**
-     * Link constructor.
-     *
      * @param Context $context
      * @param Relation $catalogProductRelation
      * @param string|null $connectionName
