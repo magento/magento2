@@ -54,11 +54,16 @@ class Select extends \Magento\Eav\Model\Attribute\Data\AbstractData
             $errors[] = __('"%1" is a required value.', $label);
         }
 
-        if (!empty($value)
-            && $attribute->getSourceModel()
-            && !$attribute->getSource()->getOptionText($value)
-        ) {
-            $errors[] = __('Attribute %1 does not contain option with Id %2', $attribute->getAttributeCode(), $value);
+        if (!empty($value) && $attribute->getSourceModel()) {
+            $optionText = $attribute->getSource()->getOptionText($value);
+            // Sources report a missing option either with false or with null, while a valid label may be "0"
+            if ($optionText === false || $optionText === null) {
+                $errors[] = __(
+                    'Attribute %1 does not contain option with Id %2',
+                    $attribute->getAttributeCode(),
+                    $value
+                );
+            }
         }
 
         if (count($errors) == 0) {
