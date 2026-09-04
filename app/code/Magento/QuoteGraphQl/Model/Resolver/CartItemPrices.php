@@ -31,6 +31,13 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
     private $totals;
 
     /**
+     * Fields that require totals to be collected.
+     * @var array
+     */
+    private const FIELDS_REQUIRE_TOTALS_COLLECTION = ['discounts', 'original_item_price',
+        'original_row_total', 'catalog_discount', 'row_catalog_discount'];
+
+    /**
      * CartItemPrices constructor.
      *
      * @param TotalsCollector $totalsCollector
@@ -64,23 +71,30 @@ class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
         }
         /** @var Item $cartItem */
         $cartItem = $value['model'];
-        if (!$this->totals) {
+
+        // Collect totals only if the fields in the request match any one of FIELDS_REQUIRE_TOTALS_COLLECTION array,
+        // except discounts the rest can be removed if the field values saved in db
+        if (!$this->totals && !empty(array_intersect(
+            self::FIELDS_REQUIRE_TOTALS_COLLECTION,
+            array_keys($info->getFieldSelection(1))
+        ))
+        ) {
             // The totals calculation is based on quote address.
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
+
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         /** calculate bundle product discount */
+        $discountAmount = 0;
         if ($cartItem->getProductType() == 'bundle') {
-            $discounts = $cartItem->getExtensionAttributes()->getDiscounts() ?? [];
-            $discountAmount = 0;
-            foreach ($discounts as $discount) {
-                $discountAmount += $discount->getDiscountData()->getAmount();
+            foreach ($cartItem->getChildren() as $childItem) {
+                $discountAmount += $childItem->getDiscountAmount();
             }
-        } else {
-            $discountAmount = $cartItem->getDiscountAmount();
         }
+
+        $discountAmount += $cartItem->getDiscountAmount();
 
         return [
             'model' => $cartItem,

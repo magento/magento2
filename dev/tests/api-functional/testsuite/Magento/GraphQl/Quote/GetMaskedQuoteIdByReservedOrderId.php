@@ -12,9 +12,6 @@ use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
 use Magento\Quote\Model\QuoteFactory;
 
-/**
- * Get masked quote id by reserved order id
- */
 class GetMaskedQuoteIdByReservedOrderId
 {
     /**
@@ -51,14 +48,20 @@ class GetMaskedQuoteIdByReservedOrderId
      * Get masked quote id by reserved order id
      *
      * @param string $reservedOrderId
+     * @param bool $shouldCollectTotals
      * @return string
      * @throws NoSuchEntityException
      */
-    public function execute(string $reservedOrderId): string
+    public function execute(string $reservedOrderId, bool $shouldCollectTotals = false): string
     {
         $quote = $this->quoteFactory->create();
         $quote->setSharedStoreIds(['*']);
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
+
+        // If dataprovider is used, we need to collect totals manually and save quote
+        if ($shouldCollectTotals) {
+            $this->quoteResource->save($quote->collectTotals());
+        }
 
         return $this->quoteIdToMaskedId->execute((int)$quote->getId());
     }
