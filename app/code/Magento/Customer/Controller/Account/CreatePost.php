@@ -548,7 +548,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         [$localPart, $domain] = explode('@', $email, 2);
 
         // Only decode if domain contains punycode (contains 'xn--')
-        if (function_exists('idn_to_utf8') && strpos($domain, 'xn--') !== false) {
+        if (strpos($domain, 'xn--') !== false) {
             $decodedDomain = idn_to_utf8($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
             if ($decodedDomain !== false && $decodedDomain !== $domain) {
                 $this->getRequest()->setParam('email', $localPart . '@' . $decodedDomain);
