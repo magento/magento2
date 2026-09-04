@@ -37,7 +37,11 @@ class ProductHasOptionsTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        $this->assertArrayHasKey('has_options', $response['products']['items'][0]);
-        $this->assertArrayHasKey('required_options', $response['products']['items'][0]);
+        $item = $response['products']['items'][0];
+        $this->assertSame($productSku, $item['sku']);
+        $this->assertArrayHasKey('has_options', $item);
+        $this->assertArrayHasKey('required_options', $item);
+        $this->assertTrue($item['has_options']);
+        $this->assertTrue($item['required_options']);
     }
 }
