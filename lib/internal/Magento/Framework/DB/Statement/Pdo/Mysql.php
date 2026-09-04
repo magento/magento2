@@ -9,8 +9,6 @@ use Magento\Framework\DB\Statement\Parameter;
 
 /**
  * Mysql DB Statement
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Mysql extends \Zend_Db_Statement_Pdo
 {
