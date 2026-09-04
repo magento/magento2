@@ -7,13 +7,10 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute;
 
 /**
  * Catalog category EAV additional attribute resource collection
- *
  */
 class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
 {
     /**
-     * Entity factory
-     *
      * @var \Magento\Eav\Model\EntityFactory
      */
     protected $_eavEntityFactory;

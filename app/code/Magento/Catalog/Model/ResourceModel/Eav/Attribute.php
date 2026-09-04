@@ -36,9 +36,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
     \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface
 {
     public const MODULE_NAME = 'Magento_Catalog';
-
     public const ENTITY = 'catalog_eav_attribute';
-
     public const KEY_IS_GLOBAL = 'is_global';
 
     private const ALLOWED_INPUT_TYPES = [
