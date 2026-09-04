@@ -904,17 +904,22 @@ class Address extends AbstractAddress implements
      */
     public function getGroupedAllShippingRates()
     {
+        $carriers = [];
         $rates = [];
         foreach ($this->getShippingRatesCollection() as $rate) {
-            if (!$rate->isDeleted() && $this->carrierFactory->get($rate->getCarrier())) {
-                if (!isset($rates[$rate->getCarrier()])) {
-                    $rates[$rate->getCarrier()] = [];
+            if ($rate->isDeleted()) {
+                continue;
+            }
+
+            $carrierCode = $rate->getCarrier();
+            $carrier = $carriers[$carrierCode] ??= $this->carrierFactory->get($carrierCode);
+            if ($carrier) {
+                if (!isset($rates[$carrierCode])) {
+                    $rates[$carrierCode] = [];
+                    $rate->carrier_sort_order = $carrier->getSortOrder();
                 }
 
-                $rates[$rate->getCarrier()][] = $rate;
-                $rates[$rate->getCarrier()][0]->carrier_sort_order = $this->carrierFactory->get(
-                    $rate->getCarrier()
-                )->getSortOrder();
+                $rates[$carrierCode][] = $rate;
             }
         }
         uasort($rates, [$this, '_sortRates']);
