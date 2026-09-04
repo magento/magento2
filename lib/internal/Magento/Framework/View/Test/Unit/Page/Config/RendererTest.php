@@ -403,7 +403,10 @@ class RendererTest extends TestCase
 
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception);
+            ->with(
+                'Unable to render assets of the {contentType} content type',
+                ['contentType' => $groupTwo['type'], 'exception' => $exception]
+            );
 
         $this->urlBuilderMock->expects($this->once())
             ->method('getUrl')

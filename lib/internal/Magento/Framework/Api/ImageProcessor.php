@@ -146,7 +146,10 @@ class ImageProcessor implements ImageProcessorInterface, ImageContentUploaderInt
                 (string) $entityType,
             );
         } catch (\Exception $e) {
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to process the image content of the {entityType} entity',
+                ['entityType' => (string)$entityType, 'exception' => $e]
+            );
         }
 
         return '';

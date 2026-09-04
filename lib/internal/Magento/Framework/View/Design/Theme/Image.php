@@ -17,60 +17,46 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Image
 {
     /**
-     * Preview image width
+     * Width in pixels a preview image is scaled down to
      */
-    const PREVIEW_IMAGE_WIDTH = 800;
+    public const PREVIEW_IMAGE_WIDTH = 800;
 
     /**
-     * Preview image height
+     * Height in pixels a preview image is scaled down to
      */
-    const PREVIEW_IMAGE_HEIGHT = 800;
+    public const PREVIEW_IMAGE_HEIGHT = 800;
 
     /**
-     * Media directory
-     *
      * @var WriteInterface
      */
     protected $mediaDirectory;
 
     /**
-     * Root directory
-     *
      * @var WriteInterface
      */
     protected $rootDirectory;
 
     /**
-     * Image factory
-     *
      * @var \Magento\Framework\Image\Factory
      */
     protected $imageFactory;
 
     /**
-     * Image uploader
-     *
      * @var Image\Uploader
      */
     protected $uploader;
 
     /**
-     * Theme image path
-     *
      * @var Image\PathInterface
      */
     protected $themeImagePath;
 
     /**
-     * Logger
-     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * Theme
-     *
      * @var ThemeInterface
      */
     protected $theme;
@@ -160,7 +146,10 @@ class Image
             $this->theme->setPreviewImage($destinationFileName);
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             $this->theme->setPreviewImage(null);
-            $this->logger->critical($e);
+            $this->logger->critical(
+                'Unable to create a theme preview image from {sourcePath}',
+                ['sourcePath' => $sourcePath, 'exception' => $e]
+            );
         }
         return $isCopied;
     }
