@@ -470,18 +470,26 @@ class Factory
     /**
      * Prepare and cache directory paths for cache storage
      *
+     * The cache_dir value of every section is always resolved to an absolute path, but the directory itself
+     * is only created when the backend owning that section is file-based. Frontends configured with Redis,
+     * Valkey, Memcached, Database or APCu therefore no longer leave empty directories behind in var/.
+     *
      * @param array $options
      * @return void
      */
     private function prepareCacheDirectories(array &$options): void
     {
-        foreach (['backend_options', 'slow_backend_options'] as $section) {
+        foreach (['backend_options' => 'backend', 'slow_backend_options' => 'slow_backend'] as $section => $key) {
             if (!empty($options[$section]['cache_dir'])) {
                 $cacheDir = $options[$section]['cache_dir'];
-                if (!isset($this->cachedDirectories[$cacheDir])) {
-                    $this->cachedDirectories[$cacheDir] = $this->resolveCacheDir($cacheDir);
+                $create = $this->adapterProvider->isFilesystemBackend($options[$key] ?? $this->_defaultBackend);
+                // Memoize on path + creation decision, so a resolve-only hit for a non-file backend cannot
+                // suppress directory creation for a later file-based frontend using the same cache_dir.
+                $cacheKey = $cacheDir . '|' . ($create ? '1' : '0');
+                if (!isset($this->cachedDirectories[$cacheKey])) {
+                    $this->cachedDirectories[$cacheKey] = $this->resolveCacheDir($cacheDir, $create);
                 }
-                $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheDir];
+                $options[$section]['cache_dir'] = $this->cachedDirectories[$cacheKey];
             }
         }
     }
@@ -489,18 +497,23 @@ class Factory
     /**
      * Resolve a cache_dir value to an absolute path.
      *
-     * Absolute paths (e.g. /dev/shm/magento_l1) are required for L2 cache configuration and returned as-is.
+     * Absolute paths (e.g. /dev/shm/magento_l1) are required for L2 cache configuration and returned as-is;
+     * they are never created here. Relative paths are resolved under var/ and only created when $create is
+     * true, i.e. when the backend that owns the option section actually stores cache entries on disk.
      *
      * @param string $path
+     * @param bool $create
      * @return string
      */
-    private function resolveCacheDir(string $path): string
+    private function resolveCacheDir(string $path, bool $create): string
     {
         if (str_starts_with($path, DIRECTORY_SEPARATOR)) {
             return $path;
         }
         $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $directory->create($path);
+        if ($create) {
+            $directory->create($path);
+        }
         return $directory->getAbsolutePath($path);
     }
 
