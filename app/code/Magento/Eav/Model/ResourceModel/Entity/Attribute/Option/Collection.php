@@ -7,14 +7,10 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute\Option;
 
 /**
  * Entity attribute option collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Option value table
-     *
      * @var string
      */
     protected $_optionValueTable;

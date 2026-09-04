@@ -7,8 +7,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Type;
 
 /**
  * Eav Resource Entity Type Collection Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

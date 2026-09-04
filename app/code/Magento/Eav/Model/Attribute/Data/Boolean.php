@@ -7,8 +7,6 @@ namespace Magento\Eav\Model\Attribute\Data;
 
 /**
  * EAV Entity Attribute Boolean Data Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Boolean extends \Magento\Eav\Model\Attribute\Data\Select
 {
