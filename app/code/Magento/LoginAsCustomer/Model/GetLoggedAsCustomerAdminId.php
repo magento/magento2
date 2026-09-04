@@ -35,6 +35,10 @@ class GetLoggedAsCustomerAdminId implements GetLoggedAsCustomerAdminIdInterface
      */
     public function execute(): int
     {
-        return (int)$this->session->getLoggedAsCustomerAdmindId();
+        return (int)(
+            $this->session->getLoggedAsCustomerAdminId()
+                // This typo is kept for backward compatibility. Should be removed on Magento 2.5
+                ?? $this->session->getLoggedAsCustomerAdmindId()
+        );
     }
 }
