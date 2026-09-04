@@ -94,33 +94,25 @@ class TemporaryTableServiceTest extends TestCase
     #[DataProvider('createFromSelectDataProvider')]
     public function testCreateFromSelect($indexes, $expectedSelect)
     {
-        $selectString = 'select * from sometable';
         $random = 'random_table';
 
         $this->randomMock->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($random);
 
-        $this->adapterMock->expects($this->once())
-            ->method('query')
-            ->with($expectedSelect)
-            ->willReturnSelf();
-
-        $this->adapterMock->expects($this->once())
-            ->method('query')
-            ->willReturnSelf();
-
         $this->adapterMock->expects($this->any())
             ->method('quoteIdentifier')
             ->willReturnArgument(0);
 
-        $this->selectMock->expects($this->once())
-            ->method('getBind')
-            ->willReturn(['bind']);
-
-        $this->selectMock->expects($this->any())
-            ->method('__toString')
-            ->willReturn($selectString);
+        $this->adapterMock->expects($this->once())
+            ->method('createTemporaryTableFromSelect')
+            ->with(
+                $random,
+                $this->callback(static function (array $indexStatements) use ($expectedSelect) {
+                    return str_contains($expectedSelect, implode(',', $indexStatements));
+                }),
+                $this->selectMock
+            );
 
         $this->assertEquals(
             $random,

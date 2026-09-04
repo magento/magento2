@@ -127,7 +127,8 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             /** @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection */
             $collection = $this->getContext()->getDataProvider()->getCollection();
 
-            $select = $collection->getConnection()->select();
+            $connection = $collection->getConnection();
+            $select = $connection->select();
             $select->from(
                 ['cpw' => $collection->getTable('catalog_product_website')],
                 ['product_id']
@@ -135,9 +136,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
                 ['sw' => $collection->getTable('store_website')],
                 'cpw.website_id = sw.website_id',
                 [
-                    $this->websiteNames => new \Zend_Db_Expr(
-                        'GROUP_CONCAT(sw.name ORDER BY sw.website_id ASC SEPARATOR \',\')'
-                    )
+                    $this->websiteNames => $connection->getGroupConcatSql('sw.name', ',', 'sw.website_id ASC')
                 ]
             )->group(
                 'cpw.product_id'

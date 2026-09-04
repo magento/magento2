@@ -76,15 +76,21 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
         }
         $attributeId = $this->getAttribute()->getId();
         if (!isset($this->_options[$storeId][$attributeId])) {
-            $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
-                'asc'
-            )->setAttributeFilter(
-                $attributeId
-            )->setStoreFilter(
-                $storeId
-            )->load();
-            $this->_options[$storeId][$attributeId] = $collection->toOptionArray();
-            $this->_optionsDefault[$storeId][$attributeId] = $collection->toOptionArray('default_value');
+            // Same empty-result outcome either way, without the pointless query.
+            if (!$attributeId) {
+                $this->_options[$storeId][$attributeId] = [];
+                $this->_optionsDefault[$storeId][$attributeId] = [];
+            } else {
+                $collection = $this->_attrOptionCollectionFactory->create()->setPositionOrder(
+                    'asc'
+                )->setAttributeFilter(
+                    $attributeId
+                )->setStoreFilter(
+                    $storeId
+                )->load();
+                $this->_options[$storeId][$attributeId] = $collection->toOptionArray();
+                $this->_optionsDefault[$storeId][$attributeId] = $collection->toOptionArray('default_value');
+            }
         }
         $options = $defaultValues
             ? $this->_optionsDefault[$storeId][$attributeId]

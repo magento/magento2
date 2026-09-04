@@ -388,7 +388,7 @@ abstract class AbstractAction implements ResetAfterRequestInterface
                 [
                     'category_id' => 'cc.entity_id',
                     'product_id' => 'ccp.product_id',
-                    'position' => 'ccp.position',
+                    'position' => new \Zend_Db_Expr('MIN(ccp.position)'),
                     'is_parent' => new \Zend_Db_Expr('1'),
                     'store_id' => new \Zend_Db_Expr($store->getId()),
                     'visibility' => new \Zend_Db_Expr(
@@ -639,8 +639,9 @@ abstract class AbstractAction implements ResetAfterRequestInterface
             [
                 'category_id' => 'cc.entity_id',
                 'product_id' => 'ccp.product_id',
+                // MySQL (one ccp2 row per group here) and required by Postgres.
                 'position' => new \Zend_Db_Expr(
-                    $this->connection->getIfNullSql('ccp2.position', 'MIN(ccp.position) + 10000')
+                    $this->connection->getIfNullSql('MAX(ccp2.position)', 'MIN(ccp.position) + 10000')
                 ),
                 'is_parent' => new \Zend_Db_Expr('0'),
                 'store_id' => new \Zend_Db_Expr($store->getId()),
@@ -874,16 +875,17 @@ abstract class AbstractAction implements ResetAfterRequestInterface
                 $this->connection->getIfNullSql('cpvs.value', 'cpvd.value') . ' IN (?)',
                 $this->visibility->getVisibleInSiteIds()
             )->group(
-                'cp.entity_id'
+                ['cp.entity_id', new \Zend_Db_Expr($this->connection->getIfNullSql('cpvs.value', 'cpvd.value'))]
             )->columns(
                 [
                     'category_id' => new \Zend_Db_Expr($store->getRootCategoryId()),
                     'product_id' => 'cp.entity_id',
+                    // MySQL-tolerated condition).
                     'position' => new \Zend_Db_Expr(
-                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', 'MIN(ccp.position)', '10000')
+                        $this->connection->getCheckSql('COUNT(ccp.product_id) > 0', 'MIN(ccp.position)', '10000')
                     ),
                     'is_parent' => new \Zend_Db_Expr(
-                        $this->connection->getCheckSql('ccp.product_id IS NOT NULL', '1', '0')
+                        $this->connection->getCheckSql('COUNT(ccp.product_id) > 0', '1', '0')
                     ),
                     'store_id' => new \Zend_Db_Expr($store->getId()),
                     'visibility' => new \Zend_Db_Expr(

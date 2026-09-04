@@ -144,7 +144,10 @@ class BaseFinalPrice
         $specialTo = $this->joinAttributeProcessor->process($select, 'special_to_date');
         $currentDate = 'cwd.website_date';
 
-        $maxUnsignedBigint = '~0';
+        // '~0' there is bitwise NOT of a signed int, i.e. -1. Postgres' own bigint max
+        // is used as the "effectively unbounded" sentinel instead; it doesn't need to
+        // be the same numeric ceiling MySQL used, only larger than any real price.
+        $maxUnsignedBigint = '9223372036854775807';
         $specialFromDate = $connection->getDatePartSql($specialFrom);
         $specialToDate = $connection->getDatePartSql($specialTo);
         $specialFromExpr = "{$specialFrom} IS NULL OR {$specialFromDate} <= {$currentDate}";
@@ -257,7 +260,10 @@ class BaseFinalPrice
      */
     private function getTotalTierPriceExpression(\Zend_Db_Expr $priceExpression)
     {
-        $maxUnsignedBigint = '~0';
+        // '~0' there is bitwise NOT of a signed int, i.e. -1. Postgres' own bigint max
+        // is used as the "effectively unbounded" sentinel instead; it doesn't need to
+        // be the same numeric ceiling MySQL used, only larger than any real price.
+        $maxUnsignedBigint = '9223372036854775807';
 
         return $this->getConnection()->getCheckSql(
             implode(

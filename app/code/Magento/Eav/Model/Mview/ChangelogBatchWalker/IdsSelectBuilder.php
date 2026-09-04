@@ -43,16 +43,14 @@ class IdsSelectBuilder implements IdsSelectBuilderInterface
      */
     public function build(ChangelogInterface $changelog): Select
     {
-        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
-        $this->setGroupConcatMax($numberOfAttributes);
-
         $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
 
         $connection = $this->resourceConnection->getConnection();
+        $this->setGroupConcatMax($this->calculateEavAttributeSize($changelog));
 
         $columns = [
             $changelog->getColumnName(),
-            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
+            'attribute_ids' => $connection->getGroupConcatSql('attribute_id'),
             'store_id'
         ];
 
