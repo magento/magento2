@@ -11,9 +11,11 @@ use Exception;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\EntityManager\EntityManager;
@@ -70,6 +72,11 @@ class BulkManagement implements BulkManagementInterface
     private $logger;
 
     /**
+     * @var SaveMultipleOperationsInterface
+     */
+    private $saveMultipleOperations;
+
+    /**
      * BulkManagement constructor.
      * @param EntityManager $entityManager
      * @param BulkSummaryInterfaceFactory $bulkSummaryFactory
@@ -79,6 +86,7 @@ class BulkManagement implements BulkManagementInterface
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      * @param UserContextInterface $userContext
+     * @param SaveMultipleOperationsInterface|null $saveMultipleOperations
      */
     public function __construct(
         EntityManager $entityManager,
@@ -88,7 +96,8 @@ class BulkManagement implements BulkManagementInterface
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
         LoggerInterface $logger,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        ?SaveMultipleOperationsInterface $saveMultipleOperations = null
     ) {
         $this->entityManager = $entityManager;
         $this->bulkSummaryFactory= $bulkSummaryFactory;
@@ -98,6 +107,8 @@ class BulkManagement implements BulkManagementInterface
         $this->publisher = $publisher;
         $this->logger = $logger;
         $this->userContext = $userContext;
+        $this->saveMultipleOperations = $saveMultipleOperations
+            ?: ObjectManager::getInstance()->get(SaveMultipleOperationsInterface::class);
     }
 
     /**
@@ -128,6 +139,7 @@ class BulkManagement implements BulkManagementInterface
             $bulkSummary->setOperationCount((int)$bulkSummary->getOperationCount() + count($operations));
             $this->entityManager->save($bulkSummary);
 
+            $this->saveOperations($operations);
             $this->publishOperations($operations);
 
             $connection->commit();
@@ -215,6 +227,32 @@ class BulkManagement implements BulkManagementInterface
     }
 
     /**
+     * Persist the operations of a bulk.
+     *
+     * Operations that already carry an identifier are inserted with a single batch query. An operation without one
+     * takes its identifier from the database on insert and the message consumer addresses the created row by that
+     * value, so those operations have to be inserted one by one to have it assigned back to them.
+     *
+     * @param OperationInterface[] $operations
+     * @return void
+     */
+    private function saveOperations(array $operations): void
+    {
+        $identifiedOperations = [];
+        foreach ($operations as $operation) {
+            if ($operation->getId() === null) {
+                $this->entityManager->save($operation);
+            } else {
+                $identifiedOperations[] = $operation;
+            }
+        }
+
+        if (!empty($identifiedOperations)) {
+            $this->saveMultipleOperations->execute($identifiedOperations);
+        }
+    }
+
+    /**
      * Publish list of operations to the corresponding message queues.
      *
      * @param array $operations
@@ -224,7 +262,6 @@ class BulkManagement implements BulkManagementInterface
     {
         $operationsByTopics = [];
         foreach ($operations as $operation) {
-            $this->entityManager->save($operation);
             $operationsByTopics[$operation->getTopicName()][] = $operation;
         }
         foreach ($operationsByTopics as $topicName => $operations) {

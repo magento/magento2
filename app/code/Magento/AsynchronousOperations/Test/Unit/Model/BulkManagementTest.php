@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Model;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\AsynchronousOperations\Model\BulkManagement;
 use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection;
@@ -69,6 +70,11 @@ class BulkManagementTest extends TestCase
     private $logger;
 
     /**
+     * @var SaveMultipleOperationsInterface|MockObject
+     */
+    private $saveMultipleOperations;
+
+    /**
      * @var BulkManagement
      */
     private $bulkManagement;
@@ -93,6 +99,7 @@ class BulkManagementTest extends TestCase
         $this->metadataPool = $this->createMock(MetadataPool::class);
         $this->resourceConnection = $this->createMock(ResourceConnection::class);
         $this->logger = $this->createMock(LoggerInterface::class);
+        $this->saveMultipleOperations = $this->createMock(SaveMultipleOperationsInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->bulkManagement = $objectManager->getObject(
@@ -104,7 +111,8 @@ class BulkManagementTest extends TestCase
                 'publisher' => $this->publisher,
                 'metadataPool' => $this->metadataPool,
                 'resourceConnection' => $this->resourceConnection,
-                'logger' => $this->logger
+                'logger' => $this->logger,
+                'saveMultipleOperations' => $this->saveMultipleOperations
             ]
         );
     }
@@ -142,9 +150,13 @@ class BulkManagementTest extends TestCase
         $bulkSummary->expects($this->once())->method('setUserType')->with($userType)->willReturnSelf();
         $bulkSummary->expects($this->once())->method('getOperationCount')->willReturn(1);
         $bulkSummary->expects($this->once())->method('setOperationCount')->with(3)->willReturnSelf();
+        $savedEntities = [];
         $this->entityManager->expects($this->exactly(3))->method('save')
-            ->withConsecutive([$bulkSummary], [$operation], [$operation])
-            ->will($this->onConsecutiveCalls($bulkSummary, $operation, $operation));
+            ->willReturnCallback(function ($entity) use (&$savedEntities) {
+                $savedEntities[] = $entity;
+                return $entity;
+            });
+        $this->saveMultipleOperations->expects($this->never())->method('execute');
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->exactly(2))->method('getTopicName')
             ->willReturnOnConsecutiveCalls($topicNames[0], $topicNames[1]);
@@ -164,6 +176,66 @@ class BulkManagementTest extends TestCase
         $this->assertTrue(
             $this->bulkManagement->scheduleBulk($bulkUuid, [$operation, $operation], $description, $userId)
         );
+        $this->assertSame([$bulkSummary, $operation, $operation], $savedEntities);
+    }
+
+    /**
+     * Operations that already carry an identifier are persisted with a single batch query before being published.
+     *
+     * @return void
+     */
+    public function testScheduleBulkSavesIdentifiedOperationsInBatch(): void
+    {
+        $bulkUuid = 'bulk-001';
+        $description = 'Bulk summary description...';
+        $userId = 1;
+        $connectionName = 'default';
+        $topicName = 'topic.name.0';
+        $firstOperation = $this->createMock(OperationInterface::class);
+        $firstOperation->method('getId')->willReturn(0);
+        $firstOperation->method('getTopicName')->willReturn($topicName);
+        $secondOperation = $this->createMock(OperationInterface::class);
+        $secondOperation->method('getId')->willReturn(1);
+        $secondOperation->method('getTopicName')->willReturn($topicName);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPool->expects($this->once())->method('getMetadata')
+            ->with(BulkSummaryInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->resourceConnection->expects($this->once())
+            ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
+        $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
+        $connection->expects($this->once())->method('commit')->willReturnSelf();
+        $bulkSummary = $this->createMock(BulkSummaryInterface::class);
+        $this->bulkSummaryFactory->expects($this->once())->method('create')->willReturn($bulkSummary);
+        $this->entityManager->expects($this->once())
+            ->method('load')->with($bulkSummary, $bulkUuid)->willReturn($bulkSummary);
+        $bulkSummary->method('getOperationCount')->willReturn(0);
+        $bulkSummary->expects($this->once())->method('setOperationCount')->with(2)->willReturnSelf();
+        $this->entityManager->expects($this->once())->method('save')->with($bulkSummary)->willReturn($bulkSummary);
+
+        $callOrder = [];
+        $this->saveMultipleOperations->expects($this->once())->method('execute')
+            ->willReturnCallback(function ($operations) use (&$callOrder, $firstOperation, $secondOperation) {
+                $this->assertSame([$firstOperation, $secondOperation], $operations);
+                $callOrder[] = 'save';
+            });
+        $this->publisher->expects($this->once())->method('publish')
+            ->willReturnCallback(function () use (&$callOrder) {
+                $callOrder[] = 'publish';
+                return null;
+            });
+
+        $this->assertTrue(
+            $this->bulkManagement->scheduleBulk(
+                $bulkUuid,
+                [$firstOperation, $secondOperation],
+                $description,
+                $userId
+            )
+        );
+        $this->assertSame(['save', 'publish'], $callOrder);
     }
 
     /**
@@ -260,10 +332,9 @@ class BulkManagementTest extends TestCase
             ->method('setOperationCount')
             ->with(2)
             ->willReturnSelf();
-        $this->entityManager->expects($this->once())
+        $this->entityManager->expects($this->exactly(2))
             ->method('save')
-            ->with($bulkSummary)
-            ->willReturn($bulkSummary);
+            ->willReturnArgument(0);
         $this->publisher->expects($this->once())
             ->method('publish')
             ->willThrowException(new \Exception($exceptionMessage));
@@ -326,7 +397,8 @@ class BulkManagementTest extends TestCase
             ->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
-        $this->entityManager->expects($this->once())->method('save')->with($operation)->willReturn($operation);
+        $this->entityManager->expects($this->never())->method('save');
+        $this->saveMultipleOperations->expects($this->never())->method('execute');
         $this->assertEquals(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
 
