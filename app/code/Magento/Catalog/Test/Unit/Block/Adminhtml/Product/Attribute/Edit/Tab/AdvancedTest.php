@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced;
+use Magento\Catalog\Model\Attribute\Source\ApplyTo;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Directory\Helper\Data as DirectoryHelper;
@@ -78,6 +79,11 @@ class AdvancedTest extends TestCase
     protected $propertyLocker;
 
     /**
+     * @var ApplyTo|MockObject
+     */
+    protected $applyTo;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -102,6 +108,9 @@ class AdvancedTest extends TestCase
         $this->eavData = $this->createMock(EavHelper::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->propertyLocker = $this->createMock(PropertyLocker::class);
+        $this->applyTo = $this->createMock(ApplyTo::class);
+        $this->applyTo->method('toOptionArray')
+            ->willReturn([['value' => 'simple', 'label' => 'Simple Product']]);
 
         $this->block = $objectManager->getObject(
             Advanced::class,
@@ -113,6 +122,7 @@ class AdvancedTest extends TestCase
                 'eavData' => $this->eavData,
                 'filesystem' => $this->filesystem,
                 'propertyLocker' => $this->propertyLocker,
+                'applyTo' => $this->applyTo,
             ]
         );
     }
@@ -148,7 +158,14 @@ class AdvancedTest extends TestCase
         $this->formFactory->method('create')->willReturn($form);
         $form->method('addFieldset')->willReturn($fieldSet);
         $form->method('getElement')->willReturn($formElement);
-        $fieldSet->expects($this->any())->method('addField')->willReturnSelf();
+        $addedFields = [];
+        $fieldSet->expects($this->any())->method('addField')
+            ->willReturnCallback(
+                function ($fieldId, $type, $config) use ($fieldSet, &$addedFields) {
+                    $addedFields[$fieldId] = ['type' => $type, 'config' => $config];
+                    return $fieldSet;
+                }
+            );
         $attributeModel->method('getDefaultValue')->willReturn($defaultValue);
         $attributeModel->method('getId')->willReturn(1);
         $attributeModel->method('getEntityType')->willReturn($entityType);
@@ -172,7 +189,7 @@ class AdvancedTest extends TestCase
 
         $entityType->method('getEntityTypeCode')->willReturn('entity_type_code');
         $this->eavData->method('getFrontendClasses')->willReturn([]);
-        $formElement->expects($this->exactly(2))->method('setDisabled')->willReturnSelf();
+        $formElement->expects($this->exactly(3))->method('setDisabled')->willReturnSelf();
         $this->yesNo->method('toOptionArray')->willReturn(['yes', 'no']);
         $this->filesystem->method('getDirectoryRead')->willReturn($directoryReadInterface);
         $directoryReadInterface->method('getRelativePath')->willReturn('relative_path');
@@ -180,5 +197,12 @@ class AdvancedTest extends TestCase
 
         $this->block->setData(['action' => 'save']);
         $this->block->toHtml();
+
+        $this->assertArrayHasKey('apply_to', $addedFields);
+        $this->assertSame('multiselect', $addedFields['apply_to']['type']);
+        $this->assertSame(
+            [['value' => 'simple', 'label' => 'Simple Product']],
+            $addedFields['apply_to']['config']['values']
+        );
     }
 }

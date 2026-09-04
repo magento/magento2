@@ -708,6 +708,85 @@ class SaveTest extends AttributeTest
         $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
     }
 
+    public function testApplyToIsResetToEmptyArrayWhenNotPosted()
+    {
+        $data = [
+            'frontend_input' => 'text',
+        ];
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['isAjax', null, null],
+                ['serialized_options', '[]', ''],
+                ['attribute_code', null, 'code'],
+            ]);
+        $this->formDataSerializerMock->expects($this->once())->method('unserialize')->with('')->willReturn([]);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
+        $this->inputTypeValidatorMock->method('isValid')->with('text')->willReturn(true);
+        $this->presentationMock->method('convertPresentationDataToInputType')->willReturnCallback(function ($arg) {
+            return $arg;
+        });
+        $this->productHelperMock->method('getAttributeSourceModelByInputType')->with('text')->willReturn(null);
+        $this->productHelperMock->method('getAttributeBackendModelByInputType')->with('text')->willReturn(null);
+
+        $this->productAttributeMock->expects($this->once())
+            ->method('addData')
+            ->with($this->callback(function ($arg) {
+                return array_key_exists('apply_to', $arg) && $arg['apply_to'] === [];
+            }));
+        $this->resultFactoryMock->expects($this->any())->method('create')->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->any())->method('setPath')->willReturnSelf();
+
+        $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
+    }
+
+    public function testApplyToIsKeptUntouchedForSystemAttribute()
+    {
+        $data = [
+            'frontend_input' => 'text',
+            'apply_to' => ['simple'],
+        ];
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['isAjax', null, null],
+                ['serialized_options', '[]', ''],
+                ['attribute_id', null, 1],
+                ['attribute_code', null, 'code'],
+            ]);
+        $this->formDataSerializerMock->expects($this->once())->method('unserialize')->with('')->willReturn([]);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
+        $this->inputTypeValidatorMock->method('isValid')->with('text')->willReturn(true);
+        $this->presentationMock->method('convertPresentationDataToInputType')->willReturnCallback(function ($arg) {
+            return $arg;
+        });
+
+        $systemAttribute = $this->createPartialMock(
+            ResourceAttribute::class,
+            ['load', 'getId', 'getAttributeCode', 'getEntityTypeId', 'getIsUserDefined', 'addData', 'save']
+        );
+        $systemAttribute->method('load')->willReturnSelf();
+        $systemAttribute->method('getId')->willReturn(1);
+        $systemAttribute->method('getAttributeCode')->willReturn('code');
+        $systemAttribute->method('getIsUserDefined')->willReturn(false);
+        $systemAttribute->expects($this->once())
+            ->method('addData')
+            ->with($this->callback(function ($arg) {
+                return !array_key_exists('apply_to', $arg);
+            }));
+        $localAttributeFactory = $this->createPartialMock(AttributeFactory::class, ['create']);
+        $localAttributeFactory->method('create')->willReturn($systemAttribute);
+
+        $this->resultFactoryMock->expects($this->any())->method('create')->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->any())->method('setPath')->willReturnSelf();
+
+        $controller = $this->createControllerWithAttributeFactory($localAttributeFactory);
+
+        $this->assertInstanceOf(ResultRedirect::class, $controller->execute());
+    }
+
     public function testGroupCollectionCreatesAndSavesGroup()
     {
         $data = [
