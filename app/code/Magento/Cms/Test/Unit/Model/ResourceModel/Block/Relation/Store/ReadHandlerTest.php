@@ -9,6 +9,7 @@ namespace Magento\Cms\Test\Unit\Model\ResourceModel\Block\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Block;
 use Magento\Cms\Model\ResourceModel\Block\Relation\Store\ReadHandler;
+use Magento\Cms\Model\Block as CmsModelBlock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,7 +45,7 @@ class ReadHandlerTest extends TestCase
             ->method('lookupStoreIds')
             ->willReturn([$storeId]);
 
-        $block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
+        $block = $this->getMockBuilder(CmsModelBlock::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -59,12 +60,12 @@ class ReadHandlerTest extends TestCase
             ]);
 
         $result = $this->model->execute($block);
-        $this->assertInstanceOf(\Magento\Cms\Model\Block::class, $result);
+        $this->assertInstanceOf(CmsModelBlock::class, $result);
     }
 
     public function testExecuteWithNoId()
     {
-        $block = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
+        $block = $this->getMockBuilder(CmsModelBlock::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -73,6 +74,6 @@ class ReadHandlerTest extends TestCase
             ->willReturn(false);
 
         $result = $this->model->execute($block);
-        $this->assertInstanceOf(\Magento\Cms\Model\Block::class, $result);
+        $this->assertInstanceOf(CmsModelBlock::class, $result);
     }
 }

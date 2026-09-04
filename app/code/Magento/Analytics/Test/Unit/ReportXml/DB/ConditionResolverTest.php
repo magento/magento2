@@ -46,7 +46,7 @@ class ConditionResolverTest extends TestCase
 
         $this->selectBuilderMock = $this->createMock(SelectBuilder::class);
 
-        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->conditionResolver = new ConditionResolver($this->resourceConnectionMock);
     }

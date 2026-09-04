@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Paypal\Model\ResourceModel\Report;
@@ -77,7 +77,7 @@ class Settlement extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     /*
                      * Converting numeric
                      */
-                    $rows[$key]['fee_amount'] = (double)$rows[$key]['fee_amount'];
+                    $rows[$key]['fee_amount'] = (float)$rows[$key]['fee_amount'];
                     /*
                      * Setting reportId
                      */

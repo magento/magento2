@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ use Magento\Framework\App\Router\Base;
 use Magento\Framework\App\Router\PathConfigInterface;
 use Magento\Framework\Code\NameBuilder;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -94,7 +95,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider matchDataProvider
      * @param MockObject|\Closure $requestMock
      * @param string $defaultPath
      * @param string $moduleFrontName
@@ -102,6 +102,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * @param string|null $actionName
      * @param string|null $moduleName
      */
+    #[DataProvider('matchDataProvider')]
     public function testMatch(
         MockObject|\Closure $requestMock,
         string $defaultPath,
@@ -180,7 +181,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
         $mockBuilder = $this->getMockBuilder($class);
         $mockBuilder->setMockClassName($mockClassName);
         $mockBuilder->disableOriginalConstructor();
-        return $mockBuilder->getMockForAbstractClass();
+        return $mockBuilder->getMock();
     }
 
     public static function matchDataProvider(): array
@@ -231,7 +232,6 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider matchEmptyActionDataProvider
      * @param MockObject|\Closure $requestMock
      * @param string $defaultPath
      * @param string $moduleFrontName
@@ -239,6 +239,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      * @param string|null $actionName
      * @param string|null $moduleName
      */
+    #[DataProvider('matchEmptyActionDataProvider')]
     public function testMatchEmptyAction(
         MockObject|\Closure $requestMock,
         string $defaultPath,

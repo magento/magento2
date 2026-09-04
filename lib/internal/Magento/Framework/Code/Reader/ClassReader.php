@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Code\Reader;
 
@@ -22,6 +22,9 @@ class ClassReader implements ClassReaderInterface
      */
     private $parentsCache = [];
 
+    /** @var array<string, array|null> */
+    private array $constructorCache = [];
+
     /**
      * Read class constructor signature
      *
@@ -31,6 +34,10 @@ class ClassReader implements ClassReaderInterface
      */
     public function getConstructor($className)
     {
+        if (array_key_exists($className, $this->constructorCache)) {
+            return $this->constructorCache[$className];
+        }
+
         $class = new ReflectionClass($className);
         $result = null;
         $constructor = $class->getConstructor();
@@ -59,7 +66,7 @@ class ClassReader implements ClassReaderInterface
             }
         }
 
-        return $result;
+        return $this->constructorCache[$className] = $result;
     }
 
     /**

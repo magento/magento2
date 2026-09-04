@@ -30,6 +30,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -182,6 +183,10 @@ class Product extends AbstractEntity
     public const URL_KEY = 'url_key';
 
     private const ERROR_DUPLICATE_URL_KEY_BY_CATEGORY = 'duplicatedUrlKeyByCategory';
+
+    private const STRING_OVERFLOW = 8000;
+
+    private const STRING_PADDING = 5;
 
     /**
      * @var array
@@ -375,7 +380,7 @@ class Product extends AbstractEntity
      *     'type_id'        => (string) product type
      *     'attr_set_id'    => (int) product attribute set ID
      *     'entity_id'      => (int) product ID
-     *     'supported_type' => (boolean) is product type supported by current version of import module
+     *     'supported_type' => (bool) is product type supported by current version of import module
      * )
      *
      * @var array
@@ -789,6 +794,11 @@ class Product extends AbstractEntity
     private ?File $fileDriver;
 
     /**
+     * @var DomainValidator|null
+     */
+    private ?DomainValidator $domainValidator;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -839,6 +849,7 @@ class Product extends AbstractEntity
      * @param File|null $fileDriver
      * @param StockItemProcessorInterface|null $stockItemProcessor
      * @param SkuStorage|null $skuStorage
+     * @param DomainValidator|null $domainValidator
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -895,7 +906,8 @@ class Product extends AbstractEntity
         ?LinkProcessor $linkProcessor = null,
         ?File $fileDriver = null,
         ?StockItemProcessorInterface $stockItemProcessor = null,
-        ?SkuStorage $skuStorage = null
+        ?SkuStorage $skuStorage = null,
+        ?DomainValidator $domainValidator = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -938,7 +950,7 @@ class Product extends AbstractEntity
         $this->linkProcessor = $linkProcessor ?? ObjectManager::getInstance()
             ->get(LinkProcessor::class);
         $this->linkProcessor->addNameToIds($this->_linkNameToId);
-        $this->hashAlgorithm = (version_compare(PHP_VERSION, '8.1.0') >= 0) ? 'xxh128' : 'crc32c';
+        $this->hashAlgorithm = 'xxh128';
         parent::__construct(
             $jsonHelper,
             $importExportData,
@@ -965,6 +977,8 @@ class Product extends AbstractEntity
             ->get(StockItemProcessorInterface::class);
         $this->fileDriver = $fileDriver ?? ObjectManager::getInstance()
             ->get(File::class);
+        $this->domainValidator = $domainValidator ?? ObjectManager::getInstance()
+            ->get(DomainValidator::class);
     }
 
     /**
@@ -2189,6 +2203,11 @@ class Product extends AbstractEntity
             if (stripos($filename, self::FILTER_CHAIN) !== false) {
                 return '';
             }
+
+            if (!$this->domainValidator->isValid($filename)) {
+                return '';
+            }
+
             $content = $this->fileDriver->fileGetContents($filename);
         } catch (\Exception $e) {
             $content = false;
@@ -2423,7 +2442,7 @@ class Product extends AbstractEntity
     /**
      * Uploading files into the "catalog/product" media folder.
      *
-     * Return a new file name if the same file is already exists.
+     * Return a new file name if the same file already exists.
      *
      * @param string $fileName
      * @param bool $renameFileOff [optional] boolean to pass.
@@ -3167,6 +3186,42 @@ class Product extends AbstractEntity
     }
 
     /**
+     * Split SKUs into butches
+     *
+     * @param array $data
+     * @return array
+     */
+    private function splitIntoBatches(array $data): array
+    {
+        $batches = [];
+        $batch = [];
+        $accumulatedSkuLength = 0;
+        $accumulatedUrlLength = 0;
+        foreach ($data as $url => $sku) {
+            $skuLength = strlen($sku) + self::STRING_PADDING;
+            $urlLength = strlen($url) + self::STRING_PADDING;
+            if ($skuLength + $accumulatedSkuLength >= self::STRING_OVERFLOW ||
+                $urlLength + $accumulatedUrlLength >= self::STRING_OVERFLOW
+            ) {
+                $batches[] = $batch;
+                $batch = [$url => $sku];
+                $accumulatedSkuLength = $skuLength;
+                $accumulatedUrlLength = $urlLength;
+            } else {
+                $batch[$url] = $sku;
+                $accumulatedSkuLength += $skuLength;
+                $accumulatedUrlLength += $urlLength;
+            }
+        }
+
+        if (!empty($batch)) {
+            $batches[] = $batch;
+        }
+
+        return $batches;
+    }
+
+    /**
      * Check that url_keys are not already assigned to others entities in DB
      *
      * @return void
@@ -3176,21 +3231,27 @@ class Product extends AbstractEntity
     {
         $resource = $this->getResource();
         foreach ($this->urlKeys as $storeId => $urlKeys) {
-            $urlKeyDuplicates = $this->_connection->fetchAssoc(
-                $this->_connection->select()->from(
-                    ['url_rewrite' => $resource->getTable('url_rewrite')],
-                    [
-                        'request_path',
-                        'store_id',
-                        'entity_type'
-                    ]
-                )->joinLeft(
-                    ['cpe' => $resource->getTable('catalog_product_entity')],
-                    "cpe.entity_id = url_rewrite.entity_id"
-                )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
-                    ->where('store_id IN (?)', $storeId)
-                    ->where('cpe.sku not in (?)', array_values($urlKeys))
-            );
+            $requestPaths = $this->splitIntoBatches($urlKeys);
+
+            $urlKeyDuplicates = [];
+            foreach ($requestPaths as $urlKeys) {
+                $duplicates = $this->_connection->fetchAssoc(
+                    $this->_connection->select()->from(
+                        ['url_rewrite' => $resource->getTable('url_rewrite')],
+                        [
+                            'request_path',
+                            'store_id',
+                            'entity_type'
+                        ]
+                    )->joinLeft(
+                        ['cpe' => $resource->getTable('catalog_product_entity')],
+                        "cpe.entity_id = url_rewrite.entity_id"
+                    )->where('request_path IN (?)', array_map('strval', array_keys($urlKeys)))
+                        ->where('store_id IN (?)', $storeId)
+                        ->where('cpe.sku not in (?)', array_values($urlKeys))
+                );
+                $urlKeyDuplicates = [...$urlKeyDuplicates, ...$duplicates];
+            }
 
             foreach ($urlKeyDuplicates as $entityData) {
                 $rowNum = $this->rowNumbers[$entityData['store_id']][$entityData['request_path']];

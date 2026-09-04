@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order\Creditmemo\Comment;
 use Magento\Sales\Model\Order\Creditmemo\Comment\Validator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Sales\Helper\SalesEntityCommentValidator;
 
 class ValidatorTest extends TestCase
@@ -36,8 +37,7 @@ class ValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->salesEntityCommentValidator = $this->getMockBuilder(SalesEntityCommentValidator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->salesEntityCommentValidator = $this->createMock(SalesEntityCommentValidator::class);
         $this->commentModelMock = $this->createPartialMock(
             Comment::class,
             ['hasData', 'getData']
@@ -57,8 +57,8 @@ class ValidatorTest extends TestCase
      * @param $commentDataMap
      * @param $commentData
      * @param $expectedWarnings
-     * @dataProvider providerCommentData
      */
+    #[DataProvider('providerCommentData')]
     public function testValidate($commentDataMap, $commentData, $expectedWarnings)
     {
         $this->commentModelMock->expects($this->any())

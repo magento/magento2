@@ -71,17 +71,25 @@ class FilterFactoryTest extends TestCase
      */
     public function testCreateWithUseSourceAttribute()
     {
-        $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->addMethods(['usesSource', 'getSource'])
-            ->getMockForAbstractClass();
+        $contextMock = $this->createMock(ContextInterface::class);
+        $attributeMock = $this->createPartialMock(
+            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
+            [
+                'getAttributeCode',
+                'getDefaultFrontendLabel',
+                'usesSource',
+                'getSourceModel',
+                'getFrontendInput',
+                'getSource'
+            ]
+        );
         $attributeMock->method('getAttributeCode')->willReturn(self::STUB_ATTRIBUTE['attribute_code']);
         $attributeMock->method('getDefaultFrontendLabel')
             ->willReturn(self::STUB_ATTRIBUTE['default_frontend_label']);
         $attributeMock->method('usesSource')->willReturn(self::STUB_ATTRIBUTE['uses_source']);
         $attributeMock->method('getSourceModel')->willReturn(self::STUB_ATTRIBUTE['source_model']);
         $attributeMock->method('getFrontendInput')->willReturn(self::STUB_ATTRIBUTE['frontend_input']);
-        $sourceMock = $this->getMockForAbstractClass(SourceInterface::class);
+        $sourceMock = $this->createMock(SourceInterface::class);
         $attributeMock->method('getSource')->willReturn($sourceMock);
         $sourceMock->method('getAllOptions')->willReturn(self::STUB_ATTRIBUTE['all_options']);
         $this->componentFactoryMock->expects($this->once())

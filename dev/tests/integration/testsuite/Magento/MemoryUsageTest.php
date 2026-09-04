@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento;
 
@@ -10,7 +10,12 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     /**
      * Number of application reinitialization iterations to be conducted by tests
      */
-    const APP_REINITIALIZATION_LOOPS = 20;
+    private const APP_REINITIALIZATION_LOOPS = 20;
+
+    /**
+     * Number of warm-up reinitialization iterations conducted before measuring memory usage.
+     */
+    private const WARM_UP_LOOPS = 5;
 
     /**
      * @var \Magento\TestFramework\Helper\Memory
@@ -32,7 +37,9 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
      */
     public function testAppReinitializationNoMemoryLeak()
     {
-        $this->markTestSkipped('Skipped until MAGETWO-47111');
+        for ($i = 0; $i < self::WARM_UP_LOOPS; $i++) {
+            \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize();
+        }
 
         $this->_deallocateUnusedMemory();
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage();

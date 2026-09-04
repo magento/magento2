@@ -25,9 +25,12 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for set shipping addresses on cart mutation
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SetShippingAddressOnCartTest extends GraphQlAbstract
 {
@@ -422,7 +425,8 @@ mutation {
 }
 QUERY;
         self::expectExceptionMessage(
-            'The shipping address cannot contain "customer_address_id" and "address" at the same time.'
+            'The shipping address cannot contain "customer_address_id" or '
+            . '"customer_address_uid" together with "address".'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -517,11 +521,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @param string $input
      * @param string $message
      * @throws \Exception
      */
+    #[DataProvider('dataProviderUpdateWithMissedRequiredParameters')]
     public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -1870,7 +1874,8 @@ mutation {
 }
 QUERY;
         $this->expectExceptionMessage(
-            'The shipping address must contain either "customer_address_id" or "address".'
+            'The shipping address must contain either "customer_address_id" or '
+            . '"customer_address_uid" or "address".'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
@@ -2144,5 +2149,60 @@ QUERY;
         ];
 
         $this->assertResponseFields($addressResponse, $assertionMap);
+    }
+
+    #[
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCartFixture::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCart::class, [
+            'cart_id' => '$cart.id$',
+            'product_id' => '$product.id$',
+            'qty' => 1
+        ]),
+        DataFixture(QuoteIdMask::class, ['cart_id' => '$cart.id$'], 'quoteIdMask')
+    ]
+    public function testSetShippingAddressWithEmptyPostcodeAndTelephone()
+    {
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $customerData = $this->customerRepository->getById($customer->getId());
+        $maskedQuoteId = DataFixtureStorageManager::getStorage()->get('quoteIdMask')->getMaskedId();
+
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test firstname"
+            lastname: "test lastname"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "test city"
+            region: "AZ"
+            region_id: 4
+            postcode: ""
+            country_code: "US"
+            telephone: ""
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        postcode
+        telephone
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->expectExceptionMessage('"postcode" is required. Enter and try again.');
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap($customerData->getEmail()));
     }
 }

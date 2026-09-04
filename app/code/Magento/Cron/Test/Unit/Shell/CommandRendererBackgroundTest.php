@@ -13,6 +13,7 @@ use Magento\Cron\Shell\CommandRendererBackground;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\OsInfo;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,12 +67,12 @@ class CommandRendererBackgroundTest extends TestCase
 
     /**
      * @covers ::render
-     * @dataProvider commandPerOsTypeDataProvider
      *
      * @param bool $isWindows
      * @param string $expectedResults
      * @param string[] $arguments
      */
+    #[DataProvider('commandPerOsTypeDataProvider')]
     public function testRender($isWindows, $expectedResults, $arguments)
     {
         $this->osInfo->expects($this->once())
@@ -90,22 +91,25 @@ class CommandRendererBackgroundTest extends TestCase
      *
      * @return array
      */
-    public function commandPerOsTypeDataProvider()
+    public static function commandPerOsTypeDataProvider()
     {
+        $testCommand = 'php -r test.php';
+        $logPath = '/path/to/magento/var/log/';
+        
         return [
             'windows' => [
                 true,
-                'start /B "magento background task" ' . $this->testCommand . ' 2>&1',
+                'start /B "magento background task" ' . $testCommand . ' 2>&1',
                 [],
             ],
             'unix-without-group-name' => [
                 false,
-                $this->testCommand . ' >> /dev/null 2>&1 &',
+                $testCommand . ' >> /dev/null 2>&1 &',
                 [],
             ],
             'unix-with-group-name' => [
                 false,
-                $this->testCommand . " >> '{$this->logPath}magento.cron.group-name.log' 2>&1 &",
+                $testCommand . " >> '{$logPath}magento.cron.group-name.log' 2>&1 &",
                 ['php-executable', 'script-path', 'group-name'],
             ],
         ];

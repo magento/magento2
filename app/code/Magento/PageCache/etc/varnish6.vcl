@@ -27,6 +27,11 @@ sub vcl_recv {
         set req.hash_always_miss = true;
     }
 
+    # Sorting query string parameters
+    if (req.url ~ "\?.+&.+") {
+        set req.url = std.querysort(req.url);
+    }
+
     if (req.method == "PURGE") {
         if (client.ip !~ purge) {
             return (synth(405, "Method not allowed"));
@@ -50,6 +55,7 @@ sub vcl_recv {
         req.method != "HEAD" &&
         req.method != "PUT" &&
         req.method != "POST" &&
+        req.method != "PATCH" &&
         req.method != "TRACE" &&
         req.method != "OPTIONS" &&
         req.method != "DELETE") {
@@ -82,8 +88,8 @@ sub vcl_recv {
     std.collect(req.http.Cookie);
 
     # Remove all marketing get parameters to minimize the cache objects
-    if (req.url ~ "(\?|&)(gad_source|gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=") {
-        set req.url = regsuball(req.url, "(gad_source|gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
+    if (req.url ~ "(\?|&)(gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+|gad_[a-z]+)=") {
+        set req.url = regsuball(req.url, "(gbraid|wbraid|_gl|dclid|gclsrc|srsltid|msclkid|gclid|cx|_kx|ie|cof|siteurl|zanpid|origin|fbclid|mc_[a-z]+|utm_[a-z]+|_bta_[a-z]+|gad_[a-z]+)=[-_A-z0-9+()%.]+&?", "");
         set req.url = regsub(req.url, "[?|&]+$", "");
     }
 

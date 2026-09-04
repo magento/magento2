@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -34,7 +34,7 @@ class ThemePackageListTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registrar = $this->getMockForAbstractClass(
+        $this->registrar = $this->createMock(
             ComponentRegistrarInterface::class
         );
         $this->factory = $this->createMock(ThemePackageFactory::class);

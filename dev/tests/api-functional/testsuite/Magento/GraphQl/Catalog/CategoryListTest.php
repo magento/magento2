@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test CategoryList GraphQl query
@@ -30,12 +31,12 @@ class CategoryListTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterSingleCategoryDataProvider
      * @param string $field
      * @param string $condition
      * @param string $value
      * @param array $expectedResult
      */
+    #[DataProvider('filterSingleCategoryDataProvider')]
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY
@@ -60,12 +61,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterMultipleCategoriesDataProvider
      * @param $field
      * @param $condition
      * @param $value
      * @param $expectedResult
      */
+    #[DataProvider('filterMultipleCategoriesDataProvider')]
     public function testFilterMultipleCategoriesByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY

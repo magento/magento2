@@ -12,5 +12,8 @@
         <element name="sectionHeader" type="button" selector="#catalog_frontend-head"/>
         <element name="productsPerPageAllowedValues" type="input" selector="#catalog_frontend_grid_per_page_values"/>
         <element name="productsPerPageDefaultValue" type="input" selector="#catalog_frontend_grid_per_page"/>
+        <element name="productsPerPageAllowedValuesForList" type="input" selector="#catalog_frontend_list_per_page_values"/>
+        <element name="productsPerPageDefaultValueForList" type="input" selector="#catalog_frontend_list_per_page"/>
+        <element name="advancedInventoryBtn" type="button" selector="//li[contains(@aria-labelledby, 'attributes_update_tabs_inventory')]"/>
     </section>
 </sections>

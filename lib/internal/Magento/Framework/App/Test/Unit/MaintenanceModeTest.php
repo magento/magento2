@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -40,7 +40,7 @@ class MaintenanceModeTest extends TestCase
      */
     protected function setup(): void
     {
-        $this->flagDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->flagDir = $this->createMock(WriteInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->method('getDirectoryWrite')
             ->willReturn($this->flagDir);

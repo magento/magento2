@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2017 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -212,5 +212,8 @@
         <data key="tax_postcode">*</data>
         <data key="rate">20</data>
         <data key="zip_is_range">0</data>
+    </entity>
+    <entity name="USFullTaxRate19Percent" extends="USFullTaxRate">
+        <data key="rate">19</data>
     </entity>
 </entities>

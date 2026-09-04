@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Config\Block\System\Config;
 
@@ -12,6 +12,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\View\Element\Text;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -105,8 +106,8 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @param string $configDataValue The value that the field path should be set to in the config data
      * @param int $valueSelCtr Number of time that value is selected
      * @param bool $expectedUseDefault
-     * @dataProvider initFieldsUseDefaultCheckboxDataProvider
      */
+    #[DataProvider('initFieldsUseDefaultCheckboxDataProvider')]
     public function testInitFieldsUseDefaultCheckbox(
         $fieldId,
         $isConfigDataEmpty,
@@ -212,9 +213,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @param bool $isConfigDataEmpty if the config data array should be empty or not
      * @param string $configDataValue Value that the field path should be set to in the config data
      * @param int $valueSelCtr Number of time that value is selected
-     * @dataProvider initFieldsUseConfigPathDataProvider
      * @magentoConfigFixture default/test_config_section/test_group_config_node/test_field_value config value
      */
+    #[DataProvider('initFieldsUseConfigPathDataProvider')]
     public function testInitFieldsUseConfigPath($fieldId, $isConfigDataEmpty, $configDataValue, $valueSelCtr = 1)
     {
         $this->_setupFieldsInheritCheckbox($fieldId, $isConfigDataEmpty, $configDataValue);
@@ -290,9 +291,9 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * @param string $currentScopeCode
      * @param bool $isDbOverrideValue whether values should be overridden in the database for the current scope
      *
-     * @dataProvider initFieldsWithBackendModelDataProvider
      * @covers \Magento\Config\Block\System\Config\Form::initFields
      */
+    #[DataProvider('initFieldsWithBackendModelDataProvider')]
     public function testInitFieldsWithBackendModel(
         $fieldId,
         $expectedConfigValue,
@@ -515,13 +516,12 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $directories = $fileResolver->get('config.xml', 'global');
 
         $property = new \ReflectionProperty($directories, 'paths');
-        $property->setAccessible(true);
         $property->setValue(
             $directories,
             array_merge($property->getValue($directories), [__DIR__ . '/_files/test_config.xml'])
         );
 
-        $fileResolverMock = $this->getMockForAbstractClass(FileResolverInterface::class);
+        $fileResolverMock = $this->createMock(FileResolverInterface::class);
         $fileResolverMock->method('get')->willReturn($directories);
 
         $initialReader = Bootstrap::getObjectManager()->create(
@@ -540,7 +540,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
 
         $composite = Bootstrap::getObjectManager()->get('systemConfigPostProcessorComposite');
         $property = new \ReflectionProperty($composite, 'processors');
-        $property->setAccessible(true);
         $processors = $property->getValue($composite);
         $processors['metadata'] = $metadataConfigTypeProcessor;
         $property->setValue($composite, $processors);
@@ -588,7 +587,6 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

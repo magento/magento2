@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2025 Adobe
+ * Copyright 2020 Adobe
  * All Rights Reserved.
  */
 
@@ -19,7 +19,11 @@ use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\MediaGalleryRenditions\Model\Config;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateRenditionsTest extends TestCase
 {
     private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
@@ -103,14 +107,13 @@ class GenerateRenditionsTest extends TestCase
     }
 
     /**
-     * @dataProvider renditionsImageProvider
-     *
      * Test for generation of rendition images.
      *
      * @param string $path
      * @param string $renditionPath
      * @throws LocalizedException
      */
+    #[DataProvider('renditionsImageProvider')]
     public function testExecute(string $path, string $renditionPath): void
     {
         $this->copyImage($path);
