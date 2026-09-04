@@ -435,9 +435,7 @@ class Cache implements ConfigOptionsListInterface
             self::INPUT_VALUE_CACHE_REDIS,
             self::INPUT_VALUE_CACHE_VALKEY,
             self::INPUT_VALUE_CACHE_SYMFONY_REDIS,
-            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY,
-            self::INPUT_VALUE_CACHE_ZEND_L1_L2,
-            self::INPUT_VALUE_CACHE_SYMFONY_L1_L2,
+            self::INPUT_VALUE_CACHE_SYMFONY_VALKEY
         ], true)) {
             if (!$this->validateRedisConfig($options, $deploymentConfig)) {
                 $errors[] = "Invalid {$selectedBackend} configuration. Could not connect to {$selectedBackend} server.";
