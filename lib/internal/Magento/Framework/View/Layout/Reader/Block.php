@@ -82,6 +82,8 @@ class Block implements Layout\ReaderInterface
      */
     private $conditionReader;
 
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
+
     /**
      * @deprecated 101.0.0 'acl' attribute name is deprecated. Use self::ATTRIBUTE_ACL instead.
      * @see self::ATTRIBUTE_ACL
@@ -105,7 +107,8 @@ class Block implements Layout\ReaderInterface
         Layout\ReaderPool $readerPool,
         InterpreterInterface $argumentInterpreter,
         Condition $conditionReader,
-        $scopeType = null
+        $scopeType = null,
+        ?\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null
     ) {
         $this->helper = $helper;
         $this->argumentParser = $argumentParser;
@@ -113,6 +116,13 @@ class Block implements Layout\ReaderInterface
         $this->scopeType = $scopeType;
         $this->argumentInterpreter = $argumentInterpreter;
         $this->conditionReader = $conditionReader;
+        if ($scopeConfig === null) {
+            $this->scopeConfig
+                = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        } else {
+            $this->scopeConfig = $scopeConfig;
+        }
     }
 
     /**
@@ -228,6 +238,9 @@ class Block implements Layout\ReaderInterface
         ScheduledStructure $scheduledStructure,
         Element $currentElement
     ) {
+        if (!$this->isReferenceBlockActive($currentElement)) {
+            return;
+        }
         $elementName = $currentElement->getAttribute('name');
         $elementRemove = filter_var($currentElement->getAttribute('remove'), FILTER_VALIDATE_BOOLEAN);
         if ($elementRemove) {
@@ -241,6 +254,22 @@ class Block implements Layout\ReaderInterface
         $this->updateScheduledData($currentElement, $data);
         $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
+    }
+
+    /**
+     * Determine whether the current reference block should be interpreted.
+     *
+     * @param Element $currentElement
+     * @return bool
+     */
+    protected function isReferenceBlockActive(Element $currentElement): bool
+    {
+        $ifconfig = $currentElement->getAttribute('ifconfig');
+        if ($ifconfig === '' || $ifconfig === null) {
+            return true;
+        }
+
+        return $this->scopeConfig->isSetFlag($ifconfig, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
     /**
