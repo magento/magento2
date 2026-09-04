@@ -782,6 +782,8 @@ class ConditionsToSearchCriteriaMapperTest extends TestCase
             'nlike' => 'like',
             'in' => 'nin',
             'nin' => 'in',
+            'is_null' => 'notnull',
+            'notnull' => 'is_null',
         ];
 
         foreach ($reversalMappings as $original => $reversed) {
