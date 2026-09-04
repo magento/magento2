@@ -58,7 +58,6 @@ class Text extends AbstractData
     {
         $errors = [];
         $attribute = $this->getAttribute();
-        $label = __($attribute->getStoreLabel());
 
         if ($value === false) {
             // try to load original value and validate it
@@ -70,6 +69,10 @@ class Text extends AbstractData
         }
 
         if (empty($value) && $value !== '0') {
+            if ($label = $attribute->getStoreLabel()) {
+                $label = __($label);
+            }
+
             $errors[] = __('"%1" is a required value.', $label);
         }
 
@@ -122,7 +125,6 @@ class Text extends AbstractData
     protected function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
     {
         // validate length
-        $label = __($attribute->getStoreLabel());
 
         $length = $value ? $this->_string->strlen(trim($value)) : 0;
 
@@ -133,6 +135,11 @@ class Text extends AbstractData
                 $validateRules,
                 'min_text_length'
             );
+
+            if ($label = $attribute->getStoreLabel()) {
+                $label = __($attribute->getStoreLabel());
+            }
+
             if ($minTextLength !== null && $length < $minTextLength) {
                 $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
             }
