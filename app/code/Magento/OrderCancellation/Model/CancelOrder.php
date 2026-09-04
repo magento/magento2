@@ -9,6 +9,7 @@ namespace Magento\OrderCancellation\Model;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\Method\Free;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Exception\CouldNotRefundException;
@@ -60,7 +61,9 @@ class CancelOrder
     ): Order {
         $payment = $order->getPayment();
 
-        if ($payment->getAmountPaid() !== null || $payment->getMethod() === 'free') {
+        if ($payment->getMethod() === Free::PAYMENT_METHOD_FREE_CODE) {
+            $order->cancel();
+        } elseif ($payment->getAmountPaid() !== null) {
             $order = $payment->getMethodInstance()->isOffline()
                 ? $this->handleOfflinePayment($order)
                 : $this->handleOnlinePayment($order);

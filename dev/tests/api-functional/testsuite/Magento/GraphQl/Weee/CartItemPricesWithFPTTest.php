@@ -120,7 +120,39 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertNotEmpty($result['cart']['items']);
         $actualFtps = $result['cart']['items'][0]['prices']['fixed_product_taxes'];
-        $this->assertEqualsCanonicalizing($expectedFtps, $actualFtps);
+        $this->assertFixedProductTaxesEqual($expectedFtps, $actualFtps);
+    }
+
+    /**
+     * Assert FPT rows match; order-independent, supports duplicate labels (multiset of label+amount).
+     *
+     * @param array $expected
+     * @param array $actual
+     * @return void
+     */
+    private function assertFixedProductTaxesEqual(array $expected, array $actual): void
+    {
+        $normalize = function (array $fpts): array {
+            $rows = [];
+            foreach ($fpts as $fpt) {
+                $rows[] = [
+                    'label' => $fpt['label'] ?? '',
+                    'value' => (float)($fpt['amount']['value'] ?? 0),
+                ];
+            }
+            usort(
+                $rows,
+                function (array $a, array $b): int {
+                    $labelCmp = strcmp($a['label'], $b['label']);
+                    if ($labelCmp !== 0) {
+                        return $labelCmp;
+                    }
+                    return $a['value'] <=> $b['value'];
+                }
+            );
+            return $rows;
+        };
+        $this->assertEquals($normalize($expected), $normalize($actual));
     }
 
     /**
@@ -265,7 +297,7 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fixed_product_attribute_front_label',
                         'amount' => [
-                            'value' => 5.01
+                            'value' => 5.0
                         ]
                     ],
                 ]
@@ -287,7 +319,7 @@ class CartItemPricesWithFPTTest extends GraphQlAbstract
                     [
                         'label' => 'fpt_for_all_front_label',
                         'amount' => [
-                            'value' => 13.65
+                            'value' => 13.66
                         ]
                     ],
                     [

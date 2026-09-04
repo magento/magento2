@@ -160,6 +160,60 @@ class SelectTest extends TestCase
     }
 
     /**
+     * @covers \Magento\Eav\Model\Attribute\Data\Select::validateValue
+     *
+     * @param mixed $optionText
+     * @param array|bool $expectedResult
+     */
+    #[DataProvider('validateValueWithSourceDataProvider')]
+    public function testValidateValueWithSource($optionText, $expectedResult)
+    {
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData']
+        );
+
+        $sourceMock = $this->createMock(AbstractSource::class);
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturn($optionText);
+
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Label');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn(false);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attrCode');
+        $attributeMock->expects($this->any())->method('getSourceModel')->willReturn('Some_Source');
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
+
+        $this->model->setEntity($entityMock);
+        $this->model->setAttribute($attributeMock);
+        $this->assertEquals($expectedResult, $this->model->validateValue('464'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateValueWithSourceDataProvider()
+    {
+        return [
+            'option label "0" is valid (must not be rejected as falsy)' => [
+                'optionText' => '0',
+                'expectedResult' => true,
+            ],
+            'non-existent option returns false from source' => [
+                'optionText' => false,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
+            'non-existent option returns null from source' => [
+                'optionText' => null,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
+            'valid label passes' => [
+                'optionText' => 'Label',
+                'expectedResult' => true,
+            ],
+        ];
+    }
+
+    /**
      * @covers \Magento\Eav\Model\Attribute\Data\Select::compactValue
      */
     public function testCompactValue()
