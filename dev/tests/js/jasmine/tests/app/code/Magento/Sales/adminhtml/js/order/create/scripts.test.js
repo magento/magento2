@@ -572,5 +572,50 @@ define([
             });
         });
 
+        describe('loadAreaResponseHandler()', function () {
+            it('keeps the payment form DOM when available payment methods did not change', function () {
+                init();
+                order.paymentMethod = 'payment1';
+                document.getElementById('order-billing_method').innerHTML =
+                    '<input name="payment[method]" value="payment1" type="radio"/><span id="marker"/>';
+                order.loadingAreas = ['billing_method'];
+
+                order.loadAreaResponseHandler({
+                    billing_method: '<input name="payment[method]" value="payment1" type="radio"/>'
+                });
+
+                expect(document.getElementById('marker')).not.toBeNull();
+            });
+
+            it('replaces the payment form when available payment methods changed', function () {
+                init();
+                order.paymentMethod = 'payment1';
+                document.getElementById('order-billing_method').innerHTML =
+                    '<input name="payment[method]" value="payment1" type="radio"/><span id="marker"/>';
+                order.loadingAreas = ['billing_method'];
+
+                order.loadAreaResponseHandler({
+                    billing_method: '<input name="payment[method]" value="payment1" type="radio"/>' +
+                        '<input name="payment[method]" value="payment2" type="radio"/>'
+                });
+
+                expect(document.getElementById('marker')).toBeNull();
+            });
+
+            it('replaces the payment form when no payment method is selected', function () {
+                init();
+                order.paymentMethod = null;
+                document.getElementById('order-billing_method').innerHTML =
+                    '<input name="payment[method]" value="payment1" type="radio"/><span id="marker"/>';
+                order.loadingAreas = ['billing_method'];
+
+                order.loadAreaResponseHandler({
+                    billing_method: '<input name="payment[method]" value="payment1" type="radio"/>'
+                });
+
+                expect(document.getElementById('marker')).toBeNull();
+            });
+        });
+
     });
 });
