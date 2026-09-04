@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model\Description;
 
@@ -39,6 +39,8 @@ class DescriptionSentenceGenerator
      */
     public function generate()
     {
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $sentenceWordsCount = mt_rand(
             $this->sentenceConfig['words']['count-min'],
             $this->sentenceConfig['words']['count-max']

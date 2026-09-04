@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -43,9 +43,7 @@ $ccNumberView = $block->escapeHtml($block->getNumberLast4Digits());
                                         "modalClass": "my-credit-cards-popup",
                                         "toggleEvent": "click",
                                         "title": "<?= $block->escapeHtml(__('Delete')) ?>",
-                                        "content": "Are you sure you want to delete this card: <?=
-                                            /* @noEscape */ $ccNumberView
-                                        ?>?"
+                                        "content": "<?= $block->escapeHtml(__('Are you sure you want to delete this card: %1?', $ccNumberView)) ?>"
                                     }
                                 }'>
                 <span><?= $block->escapeHtml(__('Delete')) ?></span>

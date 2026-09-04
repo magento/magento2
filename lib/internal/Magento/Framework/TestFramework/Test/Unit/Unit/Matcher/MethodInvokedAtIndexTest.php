@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,12 +15,14 @@ class MethodInvokedAtIndexTest extends TestCase
 {
     public function testMatches()
     {
+        $object = $this->createMock(\stdClass::class);
+
         $invocationObject = new Invocation(
             'ClassName',
             'ValidMethodName',
             [],
             'void',
-            new \StdClass()
+            $object
         );
         $matcher = new MethodInvokedAtIndex(0);
         $this->assertTrue($matcher->matches($invocationObject));

@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Reports\Block\Adminhtml\Sales\Invoiced;
 
+use Magento\Reports\Block\Adminhtml\Grid\Column\Renderer\Currency;
+use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
+
 /**
  * Adminhtml invoiced report grid block
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
@@ -22,7 +24,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     protected $_columnGroupBy = 'period';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @codeCoverageIgnore
      */
     protected function _construct()
@@ -32,7 +34,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getResourceCollectionName()
     {
@@ -42,7 +44,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -53,14 +55,13 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'index' => 'period',
                 'sortable' => false,
                 'period_type' => $this->getPeriodType(),
-                'renderer' => \Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date::class,
+                'renderer' => Date::class,
                 'totals_label' => __('Total'),
                 'html_decorators' => ['nobr'],
                 'header_css_class' => 'col-period',
                 'column_css_class' => 'col-period'
             ]
         );
-
         $this->addColumn(
             'orders_count',
             [
@@ -73,7 +74,6 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'column_css_class' => 'col-qty'
             ]
         );
-
         $this->addColumn(
             'orders_invoiced',
             [
@@ -86,10 +86,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'column_css_class' => 'col-invoiced'
             ]
         );
-
-        if ($this->getFilterData()->getStoreIds()) {
-            $this->setStoreIds(explode(',', $this->getFilterData()->getStoreIds()));
-        }
+        $this->setStoreIds($this->_getStoreIds());
         $currencyCode = $this->getCurrentCurrencyCode();
         $rate = $this->getRate($currencyCode);
 
@@ -104,10 +101,10 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced',
-                'column_css_class' => 'col-total-invoiced'
+                'column_css_class' => 'col-total-invoiced',
+                'renderer' => Currency::class
             ]
         );
-
         $this->addColumn(
             'invoiced_captured',
             [
@@ -119,10 +116,10 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced-paid',
-                'column_css_class' => 'col-total-invoiced-paid'
+                'column_css_class' => 'col-total-invoiced-paid',
+                'renderer' => Currency::class
             ]
         );
-
         $this->addColumn(
             'invoiced_not_captured',
             [
@@ -134,7 +131,8 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
                 'sortable' => false,
                 'rate' => $rate,
                 'header_css_class' => 'col-total-invoiced-not-paid',
-                'column_css_class' => 'col-total-invoiced-not-paid'
+                'column_css_class' => 'col-total-invoiced-not-paid',
+                'renderer' => Currency::class
             ]
         );
 

@@ -2,8 +2,8 @@
 /**
  * Tests that existing payment.xml files are valid to schema individually and merged.
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Test\Integrity\Modular;
 
@@ -26,7 +26,7 @@ class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCon
      *
      * @return string
      */
-    protected function _getConfigFilePathGlob()
+    protected static function _getConfigFilePathGlob()
     {
         return 'etc/payment.xml';
     }
@@ -36,9 +36,9 @@ class PaymentConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCon
      *
      * @return string
      */
-    protected function _getXsdPath()
+    protected static function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Payment')
+        return self::$componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Payment')
             . '/etc/payment_file.xsd';
     }
 }

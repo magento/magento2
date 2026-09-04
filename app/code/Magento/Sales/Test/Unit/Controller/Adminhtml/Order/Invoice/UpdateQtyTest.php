@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -28,6 +29,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -35,6 +37,8 @@ use PHPUnit\Framework\TestCase;
  */
 class UpdateQtyTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -104,55 +108,37 @@ class UpdateQtyTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->titleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-        $this->responseMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->setMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->titleMock = $this->createMock(Title::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->responseMock = $this->createMock(ResponseHttp::class);
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
 
-        $this->viewMock = $this->getMockBuilder(ViewInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->viewMock = $this->createMock(ViewInterface::class);
 
         $this->viewMock->expects($this->any())->method('loadLayout')->willReturnSelf();
 
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->pageConfigMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
 
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
-        $contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getRequest',
-                    'getResponse',
-                    'getObjectManager',
-                    'getTitle',
-                    'getSession',
-                    'getHelper',
-                    'getActionFlag',
-                    'getMessageManager',
-                    'getResultRedirectFactory',
-                    'getView'
-                ]
-            )
-            ->getMock();
+        $contextMock = $this->createPartialMockWithReflection(
+            Context::class,
+            [
+                'getRequest',
+                'getResponse',
+                'getObjectManager',
+                'getSession',
+                'getHelper',
+                'getActionFlag',
+                'getMessageManager',
+                'getResultRedirectFactory',
+                'getView',
+                'getTitle'
+            ]
+        );
         $contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -171,22 +157,20 @@ class UpdateQtyTest extends TestCase
 
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultRawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->resultJsonFactoryMock = $this->getMockBuilder(JsonFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->invoiceServiceMock = $this->getMockBuilder(InvoiceService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->invoiceServiceMock = $this->createMock(InvoiceService::class);
 
         $this->controller = $objectManager->getObject(
             UpdateQty::class,
@@ -205,32 +189,30 @@ class UpdateQtyTest extends TestCase
      *
      * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $orderId = 1;
         $invoiceData = ['comment_text' => 'test'];
         $response = 'test data';
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('order_id')
-            ->willReturn($orderId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('invoice', [])
-            ->willReturn($invoiceData);
+            ->willReturnCallback(function ($arg1, $arg2) use ($orderId, $invoiceData) {
+                if ($arg1 == 'order_id') {
+                    return $orderId;
+                } elseif ($arg1 == 'invoice' && empty($arg2)) {
+                    return $invoiceData;
+                }
+            });
 
-        $invoiceMock = $this->getMockBuilder(Invoice::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $invoiceMock = $this->createMock(Invoice::class);
         $invoiceMock->expects($this->once())
             ->method('getTotalQty')
             ->willReturn(2);
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->onlyMethods(['load', 'getId', 'canInvoice'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -248,23 +230,17 @@ class UpdateQtyTest extends TestCase
             ->with($orderMock, [])
             ->willReturn($invoiceMock);
 
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with(Order::class)
             ->willReturn($orderMock);
 
-        $blockItemMock = $this->getMockBuilder(Items::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $blockItemMock = $this->createMock(Items::class);
         $blockItemMock->expects($this->once())
             ->method('toHtml')
             ->willReturn($response);
 
-        $layoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $layoutMock = $this->createMock(Layout::class);
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('order_items')
@@ -283,10 +259,7 @@ class UpdateQtyTest extends TestCase
             ->method('create')
             ->willReturn($this->resultPageMock);
 
-        $resultRaw = $this->getMockBuilder(Raw::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultRaw = $this->createMock(Raw::class);
         $resultRaw->expects($this->once())->method('setContents')->with($response);
 
         $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($resultRaw);
@@ -299,21 +272,21 @@ class UpdateQtyTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteModelException()
+    public function testExecuteModelException(): void
     {
         $message = 'The order no longer exists.';
         $response = ['error' => true, 'message' => $message];
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->onlyMethods(['load', 'getId', 'canInvoice'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')->willReturnSelf();
         $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with(Order::class)
             ->willReturn($orderMock);
@@ -323,10 +296,7 @@ class UpdateQtyTest extends TestCase
             ->with('Invoices');
 
         /** @var Json|MockObject */
-        $resultJsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultJsonMock = $this->createMock(Json::class);
         $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
         $this->resultJsonFactoryMock->expects($this->once())
@@ -341,21 +311,21 @@ class UpdateQtyTest extends TestCase
      *
      * @return void
      */
-    public function testExecuteException()
+    public function testExecuteException(): void
     {
         $message = 'The order no longer exists.';
         $response = ['error' => true, 'message' => $message];
 
         $orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->onlyMethods(['load', 'getId', 'canInvoice'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')->willReturnSelf();
         $orderMock->expects($this->once())
             ->method('getId')
             ->willReturn(null);
-        $this->objectManagerMock->expects($this->at(0))
+        $this->objectManagerMock
             ->method('create')
             ->with(Order::class)
             ->willReturn($orderMock);
@@ -365,10 +335,7 @@ class UpdateQtyTest extends TestCase
             ->with('Invoices');
 
         /** @var Json|MockObject */
-        $resultJsonMock = $this->getMockBuilder(Json::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $resultJsonMock = $this->createMock(Json::class);
         $resultJsonMock->expects($this->once())->method('setData')->with($response);
 
         $this->resultJsonFactoryMock->expects($this->once())

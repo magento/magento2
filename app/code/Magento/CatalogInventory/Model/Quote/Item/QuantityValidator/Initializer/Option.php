@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer;
 
@@ -120,7 +120,7 @@ class Option
             /**
              * if option's qty was updates we also need to update quote item qty
              */
-            $quoteItem->setData('qty', (int) $qty);
+            $quoteItem->setData('qty', (int) $result->getItemQty());
         }
         if ($result->getMessage() !== null) {
             $option->setMessage($result->getMessage());

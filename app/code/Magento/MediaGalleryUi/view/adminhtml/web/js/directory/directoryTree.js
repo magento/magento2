@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 /* global Base64 */
@@ -11,7 +11,8 @@ define([
     'underscore',
     'Magento_MediaGalleryUi/js/directory/actions/createDirectory',
     'jquery/jstree/jquery.jstree',
-    'Magento_Ui/js/lib/view/utils/async'
+    'Magento_Ui/js/lib/view/utils/async',
+    'Magento_MediaGalleryUi/js/directory/directories'
 ], function ($, Component, layout, _, createDirectory) {
     'use strict';
 
@@ -25,6 +26,7 @@ define([
             createDirectoryUrl: 'media_gallery/directories/create',
             deleteDirectoryUrl: 'media_gallery/directories/delete',
             jsTreeReloaded: null,
+            restoringDirectorySelection: false,
             modules: {
                 bookmarks: '${ $.bookmarkProvider }',
                 directories: '${ $.name }_directories',
@@ -52,6 +54,7 @@ define([
                 this.directoryTreeSelector,
                 this,
                 function () {
+                    this.initJsTreeEvents();
                     this.renderDirectoryTree().then(function () {
                         this.initEvents();
                     }.bind(this));
@@ -65,10 +68,16 @@ define([
          * Render directory tree component.
          */
         renderDirectoryTree: function () {
-            return this.getJsonTree().then(function (data) {
+            if (this.isLazyTreeMode()) {
+                this.createTree();
+
+                return $.Deferred().resolve().promise();
+            }
+
+            return this.getJsonTree(true).then(function (data) {
                 this.createFolderIfNotExists(data).then(function (isFolderCreated) {
                     if (isFolderCreated) {
-                        this.getJsonTree().then(function (newData) {
+                        this.getJsonTree(true).then(function (newData) {
                             this.createTree(newData);
                         }.bind(this));
                     } else {
@@ -103,7 +112,7 @@ define([
                 return deferred.promise();
             }
 
-            if (this.isDirectoryExist(directories[0], requestedDirectory)) {
+            if (this.isDirectoryExist(directories, requestedDirectory)) {
                 deferred.resolve(false);
 
                 return deferred.promise();
@@ -112,7 +121,7 @@ define([
             pathArray = this.convertPathToPathsArray(requestedDirectory);
 
             $.each(pathArray, function (i, val) {
-                if (this.isDirectoryExist(directories[0], val)) {
+                if (this.isDirectoryExist(directories, val)) {
                     pathArray.splice(i, 1);
                 }
             }.bind(this));
@@ -125,6 +134,15 @@ define([
             });
 
             return deferred.promise();
+        },
+
+        /**
+         * Check if directory tree should be loaded on demand.
+         *
+         * @returns {Boolean}
+         */
+        isLazyTreeMode: function () {
+            return _.isNull(this.getRequestedDirectory());
         },
 
         /**
@@ -146,7 +164,7 @@ define([
                 var i;
 
                 for (i = 0; i < data.length; i++) {
-                    if (data[i].attr.id === id) {
+                    if (data[i].id === id) {
                         found = data[i];
                         break;
                     } else if (data[i].children && data[i].children.length) {
@@ -206,19 +224,17 @@ define([
          * Remove ability to multiple select on nodes
          */
         disableMultiselectBehavior: function () {
-            $.jstree.defaults.ui['select_range_modifier'] = false;
-            $.jstree.defaults.ui['select_multiple_modifier'] = false;
+            $.jstree.defaults.core.multiple = false;
         },
 
         /**
          *  Handle jstree events
          */
         initEvents: function () {
-            this.initJsTreeEvents();
             this.disableMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
-                this.getJsonTree().then(function (data) {
+                this.getJsonTree(!this.isLazyTreeMode()).then(function (data) {
                     this.createFolderIfNotExists(data).then(function (isCreated) {
                         if (isCreated) {
                             this.renderDirectoryTree().then(function () {
@@ -238,7 +254,7 @@ define([
          */
         initJsTreeEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
-                this.setActiveNodeFilter($(data.rslt.obj).data('path'));
+                this.setActiveNodeFilter(data.node.id);
                 this.setJsTreeReloaded(false);
             }.bind(this));
 
@@ -251,9 +267,14 @@ define([
          * Verify directory filter on init event, select folder per directory filter state
          */
         updateSelectedDirectory: function () {
-            var currentFilterPath = this.filterChips().filters.path,
+            var appliedFilters = this.filterChips().get('applied') || {},
+                currentFilterPath = appliedFilters.path || this.filterChips().filters.path,
                 requestedDirectory = this.getRequestedDirectory(),
                 currentTreePath;
+
+            if (this.restoringDirectorySelection) {
+                return;
+            }
 
             if (_.isUndefined(currentFilterPath)) {
                 this.clearFiltersHandle();
@@ -275,9 +296,128 @@ define([
 
             if (this.folderExistsInTree(currentTreePath)) {
                 this.locateNode(currentTreePath);
-            } else {
-                this.selectStorageRoot();
+            } else if (_.isString(currentTreePath) && currentTreePath !== '') {
+                if (!this.isLazyTreeMode()) {
+                    this.selectStorageRoot();
+                    return;
+                }
+
+                this.restoringDirectorySelection = true;
+                this.ensurePathLoaded(currentTreePath)
+                    .done(function (isLoaded) {
+                        if (isLoaded && this.folderExistsInTree(currentTreePath)) {
+                            this.locateNode(currentTreePath);
+                        } else {
+                            this.selectStorageRoot();
+                        }
+                    }.bind(this))
+                    .always(function () {
+                        this.restoringDirectorySelection = false;
+                    }.bind(this));
             }
+        },
+
+        /**
+         * Ensure all directory ancestors are loaded in lazy tree mode.
+         *
+         * @param {String} path
+         * @returns {jQuery.Promise}
+         */
+        ensurePathLoaded: function (path) {
+            var deferred = $.Deferred(),
+                pathChain = this.getPathChain(path),
+                index;
+
+            if (!_.isString(path) || path === '') {
+                deferred.resolve(false);
+                return deferred.promise();
+            }
+
+            if (!this.isLazyTreeMode()) {
+                deferred.resolve(this.folderExistsInTree(path));
+                return deferred.promise();
+            }
+
+            index = _.findIndex(pathChain, function (segmentPath) {
+                return !!this.folderExistsInTree(segmentPath);
+            }.bind(this));
+
+            if (index === -1) {
+                deferred.resolve(false);
+                return deferred.promise();
+            }
+
+            /**
+             * Open each path segment sequentially so jstree lazy-loads children.
+             */
+            function processNextSegment() {
+                var segmentPath;
+
+                if (index >= pathChain.length) {
+                    deferred.resolve(this.folderExistsInTree(path));
+                    return;
+                }
+
+                segmentPath = pathChain[index];
+
+                if (!this.folderExistsInTree(segmentPath)) {
+                    deferred.resolve(false);
+                    return;
+                }
+
+                this.openNodeAsync(segmentPath)
+                    .always(function () {
+                        index++;
+                        processNextSegment.call(this);
+                    }.bind(this));
+            }
+
+            processNextSegment.call(this);
+
+            return deferred.promise();
+        },
+
+        /**
+         * Open node and resolve once jstree processes lazy children.
+         *
+         * @param {String} path
+         * @returns {jQuery.Promise}
+         */
+        openNodeAsync: function (path) {
+            var deferred = $.Deferred(),
+                tree = $(this.directoryTreeSelector).jstree(true);
+
+            if (!tree || !tree.get_node(path)) {
+                deferred.resolve(false);
+
+                return deferred.promise();
+            }
+
+            tree.open_node(path, function (node, status) {
+                deferred.resolve(status !== false);
+            });
+
+            return deferred.promise();
+        },
+
+        /**
+         * Convert path string into cumulative segments:
+         * 'a/b/c' -> ['a', 'a/b', 'a/b/c'].
+         *
+         * @param {String} path
+         * @returns {Array}
+         */
+        getPathChain: function (path) {
+            var segments = _.filter(path.split('/'), function (segment) {
+                    return segment !== '';
+                }),
+                pathChain = [];
+
+            $.each(segments, function (index) {
+                pathChain.push(segments.slice(0, index + 1).join('/'));
+            });
+
+            return pathChain;
         },
 
         /**
@@ -287,7 +427,7 @@ define([
          */
         folderExistsInTree: function (path) {
             if (!_.isUndefined(path)) {
-                return $('#' + path.replace(/\//g, '\\/')).length === 1;
+                return $(this.directoryTreeSelector).jstree('get_node', path);
             }
 
             return false;
@@ -318,12 +458,14 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
-            if (path === $(this.directoryTreeSelector).jstree('get_selected').attr('id')) {
+            if ($(this.directoryTreeSelector).jstree('is_selected', path)) {
                 return;
             }
-            path = path.replace(/\//g, '\\/');
-            $(this.directoryTreeSelector).jstree('open_node', '#' + path);
-            $(this.directoryTreeSelector).jstree('select_node', '#' + path, true);
+            $(this.directoryTreeSelector).jstree('deselect_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
+            $(this.directoryTreeSelector).jstree('open_node', path);
+            $(this.directoryTreeSelector).jstree('select_node', path, true);
 
         },
 
@@ -396,7 +538,9 @@ define([
          * Remove active node from directory tree, and select next
          */
         removeNode: function () {
-            $(this.directoryTreeSelector).jstree('remove');
+            $(this.directoryTreeSelector).jstree('delete_node',
+                $(this.directoryTreeSelector).jstree('get_selected')
+            );
         },
 
         /**
@@ -411,18 +555,30 @@ define([
             filters = $.extend(true, filters, applied);
             filters.path = path;
             this.filterChips().set('applied', filters);
+
+            if (!_.isUndefined(this.bookmarks()) && _.isFunction(this.bookmarks().store)) {
+                this.bookmarks().store('current');
+            }
         },
 
         /**
          * Reload jstree and update jstree events
          */
-        reloadJsTree: function () {
+        reloadJsTree: function (loadWholeTree) {
             var deferred = $.Deferred();
 
-            this.getJsonTree().then(function (data) {
-                this.createTree(data);
+            if (this.isLazyTreeMode() && !loadWholeTree) {
+                $(this.directoryTreeSelector).jstree(true).refresh(false, true);
                 this.setJsTreeReloaded(true);
-                this.initEvents();
+                deferred.resolve();
+
+                return deferred.promise();
+            }
+
+            this.getJsonTree(true).then(function (data) {
+                $(this.directoryTreeSelector).jstree(true).settings.core.data = data;
+                $(this.directoryTreeSelector).jstree(true).refresh(false, true);
+                this.setJsTreeReloaded(true);
                 deferred.resolve();
             }.bind(this));
 
@@ -432,13 +588,17 @@ define([
         /**
          * Get json data for jstree
          */
-        getJsonTree: function () {
-            var deferred = $.Deferred();
+        getJsonTree: function (loadWholeTree) {
+            var deferred = $.Deferred(),
+                requestData = {
+                    loadWholeTree: loadWholeTree ? 1 : 0
+                };
 
             $.ajax({
                 url: this.getDirectoryTreeUrl,
                 type: 'GET',
                 dataType: 'json',
+                data: requestData,
 
                 /**
                  * Success handler for request
@@ -470,28 +630,44 @@ define([
          * @param {Array} data
          */
         createTree: function (data) {
+            var treeData = data;
+
+            if (this.isLazyTreeMode()) {
+                treeData = {
+                    url: this.getDirectoryTreeUrl,
+                    type: 'GET',
+
+                    /**
+                     * Return data payload for on-demand loading.
+                     *
+                     * @param {Object} node
+                     * @returns {Object}
+                     */
+                    data: function (node) {
+                        return {
+                            path: node.id,
+                            loadWholeTree: 0
+                        };
+                    }
+                };
+            }
+
+            // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             $(this.directoryTreeSelector).jstree({
-                plugins: ['json_data', 'themes',  'ui', 'crrm', 'types', 'hotkeys'],
-                vcheckbox: {
-                    'two_state': true,
-                    'real_checkboxes': true
+                plugins: [],
+                checkbox: {
+                    three_state: false,
+                    cascade: ''
                 },
-                'json_data': {
-                    data: data
-                },
-                hotkeys: {
-                    space: this._changeState,
-                    'return': this._changeState
-                },
-                types: {
-                    'types': {
-                        'disabled': {
-                            'check_node': true,
-                            'uncheck_node': true
-                        }
+                core: {
+                    data: treeData,
+                    check_callback: true,
+                    themes: {
+                        dots: false
                     }
                 }
             });
+            // jscs:enable requireCamelCaseOrUpperCaseIdentifiers
         }
     });
 });

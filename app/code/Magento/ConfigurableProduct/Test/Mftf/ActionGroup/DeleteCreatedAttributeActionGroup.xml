@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -26,7 +26,7 @@
         <fillField stepKey="searchProductDefaultLabel" selector="{{CatalogProductsSection.searchDefaultLabelField}}" userInput="{{NewProductsData.defaultLabel}}"/>
         <click stepKey="clickSearchButton" selector="{{CatalogProductsSection.searchButton}}"/>
         <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
-        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdAttributeItem}}"/>
+        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdTheAttributeItem(NewProductsData.defaultLabel)}}"/>
         <waitForPageLoad stepKey="waitForAttributePropertiesPageLoad"/>
 
         <!--Click on Delete Attribute item-->

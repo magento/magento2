@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Controller\Index;
 
@@ -50,8 +50,8 @@ class Index extends Action implements HttpGetActionInterface, HttpPostActionInte
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
-        ScopeConfigInterface $scopeConfig = null,
-        Page $page = null
+        ?ScopeConfigInterface $scopeConfig = null,
+        ?Page $page = null
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
         $this->scopeConfig = $scopeConfig ? : ObjectManager::getInstance()->get(ScopeConfigInterface::class);

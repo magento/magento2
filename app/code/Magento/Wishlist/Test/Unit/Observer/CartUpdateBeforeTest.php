@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Test\Unit\Observer;
 
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Framework\Message\ManagerInterface;
@@ -19,6 +20,8 @@ use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Wishlist\Observer\CartUpdateBefore as Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Framework\Event\Observer as EventObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CartUpdateBeforeTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Observer
      */
@@ -43,7 +48,7 @@ class CartUpdateBeforeTest extends TestCase
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Customer\Model\Session|MockObject
+     * @var CustomerSession|MockObject
      */
     protected $customerSession;
 
@@ -64,16 +69,9 @@ class CartUpdateBeforeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->helper = $this->getMockBuilder(Data::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wishlistFactory = $this->getMockBuilder(WishlistFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->wishlist = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helper = $this->createMock(Data::class);
+        $this->wishlistFactory = $this->createPartialMock(WishlistFactory::class, ['create']);
+        $this->wishlist = $this->createMock(Wishlist::class);
         $this->wishlistFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->wishlist);
@@ -95,45 +93,38 @@ class CartUpdateBeforeTest extends TestCase
         $itemQty = 123;
         $productId = 321;
 
-        $eventObserver = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventObserver = $this->createMock(EventObserver::class);
 
-        $event = $this->getMockBuilder(Event::class)
-            ->setMethods(['getCart', 'getInfo'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $event = $this->createPartialMockWithReflection(
+            Event::class,
+            ['getCart', 'getInfo']
+        );
 
         $eventObserver->expects($this->exactly(2))
             ->method('getEvent')
             ->willReturn($event);
 
-        $quoteItem = $this->getMockBuilder(Item::class)
-            ->setMethods(['getProductId', 'getBuyRequest', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteItem = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProductId', 'getBuyRequest']
+        );
 
-        $buyRequest = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['setQty'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $buyRequest = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setQty']
+        );
 
-        $infoData = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['toArray'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $infoData = $this->createPartialMock(DataObject::class, ['toArray']);
 
         $infoData->expects($this->once())
             ->method('toArray')
             ->willReturn([$itemId => ['qty' => $itemQty, 'wishlist' => true]]);
 
-        $cart = $this->getMockBuilder(Cart::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quote = $this->getMockBuilder(Quote::class)
-            ->setMethods(['getCustomerId', 'getItemById', 'removeItem', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $cart = $this->createMock(Cart::class);
+        $quote = $this->createPartialMockWithReflection(
+            Quote::class,
+            ['getCustomerId', 'getItemById', 'removeItem']
+        );
 
         $event->expects($this->once())
             ->method('getCart')
@@ -187,7 +178,7 @@ class CartUpdateBeforeTest extends TestCase
         $this->helper->expects($this->once())
             ->method('calculate');
 
-        /** @var $eventObserver \Magento\Framework\Event\Observer */
+        /** @var $eventObserver EventObserver */
         $this->assertSame(
             $this->observer,
             $this->observer->execute($eventObserver)

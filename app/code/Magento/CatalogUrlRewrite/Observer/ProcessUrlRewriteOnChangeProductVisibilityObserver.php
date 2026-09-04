@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,12 +43,13 @@ class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInte
         $event = $observer->getEvent();
         $attrData = $event->getAttributesData();
         $productIds = $event->getProductIds();
+        $storeIdFromScope = $event->getStoreId();
         $visibility = $attrData[ProductInterface::VISIBILITY] ?? 0;
 
         if (!$visibility || !$productIds) {
             return;
         }
 
-        $this->adaptUrlRewritesToVisibility->execute($productIds, (int)$visibility);
+        $this->adaptUrlRewritesToVisibility->execute($productIds, (int)$visibility, (int)$storeIdFromScope);
     }
 }

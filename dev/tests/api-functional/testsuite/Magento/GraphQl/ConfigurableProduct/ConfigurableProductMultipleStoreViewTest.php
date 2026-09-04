@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test configurable product queries work correctly with multiple websites
@@ -34,6 +35,42 @@ class ConfigurableProductMultipleStoreViewTest extends GraphQlAbstract
         self::assertContains('Option 1', $secondWebsiteVariants[0]['attributes'][0]);
         self::assertContains('simple_20', $secondWebsiteVariants[1]['product']);
         self::assertContains('Option 2', $secondWebsiteVariants[1]['attributes'][0]);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_children_on_different_websites.php
+     * @param string $store
+     * @param string $childSku
+     * @param string $attributeLabel
+     */
+    #[DataProvider('childrenAssignedToDifferentWebsitesDataProvider')]
+    public function testConfigurableProductWithChildrenAssignedToDifferentWebsites(
+        string $store,
+        string $childSku,
+        string $attributeLabel
+    ) {
+        $headers = ['Store' => $store];
+        $query = $this->getQuery('configurable');
+        $response = $this->graphQlQuery($query, [], '', $headers);
+        self::assertCount(1, $response['products']['items']);
+        $product = $response['products']['items'][0];
+        self::assertCount(1, $product['variants']);
+        $variant = $response['products']['items'][0]['variants'][0];
+        self::assertEquals($childSku, $variant['product']['sku']);
+        self::assertCount(1, $variant['attributes']);
+        $attribute = $variant['attributes'][0];
+        self::assertEquals($attributeLabel, $attribute['label']);
+    }
+
+    /**
+     * @return array
+     */
+    public static function childrenAssignedToDifferentWebsitesDataProvider(): array
+    {
+        return [
+            ['default', 'simple_option_2', 'Option 2'],
+            ['fixture_second_store', 'simple_option_1', 'Option 1'],
+        ];
     }
 
     /**

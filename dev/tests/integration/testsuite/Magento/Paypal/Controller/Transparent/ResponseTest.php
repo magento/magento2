@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,11 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
-use Magento\Framework\Session\Generic as GenericSession;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests PayPal transparent response controller.
@@ -32,8 +33,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoConfigFixture current_store payment/payflowpro/active 1
      * @magentoDataFixture Magento/Sales/_files/quote.php
-     * @dataProvider paymentCcExpirationDateDataProvider
      */
+    #[DataProvider('paymentCcExpirationDateDataProvider')]
     public function testPaymentCcExpirationDate(
         string $currentDateTime,
         string $paypalExpDate,
@@ -59,7 +60,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setPostValue($postData);
         $this->getRequest()->setMethod('POST');
         /** @var Session $checkoutSession */
-        $checkoutSession = $this->_objectManager->get(GenericSession::class);
+        $checkoutSession = $this->_objectManager->get(Session::class);
         $checkoutSession->setQuoteId($quote->getId());
         $this->setCurrentDateTime($currentDateTime);
 
@@ -76,7 +77,7 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @return array
      */
-    public function paymentCcExpirationDateDataProvider(): array
+    public static function paymentCcExpirationDateDataProvider(): array
     {
         return [
             'Expiration year in current century' => [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Fixtures\ImagesGenerator;
 
@@ -52,6 +52,8 @@ class ImagesGenerator
 
         $image = imagecreate($config['image-width'], $config['image-height']);
         $bgColor = imagecolorallocate($image, 240, 240, 240);
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $fgColor = imagecolorallocate($image, mt_rand(0, 230), mt_rand(0, 230), mt_rand(0, 230));
         $colors = [$fgColor, $bgColor];
         imagefilledrectangle($image, 0, 0, $config['image-width'], $config['image-height'], $bgColor);
@@ -78,8 +80,6 @@ class ImagesGenerator
         }
         $mediaDirectory->writeFile($imagePath, stream_get_contents($memory, -1, 0));
         fclose($memory);
-        imagedestroy($image);
-        // phpcs:enable
 
         return $imagePath;
     }

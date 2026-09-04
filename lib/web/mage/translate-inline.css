@@ -1,11 +1,19 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 .trnslate-inline-area [data-translate],
 .trnslate-inline-area .translate-inline {
     outline: dotted 1px red !important;
+}
+
+.trnslate-inline-area .window-translate-inline {
+    z-index: 903;
+}
+
+.trnslate-inline-area .ui-widget-overlay.ui-front {
+    z-index: 902;
 }
 
 * html .translate-inline,

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="AdminFedexEnableForCheckoutConfigData" type="fedex_config">
@@ -45,5 +45,25 @@
         <data key="path">carriers/fedex/active</data>
         <data key="value">0</data>
         <data key="label">No</data>
+    </entity>
+    <entity name="AdminFedexAccount" type="fedex_config">
+        <data key="path">carriers/fedex/account</data>
+    </entity>
+    <entity name="AdminFedexHubId" type="fedex_config">
+        <data key="path">carriers/fedex/smartpost_hubid</data>
+    </entity>
+    <entity name="AdminFedexApiKey" type="fedex_config">
+        <data key="path">carriers/fedex/api_key</data>
+    </entity>
+    <entity name="AdminFedexSecretKey" type="fedex_config">
+        <data key="path">carriers/fedex/secret_key</data>
+    </entity>
+    <entity name="AdminFedexInternationalPriorityOnlyAllowedMethodsConfigData" type="fedex_config">
+        <data key="path">carriers/fedex/allowed_methods</data>
+        <data key="value">FEDEX_INTERNATIONAL_PRIORITY</data>
+    </entity>
+    <entity name="AdminFedexRestoreDefaultAllowedMethodsConfigData" type="fedex_config">
+        <data key="path">carriers/fedex/allowed_methods</data>
+        <data key="value">EUROPE_FIRST_INTERNATIONAL_PRIORITY,FEDEX_1_DAY_FREIGHT,FEDEX_2_DAY_FREIGHT,FEDEX_2_DAY,FEDEX_2_DAY_AM,FEDEX_3_DAY_FREIGHT,FEDEX_EXPRESS_SAVER,FEDEX_GROUND,FIRST_OVERNIGHT,GROUND_HOME_DELIVERY,INTERNATIONAL_ECONOMY,INTERNATIONAL_ECONOMY_FREIGHT,INTERNATIONAL_FIRST,INTERNATIONAL_GROUND,FEDEX_INTERNATIONAL_PRIORITY,FEDEX_INTERNATIONAL_PRIORITY_EXPRESS,FEDEX_FIRST,FEDEX_PRIORITY,FEDEX_PRIORITY_EXPRESS,FEDEX_PRIORITY_EXPRESS_FREIGHT,FEDEX_PRIORITY_FREIGHT,FEDEX_ECONOMY_SELECT,INTERNATIONAL_PRIORITY_FREIGHT,PRIORITY_OVERNIGHT,SMART_POST,STANDARD_OVERNIGHT,FEDEX_FREIGHT,FEDEX_NATIONAL_FREIGHT</data>
     </entity>
 </entities>

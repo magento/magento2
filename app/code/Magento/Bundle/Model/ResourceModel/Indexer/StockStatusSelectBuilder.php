@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
@@ -18,6 +18,20 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  */
 class StockStatusSelectBuilder
 {
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection

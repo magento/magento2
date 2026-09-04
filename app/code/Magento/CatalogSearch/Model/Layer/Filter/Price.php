@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -185,7 +185,7 @@ class Price extends AbstractFilter
         $toPrice = empty($toPrice) ? $toPrice : $toPrice * $this->getCurrencyRate();
 
         $formattedFromPrice = $this->priceCurrency->format($fromPrice);
-        if ($isLast) {
+        if ($isLast || $toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
         } elseif ($fromPrice == $toPrice && $this->dataProvider->getOnePriceIntervalValue()) {
             return $formattedFromPrice;

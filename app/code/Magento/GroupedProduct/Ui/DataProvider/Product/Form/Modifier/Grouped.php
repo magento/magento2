@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
@@ -136,8 +136,8 @@ class Grouped extends AbstractModifier
         AttributeSetRepositoryInterface $attributeSetRepository,
         CurrencyInterface $localeCurrency,
         array $uiComponentsConfig = [],
-        GroupedProducts $groupedProducts = null,
-        \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
+        ?GroupedProducts $groupedProducts = null,
+        ?\Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory = null
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -562,6 +562,7 @@ class Grouped extends AbstractModifier
                             'fit' => true,
                             'label' => __('Thumbnail'),
                             'sortOrder' => 20,
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -586,6 +587,7 @@ class Grouped extends AbstractModifier
                             'validation' => [
                                 'validate-number' => true,
                             ],
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -601,7 +603,8 @@ class Grouped extends AbstractModifier
                             'elementTmpl' => 'Magento_GroupedProduct/components/position',
                             'sortOrder' => 90,
                             'fit' => true,
-                            'dataScope' => 'positionCalculated'
+                            'dataScope' => 'positionCalculated',
+                            'labelVisible' => false,
                         ],
                     ],
                 ],
@@ -660,6 +663,7 @@ class Grouped extends AbstractModifier
                         'fit' => $fit,
                         'label' => $label,
                         'sortOrder' => $sortOrder,
+                        'labelVisible' => false,
                     ],
                 ],
             ],

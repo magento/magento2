@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,25 +22,39 @@ use PHPUnit\Framework\TestCase;
 
 class MassDeleteTest extends TestCase
 {
-    /** @var ManagerInterface|MockObject */
+    /**
+     * @var ManagerInterface|MockObject
+     */
     private $messageManager;
 
-    /** @var  ObjectManagerInterface|MockObject */
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
     private $objectManager;
 
-    /** @var MassDelete */
+    /**
+     * @var MassDelete
+     */
     private $controller;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     private $objectManagerHelper;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $context;
 
-    /** @var PageFactory|MockObject */
+    /**
+     * @var PageFactory|MockObject
+     */
     private $pageFactory;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $request;
 
     /**
@@ -53,24 +67,15 @@ class MassDeleteTest extends TestCase
      */
     private $resultRedirectMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['addSuccessMessage', 'addErrorMessage'])
-            ->getMockForAbstractClass();
-        $this->pageFactory = $this->getMockBuilder(PageFactory::class)
-            ->setMethods([])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->request = $this->createMock(RequestInterface::class);
+        $this->objectManager = $this->createStub(ObjectManagerInterface::class);
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->pageFactory = $this->createMock(PageFactory::class);
         $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -102,12 +107,15 @@ class MassDeleteTest extends TestCase
             MassDelete::class,
             [
                 'context' => $this->context,
-                'resultPageFactory' => $this->pageFactory,
+                'resultPageFactory' => $this->pageFactory
             ]
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $ids = [1, 2];
         $this->request->expects($this->once())
@@ -115,8 +123,25 @@ class MassDeleteTest extends TestCase
             ->with('search')
             ->willReturn($ids);
 
-        $this->createQuery(0, 1);
-        $this->createQuery(1, 2);
+        $willReturnArgs = [];
+
+        $query = $this->createQuery(1);
+        $willReturnArgs[] = $query;
+
+        $query = $this->createQuery(2);
+        $willReturnArgs[] = $query;
+
+        $this->objectManager
+            ->method('create')
+            ->willReturnCallback(function ($arg) use ($willReturnArgs) {
+                if ($arg == Query::class) {
+                    static $callCount = 0;
+                    $returnValue = $willReturnArgs[$callCount] ?? null;
+                    $callCount++;
+                    return $returnValue;
+                }
+            });
+
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')->willReturnSelf();
         $this->resultRedirectMock->expects($this->once())
@@ -128,25 +153,24 @@ class MassDeleteTest extends TestCase
     }
 
     /**
-     * @param $index
      * @param $id
+     *
      * @return Query|MockObject
      */
-    private function createQuery($index, $id)
+    private function createQuery($id): MockObject
     {
         $query = $this->getMockBuilder(Query::class)
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'delete'])
+            ->onlyMethods(['load', 'delete'])
             ->getMock();
-        $query->expects($this->at(0))
-            ->method('delete')->willReturnSelf();
-        $query->expects($this->at(0))
-            ->method('load')
-            ->with($id)->willReturnSelf();
-        $this->objectManager->expects($this->at($index))
-            ->method('create')
-            ->with(Query::class)
+        $query
+            ->method('delete')
             ->willReturn($query);
+        $query
+            ->method('load')
+            ->with($id)
+            ->willReturn($query);
+
         return $query;
     }
 }

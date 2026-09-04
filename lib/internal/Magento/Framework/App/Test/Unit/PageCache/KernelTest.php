@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,11 +14,16 @@ use Magento\Framework\App\Http\ContextFactory;
 use Magento\Framework\App\PageCache\Cache;
 use Magento\Framework\App\PageCache\Identifier;
 use Magento\Framework\App\PageCache\Kernel;
+use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Response\HttpFactory;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Stdlib\CookieDisablerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\PageCache\Model\Cache\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,41 +31,63 @@ use PHPUnit\Framework\TestCase;
  */
 class KernelTest extends TestCase
 {
-    /** @var Kernel */
+    /**
+     * @var Kernel
+     */
     protected $kernel;
 
-    /** @var Cache|MockObject */
+    /**
+     * @var Cache|MockObject
+     */
     protected $cacheMock;
 
-    /** @var Identifier|MockObject */
+    /**
+     * @var Identifier|MockObject
+     */
     protected $identifierMock;
 
-    /** @var Http|MockObject */
+    /**
+     * @var Http|MockObject
+     */
     protected $requestMock;
 
-    /** @var \Magento\Framework\App\Response\Http|MockObject */
+    /**
+     * @var \Magento\Framework\App\Response\Http|MockObject
+     */
     protected $responseMock;
 
-    /** @var  MockObject|Type */
+    /**
+     * @var MockObject|Type
+     */
     private $fullPageCacheMock;
 
-    /** @var \Magento\Framework\App\Response\Http|MockObject */
+    /**
+     * @var \Magento\Framework\App\Response\Http|MockObject
+     */
     private $httpResponseMock;
 
-    /** @var ContextFactory|MockObject */
+    /**
+     * @var ContextFactory|MockObject
+     */
     private $contextFactoryMock;
 
-    /** @var HttpFactory|MockObject */
+    /**
+     * @var HttpFactory|MockObject
+     */
     private $httpFactoryMock;
 
-    /** @var SerializerInterface|MockObject */
+    /**
+     * @var SerializerInterface|MockObject
+     */
     private $serializer;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $contextMock;
 
     /**
-     * Setup
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -71,11 +98,28 @@ class KernelTest extends TestCase
         $this->httpResponseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->identifierMock = $this->createMock(Identifier::class);
         $this->requestMock = $this->createMock(Http::class);
-        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializer = $this->createMock(SerializerInterface::class);
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->contextFactoryMock = $this->createPartialMock(ContextFactory::class, ['create']);
         $this->httpFactoryMock = $this->createPartialMock(HttpFactory::class, ['create']);
         $this->responseMock->expects($this->any())->method('getHeaders')->willReturn($headersMock);
+
+        $objectManagerHelper = new ObjectManager($this);
+        $objects = [
+            [
+                CookieDisablerInterface::class,
+                $this->createMock(CookieDisablerInterface::class)
+            ],
+            [
+                AppState::class,
+                $this->createMock(AppState::class)
+            ],
+            [
+                \Magento\Framework\App\PageCache\IdentifierInterface::class,
+                $this->createMock(\Magento\Framework\App\PageCache\IdentifierInterface::class)
+            ]
+        ];
+        $objectManagerHelper->prepareObjectManager($objects);
 
         $this->kernel = new Kernel(
             $this->cacheMock,
@@ -89,18 +133,13 @@ class KernelTest extends TestCase
 
         $reflection = new \ReflectionClass(Kernel::class);
         $reflectionProperty = $reflection->getProperty('fullPageCache');
-        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
     }
 
-    /**
-     * @dataProvider dataProviderForResultWithCachedData
-     * @param string $id
-     * @param mixed $cache
-     * @param bool $isGet
-     * @param bool $isHead
+    /**     * @return void
      */
-    public function testLoadWithCachedData($id, $cache, $isGet, $isHead)
+    #[DataProvider('dataProviderForResultWithCachedData')]
+    public function testLoadWithCachedData($id, $cache, $isGet, $isHead): void
     {
         $this->serializer->expects($this->once())
             ->method('unserialize')
@@ -148,7 +187,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithCachedData()
+    public static function dataProviderForResultWithCachedData(): array
     {
         $data = [
             'context' => [
@@ -162,18 +201,14 @@ class KernelTest extends TestCase
 
         return [
             ['existing key', $data, true, false],
-            ['existing key', $data, false, true],
+            ['existing key', $data, false, true]
         ];
     }
 
-    /**
-     * @dataProvider dataProviderForResultWithoutCachedData
-     * @param string $id
-     * @param mixed $cache
-     * @param bool $isGet
-     * @param bool $isHead
+    /**     * @return void
      */
-    public function testLoadWithoutCachedData($id, $cache, $isGet, $isHead)
+    #[DataProvider('dataProviderForResultWithoutCachedData')]
+    public function testLoadWithoutCachedData($id, $cache, $isGet, $isHead): void
     {
         $this->requestMock->expects($this->once())->method('isGet')->willReturn($isGet);
         $this->requestMock->expects($this->any())->method('isHead')->willReturn($isHead);
@@ -193,7 +228,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForResultWithoutCachedData()
+    public static function dataProviderForResultWithoutCachedData(): array
     {
         return [
             ['existing key', [], false, false],
@@ -202,11 +237,10 @@ class KernelTest extends TestCase
         ];
     }
 
-    /**
-     * @param $httpCode
-     * @dataProvider testProcessSaveCacheDataProvider
+    /**     * @return void
      */
-    public function testProcessSaveCache($httpCode, $at)
+    #[DataProvider('processSaveCacheDataProvider')]
+    public function testProcessSaveCache($httpCode): void
     {
         $this->serializer->expects($this->once())
             ->method('serialize')
@@ -220,15 +254,15 @@ class KernelTest extends TestCase
             'Cache-Control: public, max-age=100, s-maxage=100'
         );
 
-        $this->responseMock->expects(
-            $this->at(0)
-        )->method(
-            'getHeader'
-        )->with(
-            'Cache-Control'
-        )->willReturn(
-            $cacheControlHeader
-        );
+        $this->responseMock
+            ->method('getHeader')
+            ->willReturnCallback(function ($arg) use ($cacheControlHeader) {
+                if ($arg == 'Cache-Control') {
+                    return $cacheControlHeader;
+                } elseif ($arg == 'X-Magento-Tags') {
+                    return null;
+                }
+            });
         $this->responseMock->expects(
             $this->any()
         )->method(
@@ -239,15 +273,13 @@ class KernelTest extends TestCase
             ->willReturn(true);
         $this->responseMock->expects($this->once())
             ->method('setNoCacheHeaders');
-        $this->responseMock->expects($this->at($at[0]))
-            ->method('getHeader')
-            ->with('X-Magento-Tags');
-        $this->responseMock->expects($this->at($at[1]))
+        $this->responseMock
             ->method('clearHeader')
-            ->with('Set-Cookie');
-        $this->responseMock->expects($this->at($at[2]))
-            ->method('clearHeader')
-            ->with('X-Magento-Tags');
+            ->willReturnCallback(function ($arg) {
+                if ($arg == 'Set-Cookie' || $arg == 'X-Magento-Tags') {
+                    return null;
+                }
+            });
         $this->fullPageCacheMock->expects($this->once())
             ->method('save');
         $this->kernel->process($this->responseMock);
@@ -256,22 +288,18 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function testProcessSaveCacheDataProvider()
+    public static function processSaveCacheDataProvider(): array
     {
         return [
-            [200, [3, 4, 5]],
-            [404, [4, 5, 6]]
+            [200],
+            [404]
         ];
     }
 
-    /**
-     * @dataProvider processNotSaveCacheProvider
-     * @param string $cacheControlHeader
-     * @param int $httpCode
-     * @param bool $isGet
-     * @param bool $overrideHeaders
+    /**     * @return void
      */
-    public function testProcessNotSaveCache($cacheControlHeader, $httpCode, $isGet, $overrideHeaders)
+    #[DataProvider('processNotSaveCacheProvider')]
+    public function testProcessNotSaveCache($cacheControlHeader, $httpCode, $isGet, $overrideHeaders): void
     {
         $header = CacheControl::fromString("Cache-Control: $cacheControlHeader");
         $this->responseMock->expects(
@@ -295,7 +323,7 @@ class KernelTest extends TestCase
     /**
      * @return array
      */
-    public function processNotSaveCacheProvider()
+    public static function processNotSaveCacheProvider(): array
     {
         return [
             ['private, max-age=100', 200, true, false],
@@ -308,5 +336,29 @@ class KernelTest extends TestCase
             ['public, max-age=100, s-maxage=100', 500, true, true],
             ['public, max-age=100, s-maxage=100', 200, false, true]
         ];
+    }
+
+    public function testProcessNotSaveCacheForNotCacheableResponse(): void
+    {
+        $header = CacheControl::fromString("Cache-Control: public, max-age=100, s-maxage=100");
+        $notCacheableResponse = $this->getMockBuilder(\Magento\Framework\App\Response\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $notCacheableResponse->expects($this->once())
+            ->method('getHeader')
+            ->with('Cache-Control')
+            ->willReturn($header);
+        $notCacheableResponse->expects($this->any())
+            ->method('getHttpResponseCode')
+            ->willReturn(200);
+        $notCacheableResponse->expects($this->once())
+            ->method('setNoCacheHeaders');
+        $this->requestMock
+            ->expects($this->any())->method('isGet')
+            ->willReturn(true);
+        $this->fullPageCacheMock->expects($this->never())
+            ->method('save');
+        $this->kernel->process($notCacheableResponse);
     }
 }

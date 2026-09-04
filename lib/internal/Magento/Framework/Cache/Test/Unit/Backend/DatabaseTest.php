@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\Database;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class DatabaseTest extends TestCase
@@ -21,6 +25,9 @@ class DatabaseTest extends TestCase
      */
     protected $objectManager;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -29,23 +36,25 @@ class DatabaseTest extends TestCase
     /**
      * @param array $options
      *
-     * @dataProvider initializeWithExceptionDataProvider
+     * @return void
      */
-    public function testInitializeWithException($options)
+     #[DataProvider('initializeWithExceptionDataProvider')]
+    public function testInitializeWithException($options): void
     {
-        $this->expectException('Zend_Cache_Exception');
+        if ($options['adapter']!='' && is_callable($options['adapter'])) {
+            $options['adapter'] = $options['adapter']($this);
+        }
+        $this->expectException(CacheException::class);
         $this->objectManager->getObject(
             Database::class,
-            [
-                'options' => $options,
-            ]
+            ['options' => $options]
         );
     }
 
     /**
      * @return array
      */
-    public function initializeWithExceptionDataProvider()
+    public static function initializeWithExceptionDataProvider(): array
     {
         return [
             'empty_adapter' => [
@@ -55,8 +64,8 @@ class DatabaseTest extends TestCase
                     'data_table_callback' => 'data_table_callback',
                     'tags_table' => 'tags_table',
                     'tags_table_callback' => 'tags_table_callback',
-                    'adapter' => '',
-                ],
+                    'adapter' => ''
+                ]
             ],
             'empty_data_table' => [
                 'options' => [
@@ -65,8 +74,8 @@ class DatabaseTest extends TestCase
                     'data_table_callback' => '',
                     'tags_table' => 'tags_table',
                     'tags_table_callback' => 'tags_table_callback',
-                    'adapter' => $this->createMock(Mysql::class),
-                ],
+                    'adapter' => static fn (self $testCase) => $testCase->createMock(Mysql::class)
+                ]
             ],
             'empty_tags_table' => [
                 'options' => [
@@ -75,20 +84,22 @@ class DatabaseTest extends TestCase
                     'data_table_callback' => 'data_table_callback',
                     'tags_table' => '',
                     'tags_table_callback' => '',
-                    'adapter' => $this->createMock(Mysql::class),
-                ],
-            ],
+                    'adapter' => static fn (self $testCase) => $testCase->createMock(Mysql::class)
+                ]
+            ]
         ];
     }
 
     /**
-     * @param array $options
+     * @param \Closure $options
      * @param bool|string $expected
      *
-     * @dataProvider loadDataProvider
+     * @return void
      */
-    public function testLoad($options, $expected)
+     #[DataProvider('loadDataProvider')]
+    public function testLoad($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -99,16 +110,12 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expected, $database->load(5, true));
     }
 
-    /**
-     * @return array
-     */
-    public function loadDataProvider()
+    protected function getMockForMysqlClass()
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchOne'])
+            ->onlyMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $selectMock = $this->createPartialMock(Select::class, ['where', 'from']);
 
         $selectMock->expects($this->any())
@@ -125,25 +132,39 @@ class DatabaseTest extends TestCase
             ->method('fetchOne')
             ->willReturn('loaded_value');
 
+        return $connectionMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function loadDataProvider(): array
+    {
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClass();
+
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'expected' => 'loaded_value',
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'expected' => 'loaded_value'
 
             ],
             'without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData(),
-                'expected' => false,
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData(),
+                'expected' => false
+            ]
         ];
     }
 
     /**
-     * @param Mysql|MockObject $connectionMock
+     * @param Mysql|\Closure $connectionMock
      * @return array
      */
-    public function getOptionsWithStoreData($connectionMock)
+    public function getOptionsWithStoreData($connectionMock): array
     {
+        if (is_callable($connectionMock)) {
+            $connectionMock = $connectionMock($this);
+        }
+
         return [
             'adapter_callback' => '',
             'data_table' => 'data_table',
@@ -151,16 +172,19 @@ class DatabaseTest extends TestCase
             'tags_table' => 'tags_table',
             'tags_table_callback' => 'tags_table_callback',
             'store_data' => 'store_data',
-            'adapter' => $connectionMock,
+            'adapter' => $connectionMock
         ];
     }
 
     /**
-     * @param null|Mysql|MockObject $connectionMock
+     * @param null|Mysql|MockObject|\Closure $connectionMock
      * @return array
      */
-    public function getOptionsWithoutStoreData($connectionMock = null)
+    public function getOptionsWithoutStoreData($connectionMock = null): array
     {
+        if (is_callable($connectionMock)) {
+            $connectionMock = $connectionMock($this);
+        }
         if (null === $connectionMock) {
             $connectionMock = $this->getMockBuilder(Mysql::class)
                 ->disableOriginalConstructor()
@@ -182,10 +206,12 @@ class DatabaseTest extends TestCase
      * @param array $options
      * @param bool|string $expected
      *
-     * @dataProvider loadDataProvider
+     * @return void
      */
-    public function testTest($options, $expected)
+     #[DataProvider('loadDataProvider')]
+    public function testTest($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -200,10 +226,12 @@ class DatabaseTest extends TestCase
      * @param array $options
      * @param bool $expected
      *
-     * @dataProvider saveDataProvider
+     * @return void
      */
-    public function testSave($options, $expected)
+     #[DataProvider('saveDataProvider')]
+    public function testSave($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -216,21 +244,25 @@ class DatabaseTest extends TestCase
     /**
      * @return array
      */
-    public function saveDataProvider()
+    public static function saveDataProvider(): array
     {
         return [
             'major_case_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($this->getSaveAdapterMock(true)),
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(
+                    static fn (self $testCase) => $testCase->getSaveAdapterMock(true)
+                ),
+                'expected' => true
             ],
             'minor_case_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($this->getSaveAdapterMock(false)),
-                'expected' => false,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData(
+                    static fn (self $testCase) => $testCase->getSaveAdapterMock(false)
+                ),
+                'expected' => false
             ],
             'without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData(),
-                'expected' => true,
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData(),
+                'expected' => true
+            ]
         ];
     }
 
@@ -238,17 +270,14 @@ class DatabaseTest extends TestCase
      * @param bool $result
      * @return Mysql|MockObject
      */
-    protected function getSaveAdapterMock($result)
+    protected function getSaveAdapterMock($result): Mysql
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['quoteIdentifier', 'query'])
+            ->onlyMethods(['quoteIdentifier', 'query'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $dbStatementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->setMethods(['rowCount'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $dbStatementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
 
         $dbStatementMock->expects($this->any())
             ->method('rowCount')
@@ -269,10 +298,12 @@ class DatabaseTest extends TestCase
      * @param array $options
      * @param bool $expected
      *
-     * @dataProvider removeDataProvider
+     * @return void
      */
-    public function testRemove($options, $expected)
+     #[DataProvider('removeDataProvider')]
+    public function testRemove($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -282,30 +313,36 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expected, $database->remove(3));
     }
 
-    /**
-     * @return array
-     */
-    public function removeDataProvider()
+    protected function getMockForMysqlClassTwo()
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['delete'])
+            ->onlyMethods(['delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $connectionMock->expects($this->any())
             ->method('delete')
             ->willReturn(true);
+        return $connectionMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function removeDataProvider(): array
+    {
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClassTwo();
 
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'expected' => true
 
             ],
             'without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData(),
-                'expected' => false,
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData(),
+                'expected' => false
+            ]
         ];
     }
 
@@ -314,10 +351,12 @@ class DatabaseTest extends TestCase
      * @param string $mode
      * @param bool $expected
      *
-     * @dataProvider cleanDataProvider
+     * @return void
      */
-    public function testClean($options, $mode, $expected)
+     #[DataProvider('cleanDataProvider')]
+    public function testClean($options, $mode, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -327,13 +366,10 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expected, $database->clean($mode));
     }
 
-    /**
-     * @return array
-     */
-    public function cleanDataProvider()
+    protected function getMockForMysqlClassThree()
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['query', 'delete'])
+            ->onlyMethods(['query', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -345,50 +381,62 @@ class DatabaseTest extends TestCase
             ->method('delete')
             ->willReturn(true);
 
+        return $connectionMock;
+    }
+    /**
+     * @return array
+     */
+    public static function cleanDataProvider(): array
+    {
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClassThree();
+
         return [
             'mode_all_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_ALL,
-                'expected' => false,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_ALL,
+                'expected' => false
 
             ],
             'mode_all_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_ALL,
-                'expected' => false,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_ALL,
+                'expected' => false
             ],
             'mode_old_with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_OLD,
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_OLD,
+                'expected' => true
 
             ],
             'mode_old_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_OLD,
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_OLD,
+                'expected' => true
             ],
             'mode_matching_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_TAG,
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_MATCHING_TAG,
+                'expected' => true
             ],
             'mode_not_matching_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG,
-                'expected' => true,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+                'expected' => true
             ],
             'mode_matching_any_tag_without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData($connectionMock),
-                'mode' => \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                'expected' => true,
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData($connectionMock),
+                'mode' => CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG,
+                'expected' => true
+            ]
         ];
     }
 
-    public function testCleanException()
+    /**
+     * @return void
+     */
+    public function testCleanException(): void
     {
-        $this->expectException('Zend_Cache_Exception');
+        $this->expectException(CacheException::class);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -399,13 +447,15 @@ class DatabaseTest extends TestCase
     }
 
     /**
-     * @param array $options
+     * @param \Closure $options
      * @param array $expected
      *
-     * @dataProvider getIdsDataProvider
+     * @return void
      */
-    public function testGetIds($options, $expected)
+     #[DataProvider('getIdsDataProvider')]
+    public function testGetIds($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -415,13 +465,10 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expected, $database->getIds());
     }
 
-    /**
-     * @return array
-     */
-    public function getIdsDataProvider()
+    protected function getMockForMysqlClassFour()
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol'])
+            ->onlyMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -437,24 +484,34 @@ class DatabaseTest extends TestCase
         $connectionMock->expects($this->any())
             ->method('fetchCol')
             ->willReturn(['value_one', 'value_two']);
+        return $connectionMock;
+    }
 
+    /**
+     * @return array
+     */
+    public static function getIdsDataProvider(): array
+    {
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClassFour();
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'expected' => ['value_one', 'value_two'],
-
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'expected' => ['value_one', 'value_two']
             ],
             'without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData(),
-                'expected' => [],
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData(),
+                'expected' => []
+            ]
         ];
     }
 
-    public function testGetTags()
+    /**
+     * @return void
+     */
+    public function testGetTags(): void
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol'])
+            ->onlyMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -483,10 +540,13 @@ class DatabaseTest extends TestCase
         $this->assertEquals(['value_one', 'value_two'], $database->getIds());
     }
 
-    public function testGetIdsMatchingTags()
+    /**
+     * @return void
+     */
+    public function testGetIdsMatchingTags(): void
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol'])
+            ->onlyMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -527,10 +587,13 @@ class DatabaseTest extends TestCase
         $this->assertEquals(['value_one', 'value_two'], $database->getIdsMatchingTags());
     }
 
-    public function testGetIdsNotMatchingTags()
+    /**
+     * @return void
+     */
+    public function testGetIdsNotMatchingTags(): void
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol'])
+            ->onlyMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -558,13 +621,9 @@ class DatabaseTest extends TestCase
             ->method('select')
             ->willReturn($selectMock);
 
-        $connectionMock->expects($this->at(1))
+        $connectionMock
             ->method('fetchCol')
-            ->willReturn(['some_value_one']);
-
-        $connectionMock->expects($this->at(3))
-            ->method('fetchCol')
-            ->willReturn(['some_value_two']);
+            ->willReturnOnConsecutiveCalls(['some_value_one'], ['some_value_two']);
 
         /** @var Database $database */
         $database = $this->objectManager->getObject(
@@ -575,10 +634,13 @@ class DatabaseTest extends TestCase
         $this->assertEquals(['some_value_one'], $database->getIdsNotMatchingTags());
     }
 
-    public function testGetIdsMatchingAnyTags()
+    /**
+     * @return void
+     */
+    public function testGetIdsMatchingAnyTags(): void
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol'])
+            ->onlyMethods(['select', 'fetchCol'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -607,10 +669,13 @@ class DatabaseTest extends TestCase
         $this->assertEquals(['some_value_one', 'some_value_two'], $database->getIds());
     }
 
-    public function testGetMetadatas()
+    /**
+     * @return void
+     */
+    public function testGetMetadatas(): void
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['select', 'fetchCol', 'fetchRow'])
+            ->onlyMethods(['select', 'fetchCol', 'fetchRow'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -644,7 +709,7 @@ class DatabaseTest extends TestCase
             [
                 'expire' => 3,
                 'mtime' => 2,
-                'tags' => ['some_value_one', 'some_value_two'],
+                'tags' => ['some_value_one', 'some_value_two']
             ],
             $database->getMetadatas(5)
         );
@@ -654,10 +719,12 @@ class DatabaseTest extends TestCase
      * @param array $options
      * @param bool $expected
      *
-     * @dataProvider touchDataProvider
+     * @return void
      */
-    public function testTouch($options, $expected)
+     #[DataProvider('touchDataProvider')]
+    public function testTouch($options, $expected): void
     {
+        $options = $options($this);
         /** @var Database $database */
         $database = $this->objectManager->getObject(
             Database::class,
@@ -667,13 +734,10 @@ class DatabaseTest extends TestCase
         $this->assertEquals($expected, $database->touch(2, 100));
     }
 
-    /**
-     * @return array
-     */
-    public function touchDataProvider()
+    protected function getMockForMysqlClassFive()
     {
         $connectionMock = $this->getMockBuilder(Mysql::class)
-            ->setMethods(['update'])
+            ->onlyMethods(['update'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -681,16 +745,26 @@ class DatabaseTest extends TestCase
             ->method('update')
             ->willReturn(false);
 
+        return $connectionMock;
+    }
+
+    /**
+     * @return array
+     */
+    public static function touchDataProvider(): array
+    {
+        $connectionMock = static fn (self $testCase) => $testCase->getMockForMysqlClassFive();
+
         return [
             'with_store_data' => [
-                'options' => $this->getOptionsWithStoreData($connectionMock),
-                'expected' => false,
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithStoreData($connectionMock),
+                'expected' => false
 
             ],
             'without_store_data' => [
-                'options' => $this->getOptionsWithoutStoreData(),
-                'expected' => true,
-            ],
+                'options' => static fn (self $testCase) => $testCase->getOptionsWithoutStoreData(),
+                'expected' => true
+            ]
         ];
     }
 }

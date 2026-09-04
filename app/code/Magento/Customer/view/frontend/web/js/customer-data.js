@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -16,6 +16,8 @@ define([
     'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig, url) {
     'use strict';
+
+    const GLOBAL_SHARE = '0';
 
     var options = {},
         storage,
@@ -47,10 +49,26 @@ define([
      * Invalidate Cache By Close Cookie Session
      */
     invalidateCacheByCloseCookieSession = function () {
+        var isLoggedIn = parseInt(options.isLoggedIn, 10) || 0,
+            loginStorage = $.localStorage;
+
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-            $.cookieStorage.set('mage-cache-sessid', true);
             storage.removeAll();
         }
+
+        if (options.customerShare === GLOBAL_SHARE) {
+            loginStorage = $.cookieStorage;
+        }
+
+        if (!loginStorage.isSet('mage-customer-login')) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
+        }
+        if (loginStorage.get('mage-customer-login') !== isLoggedIn) {
+            loginStorage.set('mage-customer-login', isLoggedIn);
+            storage.removeAll();
+        }
+
+        $.cookieStorage.set('mage-cache-sessid', true);
     };
 
     dataProvider = {
@@ -84,7 +102,10 @@ define([
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
 
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function (jqXHR) {
-                throw new Error(jqXHR);
+                // don't throw error if the request is cancelled or blocked
+                if (jqXHR.status !== 0) {
+                    throw new Error(jqXHR);
+                }
             });
         }
     };
@@ -95,14 +116,21 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        var sectionDataIds, newSectionDataIds = {};
-
         target.subscribe(function () {
+            var sectionDataIdsAtSchedule = $.cookieStorage.get('section_data_ids') || {},
+                dataIdAtSchedule = sectionDataIdsAtSchedule[sectionName];
+
             setTimeout(function () {
+                var sectionDataIds = $.cookieStorage.get('section_data_ids') || {},
+                    newSectionDataIds = {};
+
+                if (sectionDataIds[sectionName] !== dataIdAtSchedule) {
+                    return;
+                }
+
                 storage.remove(sectionName);
-                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) { //eslint-disable-line eqeqeq
+                    if (name !== sectionName) {
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -190,21 +218,17 @@ define([
          * Customer data initialization
          */
         init: function () {
-            var expiredSectionNames = this.getExpiredSectionNames();
+            var expiredSectionNames = this.getExpiredSectionNames(),
+                sectionsToReload;
 
-            if (expiredSectionNames.length > 0) {
-                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
-                    buffer.notify(sectionName, sectionData);
-                });
-                this.reload(expiredSectionNames, false);
-            } else {
-                _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
-                    buffer.notify(sectionName, sectionData);
-                });
+            _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
+                buffer.notify(sectionName, sectionData);
+            });
 
-                if (!_.isEmpty(storageInvalidation.keys())) {
-                    this.reload(storageInvalidation.keys(), false);
-                }
+            sectionsToReload = _.uniq(expiredSectionNames.concat(storageInvalidation.keys()));
+
+            if (sectionsToReload.length > 0) {
+                this.reload(sectionsToReload, false);
             }
 
             if (!_.isEmpty($.cookieStorage.get('section_data_clean'))) {
@@ -221,6 +245,13 @@ define([
                 path: '/',
                 expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
             });
+
+            if (options.cookieDomain) {
+                $.cookieStorage.setConf({
+                    domain: options.cookieDomain
+                });
+            }
+
             storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
             storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
         },
@@ -251,11 +282,13 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
-                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                    cookieSectionTimestamp !== sectionData['data_id']
                 ) {
                     expiredSectionNames.push(sectionName);
                 }
@@ -358,6 +391,31 @@ define([
         },
 
         /**
+         * Reload sections on ajax complete
+         *
+         * @param {Object} jsonResponse
+         * @param {Object} settings
+         */
+        onAjaxComplete: function (jsonResponse, settings) {
+            var sections,
+                redirects;
+
+            if (settings.type.match(/post|put|delete/i)) {
+                sections = sectionConfig.getAffectedSections(settings.url);
+
+                if (sections && sections.length) {
+                    this.invalidate(sections);
+                    redirects = ['redirect', 'backUrl'];
+
+                    if (_.isObject(jsonResponse) && !_.isEmpty(_.pick(jsonResponse, redirects))) { //eslint-disable-line
+                        return;
+                    }
+                    this.reload(sections, true);
+                }
+            }
+        },
+
+        /**
          * @param {Object} settings
          * @constructor
          */
@@ -375,22 +433,7 @@ define([
      * Events listener
      */
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        var sections,
-            redirects;
-
-        if (settings.type.match(/post|put|delete/i)) {
-            sections = sectionConfig.getAffectedSections(settings.url);
-
-            if (sections) {
-                customerData.invalidate(sections);
-                redirects = ['redirect', 'backUrl'];
-
-                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
-                    return;
-                }
-                customerData.reload(sections, true);
-            }
-        }
+        customerData.onAjaxComplete(xhr.responseJSON, settings);
     });
 
     /**
@@ -399,7 +442,7 @@ define([
     $(document).on('submit', function (event) {
         var sections;
 
-        if (event.target.method.match(/post|put|delete/i)) {
+        if (event.target.hasAttribute('method') && event.target.getAttribute('method').match(/post|put|delete/i)) {
             sections = sectionConfig.getAffectedSections(event.target.action);
 
             if (sections) {

@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Form Input/Output Strip HTML tags Filter
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Filter;
 
@@ -21,7 +19,7 @@ class Striptags implements \Magento\Framework\Data\Form\Filter\FilterInterface
      */
     public function inputFilter($value)
     {
-        return strip_tags($value);
+        return $value !== null ? strip_tags($value) : '';
     }
 
     /**

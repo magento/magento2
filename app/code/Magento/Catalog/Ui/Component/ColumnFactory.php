@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Ui\Component;
 
@@ -61,7 +61,7 @@ class ColumnFactory
      */
     public function __construct(
         UiComponentFactory $componentFactory,
-        TimezoneInterface $timezone = null
+        ?TimezoneInterface $timezone = null
     ) {
         $this->componentFactory = $componentFactory;
         $this->timezone = $timezone
@@ -82,7 +82,7 @@ class ColumnFactory
     {
         $filterModifiers = $context->getRequestParam(FilterModifier::FILTER_MODIFIER, []);
 
-        $columnName = $attribute->getAttributeCode();
+        $columnName = $attribute->getAttributeCode() ?? '';
         $config = array_merge(
             [
                 'label' => __($attribute->getDefaultFrontendLabel()),
@@ -97,7 +97,7 @@ class ColumnFactory
         );
 
         if ($attribute->usesSource()) {
-            $config['options'] = $attribute->getSource()->getAllOptions();
+            $config['options'] = $attribute->getSource()->getAllOptions(true, true);
             foreach ($config['options'] as &$optionData) {
                 $optionData['__disableTmpl'] = true;
             }
@@ -163,7 +163,8 @@ class ColumnFactory
      */
     protected function getDataType($attribute)
     {
-        return $this->dataTypeMap[$attribute->getFrontendInput()] ?? $this->dataTypeMap['default'];
+        $frontendInput = $attribute->getFrontendInput() ?? '';
+        return $this->dataTypeMap[$frontendInput] ?? $this->dataTypeMap['default'];
     }
 
     /**
@@ -174,6 +175,7 @@ class ColumnFactory
      */
     protected function getFilterType($frontendInput)
     {
+        $frontendInput = (string)$frontendInput;
         $filtersMap = ['date' => 'dateRange', 'datetime' => 'dateRange'];
         $result = array_replace_recursive($this->dataTypeMap, $filtersMap);
 

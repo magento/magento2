@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,9 +15,10 @@ use Magento\Quote\Api\Data\CartInterface;
 
 /**
  * Extension point for setting shipping addresses for a specified shopping cart
- *
  * All objects that are responsible for setting shipping addresses on a cart via GraphQl
  * should implement this interface.
+ *
+ * @api
  */
 interface SetShippingAddressesOnCartInterface
 {

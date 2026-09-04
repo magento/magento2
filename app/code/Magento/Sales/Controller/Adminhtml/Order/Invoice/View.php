@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
@@ -44,16 +43,17 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
     {
         $invoice = $this->getInvoice();
         if (!$invoice) {
-            /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
-            $resultForward = $this->resultForwardFactory->create();
-            return $resultForward->forward('noroute');
+            /** @var \Magento\Framework\Controller\Result\RedirectFactory $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/invoice');
+            return $resultRedirect;
         }
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Sales::sales_order');
         $resultPage->getConfig()->getTitle()->prepend(__('Invoices'));
-        $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $invoice->getIncrementId()));
+        $resultPage->getConfig()->getTitle()->prepend(__('View Invoice #%1', $invoice->getIncrementId()));
         $resultPage->getLayout()->getBlock(
             'sales_invoice_view'
         )->updateBackButtonUrl(

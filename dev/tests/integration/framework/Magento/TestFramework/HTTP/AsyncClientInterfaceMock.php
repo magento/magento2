@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -97,10 +97,10 @@ class AsyncClientInterfaceMock implements AsyncClientInterface
     /**
      * Next responses will be as given.
      *
-     * @param  HttpResponseDeferredInterface $mockDeferredResponse
+     * @param  HttpResponseDeferredInterface|null $mockDeferredResponse
      * @return self
      */
-    public function setDeferredResponseMock(HttpResponseDeferredInterface $mockDeferredResponse): self
+    public function setDeferredResponseMock(?HttpResponseDeferredInterface $mockDeferredResponse): self
     {
         $this->mockDeferredResponse = $mockDeferredResponse;
 

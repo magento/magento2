@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -11,7 +11,7 @@ define([
     'use strict';
 
     return function (config, element) {
-        $(element).click(function (event) {
+        $(element).on('click', function (event) {
             var cart = customerData.get('cart'),
                 customer = customerData.get('customer');
 

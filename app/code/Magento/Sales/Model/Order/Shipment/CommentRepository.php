@@ -1,8 +1,10 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -73,9 +75,9 @@ class CommentRepository implements ShipmentCommentRepositoryInterface
         ShipmentCommentInterfaceFactory $commentFactory,
         ShipmentCommentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
-        ShipmentCommentSender $shipmentCommentSender = null,
-        ShipmentRepositoryInterface $shipmentRepository = null,
-        LoggerInterface $logger = null
+        ?ShipmentCommentSender $shipmentCommentSender = null,
+        ?ShipmentRepositoryInterface $shipmentRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->commentResource = $commentResource;
         $this->commentFactory = $commentFactory;

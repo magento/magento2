@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Helper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Helper\PathPattern;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathPatternTest extends TestCase
 {
@@ -34,9 +35,8 @@ class PathPatternTest extends TestCase
     /**
      * @param string $path
      * @param string $expectedPattern
-     *
-     * @dataProvider translatePatternFromGlobDataProvider
-     */
+     *     */
+    #[DataProvider('translatePatternFromGlobDataProvider')]
     public function testTranslatePatternFromGlob($path, $expectedPattern)
     {
         $this->assertEquals($expectedPattern, $this->pathPatternHelper->translatePatternFromGlob($path));
@@ -45,7 +45,7 @@ class PathPatternTest extends TestCase
     /**
      * @return array
      */
-    public function translatePatternFromGlobDataProvider()
+    public static function translatePatternFromGlobDataProvider()
     {
         return [
             [

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Block\Rss;
 
@@ -27,6 +27,11 @@ class Discounts extends \Magento\Framework\View\Element\AbstractBlock implements
      * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
+
+    /**
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface
+     */
+    private $rssUrlBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context

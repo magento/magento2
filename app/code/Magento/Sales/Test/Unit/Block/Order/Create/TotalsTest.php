@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,13 +9,18 @@ namespace Magento\Sales\Test\Unit\Block\Order\Create;
 
 use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote as QuoteModel;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class TotalsTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var MockObject
      */
@@ -42,36 +47,27 @@ class TotalsTest extends TestCase
     protected $sessionQuoteMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|MockObject
+     * @var QuoteModel|MockObject
      */
     protected $quoteMock;
 
     /**
-     * Init
+     * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->helperManager = new ObjectManager($this);
-        $this->sessionQuoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'setTotalsCollectedFlag',
-                'collectTotals',
-                'getTotals',
-                'isVirtual',
-                'getBillingAddress',
-                'getShippingAddress'
-            ])
-            ->getMock();
-        $this->shippingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->billingAddressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->helperManager->prepareObjectManager();
+        $this->sessionQuoteMock = $this->createMock(Quote::class);
+        $this->quoteMock = $this->createPartialMockWithReflection(
+            QuoteModel::class,
+            [
+                'collectTotals', 'getTotals', 'isVirtual', 'getBillingAddress', 'getShippingAddress',
+                'setTotalsCollectedFlag'
+            ]
+        );
+        $this->shippingAddressMock = $this->createMock(Address::class);
+        $this->billingAddressMock = $this->createMock(Address::class);
 
         $this->quoteMock->expects($this->any())
             ->method('getBillingAddress')
@@ -87,12 +83,14 @@ class TotalsTest extends TestCase
     }
 
     /**
-     * @dataProvider totalsDataProvider
+     * @param bool $isVirtual
+     *
+     * @return void
      */
-    public function testGetTotals($isVirtual)
+    #[DataProvider('totalsDataProvider')]
+    public function testGetTotals(bool $isVirtual): void
     {
         $expected = 'expected';
-        $this->quoteMock->expects($this->at(1))->method('collectTotals');
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
         if ($isVirtual) {
             $this->billingAddressMock->expects($this->once())->method('getTotals')->willReturn($expected);
@@ -105,7 +103,7 @@ class TotalsTest extends TestCase
     /**
      * @return array
      */
-    public function totalsDataProvider()
+    public static function totalsDataProvider(): array
     {
         return [
             [true],

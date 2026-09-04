@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -36,5 +36,8 @@
         <data key="region">Armed Forces Europe</data>
         <data key="region_code">AFE</data>
         <data key="region_id">9</data>
+    </entity>
+    <entity name="RegionUKGL" type="region">
+        <data key="region">Greater London</data>
     </entity>
 </entities>

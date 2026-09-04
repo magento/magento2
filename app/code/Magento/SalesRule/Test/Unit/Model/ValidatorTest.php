@@ -1,21 +1,25 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2012 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model;
 
 use Magento\Catalog\Helper\Data;
+use Magento\Directory\Model\PriceCurrency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Validator\AbstractValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Quote\Api\Data\CartExtension;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
@@ -33,6 +37,7 @@ use Magento\SalesRule\Model\Validator\Pool;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Select_Exception;
 
 /**
  * Test sales rule model validator
@@ -41,6 +46,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -101,33 +107,33 @@ class ValidatorTest extends TestCase
      */
     private $cartFixedDiscountHelper;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
-            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription']
+            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', 'addShippingDiscountDescription']
         );
 
-        $this->addressMock = $this->getMockBuilder(Address::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getShippingAmountForDiscount',
-                    'getBaseShippingAmountForDiscount',
-                    'getQuote',
-                    'getCustomAttributesCodes',
-                    'setCartFixedRules'
-                ]
-            )
-            ->getMock();
+        $this->addressMock = $this->createPartialMockWithReflection(
+            Address::class,
+            [
+                'getQuote',
+                'getCustomAttributesCodes',
+                'getShippingAmountForDiscount',
+                'getBaseShippingAmountForDiscount',
+                'setCartFixedRules'
+            ]
+        );
 
         /** @var AbstractItem|MockObject $item */
-        $this->item = $this->getMockBuilder(Item::class)
-            ->addMethods(['getParentItemId'])
-            ->onlyMethods(['getAddress'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getParentItemId', 'getAddress']
+        );
         $this->item->expects($this->any())
             ->method('getAddress')
             ->willReturn($this->addressMock);
@@ -142,12 +148,12 @@ class ValidatorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $ruleCollectionFactoryMock = $this->prepareRuleCollectionMock($this->ruleCollection);
-        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['roundPrice'])
-            ->getMockForAbstractClass();
+        $this->priceCurrency = $this->createPartialMock(
+            PriceCurrency::class,
+            ['convert', 'roundPrice']
+        );
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
-            ->setMethods([
+            ->onlyMethods([
                 'calculateShippingAmountWhenAppliedToShipping',
                 'getDiscountAmount',
                 'getShippingDiscountAmount',
@@ -193,7 +199,7 @@ class ValidatorTest extends TestCase
      * @return Item|MockObject
      * @throws LocalizedException
      */
-    protected function getQuoteItemMock()
+    protected function getQuoteItemMock(): Item
     {
         $fixturePath = __DIR__ . '/_files/';
         $itemDownloadable = $this->createPartialMock(
@@ -220,7 +226,10 @@ class ValidatorTest extends TestCase
         return $itemDownloadable;
     }
 
-    public function testCanApplyRules()
+    /**
+     * @return void
+     */
+    public function testCanApplyRules(): void
     {
         $this->model->init(
             $this->model->getWebsiteId(),
@@ -229,10 +238,10 @@ class ValidatorTest extends TestCase
         );
         $item = $this->getQuoteItemMock();
         $rule = $this->createMock(Rule::class);
-        $actionsCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['validate'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $actionsCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['validate']
+        );
         $actionsCollection->expects($this->any())
             ->method('validate')
             ->with($item)
@@ -262,10 +271,14 @@ class ValidatorTest extends TestCase
         $this->assertTrue($this->model->canApplyRules($item));
     }
 
-    public function testProcess()
+    /**
+     * @return void
+     */
+    public function testProcess(): void
     {
         $negativePrice = -1;
 
+        $rule = $this->createMock(Rule::class);
         $this->item->setDiscountCalculationPrice($negativePrice);
         $this->item->setData('calculation_price', $negativePrice);
 
@@ -276,34 +289,13 @@ class ValidatorTest extends TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
-        $this->model->process($this->item);
+        $this->model->process($this->item, $rule);
     }
 
-    public function testProcessWhenItemPriceIsNegativeDiscountsAreZeroed()
-    {
-        $negativePrice = -1;
-        $nonZeroDiscount = 123;
-        $this->model->init(
-            $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
-        );
-
-        $this->item->setDiscountCalculationPrice($negativePrice);
-        $this->item->setData('calculation_price', $negativePrice);
-
-        $this->item->setDiscountAmount($nonZeroDiscount);
-        $this->item->setBaseDiscountAmount($nonZeroDiscount);
-        $this->item->setDiscountPercent($nonZeroDiscount);
-
-        $this->model->process($this->item);
-
-        $this->assertEquals(0, $this->item->getDiscountAmount());
-        $this->assertEquals(0, $this->item->getBaseDiscountAmount());
-        $this->assertEquals(0, $this->item->getDiscountPercent());
-    }
-
-    public function testApplyRulesThatAppliedRuleIdsAreCollected()
+    /**
+     * @return void
+     */
+    public function testApplyRulesThatAppliedRuleIdsAreCollected(): void
     {
         $positivePrice = 1;
         $ruleId1 = 123;
@@ -314,6 +306,7 @@ class ValidatorTest extends TestCase
             $this->model->getCustomerGroupId(),
             $this->model->getCouponCode()
         );
+        $rule = $this->createMock(Rule::class);
 
         $this->item->setDiscountCalculationPrice($positivePrice);
         $this->item->setData('calculation_price', $positivePrice);
@@ -323,8 +316,7 @@ class ValidatorTest extends TestCase
             ->method('applyRules')
             ->with(
                 $this->item,
-                $this->ruleCollection,
-                $this->anything(),
+                [$rule],
                 $this->anything()
             )
             ->willReturn($expectedRuleIds);
@@ -335,10 +327,13 @@ class ValidatorTest extends TestCase
                 $expectedRuleIds
             );
 
-        $this->model->process($this->item);
+        $this->model->process($this->item, $rule);
     }
 
-    public function testInit()
+    /**
+     * @return void
+     */
+    public function testInit(): void
     {
         $this->assertInstanceOf(
             Validator::class,
@@ -350,12 +345,15 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testCanApplyDiscount()
+    /**
+     * @return void
+     */
+    public function testCanApplyDiscount(): void
     {
         $validator = $this->getMockBuilder(AbstractValidator::class)
-            ->setMethods(['isValid'])
+            ->onlyMethods(['isValid'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->validators->expects($this->any())
             ->method('getValidators')
@@ -374,27 +372,27 @@ class ValidatorTest extends TestCase
         $this->assertFalse($this->model->canApplyDiscount($this->item));
     }
 
-    public function testInitTotalsCanApplyDiscount()
+    /**
+     * @return void
+     */
+    public function testInitTotalsCanApplyDiscount(): void
     {
         $rule = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getSimpleAction'])
-            ->onlyMethods(['getActions', 'getId'])
+            ->onlyMethods(['getActions', 'getId', 'getSimpleAction'])
             ->disableOriginalConstructor()
             ->getMock();
-        $item1 = $this->getMockForAbstractClass(
+        $item1 = $this->createPartialMockWithReflection(
             AbstractItem::class,
-            [],
-            '',
-            false,
-            true,
-            true,
             [
                 '__clone',
                 'getDiscountCalculationPrice',
                 'getBaseDiscountCalculationPrice',
                 'getCalculationPrice',
                 'getParentItemId',
-                'getParentItem'
+                'getParentItem',
+                'getQuote',
+                'getAddress',
+                'getOptionByCode'
             ]
         );
         $item2 = clone $item1;
@@ -408,15 +406,20 @@ class ValidatorTest extends TestCase
         $iterator = new \ArrayIterator([$rule]);
         $this->ruleCollection->expects($this->once())->method('getIterator')->willReturn($iterator);
         $validator = $this->getMockBuilder(AbstractValidator::class)
-            ->setMethods(['isValid'])
+            ->onlyMethods(['isValid'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->validators->expects($this->atLeastOnce())->method('getValidators')->with('discount')
             ->willReturn([$validator]);
-        $validator->expects($this->at(0))->method('isValid')->with($item1)->willReturn(false);
-        $validator->expects($this->at(1))->method('isValid')->with($item2)->willReturn(true);
-
+        $validator->method('isValid')
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return false;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
+            });
         $item1->expects($this->any())->method('getParentItemId')->willReturn(null);
         $item1->expects($this->any())->method('getParentItem')->willReturn(null);
         $item1->expects($this->never())->method('getDiscountCalculationPrice');
@@ -436,12 +439,18 @@ class ValidatorTest extends TestCase
         $this->utility->expects($this->once())->method('getItemQty')->willReturn(1);
         $this->utility->expects($this->any())->method('canProcessRule')->willReturn(true);
 
-        $actionsCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['validate'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $actionsCollection->expects($this->at(0))->method('validate')->with($item1)->willReturn(true);
-        $actionsCollection->expects($this->at(1))->method('validate')->with($item2)->willReturn(true);
+        $actionsCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['validate']
+        );
+        $actionsCollection->method('validate')
+            ->willReturnCallback(function ($arg1) use ($item1, $item2) {
+                if ($arg1 == $item1) {
+                    return true;
+                } elseif ($arg1 == $item2) {
+                    return true;
+                }
+            });
         $rule->expects($this->any())->method('getActions')->willReturn($actionsCollection);
         $rule->expects($this->any())->method('getId')->willReturn(1);
 
@@ -454,10 +463,14 @@ class ValidatorTest extends TestCase
         $this->assertArrayHasKey('items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('base_items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertArrayHasKey('items_count', $this->model->getRuleItemTotalsInfo($rule->getId()));
+        $this->assertArrayHasKey('affected_items', $this->model->getRuleItemTotalsInfo($rule->getId()));
         $this->assertEquals(1, $this->model->getRuleItemTotalsInfo($rule->getId())['items_count']);
     }
 
-    public function testInitTotalsNoItems()
+    /**
+     * @return void
+     */
+    public function testInitTotalsNoItems(): void
     {
         $address = $this->createMock(Address::class);
         $this->item->expects($this->never())
@@ -471,10 +484,11 @@ class ValidatorTest extends TestCase
     }
 
     /**
-     * @param $ruleCollection
+     * @param MockObject $ruleCollection
+     *
      * @return MockObject
      */
-    protected function prepareRuleCollectionMock($ruleCollection)
+    protected function prepareRuleCollectionMock(MockObject $ruleCollection): MockObject
     {
         $this->ruleCollection->expects($this->any())
             ->method('addFieldToFilter')
@@ -485,7 +499,7 @@ class ValidatorTest extends TestCase
         $ruleCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])
+                ->onlyMethods(['create'])
                 ->getMock();
         $ruleCollectionFactoryMock->expects($this->any())
             ->method('create')
@@ -493,7 +507,10 @@ class ValidatorTest extends TestCase
         return $ruleCollectionFactoryMock;
     }
 
-    public function testProcessShippingAmountNoRules()
+    /**
+     * @return void
+     */
+    public function testProcessShippingAmountNoRules(): void
     {
         $iterator = new \ArrayIterator([]);
         $this->ruleCollection->expects($this->any())
@@ -510,11 +527,13 @@ class ValidatorTest extends TestCase
         );
     }
 
-    public function testProcessShippingAmountProcessDisabled()
+    /**
+     * @return void
+     */
+    public function testProcessShippingAmountProcessDisabled(): void
     {
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $iterator = new \ArrayIterator([$ruleMock]);
         $this->ruleCollection->expects($this->any())
@@ -536,19 +555,94 @@ class ValidatorTest extends TestCase
      *
      * @param string $action
      * @param int $ruleDiscount
-     * @param int $shippingDiscount
-     * @dataProvider dataProviderActions
-     * @throws \Zend_Db_Select_Exception
+     * @param float $shippingDiscount
+     *
+     * @return void
+     * @throws Zend_Db_Select_Exception
      */
-    public function testProcessShippingAmountActions($action, $ruleDiscount, $shippingDiscount): void
-    {
+    #[DataProvider('dataProviderActions')]
+    public function testProcessShippingAmountActions(
+        string $action,
+        int $ruleDiscount,
+        float $shippingDiscount
+    ): void {
         $shippingAmount = 5.0;
         $quoteBaseSubTotal = 10.0;
 
-        $ruleMock = $this->getMockBuilder(Rule::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getApplyToShipping', 'getSimpleAction', 'getDiscountAmount'])
-            ->getMock();
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction']
+        );
+        $ruleMock->method('getApplyToShipping')
+            ->willReturn(true);
+        $ruleMock->method('getDiscountAmount')
+            ->willReturn($ruleDiscount);
+        $ruleMock->expects($this->any())->method('getSimpleAction')->willReturn($action);
+
+        $iterator = new \ArrayIterator([$ruleMock]);
+        $this->ruleCollection->method('getIterator')
+            ->willReturn($iterator);
+
+        $this->utility->method('canProcessRule')
+            ->willReturn(true);
+
+        $this->priceCurrency->method('convert')
+            ->willReturn($ruleDiscount);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturn(round($shippingDiscount, 2));
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $addressMock = $this->setupAddressMock($shippingAmount, $quoteBaseSubTotal);
+
+        self::assertInstanceOf(Validator::class, $this->model->processShippingAmount($addressMock));
+        self::assertEquals($shippingDiscount, $addressMock->getShippingDiscountAmount());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderActions(): array
+    {
+        return [
+            [Rule::TO_PERCENT_ACTION, 50, 2.5],
+            [Rule::BY_PERCENT_ACTION, 50, 2.5],
+            [Rule::TO_FIXED_ACTION, 5, 0],
+            [Rule::BY_FIXED_ACTION, 5, 5],
+            [Rule::CART_FIXED_ACTION, 5, 0]
+        ];
+    }
+
+    /**
+     * Tests shipping amount with full discount action.
+     *
+     * @param string $action
+     * @param float $ruleDiscount
+     * @param float $shippingDiscount
+     * @param float $shippingAmount
+     * @param float $quoteBaseSubTotal
+     *
+     * @return void
+     * @throws Zend_Db_Select_Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    #[DataProvider('dataProviderForFullShippingDiscount')]
+    public function testProcessShippingAmountWithFullFixedPercentDiscount(
+        string $action,
+        float $ruleDiscount,
+        float $shippingDiscount,
+        float $shippingAmount,
+        float $quoteBaseSubTotal
+    ): void {
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction']
+        );
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);
         $ruleMock->method('getDiscountAmount')
@@ -582,46 +676,59 @@ class ValidatorTest extends TestCase
     }
 
     /**
+     * Get data provider array for full shipping discount action
+     *
      * @return array
      */
-    public static function dataProviderActions()
+    public static function dataProviderForFullShippingDiscount(): array
     {
         return [
-            [Rule::TO_PERCENT_ACTION, 50, 2.5],
-            [Rule::BY_PERCENT_ACTION, 50, 2.5],
-            [Rule::TO_FIXED_ACTION, 5, 0],
-            [Rule::BY_FIXED_ACTION, 5, 5],
-            [Rule::CART_FIXED_ACTION, 5, 0],
+            'verify shipping discount when shipping amount is greater than zero' => [
+                Rule::BY_PERCENT_ACTION,
+                100.00,
+                5.0,
+                5.0,
+                10.0
+            ],
+            'verify shipping discount when shipping amount is zero' => [
+                Rule::BY_PERCENT_ACTION,
+                100.00,
+                5.0,
+                0,
+                10.0
+            ]
         ];
     }
 
     /**
      * @param float $shippingAmount
      * @param float $quoteBaseSubTotal
-     * @return MockObject
+     *
+     * @return Address|MockObject
      */
-    protected function setupAddressMock($shippingAmount = 0.0, $quoteBaseSubTotal = 0.0)
-    {
+    protected function setupAddressMock(
+        float $shippingAmount = 0.0,
+        float $quoteBaseSubTotal = 0.0
+    ): Address {
         $shippingAssignments = ['test_assignment_1'];
-        $storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
+        $storeMock = $this->createMock(Store::class);
 
-        $quoteMock = $this->getMockBuilder(Quote::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'setAppliedRuleIds',
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
                 'getStore',
-                'getBaseSubtotal',
                 'getExtensionAttributes',
-                'isVirtual'
-            ])
-            ->getMock();
-        $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getShippingAssignments'])
-            ->getMockForAbstractClass();
+                'isVirtual',
+                'setAppliedRuleIds',
+                'getBaseSubtotal'
+            ]
+        );
+        $cartExtensionMock = $this->createPartialMockWithReflection(
+            CartExtension::class,
+            ['getShippingAssignments']
+        );
+        $cartExtensionMock->method('getShippingAssignments')
+            ->willReturn($shippingAssignments);
 
         $quoteMock->method('getStore')
             ->willReturn($storeMock);
@@ -646,9 +753,6 @@ class ValidatorTest extends TestCase
         $quoteMock->method('getExtensionAttributes')
             ->willReturn($cartExtensionMock);
 
-        $cartExtensionMock->method('getShippingAssignments')
-            ->willReturn($shippingAssignments);
-
         $this->addressMock->method('getShippingAmountForDiscount')
             ->willReturn($shippingAmount);
 
@@ -664,7 +768,10 @@ class ValidatorTest extends TestCase
         return $this->addressMock;
     }
 
-    public function testReset()
+    /**
+     * @return void
+     */
+    public function testReset(): void
     {
         $this->utility->expects($this->once())
             ->method('resetRoundingDeltas');
@@ -683,5 +790,75 @@ class ValidatorTest extends TestCase
             $this->model->getCouponCode()
         );
         $this->assertInstanceOf(Validator::class, $this->model->reset($addressMock));
+    }
+
+    /**
+     * @param bool $stopRulesProcessing
+     * @param bool $ruleAppliedToItems
+     * @param float $expectedShippingDiscount
+     * @return void
+     */
+    #[DataProvider('dataProviderNonShippingRuleStopProcessing')]
+    public function testProcessShippingAmountNonShippingRuleStopProcessing(
+        bool $stopRulesProcessing,
+        bool $ruleAppliedToItems,
+        float $expectedShippingDiscount
+    ): void {
+        $shippingAmount = 10.0;
+
+        $rule1 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount', 'getId']
+        );
+        $rule1->method('getApplyToShipping')->willReturn(false);
+        $rule1->method('getStopRulesProcessing')->willReturn($stopRulesProcessing);
+        $rule1->method('getId')->willReturn(1);
+
+        $rule2 = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getStopRulesProcessing', 'getSimpleAction', 'getDiscountAmount']
+        );
+        $rule2->method('getApplyToShipping')->willReturn(true);
+        $rule2->method('getStopRulesProcessing')->willReturn(false);
+        $rule2->method('getSimpleAction')->willReturn(Rule::BY_PERCENT_ACTION);
+        $rule2->method('getDiscountAmount')->willReturn(100);
+
+        $iterator = new \ArrayIterator([$rule1, $rule2]);
+        $this->ruleCollection->method('getIterator')->willReturn($iterator);
+
+        $this->priceCurrency->method('roundPrice')
+            ->willReturnCallback(function ($price) {
+                return round($price, 2);
+            });
+
+        $this->utility->method('canProcessRule')->willReturn(true);
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $addressMock = $this->setupAddressMock($shippingAmount);
+
+        if ($ruleAppliedToItems) {
+            $addressMock->setAppliedRuleIds('1');
+        }
+
+        $this->model->processShippingAmount($addressMock);
+
+        self::assertEquals($expectedShippingDiscount, $addressMock->getShippingDiscountAmount());
+    }
+
+    /**
+     * @return array
+     */
+    public static function dataProviderNonShippingRuleStopProcessing(): array
+    {
+        return [
+            'stop processing honored when rule is applied to items' => [true, true, 0.0],
+            'stop processing ignored when rule is not applied to items' => [true, false, 10.0],
+            'no stop processing allows subsequent rules' => [false, true, 10.0],
+        ];
     }
 }

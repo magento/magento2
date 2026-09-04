@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -12,8 +12,9 @@
         <annotations>
             <description>Click Save Address button on checkout.</description>
         </annotations>
-
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.saveAddress}}" stepKey="waitForSaveButton"/>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.newAddressForm}}" stepKey="waitForNewAddressFormGone"/>
     </actionGroup>
 </actionGroups>

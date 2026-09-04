@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\CustomerTokenManagement;
 use Magento\Vault\Model\PaymentTokenManagement;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,12 +34,8 @@ class CustomerTokenManagementTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->paymentTokenManagement = $this->getMockBuilder(PaymentTokenManagement::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerSession = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->paymentTokenManagement = $this->createMock(PaymentTokenManagement::class);
+        $this->customerSession = $this->createMock(Session::class);
 
         $this->tokenManagement = new CustomerTokenManagement(
             $this->paymentTokenManagement,
@@ -50,8 +47,8 @@ class CustomerTokenManagementTest extends TestCase
      * @param int|null $customerId
      * @param bool $isLoggedCustomer
      * @return void
-     * @dataProvider getCustomerSessionTokensNegativeDataProvider
      */
+    #[DataProvider('getCustomerSessionTokensNegativeDataProvider')]
     public function testGetCustomerSessionTokensNegative($customerId, bool $isLoggedCustomer)
     {
         $this->customerSession->method('getCustomerId')->willReturn($customerId);
@@ -64,7 +61,7 @@ class CustomerTokenManagementTest extends TestCase
     /**
      * @return array
      */
-    public function getCustomerSessionTokensNegativeDataProvider()
+    public static function getCustomerSessionTokensNegativeDataProvider()
     {
         return [
             'not registered customer' => [null, false],
@@ -75,7 +72,7 @@ class CustomerTokenManagementTest extends TestCase
     public function testGetCustomerSessionTokens()
     {
         $customerId = 1;
-        $token = $this->getMockForAbstractClass(PaymentTokenInterface::class);
+        $token = $this->createMock(PaymentTokenInterface::class);
         $expectation = [$token];
 
         $this->customerSession->expects(static::once())

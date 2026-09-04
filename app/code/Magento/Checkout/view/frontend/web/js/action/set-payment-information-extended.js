@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -15,7 +15,7 @@ define([
     'Magento_Checkout/js/action/get-totals',
     'Magento_Checkout/js/model/full-screen-loader',
     'underscore',
-    'Magento_Checkout/js/model/payment/set-payment-hooks'
+    'Magento_Checkout/js/model/payment/place-order-hooks'
 ], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _, hooks) {
     'use strict';
 

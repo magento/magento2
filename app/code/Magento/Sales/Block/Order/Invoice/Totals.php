@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Order\Invoice;
 
@@ -33,6 +33,8 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     protected $_invoice = null;
 
     /**
+     * Get order
+     *
      * @return Order
      */
     public function getInvoice()
@@ -50,6 +52,8 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     }
 
     /**
+     * Set Order
+     *
      * @param Order $invoice
      * @return $this
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -28,6 +28,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -89,26 +90,28 @@ class SourceTest extends TestCase
      */
     private $readFactory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->preProcessorPool = $this->createMock(Pool::class);
         $this->viewFileResolution = $this->createMock(
             StaticFile::class
         );
-        $this->theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->theme = $this->createMock(ThemeInterface::class);
         /** @var ScopeConfigInterface $config */
-        $this->chainFactory = $this->getMockBuilder(
-            ChainFactoryInterface::class
-        )->getMock();
+        $this->chainFactory = $this->getMockBuilder(ChainFactoryInterface::class)
+            ->getMock();
         $this->chain = $this->getMockBuilder(Chain::class)
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->onlyMethods(['isChanged', 'getContent', 'getTargetAssetPath'])
             ->getMock();
         $this->chainFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->chain);
 
-        $themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
+        $themeProvider = $this->createMock(ThemeProviderInterface::class);
         $themeProvider->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')
@@ -135,13 +138,12 @@ class SourceTest extends TestCase
      * @param bool $isMaterialization
      * @param bool $isExist
      *
-     * @dataProvider getFileDataProvider
-     */
-    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization, $isExist)
+     * @return void     */
+    #[DataProvider('getFileDataProvider')]
+    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization, $isExist): void
     {
         $filePath = 'some/file.ext';
         $read = $this->createMock(Read::class);
-        $read->expects($this->at(0))->method('readFile')->with($origPath)->willReturn($origContent);
         $this->readFactory->expects($this->atLeastOnce())->method('create')->willReturn($read);
         $this->viewFileResolution->expects($this->once())
             ->method('getFile')
@@ -178,7 +180,11 @@ class SourceTest extends TestCase
                 ->willReturn('result');
         } else {
             $this->tmpDir->expects($this->never())->method('writeFile');
-            $read->expects($this->at(1))
+            $read
+                ->method('readFile')
+                ->with($origPath)
+                ->willReturn($origContent);
+            $read
                 ->method('getAbsolutePath')
                 ->with('file.ext')
                 ->willReturn('result');
@@ -189,9 +195,10 @@ class SourceTest extends TestCase
     /**
      * @param string $path
      * @param string $expected
-     * @dataProvider getContentTypeDataProvider
-     */
-    public function testGetContentType($path, $expected)
+     *
+     * @return void     */
+    #[DataProvider('getContentTypeDataProvider')]
+    public function testGetContentType($path, $expected): void
     {
         $this->assertEquals($expected, $this->object->getContentType($path));
     }
@@ -199,21 +206,23 @@ class SourceTest extends TestCase
     /**
      * @return array
      */
-    public function getContentTypeDataProvider()
+    public static function getContentTypeDataProvider(): array
     {
         return [
             ['', ''],
             ['path/file', ''],
-            ['path/file.ext', 'ext'],
+            ['path/file.ext', 'ext']
         ];
     }
 
     /**
-     * A callback for affecting preprocessor chain in the test
+     * A callback for affecting preprocessor chain in the test.
      *
      * @param Chain $chain
+     *
+     * @return void
      */
-    public function chainTestCallback(Chain $chain)
+    public function chainTestCallback(Chain $chain): void
     {
         $chain->setContentType('ext');
         $chain->setContent('processed');
@@ -222,31 +231,34 @@ class SourceTest extends TestCase
     /**
      * @return array
      */
-    public function getFileDataProvider()
+    public static function getFileDataProvider(): array
     {
         return [
             ['/root/some/file.ext', 'file.ext', 'processed', false, true],
             ['/root/some/file.ext', 'file.ext', 'not_processed', true, false],
             ['/root/some/file.ext2', 'file.ext2', 'processed', true, true],
-            ['/root/some/file.ext2', 'file.ext2', 'not_processed', true, false],
+            ['/root/some/file.ext2', 'file.ext2', 'not_processed', true, false]
         ];
     }
 
-    protected function initFilesystem()
+    /**
+     * @return void
+     */
+    protected function initFilesystem(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->rootDirRead = $this->getMockForAbstractClass(
+        $this->rootDirRead = $this->createMock(
             ReadInterface::class
         );
-        $this->staticDirRead = $this->getMockForAbstractClass(
+        $this->staticDirRead = $this->createMock(
             ReadInterface::class
         );
-        $this->tmpDir = $this->getMockForAbstractClass(WriteInterface::class);
+        $this->tmpDir = $this->createMock(WriteInterface::class);
 
         $readDirMap = [
             [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirRead],
             [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirRead],
-            [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->tmpDir],
+            [DirectoryList::TMP_MATERIALIZATION_DIR, DriverPool::FILE, $this->tmpDir]
         ];
 
         $this->filesystem->expects($this->any())
@@ -259,12 +271,13 @@ class SourceTest extends TestCase
     }
 
     /**
-     * Create an asset mock
+     * Create an asset mock.
      *
      * @param bool $isFallback
+     *
      * @return File|MockObject
      */
-    protected function getAsset($isFallback = true)
+    protected function getAsset($isFallback = true): File
     {
         if ($isFallback) {
             $context = new FallbackContext(

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenContentMenuTabActionGroup">
+        <annotations>
+            <description>Open tab 'Content' on main menu.</description>
+        </annotations>
+        <conditionalClick selector="{{AdminMenuSection.menuItem('magento-backend-content')}}" dependentSelector="{{AdminMenuSection.contentMenuClose}}" visible="false" stepKey="openContentTab"/>
+    </actionGroup>
+</actionGroups>

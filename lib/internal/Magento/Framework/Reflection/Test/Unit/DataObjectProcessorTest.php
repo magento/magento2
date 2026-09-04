@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Reflection\Test\Unit;
 
 use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\Reflection\CustomAttributesProcessor;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\ExtensionAttributesProcessor;
 use Magento\Framework\Reflection\FieldNamer;
@@ -18,13 +19,22 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataObjectProcessorTest extends TestCase
 {
     /**
      * @var DataObjectProcessor
      */
     private $dataObjectProcessor;
+
+    /**
+     * @var MethodsMap
+     */
+    private $methodsMapProcessor;
 
     /**
      * @var ExtensionAttributesProcessor|MockObject
@@ -34,21 +44,21 @@ class DataObjectProcessorTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $methodsMapProcessor = $objectManager->getObject(
+        $this->methodsMapProcessor = $objectManager->getObject(
             MethodsMap::class,
             [
                 'fieldNamer' => $objectManager->getObject(FieldNamer::class),
                 'typeProcessor' => $objectManager->getObject(TypeProcessor::class),
             ]
         );
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')
             ->willReturn(['unserializedData']);
 
         $objectManager->setBackwardCompatibleProperty(
-            $methodsMapProcessor,
+            $this->methodsMapProcessor,
             'serializer',
             $serializerMock
         );
@@ -56,71 +66,223 @@ class DataObjectProcessorTest extends TestCase
         $this->extensionAttributesProcessorMock = $this->getMockBuilder(ExtensionAttributesProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->dataObjectProcessor = $objectManager->getObject(
-            DataObjectProcessor::class,
-            [
-                'methodsMapProcessor' => $methodsMapProcessor,
-                'typeCaster' => $objectManager->getObject(TypeCaster::class),
-                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
-                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock
-            ]
-        );
     }
 
     /**
      * @param array $extensionAttributes
-     * @param array $expectedOutputDataArray
-     *
-     * @dataProvider buildOutputDataArrayDataProvider
-     */
-    public function testBuildOutputDataArray($extensionAttributes, $expectedOutputDataArray)
-    {
-        $objectManager =  new ObjectManager($this);
+     * @param array $excludedMethodsClassMap
+     * @param array $expectedOutput     */
+    #[DataProvider('buildOutputDataArrayDataProvider')]
+    public function testBuildOutputDataArray(
+        array $extensionAttributes,
+        array $excludedMethodsClassMap,
+        array $expectedOutput
+    ) {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(
+                    \Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class
+                ),
+                'excludedMethodsClassMap' => $excludedMethodsClassMap,
+            ]
+        );
+
         /** @var TestDataObject $testDataObject */
         $testDataObject = $objectManager->getObject(
             TestDataObject::class,
             [
-                'extensionAttributes' => $this->getMockForAbstractClass(
+                'extensionAttributes' => $this->createMock(
                     ExtensionAttributesInterface::class
                 )
             ]
         );
 
-        $this->extensionAttributesProcessorMock->expects($this->once())
+        if (in_array('getExtensionAttributes', $excludedMethodsClassMap[TestDataInterface::class] ?? [])) {
+            $expectedTimes = $this->never();
+        } else {
+            $expectedTimes = $this->once();
+        }
+
+        $this->extensionAttributesProcessorMock->expects($expectedTimes)
             ->method('buildOutputDataArray')
             ->willReturn($extensionAttributes);
 
         $outputData = $this->dataObjectProcessor
             ->buildOutputDataArray($testDataObject, TestDataInterface::class);
-        $this->assertEquals($expectedOutputDataArray, $outputData);
+        $this->assertEquals($expectedOutput, $outputData);
     }
 
     /**
      * @return array
      */
-    public function buildOutputDataArrayDataProvider()
+    public static function buildOutputDataArrayDataProvider()
     {
-        $expectedOutputDataArray = [
+        $expectedOutput = [
             'id' => '1',
             'address' => 'someAddress',
             'default_shipping' => 'true',
             'required_billing' => 'false',
         ];
-        $extensionAttributeArray = [
+
+        $extensionAttributes = [
             'attribute1' => 'value1',
-            'attribute2' => 'value2'
+            'attribute2' => 'value2',
         ];
 
         return [
-            'No Attributes' => [[], $expectedOutputDataArray],
-            'With Attributes' => [
-                $extensionAttributeArray,
+            'No Extension Attributes or Excluded Methods' => [
+                [],
+                [],
+                $expectedOutput,
+            ],
+            'With Extension Attributes' => [
+                $extensionAttributes,
+                [],
                 array_merge(
-                    $expectedOutputDataArray,
-                    ['extension_attributes' => $extensionAttributeArray]
-                )
-            ]
+                    $expectedOutput,
+                    ['extension_attributes' => $extensionAttributes]
+                ),
+            ],
+            'With Excluded Method' => [
+                [],
+                [
+                    TestDataInterface::class => [
+                        'getAddress',
+                    ],
+                ],
+                array_diff_key($expectedOutput, array_flip(['address'])),
+            ],
+            'With getExtensionAttributes as Excluded Method' => [
+                $extensionAttributes,
+                [
+                    TestDataInterface::class => [
+                        'getExtensionAttributes',
+                    ],
+                ],
+                $expectedOutput,
+            ],
         ];
+    }
+
+    /**
+     * Test that UnstructuredArray is preserved as is without processing elements
+     */
+    public function testBuildOutputDataArrayWithUnstructuredArray()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $typeCaster = $objectManager->getObject(TypeCaster::class);
+        $fieldNamer = $objectManager->getObject(FieldNamer::class);
+        $customAttributesProcessor = $objectManager->getObject(
+            CustomAttributesProcessor::class
+        );
+        $propertyMetadataProvider = $objectManager->getObject(
+            \Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class
+        );
+
+        $this->dataObjectProcessor = new DataObjectProcessor(
+            $this->methodsMapProcessor,
+            $typeCaster,
+            $fieldNamer,
+            $customAttributesProcessor,
+            $this->extensionAttributesProcessorMock,
+            [],
+            [],
+            $propertyMetadataProvider
+        );
+
+        $unstructuredArrayData = [
+            ['sku' => 'product1', 'name' => 'Product 1'],
+            ['sku' => 'product2', 'name' => 'Product 2'],
+            'some_string_value',
+            123,
+            ['nested' => ['array' => 'value']]
+        ];
+
+        $testDataObject = $objectManager->getObject(
+            TestDataObjectWithUnstructuredArray::class,
+            ['items' => $unstructuredArrayData]
+        );
+
+        $outputData = $this->dataObjectProcessor->buildOutputDataArray(
+            $testDataObject,
+            TestDataObjectWithUnstructuredArray::class
+        );
+
+        $this->assertArrayHasKey('items', $outputData);
+        $this->assertEquals($unstructuredArrayData, $outputData['items']);
+        $this->assertSame($unstructuredArrayData, $outputData['items']);
+    }
+
+    public function testBuildOutputDataArrayWithPublicProperties()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(
+                    \Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class
+                ),
+            ]
+        );
+
+        $testDataObject = new TestDataObjectWithPublicProperties(12, 'Sample');
+
+        $outputData = $this->dataObjectProcessor->buildOutputDataArray(
+            $testDataObject,
+            TestDataObjectWithPublicProperties::class
+        );
+
+        $this->assertSame(
+            [
+                'entity_id' => 12,
+                'name' => 'Sample',
+            ],
+            $outputData
+        );
+    }
+
+    public function testBuildOutputDataArrayPrefersGetterOverPublicProperty()
+    {
+        $objectManager = new ObjectManager($this);
+
+        $this->dataObjectProcessor = $objectManager->getObject(
+            DataObjectProcessor::class,
+            [
+                'methodsMapProcessor' => $this->methodsMapProcessor,
+                'typeCaster' => $objectManager->getObject(TypeCaster::class),
+                'fieldNamer' => $objectManager->getObject(FieldNamer::class),
+                'extensionAttributesProcessor' => $this->extensionAttributesProcessorMock,
+                'propertyMetadataProvider' => $objectManager->getObject(
+                    \Magento\Framework\Reflection\DataObject\PropertyMetadataProvider::class
+                ),
+            ]
+        );
+
+        $testDataObject = new TestDataObjectWithGetterAndPublicProperty('property-value');
+
+        $outputData = $this->dataObjectProcessor->buildOutputDataArray(
+            $testDataObject,
+            TestDataObjectWithGetterAndPublicProperty::class
+        );
+
+        $this->assertSame(
+            [
+                'name' => 'getter-value',
+            ],
+            $outputData
+        );
     }
 }

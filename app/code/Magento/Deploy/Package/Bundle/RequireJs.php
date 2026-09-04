@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Package\Bundle;
 
@@ -105,6 +105,11 @@ class RequireJs implements BundleInterface
     private $pathToBundleDir;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Bundle constructor
      *
      * @param Filesystem $filesystem
@@ -185,6 +190,8 @@ class RequireJs implements BundleInterface
         }
 
         $this->files = [];
+
+        return true;
     }
 
     /**
@@ -193,6 +200,8 @@ class RequireJs implements BundleInterface
     public function clear()
     {
         $this->staticDir->delete($this->pathToBundleDir);
+
+        return true;
     }
 
     /**

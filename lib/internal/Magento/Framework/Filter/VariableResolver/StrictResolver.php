@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -86,7 +86,7 @@ class StrictResolver implements VariableResolverInterface
                 $stackArgs[$i]['variable'] = $stackArgs[$i - 1]['variable']
                     ->getData($stackArgs[$i]['name']);
             }
-        } elseif ($stackArgs[$i]['type'] == 'method' && substr($stackArgs[$i]['name'], 0, 3) == 'get') {
+        } elseif ($stackArgs[$i]['type'] == 'method' && substr($stackArgs[$i]['name'] ?? '', 0, 3) == 'get') {
             $this->handleGetterMethod($i, $filter, $templateVariables, $stackArgs);
         }
     }

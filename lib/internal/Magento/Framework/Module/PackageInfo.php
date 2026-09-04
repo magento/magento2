@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Module;
 
@@ -73,7 +73,7 @@ class PackageInfo
     public function __construct(
         Dir\Reader $reader,
         ComponentRegistrar $componentRegistrar,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
@@ -190,7 +190,7 @@ class PackageInfo
      */
     protected function isMagentoPackage($packageName)
     {
-        return strpos($packageName, 'magento/module-') === 0;
+        return $packageName !== null && strpos($packageName, 'magento/module-') === 0;
     }
 
     /**

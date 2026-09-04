@@ -1,21 +1,38 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrderFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\Registry;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
+use Magento\Sales\Test\Fixture\InvoiceComment as InvoiceCommentFixture ;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Tests the Invoice query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InvoiceTest extends GraphQlAbstract
 {
@@ -410,13 +427,145 @@ QUERY;
         $this->deleteOrder();
     }
 
+    #[
+        DataFixture(Customer::class, ['email' => 'customer@search.example.com'], as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'visible_comment',
+            'is_visible_on_front' => 1,
+        ]),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'non_visible_comment',
+            'is_visible_on_front' => 0,
+        ]),
+    ]
+    public function testInvoiceCommentsQuery()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    orders {
+      items {
+        invoices {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $invoice = $response['customer']['orders']['items'][0]['invoices'][0];
+        $this->assertCount(1, $invoice['comments']);
+        $this->assertEquals('visible_comment', $invoice['comments'][0]['message']);
+        $this->assertNotEmpty($invoice['comments'][0]['timestamp']);
+    }
+
+    #[
+        Config('general/locale/code', 'fr_FR'),
+        Config('general/locale/timezone', 'Europe/Paris'),
+        DataFixture(Customer::class, ['email' => 'customer_fr@search.example.com'], as: 'customer'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'cart'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart.id$', 'product_id' => '$product.id$']),
+        DataFixture(SetBillingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetShippingAddressFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetGuestEmailFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(InvoiceCommentFixture::class, [
+            'parent_id' => '$invoice.id$',
+            'comment' => 'visible_comment',
+            'is_visible_on_front' => 1,
+            'created_at' => '2026-01-15 10:00:00',
+        ], as: 'invoiceComment'),
+    ]
+    public function testInvoiceCommentTimestampCalendarValueIsCorrectUnderFrenchLocale()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    orders {
+      items {
+        invoices {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer_fr@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $invoice = $response['customer']['orders']['items'][0]['invoices'][0];
+        $timestamp = $invoice['comments'][0]['timestamp'];
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $timestamp);
+
+        $invoiceComment = DataFixtureStorageManager::getStorage()->get('invoiceComment');
+        // Independent computation - deliberately does NOT go through
+        // Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug (AC-18084).
+        $expectedTimestamp = (new \DateTime($invoiceComment->getCreatedAt(), new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('Europe/Paris'))
+            ->format('Y-m-d H:i:s');
+
+        $this->assertSame(
+            $expectedTimestamp,
+            $timestamp,
+            sprintf(
+                'Invoice comment timestamp should equal its created_at (%s, UTC) converted to the '
+                . 'Europe/Paris store timezone under the fr_FR locale.',
+                $invoiceComment->getCreatedAt()
+            )
+        );
+    }
+
     /**
      * Prepare invoice for the order
      *
      * @param string $orderNumber
      * @param int|null $qty
      */
-    private function prepareInvoice(string $orderNumber, int $qty = null)
+    private function prepareInvoice(string $orderNumber, ?int $qty = null)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = Bootstrap::getObjectManager()

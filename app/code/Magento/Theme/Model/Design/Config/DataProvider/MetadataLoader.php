@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Design\Config\DataProvider;
 
@@ -74,7 +74,10 @@ class MetadataLoader
             $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
             foreach ($fieldsData as $fieldData) {
                 $element = &$data;
-                foreach (explode('/', $fieldData->getFieldConfig()['fieldset']) as $fieldset) {
+                $fieldSets = isset($fieldData->getFieldConfig()['fieldset']) ?
+                    explode('/', $fieldData->getFieldConfig()['fieldset']) : [];
+                foreach ($fieldSets as $fieldset) {
+                    // @phpstan-ignore-next-line
                     if (!isset($element[$fieldset]['children'])) {
                         $element[$fieldset]['children'] = [];
                     }

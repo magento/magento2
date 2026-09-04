@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,17 +15,19 @@ use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Action;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTestCase;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Ui\Component\MassAction\Filter;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Catalog\Helper\Product\Edit\Action\Attribute as AttributeHelper;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatusTest extends ProductTest
+class MassStatusTest extends ProductTestCase
 {
     /**
      * @var Processor|MockObject
@@ -48,71 +50,47 @@ class MassStatusTest extends ProductTest
     private $productBuilderMock;
 
     /**
-     * @var AbstractDb|MockObject
+     * @var ProductCollection|MockObject
      */
-    private $abstractDbMock;
+    private $productCollectionMock;
 
     /**
      * @var Action|MockObject
      */
     private $actionMock;
 
+    /**
+     * @var AttributeHelper|MockObject
+     */
+    private $attributeHelperMock;
+
     protected function setUp(): void
     {
-        $this->priceProcessorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productBuilderMock = $this->getMockBuilder(Builder::class)
-            ->setMethods(['build'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->priceProcessorMock = $this->createMock(Processor::class);
+        $this->productBuilderMock = $this->createPartialMock(Builder::class, ['build']);
 
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getStoreId', '__sleep'])
-            ->getMock();
-        $productMock->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn('simple');
-        $productMock->expects($this->any())
-            ->method('getStoreId')
-            ->willReturn('1');
-        $this->productBuilderMock->expects($this->any())
-            ->method('build')
-            ->willReturn($productMock);
+        $productMock = $this->createPartialMock(Product::class, ['getTypeId', 'getStoreId', '__sleep']);
+        $productMock->method('getTypeId')->willReturn('simple');
+        $productMock->method('getStoreId')->willReturn('1');
+        $this->productBuilderMock->method('build')->willReturn($productMock);
 
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
         $resultFactory->expects($this->atLeastOnce())
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
 
-        $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAllIds', 'getResource'])
-            ->getMock();
-        $this->filterMock = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCollection'])
-            ->getMock();
-        $this->actionMock = $this->getMockBuilder(Action::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCollectionMock = $this->createPartialMock(
+            ProductCollection::class,
+            ['getAllIds', 'getResource']
+        );
+        $this->filterMock = $this->createPartialMock(Filter::class, ['getCollection']);
+        $this->actionMock = $this->createMock(Action::class);
+        $this->attributeHelperMock = $this->createPartialMock(AttributeHelper::class, ['setProductIds']);
 
-        $collectionFactoryMock =
-            $this->getMockBuilder(CollectionFactory::class)
-                ->disableOriginalConstructor()
-                ->setMethods(['create'])
-                ->getMock();
-        $collectionFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->abstractDbMock);
+        $collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);
+        $collectionFactoryMock->method('create')->willReturn($this->productCollectionMock);
 
         $additionalParams = [
             'resultFactory' => $resultFactory
@@ -126,7 +104,8 @@ class MassStatusTest extends ProductTest
             $this->priceProcessorMock,
             $this->filterMock,
             $collectionFactoryMock,
-            $this->actionMock
+            $this->actionMock,
+            $this->attributeHelperMock
         );
     }
 
@@ -137,13 +116,14 @@ class MassStatusTest extends ProductTest
         $filters = [
             'store_id' => 2,
         ];
+        $productIds = [3];
 
         $this->filterMock->expects($this->once())
             ->method('getCollection')
-            ->willReturn($this->abstractDbMock);
-        $this->abstractDbMock->expects($this->once())
+            ->willReturn($this->productCollectionMock);
+        $this->productCollectionMock->expects($this->once())
             ->method('getAllIds')
-            ->willReturn([3]);
+            ->willReturn($productIds);
         $this->request->expects($this->exactly(3))
             ->method('getParam')
             ->willReturnMap(
@@ -153,9 +133,12 @@ class MassStatusTest extends ProductTest
                     ['filters', [], $filters]
                 ]
             );
+        $this->attributeHelperMock->expects($this->once())
+            ->method('setProductIds')
+            ->with($productIds);
         $this->actionMock->expects($this->once())
             ->method('updateAttributes')
-            ->with([3], ['status' => $status], 2);
+            ->with($productIds, ['status' => $status], 2);
         $this->priceProcessorMock->expects($this->once())
             ->method('reindexList');
 

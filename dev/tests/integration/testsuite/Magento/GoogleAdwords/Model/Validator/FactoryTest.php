@@ -2,8 +2,8 @@
 /**
  * Integration test for \Magento\GoogleAdwords\Model\Validator\Factory
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GoogleAdwords\Model\Validator;
 

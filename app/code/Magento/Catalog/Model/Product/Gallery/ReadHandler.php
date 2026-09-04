@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
@@ -66,7 +66,11 @@ class ReadHandler implements ExtensionInterface
             $entity,
             $mediaEntries
         );
-        
+        $entity->setOrigData(
+            $this->getAttribute()->getAttributeCode(),
+            $entity->getData($this->getAttribute()->getAttributeCode())
+        );
+
         return $entity;
     }
 
@@ -80,6 +84,7 @@ class ReadHandler implements ExtensionInterface
      */
     public function addMediaDataToProduct(Product $product, array $mediaEntries)
     {
+        $mediaEntries = $this->sortMediaEntriesByPosition($mediaEntries);
         $product->setData(
             $this->getAttribute()->getAttributeCode(),
             [
@@ -108,9 +113,10 @@ class ReadHandler implements ExtensionInterface
      * Find default value
      *
      * @param string $key
-     * @param string[] &$image
+     * @param string[] $image
      * @return string
      * @deprecated 101.0.1
+     * @see \Magento\Catalog\Model\Product\Gallery\ReadHandler::addMediaDataToProduct
      * @since 101.0.0
      */
     protected function findDefaultValue($key, &$image)
@@ -120,5 +126,31 @@ class ReadHandler implements ExtensionInterface
         }
 
         return '';
+    }
+
+    /**
+     * Sort media entries by position
+     *
+     * @param array $mediaEntries
+     * @return array
+     */
+    private function sortMediaEntriesByPosition(array $mediaEntries): array
+    {
+        $mediaEntriesWithNullPositions = [];
+        foreach ($mediaEntries as $index => $mediaEntry) {
+            if ($mediaEntry['position'] === null) {
+                $mediaEntriesWithNullPositions[] = $mediaEntry;
+                unset($mediaEntries[$index]);
+            }
+        }
+        if (!empty($mediaEntries)) {
+            usort(
+                $mediaEntries,
+                function ($entryA, $entryB) {
+                    return ($entryA['position'] < $entryB['position']) ? -1 : 1;
+                }
+            );
+        }
+        return array_merge($mediaEntries, $mediaEntriesWithNullPositions);
     }
 }

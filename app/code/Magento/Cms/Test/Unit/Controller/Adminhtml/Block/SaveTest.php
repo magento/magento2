@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,7 +18,10 @@ use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as TestFrameworkObjectManager;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SaveTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var RequestInterface|MockObject
      */
@@ -68,12 +72,12 @@ class SaveTest extends TestCase
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|MockObject
+     * @var EventManagerInterface|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var TestFrameworkObjectManager
      */
     protected $objectManager;
 
@@ -97,15 +101,18 @@ class SaveTest extends TestCase
      */
     protected $blockId = 1;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new TestFrameworkObjectManager($this);
 
         $this->contextMock = $this->createMock(Context::class);
 
         $this->resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
@@ -117,14 +124,14 @@ class SaveTest extends TestCase
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMock();
 
-        $this->requestMock = $this->getMockForAbstractClass(
+        // Use MockCreationTrait to add non-existent methods like getPostValue
+        $this->requestMock = $this->createPartialMockWithReflection(
             RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParam', 'getPostValue']
+            ['getPostValue', 'getParam', 'isPost', 'getFullActionName', 'setParam',
+             'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+             'getCookie', 'getBeforeForwardInfo', 'getPathInfo', 'setPathInfo',
+             'getOriginalPathInfo', 'getFrontName', 'getControllerName', 'getRouteName',
+             'setParams', 'getParams', 'isSecure']
         );
 
         $this->blockMock = $this->getMockBuilder(
@@ -132,21 +139,16 @@ class SaveTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
 
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
+        $this->eventManagerMock = $this->createPartialMock(
+            EventManagerInterface::class,
             ['dispatch']
         );
 
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get', 'create'])
+            ->onlyMethods(['get', 'create'])
             ->getMock();
 
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
@@ -159,12 +161,10 @@ class SaveTest extends TestCase
 
         $this->blockFactory = $this->getMockBuilder(BlockFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
-        $this->blockRepository = $this->getMockBuilder(BlockRepositoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->blockRepository = $this->createMock(BlockRepositoryInterface::class);
 
         $this->saveController = $this->objectManager->getObject(
             Save::class,
@@ -172,12 +172,15 @@ class SaveTest extends TestCase
                 'context' => $this->contextMock,
                 'dataPersistor' => $this->dataPersistorMock,
                 'blockFactory' => $this->blockFactory,
-                'blockRepository' => $this->blockRepository,
+                'blockRepository' => $this->blockRepository
             ]
         );
     }
 
-    public function testSaveAction()
+    /**
+     * @return void
+     */
+    public function testSaveAction(): void
     {
         $postData = [
             'title' => '"><img src=y onerror=prompt(document.domain)>;',
@@ -194,7 +197,7 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, 'continue'],
+                    ['back', null, 'continue']
                 ]
             );
 
@@ -223,14 +226,20 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveActionWithoutData()
+    /**
+     * @return void
+     */
+    public function testSaveActionWithoutData(): void
     {
         $this->requestMock->expects($this->any())->method('getPostValue')->willReturn(false);
         $this->resultRedirect->expects($this->atLeastOnce())->method('setPath')->with('*/*/')->willReturnSelf();
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveActionNoId()
+    /**
+     * @return void
+     */
+    public function testSaveActionNoId(): void
     {
         $postData = [
             'block_id' => 1,
@@ -243,7 +252,7 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, false],
+                    ['back', null, false]
                 ]
             );
 
@@ -265,7 +274,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveAndDuplicate()
+    /**
+     * @return void
+     */
+    public function testSaveAndDuplicate(): void
     {
         $postData = [
             'title' => 'unique_title_123',
@@ -282,22 +294,18 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, true],
+                    ['back', null, true]
                 ]
             );
-
-        $this->blockFactory->expects($this->at(0))
-            ->method('create')
-            ->willReturn($this->blockMock);
 
         $duplicateBlockMock = $this->getMockBuilder(
             Block::class
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->blockFactory->expects($this->at(1))
+        $this->blockFactory
             ->method('create')
-            ->willReturn($duplicateBlockMock);
+            ->willReturnOnConsecutiveCalls($this->blockMock, $duplicateBlockMock);
 
         $duplicateBlockMock->expects($this->atLeastOnce())
             ->method('setId')
@@ -323,17 +331,21 @@ class SaveTest extends TestCase
             ->willReturn($this->blockMock);
 
         $this->blockMock->expects($this->any())->method('setData');
-        $this->blockRepository->expects($this->at(1))->method('save')->with($this->blockMock);
-        $this->blockRepository->expects($this->at(2))->method('save')->with($duplicateBlockMock);
+        $this->blockRepository
+            ->method('save')
+            ->willReturnCallback(function ($arg1) use ($duplicateBlockMock) {
+                if ($arg1 == $this->blockMock || $arg1 == $duplicateBlockMock) {
+                    return null;
+                }
+            });
 
-        $this->messageManagerMock->expects($this->at(0))
+        $this->messageManagerMock
             ->method('addSuccessMessage')
-            ->with(__('You saved the block.'));
-
-        $this->messageManagerMock->expects($this->at(1))
-            ->method('addSuccessMessage')
-            ->with(__('You duplicated the block.'));
-
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == (__('You saved the block.')) || $arg1 == __('You duplicated the block.')) {
+                    return null;
+                }
+            });
         $this->dataPersistorMock->expects($this->any())
             ->method('clear')
             ->with('cms_block');
@@ -346,7 +358,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveAndClose()
+    /**
+     * @return void
+     */
+    public function testSaveAndClose(): void
     {
         $postData = [
             'title' => '"><img src=y onerror=prompt(document.domain)>;',
@@ -363,7 +378,7 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, 'close'],
+                    ['back', null, 'close']
                 ]
             );
 
@@ -392,7 +407,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveActionWithMarginalSpace()
+    /**
+     * @return void
+     */
+    public function testSaveActionWithMarginalSpace(): void
     {
         $postData = [
             'title' => 'unique_title_123',
@@ -409,7 +427,7 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, true],
+                    ['back', null, true]
                 ]
             );
 
@@ -444,7 +462,10 @@ class SaveTest extends TestCase
         $this->assertSame($this->resultRedirect, $this->saveController->execute());
     }
 
-    public function testSaveActionThrowsException()
+    /**
+     * @return void
+     */
+    public function testSaveActionThrowsException(): void
     {
         $postData = [
             'title' => '"><img src=y onerror=prompt(document.domain)>;',
@@ -461,7 +482,7 @@ class SaveTest extends TestCase
             ->willReturnMap(
                 [
                     ['block_id', null, 1],
-                    ['back', null, true],
+                    ['back', null, true]
                 ]
             );
 

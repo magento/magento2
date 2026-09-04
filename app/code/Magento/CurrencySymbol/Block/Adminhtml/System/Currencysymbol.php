@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Manage currency symbols block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CurrencySymbol\Block\Adminhtml\System;
 
@@ -34,17 +32,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     ) {
         $this->_symbolSystemFactory = $symbolSystemFactory;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Constructor. Initialization required variables for class instance.
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_controller = 'adminhtml_system_currencysymbol';
-        parent::_construct();
     }
 
     /**

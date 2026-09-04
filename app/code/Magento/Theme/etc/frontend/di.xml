@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -27,12 +27,15 @@
         <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin"/>
     </type>
     <type name="Magento\Framework\View\Result\Layout">
-        <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin" />
+        <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin" sortOrder="-20" />
         <plugin name="deferJsToFooter" type="Magento\Theme\Controller\Result\JsFooterPlugin" sortOrder="-10" />
     </type>
     <type name="Magento\Theme\Block\Html\Header\CriticalCss">
         <arguments>
             <argument name="filePath" xsi:type="string">css/critical.css</argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
     </type>
 </config>

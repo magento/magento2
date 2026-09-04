@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
@@ -22,11 +22,12 @@ class NewActionHtml extends Quote implements HttpPostActionInterface
      */
     public function execute()
     {
-        $id = $this->getRequest()
-            ->getParam('id');
-        $formName = $this->getRequest()
-            ->getParam('form_namespace');
-        $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+        $id = $this->getRequest()->getParam('id');
+        $formName = $this->getRequest()->getParam('form_namespace');
+        $typeArr = explode(
+            '|',
+            str_replace('-', '/', $this->getRequest()->getParam('type', ''))
+        );
         $type = $typeArr[0];
 
         $model = $this->_objectManager->create(

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogSearch\Model\ResourceModel\Advanced;
@@ -176,23 +176,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $requestBuilder = null,
         $searchEngine = null,
         $temporaryStorageFactory = null,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        SearchResultFactory $searchResultFactory = null,
-        ProductLimitationFactory $productLimitationFactory = null,
-        MetadataPool $metadataPool = null,
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?SearchResultFactory $searchResultFactory = null,
+        ?ProductLimitationFactory $productLimitationFactory = null,
+        ?MetadataPool $metadataPool = null,
         $searchRequestName = 'advanced_search_container',
-        SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
-        SearchResultApplierFactory $searchResultApplierFactory = null,
-        TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
-        EngineResolverInterface $engineResolver = null,
-        DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
-        Advanced $advancedSearchResource = null
+        ?SearchCriteriaResolverFactory $searchCriteriaResolverFactory = null,
+        ?SearchResultApplierFactory $searchResultApplierFactory = null,
+        ?TotalRecordsResolverFactory $totalRecordsResolverFactory = null,
+        ?EngineResolverInterface $engineResolver = null,
+        ?DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null,
+        ?Advanced $advancedSearchResource = null
     ) {
         $this->searchRequestName = $searchRequestName;
-        if ($searchResultFactory === null) {
-            $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Api\Search\SearchResultFactory::class);
-        }
+        $this->searchResultFactory = $searchResultFactory ?: ObjectManager::getInstance()
+            ->get(SearchResultFactory::class);
         $this->searchCriteriaResolverFactory = $searchCriteriaResolverFactory ?: ObjectManager::getInstance()
             ->get(SearchCriteriaResolverFactory::class);
         $this->searchResultApplierFactory = $searchResultApplierFactory ?: ObjectManager::getInstance()
@@ -241,7 +239,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function addFieldsToFilter($fields)
     {
         if ($fields) {
-            $this->filters = array_merge($this->filters, $fields);
+            $this->filters = array_replace_recursive($this->filters, $fields);
         }
         return $this;
     }

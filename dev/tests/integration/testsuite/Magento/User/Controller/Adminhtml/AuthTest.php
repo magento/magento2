@@ -1,17 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\User\Controller\Adminhtml\Auth
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -107,6 +111,45 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
+     * Test reset password action extends expiry of token
+     *
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::execute
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::_validateResetPasswordLinkToken
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testResetPasswordActionWithTokenNearExpiry()
+    {
+        /** @var $user \Magento\User\Model\User */
+        $user = Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername(
+            'dummy_username'
+        );
+        $this->assertNotEmpty($user->getId(), 'Broken fixture');
+        $resetPasswordToken = Bootstrap::getObjectManager()->get(
+            \Magento\User\Helper\Data::class
+        )->generateResetPasswordLinkToken();
+        $user->changeResetPasswordLinkToken($resetPasswordToken);
+
+        $anHourAgo = Bootstrap::getObjectManager()->create(DateTimeFactory::class)
+            ->create()
+            ->sub(\DateInterval::createFromDateString('1 hour'))
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+        $user->setRpTokenCreatedAt($anHourAgo);
+        $user->save();
+
+        $this->getRequest()->setQueryValue('token', $resetPasswordToken)->setQueryValue('id', $user->getId());
+        $this->dispatch('backend/admin/auth/resetpassword');
+
+        $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
+        $this->assertEquals('auth', $this->getRequest()->getControllerName());
+        $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
+        $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+
+        $this->assertNotEquals($anHourAgo, $user->reload()->getRpTokenCreatedAt());
+    }
+
+    /**
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::execute
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::_validateResetPasswordLinkToken
      */
@@ -122,11 +165,11 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     }
 
     /**
-     * @dataProvider resetPasswordDataProvider
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost::execute
      * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPasswordPost::_validateResetPasswordLinkToken
      * @magentoDataFixture Magento/User/_files/dummy_user.php
      */
+    #[DataProvider('resetPasswordDataProvider')]
     public function testResetPasswordPostAction($password, $passwordConfirmation, $isPasswordChanged)
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -183,7 +226,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         }
     }
 
-    public function resetPasswordDataProvider()
+    public static function resetPasswordDataProvider()
     {
         $password = uniqid('123q');
         return [
@@ -274,13 +317,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
     protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
     {
         $transportMock = $this->getMockBuilder(\Magento\Framework\Mail\TransportInterface::class)
-            ->setMethods(['sendMessage'])
+            ->onlyMethods(['sendMessage'])
             ->getMockForAbstractClass();
         $transportMock->expects($this->exactly($occurrenceNumber))
             ->method('sendMessage');
         $transportBuilderMock = $this->getMockBuilder(\Magento\Framework\Mail\Template\TransportBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'setTemplateModel',
                     'addTo',
@@ -330,7 +373,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         );
         $factoryMock = $this->getMockBuilder(\Magento\User\Model\UserFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(
+            ->onlyMethods(
                 [
                     'create'
                 ]

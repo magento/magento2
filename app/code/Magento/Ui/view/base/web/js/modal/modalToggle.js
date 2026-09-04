@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -19,9 +19,9 @@ define([
         if (config.contentSelector) {
             content = $(config.contentSelector);
         } else if (config.content) {
-            content = $('<div />').html(config.content);
+            content = $('<div></div>').html(config.content);
         } else {
-            content = $('<div />');
+            content = $('<div></div>');
         }
 
         widget = content.modal(config);

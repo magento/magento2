@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class UpdateRowTest extends TestCase
 {
@@ -51,12 +52,9 @@ class UpdateRowTest extends TestCase
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
-        $this->metadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->getMockForAbstractClass();
+        $this->metadataMock = $this->createMock(EntityMetadataInterface::class);
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->metadataMock = $this->createMock(EntityMetadataInterface::class);
 
         $this->model = (new ObjectManager($this))->getObject(UpdateRow::class, [
             'metadataPool' => $this->metadataPoolMock,
@@ -64,12 +62,11 @@ class UpdateRowTest extends TestCase
         ]);
     }
 
-    /**
-     * @dataProvider columnsDataProvider
-     * @param array $data
+    /**     * @param array $data
      * @param array $columns
      * @param array $preparedColumns
      */
+    #[DataProvider('columnsDataProvider')]
     public function testExecute(array $data, array $columns, array $preparedColumns)
     {
         $primaryKeyName = 'entity_id';
@@ -108,7 +105,7 @@ class UpdateRowTest extends TestCase
     /**
      * @return array
      */
-    public function columnsDataProvider()
+    public static function columnsDataProvider()
     {
         $data = [
             'test_link_field' => 1,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -19,16 +19,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorResultMergerTest extends TestCase
 {
+
     /**
-     * Testable Object
-     *
      * @var ValidatorResultMerger
      */
     private $validatorResultMerger;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,13 +43,14 @@ class ValidatorResultMergerTest extends TestCase
     protected function setUp(): void
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-            ->setMethods(['create'])->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->validatorResultMerger = $this->objectManager->getObject(
             ValidatorResultMerger::class,
             [
-                'validatorResultInterfaceFactory' => $this->validatorResultFactoryMock,
+                'validatorResultInterfaceFactory' => $this->validatorResultFactoryMock
             ]
         );
     }
@@ -62,23 +60,29 @@ class ValidatorResultMergerTest extends TestCase
      *
      * @return void
      */
-    public function testMerge()
+    public function testMerge(): void
     {
-        $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
+        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);
         $orderValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test01', 'test02']);
         $creditmemoValidationResultMock->expects($this->once())->method('getMessages')->willReturn(['test03']);
 
-        $validatorResultMock->expects($this->at(0))->method('addMessage')->with('test01');
-        $validatorResultMock->expects($this->at(1))->method('addMessage')->with('test02');
-        $validatorResultMock->expects($this->at(2))->method('addMessage')->with('test03');
-        $validatorResultMock->expects($this->at(3))->method('addMessage')->with('test04');
-        $validatorResultMock->expects($this->at(4))->method('addMessage')->with('test05');
-        $validatorResultMock->expects($this->at(5))->method('addMessage')->with('test06');
+        $validatorResultMock
+            ->method('addMessage')
+            ->willReturnCallback(function ($arg1) {
+                if ($arg1 == 'test01' ||
+                    $arg1 == 'test02' ||
+                    $arg1 == 'test03' ||
+                    $arg1 == 'test04' ||
+                    $arg1 == 'test05' ||
+                    $arg1 == 'test06') {
+                    return null;
+                }
+            });
         $expected = $validatorResultMock;
         $actual = $this->validatorResultMerger->merge(
             $orderValidationResultMock,

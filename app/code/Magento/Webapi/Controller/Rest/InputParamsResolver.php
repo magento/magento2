@@ -1,17 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
+
+declare(strict_types=1);
 
 namespace Magento\Webapi\Controller\Rest;
 
+use Magento\Framework\Api\SimpleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\AuthorizationException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\Webapi\Exception;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\Framework\Webapi\Validator\EntityArrayValidator\InputArraySizeLimitValue;
 use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * This class is responsible for retrieving resolved input data
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InputParamsResolver
 {
@@ -46,6 +57,16 @@ class InputParamsResolver
     private $requestValidator;
 
     /**
+     * @var MethodsMap
+     */
+    private $methodsMap;
+
+    /**
+     * @var InputArraySizeLimitValue
+     */
+    private $inputArraySizeLimitValue;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -53,41 +74,53 @@ class InputParamsResolver
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param Router $router
      * @param RequestValidator $requestValidator
+     * @param MethodsMap|null $methodsMap
+     * @param InputArraySizeLimitValue|null $inputArraySizeLimitValue
      */
     public function __construct(
         RestRequest $request,
         ParamsOverrider $paramsOverrider,
         ServiceInputProcessor $serviceInputProcessor,
         Router $router,
-        RequestValidator $requestValidator
+        RequestValidator $requestValidator,
+        ?MethodsMap $methodsMap = null,
+        ?InputArraySizeLimitValue $inputArraySizeLimitValue = null
     ) {
         $this->request = $request;
         $this->paramsOverrider = $paramsOverrider;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->router = $router;
         $this->requestValidator = $requestValidator;
+        $this->methodsMap = $methodsMap ?: ObjectManager::getInstance()
+            ->get(MethodsMap::class);
+        $this->inputArraySizeLimitValue = $inputArraySizeLimitValue ?? ObjectManager::getInstance()
+                ->get(InputArraySizeLimitValue::class);
     }
 
     /**
      * Process and resolve input parameters
      *
      * @return array
-     * @throws \Magento\Framework\Webapi\Exception
+     * @throws Exception|AuthorizationException|LocalizedException
      */
     public function resolve()
     {
         $this->requestValidator->validate();
         $route = $this->getRoute();
-        $serviceMethodName = $route->getServiceMethod();
-        $serviceClassName = $route->getServiceClass();
-        $inputData = $this->getInputData();
-        return $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+        $this->inputArraySizeLimitValue->set($route->getInputArraySizeLimit());
+
+        return $this->serviceInputProcessor->process(
+            $route->getServiceClass(),
+            $route->getServiceMethod(),
+            $this->getInputData(),
+        );
     }
 
     /**
      * Get API input data
      *
      * @return array
+     * @throws InputException|Exception
      */
     public function getInputData()
     {
@@ -108,20 +141,130 @@ class InputParamsResolver
         } else {
             $inputData = $this->request->getRequestData();
         }
+        $inputData = $this->filterInputData($inputData);
+
+        $this->validateParameters($serviceClassName, $serviceMethodName, array_keys($route->getParameters()));
 
         return $this->paramsOverrider->override($inputData, $route->getParameters());
+    }
+
+    /**
+     * Validates InputData
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputData(array $inputData): array
+    {
+        if ($inputData === [] || array_is_list($inputData)) {
+            return $this->filterInputListData($inputData);
+        }
+
+        return $this->filterAssociativeInputData($inputData);
+    }
+
+    /**
+     * Filter input data for list arrays by recursing nested arrays.
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterInputListData(array $inputData): array
+    {
+        foreach ($inputData as $key => $value) {
+            if (is_array($value)) {
+                $inputData[$key] = $this->filterInputData($value);
+            }
+        }
+        return $inputData;
+    }
+
+    /**
+     * Filter input data for associative arrays by removing normalized duplicates.
+     *
+     * @param array $inputData
+     * @return array
+     */
+    private function filterAssociativeInputData(array $inputData): array
+    {
+        $checkArr = [];
+        $result = null;
+
+        foreach ($inputData as $key => $value) {
+            $normalizedKey = is_string($key) ? strtolower(str_replace('_', '', $key)) : $key;
+            $processedValue = is_array($value) ? $this->filterInputData($value) : $value;
+
+            if (!isset($checkArr[$normalizedKey])) {
+                $checkArr[$normalizedKey] = true;
+                if ($result !== null) {
+                    $result[$key] = $processedValue;
+                } elseif ($processedValue !== $value) {
+                    $inputData[$key] = $processedValue;
+                }
+                continue;
+            }
+
+            if ($result === null) {
+                $result = $inputData;
+            }
+
+            unset($result[$key]);
+        }
+
+        return $result ?? $inputData;
     }
 
     /**
      * Retrieve current route.
      *
      * @return Route
+     * @throws Exception
      */
     public function getRoute()
     {
         if (!$this->route) {
             $this->route = $this->router->match($this->request);
         }
+
         return $this->route;
+    }
+
+    /**
+     * Validate that parameters are really used in the current request.
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @param array $paramOverriders
+     */
+    private function validateParameters(
+        string $serviceClassName,
+        string $serviceMethodName,
+        array $paramOverriders
+    ): void {
+        $methodParams = $this->methodsMap->getMethodParams($serviceClassName, $serviceMethodName);
+        foreach ($paramOverriders as $key => $param) {
+            $arrayKeys = explode('.', $param ?? '');
+            $value = array_shift($arrayKeys);
+
+            foreach ($methodParams as $serviceMethodParam) {
+                $serviceMethodParamName = $serviceMethodParam[MethodsMap::METHOD_META_NAME];
+                $serviceMethodType = $serviceMethodParam[MethodsMap::METHOD_META_TYPE];
+
+                $camelCaseValue = SimpleDataObjectConverter::snakeCaseToCamelCase($value);
+                if ($serviceMethodParamName === $value || $serviceMethodParamName === $camelCaseValue) {
+                    if (count($arrayKeys) > 0) {
+                        $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase('set_' . $arrayKeys[0]);
+                        $this->validateParameters($serviceMethodType, $camelCaseKey, [implode('.', $arrayKeys)]);
+                    }
+                    unset($paramOverriders[$key]);
+                    break;
+                }
+            }
+        }
+        if (!empty($paramOverriders)) {
+            $message = 'The current request does not expect the next parameters: '
+                . implode(', ', $paramOverriders);
+            throw new \UnexpectedValueException(__($message)->__toString());
+        }
     }
 }

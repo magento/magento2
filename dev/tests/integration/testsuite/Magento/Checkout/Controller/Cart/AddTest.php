@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class add product to cart controller.
@@ -120,11 +121,10 @@ class AddTest extends AbstractController
     }
 
     /**
-     * @dataProvider wrongParamsDataProvider
-     *
      * @param array $params
      * @return void
      */
+    #[DataProvider('wrongParamsDataProvider')]
     public function testWithWrongParams(array $params): void
     {
         $this->prepareReferer();
@@ -135,7 +135,7 @@ class AddTest extends AbstractController
     /**
      * @return array
      */
-    public function wrongParamsDataProvider(): array
+    public static function wrongParamsDataProvider(): array
     {
         return [
             'empty_params' => ['params' => []],
@@ -172,7 +172,7 @@ class AddTest extends AbstractController
         $product = $this->productRepository->get('simple-1');
         $postData = ['product' => $product->getId(), 'qty' => '1000'];
         $this->dispatchAddToCartRequest($postData);
-        $message = (string)__('The requested qty is not available');
+        $message = (string)__('Not enough items for sale');
         $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
         $this->assertRedirect($this->stringContains($product->getProductUrl()));
     }
@@ -193,9 +193,21 @@ class AddTest extends AbstractController
         ];
         $this->dispatchAddToCartRequest($params);
         $this->assertCount(3, $checkoutSession->getQuote()->getItemsCollection());
+
+        $productNames = [$product->getName()];
+        foreach (explode(',', (string)$params['related_product']) as $relatedProductId) {
+            $productNames[] = $this->productRepository->getById((int)$relatedProductId)->getName();
+        }
+        if (count($productNames) === 2) {
+            $productList = (string)__('%1 and %2', $productNames[0], $productNames[1]);
+        } else {
+            $lastProductName = array_pop($productNames);
+            $productList = (string)__('%1 and %2', implode(', ', $productNames), $lastProductName);
+        }
+
         $message = (string)__(
             'You added %1 to your <a href="%2">shopping cart</a>.',
-            $product->getName(),
+            $productList,
             'http://localhost/checkout/cart/'
         );
         $this->assertSessionMessages(

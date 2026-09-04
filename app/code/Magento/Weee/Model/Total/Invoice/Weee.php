@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
@@ -12,7 +12,7 @@ use Magento\Framework\App\ObjectManager;
 class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
 {
     /**
-     * Weee data
+     * Weee data object
      *
      * @var WeeeHelper
      */
@@ -38,7 +38,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     public function __construct(
         WeeeHelper $weeeData,
         array $data = [],
-        Json $serializer = null
+        ?Json $serializer = null
     ) {
         $this->_weeeData = $weeeData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -71,14 +71,21 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $orderItem = $item->getOrderItem();
             $orderItemQty = $orderItem->getQtyOrdered();
 
-            if (!$orderItemQty || $orderItem->isDummy() || $item->getQty() < 0) {
+            if (!$orderItemQty || $item->getQty() < 0) {
+                continue;
+            }
+
+            if ($orderItem->isDummy()) {
+                $item->setWeeeTaxAppliedRowAmount(0);
+                $item->setBaseWeeeTaxAppliedRowAmount(0);
                 continue;
             }
 
             $ratio = $item->getQty() / $orderItemQty;
 
-            $orderItemWeeeAmount = $orderItem->getWeeeTaxAppliedRowAmount();
-            $orderItemBaseWeeeAmount = $orderItem->getBaseWeeeTaxAppliedRowAmnt();
+            $applied = $this->_weeeData->getApplied($orderItem);
+            $orderItemWeeeAmount = array_sum(array_column($applied, 'row_amount'));
+            $orderItemBaseWeeeAmount = array_sum(array_column($applied, 'base_row_amount'));
             $weeeAmount = $invoice->roundPrice($orderItemWeeeAmount * $ratio);
             $baseWeeeAmount = $invoice->roundPrice($orderItemBaseWeeeAmount * $ratio, 'base');
 
@@ -174,6 +181,18 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $baseTotalWeeeAmountInclTax += $baseWeeeAmountInclTax;
         }
 
+        // If FPT is configured to be included in the subtotal,
+        // we need to subtract it from the subtotal and the grand total,
+        // as Collect function from Catalog module knows nothing about FPT and that it is already included in Subtotal
+        if ($invoice->isLast() && $this->_weeeData->includeInSubtotal($store)) {
+            $invoice->setSubtotal($invoice->getSubtotal() - $totalWeeeAmount);
+            $invoice->setBaseSubtotal($invoice->getBaseSubtotal() - $baseTotalWeeeAmount);
+            $invoice->setGrandTotal($invoice->getGrandTotal() - $totalWeeeAmountInclTax);
+            $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() - $baseTotalWeeeAmountInclTax);
+            $invoice->setTaxAmount($invoice->getTaxAmount() - $totalWeeeTaxAmount);
+            $invoice->setBaseTaxAmount($invoice->getBaseTaxAmount() - $baseTotalWeeeTaxAmount);
+        }
+
         $allowedTax = $order->getTaxAmount() - $order->getTaxInvoiced() - $invoice->getTaxAmount();
         $allowedBaseTax = $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced() - $invoice->getBaseTaxAmount();
         $totalWeeeTaxAmount = min($totalWeeeTaxAmount, $allowedTax);
@@ -196,15 +215,9 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $invoice->setBaseSubtotal($invoice->getBaseSubtotal() + $baseTotalWeeeAmount);
         }
 
-        if (!$invoice->isLast()) {
             // need to add the Weee amounts including all their taxes
             $invoice->setSubtotalInclTax($invoice->getSubtotalInclTax() + $totalWeeeAmountInclTax);
             $invoice->setBaseSubtotalInclTax($invoice->getBaseSubtotalInclTax() + $baseTotalWeeeAmountInclTax);
-        } else {
-            // since the Subtotal Incl Tax line will already have the taxes on Weee, just add the non-taxable amounts
-            $invoice->setSubtotalInclTax($invoice->getSubtotalInclTax() + $totalWeeeAmount);
-            $invoice->setBaseSubtotalInclTax($invoice->getBaseSubtotalInclTax() + $baseTotalWeeeAmount);
-        }
 
         $invoice->setGrandTotal($invoice->getGrandTotal() + $totalWeeeAmount + $totalWeeeTaxAmount);
         $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseTotalWeeeAmount + $baseTotalWeeeTaxAmount);

@@ -1,19 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Email\Model;
 
 use Magento\Backend\App\Area\FrontNameResolver as BackendFrontNameResolver;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -26,12 +27,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Zend_Mail|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $mail;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -46,13 +42,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         }
 
-        $this->mail = $this->getMockBuilder(\Zend_Mail::class)
-            ->setMethods(['send', 'addTo', 'addBcc', 'setReturnPath', 'setReplyTo'])
-            ->setConstructorArgs(['utf-8'])
-            ->getMock();
-
         $this->model = $this->getMockBuilder(\Magento\Email\Model\Template::class)
-            ->setMethods(['_getMail'])
             ->setConstructorArgs(
                 [
                     $this->objectManager->get(\Magento\Framework\Model\Context::class),
@@ -70,26 +60,15 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                     $this->objectManager->get(\Magento\Email\Model\Template\FilterFactory::class),
                 ]
             )
+            ->onlyMethods([])
             ->getMock();
 
         $this->objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-
-        $this->model->expects($this->any())->method('_getMail')->willReturnCallback([$this, 'getMail']);
         $this->model
             ->setSenderName('sender')
             ->setSenderEmail('sender@example.com')
             ->setTemplateSubject('Subject')
             ->setTemplateId('abc');
-    }
-
-    /**
-     * Return a disposable \Zend_Mail instance
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Zend_Mail
-     */
-    public function getMail()
-    {
-        return clone $this->mail;
     }
 
     public function testSetGetTemplateFilter()
@@ -159,8 +138,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateFallbackDataProvider
      */
+    #[DataProvider('templateFallbackDataProvider')]
     public function testTemplateFallback($area, $templateId, $expectedOutput, $mockThemeFallback = false)
     {
         $this->mockModel();
@@ -179,7 +158,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateFallbackDataProvider()
+    public static function templateFallbackDataProvider()
     {
         return [
             'Template from module - admin' => [
@@ -228,7 +207,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateDirectiveDataProvider
      *
      * @param string $area
      * @param int $templateType
@@ -238,6 +216,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @param string $storeConfigPath
      * @param bool $mockAdminTheme
      */
+    #[DataProvider('templateDirectiveDataProvider')]
     public function testTemplateDirective(
         $area,
         $templateType,
@@ -283,7 +262,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateDirectiveDataProvider()
+    public static function templateDirectiveDataProvider()
     {
         return [
             'Template from module folder - adminhtml' => [
@@ -384,7 +363,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -393,7 +372,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
-    public function testLegacyTemplateLoadedFromDbIsFilteredInLegacyMode()
+    public function testLegacyTemplateLoadedFromDbIsFilteredInStrictMode()
     {
         $this->mockModel();
 
@@ -405,7 +384,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -418,7 +396,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -439,7 +417,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $this->objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '0',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -452,7 +429,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class)
             ->setValue('design/email/footer_template', $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
 
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $this->model->getProcessedTemplate());
     }
 
     /**
@@ -463,13 +440,13 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
-     * @dataProvider templateStylesVariableDataProvider
      *
      * @param string $area
      * @param string $expectedOutput
      * @param array $unexpectedOutputs
      * @param array $templateForDatabase
      */
+    #[DataProvider('templateStylesVariableDataProvider')]
     public function testTemplateStylesVariable($area, $expectedOutput, $unexpectedOutputs, $templateForDatabase = [])
     {
         if (count($templateForDatabase)) {
@@ -485,14 +462,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         } else {
             // <!--@styles @--> parsing only via the loadDefault method. Since email template files won't contain
             // @styles comments by default, it is necessary to mock an object to return testable contents
-            $themeDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
-                ->disableOriginalConstructor()
-                ->setMethods(
-                    [
-                        'readFile',
-                    ]
-                )
-                ->getMockForAbstractClass();
+            $themeDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
 
             $themeDirectory->expects($this->once())
                 ->method('readFile')
@@ -500,7 +470,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
             $filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['getDirectoryRead'])
+                ->onlyMethods(['getDirectoryRead'])
                 ->getMock();
 
             $filesystem->expects($this->once())
@@ -525,7 +495,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function templateStylesVariableDataProvider()
+    public static function templateStylesVariableDataProvider()
     {
         return [
             'Styles from <!--@styles @--> comment - adminhtml' => [
@@ -738,8 +708,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $config
-     * @dataProvider setDesignConfigExceptionDataProvider
      */
+    #[DataProvider('setDesignConfigExceptionDataProvider')]
     public function testSetDesignConfigException($config)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -749,7 +719,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $model->setDesignConfig($config);
     }
 
-    public function setDesignConfigExceptionDataProvider()
+    public static function setDesignConfigExceptionDataProvider()
     {
         $storeId = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
             ->getStore()
@@ -781,7 +751,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     public function testGetTypeNonExistentType()
     {
         $this->expectException(\UnexpectedValueException::class);
-        $this->expectExceptionMessage('Email template \'foo\' is not defined.');
+        $this->expectExceptionMessage('Email template is not defined.');
 
         $this->mockModel();
         $this->model->setId('foo');
@@ -869,5 +839,32 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $options = ['area' => 'test area', 'store' => 1];
         $this->model->setOptions($options);
         $this->assertEquals($options, $this->model->getDesignConfig()->getData());
+    }
+
+    /**
+     * @magentoConfigFixture default_store general/store_information/name Test Store
+     * @magentoConfigFixture default_store general/store_information/street_line1 Street 1
+     * @magentoConfigFixture default_store general/store_information/street_line2 Street 2
+     * @magentoConfigFixture default_store general/store_information/city Austin
+     * @magentoConfigFixture default_store general/store_information/zip 78758
+     * @magentoConfigFixture default_store general/store_information/country_id US
+     * @magentoConfigFixture default_store general/store_information/region_id 57
+     */
+    public function testStoreFormattedAddress()
+    {
+        $this->mockModel();
+        $this->model->setTemplateType(TemplateTypesInterface::TYPE_HTML);
+
+        /* See app/design/frontend/Magento/luma/Magento_Email/email/footer.html */
+        $template = '{{var store.formatted_address|raw}}';
+        $this->model->setTemplateText($template);
+
+        $result = $this->model->getProcessedTemplate();
+        $this->assertStringContainsString('Test Store', $result);
+        $this->assertStringContainsString('Street 1', $result);
+        $this->assertStringContainsString('Street 2', $result);
+        $this->assertStringContainsString('Austin', $result);
+        $this->assertStringContainsString('Texas', $result);
+        $this->assertStringContainsString('United States', $result);
     }
 }

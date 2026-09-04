@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -98,6 +98,7 @@ class Storage
         $select->reset(Select::COLUMNS)->columns([$tableId . '.entity_id', $tableId . '.parent_id']);
 
         $pageSize = $this->config->getValue(AbstractEntity::XML_PATH_PAGE_SIZE);
+        $pageSize = $pageSize !== null ? (int) $pageSize : null;
         $getChuck = function (int $offset) use ($customerIds, $pageSize) {
             return array_slice($customerIds, $offset, $pageSize);
         };

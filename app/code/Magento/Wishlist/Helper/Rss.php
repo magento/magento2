@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Wishlist\Helper;
@@ -10,6 +10,7 @@ namespace Magento\Wishlist\Helper;
  * Wishlist rss helper
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
@@ -104,9 +105,9 @@ class Rss extends \Magento\Wishlist\Helper\Data
     public function getCustomer()
     {
         if ($this->_customer === null) {
-            $params = $this->urlDecoder->decode($this->_getRequest()->getParam('data'));
-            $data   = explode(',', $params);
-            $customerId    = abs((int)$data[0]);
+            $params = $this->urlDecoder->decode($this->_getRequest()->getParam('data', ''));
+            $data = explode(',', $params);
+            $customerId = abs((int)$data[0]);
             if ($customerId && ($customerId == $this->_customerSession->getCustomerId())) {
                 $this->_customer = $this->_customerRepository->getById($customerId);
             } else {

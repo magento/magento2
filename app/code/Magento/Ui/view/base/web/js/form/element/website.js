@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -25,10 +25,6 @@ define([
          */
         initialize: function () {
             this._super();
-
-            if (this.customerId || this.isGlobalScope) {
-                this.disable(true);
-            }
 
             return this;
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,9 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-26167"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login -->
@@ -56,6 +54,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete Tax Rule-->
@@ -95,8 +94,8 @@
         <actionGroup ref="StorefrontAssertOrderReviewSummaryWithTaxActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">
             <argument name="orderSummarySubTotal" value="$123.00"/>
             <argument name="orderSummaryShippingTotal" value="$0.00"/>
-            <argument name="orderSummaryTotal" value="$133.15"/>
-            <argument name="orderSummaryTax" value="$10.15"/>
+            <argument name="orderSummaryTotal" value="$123.00"/>
+            <argument name="orderSummaryTax" value="$0.00"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>

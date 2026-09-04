@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Foreign Key constraint definition.
@@ -67,9 +68,7 @@ class ForeignKeyTest extends TestCase
         $refColumnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $tableMock = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,6 +117,7 @@ class ForeignKeyTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->foreignKey->fromDefinition(['Create Table' => $definition]);
@@ -127,7 +127,7 @@ class ForeignKeyTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [
@@ -136,7 +136,7 @@ class ForeignKeyTest extends TestCase
                     . 'INDEX `TEST_INDEX` (`col_name`),'
                     . 'CONSTRAINT `fk_name` FOREIGN KEY (`col_name`) '
                     . 'REFERENCES `ref_table` (`ref_col_name`)  ON DELETE CASCADE',
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'fk_name' => [
                         'type' => Reference::TYPE,
                         'name' => 'fk_name',
@@ -153,7 +153,7 @@ class ForeignKeyTest extends TestCase
                     . 'INDEX `TEST_INDEX` (`col_name`),'
                     . 'CONSTRAINT `fk_name` FOREIGN KEY(`col_name`)'
                     . 'REFERENCES `ref_table`(`ref_col_name`)ON DELETE NO ACTION',
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'fk_name' => [
                         'type' => Reference::TYPE,
                         'name' => 'fk_name',
@@ -170,7 +170,7 @@ class ForeignKeyTest extends TestCase
                     . 'INDEX `TEST_INDEX` (`col_name`),'
                     . 'CONSTRAINT `fk_name` FOREIGN KEY(`column_name`)'
                     . 'REFERENCES `ref_table`(`ref_col_name`)ON DELETE SET DEFAULT',
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'fk_name' => [
                         'type' => Reference::TYPE,
                         'name' => 'fk_name',
@@ -187,7 +187,7 @@ class ForeignKeyTest extends TestCase
                     . 'INDEX `TEST_INDEX` (`col_name`),'
                     . 'CONSTRAINT `fk_name` FOREIGN KEY(`column_name`)'
                     . 'REFERENCES `ref_table`(`ref_col_name`)ON DELETE SET NULL',
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'fk_name' => [
                         'type' => Reference::TYPE,
                         'name' => 'fk_name',
@@ -204,7 +204,7 @@ class ForeignKeyTest extends TestCase
                     . 'INDEX `TEST_INDEX` (`col_name`),'
                     . 'CONSTRAINT `fk_name` FOREIGN KEY(`column_name`)'
                     . 'REFERENCES `ref_table`(`ref_col_name`)ON DELETE RESTRICT ON UPDATE RESTRICT',
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'fk_name' => [
                         'type' => Reference::TYPE,
                         'name' => 'fk_name',

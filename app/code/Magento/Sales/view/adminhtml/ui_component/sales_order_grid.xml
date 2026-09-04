@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
@@ -58,7 +58,7 @@
                 </settings>
             </filterSelect>
         </filters>
-        <massaction name="listing_massaction" component="Magento_Sales/js/grid/tree-massactions">
+        <massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
             <action name="cancel">
                 <settings>
                     <url path="sales/order/massCancel"/>
@@ -131,7 +131,7 @@
                 </param>
             </childDefaults>
         </settings>
-        <selectionsColumn name="ids">
+        <selectionsColumn name="ids" component="Magento_Sales/js/grid/columns/multiselect">
             <settings>
                 <indexField>entity_id</indexField>
             </settings>

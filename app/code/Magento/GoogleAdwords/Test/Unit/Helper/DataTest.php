@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\GoogleAdwords\Test\Unit\Helper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GoogleAdwords\Helper\Data;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,6 +31,9 @@ class DataTest extends TestCase
      */
     protected $_helper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $className = Data::class;
@@ -45,7 +49,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsActive()
+    public static function dataProviderForTestIsActive(): array
     {
         return [
             [true, 1234, true],
@@ -59,9 +63,11 @@ class DataTest extends TestCase
      * @param bool $isActive
      * @param string $returnConfigValue
      * @param bool $returnValue
-     * @dataProvider dataProviderForTestIsActive
+     *
+     * @return void
      */
-    public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue)
+    #[DataProvider('dataProviderForTestIsActive')]
+    public function testIsGoogleAdwordsActive($isActive, $returnConfigValue, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
             $this->any()
@@ -72,7 +78,11 @@ class DataTest extends TestCase
         )->willReturn(
             $isActive
         );
-        $this->_scopeConfigMock->method('getValue')->with($this->isType('string'))->willReturnCallback(
+        $this->_scopeConfigMock->method('getValue')->with(
+            $this->callback(function ($value) {
+                return is_string($value);
+            })
+        )->willReturnCallback(
             function () use ($returnConfigValue) {
                 return $returnConfigValue;
             }
@@ -81,7 +91,10 @@ class DataTest extends TestCase
         $this->assertEquals($returnValue, $this->_helper->isGoogleAdwordsActive());
     }
 
-    public function testGetLanguageCodes()
+    /**
+     * @return void
+     */
+    public function testGetLanguageCodes(): void
     {
         $languages = ['en', 'ru', 'uk'];
         $this->_scopeConfigMock->expects(
@@ -100,7 +113,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConvertLanguage()
+    public static function dataProviderForTestConvertLanguage(): array
     {
         return [
             ['some-language', 'some-language'],
@@ -113,9 +126,11 @@ class DataTest extends TestCase
     /**
      * @param string $language
      * @param string $returnLanguage
-     * @dataProvider dataProviderForTestConvertLanguage
+     *
+     * @return void
      */
-    public function testConvertLanguageCodeToLocaleCode($language, $returnLanguage)
+    #[DataProvider('dataProviderForTestConvertLanguage')]
+    public function testConvertLanguageCodeToLocaleCode(string $language, string $returnLanguage): void
     {
         $convertArray = ['zh_TW' => 'zh_Hant', 'iw' => 'he', 'zh_CN' => 'zh_Hans'];
         $this->_scopeConfigMock->expects(
@@ -131,7 +146,10 @@ class DataTest extends TestCase
         $this->assertEquals($returnLanguage, $this->_helper->convertLanguageCodeToLocaleCode($language));
     }
 
-    public function testGetConversionImgSrc()
+    /**
+     * @return void
+     */
+    public function testGetConversionImgSrc(): void
     {
         $conversionId = 123;
         $label = 'LabEl';
@@ -140,20 +158,20 @@ class DataTest extends TestCase
             $conversionId,
             $label
         );
-        $this->_scopeConfigMock->expects(
-            $this->at(0)
-        )->method(
-            'getValue'
-        )->with(
-            Data::XML_PATH_CONVERSION_IMG_SRC,
-            'default'
-        )->willReturn(
-            $imgSrc
-        );
+        $this->_scopeConfigMock
+            ->method('getValue')
+            ->willReturnCallback(function ($arg1, $arg2) use ($imgSrc) {
+                if ($arg1 == Data::XML_PATH_CONVERSION_IMG_SRC && $arg2 == 'default') {
+                    return $imgSrc;
+                }
+            });
         $this->assertEquals($imgSrc, $this->_helper->getConversionImgSrc());
     }
 
-    public function testGetConversionJsSrc()
+    /**
+     * @return void
+     */
+    public function testGetConversionJsSrc(): void
     {
         $jsSrc = 'some-js-src';
         $this->_scopeConfigMock->expects(
@@ -171,7 +189,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestStoreConfig()
+    public static function dataProviderForTestStoreConfig(): array
     {
         return [
             ['getConversionId', Data::XML_PATH_CONVERSION_ID, 123],
@@ -180,7 +198,7 @@ class DataTest extends TestCase
             ['getConversionColor', Data::XML_PATH_CONVERSION_COLOR, 'ffffff'],
             ['getConversionLabel', Data::XML_PATH_CONVERSION_LABEL, 'Label'],
             ['getConversionValueType', Data::XML_PATH_CONVERSION_VALUE_TYPE, '1'],
-            ['getConversionValueConstant', Data::XML_PATH_CONVERSION_VALUE, '0'],
+            ['getConversionValueConstant', Data::XML_PATH_CONVERSION_VALUE, '0']
         ];
     }
 
@@ -188,9 +206,11 @@ class DataTest extends TestCase
      * @param string $method
      * @param string $xmlPath
      * @param string $returnValue
-     * @dataProvider dataProviderForTestStoreConfig
+     *
+     * @return void
      */
-    public function testGetStoreConfigValue($method, $xmlPath, $returnValue)
+    #[DataProvider('dataProviderForTestStoreConfig')]
+    public function testGetStoreConfigValue($method, $xmlPath, $returnValue): void
     {
         $this->_scopeConfigMock->expects(
             $this->once()
@@ -205,14 +225,20 @@ class DataTest extends TestCase
         $this->assertEquals($returnValue, $this->_helper->{$method}());
     }
 
-    public function testHasSendConversionValueCurrency()
+    /**
+     * @return void
+     */
+    public function testHasSendConversionValueCurrency(): void
     {
         $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
 
         $this->assertTrue($this->_helper->hasSendConversionValueCurrency());
     }
 
-    public function testGetConversionValueDynamic()
+    /**
+     * @return void
+     */
+    public function testGetConversionValueDynamic(): void
     {
         $returnValue = 4.1;
         $this->_scopeConfigMock->expects(
@@ -237,7 +263,10 @@ class DataTest extends TestCase
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
     }
 
-    public function testGetConversionValueCurrency()
+    /**
+     * @return void
+     */
+    public function testGetConversionValueCurrency(): void
     {
         $returnValueCurrency = 'USD';
         $this->_scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
@@ -257,7 +286,7 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestConversionValueConstant()
+    public static function dataProviderForTestConversionValueConstant(): array
     {
         return [[1.4, 1.4], ['', Data::CONVERSION_VALUE_DEFAULT]];
     }
@@ -265,29 +294,19 @@ class DataTest extends TestCase
     /**
      * @param string $conversionValueConst
      * @param string $returnValue
-     * @dataProvider dataProviderForTestConversionValueConstant
+     *
+     * @return void
      */
-    public function testGetConversionValueConstant($conversionValueConst, $returnValue)
+    #[DataProvider('dataProviderForTestConversionValueConstant')]
+    public function testGetConversionValueConstant($conversionValueConst, $returnValue): void
     {
-        $this->_scopeConfigMock->expects(
-            $this->at(0)
-        )->method(
-            'getValue'
-        )->with(
-            Data::XML_PATH_CONVERSION_VALUE_TYPE
-        )->willReturn(
-            Data::CONVERSION_VALUE_TYPE_CONSTANT
-        );
         $this->_registryMock->expects($this->never())->method('registry');
-        $this->_scopeConfigMock->expects(
-            $this->at(1)
-        )->method(
-            'getValue'
-        )->with(
-            Data::XML_PATH_CONVERSION_VALUE
-        )->willReturn(
-            $conversionValueConst
-        );
+        $this->_scopeConfigMock
+            ->method('getValue')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [Data::XML_PATH_CONVERSION_VALUE_TYPE] => Data::CONVERSION_VALUE_TYPE_CONSTANT,
+                [Data::XML_PATH_CONVERSION_VALUE] => $conversionValueConst
+            });
 
         $this->assertEquals($returnValue, $this->_helper->getConversionValue());
     }

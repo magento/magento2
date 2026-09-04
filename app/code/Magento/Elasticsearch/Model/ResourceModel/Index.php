@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\Model\ResourceModel;
 
 use Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -19,6 +20,8 @@ use Magento\Framework\Search\Request\IndexScopeResolverInterface as TableResolve
  * Elasticsearch index resource model
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
 {
@@ -41,6 +44,11 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
     protected $eavConfig;
 
     /**
+     * @var array
+     */
+    private $loadedCategoriesCache = [];
+
+    /**
      * Index constructor.
      * @param Context $context
      * @param StoreManagerInterface $storeManager
@@ -48,7 +56,7 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
      * @param ProductRepositoryInterface $productRepository
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Config $eavConfig
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param TableResolver|null $tableResolver
      * @param DimensionCollectionFactory|null $dimensionCollectionFactory
      * @SuppressWarnings(Magento.TypeDuplication)
@@ -61,8 +69,8 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         CategoryRepositoryInterface $categoryRepository,
         Config $eavConfig,
         $connectionName = null,
-        TableResolver $tableResolver = null,
-        DimensionCollectionFactory $dimensionCollectionFactory = null
+        ?TableResolver $tableResolver = null,
+        ?DimensionCollectionFactory $dimensionCollectionFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->categoryRepository = $categoryRepository;
@@ -135,9 +143,28 @@ class Index extends \Magento\AdvancedSearch\Model\ResourceModel\Index
         $categoryPositions = $this->getCategoryProductIndexData($storeId, $productIds);
         $categoryData = [];
 
+        // Create cache key that includes store ID
+        $cacheKeyPrefix = 'store_' . $storeId . '_cat_';
+
         foreach ($categoryPositions as $productId => $positions) {
             foreach ($positions as $categoryId => $position) {
-                $category = $this->categoryRepository->get($categoryId, $storeId);
+                $cacheKey = $cacheKeyPrefix . $categoryId;
+
+                // Check instance cache first to avoid repeated repository calls (persists across multiple method calls)
+                if (!isset($this->loadedCategoriesCache[$cacheKey])) {
+                    try {
+                        $this->loadedCategoriesCache[$cacheKey] = $this->categoryRepository->get($categoryId, $storeId);
+                    } catch (NoSuchEntityException $e) {
+                        $this->loadedCategoriesCache[$cacheKey] = null;
+                        continue;
+                    }
+                }
+
+                $category = $this->loadedCategoriesCache[$cacheKey];
+                if ($category === null) {
+                    continue;
+                }
+
                 $categoryName = $category->getName();
                 $categoryData[$productId][] = [
                     'id' => $categoryId,

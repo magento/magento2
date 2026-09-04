@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogWidget\Block\Product;
@@ -11,11 +11,14 @@ use Magento\Catalog\Block\Product\AbstractProduct;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Block\Product\Widget\Html\Pager;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Catalog\ViewModel\Product\OptionsData;
 use Magento\CatalogWidget\Model\Rule;
+use Magento\CatalogWidget\Model\Rule\Condition\Product\CategoryConditionProcessor;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
@@ -43,28 +46,27 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     /**
      * Default value for products count that will be shown
      */
-    const DEFAULT_PRODUCTS_COUNT = 10;
+    public const DEFAULT_PRODUCTS_COUNT = 10;
 
     /**
      * Name of request parameter for page number value
      *
-     * @deprecated @see $this->getData('page_var_name')
+     * @deprecated
+     * @see $this->getData('page_var_name')
      */
-    const PAGE_VAR_NAME = 'np';
+    public const PAGE_VAR_NAME = 'np';
 
     /**
      * Default value for products per page
      */
-    const DEFAULT_PRODUCTS_PER_PAGE = 5;
+    public const DEFAULT_PRODUCTS_PER_PAGE = 5;
 
     /**
      * Default value whether show pager or not
      */
-    const DEFAULT_SHOW_PAGER = false;
+    public const DEFAULT_SHOW_PAGER = false;
 
     /**
-     * Instance of pager block
-     *
      * @var Pager
      */
     protected $pager;
@@ -75,15 +77,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     protected $httpContext;
 
     /**
-     * Catalog product visibility
-     *
      * @var Visibility
      */
     protected $catalogProductVisibility;
 
     /**
-     * Product collection factory
-     *
      * @var CollectionFactory
      */
     protected $productCollectionFactory;
@@ -136,6 +134,16 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
     private $categoryRepository;
 
     /**
+     * @var OptionsData
+     */
+    private OptionsData $optionsData;
+
+    /**
+     * @var CategoryConditionProcessor
+     */
+    private CategoryConditionProcessor $categoryConditionProcessor;
+
+    /**
      * @param Context $context
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
@@ -148,6 +156,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * @param LayoutFactory|null $layoutFactory
      * @param EncoderInterface|null $urlEncoder
      * @param CategoryRepositoryInterface|null $categoryRepository
+     * @param OptionsData|null $optionsData
+     * @param CategoryConditionProcessor|null $categoryConditionProcessor
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -160,10 +170,12 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         Rule $rule,
         Conditions $conditionsHelper,
         array $data = [],
-        Json $json = null,
-        LayoutFactory $layoutFactory = null,
-        EncoderInterface $urlEncoder = null,
-        CategoryRepositoryInterface $categoryRepository = null
+        ?Json $json = null,
+        ?LayoutFactory $layoutFactory = null,
+        ?EncoderInterface $urlEncoder = null,
+        ?CategoryRepositoryInterface $categoryRepository = null,
+        ?OptionsData $optionsData = null,
+        ?CategoryConditionProcessor $categoryConditionProcessor = null
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
@@ -175,7 +187,10 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         $this->layoutFactory = $layoutFactory ?: ObjectManager::getInstance()->get(LayoutFactory::class);
         $this->urlEncoder = $urlEncoder ?: ObjectManager::getInstance()->get(EncoderInterface::class);
         $this->categoryRepository = $categoryRepository ?? ObjectManager::getInstance()
-                ->get(CategoryRepositoryInterface::class);
+            ->get(CategoryRepositoryInterface::class);
+        $this->optionsData = $optionsData ?: ObjectManager::getInstance()->get(OptionsData::class);
+        $this->categoryConditionProcessor = $categoryConditionProcessor ?: ObjectManager::getInstance()
+            ->get(CategoryConditionProcessor::class);
         parent::__construct(
             $context,
             $data
@@ -223,14 +238,40 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             $this->_storeManager->getStore()->getId(),
             $this->_design->getDesignTheme()->getId(),
             $this->httpContext->getValue(\Magento\Customer\Model\Context::CONTEXT_GROUP),
+            $this->json->serialize($this->httpContext->getValue('tax_rates')),
             (int)$this->getRequest()->getParam($this->getData('page_var_name'), 1),
             $this->getProductsPerPage(),
             $this->getProductsCount(),
             $conditions,
-            $this->json->serialize($this->getRequest()->getParams()),
+            $this->json->serialize($this->scrubInvalidUtf8($this->getRequest()->getParams())),
             $this->getTemplate(),
             $this->getTitle()
         ];
+    }
+
+    /**
+     * Replace invalid UTF-8 byte sequences in request params before serialization.
+     *
+     * Request params come from raw $_GET / $_POST and may contain malformed UTF-8
+     * (truncated fbclid/gclid/utm_*, bot scanners, overlong encodings). Passing such
+     * data to json_encode without JSON_INVALID_UTF8_* flags raises JSON_ERROR_UTF8 and
+     * breaks block rendering. Substituting invalid bytes is safe here because the
+     * result is used only as part of a cache key.
+     *
+     * @param string|array $value
+     * @return string|array
+     */
+    private function scrubInvalidUtf8(string|array $value): string|array
+    {
+        if (is_string($value)) {
+            return mb_scrub($value, 'UTF-8');
+        }
+        if (is_array($value)) {
+            foreach ($value as $key => $item) {
+                $value[$key] = $this->scrubInvalidUtf8($item);
+            }
+        }
+        return $value;
     }
 
     /**
@@ -305,9 +346,21 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             'action' => $url,
             'data' => [
                 'product' => $product->getEntityId(),
+                'options' => $this->optionsData->getOptionsData($product),
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ]
         ];
+    }
+
+    /**
+     * Return product options
+     *
+     * @param Product $product
+     * @return array
+     */
+    public function getOptionsData(Product $product): array
+    {
+        return $this->optionsData->getOptionsData($product);
     }
 
     /**
@@ -328,14 +381,25 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function createCollection()
     {
-        /** @var $collection Collection */
-        $collection = $this->productCollectionFactory->create();
+        $collection = $this->getBaseCollection();
 
+        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
+
+        return $collection;
+    }
+
+    /**
+     * Prepare and return product collection without visibility filter
+     *
+     * @return Collection
+     * @throws LocalizedException
+     */
+    public function getBaseCollection(): Collection
+    {
+        $collection = $this->productCollectionFactory->create();
         if ($this->getData('store_id') !== null) {
             $collection->setStoreId($this->getData('store_id'));
         }
-
-        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         /**
          * Change sorting attribute to entity_id because created_at can be the same for products fastly created
@@ -343,9 +407,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
-            ->addAttributeToSort('entity_id', 'desc')
-            ->setPageSize($this->getPageSize())
-            ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
+            ->addAttributeToFilter(Product::STATUS, ProductStatus::STATUS_ENABLED)
+            ->addAttributeToSort('entity_id', 'desc');
 
         $conditions = $this->getConditions();
         $conditions->collectValidatedAttributes($collection);
@@ -357,35 +420,22 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
          */
         $collection->distinct(true);
 
-        return $collection;
-    }
+        $currentPage = (int)($this->getRequest()->getParam($this->getData('page_var_name')) ?? 1);
 
-    /**
-     * Update conditions if the category is an anchor category
-     *
-     * @param array $condition
-     * @return array
-     */
-    private function updateAnchorCategoryConditions(array $condition): array
-    {
-        if (array_key_exists('value', $condition)) {
-            $categoryId = $condition['value'];
+        // Apply pagination with total limit after all other operations
+        if ($this->showPager()) {
+            $pageSize = $this->getProductsPerPage();
+            $totalLimit = $this->getProductsCount();
 
-            try {
-                $category = $this->categoryRepository->get($categoryId, $this->_storeManager->getStore()->getId());
-            } catch (NoSuchEntityException $e) {
-                return $condition;
-            }
+            $offset = ($currentPage - 1) * $pageSize;
+            $limit = min($pageSize, max(0, $totalLimit - $offset));
 
-            $children = $category->getIsAnchor() ? $category->getChildren(true) : [];
-            if ($children) {
-                $children = explode(',', $children);
-                $condition['operator'] = "()";
-                $condition['value'] = array_merge([$categoryId], $children);
-            }
+            $collection->getSelect()->limit($limit, $offset);
+        } else {
+            $collection->getSelect()->limit($this->getProductsCount());
         }
 
-        return $condition;
+        return $collection;
     }
 
     /**
@@ -399,8 +449,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
             ? $this->getData('conditions_encoded')
             : $this->getData('conditions');
 
-        if ($conditions) {
-            $conditions = $this->conditionsHelper->decode($conditions);
+        if (is_string($conditions)) {
+            $conditions = $this->decodeConditions($conditions);
         }
 
         foreach ($conditions as $key => $condition) {
@@ -410,7 +460,10 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
                 }
 
                 if ($condition['attribute'] == 'category_ids') {
-                    $conditions[$key] = $this->updateAnchorCategoryConditions($condition);
+                    $conditions[$key] = $this->categoryConditionProcessor->process(
+                        $condition,
+                        $this->_storeManager->getStore()->getId()
+                    );
                 }
             }
         }
@@ -537,7 +590,8 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * Get currency of product
      *
      * @return PriceCurrencyInterface
-     * @deprecated 100.2.0
+     * @deprecated
+     * @see Constructor injection
      */
     private function getPriceCurrency()
     {
@@ -579,5 +633,25 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         }
 
         return $pagerBlockName . '.' . $pageName;
+    }
+
+    /**
+     * Decode encoded special characters and unserialize conditions into array
+     *
+     * @param string $encodedConditions
+     * @return array
+     * @see \Magento\Widget\Model\Widget::getDirectiveParam
+     */
+    private function decodeConditions(string $encodedConditions): array
+    {
+        return $this->conditionsHelper->decode(htmlspecialchars_decode($encodedConditions));
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _afterToHtml($html)
+    {
+        return trim($html);
     }
 }

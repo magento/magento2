@@ -1,14 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\TemplateInterface;
+use Magento\Framework\Mail\TemplateInterfaceFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Theme\Api\Data\DesignConfigExtensionInterface;
 use Magento\Theme\Api\Data\DesignConfigInterface;
 use Magento\Theme\Model\Data\Design\Config\Data;
 use Magento\Theme\Model\Design\Config\Validator;
@@ -20,8 +24,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
-     * @var \Magento\Framework\Mail\TemplateInterfaceFactory|MockObject
+     * @var TemplateInterfaceFactory|MockObject
      */
     private $templateFactory;
 
@@ -46,31 +52,31 @@ class ValidatorTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->templateFactory = $this->getMockBuilder(\Magento\Framework\Mail\TemplateInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
-        $this->template = $this->getMockBuilder(TemplateInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'emulateDesign',
-                    'setForcedArea',
-                    'loadDefault',
-                    'getTemplateText',
-                    'revertDesign',
-                ]
-            )
-            ->getMockForAbstractClass();
+        $this->templateFactory = $this->createPartialMock(
+            TemplateInterfaceFactory::class,
+            ['create']
+        );
+        $this->template = $this->createPartialMockWithReflection(
+            TemplateInterface::class,
+            [
+                'isPlain', 'getType', // From TemplateTypesInterface
+                'processTemplate', 'getSubject', 'setVars', 'setOptions', // From TemplateInterface
+                'emulateDesign', 'setForcedArea', 'loadDefault', 'getTemplateText', 'revertDesign', // Custom
+            ]
+        );
         $this->templateFactory->expects($this->any())->method('create')->willReturn($this->template);
-        $this->designConfig = $this->getMockBuilder(DesignConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes'])
-            ->getMockForAbstractClass();
+        $this->designConfig = $this->createPartialMock(
+            DesignConfigInterface::class,
+            [
+                'getScope', 'getScopeId', 'setScope', 'setScopeId',
+                'getExtensionAttributes', 'setExtensionAttributes'
+            ]
+        );
     }
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testGetDefaultTemplateTextDefaultScope(): void
     {
@@ -85,13 +91,13 @@ class ValidatorTest extends TestCase
         $this->template->expects($this->once())->method('emulateDesign');
         $this->template->expects($this->once())->method('setForcedArea')->with($templateId);
         $this->template->expects($this->once())->method('loadDefault')->with($templateId);
-        $this->template->expects($this->once())->method('getTemplateText');
+        $this->template->expects($this->once())->method('getTemplateText')->willReturn('');
         $this->template->expects($this->once())->method('revertDesign');
 
-        $extensionAttributes = $this->getMockBuilder(\Magento\Theme\Api\Data\DesignConfigExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getDesignConfigData'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            DesignConfigExtensionInterface::class,
+            ['getDesignConfigData']
+        );
 
         $extensionAttributes->expects($this->any())->method('getDesignConfigData')->willReturn(
             [

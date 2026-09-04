@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
@@ -10,8 +10,10 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Customer::customer">
-                    <resource id="Magento_LoginAsCustomer::login" title="Login as Customer">
-                        <resource id="Magento_LoginAsCustomer::allow_shopping_assistance" title="Allow remote shopping assistance" sortOrder="20" />
+                    <resource id="Magento_Customer::manage">
+                        <resource id="Magento_Customer::actions">
+                            <resource id="Magento_LoginAsCustomer::allow_shopping_assistance" title="Remote shopping assistance opt-in" sortOrder="40" />
+                        </resource>
                     </resource>
                 </resource>
             </resource>

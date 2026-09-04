@@ -1,18 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Export\Entity;
 
-use Magento\ImportExport\Api\Data\ExtendedExportInfoInterface;
+use Magento\ImportExport\Api\Data\FieldsEnclosureAwareExportInfoInterface;
 
 /**
  * Class ExportInfo implementation for ExportInfoInterface.
  */
-class ExportInfo implements ExtendedExportInfoInterface
+class ExportInfo implements FieldsEnclosureAwareExportInfoInterface
 {
     /**
      * @var string
@@ -43,6 +43,16 @@ class ExportInfo implements ExtendedExportInfoInterface
      * @var mixed
      */
     private $skipAttr;
+
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @var bool
+     */
+    private $fieldsEnclosure;
 
     /**
      * @inheritdoc
@@ -133,10 +143,45 @@ class ExportInfo implements ExtendedExportInfoInterface
     }
 
     /**
-     * @inheritdoc
+     * Set skipped attributes
+     *
+     * @param string $skipAttr
+     * @return void
      */
     public function setSkipAttr($skipAttr)
     {
         $this->skipAttr = $skipAttr;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setLocale(string $locale): void
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getFieldsEnclosure(): ?bool
+    {
+        return $this->fieldsEnclosure;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setFieldsEnclosure(bool $fieldsEnclosure): void
+    {
+        $this->fieldsEnclosure = $fieldsEnclosure;
     }
 }

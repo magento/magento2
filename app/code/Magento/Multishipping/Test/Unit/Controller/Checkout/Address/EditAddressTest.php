@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,6 +20,7 @@ use Magento\Framework\View\Page\Title;
 use Magento\Framework\View\Result\Page;
 use Magento\Multishipping\Controller\Checkout\Address\EditAddress;
 use Magento\Multishipping\Helper\Data;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +30,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EditAddressTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var EditAddress
      */
@@ -85,15 +88,9 @@ class EditAddressTest extends TestCase
         $this->checkoutMock = $this->createMock(Multishipping::class);
         $this->titleMock = $this->createMock(Title::class);
         $this->layoutMock = $this->createMock(Layout::class);
-        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
-        $response = $this->getMockBuilder(ResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMockForAbstractClass();
+        $this->viewMock = $this->createMock(ViewInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
+        $response = $this->createMock(ResponseInterface::class);
         $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->atLeastOnce())
             ->method('getRequest')
@@ -102,13 +99,11 @@ class EditAddressTest extends TestCase
             ->method('getResponse')
             ->willReturn($response);
         $contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
-        $this->addressFormMock =
-            $this->getMockBuilder(Edit::class)
-                ->addMethods(['setTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl'])
-                ->onlyMethods(['getTitle'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->addressFormMock = $this->createPartialMockWithReflection(
+            Edit::class,
+            ['setTitle', 'setSuccessUrl', 'setBackUrl', 'setErrorUrl', 'getTitle']
+        );
+        $this->urlMock = $this->createMock(UrlInterface::class);
         $contextMock->expects($this->any())->method('getUrl')->willReturn($this->urlMock);
         $this->pageMock = $this->createMock(Page::class);
         $this->pageMock->expects($this->any())->method('getConfig')->willReturn($this->configMock);
@@ -135,14 +130,12 @@ class EditAddressTest extends TestCase
             ->method('setTitle')
             ->with('Edit Address')
             ->willReturnSelf();
-        $helperMock = $this->getMockBuilder(Data::class)
-            ->addMethods(['__'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $helperMock = $this->createPartialMockWithReflection(Data::class, ['__']);
         $helperMock->expects($this->any())->method('__')->willReturn('Edit Address');
         $valueMap = [
-            ['*/*/selectBilling', null, 'success/url'],
+            ['*/*/saveBillingFromList', ['id' => 1], 'success/url'],
             ['*/*/*', ['id' => 1], 'error/url'],
+            ['*/*/selectBilling', null, 'back/url'],
         ];
         $this->urlMock->expects($this->any())->method('getUrl')->willReturnMap($valueMap);
         $this->addressFormMock->expects($this->once())->method('setSuccessUrl')->with('success/url')->willReturnSelf();
@@ -151,7 +144,7 @@ class EditAddressTest extends TestCase
         $this->titleMock->expects($this->once())->method('getDefault')->willReturn('default_title');
         $this->addressFormMock->expects($this->once())->method('getTitle')->willReturn('Address title');
         $this->titleMock->expects($this->once())->method('set')->with('Address title - default_title');
-        $this->addressFormMock->expects($this->once())->method('setBackUrl')->with('success/url');
+        $this->addressFormMock->expects($this->once())->method('setBackUrl')->with('back/url');
         $this->viewMock->expects($this->once())->method('renderLayout');
         $this->controller->execute();
     }

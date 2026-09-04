@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Mview\View;
 
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
@@ -106,21 +107,114 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test for clear() method
-     *
      * @return void
      * @throws ChangelogTableNotExistsException
-     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    public function testClear()
+    public function testChangelogClearOversizeBatchSize()
     {
-        $this->assertEquals(0, $this->model->getVersion());
-        //the same that a table is empty
-        $changelogName = $this->resource->getTableName($this->model->getName());
-        $this->connection->insert($changelogName, ['version_id' => 1, 'entity_id' => 1]);
-        $this->assertEquals(1, $this->model->getVersion());
-        $this->model->clear(1);
-        $this->assertEquals(1, $this->model->getVersion()); //the same that a table is empty
+        $stateVersionId = 14001;
+        $changelog = $this->generateChangelog(20000);
+
+        // #0: check if changelog generated correctly
+        $this->assertEquals(1, $this->getChangelogFirstEntityId($changelog));
+        $this->assertEquals(20000, $this->getChangelogEntitiesCount($changelog));
+
+        // #1: check if changelog reduced by batch size value
+        $this->model->clear($stateVersionId);
+        $this->assertEquals($stateVersionId, $this->getChangelogFirstEntityId($changelog));
+        $this->assertEquals(6000, $this->getChangelogEntitiesCount($changelog));
+
+        // #2: fully clear changelog
+        $this->model->clear(20001);
+        $this->assertEquals(0, $this->getChangelogEntitiesCount($changelog));
+    }
+
+    /**
+     * @param string $changelog
+     * @return int
+     */
+    private function getChangelogFirstEntityId(string $changelog): int
+    {
+        return (int) $this->connection->fetchOne($this->connection->select()->from($changelog, 'version_id'));
+    }
+
+    /**
+     * @param string $changelog
+     * @return int
+     */
+    private function getChangelogEntitiesCount(string $changelog): int
+    {
+        return (int) $this->connection->fetchOne($this->connection->select()->from($changelog, 'COUNT(1)'));
+    }
+
+    /**
+     * @param int $entitiesCount
+     * @return string
+     */
+    private function generateChangelog(int $entitiesCount = 100): string
+    {
+        $data = [];
+        $changelog = $this->resource->getTableName($this->model->getName());
+
+        for ($i = 1; $i <= $entitiesCount; $i++) {
+            $data[$i]['version_id'] = $i;
+            $data[$i]['entity_id'] = $i;
+        }
+        $this->connection->insertArray(
+            $changelog,
+            ['version_id', 'entity_id'],
+            $data
+        );
+
+        return $changelog;
+    }
+
+    /**
+     * Create entity table for MView
+     *
+     * @param string $tableName
+     * @return void
+     */
+    private function createEntityTable(string $tableName)
+    {
+        $table = $this->resource->getConnection()->newTable(
+            $tableName
+        )->addColumn(
+            'entity_id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Version ID'
+        )->addColumn(
+            'additional_column',
+            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Entity ID'
+        );
+        $this->resource->getConnection()->createTable($table);
+    }
+
+    public function testAdditionalColumns()
+    {
+        $tableName = 'test_mview_table';
+        $this->createEntityTable($tableName);
+        $view = $this->objectManager->create(View::class);
+        $view->load('test_view_with_additional_columns');
+        $view->subscribe();
+        $this->connection->insert($tableName, ['entity_id' => 12, 'additional_column' => 13]);
+        $select = $this->connection->select()
+            ->from($view->getChangelog()->getName(), ['entity_id', 'test_additional_column']);
+        $actual = $this->connection->fetchAll($select);
+        $this->assertEquals(
+            [
+                'entity_id' => "12",
+                'test_additional_column' => "13"
+            ],
+            reset($actual)
+        );
+        $this->connection->dropTable($tableName);
+        $this->connection->dropTable($view->getChangelog()->getName());
     }
 
     /**

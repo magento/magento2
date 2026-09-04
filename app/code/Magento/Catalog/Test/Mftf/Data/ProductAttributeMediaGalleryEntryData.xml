@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,6 +20,18 @@
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
     </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryTestImage2" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Adobe Base </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>image</item>
+            <item>small_image</item>
+            <item>thumbnail</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">AdobeBaseContent</requiredEntity>
+    </entity>
     <entity name="ApiProductAttributeMediaGalleryEntryMagentoLogo" type="ProductAttributeMediaGalleryEntry">
         <data key="media_type">image</data>
         <data key="label" unique="suffix">Magento Logo </data>
@@ -29,6 +41,23 @@
         </array>
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">MagentoLogoImageContent</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryBluePng" type="ProductAttributeMediaGalleryEntry">
+        <data key="media_type">image</data>
+        <data key="label" unique="suffix">Blue PNG </data>
+        <data key="position">1</data>
+        <array key="types">
+            <item>image</item>
+            <item>small_image</item>
+            <item>thumbnail</item>
+            <item>swatch</item>
+        </array>
+        <data key="disabled">false</data>
+        <requiredEntity type="ImageContent">BluePngImageContent</requiredEntity>
+    </entity>
+    <entity name="ApiProductAttributeMediaGalleryEntryRedPng" extends="ApiProductAttributeMediaGalleryEntryBluePng" type="ProductAttributeMediaGalleryEntry">
+        <data key="label" unique="suffix">Red PNG </data>
+        <requiredEntity type="ImageContent">RedPngImageContent</requiredEntity>
     </entity>
     <!-- From file "export_import_configurable_product.csv" -->
     <entity name="ApiProductAttributeMediaGalleryForExportImport" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
@@ -41,5 +70,11 @@
         <data key="position">0</data>
         <data key="disabled">false</data>
         <requiredEntity type="ImageContent">TestImageContent</requiredEntity>
+    </entity>
+    <entity name="ProductAttributeMediaGalleryRole">
+        <data key="Base">image</data>
+        <data key="Small">small_image</data>
+        <data key="Thumbnail">thumbnail</data>
+        <data key="Swatch">swatch_image</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Block\Widget;
@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @see MAGETWO-69846
  * @since 100.0.2
  */
 class Form extends \Magento\Backend\Block\Widget
@@ -43,7 +44,7 @@ class Form extends \Magento\Backend\Block\Widget
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         array $data = [],
-        Form\Element\ElementCreator $creator = null
+        ?Form\Element\ElementCreator $creator = null
     ) {
         parent::__construct($context, $data);
         $this->creator = $creator ?: ObjectManager::getInstance()->get(Form\Element\ElementCreator::class);
@@ -230,6 +231,10 @@ class Form extends \Magento\Backend\Block\Widget
             case 'date':
                 $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
                 break;
+            case 'datetime':
+                $element->setDateFormat($this->_localeDate->getDateFormatWithLongYear());
+                $element->setTimeFormat($this->_localeDate->getTimeFormat());
+                break;
             case 'multiline':
                 $element->setLineCount($attribute->getMultilineCount());
                 break;
@@ -246,7 +251,13 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected function _addElementTypes(\Magento\Framework\Data\Form\AbstractForm $baseElement)
     {
-        $types = $this->_getAdditionalElementTypes();
+        $types = array_merge(
+            [
+                'datetime' => 'date'
+            ],
+            $this->_getAdditionalElementTypes()
+        );
+
         foreach ($types as $code => $className) {
             $baseElement->addType($code, $className);
         }

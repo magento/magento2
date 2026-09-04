@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -12,7 +12,6 @@ define([
     'mage/template',
     'matchMedia',
     'jquery-ui-modules/widget',
-    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
@@ -35,12 +34,12 @@ define([
             selectClass: 'selected',
             template:
                 '<li class="<%- data.row_class %>" id="qs-option-<%- data.index %>" role="option">' +
-                    '<span class="qs-option-name">' +
-                       ' <%- data.title %>' +
-                    '</span>' +
-                    '<span aria-hidden="true" class="amount">' +
-                        '<%- data.num_results %>' +
-                    '</span>' +
+                '<span class="qs-option-name">' +
+                ' <%- data.title %>' +
+                '</span>' +
+                '<span aria-hidden="true" class="amount">' +
+                '<%- data.num_results %>' +
+                '</span>' +
                 '</li>',
             submitBtn: 'button[type="submit"]',
             searchLabel: '[data-role=minisearch-label]',
@@ -212,67 +211,71 @@ define([
             var keyCode = e.keyCode || e.which;
 
             switch (keyCode) {
-                case $.ui.keyCode.HOME:
-                    if (this._getFirstVisibleElement()) {
+            case $.ui.keyCode.HOME:
+                if (this._getFirstVisibleElement()) {
+                    this._getFirstVisibleElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getFirstVisibleElement();
+                }
+                break;
+
+            case $.ui.keyCode.END:
+                if (this._getLastElement()) {
+                    this._getLastElement().addClass(this.options.selectClass);
+                    this.responseList.selected = this._getLastElement();
+                }
+                break;
+
+            case $.ui.keyCode.ESCAPE:
+                this._resetResponseList(true);
+                this.autoComplete.hide();
+                break;
+
+            case $.ui.keyCode.ENTER:
+                if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                    this.searchForm.trigger('submit');
+                    e.preventDefault();
+                }
+                break;
+
+            case $.ui.keyCode.DOWN:
+                if (this.responseList.indexList) {
+                    if (!this.responseList.selected) {  //eslint-disable-line max-depth
+                        this._getFirstVisibleElement().addClass(this.options.selectClass);
+                        this.responseList.selected = this._getFirstVisibleElement();
+                    } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
+                        this.responseList.selected = this.responseList.selected
+                            .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
+                    } else {
+                        this.responseList.selected.removeClass(this.options.selectClass);
                         this._getFirstVisibleElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getFirstVisibleElement();
                     }
-                    break;
+                    this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                    this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                    this._updateAriaHasPopup(true);
+                    this.autoComplete.show();
+                }
+                break;
 
-                case $.ui.keyCode.END:
-                    if (this._getLastElement()) {
+            case $.ui.keyCode.UP:
+                if (this.responseList.indexList !== null) {
+                    if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
+                        this.responseList.selected = this.responseList.selected
+                            .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
+
+                    } else {
+                        this.responseList.selected.removeClass(this.options.selectClass);
                         this._getLastElement().addClass(this.options.selectClass);
                         this.responseList.selected = this._getLastElement();
                     }
-                    break;
-
-                case $.ui.keyCode.ESCAPE:
-                    this._resetResponseList(true);
-                    this.autoComplete.hide();
-                    break;
-
-                case $.ui.keyCode.ENTER:
-                    if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
-                        this.searchForm.trigger('submit');
-                        e.preventDefault();
-                    }
-                    break;
-
-                case $.ui.keyCode.DOWN:
-                    if (this.responseList.indexList) {
-                        if (!this.responseList.selected) {  //eslint-disable-line max-depth
-                            this._getFirstVisibleElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getFirstVisibleElement();
-                        } else if (!this._getLastElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected
-                                .removeClass(this.options.selectClass).next().addClass(this.options.selectClass);
-                        } else {
-                            this.responseList.selected.removeClass(this.options.selectClass);
-                            this._getFirstVisibleElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getFirstVisibleElement();
-                        }
-                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
-                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
-                    }
-                    break;
-
-                case $.ui.keyCode.UP:
-                    if (this.responseList.indexList !== null) {
-                        if (!this._getFirstVisibleElement().hasClass(this.options.selectClass)) {
-                            this.responseList.selected = this.responseList.selected
-                                .removeClass(this.options.selectClass).prev().addClass(this.options.selectClass);
-
-                        } else {
-                            this.responseList.selected.removeClass(this.options.selectClass);
-                            this._getLastElement().addClass(this.options.selectClass);
-                            this.responseList.selected = this._getLastElement();
-                        }
-                        this.element.val(this.responseList.selected.find('.qs-option-name').text());
-                        this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
-                    }
-                    break;
-                default:
-                    return true;
+                    this.element.val(this.responseList.selected.find('.qs-option-name').text());
+                    this.element.attr('aria-activedescendant', this.responseList.selected.attr('id'));
+                    this._updateAriaHasPopup(true);
+                    this.autoComplete.show();
+                }
+                break;
+            default:
+                return true;
             }
         },
 
@@ -300,60 +303,63 @@ define([
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
                 this.submitBtn.disabled = false;
-                $.getJSON(this.options.url, {
-                    q: value
-                }, $.proxy(function (data) {
-                    if (data.length) {
-                        $.each(data, function (index, element) {
-                            var html;
 
-                            element.index = index;
-                            html = template({
-                                data: element
+                if (this.options.url !== '') { //eslint-disable-line eqeqeq
+                    $.getJSON(this.options.url, {
+                        q: value
+                    }, $.proxy(function (data) {
+                        if (data.length) {
+                            $.each(data, function (index, element) {
+                                var html;
+
+                                element.index = index;
+                                html = template({
+                                    data: element
+                                });
+                                dropdown.append(html);
                             });
-                            dropdown.append(html);
-                        });
 
-                        this._resetResponseList(true);
+                            this._resetResponseList(true);
 
-                        this.responseList.indexList = this.autoComplete.html(dropdown)
-                            .css(clonePosition)
-                            .show()
-                            .find(this.options.responseFieldElements + ':visible');
+                            this.responseList.indexList = this.autoComplete.html(dropdown)
+                                .css(clonePosition)
+                                .show()
+                                .find(this.options.responseFieldElements + ':visible');
 
-                        this.element.removeAttr('aria-activedescendant');
+                            this.element.removeAttr('aria-activedescendant');
 
-                        if (this.responseList.indexList.length) {
-                            this._updateAriaHasPopup(true);
+                            if (this.responseList.indexList.length) {
+                                this._updateAriaHasPopup(true);
+                            } else {
+                                this._updateAriaHasPopup(false);
+                            }
+
+                            this.responseList.indexList
+                                .on('click', function (e) {
+                                    this.responseList.selected = $(e.currentTarget);
+                                    this.searchForm.trigger('submit');
+                                }.bind(this))
+                                .on('mouseenter mouseleave', function (e) {
+                                    this.responseList.indexList.removeClass(this.options.selectClass);
+                                    $(e.target).addClass(this.options.selectClass);
+                                    this.responseList.selected = $(e.target);
+                                    this.element.attr('aria-activedescendant', $(e.target).attr('id'));
+                                }.bind(this))
+                                .on('mouseout', function (e) {
+                                    if (!this._getLastElement() &&
+                                        this._getLastElement().hasClass(this.options.selectClass)) {
+                                        $(e.target).removeClass(this.options.selectClass);
+                                        this._resetResponseList(false);
+                                    }
+                                }.bind(this));
                         } else {
+                            this._resetResponseList(true);
+                            this.autoComplete.hide();
                             this._updateAriaHasPopup(false);
+                            this.element.removeAttr('aria-activedescendant');
                         }
-
-                        this.responseList.indexList
-                            .on('click', function (e) {
-                                this.responseList.selected = $(e.currentTarget);
-                                this.searchForm.trigger('submit');
-                            }.bind(this))
-                            .on('mouseenter mouseleave', function (e) {
-                                this.responseList.indexList.removeClass(this.options.selectClass);
-                                $(e.target).addClass(this.options.selectClass);
-                                this.responseList.selected = $(e.target);
-                                this.element.attr('aria-activedescendant', $(e.target).attr('id'));
-                            }.bind(this))
-                            .on('mouseout', function (e) {
-                                if (!this._getLastElement() &&
-                                    this._getLastElement().hasClass(this.options.selectClass)) {
-                                    $(e.target).removeClass(this.options.selectClass);
-                                    this._resetResponseList(false);
-                                }
-                            }.bind(this));
-                    } else {
-                        this._resetResponseList(true);
-                        this.autoComplete.hide();
-                        this._updateAriaHasPopup(false);
-                        this.element.removeAttr('aria-activedescendant');
-                    }
-                }, this));
+                    }, this));
+                }
             } else {
                 this._resetResponseList(true);
                 this.autoComplete.hide();

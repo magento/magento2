@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -12,17 +12,24 @@ namespace Magento\Bundle\Model;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type as BundleType;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
+use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Entity;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -160,9 +167,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @param bool $isSalable
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Bundle/_files/product.php
-     * @dataProvider stockConfigDataProvider
      * @covers \Magento\Catalog\Model\Product::isSalable
      */
+    #[DataProvider('stockConfigDataProvider')]
     public function testIsSalable(
         float $selectionQty,
         float $qty,
@@ -191,7 +198,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                 $productLink->setQty($selectionQty);
             }
         }
-        $productRepository->save($bundle);
+        $bundle = $productRepository->save($bundle);
 
         $this->assertEquals($isSalable, $bundle->isSalable());
     }
@@ -199,7 +206,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function stockConfigDataProvider(): array
+    public static function stockConfigDataProvider(): array
     {
         $qtyVars = [0, 10];
         $isInStockVars = [
@@ -225,7 +232,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
                                 . " isInStock: {$isInStock}"
                                 . " manageStock: {$manageStock}"
                                 . " backorders: {$backorders}";
-                            $isSalable = $this->checkIsSalable(
+                            $isSalable = self::checkIsSalable(
                                 $selectionQty,
                                 $qty,
                                 $isInStock,
@@ -251,6 +258,134 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Bundle/_files/bundle_product_with_dynamic_price.php
+     * @param bool $isOption1Required
+     * @param bool $isOption2Required
+     * @param array $outOfStockConfig
+     * @param array $inStockConfig
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
+     */
+    #[DataProvider('shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider')]
+    public function testShouldUpdateBundleStockStatusIfChildProductsStockStatusChanged(
+        bool $isOption1Required,
+        bool $isOption2Required,
+        array $outOfStockConfig,
+        array $inStockConfig
+    ): void {
+        $sku = 'bundle_product_with_dynamic_price';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var ProductInterface $product */
+        $product = $productRepository->get($sku, true, null, true);
+        $extension = $product->getExtensionAttributes();
+        $options = $extension->getBundleProductOptions();
+        $options[0]->setRequired($isOption1Required);
+        $options[1]->setRequired($isOption2Required);
+        $extension->setBundleProductOptions($options);
+        $stockItem = $extension->getStockItem();
+        $stockItem->setUseConfigManageStock(1);
+        $product->setExtensionAttributes($extension);
+        $productRepository->save($product);
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+        foreach ($outOfStockConfig as $childSku => $stockData) {
+            $this->updateStockItem($childSku, $stockData);
+        }
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertFalse($stockItem->getIsInStock());
+        foreach ($inStockConfig as $childSku => $stockData) {
+            $this->updateStockItem($childSku, $stockData);
+        }
+
+        $stockItem = $this->getStockItem((int) $product->getId());
+        $this->assertNotNull($stockItem);
+        $this->assertTrue($stockItem->getIsInStock());
+    }
+
+    /**
+     * @return array
+     */
+    public static function shouldUpdateBundleStockStatusIfChildProductsStockStatusChangedDataProvider(): array
+    {
+        return [
+            'all options are required' => [
+                true,
+                true,
+                'outOfStockConfig' => [
+                    'simple1' => [
+                        'is_in_stock' => false
+                    ],
+                ],
+                'inStockConfig' => [
+                    'simple1' => [
+                        'is_in_stock' => true
+                    ]
+                ]
+            ],
+            'all options are optional' => [
+                false,
+                false,
+                'outOfStockConfig' => [
+                    'simple1' => [
+                        'is_in_stock' => false
+                    ],
+                    'simple2' => [
+                        'is_in_stock' => false
+                    ],
+                ],
+                'inStockConfig' => [
+                    'simple1' => [
+                        'is_in_stock' => true
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $sku
+     * @param array $data
+     * @throws NoSuchEntityException
+     */
+    private function updateStockItem(string $sku, array $data): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku, true, null, true);
+        $extendedAttributes = $product->getExtensionAttributes();
+        $stockItem = $extendedAttributes->getStockItem();
+        $stockItem->setIsInStock($data['is_in_stock']);
+        $extendedAttributes->setStockItem($stockItem);
+        $product->setExtensionAttributes($extendedAttributes);
+        $productRepository->save($product);
+    }
+
+    /**
+     * @param int $productId
+     * @return StockItemInterface|null
+     */
+    private function getStockItem(int $productId): ?StockItemInterface
+    {
+        $criteriaFactory = $this->objectManager->create(StockItemCriteriaInterfaceFactory::class);
+        $stockItemRepository = $this->objectManager->create(StockItemRepositoryInterface::class);
+        $stockConfiguration = $this->objectManager->create(StockConfigurationInterface::class);
+        $criteria = $criteriaFactory->create();
+        $criteria->setScopeFilter($stockConfiguration->getDefaultScopeId());
+        $criteria->setProductsFilter($productId);
+        $stockItemCollection = $stockItemRepository->getList($criteria);
+        $stockItems = $stockItemCollection->getItems();
+        return reset($stockItems);
+    }
+
+    /**
      * @param float $selectionQty
      * @param float $qty
      * @param int $isInStock
@@ -259,7 +394,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @return bool
      * @see \Magento\Bundle\Model\ResourceModel\Selection\Collection::addQuantityFilter
      */
-    private function checkIsSalable(
+    private static function checkIsSalable(
         float $selectionQty,
         float $qty,
         int $isInStock,

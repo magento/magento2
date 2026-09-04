@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -299,7 +299,17 @@ define([
          * @returns {String}
          */
         getLabel: function (record) {
-            return record[this.index];
+            return record !== undefined ? record[this.index] : null;
+        },
+
+        /**
+         * UnsanitizedHtml version of getLabel.
+         *
+         * @param {Object} record - Data to be preprocessed.
+         * @returns {String}
+         */
+        getLabelUnsanitizedHtml: function (record) {
+            return this.getLabel(record);
         },
 
         /**

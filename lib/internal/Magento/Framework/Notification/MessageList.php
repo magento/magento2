@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Notification;
@@ -30,12 +30,17 @@ class MessageList
     protected $_messages;
 
     /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param array $messages
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager, $messages = [])
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
         $this->_messageClasses = $messages;
     }
 
@@ -55,7 +60,7 @@ class MessageList
             if (!$messageClass) {
                 throw new \InvalidArgumentException('Message class for message "' . $key . '" is not set');
             }
-            $message = $this->_objectManager->get($messageClass);
+            $message = $this->objectManager->get($messageClass);
             if ($message instanceof \Magento\Framework\Notification\MessageInterface) {
                 $this->_messages[$message->getIdentity()] = $message;
             } else {

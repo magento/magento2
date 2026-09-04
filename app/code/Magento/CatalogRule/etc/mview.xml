@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
@@ -21,12 +21,12 @@
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />
             <table name="catalog_product_entity_varchar" entity_column="entity_id" />
             <table name="catalog_category_product" entity_column="product_id" />
+            <table name="catalog_product_link" entity_column="product_id" />
         </subscriptions>
     </view>
     <view id="catalog_product_price" class="Magento\Catalog\Model\Indexer\Product\Price" group="indexer">
         <subscriptions>
             <table name="catalogrule_product_price" entity_column="product_id" />
-            <table name="catalogrule_product_price_replica" entity_column="product_id" />
         </subscriptions>
     </view>
 </config>

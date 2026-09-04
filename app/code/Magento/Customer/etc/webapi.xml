@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -141,6 +141,9 @@
         </resources>
         <data>
             <parameter name="customer.id" force="true">%customer_id%</parameter>
+            <parameter name="customer.group_id" force="true">%customer_group_id%</parameter>
+            <parameter name="customer.website_id" force="true">%customer_website_id%</parameter>
+            <parameter name="customer.store_id" force="true">%customer_store_id%</parameter>
         </data>
     </route>
     <route url="/V1/customers/me" method="GET" soapOperation="getSelf">
@@ -278,6 +281,12 @@
         <service class="Magento\Customer\Api\AddressRepositoryInterface" method="deleteById"/>
         <resources>
             <resource ref="Magento_Customer::manage"/>
+        </resources>
+    </route>
+    <route url="/V1/customers/activate" method="POST">
+        <service class="Magento\Customer\Api\AccountManagementInterface" method="activate"/>
+        <resources>
+            <resource ref="anonymous"/>
         </resources>
     </route>
 </routes>

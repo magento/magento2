@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -22,11 +22,12 @@ class RelativePathConverter
      * @param string $relativePath
      * @return string
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function convert($nodePath, $relativePath)
     {
-        $nodePath = trim($nodePath);
-        $relativePath = trim($relativePath);
+        $nodePath = $nodePath !== null ? trim($nodePath) : '';
+        $relativePath = $relativePath !== null ? trim($relativePath) : '';
 
         if (empty($nodePath) || empty($relativePath)) {
             throw new \InvalidArgumentException('Invalid arguments');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Rule\Action\Discount;
 
@@ -13,6 +13,7 @@ use Magento\SalesRule\Helper\CartFixedDiscount;
 use Magento\SalesRule\Model\DeltaPriceRound;
 use Magento\SalesRule\Model\Rule;
 use Magento\SalesRule\Model\Validator;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Calculates discount for cart item if fixed discount applied on whole cart.
@@ -29,12 +30,12 @@ class CartFixed extends AbstractDiscount
     /**
      * @var DeltaPriceRound
      */
-    private $deltaPriceRound;
+    private DeltaPriceRound $deltaPriceRound;
 
     /**
      * @var CartFixedDiscount
      */
-    private $cartFixedDiscountHelper;
+    private CartFixedDiscount $cartFixedDiscountHelper;
 
     /**
      * @var string
@@ -42,10 +43,16 @@ class CartFixed extends AbstractDiscount
     private static $discountType = 'CartFixed';
 
     /**
+     * @var ExistingDiscountRuleCollector
+     */
+    private ExistingDiscountRuleCollector $existingDiscountRuleCollector;
+
+    /**
      * @param Validator $validator
      * @param DataFactory $discountDataFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param DeltaPriceRound $deltaPriceRound
+     * @param ExistingDiscountRuleCollector $existingDiscountRuleCollector
      * @param CartFixedDiscount|null $cartFixedDiscount
      */
     public function __construct(
@@ -53,9 +60,11 @@ class CartFixed extends AbstractDiscount
         DataFactory $discountDataFactory,
         PriceCurrencyInterface $priceCurrency,
         DeltaPriceRound $deltaPriceRound,
+        ExistingDiscountRuleCollector $existingDiscountRuleCollector,
         ?CartFixedDiscount $cartFixedDiscount = null
     ) {
         $this->deltaPriceRound = $deltaPriceRound;
+        $this->existingDiscountRuleCollector = $existingDiscountRuleCollector;
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($validator, $discountDataFactory, $priceCurrency);
@@ -70,20 +79,19 @@ class CartFixed extends AbstractDiscount
      * @return Data
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function calculate($rule, $item, $qty)
     {
-        /** @var Data $discountData */
-        $discountData = $this->discountFactory->create();
-
         $ruleTotals = $this->validator->getRuleItemTotalsInfo($rule->getId());
         $baseRuleTotals = $ruleTotals['base_items_price'] ?? 0.0;
+        $ruleItemsCount = $ruleTotals['items_count'] ?? 0;
 
         $address = $item->getAddress();
+        $quote = $item->getQuote();
         $shippingMethod = $address->getShippingMethod();
         $isAppliedToShipping = (int) $rule->getApplyToShipping();
-        $quote = $item->getQuote();
         $ruleDiscount = (float) $rule->getDiscountAmount();
 
         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
@@ -91,6 +99,7 @@ class CartFixed extends AbstractDiscount
         $baseItemPrice = $this->validator->getItemBasePrice($item);
         $itemOriginalPrice = $this->validator->getItemOriginalPrice($item);
         $baseItemOriginalPrice = $this->validator->getItemBaseOriginalPrice($item);
+        $baseItemDiscountAmount = (float) $item->getBaseDiscountAmount();
 
         $cartRules = $quote->getCartFixedRules();
         if (!isset($cartRules[$rule->getId()])) {
@@ -99,19 +108,25 @@ class CartFixed extends AbstractDiscount
         $availableDiscountAmount = (float) $cartRules[$rule->getId()];
         $discountType = self::$discountType . $rule->getId();
 
+        /** @var Data $discountData */
+        $discountData = $this->discountFactory->create();
         if ($availableDiscountAmount > 0) {
             $store = $quote->getStore();
-            if ($ruleTotals['items_count'] <= 1) {
-                $baseRuleTotals = $shippingMethod ?
-                    $this->cartFixedDiscountHelper
-                        ->getBaseRuleTotals(
-                            $isAppliedToShipping,
-                            $quote,
-                            $isMultiShipping,
-                            $address,
-                            $baseRuleTotals
-                        ) : $baseRuleTotals;
-                $availableDiscountAmount = $this->cartFixedDiscountHelper
+            $shippingPrice = $this->cartFixedDiscountHelper->applyDiscountOnPricesIncludedTax()
+                ? (float) $address->getShippingInclTax()
+                : (float) $address->getShippingExclTax();
+            $baseRuleTotals = $shippingMethod ?
+                $this->cartFixedDiscountHelper
+                    ->getBaseRuleTotals(
+                        $isAppliedToShipping,
+                        $quote,
+                        $isMultiShipping,
+                        $address,
+                        $baseRuleTotals,
+                        $shippingPrice
+                    ) : $baseRuleTotals;
+            if ($isAppliedToShipping) {
+                $baseDiscountAmount = $this->cartFixedDiscountHelper
                     ->getDiscountAmount(
                         $ruleDiscount,
                         $qty,
@@ -119,29 +134,27 @@ class CartFixed extends AbstractDiscount
                         $baseRuleTotals,
                         $discountType
                     );
-                $quoteAmount = $this->priceCurrency->convert($availableDiscountAmount, $store);
-                $baseDiscountAmount = min($baseItemPrice * $qty, $availableDiscountAmount);
-                $this->deltaPriceRound->reset($discountType);
             } else {
-                $baseRuleTotals = $shippingMethod ?
-                    $this->cartFixedDiscountHelper
-                        ->getBaseRuleTotals(
-                            $isAppliedToShipping,
-                            $quote,
-                            $isMultiShipping,
-                            $address,
-                            $baseRuleTotals
-                        ) : $baseRuleTotals;
-                $maximumItemDiscount =$this->cartFixedDiscountHelper
-                    ->getDiscountAmount(
+                $baseDiscountAmount = $this->cartFixedDiscountHelper
+                    ->getDiscountedAmountProportionally(
                         $ruleDiscount,
                         $qty,
                         $baseItemPrice,
-                        $baseRuleTotals,
+                        $baseItemDiscountAmount,
+                        $baseRuleTotals -
+                        $this->getItemsTotalDiscount($rule->getId(), $ruleTotals['affected_items']),
                         $discountType
                     );
-                $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
-                $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
+
+            }
+            $discountAmount = $this->priceCurrency->convert($baseDiscountAmount, $store);
+            $baseDiscountAmount = min($baseItemPrice * $qty, $baseDiscountAmount);
+            if ($ruleItemsCount <= 1) {
+                $this->deltaPriceRound->reset($discountType);
+                if ($baseDiscountAmount > $availableDiscountAmount) {
+                    $baseDiscountAmount = $availableDiscountAmount;
+                }
+            } else {
                 $this->validator->decrementRuleItemTotalsCount($rule->getId());
             }
 
@@ -162,24 +175,24 @@ class CartFixed extends AbstractDiscount
                 $ruleTotals['items_count'] <= 1) {
                 $estimatedShippingAmount = (float) $address->getBaseShippingInclTax();
                 $shippingDiscountAmount = $this->cartFixedDiscountHelper->
-                                                getShippingDiscountAmount(
-                                                    $rule,
-                                                    $estimatedShippingAmount,
-                                                    $baseRuleTotals
-                                                );
+                    getShippingDiscountAmount(
+                        $rule,
+                        $estimatedShippingAmount,
+                        $baseRuleTotals
+                    );
                 $cartRules[$rule->getId()] -= $shippingDiscountAmount;
                 if ($cartRules[$rule->getId()] < 0.0) {
                     $baseDiscountAmount += $cartRules[$rule->getId()];
-                    $quoteAmount += $cartRules[$rule->getId()];
+                    $discountAmount += $cartRules[$rule->getId()];
                 }
             }
             if ($availableDiscountAmount <= 0) {
                 $this->deltaPriceRound->reset($discountType);
             }
 
-            $discountData->setAmount($this->priceCurrency->roundPrice(min($itemPrice * $qty, $quoteAmount)));
+            $discountData->setAmount($this->priceCurrency->roundPrice(min($itemPrice * $qty, $discountAmount)));
             $discountData->setBaseAmount($baseDiscountAmount);
-            $discountData->setOriginalAmount(min($itemOriginalPrice * $qty, $quoteAmount));
+            $discountData->setOriginalAmount(min($itemOriginalPrice * $qty, $discountAmount));
             $discountData->setBaseOriginalAmount($this->priceCurrency->roundPrice($baseItemOriginalPrice));
         }
         $quote->setCartFixedRules($cartRules);
@@ -188,9 +201,31 @@ class CartFixed extends AbstractDiscount
     }
 
     /**
+     * Get existing discount applied to affected items
+     *
+     * @param int $ruleId
+     * @param array $affectedItems
+     * @return float
+     */
+    private function getItemsTotalDiscount(int $ruleId, array $affectedItems): float
+    {
+        if ($this->existingDiscountRuleCollector->getExistingRuleDiscount($ruleId) === null) {
+            $existingRuleDiscount = 0;
+            /** @var Item $ruleItem */
+            foreach ($affectedItems as $ruleItem) {
+                $existingRuleDiscount += $ruleItem->getBaseDiscountAmount();
+            }
+            $this->existingDiscountRuleCollector->setExistingRuleDiscount($ruleId, $existingRuleDiscount);
+        }
+
+        return $this->existingDiscountRuleCollector->getExistingRuleDiscount($ruleId);
+    }
+
+    /**
      * Set information about usage cart fixed rule by quote address
      *
      * @deprecated 101.2.0 should be removed as it is not longer used
+     * @see Nothing
      * @param int $ruleId
      * @param int $itemId
      * @return void
@@ -204,6 +239,7 @@ class CartFixed extends AbstractDiscount
      * Retrieve information about usage cart fixed rule by quote address
      *
      * @deprecated 101.2.0 should be removed as it is not longer used
+     * @see Nothing
      * @param int $ruleId
      * @return int|null
      */

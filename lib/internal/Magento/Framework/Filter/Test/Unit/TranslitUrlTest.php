@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\Filter\TranslitUrl;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class TranslitUrlTest extends TestCase
@@ -28,9 +29,8 @@ class TranslitUrlTest extends TestCase
      * @param string $testString
      * @param string $result
      * @param string $resultIconv
-     * @param bool $isIconv
-     * @dataProvider filterDataProvider
-     */
+     * @param bool $isIconv     */
+    #[DataProvider('filterDataProvider')]
     public function testFilter($testString, $result, $resultIconv, $isIconv)
     {
         if ($isIconv) {
@@ -43,7 +43,7 @@ class TranslitUrlTest extends TestCase
     /**
      * @return array
      */
-    public function filterDataProvider()
+    public static function filterDataProvider()
     {
         $isIconv = '"libiconv"' == ICONV_IMPL;
         return [
@@ -61,7 +61,12 @@ class TranslitUrlTest extends TestCase
                 'eur',
                 $isIconv
             ],
-            ['™', 'tm', 'tm', $isIconv]
+            ['™', 'tm', 'tm', $isIconv],
+            ['ñandú', 'nandu', 'nandu', $isIconv],
+            ['ÑANDÚ', 'nandu', 'nandu', $isIconv],
+            ['Anémonas do Japão', 'anemonas-do-japao', 'anemonas-do-japao', $isIconv],
+            ['Pão de Açúcar', 'pao-de-acucar', 'pao-de-acucar', $isIconv],
+            ['Êxito', 'exito', 'exito', $isIconv],
         ];
     }
 }

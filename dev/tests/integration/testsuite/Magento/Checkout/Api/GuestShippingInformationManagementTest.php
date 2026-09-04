@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,9 +12,12 @@ use Magento\Checkout\Api\Data\ShippingInformationInterfaceFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Model\QuoteIdMaskFactory;
@@ -76,8 +79,8 @@ class GuestShippingInformationManagementTest extends TestCase
      *
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
-     * @dataProvider getAddressesVariation
      */
+    #[DataProvider('getAddressesVariation')]
     public function testDifferentAddresses(bool $swapShipping): void
     {
         $carts = $this->cartRepo->getList(
@@ -121,11 +124,56 @@ class GuestShippingInformationManagementTest extends TestCase
     }
 
     /**
+     * Test save address information with customer custom address attribute for quote
+     *
+     * @return void
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address_with_custom_text_attribute.php
+     */
+    public function testSaveAddressInformationWithCustomerCustomAddressAttribute(): void
+    {
+        $carts = $this->cartRepo->getList(
+            $this->searchCriteria->addFilter('reserved_order_id', 'test01')->create()
+        )->getItems();
+        $currentQuote = array_pop($carts);
+        $guestCustomer = $this->customerRepo->get('JohnDoe@mail.com');
+
+        $customerCustomAddressAttribute = $guestCustomer->getCustomAttributes();
+
+        /** @var ShippingAssignmentInterface $shippingAssignment */
+        $shippingAssignment = $currentQuote->getExtensionAttributes()->getShippingAssignments()[0];
+        $shippingAddress = $shippingAssignment->getShipping()->getAddress();
+        $billingAddress = $currentQuote->getBillingAddress();
+
+        if ($customerCustomAddressAttribute) {
+            $shippingAddress->setCustomAttributes($customerCustomAddressAttribute);
+            $billingAddress->setCustomAttributes($customerCustomAddressAttribute);
+        }
+
+        /** @var ShippingInformationInterface $shippingInformation */
+        $shippingInformation = $this->shippingFactory->create();
+        $shippingInformation->setBillingAddress($billingAddress);
+        $shippingInformation->setShippingAddress($shippingAddress);
+        $shippingInformation->setShippingMethodCode('flatrate');
+        $shippingInformation->setShippingCarrierCode('flatrate');
+        /** @var QuoteIdMask $idMask */
+        $idMask = $this->maskFactory->create();
+        $idMask->load($currentQuote->getId(), 'quote_id');
+
+        $paymentDetails = $this->management->saveAddressInformation($idMask->getMaskedId(), $shippingInformation);
+        $this->assertNotEmpty($paymentDetails);
+        $this->assertEquals($currentQuote->getGrandTotal(), $paymentDetails->getTotals()->getSubtotal());
+    }
+
+    /**
      * Different variations for addresses test.
      *
      * @return array
      */
-    public function getAddressesVariation(): array
+    public static function getAddressesVariation(): array
     {
         return [
             'Shipping address swap' => [true],

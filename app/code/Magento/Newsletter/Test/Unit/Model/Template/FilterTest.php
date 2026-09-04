@@ -1,16 +1,21 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Newsletter\Test\Unit\Model\Template;
 
+use Magento\Email\Model\Template\Css\Processor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\LayoutFactory;
@@ -22,8 +27,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use Magento\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
+use Magento\Widget\Model\Widget;
 use Magento\Widget\Model\Widget as WidgetModel;
-use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -52,31 +57,27 @@ class FilterTest extends TestCase
 
     protected function setUp(): void
     {
-        $scopeConfig = $this->getMockForAbstractClass(
-            ScopeConfigInterface::class,
-            [],
-            '',
-            false
-        );
-        $this->storeManagerMock = $this->getMockForAbstractClass(
-            StoreManagerInterface::class,
-            [],
-            '',
-            false
-        );
-        $logger = $this->getMockForAbstractClass(LoggerInterface::class, [], '', false);
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class, [], '', false);
-        $urlModel = $this->getMockForAbstractClass(UrlInterface::class, [], '', false);
+        $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
+
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
+        $urlModel = $this->createMock(UrlInterface::class);
         $string = $this->createMock(StringUtils::class);
         $escaper = $this->createMock(Escaper::class);
         $assetRepo = $this->createMock(Repository::class);
         $coreVariableFactory = $this->createPartialMock(VariableFactory::class, ['create']);
         $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
         $this->appStateMock = $this->createMock(State::class);
-        $emogrifier = $this->createMock(Emogrifier::class);
         $configVariables = $this->createMock(Variables::class);
         $widgetResource = $this->createMock(WidgetResourceModel::class);
         $widget = $this->createMock(WidgetModel::class);
+        $variableResolver = $this->createMock(VariableResolverInterface::class);
+        $cssProcessor = $this->createMock(Processor::class);
+        $pubDirectory = $this->createMock(Filesystem::class);
+        $cssInliner = $this->createMock(CssInliner::class);
 
         $this->filter = new Filter(
             $string,
@@ -90,8 +91,11 @@ class FilterTest extends TestCase
             $layoutFactory,
             $this->appStateMock,
             $urlModel,
-            $emogrifier,
             $configVariables,
+            $variableResolver,
+            $cssProcessor,
+            $pubDirectory,
+            $cssInliner,
             $widgetResource,
             $widget
         );
@@ -104,7 +108,7 @@ class FilterTest extends TestCase
 
         $construction = '{{widget type="\Magento\Cms\Block\Widget\Page\Link" page_id="1"}}';
 
-        $store = $this->getMockForAbstractClass(StoreInterface::class, [], '', false);
+        $store = $this->createMock(StoreInterface::class);
         $store->expects($this->once())
             ->method('getId')
             ->willReturn(1);

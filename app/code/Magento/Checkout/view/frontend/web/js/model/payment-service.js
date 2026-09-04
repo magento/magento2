@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -50,13 +50,18 @@ define([
             }
 
             filteredMethods = _.without(methods, freeMethod);
-
             if (filteredMethods.length === 1) {
                 selectPaymentMethod(filteredMethods[0]);
             } else if (quote.paymentMethod()) {
                 methodIsAvailable = methods.some(function (item) {
                     return item.method === quote.paymentMethod().method;
                 });
+
+                if (!methodIsAvailable && !_.isEmpty(window.checkoutConfig.vault)) {
+                    methodIsAvailable = Object.keys(window.checkoutConfig.payment.vault)
+                        .findIndex((vaultPayment) => vaultPayment === quote.paymentMethod().method) !== -1;
+                }
+
                 //Unset selected payment method if not available
                 if (!methodIsAvailable) {
                     selectPaymentMethod(null);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,12 +16,15 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class LockValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var LockValidator
      */
@@ -47,27 +50,20 @@ class LockValidatorTest extends TestCase
      */
     private $metadataPoolMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder(ResourceConnection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resource = $this->createMock(ResourceConnection::class);
 
-        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
-            ->setMethods(['select', 'fetchOne'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connectionMock = $this->createMock(AdapterInterface::class);
 
-        $this->select = $this->getMockBuilder(Select::class)
-            ->setMethods(['reset', 'from', 'join', 'where', 'group', 'limit'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->select = $this->createPartialMock(Select::class, ['reset', 'from', 'join', 'where', 'group', 'limit']);
 
-        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
 
         $this->metadataPoolMock->expects(self::once())
             ->method('getMetadata')
@@ -76,17 +72,17 @@ class LockValidatorTest extends TestCase
 
         $this->model = $helper->getObject(
             LockValidator::class,
-            [
-                'resource' => $this->resource
-            ]
+            ['resource' => $this->resource]
         );
         $refClass = new \ReflectionClass(LockValidator::class);
         $refProperty = $refClass->getProperty('metadataPool');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
-    public function testValidate()
+    /**
+     * @return void
+     */
+    public function testValidate(): void
     {
         $this->validate(false);
     }
@@ -94,11 +90,9 @@ class LockValidatorTest extends TestCase
     /**
      * @return EntityMetadata|MockObject
      */
-    private function getMetaDataMock()
+    private function getMetaDataMock(): EntityMetadata
     {
-        $metadata = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $metadata = $this->createMock(EntityMetadata::class);
 
         $metadata->expects(self::once())
             ->method('getLinkField')
@@ -107,7 +101,10 @@ class LockValidatorTest extends TestCase
         return $metadata;
     }
 
-    public function testValidateException()
+    /**
+     * @return void
+     */
+    public function testValidateException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('This attribute is used in configurable products.');
@@ -116,9 +113,11 @@ class LockValidatorTest extends TestCase
 
     /**
      * @param $exception
+     *
+     * @return void
      * @throws LocalizedException
      */
-    public function validate($exception)
+    public function validate($exception): void
     {
         $attrTable = 'someAttributeTable';
         $productTable = 'someProductTable';
@@ -127,21 +126,20 @@ class LockValidatorTest extends TestCase
 
         $bind = ['attribute_id' => $attributeId, 'attribute_set_id' => $attributeSet];
 
-        /** @var AbstractModel|MockObject $object */
-        $object = $this->getMockBuilder(AbstractModel::class)
-            ->setMethods(['getAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $object->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
+        $object = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getAttributeId', 'setAttributeId']
+        );
+        $object->method('getAttributeId')->willReturn($attributeId);
 
         $this->resource->expects($this->once())->method('getConnection')
             ->willReturn($this->connectionMock);
-        $this->resource->expects($this->at(1))->method('getTableName')
-            ->with('catalog_product_super_attribute')
-            ->willReturn($attrTable);
-        $this->resource->expects($this->at(2))->method('getTableName')
-            ->with('catalog_product_entity')
-            ->willReturn($productTable);
+        $this->resource
+            ->method('getTableName')
+            ->willReturnCallback(fn($operation) => match ([$operation]) {
+                ['catalog_product_super_attribute'] => $attrTable,
+                ['catalog_product_entity'] => $productTable
+            });
 
         $this->connectionMock->expects($this->once())->method('select')
             ->willReturn($this->select);
@@ -163,8 +161,7 @@ class LockValidatorTest extends TestCase
                 'main_table.product_id = entity.entity_id'
             )
             ->willReturn($this->select);
-        $this->select->expects($this->any())->method('where')
-            ->willReturn($this->select);
+        $this->select->method('where')->willReturn($this->select);
         $this->select->expects($this->once())->method('group')
             ->with('main_table.attribute_id')
             ->willReturn($this->select);

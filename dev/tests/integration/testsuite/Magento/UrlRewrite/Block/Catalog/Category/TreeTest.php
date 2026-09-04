@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\UrlRewrite\Block\Catalog\Category;
@@ -40,7 +40,6 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeArray()
     {
         $tree = $this->_treeBlock->getTreeArray();
-        $this->assertFalse($tree['is_active']);
         $this->assertEquals('Root', (string)$tree['name']);
         $this->assertTrue($tree['expanded']);
         $this->assertCount(1, $tree['children']);

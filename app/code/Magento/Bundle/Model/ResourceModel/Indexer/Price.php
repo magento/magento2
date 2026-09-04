@@ -1,28 +1,31 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
-use Magento\Framework\DB\Select;
-use Magento\Framework\Indexer\DimensionalIndexerInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
-use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructure;
+use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\IndexTableStructureFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttributeProcessor;
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Indexer\DimensionalIndexerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\CatalogInventory\Model\Stock;
 
 /**
  * Bundle products Price indexer resource model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Price implements DimensionalIndexerInterface
 {
@@ -92,16 +95,43 @@ class Price implements DimensionalIndexerInterface
     private $moduleManager;
 
     /**
+     * @var string
+     */
+    private $tmpBundlePriceTable;
+
+    /**
+     * @var string
+     */
+    private $tmpBundleSelectionTable;
+
+    /**
+     * @var string
+     */
+    private $tmpBundleOptionTable;
+
+    /**
+     * @var StockStatusQueryProcessorInterface
+     */
+    private StockStatusQueryProcessorInterface $stockStatusQueryProcessor;
+
+    /**
+     * @var SelectionPriceModifierInterface
+     */
+    private SelectionPriceModifierInterface $selectionPriceIndexer;
+
+    /**
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param BasePriceModifier $basePriceModifier
      * @param JoinAttributeProcessor $joinAttributeProcessor
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param ManagerInterface $eventManager
+     * @param Manager $moduleManager
+     * @param StockStatusQueryProcessorInterface|null $stockStatusQueryProcessor
      * @param bool $fullReindexAction
      * @param string $connectionName
+     * @param SelectionPriceModifierInterface|null $selectionPriceIndexer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -114,8 +144,10 @@ class Price implements DimensionalIndexerInterface
         JoinAttributeProcessor $joinAttributeProcessor,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Module\Manager $moduleManager,
+        ?StockStatusQueryProcessorInterface $stockStatusQueryProcessor = null,
         $fullReindexAction = false,
-        $connectionName = 'indexer'
+        $connectionName = 'indexer',
+        ?SelectionPriceModifierInterface $selectionPriceIndexer = null
     ) {
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
@@ -127,6 +159,12 @@ class Price implements DimensionalIndexerInterface
         $this->joinAttributeProcessor = $joinAttributeProcessor;
         $this->eventManager = $eventManager;
         $this->moduleManager = $moduleManager;
+        $this->stockStatusQueryProcessor = $stockStatusQueryProcessor ??
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(StockStatusQueryProcessorInterface::class);
+        $this->selectionPriceIndexer = $selectionPriceIndexer ??
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SelectionPriceModifierInterface::class);
     }
 
     /**
@@ -184,7 +222,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundlePriceTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_tmp');
+        if ($this->tmpBundlePriceTable === null) {
+            $this->tmpBundlePriceTable = $this->getTable('catalog_product_index_price_bundle_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundlePriceTable,
+                $this->getTable('catalog_product_index_price_bundle_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundlePriceTable;
     }
 
     /**
@@ -194,7 +241,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundleSelectionTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_sel_tmp');
+        if ($this->tmpBundleSelectionTable === null) {
+            $this->tmpBundleSelectionTable = $this->getTable('catalog_product_index_price_bundle_sel_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundleSelectionTable,
+                $this->getTable('catalog_product_index_price_bundle_sel_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundleSelectionTable;
     }
 
     /**
@@ -204,7 +260,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundleOptionTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_opt_tmp');
+        if ($this->tmpBundleOptionTable === null) {
+            $this->tmpBundleOptionTable = $this->getTable('catalog_product_index_price_bundle_opt_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundleOptionTable,
+                $this->getTable('catalog_product_index_price_bundle_opt_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundleOptionTable;
     }
 
     /**
@@ -272,6 +337,10 @@ class Price implements DimensionalIndexerInterface
         )->joinInner(
             ['cwd' => $this->getTable('catalog_product_index_website')],
             'pw.website_id = cwd.website_id',
+            []
+        )->joinLeft(
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
             []
         );
         $select->joinLeft(
@@ -365,6 +434,9 @@ class Price implements DimensionalIndexerInterface
             $select->where('e.entity_id IN(?)', $entityIds);
         }
 
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         /**
          * Add additional external limitation
          */
@@ -397,6 +469,7 @@ class Price implements DimensionalIndexerInterface
         $this->prepareBundleSelectionTable();
         $this->calculateFixedBundleSelectionPrice();
         $this->calculateDynamicBundleSelectionPrice($dimensions);
+        $this->selectionPriceIndexer->modify($this->getBundleSelectionTable(), $dimensions);
 
         $this->prepareBundleOptionTable();
 
@@ -457,6 +530,42 @@ class Price implements DimensionalIndexerInterface
     }
 
     /**
+     * Get base select for bundle selection price update
+     *
+     * @return Select
+     * @throws \Exception
+     */
+    private function getBaseBundleSelectionPriceUpdateSelect(): Select
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
+        $bundleSelectionTable = $this->getBundleSelectionTable();
+
+        $select = $this->getConnection()->select()
+        ->join(
+            ['i' => $this->getBundlePriceTable()],
+            "i.entity_id = $bundleSelectionTable.entity_id
+             AND i.customer_group_id = $bundleSelectionTable.customer_group_id
+             AND i.website_id = $bundleSelectionTable.website_id",
+            []
+        )->join(
+            ['parent_product' => $this->getTable('catalog_product_entity')],
+            'parent_product.entity_id = i.entity_id',
+            []
+        )->join(
+            ['bo' => $this->getTable('catalog_product_bundle_option')],
+            "bo.parent_id = parent_product.$linkField AND bo.option_id = $bundleSelectionTable.option_id",
+            ['option_id']
+        )->join(
+            ['bs' => $this->getTable('catalog_product_bundle_selection')],
+            "bs.option_id = bo.option_id AND bs.selection_id = $bundleSelectionTable.selection_id",
+            ['selection_id']
+        );
+
+        return $select;
+    }
+
+    /**
      * Apply selections price for fixed bundles
      *
      * @return void
@@ -499,7 +608,7 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $select = $this->getBaseBundleSelectionPriceSelect();
+        $select = $this->getBaseBundleSelectionPriceUpdateSelect();
         $select->joinInner(
             ['bsp' => $this->getTable('catalog_product_bundle_selection_price')],
             'bs.selection_id = bsp.selection_id AND bsp.website_id = i.website_id',
@@ -586,10 +695,9 @@ class Price implements DimensionalIndexerInterface
      * @return void
      * @throws \Exception
      */
-    private function calculateDynamicBundleSelectionPrice($dimensions)
+    private function calculateDynamicBundleSelectionPrice(array $dimensions): void
     {
         $connection = $this->getConnection();
-
         $price = 'idx.min_price * bs.selection_qty';
         $specialExpr = $connection->getCheckSql(
             'i.special_price > 0 AND i.special_price < 100',
@@ -625,14 +733,34 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
-        $select->join(
-            ['si' => $this->getTable('cataloginventory_stock_status')],
-            'si.product_id = bs.product_id',
-            []
-        );
-        $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
+        $select = $this->stockStatusQueryProcessor->execute($select);
+        $query = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', (string) $select);
 
-        $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
+        $insertColumns = [
+            'entity_id',
+            'customer_group_id',
+            'website_id',
+            'option_id',
+            'selection_id',
+            'group_type',
+            'is_required',
+            'price',
+            'tier_price'
+        ];
+        $insertColumns = array_map(function ($item) use ($connection) {
+            return $connection->quoteIdentifier($item);
+        }, $insertColumns);
+        $updateValues = [];
+        foreach ($insertColumns as $column) {
+            $updateValues[] = sprintf("%s = VALUES(%s)", $column, $column);
+        }
+
+        $connection->query(sprintf(
+            "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
+            implode(",", $insertColumns),
+            $query,
+            implode(",", $updateValues)
+        ));
     }
 
     /**
@@ -678,6 +806,11 @@ class Price implements DimensionalIndexerInterface
             ['pw' => $this->getTable('store_website')],
             'tp.website_id = 0 OR tp.website_id = pw.website_id',
             ['website_id']
+        )->joinLeft(
+            // customer group website limitations
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
+            []
         )->where(
             'pw.website_id != 0'
         )->where(
@@ -692,6 +825,10 @@ class Price implements DimensionalIndexerInterface
         if (!empty($entityIds)) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
+
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         foreach ($dimensions as $dimension) {
             if (!isset($this->dimensionToFieldMapper[$dimension->getName()])) {
                 throw new \LogicException(
@@ -728,7 +865,17 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+        ]);
     }
 
     /**

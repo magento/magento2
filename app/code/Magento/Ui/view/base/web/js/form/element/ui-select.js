@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -953,7 +953,7 @@ define([
 
             if (this.isTabKey(event)) {
                 if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions) {
-                    this.cacheUiSelect.blur();
+                    this.cacheUiSelect.trigger('blur');
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
 

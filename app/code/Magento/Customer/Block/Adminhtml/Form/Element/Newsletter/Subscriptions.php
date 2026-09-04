@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -152,7 +152,7 @@ class Subscriptions extends AbstractElement
         $data = $this->dataPersistor->get('customer_form');
         $currentCustomerId = $this->getData('customer_id');
         $sessionCustomerId = $data['customer']['entity_id'] ?? null;
-        if ($sessionCustomerId === null || $currentCustomerId !== (int)$sessionCustomerId) {
+        if ($sessionCustomerId === null || ((int) $currentCustomerId) !== (int)$sessionCustomerId) {
             return null;
         }
 

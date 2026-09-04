@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -76,7 +76,7 @@
         <data key="height">1000</data>
     </entity>
     <entity name="ImageUpload3" type="uploadImage">
-        <data key="title" unique="suffix">Image1</data>
+        <data key="title">Title of the magento image</data>
         <data key="price">1.00</data>
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
@@ -86,6 +86,19 @@
         <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
+        <data key="path">wysiwyg</data>
+    </entity>
+    <entity name="ImageUploadMedium" type="uploadImage">
+        <data key="title" unique="suffix">Medium Image</data>
+        <data key="price">1.00</data>
+        <data key="file_type">Upload File</data>
+        <data key="shareable">Yes</data>
+        <data key="value">medium.jpg</data>
+        <data key="file">medium.jpg</data>
+        <data key="fileName">medium</data>
+        <data key="extension">jpg</data>
+        <data key="content">Image content. Yeah.</data>
+        <data key="height">508</data>
         <data key="path">wysiwyg</data>
     </entity>
     <entity name="ImageFolder" type="uploadImage">
@@ -105,5 +118,11 @@
         <data key="title" unique="suffix">Test CMS Block</data>
         <data key="identifier" unique="suffix" >block</data>
         <data key="active">true</data>
+    </entity>
+    <entity name="PageBuilderHtmlCmsHomePageContent" type="pagebuilder_html_property">
+        <data key="name">HTML</data>
+        <data key="section">general</data>
+        <data key="value">CMS homepage content goes here</data>
+        <data key="fieldName">html</data>
     </entity>
 </entities>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -78,6 +78,9 @@ class OperationsExecutorTest extends TestCase
      */
     private $dropElement;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->shardingMock = $this->getMockBuilder(Sharding::class)
@@ -89,8 +92,7 @@ class OperationsExecutorTest extends TestCase
         $this->statementFactoryMock = $this->getMockBuilder(StatementFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dbSchemaWriterMock = $this->getMockBuilder(DbSchemaWriterInterface::class)
-            ->getMockForAbstractClass();
+        $this->dbSchemaWriterMock = $this->createMock(DbSchemaWriterInterface::class);
         $this->statementAggregatorFactoryMock = $this->getMockBuilder(StatementAggregatorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -124,7 +126,7 @@ class OperationsExecutorTest extends TestCase
     /**
      * @return Table
      */
-    private function prepareTable()
+    private function prepareTable(): Table
     {
         $table = new Table(
             'table',
@@ -149,7 +151,10 @@ class OperationsExecutorTest extends TestCase
         return $table;
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         /** @var DiffInterface|MockObject $diff */
         $diff = $this->getMockBuilder(DiffInterface::class)
@@ -160,7 +165,7 @@ class OperationsExecutorTest extends TestCase
         $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceConnectionMock->expects(self::exactly(3))
+        $this->resourceConnectionMock->expects(self::exactly(2))
             ->method('getConnection')
             ->with('default')
             ->willReturn($connectionMock);
@@ -189,7 +194,7 @@ class OperationsExecutorTest extends TestCase
         $diff->expects(self::once())
             ->method('getAll')
             ->willReturn($tablesHistories);
-        $this->dropElement->expects(self::at(0))
+        $this->dropElement
             ->method('doOperation');
         $this->model->execute($diff, []);
     }

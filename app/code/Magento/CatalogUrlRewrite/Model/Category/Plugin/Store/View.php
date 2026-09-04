@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -104,7 +104,10 @@ class View
         Store $object,
         Store $store
     ): Store {
-        if ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id')) {
+        if (
+            $this->origStore->getData('group_id')
+            && ($this->origStore->isObjectNew() || $this->origStore->dataHasChangedFor('group_id'))
+        ) {
             $categoryRewriteUrls = $this->generateCategoryUrls(
                 (int)$this->origStore->getRootCategoryId(),
                 (int)$this->origStore->getId()

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
@@ -86,7 +86,7 @@ abstract class AbstractAction
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Framework\Indexer\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        MetadataPool $metadataPool = null
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_resource = $resource;
         $this->_indexerFactory = $indexerFactory;
@@ -167,7 +167,7 @@ abstract class AbstractAction
         )->join(
             ['relation' => $this->_getTable('catalog_product_relation')],
             'relation.parent_id = cpe.' . $linkField
-        )->where('child_id IN(?)', $childIds);
+        )->where('child_id IN(?)', $childIds, \Zend_Db::INT_TYPE);
         return $connection->fetchCol($select);
     }
 
@@ -262,7 +262,7 @@ abstract class AbstractAction
         // retrieve product types by processIds
         $select = $connection->select()
             ->from($this->_getTable('catalog_product_entity'), ['entity_id', 'type_id'])
-            ->where('entity_id IN(?)', $productIds);
+            ->where('entity_id IN(?)', $productIds, \Zend_Db::INT_TYPE);
         $pairs = $connection->fetchPairs($select);
 
         $byType = [];

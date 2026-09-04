@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -22,7 +22,6 @@ $messagePublisher = $objectManager->get(PublisherInterface::class);
 $dataObject = $exportInfoFactory->create(
     'csv',
     ProductAttributeInterface::ENTITY_TYPE_CODE,
-    [ProductInterface::SKU => 'simple2'],
-    []
+    [ProductInterface::SKU => 'simple2']
 );
 $messagePublisher->publish('import_export.export', $dataObject);

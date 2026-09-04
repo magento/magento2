@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -85,21 +86,21 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProvider')]
     public function testProductListSortOrder(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
         $this->renderBlock($category, $direction);
@@ -108,21 +109,21 @@ class SortingTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProvider')]
     public function testProductListSortOrderWithConfig(
         string $sortBy,
         string $direction,
         array $expectation,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expectation);
     }
@@ -130,51 +131,51 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProvider(): array
+    public static function productListSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_position_asc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_position_desc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_name_asc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
             ],
             'default_order_name_desc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
             ],
             'default_order_custom_attribute_asc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple3', 'simple2'],
-                'incomplete_reason' => 'MC-33825:'
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
             'default_order_custom_attribute_desc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'incomplete_reason' => 'MC-33825:'
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
         ];
@@ -183,7 +184,6 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
@@ -191,15 +191,16 @@ class SortingTest extends TestCase
      * @param string|null $incompleteReason
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProviderOnStoreView')]
     public function testProductListSortOrderOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
@@ -211,7 +212,6 @@ class SortingTest extends TestCase
     /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
-     * @dataProvider productListSortOrderDataProviderOnStoreView
      * @param string $sortBy
      * @param string $direction
      * @param array $expectation
@@ -219,15 +219,16 @@ class SortingTest extends TestCase
      * @param string|null $incompleteReason,
      * @return void
      */
+    #[DataProvider('productListSortOrderDataProviderOnStoreView')]
     public function testProductListSortOrderWithConfigOnStoreView(
         string $sortBy,
         string $direction,
         array $expectation,
         string $defaultSortBy,
-        string $incompleteReason = null
+        ?string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
@@ -252,59 +253,59 @@ class SortingTest extends TestCase
     /**
      * @return array
      */
-    public function productListSortOrderDataProviderOnStoreView(): array
+    public static function productListSortOrderDataProviderOnStoreView(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'position'
+                'defaultSortBy' => 'position'
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'position'
+                'defaultSortBy' => 'position'
             ],
             'default_order_position_asc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_position_desc' => [
-                'sort' => 'position',
+                'sortBy' => 'position',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_name_asc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple2', 'simple3'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_name_desc' => [
-                'sort' => 'name',
+                'sortBy' => 'name',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-                'default_sort' => 'price'
+                'defaultSortBy' => 'price'
             ],
             'default_order_custom_attribute_asc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'asc',
                 'expectation' => ['simple1', 'simple3', 'simple2'],
-                'default_sort' => 'price',
-                'incomplete_reason' => 'MC-33825:'
+                'defaultSortBy' => 'price',
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
             'default_order_custom_attribute_desc' => [
-                'sort' => 'test_configurable',
+                'sortBy' => 'test_configurable',
                 'direction' => 'desc',
                 'expectation' => ['simple3', 'simple2', 'simple1'],
-            'default_sort' => 'price',
-                'incomplete_reason' => 'MC-33825:'
+                'defaultSortBy' => 'price',
+                'incompleteReason' => 'MC-33825:'
                     . 'Stabilize skipped test cases for Integration SortingTest with elasticsearch',
             ],
         ];
@@ -387,13 +388,12 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
-     * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
      * @return void
      */
+    #[DataProvider('productListWithOutOfStockSortOrderDataProvider')]
     public function testProductListOutOfStockSortOrderWithElasticsearch(
         string $sortBy,
         string $direction,
@@ -408,13 +408,12 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine mysql
-     * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
      * @param array $expected
      * @return void
      */
+    #[DataProvider('productListWithOutOfStockSortOrderDataProvider')]
     public function testProductListOutOfStockSortOrderWithMysql(
         string $sortBy,
         string $direction,
@@ -428,18 +427,18 @@ class SortingTest extends TestCase
      *
      * @return array
      */
-    public function productListWithOutOfStockSortOrderDataProvider(): array
+    public static function productListWithOutOfStockSortOrderDataProvider(): array
     {
         return [
             'default_order_price_asc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => Collection::SORT_ORDER_ASC,
-                'expectation' => ['simple1', 'simple2', 'simple3', 'configurable'],
+                'expected' => ['simple1', 'simple2', 'simple3', 'configurable'],
             ],
             'default_order_price_desc' => [
-                'sort' => 'price',
+                'sortBy' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
+                'expected' => ['simple3', 'simple2', 'simple1', 'configurable'],
             ],
         ];
     }

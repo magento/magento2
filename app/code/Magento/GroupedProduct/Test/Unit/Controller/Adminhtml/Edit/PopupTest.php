@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,17 +61,16 @@ class PopupTest extends TestCase
      */
     protected $resultLayoutMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->factory = $this->createPartialMock(ProductFactory::class, ['create']);
         $this->registry = $this->createMock(Registry::class);
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultLayoutMock = $this->createMock(Layout::class);
 
         $this->resultFactoryMock->expects($this->any())
             ->method('create')
@@ -96,7 +95,10 @@ class PopupTest extends TestCase
         );
     }
 
-    public function testPopupActionNoProductId()
+    /**
+     * @return void
+     */
+    public function testPopupActionNoProductId(): void
     {
         $storeId = 12;
         $typeId = 4;
@@ -107,30 +109,32 @@ class PopupTest extends TestCase
             ['setStoreId', 'setTypeId', 'setData', '__wakeup']
         );
 
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->willReturn($productId);
         $this->factory->expects($this->once())->method('create')->willReturn($product);
-        $this->request->expects(
-            $this->at(1)
-        )->method(
-            'getParam'
-        )->with(
-            'store',
-            0
-        )->willReturn(
-            $storeId
-        );
-
         $product->expects($this->once())->method('setStoreId')->with($storeId);
-        $this->request->expects($this->at(2))->method('getParam')->with('type')->willReturn($typeId);
         $product->expects($this->once())->method('setTypeId')->with($typeId);
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
-        $this->request->expects($this->at(3))->method('getParam')->with('set')->willReturn($setId);
+        $this->request
+            ->method('getParam')
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());
     }
 
-    public function testPopupActionWithProductIdNoSetId()
+    /**
+     * @return void
+     */
+    public function testPopupActionWithProductIdNoSetId(): void
     {
         $storeId = 12;
         $typeId = 4;
@@ -141,24 +145,24 @@ class PopupTest extends TestCase
             ['setStoreId', 'setTypeId', 'setData', 'load', '__wakeup']
         );
 
-        $this->request->expects($this->at(0))->method('getParam')->with('id')->willReturn($productId);
         $this->factory->expects($this->once())->method('create')->willReturn($product);
-        $this->request->expects(
-            $this->at(1)
-        )->method(
-            'getParam'
-        )->with(
-            'store',
-            0
-        )->willReturn(
-            $storeId
-        );
         $product->expects($this->once())->method('setStoreId')->with($storeId);
-        $this->request->expects($this->at(2))->method('getParam')->with('type')->willReturn($typeId);
         $product->expects($this->never())->method('setTypeId');
         $product->expects($this->once())->method('setData')->with('_edit_mode', true);
         $product->expects($this->once())->method('load')->with($productId);
-        $this->request->expects($this->at(3))->method('getParam')->with('set')->willReturn($setId);
+        $this->request
+            ->method('getParam')
+            ->willReturnCallback(function ($arg1, $arg2) use ($productId, $storeId, $typeId, $setId) {
+                if ($arg1 == 'id') {
+                    return $productId;
+                } elseif ($arg1 == 'store' && $arg2 == 0) {
+                    return $storeId;
+                } elseif ($arg1 == 'type') {
+                    return $typeId;
+                } elseif ($arg1 == 'set') {
+                    return $setId;
+                }
+            });
         $this->registry->expects($this->once())->method('register')->with('current_product', $product);
 
         $this->assertSame($this->resultLayoutMock, $this->action->execute());

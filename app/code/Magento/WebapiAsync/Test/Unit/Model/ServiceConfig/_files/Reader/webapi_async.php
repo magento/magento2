@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -24,8 +24,8 @@ return [
         ],
     ],
     'routes' => [
-        'asyncProducts' => ['POST' => 'async/bulk/V1/products'],
-        'asyncBulkCmsPages' => ['POST' => 'async/bulk/V1/cmsPage'],
-        'asyncCustomers' => ['POST' => 'async/V1/customers']
+        'asyncProducts' => ['POST' => 'async/bulk/V1/products','input-array-size-limit' => null],
+        'asyncBulkCmsPages' => ['POST' => 'async/bulk/V1/cmsPage', 'input-array-size-limit' => 50],
+        'asyncCustomers' => ['POST' => 'async/V1/customers', 'input-array-size-limit' => null]
     ]
 ];

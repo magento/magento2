@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test categories query filtering works as expected
@@ -19,12 +20,12 @@ class CategoriesFilterTest extends GraphQlAbstract
 {
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterSingleCategoryDataProvider
      * @param string $field
      * @param string $condition
      * @param string $value
      * @param array $expectedResult
      */
+    #[DataProvider('filterSingleCategoryDataProvider')]
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY
@@ -51,12 +52,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @dataProvider filterMultipleCategoriesDataProvider
      * @param $field
      * @param $condition
      * @param $value
      * @param $expectedResult
      */
+    #[DataProvider('filterMultipleCategoriesDataProvider')]
     public function testFilterMultipleCategoriesByField($field, $condition, $value, $expectedResult)
     {
         $query = <<<QUERY
@@ -566,7 +567,7 @@ QUERY;
     /**
      * @return array
      */
-    public function filterSingleCategoryDataProvider(): array
+    public static function filterSingleCategoryDataProvider(): array
     {
         return [
             [
@@ -579,7 +580,7 @@ QUERY;
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
-                    'children_count' => '0',
+                    'children_count' => '1',
                     'path' => '1/2/3/4',
                     'position' => '1'
                 ]
@@ -594,7 +595,7 @@ QUERY;
                     'name' => 'Category 1.1',
                     'url_key' => 'category-1-1',
                     'url_path' => 'category-1/category-1-1',
-                    'children_count' => '0',
+                    'children_count' => '1',
                     'path' => '1/2/3/4',
                     'position' => '1'
                 ]
@@ -603,6 +604,20 @@ QUERY;
                 'parent_id',
                 'eq',
                 '4',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
+                    'position' => '1'
+                ]
+            ],
+            [
+                'parent_category_uid',
+                'eq',
+                'NA==',
                 [
                     'id' => '5',
                     'name' => 'Category 1.1.1',
@@ -650,7 +665,7 @@ QUERY;
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
-    public function filterMultipleCategoriesDataProvider(): array
+    public static function filterMultipleCategoriesDataProvider(): array
     {
         return[
             //Filter by multiple IDs
@@ -664,7 +679,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -700,7 +715,7 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
-                        'children_count' => '0',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],
@@ -737,7 +752,42 @@ QUERY;
                         'name' => 'Category 1.1',
                         'url_key' => 'category-1-1',
                         'url_path' => 'category-1/category-1-1',
+                        'children_count' => '1',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
                         'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '13',
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
+                    ]
+                ]
+            ],
+            // Filter by multiple parent UIDs
+            [
+                'parent_category_uid',
+                'in',
+                '["Mw==", "NA=="]',
+                [
+                    [
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '1',
                         'path' => '1/2/3/4',
                         'position' => '1'
                     ],

@@ -1,22 +1,27 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\Data\OptionInterface;
-use Magento\Bundle\Model\Option\SaveAction;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
+use Magento\Bundle\Model\Option\SaveAction;
+use Magento\Bundle\Model\ProductRelationsProcessorComposite;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Bundle product save handler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveHandler implements ExtensionInterface
 {
@@ -41,21 +46,39 @@ class SaveHandler implements ExtensionInterface
     private $metadataPool;
 
     /**
+     * @var CheckOptionLinkIfExist
+     */
+    private $checkOptionLinkIfExist;
+
+    /**
+     * @var ProductRelationsProcessorComposite
+     */
+    private $productRelationsProcessorComposite;
+
+    /**
      * @param OptionRepository $optionRepository
      * @param ProductLinkManagementInterface $productLinkManagement
      * @param SaveAction $optionSave
      * @param MetadataPool $metadataPool
+     * @param CheckOptionLinkIfExist|null $checkOptionLinkIfExist
+     * @param ProductRelationsProcessorComposite|null $productRelationsProcessorComposite
      */
     public function __construct(
         OptionRepository $optionRepository,
         ProductLinkManagementInterface $productLinkManagement,
         SaveAction $optionSave,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        ?CheckOptionLinkIfExist $checkOptionLinkIfExist = null,
+        ?ProductRelationsProcessorComposite $productRelationsProcessorComposite = null
     ) {
         $this->optionRepository = $optionRepository;
         $this->productLinkManagement = $productLinkManagement;
         $this->optionSave = $optionSave;
         $this->metadataPool = $metadataPool;
+        $this->checkOptionLinkIfExist = $checkOptionLinkIfExist
+            ?? ObjectManager::getInstance()->get(CheckOptionLinkIfExist::class);
+        $this->productRelationsProcessorComposite = $productRelationsProcessorComposite
+            ?? ObjectManager::getInstance()->get(ProductRelationsProcessorComposite::class);
     }
 
     /**
@@ -73,7 +96,9 @@ class SaveHandler implements ExtensionInterface
         /** @var OptionInterface[] $bundleProductOptions */
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
         //Only processing bundle products.
-        if ($entity->getTypeId() !== Type::TYPE_CODE || empty($bundleProductOptions)) {
+        if ($entity->getTypeId() !== Type::TYPE_CODE
+            || (empty($bundleProductOptions) && !$entity->getDropOptions())
+        ) {
             return $entity;
         }
 
@@ -81,19 +106,22 @@ class SaveHandler implements ExtensionInterface
         $existingOptionsIds = !empty($existingBundleProductOptions)
             ? $this->getOptionIds($existingBundleProductOptions)
             : [];
-        $optionIds = !empty($bundleProductOptions)
-            ? $this->getOptionIds($bundleProductOptions)
-            : [];
+        $optionIds = $this->getOptionIds($bundleProductOptions);
 
         if (!$entity->getCopyFromView()) {
             $this->processRemovedOptions($entity, $existingOptionsIds, $optionIds);
-            $newOptionsIds = array_diff($optionIds, $existingOptionsIds);
-            $this->saveOptions($entity, $bundleProductOptions, $newOptionsIds);
+            $this->saveOptions($entity, $bundleProductOptions, $existingBundleProductOptions);
         } else {
             //save only labels and not selections + product links
             $this->saveOptions($entity, $bundleProductOptions);
             $entity->setCopyFromView(false);
         }
+
+        $this->productRelationsProcessorComposite->process(
+            $entity,
+            $existingBundleProductOptions,
+            $bundleProductOptions
+        );
 
         return $entity;
     }
@@ -105,6 +133,8 @@ class SaveHandler implements ExtensionInterface
      * @param OptionInterface $option
      *
      * @return void
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     protected function removeOptionLinks($entitySku, $option)
     {
@@ -119,21 +149,20 @@ class SaveHandler implements ExtensionInterface
     /**
      * Perform save for all options entities.
      *
-     * @param object $entity
+     * @param ProductInterface $entity
      * @param array $options
-     * @param array $newOptionsIds
-     *
+     * @param array $existingBundleProductOptions
      * @return void
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    private function saveOptions($entity, array $options, array $newOptionsIds = []): void
-    {
-        foreach ($options as $option) {
-            if (in_array($option->getOptionId(), $newOptionsIds, true)) {
-                $option->setOptionId(null);
-            }
-
-            $this->optionSave->save($entity, $option);
-        }
+    private function saveOptions(
+        ProductInterface $entity,
+        array $options,
+        array $existingBundleProductOptions = []
+    ): void {
+        $this->optionSave->saveBulk($entity, $options, $existingBundleProductOptions);
     }
 
     /**
@@ -151,7 +180,7 @@ class SaveHandler implements ExtensionInterface
             /** @var OptionInterface $option */
             foreach ($options as $option) {
                 if ($option->getOptionId()) {
-                    $optionIds[] = $option->getOptionId();
+                    $optionIds[] = (int)$option->getOptionId();
                 }
             }
         }

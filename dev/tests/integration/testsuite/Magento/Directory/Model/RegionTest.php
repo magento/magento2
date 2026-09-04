@@ -1,21 +1,33 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Directory\Model;
 
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Directory\Setup\Patch\Data\UpdateRegionNamesForSwitzerland as SwitzerlandRegionData;
+use Magento\Framework\AppInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
+use SebastianBergmann\RecursionContext\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 
 class RegionTest extends TestCase
 {
     /**
      * @var Country
      */
-    protected $country;
+    private $country;
+
+    /**
+     * @var RegionCollectionFactory
+     */
+    private $regionCollectionFactory;
 
     /**
      * @inheritDoc
@@ -23,20 +35,25 @@ class RegionTest extends TestCase
     protected function setUp(): void
     {
         $this->country = Bootstrap::getObjectManager()->create(Country::class);
+        $this->regionCollectionFactory = Bootstrap::getObjectManager()->create(RegionCollectionFactory::class);
     }
 
     /**
      * Verify country has regions.
      *
-     * @var string $countryId
-     * @dataProvider getCountryIdDataProvider
+     * @param string $countryId
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     * @throws LocalizedException
      */
-    public function testCountryHasRegions($countryId)
+    #[DataProvider('getCountryIdDataProvider')]
+    public function testCountryHasRegions(string $countryId): void
     {
         $country = $this->country->loadByCode($countryId);
         $region = $country->getRegions()->getItems();
 
-        $this->assertTrue(!empty($region), 'Country ' . $countryId . ' not have regions');
+        $this->assertNotEmpty($region, 'Country ' . $countryId . ' not have regions');
     }
 
     /**
@@ -44,20 +61,34 @@ class RegionTest extends TestCase
      *
      * @return array
      */
-    public function getCountryIdDataProvider():array
+    public static function getCountryIdDataProvider(): array
     {
         return [
-            ['countryId' => 'US'],
-            ['countryId' => 'CA'],
-            ['countryId' => 'CN'],
-            ['countryId' => 'IN'],
-            ['countryId' => 'AU'],
-            ['countryId' => 'BE'],
-            ['countryId' => 'CO'],
-            ['countryId' => 'MX'],
-            ['countryId' => 'PL'],
-            ['countryId' => 'IT'],
-            ['countryId' => 'BG']
+            ['US'], ['CA'], ['CN'], ['IN'], ['AU'], ['BE'], ['CO'], ['MX'], ['PL'], ['IT'],
+            ['BG'], ['AR'], ['BO'], ['CL'], ['EC'], ['GY'], ['PY'], ['PE'], ['SR'], ['VE'],
+            ['PT'], ['IS'], ['SE'], ['GR'], ['DK'], ['AL'], ['BY'], ['UA'],
         ];
+    }
+
+    /**
+     * Verify updated Switzerland regions
+     *
+     * @throws ExpectationFailedException
+     * @throws InvalidArgumentException
+     */
+    public function testUpdatedSwitzerlandRegions(): void
+    {
+        $regionCollection = $this->regionCollectionFactory->create();
+        $regionCollection->addCountryFilter(SwitzerlandRegionData::SWITZERLAND_COUNTRY_CODE);
+        $regionCollection->addRegionCodeFilter(
+            array_keys(SwitzerlandRegionData::SWITZERLAND_COUNTRY_REGION_DATA_TO_UPDATE)
+        );
+        $regionCollection->addBindParam(':region_locale', AppInterface::DISTRO_LOCALE_CODE);
+        foreach ($regionCollection->getItems() as $regionItem) {
+            $code = $regionItem->getData('code');
+            $expectRegionName = SwitzerlandRegionData::SWITZERLAND_COUNTRY_REGION_DATA_TO_UPDATE[$code] ?? null;
+            $this->assertEquals($expectRegionName, $regionItem->getData('default_name'));
+            $this->assertEquals($expectRegionName, $regionItem->getData('name'));
+        }
     }
 }

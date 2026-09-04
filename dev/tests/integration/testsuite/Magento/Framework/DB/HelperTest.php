@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB;
 
@@ -46,7 +46,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     {
         $diff = $this->_model->getDateDiff('2011-01-01', '2011-01-01');
         $this->assertInstanceOf('Zend_Db_Expr', $diff);
-        $this->assertStringContainsString('TO_DAYS', (string)$diff);
+        $this->assertStringContainsString('TIMESTAMPDIFF(DAY', (string)$diff);
     }
 
     public function testAddLikeEscape()

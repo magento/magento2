@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Indexer\Setup;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Json\EncoderInterface;
@@ -60,6 +62,11 @@ class Recurring implements InstallSchemaInterface
     private $indexerFactory;
 
     /**
+     * @var TriggerCleaner
+     */
+    private $triggerCleaner;
+
+    /**
      * Init
      *
      * @param CollectionFactory $statesFactory
@@ -68,6 +75,7 @@ class Recurring implements InstallSchemaInterface
      * @param EncryptorInterface $encryptor
      * @param EncoderInterface $encoder
      * @param IndexerInterfaceFactory $indexerFactory
+     * @param TriggerCleaner|null $triggerCleaner
      */
     public function __construct(
         CollectionFactory $statesFactory,
@@ -75,7 +83,8 @@ class Recurring implements InstallSchemaInterface
         ConfigInterface $config,
         EncryptorInterface $encryptor,
         EncoderInterface $encoder,
-        IndexerInterfaceFactory $indexerFactory
+        IndexerInterfaceFactory $indexerFactory,
+        ?TriggerCleaner $triggerCleaner = null
     ) {
         $this->statesFactory = $statesFactory;
         $this->stateFactory = $stateFactory;
@@ -83,6 +92,7 @@ class Recurring implements InstallSchemaInterface
         $this->encryptor = $encryptor;
         $this->encoder = $encoder;
         $this->indexerFactory = $indexerFactory;
+        $this->triggerCleaner = $triggerCleaner ?? ObjectManager::getInstance()->get(TriggerCleaner::class);
     }
 
     /**
@@ -90,6 +100,17 @@ class Recurring implements InstallSchemaInterface
      */
     public function install(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        foreach ($this->config->getIndexers() as $index) {
+            $indexerId = $index['indexer_id'];
+            $state = $this->stateFactory->create();
+            $state->loadByIndexer($indexerId);
+            //  If state does not exist, create default index mode to scheduled
+            if (empty($state->getData('state_id'))) {
+                $indexer = $this->indexerFactory->create()->load($indexerId);
+                $indexer->setScheduled(true);
+            }
+        }
+
         /** @var State[] $stateIndexers */
         $stateIndexers = [];
         $states = $this->statesFactory->create();
@@ -121,8 +142,15 @@ class Recurring implements InstallSchemaInterface
 
             $indexer = $this->indexerFactory->create()->load($indexerId);
             if ($indexer->isScheduled()) {
-                $indexer->getView()->unsubscribe()->subscribe();
+                // Migrate existing changelog tables (version_id int→bigint, charset→utf8mb4)
+                // without unsubscribing/subscribing, which would unconditionally rebuild triggers.
+                $indexer->getView()->getChangelog()->create();
             }
         }
+
+        // Use TriggerCleaner to only recreate triggers whose statements actually changed,
+        // instead of unconditionally dropping and recreating all triggers for every indexer.
+        // This avoids acquiring exclusive table locks when no trigger changes are needed.
+        $this->triggerCleaner->removeTriggers();
     }
 }

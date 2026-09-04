@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Reflection;
@@ -118,7 +118,7 @@ class ExtensionAttributesProcessor
                 $value = $this->dataObjectProcessor->buildOutputDataArray($value, $returnType);
             } elseif (is_array($value)) {
                 $valueResult = [];
-                $arrayElementType = substr($returnType, 0, -2);
+                $arrayElementType = $returnType !== null ? substr($returnType, 0, -2) : '';
                 foreach ($value as $singleValue) {
                     if (is_object($singleValue) && !($singleValue instanceof Phrase)) {
                         $singleValue = $this->dataObjectProcessor->buildOutputDataArray(

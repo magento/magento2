@@ -1,12 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -101,6 +100,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL query via POST and returns the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlMutationWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->postWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
      * Compose headers
      *
      * @param array $headers
@@ -183,5 +205,19 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 . var_export($expectedValue, true)
             );
         }
+    }
+
+    /**
+     * Tear down test and flush page cache
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager
+            ->get(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 }

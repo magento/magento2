@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Validator;
@@ -45,7 +45,7 @@ class AllowedProtocols extends AbstractValidator
     {
         $uri = new Uri($value);
         $isValid = in_array(
-            strtolower($uri->getScheme()),
+            strtolower($uri->getScheme() ?? ''),
             $this->listOfProtocols
         );
         if (!$isValid) {

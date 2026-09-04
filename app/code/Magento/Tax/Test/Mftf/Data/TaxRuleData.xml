@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -23,6 +23,22 @@
     </entity>
     <entity name="SimpleTaxRule" type="taxRule">
         <data key="code" unique="suffix">TaxRule</data>
+        <data key="position">0</data>
+        <data key="priority">0</data>
+        <array key="customer_tax_class_ids">
+            <item>3</item>
+        </array>
+        <array key="product_tax_class_ids">
+            <item>2</item>
+        </array>
+        <array key="tax_rate_ids">
+            <item>1</item>
+            <item>2</item>
+        </array>
+        <data key="calculate_subtotal">true</data>
+    </entity>
+    <entity name="SimpleTaxRule2" type="taxRule">
+        <data key="code" unique="suffix">SecondSimpleTaxRule</data>
         <data key="position">0</data>
         <data key="priority">0</data>
         <array key="customer_tax_class_ids">
@@ -118,7 +134,7 @@
         <data key="calculate_subtotal">true</data>
     </entity>
     <entity name="TaxRule" type="taxRule">
-        <data key="name" unique="suffix">TaxName</data>
+        <data key="name" unique="suffix">TaxNameA</data>
     </entity>
     <entity name="TaxRuleZeroRate" type="taxRule">
         <data key="name" unique="suffix">TaxNameZeroRate</data>
@@ -135,5 +151,20 @@
         </array>
         <var key="tax_rate_ids" entityType="taxRate" entityKey="id"/>
         <data key="calculate_subtotal">false</data>
+    </entity>
+    <entity name="ProductTax" type="taxRule">
+        <data key="name" unique="suffix">ProductTax</data>
+    </entity>
+    <entity name="ProductShipping" type="taxRule">
+        <data key="name" unique="suffix">ProductShipping</data>
+    </entity>
+    <entity name="ShippingTax" type="taxRule">
+        <data key="name" unique="suffix">ShippingTax</data>
+    </entity>
+    <entity name="ShippingGood" type="taxRule">
+        <data key="name" unique="suffix">ShippingGood</data>
+    </entity>
+    <entity name="TaxRuleSuccessMessages">
+        <data key="delete">The tax rule has been deleted.</data>
     </entity>
 </entities>

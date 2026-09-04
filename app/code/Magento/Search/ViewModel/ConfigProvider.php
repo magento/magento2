@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Search\ViewModel;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Search\Helper\Data as SearchHelper;
 
 /**
  * View model for search
@@ -27,12 +28,30 @@ class ConfigProvider implements ArgumentInterface
     private $scopeConfig;
 
     /**
+     * @var SearchHelper
+     */
+    private $searchHelper;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param SearchHelper $searchHelper
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        SearchHelper $searchHelper
     ) {
         $this->scopeConfig = $scopeConfig;
+        $this->searchHelper = $searchHelper;
+    }
+
+    /**
+     * Retrieve search helper instance for template view
+     *
+     * @return SearchHelper
+     */
+    public function getSearchHelperData(): SearchHelper
+    {
+        return $this->searchHelper;
     }
 
     /**

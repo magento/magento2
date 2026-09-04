@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -52,7 +52,7 @@ class DirectoryResolver
     {
         $directory = $this->filesystem->getDirectoryWrite($directoryConfig);
         $realPath = $directory->getDriver()->getRealPathSafety($path);
-        $root = $directory->getAbsolutePath();
+        $root = rtrim($directory->getAbsolutePath(), DIRECTORY_SEPARATOR);
 
         return strpos($realPath, $root) === 0;
     }

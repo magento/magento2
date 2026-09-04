@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Block\Ui;
 
@@ -153,6 +153,7 @@ class ProductViewCounter extends Template
         $this->productRenderCollectorComposite
             ->collect($product, $productRender);
         $data = $this->hydrator->extract($productRender);
+        $data['is_available'] = $product->isAvailable();
 
         $currentProductData = [
             'items' => [

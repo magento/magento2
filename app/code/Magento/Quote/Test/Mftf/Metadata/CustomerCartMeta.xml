@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -60,4 +60,9 @@
             <field key="method">string</field>
         </object>
     </operation>
+
+    <operation name="GetOrderData" dataType="CustomerCart" type="get" auth="adminOauth" url="/V1/orders/{return}" method="GET">
+        <contentType>application/json</contentType>
+    </operation>
+
 </operations>

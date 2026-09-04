@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\MediaGalleryApi\Api\SearchAssetsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Verify SearchAssets By searchCriteria
@@ -55,9 +56,9 @@ class SearchAssetsTest extends TestCase
     /**
      * Verify search asstes by searching with search criteria
      *
-     * @dataProvider searchCriteriaProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      */
+    #[DataProvider('searchCriteriaProvider')]
     public function testExecute(array $searchCriteriaData): void
     {
         $titleFilter = $this->filterBuilder->setField($searchCriteriaData['field'])
@@ -79,7 +80,7 @@ class SearchAssetsTest extends TestCase
      *
      * @return array
      */
-    public function searchCriteriaProvider(): array
+    public static function searchCriteriaProvider(): array
     {
         return [
             [

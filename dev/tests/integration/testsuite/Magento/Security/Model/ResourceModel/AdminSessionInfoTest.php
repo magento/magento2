@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Security\Model\ResourceModel;
 
@@ -37,7 +37,6 @@ class AdminSessionInfoTest extends \PHPUnit\Framework\TestCase
     public function getTestData()
     {
         return [
-            'session_id'    => '569e273d752e9',
             'user_id'       => 1,
             'status'        => 1,
             'created_at'    => '2016-01-21 15:00:00',

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -74,7 +74,6 @@ class SimpleDirectiveTest extends TestCase
     public function testParametersAreParsed()
     {
         $filter = $this->objectManager->create(Template::class);
-        $filter->setStrictMode(false);
 
         $processor = $this->createWithProcessorsAndFilters(
             ['mydir' => $this->objectManager->create(MyDirProcessor::class)],

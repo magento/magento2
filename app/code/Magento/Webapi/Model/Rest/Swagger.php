@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Webapi\Model\Rest;
 
@@ -29,6 +29,13 @@ class Swagger extends \Magento\Framework\DataObject
     public function __construct()
     {
         $data = [
+            "securityDefinitions" => [
+                "api_key" => [
+                    "type" => "apiKey",
+                    "name" => "api_key",
+                    "in" => "header"
+                ]
+            ],
             'swagger' => self::SWAGGER_VERSION,
             'info' => [
                 'version' => '',

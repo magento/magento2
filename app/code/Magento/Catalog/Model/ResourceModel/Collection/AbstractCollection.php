@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
+
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Catalog EAV collection resource abstract model
@@ -11,7 +14,6 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
  * Implement using different stores for retrieve attribute values
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -25,7 +27,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     protected $_storeId;
 
     /**
-     * Store manager
+     * Manager of store
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
@@ -56,7 +58,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -71,6 +73,15 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $universalFactory,
             $connection
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_storeId = null;
+        parent::_resetState();
     }
 
     /**

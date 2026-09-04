@@ -1,26 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\UrlRewrite\Block\Cms\Page;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\UrlRewrite\Block\Cms\Page\Edit
  * @magentoAppArea adminhtml
  */
-class EditTest extends \PHPUnit\Framework\TestCase
+class EditTest extends TestCase
 {
     /**
      * Test prepare layout
-     *
-     * @dataProvider prepareLayoutDataProvider
      *
      * @param array $blockAttributes
      * @param array $expected
      *
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('prepareLayoutDataProvider')]
     public function testPrepareLayout($blockAttributes, $expected)
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
@@ -123,7 +125,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCmsPage()->getId()) {
-                    $this->assertRegExp(
+                    $this->assertMatchesRegularExpression(
                         '/setLocation\([\\\'\"]\S+?\/cms_page/i',
                         $buttonsHtml,
                         'Back button is not present in category URL rewrite edit block'
@@ -277,7 +279,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function prepareLayoutDataProvider()
+    public static function prepareLayoutDataProvider(): array
     {
         /** @var $urlRewrite \Magento\UrlRewrite\Model\UrlRewrite */
         $urlRewrite = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

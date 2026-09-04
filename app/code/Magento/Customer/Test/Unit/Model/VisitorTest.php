@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\ResourceModel\Visitor as VisitorResourceModel;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Visitor;
 use Magento\Customer\Model\Visitor as VisitorModel;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\DataObject;
@@ -17,12 +18,15 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit Tests to cover Visitor Model
  */
 class VisitorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var VisitorModel
      */
@@ -56,16 +60,16 @@ class VisitorTest extends TestCase
     protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
-        $this->sessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSessionId', 'getVisitorData', 'setVisitorData'])
-            ->getMock();
+        $this->sessionMock = $this->createPartialMockWithReflection(
+            Session::class,
+            ['getVisitorData', 'setVisitorData', 'getSessionId']
+        );
         $this->httpRequestMock = $this->createMock(HttpRequest::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->visitorResourceModelMock = $this->getMockBuilder(VisitorResourceModel::class)
-            ->setMethods([
+            ->onlyMethods([
                 'beginTransaction',
                 '__sleep',
                 '__wakeup',
@@ -74,6 +78,7 @@ class VisitorTest extends TestCase
                 'addCommitCallback',
                 'commit',
                 'clean',
+                'load',
             ])->disableOriginalConstructor()
             ->getMock();
         $this->visitorResourceModelMock->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');

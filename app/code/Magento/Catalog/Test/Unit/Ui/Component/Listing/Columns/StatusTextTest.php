@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,10 +12,10 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Ui\Component\Listing\Columns\StatusText;
 use PHPUnit\Framework\MockObject\MockObject;
 
-class StatusTextTest extends AbstractColumnTest
+class StatusTextTest extends AbstractColumnTestCase
 {
-    const STATUS_ID = 1;
-    const STATUS_TEXT = 'Enabled';
+    private const STATUS_ID = 1;
+    private const STATUS_TEXT = 'Enabled';
 
     /**
      * @var Status|MockObject
@@ -26,10 +26,7 @@ class StatusTextTest extends AbstractColumnTest
     {
         parent::setUp();
 
-        $this->statusMock = $this->getMockBuilder(Status::class)
-            ->setMethods(['getOptionText'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->statusMock = $this->createPartialMock(Status::class, ['getOptionText']);
     }
 
     /**

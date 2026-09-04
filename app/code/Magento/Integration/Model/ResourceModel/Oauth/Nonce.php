@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Model\ResourceModel\Oauth;
 
 /**
  * oAuth nonce resource model
- *
- * @author Magento Core Team <core@magentocommerce.com>
  */
 class Nonce extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {

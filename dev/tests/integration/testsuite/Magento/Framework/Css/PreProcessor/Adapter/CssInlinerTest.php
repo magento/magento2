@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
+
+use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CssInlinerTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,14 +31,14 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
      * @param string $htmlFilePath
      * @param string $cssFilePath
      * @param string $cssExpected
-     * @dataProvider getFilesDataProvider
      */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($htmlFilePath, $cssFilePath, $cssExpected)
     {
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);
-        $this->model->setCss($css);
         $this->model->setHtml($html);
+        $this->model->setCss($css);
         $result = $this->model->process();
         $this->assertStringContainsString($cssExpected, $result);
     }
@@ -43,18 +46,18 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProvider()
+    public static function getFilesDataProvider()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                $fixtureDir . "/_files/css/test-input.html",
+                $fixtureDir . "/_files/css/test-css-no-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
             'withSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithSpaces' => $fixtureDir . "/_files/css/test-css-with-spaces.css",
+                $fixtureDir . "/_files/css/test-input.html",
+                $fixtureDir . "/_files/css/test-css-with-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ],
         ];
@@ -64,17 +67,13 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
      * @param string $htmlFilePath
      * @param string $cssFilePath
      * @param string $cssExpected
-     * @dataProvider getFilesDataProviderEmogrifier
      */
+    #[DataProvider('getFilesDataProviderEmogrifier')]
     public function testGetFilesEmogrifier($htmlFilePath, $cssFilePath, $cssExpected)
     {
-        $emogrifier = new \Pelago\Emogrifier;
-
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);
-        $emogrifier->setCss($css);
-        $emogrifier->setHtml($html);
-        $result = $emogrifier->emogrify();
+        $result = EmogrifierCssInliner::fromHtml($html)->inlineCss($css)->render();
 
         /**
          * This test was implemented for the issue which existed in the older version of Emogrifier.
@@ -86,13 +85,13 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getFilesDataProviderEmogrifier()
+    public static function getFilesDataProviderEmogrifier()
     {
         $fixtureDir = dirname(dirname(__DIR__));
         return [
             'noSpacesCss'=>[
-                'resultHtml' => $fixtureDir . "/_files/css/test-input.html",
-                'cssWithoutSpaces' => $fixtureDir . "/_files/css/test-css-no-spaces.css",
+                $fixtureDir . "/_files/css/test-input.html",
+                $fixtureDir . "/_files/css/test-css-no-spaces.css",
                 'vertical-align: top; padding: 10px 10px 10px 0; width: 50%;'
             ]
         ];

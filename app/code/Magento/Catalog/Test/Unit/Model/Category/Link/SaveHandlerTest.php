@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Link;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Category\Link\SaveHandler;
@@ -14,11 +15,13 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveHandlerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var SaveHandler
      */
@@ -40,18 +43,13 @@ class SaveHandlerTest extends TestCase
     private $hydratorPool;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->productCategoryLink = $this->getMockBuilder(CategoryLink::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->hydrator = $this->getMockBuilder(HydratorInterface::class)
-            ->getMockForAbstractClass();
-        $this->hydratorPool = $this->getMockBuilder(HydratorPool::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->productCategoryLink = $this->createMock(CategoryLink::class);
+        $this->hydrator = $this->createMock(HydratorInterface::class);
+        $this->hydratorPool = $this->createMock(HydratorPool::class);
 
         $this->saveHandler = new SaveHandler(
             $this->productCategoryLink,
@@ -61,15 +59,21 @@ class SaveHandlerTest extends TestCase
 
     /**
      * @param array $categoryIds
-     * @param array $categoryLinks
+     * @param array|null $categoryLinks
      * @param array $existCategoryLinks
      * @param array $expectedCategoryLinks
      * @param array $affectedIds
      *
-     * @dataProvider getCategoryDataProvider
+     * @return void
      */
-    public function testExecute($categoryIds, $categoryLinks, $existCategoryLinks, $expectedCategoryLinks, $affectedIds)
-    {
+    #[DataProvider('getCategoryDataProvider')]
+    public function testExecute(
+        array $categoryIds,
+        ?array $categoryLinks,
+        array $existCategoryLinks,
+        array $expectedCategoryLinks,
+        array $affectedIds
+    ): void {
         if ($categoryLinks) {
             $this->hydrator->expects(static::any())
                 ->method('extract')
@@ -80,26 +84,18 @@ class SaveHandlerTest extends TestCase
                 ->willReturn($this->hydrator);
         }
 
-        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setCategoryLinks', 'getCategoryLinks'])
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->createPartialMockWithReflection(
+            ProductExtensionInterface::class,
+            $this->getProductExtensionMethods()
+        );
         $extensionAttributes->expects(static::any())
             ->method('getCategoryLinks')
             ->willReturn($categoryLinks);
 
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getExtensionAttributes',
-                    'setAffectedCategoryIds',
-                    'setIsChangedCategories',
-                    'getCategoryIds'
-                ]
-            )
-            ->getMock();
-        $product->expects(static::at(0))->method('setIsChangedCategories')->with(false);
+        $product = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getExtensionAttributes', 'getCategoryIds', 'setAffectedCategoryIds', 'setIsChangedCategories']
+        );
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
@@ -131,7 +127,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @return array
      */
-    public function getCategoryDataProvider()
+    public static function getCategoryDataProvider(): array
     {
         return [
             [
@@ -139,97 +135,123 @@ class SaveHandlerTest extends TestCase
                 null, // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [
                     ['category_id' => 3, 'position' => 10],
                     ['category_id' => 4, 'position' => 20],
-                    ['category_id' => 5, 'position' => 0],
+                    ['category_id' => 5, 'position' => 0]
                 ],
-                [3,4,5], //affected category_ids
+                [3,4,5] //affected category_ids
             ],
             [
                 [3, 4], //model category_ids
                 [], // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [],
-                [3,4], //affected category_ids
+                [3,4] //affected category_ids
             ],
             [
                 [], //model category_ids
                 [
-                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 3, 'position' => 20]
                 ], // dto category links
                 [
                     ['category_id' => 3, 'position' => 10],
-                    ['category_id' => 4, 'position' => 20],
+                    ['category_id' => 4, 'position' => 20]
                 ],
                 [
-                    ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 3, 'position' => 20]
                 ],
-                [3,4], //affected category_ids
+                [3,4] //affected category_ids
+            ],
+            [
+                [3], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 20]
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [
+                    ['category_id' => 3, 'position' => 20]
+                ],
+                [3] //affected category_ids
+            ],
+            [
+                [], //model category_ids
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ], // dto category links
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [
+                    ['category_id' => 3, 'position' => 10]
+                ],
+                [] //affected category_ids
             ],
             [
                 [3], //model category_ids
                 [
                     ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30]
                 ], // dto category links
                 [
-                    ['category_id' => 3, 'position' => 10],
+                    ['category_id' => 3, 'position' => 10]
                 ],
                 [
                     ['category_id' => 3, 'position' => 20],
+                    ['category_id' => 4, 'position' => 30]
                 ],
-                [3], //affected category_ids
-            ],
-            [
-                [], //model category_ids
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ], // dto category links
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [], //affected category_ids
-            ],
-            [
-                [3], //model category_ids
-                [
-                    ['category_id' => 3, 'position' => 20],
-                    ['category_id' => 4, 'position' => 30],
-                ], // dto category links
-                [
-                    ['category_id' => 3, 'position' => 10],
-                ],
-                [
-                    ['category_id' => 3, 'position' => 20],
-                    ['category_id' => 4, 'position' => 30],
-                ],
-                [3, 4], //affected category_ids
-            ],
+                [3, 4] //affected category_ids
+            ]
         ];
     }
 
-    public function testExecuteWithoutProcess()
+    /**
+     * @return void
+     */
+    public function testExecuteWithoutProcess(): void
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getExtensionAttributes', 'hasCategoryIds'])
-            ->getMock();
+        $product = $this->createPartialMock(
+            Product::class,
+            ['getExtensionAttributes']
+        );
         $product->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn(null);
-        $product->expects(static::any())
-            ->method('hasCategoryIds')
-            ->willReturn(false);
 
         $entity = $this->saveHandler->execute($product);
         static::assertSame($product, $entity);
+    }
+
+    private function getProductExtensionMethods(): array
+    {
+        return [
+            'getWebsiteIds',
+            'setWebsiteIds',
+            'getCategoryLinks',
+            'setCategoryLinks',
+            'getBundleProductOptions',
+            'setBundleProductOptions',
+            'getStockItem',
+            'setStockItem',
+            'getDiscounts',
+            'setDiscounts',
+            'getConfigurableProductOptions',
+            'setConfigurableProductOptions',
+            'getConfigurableProductLinks',
+            'setConfigurableProductLinks',
+            'getDownloadableProductLinks',
+            'setDownloadableProductLinks',
+            'getDownloadableProductSamples',
+            'setDownloadableProductSamples',
+            'getGiftcardAmounts',
+            'setGiftcardAmounts',
+        ];
     }
 }

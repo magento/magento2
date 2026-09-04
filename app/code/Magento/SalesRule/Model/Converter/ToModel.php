@@ -1,17 +1,22 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Model\Converter;
 
-use Magento\SalesRule\Model\Data\Condition;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
+use Magento\SalesRule\Model\Data\Validator;
 use Magento\SalesRule\Model\Rule;
 
 class ToModel
 {
+    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
+
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
      */
@@ -23,18 +28,28 @@ class ToModel
     protected $dataObjectProcessor;
 
     /**
+     * @var Validator
+     */
+    private Validator $validator;
+
+    /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param Validator|null $validator
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        ?Validator $validator = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->validator = $validator ?? ObjectManager::getInstance()->get(Validator::class);
     }
 
     /**
+     * Map conditions
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -51,6 +66,8 @@ class ToModel
     }
 
     /**
+     * Map action conditions
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -67,6 +84,8 @@ class ToModel
     }
 
     /**
+     * Map store labels
+     *
      * @param Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -86,12 +105,14 @@ class ToModel
     }
 
     /**
+     * Map coupon type
+     *
      * @param Rule $ruleModel
      * @return $this
      */
     protected function mapCouponType(Rule $ruleModel)
     {
-        if ($ruleModel->getCouponType()) {
+        if ($ruleModel->getCouponType() && !is_numeric($ruleModel->getCouponType())) {
             $mappedValue = '';
             switch ($ruleModel->getCouponType()) {
                 case RuleInterface::COUPON_TYPE_NO_COUPON:
@@ -111,6 +132,8 @@ class ToModel
     }
 
     /**
+     * Map fields
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -138,6 +161,9 @@ class ToModel
         $output['value'] = $condition->getValue();
         $output['attribute'] = $condition->getAttributeName();
         $output['operator'] = $condition->getOperator();
+        if ($condition->getExtensionAttributes()?->getAttributeScope()) {
+            $output['attribute_scope'] = $condition->getExtensionAttributes()->getAttributeScope();
+        }
 
         if ($condition->getAggregatorType()) {
             $output['aggregator'] = $condition->getAggregatorType();
@@ -153,10 +179,12 @@ class ToModel
     }
 
     /**
+     * To Model
+     *
      * @param RuleDataModel $dataModel
      * @return $this|Rule
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     public function toModel(RuleDataModel $dataModel)
     {
@@ -184,22 +212,27 @@ class ToModel
             \Magento\SalesRule\Api\Data\RuleInterface::class
         );
 
+        $data = array_filter($data, function ($value) {
+            return $value !== null;
+        });
         $mergedData = array_merge($modelData, $data);
 
         $validateResult = $ruleModel->validateData(new \Magento\Framework\DataObject($mergedData));
-        if ($validateResult !== true) {
-            $text = '';
-            /** @var \Magento\Framework\Phrase $errorMessage */
-            foreach ($validateResult as $errorMessage) {
-                $text .= $errorMessage->getText();
-                $text .= '; ';
-            }
-            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase($text));
-        }
+        $validationErrors = is_array($validateResult) ? $validateResult : [];
 
         $ruleModel->setData($mergedData);
 
         $this->mapFields($ruleModel, $dataModel);
+
+        if (!$this->validator->isValid($dataModel)) {
+            $validationErrors = array_merge($validationErrors, $this->validator->getMessages());
+        }
+        
+        if ($validationErrors) {
+            $exception = new InputException();
+            array_walk($validationErrors, $exception->addError(...));
+            throw $exception;
+        }
 
         return $ruleModel;
     }
@@ -214,7 +247,7 @@ class ToModel
     {
         if ($date) {
             $fromDate = new \DateTime($date);
-            $date = $fromDate->format(\DateTime::ISO8601);
+            $date = $fromDate->format(self::DATE_TIME_FORMAT);
         }
 
         return $date;

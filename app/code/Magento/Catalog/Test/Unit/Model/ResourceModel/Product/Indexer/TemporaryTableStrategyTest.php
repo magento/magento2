@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -32,6 +32,9 @@ class TemporaryTableStrategyTest extends TestCase
      */
     private $resourceMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->tableStrategyMock = $this->createMock(Strategy::class);
@@ -43,19 +46,28 @@ class TemporaryTableStrategyTest extends TestCase
         );
     }
 
-    public function testGetUseIdxTable()
+    /**
+     * @return void
+     */
+    public function testGetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(true);
         $this->assertTrue($this->model->getUseIdxTable());
     }
 
-    public function testSetUseIdxTable()
+    /**
+     * @return void
+     */
+    public function testSetUseIdxTable(): void
     {
         $this->tableStrategyMock->expects($this->once())->method('setUseIdxTable')->with(true)->willReturnSelf();
         $this->assertEquals($this->tableStrategyMock, $this->model->setUseIdxTable(true));
     }
 
-    public function testGetTableName()
+    /**
+     * @return void
+     */
+    public function testGetTableName(): void
     {
         $tablePrefix = 'prefix';
         $expectedResult = $tablePrefix . StrategyInterface::IDX_SUFFIX;
@@ -67,27 +79,30 @@ class TemporaryTableStrategyTest extends TestCase
         $this->assertEquals($expectedResult, $this->model->getTableName($tablePrefix));
     }
 
-    public function testPrepareTableName()
+    /**
+     * @return void
+     */
+    public function testPrepareTableName(): void
     {
         $tablePrefix = 'prefix';
         $expectedResult = $tablePrefix . TemporaryTableStrategy::TEMP_SUFFIX;
         $tempTableName = $tablePrefix . StrategyInterface::TMP_SUFFIX;
 
         $this->tableStrategyMock->expects($this->once())->method('getUseIdxTable')->willReturn(false);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
 
         $this->resourceMock->expects($this->once())
             ->method('getConnection')
             ->with('indexer')
             ->willReturn($connectionMock);
-        $this->resourceMock->expects($this->at(1))
+
+        $this->resourceMock
             ->method('getTableName')
-            ->with($expectedResult)
-            ->willReturn($expectedResult);
-        $this->resourceMock->expects($this->at(2))
-            ->method('getTableName')
-            ->with($tempTableName)
-            ->willReturn($tempTableName);
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [$expectedResult] => $expectedResult,
+                [$tempTableName] => $tempTableName,
+            });
+
         $connectionMock->expects($this->once())
             ->method('createTemporaryTableLike')
             ->with($expectedResult, $tempTableName, true);

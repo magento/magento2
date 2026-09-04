@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -65,7 +65,7 @@ define([
             contents = function (elem) {
                 return $.map(elem, function (el) {
                     try {
-                        return $.nodeName(el, 'iframe') ?
+                        return el.nodeName.toLowerCase() === 'iframe' ?
                             el.contentDocument || (el.contentWindow ? el.contentWindow.document : []) :
                             $.merge([], el.childNodes);
                     } catch (e) {

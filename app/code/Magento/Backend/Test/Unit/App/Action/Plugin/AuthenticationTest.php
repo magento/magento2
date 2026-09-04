@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AuthenticationTest extends TestCase
@@ -29,6 +30,9 @@ class AuthenticationTest extends TestCase
      */
     protected $plugin;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
@@ -42,13 +46,19 @@ class AuthenticationTest extends TestCase
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;
     }
 
-    public function testAroundDispatchProlongStorage()
+    /**
+     * @return void
+     */
+    public function testAroundDispatchProlongStorage(): void
     {
         $subject = $this->createMock(Index::class);
         $request = $this->createPartialMock(Http::class, ['getActionName']);
@@ -76,9 +86,9 @@ class AuthenticationTest extends TestCase
         $user->expects($this->once())
             ->method('reload');
 
-        $storage->expects($this->at(0))
+        $storage
             ->method('prolong');
-        $storage->expects($this->at(1))
+        $storage
             ->method('refreshAcl');
 
         $proceed = function ($request) use ($expectedResult) {
@@ -89,22 +99,17 @@ class AuthenticationTest extends TestCase
     }
 
     /**
-     * Calls aroundDispatch to access protected method _processNotLoggedInUser
+     * Calls aroundDispatch to access protected method _processNotLoggedInUser.
      *
+     * @return void
      * Data provider supplies different possibilities of request parameters and properties
-     * @dataProvider processNotLoggedInUserDataProvider
      */
-    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag)
+    #[DataProvider('processNotLoggedInUserDataProvider')]
+    public function testProcessNotLoggedInUser($isIFrameParam, $isAjaxParam, $isForwardedFlag): void
     {
-        $subject = $this->getMockBuilder(Index::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $request = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storage = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subject = $this->createMock(Index::class);
+        $request = $this->createMock(Http::class);
+        $storage = $this->createMock(Session::class);
 
         // Stubs to control the flow of execution in aroundDispatch
         $this->auth->expects($this->any())->method('getAuthStorage')->willReturn($storage);
@@ -155,7 +160,7 @@ class AuthenticationTest extends TestCase
     /**
      * @return array
      */
-    public function processNotLoggedInUserDataProvider()
+    public static function processNotLoggedInUserDataProvider(): array
     {
         return [
             'iFrame' => [true, false, false],

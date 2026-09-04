@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,13 +13,17 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DateTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Date
      */
@@ -73,10 +77,10 @@ class DateTest extends TestCase
      */
     private function mockGridDateColumnConfig($objectDataIndex, $periodType)
     {
-        $columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIndex', 'getPeriodType'])
-            ->getMock();
+        $columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getIndex', 'getPeriodType']
+        );
         $columnMock->expects($this->once())->method('getIndex')->willReturn($objectDataIndex);
         $columnMock->expects($this->atLeastOnce())->method('getPeriodType')->willReturn($periodType);
 
@@ -88,9 +92,7 @@ class DateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->localeDate = $this->getMockBuilder(TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeDate = $this->createMock(TimezoneInterface::class);
         $this->localeDate
             ->expects($this->once())
             ->method('date')
@@ -112,6 +114,7 @@ class DateTest extends TestCase
         );
 
         $objectManager = new ObjectManager($this);
+        $objectManager->prepareObjectManager();
         $this->date = $objectManager->getObject(
             Date::class,
             [
@@ -141,22 +144,28 @@ class DateTest extends TestCase
      * @param string $index
      * @param string $period
      * @param string $result
-     * @dataProvider datesDataProvider
      * @return void
      */
+    #[DataProvider('datesDataProvider')]
     public function testRender($data, $locale, $index, $period, $result)
     {
         $this->mockGridDateRendererBehaviorWithLocale($locale);
         $this->mockGridDateColumnConfig($index, $period);
 
         $objectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->once())->method('getData')->willReturn($data);
 
         $this->dateTimeFormatter->expects($this->once())
             ->method('formatObject')
-            ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
+            ->with(
+                $this->isInstanceOf('DateTime'),
+                $this->callback(function ($value) {
+                    return is_string($value);
+                }),
+                $locale
+            )
             ->willReturn($result);
 
         $this->assertEquals($result, $this->date->render($objectMock));
@@ -165,7 +174,7 @@ class DateTest extends TestCase
     /**
      * @return array
      */
-    public function datesDataProvider()
+    public static function datesDataProvider()
     {
         return [
             [
@@ -215,13 +224,19 @@ class DateTest extends TestCase
         $this->mockGridDateColumnConfig('period', 'day');
 
         $objectMock = $this->getMockBuilder(DataObject::class)
-            ->setMethods(['getData'])
+            ->onlyMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->any())->method('getData')->willReturn('2014-06-25');
 
         $this->dateTimeFormatter->expects($this->once())
             ->method('formatObject')
-            ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
+            ->with(
+                $this->isInstanceOf('DateTime'),
+                $this->callback(function ($value) {
+                    return is_string($value);
+                }),
+                $locale
+            )
             ->willReturn($result);
 
         $this->assertEquals($result, $this->date->render($objectMock));

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -54,6 +54,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
         \Magento\Setup\Model\ConfigOptionsList\Lock::class,
         \Magento\Setup\Model\ConfigOptionsList\Directory::class,
+        \Magento\Setup\Model\ConfigOptionsList\BackpressureLogger::class,
     ];
 
     /**
@@ -72,8 +73,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function __construct(
         ConfigGenerator $configGenerator,
         DbValidator $dbValidator,
-        KeyValidator $encryptionKeyValidator = null,
-        DriverOptions $driverOptions = null
+        ?KeyValidator $encryptionKeyValidator = null,
+        ?DriverOptions $driverOptions = null
     ) {
         $this->configGenerator = $configGenerator;
         $this->dbValidator = $dbValidator;
@@ -159,7 +160,6 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_INIT_STATEMENTS,
                 'Database  initial set of commands',
-                'SET NAMES utf8;'
             ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION,
@@ -252,7 +252,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             $errors[] = $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
         }
 
-        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) &&
+            !$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
             $errors[] = $this->validateDbSettings($options, $deploymentConfig);
         }
 

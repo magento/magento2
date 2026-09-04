@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
@@ -24,7 +24,6 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllOptions()
     {
-        CacheCleaner::cleanAll();
         $allOptions = $this->model->getAllOptions();
         $cachedAllOptions = $this->model->getAllOptions();
         $this->assertEquals($allOptions, $cachedAllOptions);

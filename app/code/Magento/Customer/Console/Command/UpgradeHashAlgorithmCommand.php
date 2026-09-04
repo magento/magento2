@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Console\Command;
 
@@ -58,7 +58,7 @@ class UpgradeHashAlgorithmCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->collection = $this->customerCollectionFactory->create();
         $this->collection->addAttributeToSelect('*');
@@ -68,10 +68,9 @@ class UpgradeHashAlgorithmCommand extends Command
             $customer->load($customer->getId());
             if (!$this->encryptor->validateHashVersion($customer->getPasswordHash())) {
                 list($hash, $salt, $version) = explode(Encryptor::DELIMITER, $customer->getPasswordHash(), 3);
-                $version .= Encryptor::DELIMITER . $this->encryptor->getLatestHashVersion();
                 $hash = $this->encryptor->getHash($hash, $salt, $this->encryptor->getLatestHashVersion());
-                list($hash, $salt) = explode(Encryptor::DELIMITER, $hash, 3);
-                $hash = implode(Encryptor::DELIMITER, [$hash, $salt, $version]);
+                list($hash, $salt, $newVersion) = explode(Encryptor::DELIMITER, $hash, 3);
+                $hash = implode(Encryptor::DELIMITER, [$hash, $salt, $version .Encryptor::DELIMITER .$newVersion]);
                 $customer->setPasswordHash($hash);
                 $customer->save();
                 $output->write(".");
@@ -79,5 +78,7 @@ class UpgradeHashAlgorithmCommand extends Command
         }
         $output->writeln(".");
         $output->writeln("<info>Finished</info>");
+
+        return 0;
     }
 }

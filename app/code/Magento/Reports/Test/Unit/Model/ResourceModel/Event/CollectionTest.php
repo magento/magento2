@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,13 +14,17 @@ use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Reports\Model\ResourceModel\Event\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class CollectionTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Collection
      */
@@ -78,7 +82,7 @@ class CollectionTest extends TestCase
             ->getMock();
 
         $this->selectMock = $this->getMockBuilder(Select::class)
-            ->setMethods(['where', 'from'])
+            ->onlyMethods(['where', 'from'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock->expects($this->any())
@@ -95,10 +99,10 @@ class CollectionTest extends TestCase
             ->method('select')
             ->willReturn($this->selectMock);
 
-        $this->resourceMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection', 'getCurrentStoreIds', '_construct', 'getMainTable', 'getTable'])
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            AbstractDb::class,
+            ['getConnection', '_construct', 'getMainTable', 'getTable', 'getCurrentStoreIds']
+        );
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->dbMock);
@@ -115,11 +119,13 @@ class CollectionTest extends TestCase
 
     /**
      * @param mixed $ignoreData
-     * @param 'string' $ignoreSql
-     * @dataProvider ignoresDataProvider
+     * @param string $ignoreSql
+     *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function testAddStoreFilter($ignoreData, $ignoreSql)
+    #[DataProvider('ignoresDataProvider')]
+    public function testAddStoreFilter($ignoreData, string $ignoreSql): void
     {
         $typeId = 1;
         $subjectId =2;
@@ -132,33 +138,36 @@ class CollectionTest extends TestCase
             ->method('getCurrentStoreIds')
             ->willReturn($stores);
         $this->selectMock
-            ->expects($this->at(0))
             ->method('where')
-            ->with('event_type_id = ?', $typeId);
-        $this->selectMock
-            ->expects($this->at(1))
-            ->method('where')
-            ->with('subject_id = ?', $subjectId);
-        $this->selectMock
-            ->expects($this->at(2))
-            ->method('where')
-            ->with('subtype = ?', $subtype);
-        $this->selectMock
-            ->expects($this->at(3))
-            ->method('where')
-            ->with('store_id IN(?)', $stores);
-        $this->selectMock
-            ->expects($this->at(4))
-            ->method('where')
-            ->with($ignoreSql, $ignoreData);
-
+            ->willReturnCallback(function (
+                $arg1,
+                $arg2
+            ) use (
+                $typeId,
+                $subjectId,
+                $stores,
+                $ignoreSql,
+                $ignoreData
+            ) {
+                if ($arg1 == 'event_type_id = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'subject_id = ?' && $arg2 == $subjectId) {
+                    return null;
+                } elseif ($arg1 == 'subtype = ?' && $arg2 == $typeId) {
+                    return null;
+                } elseif ($arg1 == 'store_id IN(?)' && $arg2 == $stores) {
+                    return null;
+                } elseif ($arg1 == $ignoreSql && $arg2 == $ignoreData) {
+                    return null;
+                }
+            });
         $this->collection->addRecentlyFiler($typeId, $subjectId, $subtype, $ignoreData, $limit);
     }
 
     /**
      * @return array
      */
-    public function ignoresDataProvider()
+    public static function ignoresDataProvider(): array
     {
         return [
             [

@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
@@ -21,6 +22,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -82,14 +84,35 @@ class SaveTest extends TestCase
     private $save;
 
     /**
-     * Set up
+     * Set up.
      *
-     * @return void
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+
+        $objects = [
+            [
+                StoreManagerInterface::class,
+                $this->createMock(StoreManagerInterface::class)
+            ],
+            [
+                Registry::class,
+                $this->createMock(Registry::class)
+            ],
+            [
+                Config::class,
+                $this->createMock(Config::class)
+            ],
+            [
+                Session::class,
+                $this->createMock(Session::class)
+            ]
+        ];
+        $this->objectManager->prepareObjectManager($objects);
+
         $this->resultRedirectFactoryMock = $this->createPartialMock(
             RedirectFactory::class,
             ['create']
@@ -99,36 +122,10 @@ class SaveTest extends TestCase
             ['create']
         );
         $this->layoutFactoryMock = $this->createPartialMock(LayoutFactory::class, ['create']);
-        $this->requestMock = $this->getMockForAbstractClass(
-            RequestInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getParam', 'getPost', 'getPostValue']
-        );
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['dispatch']
-        );
-        $this->messageManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Message\ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['addSuccessMessage', 'getMessages']
-        );
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->messageManagerMock = $this->createMock(MessageManagerInterface::class);
 
         $this->save = $this->objectManager->getObject(
             Save::class,
@@ -144,17 +141,17 @@ class SaveTest extends TestCase
     }
 
     /**
-     * Run test execute method
+     * Run test execute method.
      *
      * @param int|bool $categoryId
      * @param int $storeId
      * @param int|null $parentId
-     * @return void
      *
-     * @dataProvider dataProviderExecute
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testExecute($categoryId, $storeId, $parentId)
+    #[DataProvider('dataProviderExecute')]
+    public function testExecute($categoryId, $storeId, $parentId): void
     {
         $this->markTestSkipped('Due to MAGETWO-48956');
 
@@ -181,50 +178,50 @@ class SaveTest extends TestCase
             ['setMessages', 'getGroupedHtml']
         );
         /**
-         * @var \Magento\Catalog\Model\Category|MockObject $categoryMock
+         * @var Category|MockObject $categoryMock
          */
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setAttributeSetId', 'getProductsReadonly', 'setPostedProducts'])
-            ->onlyMethods(
-                [
-                    'setStoreId',
-                    'load',
-                    'getPath',
-                    'getResource',
-                    'setPath',
-                    'setParentId',
-                    'setData',
-                    'addData',
-                    'getDefaultAttributeSetId',
-                    'getId',
-                    'validate',
-                    'unsetData',
-                    'save',
-                    'toArray'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createPartialMock(
+            Category::class,
+            [
+                'setStoreId',
+                'load',
+                'getPath',
+                'getResource',
+                'setPath',
+                'setParentId',
+                'setData',
+                'addData',
+                'getDefaultAttributeSetId',
+                'getId',
+                'validate',
+                'unsetData',
+                'save',
+                'toArray',
+                'setAttributeSetId',
+                'getProductsReadonly',
+                'setPostedProducts'
+            ]
+        );
         /**
-         * @var \Magento\Catalog\Model\Category|MockObject $parentCategoryMock
+         * @var Category|MockObject $parentCategoryMock
          */
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->addMethods(['setAttributeSetId', 'getProductsReadonly', 'setPostedProducts'])
-            ->onlyMethods(
-                [
-                    'setStoreId',
-                    'load',
-                    'getPath',
-                    'setPath',
-                    'setParentId',
-                    'setData',
-                    'addData',
-                    'getDefaultAttributeSetId',
-                    'getId'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentCategoryMock = $this->createPartialMock(
+            Category::class,
+            [
+                'setStoreId',
+                'load',
+                'getPath',
+                'setPath',
+                'setParentId',
+                'setData',
+                'addData',
+                'getDefaultAttributeSetId',
+                'getId',
+                'setAttributeSetId',
+                'getProductsReadonly',
+                'setPostedProducts'
+            ]
+        );
         /**
          * @var Session|MockObject $sessionMock
          */
@@ -236,14 +233,12 @@ class SaveTest extends TestCase
         /**
          * @var Config|MockObject $wysiwygConfigMock
          */
-        $wysiwygConfigMock = $this->getMockBuilder(Config::class)
-            ->addMethods(['setStoreId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $wysiwygConfigMock = $this->createPartialMock(Config::class, []);
+        $wysiwygConfigMock->method('setStoreId')->willReturnSelf();
         /**
          * @var StoreManagerInterface|MockObject $storeManagerMock
          */
-        $storeManagerMock = $this->getMockForAbstractClass(
+        $storeManagerMock = $this->createMock(
             StoreManagerInterface::class,
             [],
             '',
@@ -255,7 +250,7 @@ class SaveTest extends TestCase
         /**
          * @var Layout|MockObject $layoutMock
          */
-        $layoutMock = $this->getMockForAbstractClass(
+        $layoutMock = $this->createMock(
             Layout::class,
             [],
             '',
@@ -333,9 +328,7 @@ class SaveTest extends TestCase
         $categoryMock->expects($this->once())
             ->method('addData')
             ->with($addData);
-        $categoryMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($categoryId);
+        $categoryMock->method('getId')->willReturn($categoryId);
 
         if (!$parentId) {
             if ($storeId) {
@@ -349,9 +342,7 @@ class SaveTest extends TestCase
                 $parentId = $rootCategoryId;
             }
         }
-        $categoryMock->expects($this->any())
-            ->method('load')
-            ->willReturn($parentCategoryMock);
+        $categoryMock->method('load')->willReturn($parentCategoryMock);
         $parentCategoryMock->expects($this->once())
             ->method('getPath')
             ->willReturn('parent_category_path');
@@ -407,18 +398,14 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
             ->with(__('You saved the category.'));
-        $categoryMock->expects($this->at(1))
-            ->method('getId')
-            ->willReturn(111);
+        $categoryMock->method('getId')->willReturn(111);
         $this->layoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($layoutMock);
         $layoutMock->expects($this->once())
             ->method('getMessagesBlock')
             ->willReturn($blockMock);
-        $this->messageManagerMock->expects($this->any())
-            ->method('getMessages')
-            ->willReturn($messagesMock);
+        $this->messageManagerMock->method('getMessages')->willReturn($messagesMock);
         $blockMock->expects($this->once())
             ->method('setMessages')
             ->with($messagesMock);
@@ -449,22 +436,22 @@ class SaveTest extends TestCase
     }
 
     /**
-     * Data provider for execute
+     * Data provider for execute.
      *
      * @return array
      */
-    public function dataProviderExecute()
+    public static function dataProviderExecute(): array
     {
         return [
             [
                 'categoryId' => false,
                 'storeId' => 7,
-                'parentId' => 123,
+                'parentId' => 123
             ],
             [
                 'categoryId' => false,
                 'storeId' => 7,
-                'parentId' => null,
+                'parentId' => null
             ]
         ];
     }
@@ -472,7 +459,7 @@ class SaveTest extends TestCase
     /**
      * @return array
      */
-    public function imagePreprocessingDataProvider()
+    public static function imagePreprocessingDataProvider(): array
     {
         $dataWithImage = [
             'image' => 'path.jpg',
@@ -497,12 +484,12 @@ class SaveTest extends TestCase
     }
 
     /**
-     * @dataProvider imagePreprocessingDataProvider
      *
      * @param array $data
      * @param array $expected
      */
-    public function testImagePreprocessing($data, $expected)
+    #[DataProvider('imagePreprocessingDataProvider')]
+    public function testImagePreprocessing($data, $expected): void
     {
         $eavConfig = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
@@ -14,14 +14,13 @@ use Magento\Store\Model\Store;
 /**
  * Export Advanced Pricing
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
-    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
+    public const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -84,6 +83,13 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @var string[]
      */
     private $websiteCodesMap = [];
+
+    /**
+     * Current page entity IDs for advanced pricing export.
+     *
+     * @var int[]
+     */
+    private array $currentPageEntityIds = [];
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -205,26 +211,38 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         set_time_limit(0);
 
         $writer = $this->getWriter();
-        $page = 0;
-        while (true) {
-            ++$page;
-            $entityCollection = $this->_getEntityCollection(true);
-            $entityCollection->setOrder('has_options', 'asc');
-            $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
-            $this->_prepareEntityCollection($entityCollection);
-            $this->paginateCollection($page, $this->getItemsPerPage());
-            if ($entityCollection->count() == 0) {
-                break;
+        $headerWritten = false;
+        try {
+            $page = 0;
+            while (true) {
+                ++$page;
+                $entityCollection = $this->_getEntityCollection(true);
+                $itemsPerPage = $this->getItemsPerPage();
+                $entityCollection->setOrder('entity_id', 'asc');
+                $entityCollection->setStoreId(Store::DEFAULT_STORE_ID);
+                $this->_prepareEntityCollection($entityCollection);
+                $offset = max(0, ($page - 1) * $itemsPerPage);
+                $this->currentPageEntityIds = array_values(array_unique(array_map(
+                    'intval',
+                    $entityCollection->getAllIds($itemsPerPage, $offset)
+                )));
+                if (empty($this->currentPageEntityIds)) {
+                    break;
+                }
+                $entityCollection->clear();
+                $exportData = $this->getExportData();
+                foreach ($exportData as $dataRow) {
+                    if (!$headerWritten) {
+                        $writer->setHeaderCols(array_keys($this->templateExportData));
+                        $headerWritten = true;
+                    }
+                    $writer->writeRow($dataRow);
+                }
             }
-            $entityCollection->clear();
-            $exportData = $this->getExportData();
-            foreach ($exportData as $dataRow) {
-                $writer->writeRow($dataRow);
-            }
-            if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
-                break;
-            }
+        } finally {
+            $this->currentPageEntityIds = [];
         }
+
         return $writer->getContents();
     }
 
@@ -249,13 +267,14 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     /**
      * Get export data for collection
      *
+     * @param array|null $productsByStores Products grouped by item/store for current page.
      * @return array|mixed
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function getExportData()
+    protected function getExportData(?array $productsByStores = null)
     {
         if ($this->_passTierPrice) {
             return [];
@@ -263,7 +282,9 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 
         $exportData = [];
         try {
-            $productsByStores = $this->loadCollection();
+            if ($productsByStores === null) {
+                $productsByStores = $this->loadCollection();
+            }
             if (!empty($productsByStores)) {
                 $linkField = $this->getProductEntityLinkField();
                 $productLinkIds = [];
@@ -286,6 +307,34 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         }
 
         return $exportData;
+    }
+
+    /**
+     * Load paged collection for current advanced pricing export batch.
+     *
+     * @return array
+     */
+    protected function loadCollection(): array
+    {
+        $data = [];
+        $storeId = Store::DEFAULT_STORE_ID;
+        $collection = $this->_getEntityCollection(true);
+        $collection->setOrder('entity_id', 'asc');
+        $collection->setStoreId($storeId);
+        $this->_prepareEntityCollection($collection);
+        if (!empty($this->currentPageEntityIds)) {
+            $collection->getSelect()->where(
+                $collection->getConnection()->quoteIdentifier('e.entity_id') . ' IN (?)',
+                $this->currentPageEntityIds
+            );
+        }
+        $collection->load();
+        foreach ($collection as $itemId => $item) {
+            $data[$itemId][$storeId] = $item;
+        }
+        $collection->clear();
+
+        return $data;
     }
 
     /**
@@ -452,7 +501,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 'Can only load tier prices for specific products'
             );
         }
-
         $pricesTable = ImportAdvancedPricing::TABLE_TIER_PRICE;
         $exportFilter = null;
         $priceFromFilter = null;
@@ -486,7 +534,8 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             )
             ->where(
                 'ap.' . $productEntityLinkField . ' IN (?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             );
 
         if ($priceFromFilter !== null) {
@@ -567,10 +616,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($price[0]) && !empty($price[0]) || isset($price[1]) && !empty($price[1])) {
                     $select->orWhere('ap.percentage_value IS NOT NULL');
                 }
-                if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
+                if (isset($updatedAtFrom)) {
                     $select->where('cpe.updated_at >= ?', $updatedAtFrom);
                 }
-                if (isset($updatedAtTo) && !empty($updatedAtTo)) {
+                if (isset($updatedAtTo)) {
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);

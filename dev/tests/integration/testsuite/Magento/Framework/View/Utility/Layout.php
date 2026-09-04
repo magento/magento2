@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -10,7 +10,7 @@
 namespace Magento\Framework\View\Utility;
 
 /**
- * Class Layout
+ * The integration testsuite for Layout view utility
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -44,22 +44,23 @@ class Layout
         foreach ((array)$layoutUpdatesFile as $filename) {
             $files[] = $fileFactory->create($filename, 'Magento_View');
         }
-        $fileSource = $this->_testCase
-            ->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)->getMockForAbstractClass();
-        $fileSource->expects(
-            \PHPUnit\Framework\TestCase::any()
-        )->method(
-            'getFiles'
-        )->will(
-            \PHPUnit\Framework\TestCase::returnValue($files)
-        );
-        $pageLayoutFileSource = $this->_testCase
-            ->getMockBuilder(\Magento\Framework\View\File\CollectorInterface::class)->getMockForAbstractClass();
-        $pageLayoutFileSource->expects(\PHPUnit\Framework\TestCase::any())
-            ->method('getFiles')
-            ->willReturn([]);
-        $cache = $this->_testCase
-            ->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)->getMockForAbstractClass();
+        // Use reflection to call protected getMockBuilder from TestCase (PHPUnit 12 compatibility)
+        $reflection = new \ReflectionClass($this->_testCase);
+        $getMockBuilderMethod = $reflection->getMethod('getMockBuilder');
+        
+        $fileSourceBuilder = $getMockBuilderMethod->invoke($this->_testCase, \Magento\Framework\View\File\CollectorInterface::class);
+        $fileSourceBuilder->disableOriginalConstructor();
+        $fileSource = $fileSourceBuilder->getMock();
+        $fileSource->method('getFiles')->willReturn($files);
+        
+        $pageLayoutFileSourceBuilder = $getMockBuilderMethod->invoke($this->_testCase, \Magento\Framework\View\File\CollectorInterface::class);
+        $pageLayoutFileSourceBuilder->disableOriginalConstructor();
+        $pageLayoutFileSource = $pageLayoutFileSourceBuilder->getMock();
+        $pageLayoutFileSource->method('getFiles')->willReturn([]);
+        
+        $cacheBuilder = $getMockBuilderMethod->invoke($this->_testCase, \Magento\Framework\Cache\FrontendInterface::class);
+        $cacheBuilder->disableOriginalConstructor();
+        $cache = $cacheBuilder->getMock();
         return $objectManager->create(
             \Magento\Framework\View\Layout\ProcessorInterface::class,
             ['fileSource' => $fileSource, 'pageLayoutFileSource' => $pageLayoutFileSource, 'cache' => $cache]
@@ -71,23 +72,20 @@ class Layout
      *
      * @param string|array $layoutUpdatesFile
      * @param array $args
-     * @return \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {
-        $layout = $this->_testCase->getMockBuilder(\Magento\Framework\View\Layout::class)
-            ->setMethods(['getUpdate'])
-            ->setConstructorArgs($args)
-            ->getMock();
+        $reflection = new \ReflectionClass($this->_testCase);
+        $getMockBuilderMethod = $reflection->getMethod('getMockBuilder');
+        $mockBuilder = $getMockBuilderMethod->invoke($this->_testCase, \Magento\Framework\View\Layout::class);
+        
+        $mockBuilder->onlyMethods(['getUpdate'])
+            ->setConstructorArgs($args);
+        $layout = $mockBuilder->getMock();
         $layoutUpdate = $this->getLayoutUpdateFromFixture($layoutUpdatesFile);
         $layoutUpdate->asSimplexml();
-        $layout->expects(
-            \PHPUnit\Framework\TestCase::any()
-        )->method(
-            'getUpdate'
-        )->will(
-            \PHPUnit\Framework\TestCase::returnValue($layoutUpdate)
-        );
+        $layout->method('getUpdate')->willReturn($layoutUpdate);
         return $layout;
     }
 
@@ -105,7 +103,7 @@ class Layout
             'structure' => $objectManager->create(\Magento\Framework\View\Layout\Data\Structure::class, []),
             'messageManager' => $objectManager->get(\Magento\Framework\Message\ManagerInterface::class),
             'themeResolver' => $objectManager->get(\Magento\Framework\View\Design\Theme\ResolverInterface::class),
-            'reader' => $objectManager->get('commonRenderPool'),
+            'readerPool' => $objectManager->get('commonRenderPool'),
             'generatorPool' => $objectManager->get(\Magento\Framework\View\Layout\GeneratorPool::class),
             'cache' => $objectManager->get(\Magento\Framework\App\Cache\Type\Layout::class),
             'readerContextFactory' => $objectManager->get(\Magento\Framework\View\Layout\Reader\ContextFactory::class),

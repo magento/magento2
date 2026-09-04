@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,8 +17,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-12084"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
@@ -26,6 +28,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logoutAsAdmin"/>
             <!-- Delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
 
@@ -54,12 +57,15 @@
         <reloadPage stepKey="refreshPage"/>
 
         <!-- Click Place Order and assert order is placed -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Order review page has address that was created during checkout -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage"/>
-        <waitForPageLoad stepKey="waitForCreatedOrderPage"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="navigateToOrderPage">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForCreatedOrderPage"/>
         <see selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" userInput="{{CustomerAddressSimple.street[0]}} {{CustomerAddressSimple.city}}, {{CustomerAddressSimple.state}}, {{CustomerAddressSimple.postcode}}" stepKey="checkShippingAddress"/>
     </test>
 </tests>

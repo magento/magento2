@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View\Element\UiComponent\Config\Provider;
@@ -49,7 +49,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
         $this->objectManager->get(\Magento\Framework\View\DesignInterface::class)
             ->setDesignTheme('FrameworkViewUiComponent/default');
-        CacheCleaner::cleanAll();
 
         $resultOne = $this->model->getTemplate('test.xml');
         $resultTwo = $this->model->getTemplate('test.xml');

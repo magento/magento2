@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Framework\MessageQueue\Rpc;
 
-use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\ExchangeRepository;
+use Magento\Framework\MessageQueue\MessageDeliveryMode;
 use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageIdGeneratorInterface;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
+use Magento\Framework\MessageQueue\PublisherInterface;
 
 /**
  * A MessageQueue Publisher to handle publishing a message.
@@ -49,7 +53,11 @@ class Publisher implements PublisherInterface
      */
     private $publisherConfig;
 
-    //@codingStandardsIgnoreStart
+    /**
+     * @var MessageIdGeneratorInterface
+     */
+    private $messageIdGenerator;
+
     /**
      * Initialize dependencies.
      *
@@ -57,8 +65,11 @@ class Publisher implements PublisherInterface
      * @param EnvelopeFactory $envelopeFactory
      * @param null $messageQueueConfig @deprecated obsolete dependency
      * @param null $amqpConfig @deprecated obsolete dependency
-     * @param MessageEncoder $messageEncoder
-     * @param MessageValidator $messageValidator
+     * @param MessageEncoder|null $messageEncoder
+     * @param MessageValidator|null $messageValidator
+     * @param ResponseQueueNameBuilder|null $responseQueueNameBuilder
+     * @param PublisherConfig|null $publisherConfig
+     * @param MessageIdGeneratorInterface|null $messageIdGenerator
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -67,69 +78,49 @@ class Publisher implements PublisherInterface
         EnvelopeFactory $envelopeFactory,
         $messageQueueConfig = null,
         $amqpConfig = null,
-        MessageEncoder $messageEncoder,
-        MessageValidator $messageValidator
+        ?MessageEncoder $messageEncoder = null,
+        ?MessageValidator $messageValidator = null,
+        ?ResponseQueueNameBuilder $responseQueueNameBuilder = null,
+        ?PublisherConfig $publisherConfig = null,
+        ?MessageIdGeneratorInterface $messageIdGenerator = null,
     ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
-        $this->messageEncoder = $messageEncoder;
-        $this->messageValidator = $messageValidator;
+        $objectManager = ObjectManager::getInstance();
+        $this->messageEncoder = $messageEncoder
+            ?? $objectManager->get(MessageEncoder::class);
+        $this->messageValidator = $messageValidator
+            ?? $objectManager->get(MessageValidator::class);
+        $this->responseQueueNameBuilder = $responseQueueNameBuilder
+            ?? $objectManager->get(ResponseQueueNameBuilder::class);
+        $this->publisherConfig = $publisherConfig
+            ?? $objectManager->get(PublisherConfig::class);
+        $this->messageIdGenerator = $messageIdGenerator
+            ?? $objectManager->get(MessageIdGeneratorInterface::class);
     }
-    //@codingStandardsIgnoreEnd
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function publish($topicName, $data)
     {
         $this->messageValidator->validate($topicName, $data);
         $data = $this->messageEncoder->encode($topicName, $data);
-        $replyTo = $this->getResponseQueueNameBuilder()->getQueueName($topicName);
+        $replyTo = $this->responseQueueNameBuilder->getQueueName($topicName);
         $envelope = $this->envelopeFactory->create(
             [
                 'body' => $data,
                 'properties' => [
                     'reply_to' => $replyTo,
-                    'delivery_mode' => 2,
+                    'delivery_mode' => MessageDeliveryMode::PERSISTENT->value,
                     'correlation_id' => rand(),
-                    'message_id' => md5(uniqid($topicName))
+                    'message_id' => $this->messageIdGenerator->generate($topicName),
                 ]
             ]
         );
-        $connectionName = $this->getPublisherConfig()->getPublisher($topicName)->getConnection()->getName();
+        $connectionName = $this->publisherConfig->getPublisher($topicName)->getConnection()->getName();
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $responseMessage = $exchange->enqueue($topicName, $envelope);
         return $this->messageEncoder->decode($topicName, $responseMessage, false);
-    }
-
-    /**
-     * Get response queue name builder.
-     *
-     * @return ResponseQueueNameBuilder
-     *
-     * @deprecated 103.0.0
-     */
-    private function getResponseQueueNameBuilder()
-    {
-        if ($this->responseQueueNameBuilder === null) {
-            $this->responseQueueNameBuilder = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(ResponseQueueNameBuilder::class);
-        }
-        return $this->responseQueueNameBuilder;
-    }
-
-    /**
-     * Get publisher config.
-     *
-     * @return PublisherConfig
-     *
-     * @deprecated 103.0.0
-     */
-    private function getPublisherConfig()
-    {
-        if ($this->publisherConfig === null) {
-            $this->publisherConfig = \Magento\Framework\App\ObjectManager::getInstance()->get(PublisherConfig::class);
-        }
-        return $this->publisherConfig;
     }
 }

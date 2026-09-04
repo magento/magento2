@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,9 +61,9 @@ class ProductPriceIndexFilter implements PriceModifierInterface
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         Item $stockItem,
-        ResourceConnection $resourceConnection = null,
+        ?ResourceConnection $resourceConnection = null,
         $connectionName = 'indexer',
-        Generator $batchQueryGenerator = null,
+        ?Generator $batchQueryGenerator = null,
         $batchSize = 100
     ) {
         $this->stockConfiguration = $stockConfiguration;
@@ -105,7 +105,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         if (!empty($entityIds)) {
-            $select->where('stock_item.product_id in (?)', $entityIds, \Zend_Db::INT_TYPE);
+            $select->where('stock_item.product_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         $select->group('stock_item.product_id');
@@ -121,7 +121,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         foreach ($batchSelectIterator as $select) {
             $productIds = null;
             foreach ($connection->query($select)->fetchAll() as $row) {
-                $productIds[] = $row['product_id'];
+                $productIds[] = (int) $row['product_id'];
             }
             if ($productIds !== null) {
                 $where = [$priceTable->getEntityField() .' IN (?)' => $productIds];

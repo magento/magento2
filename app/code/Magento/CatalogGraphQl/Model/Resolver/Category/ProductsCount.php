@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,7 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\StockProcessor;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CompositeCollectionProcessor;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -27,9 +27,9 @@ class ProductsCount implements ResolverInterface
     private $catalogProductVisibility;
 
     /**
-     * @var StockProcessor
+     * @var CompositeCollectionProcessor
      */
-    private $stockProcessor;
+    private $collectionProcessor;
 
     /**
      * @var SearchCriteriaInterface
@@ -39,22 +39,22 @@ class ProductsCount implements ResolverInterface
     /**
      * @param Visibility $catalogProductVisibility
      * @param SearchCriteriaInterface $searchCriteria
-     * @param StockProcessor $stockProcessor
+     * @param CompositeCollectionProcessor $collectionProcessor
      */
     public function __construct(
         Visibility $catalogProductVisibility,
         SearchCriteriaInterface $searchCriteria,
-        StockProcessor $stockProcessor
+        CompositeCollectionProcessor $collectionProcessor
     ) {
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->searchCriteria = $searchCriteria;
-        $this->stockProcessor = $stockProcessor;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
      * @inheritdoc
      */
-    public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
+    public function resolve(Field $field, $context, ResolveInfo $info, ?array $value = null, ?array $args = null)
     {
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('"model" value should be specified'));
@@ -63,8 +63,14 @@ class ProductsCount implements ResolverInterface
         $category = $value['model'];
         $productsCollection = $category->getProductCollection();
         $productsCollection->setVisibility($this->catalogProductVisibility->getVisibleInSiteIds());
-        $productsCollection = $this->stockProcessor->process($productsCollection, $this->searchCriteria, []);
+        $productsCollection = $this->collectionProcessor->process(
+            $productsCollection,
+            $this->searchCriteria,
+            [],
+            $context
+        );
+        $size = $productsCollection->getSize();
 
-        return $productsCollection->getSize();
+        return $size;
     }
 }

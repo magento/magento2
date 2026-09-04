@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\TestFramework\CodingStandard\Tool;
 
@@ -99,6 +99,7 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
         $settings['standards'] = [$this->rulesetDir];
         $settings['extensions'] = $this->extensions;
         $settings['reports']['full'] = $this->reportFile;
+        $settings['reportWidth'] = 120;
         $this->wrapper->setSettings($settings);
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction

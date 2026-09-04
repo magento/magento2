@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ReleaseNotification\Controller\Adminhtml\Dashboard;
 
@@ -34,6 +33,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ContentProviderInterface::class);
+        CacheCleaner::clean(['layout']);
         parent::tearDown();
     }
 
@@ -44,7 +44,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     {
         $content = include __DIR__ . '/../../../_files/validContent.php';
 
-        CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
             ->willReturn($content);
@@ -62,7 +61,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     public function testExecuteEmptyContent()
     {
-        CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
             ->willReturn('[]');
@@ -77,7 +75,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     public function testExecuteFalseContent()
     {
-        CacheCleaner::cleanAll();
         $this->contentProviderMock->expects($this->any())
             ->method('getContent')
             ->willReturn(false);

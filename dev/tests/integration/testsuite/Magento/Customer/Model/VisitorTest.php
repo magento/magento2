@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Model;
 
@@ -25,11 +25,14 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
         // Visitor has not customer ID yet
         $this->assertTrue($visitor->getDoCustomerLogin());
         $this->assertEquals($customer->getId(), $visitor->getCustomerId());
+        $this->assertNotNull($visitor->getCreatedAt());
 
         // Visitor already has customer ID
+        $createdAt = $visitor->getCreatedAt();
         $visitor->unsDoCustomerLogin();
         $this->_loginCustomer('customer@example.com', 'password');
         $this->assertNull($visitor->getDoCustomerLogin());
+        $this->assertEquals($createdAt, $visitor->getCreatedAt());
     }
 
     /**
@@ -63,23 +66,23 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
      */
     public function testClean()
     {
-        $customerIdNow = 1;
+        $customerIdNow = '1';
+        $createdAtNow = date('Y-m-d H:i:s', time());
         $lastVisitNow = date('Y-m-d H:i:s', time());
-        $sessionIdNow = 'asaswljxvgklasdflkjasieasd';
         $customerIdPast = null;
+        $createdAtPast = date('Y-m-d H:i:s', time() - 172800);
         $lastVisitPast = date('Y-m-d H:i:s', time() - 172800);
-        $sessionIdPast = 'kui0aa57nqddl8vk7k6ohgi352';
 
         /** @var \Magento\Customer\Model\Visitor $visitor */
         $visitor = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Visitor::class);
         $visitor->setCustomerId($customerIdPast);
-        $visitor->setSessionId($sessionIdPast);
+        $visitor->setCreatedAt($createdAtPast);
         $visitor->setLastVisitAt($lastVisitPast);
         $visitor->save();
         $visitorIdPast = $visitor->getId();
         $visitor->unsetData();
         $visitor->setCustomerId($customerIdNow);
-        $visitor->setSessionId($sessionIdNow);
+        $visitor->setCreatedAt($createdAtNow);
         $visitor->setLastVisitAt($lastVisitNow);
         $visitor->save();
         $visitorIdNow = $visitor->getId();
@@ -90,15 +93,12 @@ class VisitorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([], $visitor->getData());
         $visitor->unsetData();
         $visitor->load($visitorIdNow);
-        $this->assertEquals(
-            [
-                'visitor_id' => $visitorIdNow,
-                'customer_id' => $customerIdNow,
-                'session_id' => $sessionIdNow,
-                'last_visit_at' => $lastVisitNow
-            ],
-            $visitor->getData()
-        );
+        $result = $visitor->getData();
+        $this->assertEquals($visitorIdNow, $result['visitor_id']);
+        $this->assertEquals($customerIdNow, $result['customer_id']);
+        $this->assertGreaterThanOrEqual(strtotime($createdAtNow), strtotime($result['created_at']));
+        $this->assertEquals($lastVisitNow, $result['last_visit_at']);
+        $this->assertNull($result['session_id']);
     }
 
     /**

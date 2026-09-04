@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Filesystem\Io;
@@ -313,9 +313,10 @@ class Ftp extends AbstractIo
      */
     public function ls($grep = null)
     {
-        $ls = @ftp_nlist($this->_conn, '.');
+        $ls = @ftp_nlist($this->_conn, '.') ?: [];
 
         $list = [];
+
         foreach ($ls as $file) {
             $list[] = ['text' => $file, 'id' => $this->pwd() . '/' . $file];
         }
@@ -330,6 +331,8 @@ class Ftp extends AbstractIo
     protected function _tmpFilename($new = false)
     {
         if ($new || !$this->_tmpFilename) {
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $this->_tmpFilename = tempnam(md5(uniqid(rand(), true)), '');
         }
         return $this->_tmpFilename;

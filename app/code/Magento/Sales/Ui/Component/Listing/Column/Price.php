@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -54,8 +55,8 @@ class Price extends Column
         PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = [],
-        Currency $currency = null,
-        StoreManagerInterface $storeManager = null
+        ?Currency $currency = null,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: ObjectManager::getInstance()
@@ -75,11 +76,13 @@ class Price extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['base_currency_code']) ? $item['base_currency_code'] : null;
+                $currencyCode = $item['base_currency_code'] ?? null;
+
                 if (!$currencyCode) {
-                    $store = $this->storeManager->getStore(
-                        $this->context->getFilterParam('store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
-                    );
+                    $itemStoreId = $item['store_id'] ?? '';
+                    $storeId = $itemStoreId && is_numeric($itemStoreId) ? $itemStoreId :
+                        $this->context->getFilterParam('store_id', Store::DEFAULT_STORE_ID);
+                    $store = $this->storeManager->getStore($storeId);
                     $currencyCode = $store->getBaseCurrency()->getCurrencyCode();
                 }
                 $basePurchaseCurrency = $this->currency->load($currencyCode);

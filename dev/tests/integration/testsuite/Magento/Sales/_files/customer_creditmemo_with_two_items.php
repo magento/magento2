@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
@@ -29,7 +29,6 @@ $creditMemo = $creditMemoFactory->createByOrder($order);
 $creditMemo->setAdjustment(1.23);
 $creditMemo->setBaseGrandTotal(10);
 $creditMemo->addComment('some_comment', false, true);
-$creditMemo->addComment('some_other_comment', false, true);
 $creditMemo->addComment('not_visible', false, false);
 
 $creditMemoService->refund($creditMemo);

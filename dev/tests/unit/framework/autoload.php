@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesGenerator;
 use Magento\Framework\TestFramework\Unit\Autoloader\ExtensionAttributesInterfaceGenerator;
 use Magento\Framework\TestFramework\Unit\Autoloader\FactoryGenerator;
+use Magento\Framework\TestFramework\Unit\Autoloader\ProxyGenerator;
 use Magento\Framework\TestFramework\Unit\Autoloader\GeneratedClassesAutoloader;
 
 $generatorIo = new Io(
@@ -21,6 +22,7 @@ $generatedCodeAutoloader = new GeneratedClassesAutoloader(
         new ExtensionAttributesGenerator(),
         new ExtensionAttributesInterfaceGenerator(),
         new FactoryGenerator(),
+        new ProxyGenerator()
     ],
     $generatorIo
 );

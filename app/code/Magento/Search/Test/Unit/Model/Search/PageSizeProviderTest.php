@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Search\Model\EngineResolver;
 use Magento\Search\Model\Search\PageSizeProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PageSizeProviderTest extends TestCase
 {
@@ -41,8 +42,8 @@ class PageSizeProviderTest extends TestCase
     /**
      * @param string $searchEngine
      * @param int $size
-     * @dataProvider getPageSizeDataProvider
      */
+    #[DataProvider('getPageSizeDataProvider')]
     public function testGetPageSize($searchEngine, $size)
     {
         $this->pageSizeBySearchEngineMock
@@ -55,7 +56,7 @@ class PageSizeProviderTest extends TestCase
     /**
      * @return array
      */
-    public function getPageSizeDataProvider()
+    public static function getPageSizeDataProvider()
     {
         return [
             ['search', 10],

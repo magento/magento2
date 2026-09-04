@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup\Console\Command;
@@ -70,11 +70,11 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertStringContainsString('"Dependencies for each module:",' . PHP_EOL, $fileContents);
         $this->assertStringContainsString(
-            '"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
+            'Magento\A,1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
             $fileContents
         );
         $this->assertStringContainsString(
-            '"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
+            'Magento\B,1' . PHP_EOL . '" -- Magento\Framework",2' . PHP_EOL,
             $fileContents
         );
     }

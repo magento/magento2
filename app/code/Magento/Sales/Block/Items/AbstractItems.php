@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Items;
+
+use Magento\Sales\ViewModel\ItemRendererTypeResolverInterface;
 
 /**
  * Abstract block for display sales (quote/order/invoice etc.) items
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 class AbstractItems extends \Magento\Framework\View\Element\Template
@@ -16,7 +17,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     /**
      * Block alias fallback
      */
-    const DEFAULT_TYPE = 'default';
+    public const DEFAULT_TYPE = 'default';
 
     /**
      * Retrieve item renderer block
@@ -38,6 +39,7 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
             throw new \RuntimeException('Renderer list for block "' . $this->getNameInLayout() . '" is not defined');
         }
         $overriddenTemplates = $this->getOverriddenTemplates() ?: [];
+        $type = $type ?? '';
         $template = isset($overriddenTemplates[$type]) ? $overriddenTemplates[$type] : $this->getRendererTemplate();
         $renderer = $rendererList->getRenderer($type, self::DEFAULT_TYPE, $template);
         $renderer->setRenderedBlock($this);
@@ -83,6 +85,10 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     public function getItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
+        $itemRendererTypeResolver = $this->getData($type . '_renderer_type_resolver');
+        if ($itemRendererTypeResolver instanceof ItemRendererTypeResolverInterface) {
+            $type = $itemRendererTypeResolver->resolve($item) ?? $type;
+        }
 
         $block = $this->getItemRenderer($type)->setItem($item);
         $this->_prepareItem($block);

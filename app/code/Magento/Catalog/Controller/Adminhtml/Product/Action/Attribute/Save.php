@@ -1,12 +1,12 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\Catalog\Model\Product\Filter\DateTime as DateTimeFilter;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
@@ -68,6 +69,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     private $productFactory;
 
     /**
+     * @var DateTimeFilter
+     */
+    private $dateTimeFilter;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Bulk\BulkManagementInterface $bulkManagement
@@ -76,9 +82,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      * @param \Magento\Framework\Serialize\SerializerInterface $serializer
      * @param \Magento\Authorization\Model\UserContextInterface $userContext
      * @param int $bulkSize
-     * @param TimezoneInterface $timezone
-     * @param Config $eavConfig
-     * @param ProductFactory $productFactory
+     * @param TimezoneInterface|null $timezone
+     * @param Config|null $eavConfig
+     * @param ProductFactory|null $productFactory
+     * @param DateTimeFilter|null $dateTimeFilter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -90,9 +97,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         \Magento\Framework\Serialize\SerializerInterface $serializer,
         \Magento\Authorization\Model\UserContextInterface $userContext,
         int $bulkSize = 100,
-        TimezoneInterface $timezone = null,
-        Config $eavConfig = null,
-        ProductFactory $productFactory = null
+        ?TimezoneInterface $timezone = null,
+        ?Config $eavConfig = null,
+        ?ProductFactory $productFactory = null,
+        ?DateTimeFilter $dateTimeFilter = null
     ) {
         parent::__construct($context, $attributeHelper);
         $this->bulkManagement = $bulkManagement;
@@ -106,6 +114,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(Config::class);
         $this->productFactory = $productFactory ?? ObjectManager::getInstance()->get(ProductFactory::class);
+        $this->dateTimeFilter = $dateTimeFilter ?? ObjectManager::getInstance()->get(DateTimeFilter::class);
     }
 
     /**
@@ -134,6 +143,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             $this->validateProductAttributes($attributesData);
             $this->publish($attributesData, $websiteRemoveData, $websiteAddData, $storeId, $websiteId, $productIds);
             $this->messageManager->addSuccessMessage(__('Message is added to queue'));
+            $this->attributeHelper->setProductIds([]);
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
@@ -155,8 +165,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     private function sanitizeProductAttributes($attributesData)
     {
-        $dateFormat = $this->timezone->getDateFormat(\IntlDateFormatter::SHORT);
-
         foreach ($attributesData as $attributeCode => $value) {
             if ($attributeCode === ProductAttributeInterface::CODE_HAS_WEIGHT) {
                 continue;
@@ -170,16 +178,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
             }
 
             if ($attribute->getBackendType() === 'datetime') {
-                if (!empty($value)) {
-                    $filterInput = new \Zend_Filter_LocalizedToNormalized(['date_format' => $dateFormat]);
-                    $filterInternal = new \Zend_Filter_NormalizedToLocalized(
-                        ['date_format' => \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT]
-                    );
-                    $value = $filterInternal->filter($filterInput->filter($value));
-                } else {
-                    $value = null;
-                }
-                $attributesData[$attributeCode] = $value;
+                $attributesData[$attributeCode] = $this->filterDate(
+                    $value,
+                    $attribute->getFrontendInput() === 'datetime'
+                );
             } elseif ($attribute->getFrontendInput() === 'multiselect') {
                 // Check if 'Change' checkbox has been checked by admin for this attribute
                 $isChanged = (bool)$this->getRequest()->getPost('toggle_' . $attributeCode);
@@ -197,6 +199,24 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
     }
 
     /**
+     * Get the date and time value in internal format and timezone
+     *
+     * @param string $value
+     * @param bool $isDatetime
+     * @return string|null
+     * @throws LocalizedException
+     */
+    private function filterDate(string $value, bool $isDatetime = false): ?string
+    {
+        $date = !empty($value) ? $this->dateTimeFilter->filter($value) : null;
+        if ($date && $isDatetime) {
+            $date = $this->timezone->convertConfigTimeToUtc($date, DateTime::DATETIME_PHP_FORMAT);
+        }
+
+        return $date;
+    }
+
+    /**
      * Validate product attributes data.
      *
      * @param array $attributesData
@@ -209,9 +229,22 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $product = $this->productFactory->create();
         $product->setData($attributesData);
 
-        foreach (array_keys($attributesData) as $attributeCode) {
-            $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
-            $attribute->getBackend()->validate($product);
+        // Ensure Special Price From Date cannot exceed To Date during mass update
+        if (array_key_exists('special_from_date', $attributesData)
+            || array_key_exists('special_to_date', $attributesData)) {
+            $this->eavConfig
+                ->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'special_from_date')
+                ->setMaxValue($product->getSpecialToDate());
+        }
+
+        try {
+            foreach (array_keys($attributesData) as $attributeCode) {
+                $attribute = $this->eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode);
+                $attribute->getBackend()->validate($product);
+            }
+        } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
+            // Re-throw as LocalizedException so the specific validation message is displayed
+            throw new LocalizedException(__($e->getMessage()));
         }
     }
 

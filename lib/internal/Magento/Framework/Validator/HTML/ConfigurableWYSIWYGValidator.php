@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -15,6 +15,22 @@ use Magento\Framework\Validation\ValidationException;
  */
 class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
 {
+    /**
+     * @var string
+     */
+    private static string $xssFiltrationPattern =
+        '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:)|(script)|(alert\())|'
+        . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
+        . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
+
+    /**
+     * Pattern to detect malformed syntax
+     *
+     * @var string
+     */
+    private static string $contentFiltrationPattern =
+        '#<\w+[^>]*/[^\s/>]+/[^>]*=|<\w+/[^\s>]*on\w+\s*=|<\w+[^>]*//[^>]*=|(<body)#i';
+
     /**
      * @var string[]
      */
@@ -78,12 +94,14 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         if (mb_strlen($content) === 0) {
             return;
         }
+
         $dom = $this->loadHtml($content);
         $xpath = new \DOMXPath($dom);
 
         $this->validateConfigured($xpath);
         $this->callAttributeValidators($xpath);
         $this->callTagValidators($xpath);
+        $this->validateAttributeValue($xpath);
     }
 
     /**
@@ -96,18 +114,20 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private function validateConfigured(\DOMXPath $xpath): void
     {
         //Validating tags
+        $this->allowedTags['body'] = 'body';
+        $this->allowedTags['html'] = 'html';
         $found = $xpath->query(
             '//*['
-                . implode(
-                    ' and ',
-                    array_map(
-                        function (string $tag): string {
-                            return "name() != '$tag'";
-                        },
-                        array_merge($this->allowedTags, ['body', 'html'])
-                    )
+            . implode(
+                ' and ',
+                array_map(
+                    function (string $tag): string {
+                        return "name() != '$tag'";
+                    },
+                    $this->allowedTags
                 )
-                .']'
+            )
+            .']'
         );
         if (count($found)) {
             throw new ValidationException(
@@ -234,12 +254,51 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 $loaded = false;
             }
         );
-        $loaded = $dom->loadHTML("<html><body>$content</body></html>");
+        $matches = [];
+        preg_match_all(self::$contentFiltrationPattern, $this->maskQuotedAttributeValues($content), $matches);
+        $valueCounts = array_count_values($matches[0]);
+
+        $hasMultipleBody = isset($valueCounts['<body']) && $valueCounts['<body'] > 1;
+        $hasOtherMalicious = count($matches[0]) > 0 && !isset($valueCounts['<body']);
+
+        $loaded = !($hasMultipleBody || $hasOtherMalicious)
+            && $dom->loadHTML($content, LIBXML_HTML_NOIMPLIED);
+
         restore_error_handler();
         if (!$loaded) {
             throw new ValidationException(__('Invalid HTML content provided'));
         }
 
         return $dom;
+    }
+
+    /**
+     * Blank out quoted attribute values so their content cannot trigger malformed-syntax detection.
+     *
+     * @param string $content
+     * @return string
+     */
+    private function maskQuotedAttributeValues(string $content): string
+    {
+        return (string) preg_replace('/"[^"]*"|\'[^\']*\'/', '""', $content);
+    }
+
+    /**
+     * Validate values of html attributes
+     *
+     * @param \DOMXPath $xpath
+     * @return void
+     * @throws ValidationException
+     */
+    private function validateAttributeValue(\DOMXPath $xpath): void
+    {
+        $nodes = $xpath->query('//@*');
+        foreach ($nodes as $node) {
+            if (preg_match(self::$xssFiltrationPattern, $node->parentNode->getAttribute($node->nodeName))) {
+                throw new ValidationException(
+                    __('Invalid value provided for attribute %1', $node->nodeName)
+                );
+            }
+        }
     }
 }

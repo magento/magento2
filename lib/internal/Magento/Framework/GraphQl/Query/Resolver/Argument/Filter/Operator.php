@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,7 +40,7 @@ class Operator
      * @param string|null $value
      * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
      */
-    public function __construct(string $value = null)
+    public function __construct(?string $value = null)
     {
         if (!$value) {
             $value = self::AND;

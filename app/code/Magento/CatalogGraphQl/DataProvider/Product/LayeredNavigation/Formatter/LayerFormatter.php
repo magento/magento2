@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -18,14 +18,16 @@ class LayerFormatter
      * @param string $layerName
      * @param string $itemsCount
      * @param string $requestName
+     * @param int $position
      * @return array
      */
-    public function buildLayer($layerName, $itemsCount, $requestName): array
+    public function buildLayer($layerName, $itemsCount, $requestName, $position = null): array
     {
         return [
-            'label' => $layerName,
+            'label' => __($layerName),
             'count' => $itemsCount,
-            'attribute_code' => $requestName
+            'attribute_code' => $requestName,
+            'position' => isset($position) ? (int)$position : null
         ];
     }
 

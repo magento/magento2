@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Framework\View\Element;
 
 /**
  * Interface which allows to modify visibility behavior of UI components
+ *
+ * @api
  */
 interface ComponentVisibilityInterface
 {

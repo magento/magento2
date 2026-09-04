@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\Config;
 
@@ -9,6 +9,7 @@ use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\Initial as Config;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class InitialTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +25,6 @@ class InitialTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMetadata()
     {
-        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getMetadata(),
             $this->objectManager->create(Config::class)->getMetadata()
@@ -33,18 +33,17 @@ class InitialTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $scope
-     * @dataProvider getDataDataProvider
      */
+    #[DataProvider('getDataDataProvider')]
     public function testGetData($scope)
     {
-        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->objectManager->create(Config::class)->getData($scope),
             $this->objectManager->create(Config::class)->getData($scope)
         );
     }
 
-    public function getDataDataProvider()
+    public static function getDataDataProvider()
     {
         return [
             ['default'],

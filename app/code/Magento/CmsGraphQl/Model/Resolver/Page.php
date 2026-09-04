@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,8 +42,8 @@ class Page implements ResolverInterface
         Field $field,
         $context,
         ResolveInfo $info,
-        array $value = null,
-        array $args = null
+        ?array $value = null,
+        ?array $args = null
     ) {
         if (!isset($args['id']) && !isset($args['identifier'])) {
             throw new GraphQlInputException(__('"Page id/identifier should be specified'));
@@ -53,11 +53,12 @@ class Page implements ResolverInterface
 
         try {
             if (isset($args['id'])) {
-                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id']);
+                $pageData = $this->pageDataProvider->getDataByPageId((int)$args['id'], $info);
             } elseif (isset($args['identifier'])) {
                 $pageData = $this->pageDataProvider->getDataByPageIdentifier(
                     (string)$args['identifier'],
-                    (int)$context->getExtensionAttributes()->getStore()->getId()
+                    (int)$context->getExtensionAttributes()->getStore()->getId(),
+                    $info
                 );
             }
         } catch (NoSuchEntityException $e) {

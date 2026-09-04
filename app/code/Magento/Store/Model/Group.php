@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -9,8 +9,12 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Store\Model\Validation\StoreValidator;
+
 /**
- * Class Group
+ * Store Group model class used to retrieve and format group information
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,9 +25,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Store\Api\Data\GroupInterface,
     \Magento\Framework\App\ScopeInterface
 {
-    const ENTITY = 'store_group';
+    public const ENTITY = 'store_group';
 
-    const CACHE_TAG = 'store_group';
+    public const CACHE_TAG = 'store_group';
 
     /**
      * @var bool
@@ -101,9 +105,14 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $eventManager;
 
     /**
-     * @var \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface
+     * @var PoisonPillPutInterface
      */
     private $pillPut;
+
+    /**
+     * @var StoreValidator
+     */
+    private $modelValidator;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -117,7 +126,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
-     * @param \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface|null $pillPut
+     * @param PoisonPillPutInterface|null $pillPut
+     * @param StoreValidator|null $modelValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -128,11 +138,12 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Event\ManagerInterface $eventManager = null,
-        \Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface $pillPut = null
+        ?\Magento\Framework\Event\ManagerInterface $eventManager = null,
+        ?PoisonPillPutInterface $pillPut = null,
+        ?StoreValidator $modelValidator = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
@@ -140,7 +151,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $this->eventManager = $eventManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Event\ManagerInterface::class);
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class);
+            ->get(PoisonPillPutInterface::class);
+        $this->modelValidator = $modelValidator ?: ObjectManager::getInstance()
+            ->get(StoreValidator::class);
         parent::__construct(
             $context,
             $registry,
@@ -160,6 +173,14 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected function _construct()
     {
         $this->_init(\Magento\Store\Model\ResourceModel\Group::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->modelValidator;
     }
 
     /**
@@ -489,6 +510,17 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function getIdentities()
     {
         return [self::CACHE_TAG];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
+
+        return array_unique(array_merge($identities, $parentTags));
     }
 
     /**

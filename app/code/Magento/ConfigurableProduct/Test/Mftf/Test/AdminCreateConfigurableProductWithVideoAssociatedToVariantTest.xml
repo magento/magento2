@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithVideoAssociatedToVariantTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Add videos for all variant product"/>
+            <title value="Admin should be able to add videos for a variant Product"/>
+            <description value="Admin should be able to add videos for a Variant Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37344"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ProductYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
+
+            <createData entity="SimpleProduct" stepKey="simple1Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="SimpleProduct" stepKey="simple2Handle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+
+            <createData entity="BaseConfigurableProduct" stepKey="baseConfigProductHandle">
+                <requiredEntity createDataKey="categoryHandle"/>
+            </createData>
+            <createData entity="productDropDownAttribute" stepKey="productAttributeHandle"/>
+
+            <createData entity="productAttributeOption1" stepKey="productAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="productAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="addToAttributeSetHandle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </createData>
+
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption1Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getAttributeOption2Handle">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+            </getData>
+
+            <createData entity="SimpleOne" stepKey="childProductHandle1">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+            </createData>
+            <createData entity="SimpleOne" stepKey="childProductHandle2">
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="configProductOptionHandle">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="productAttributeHandle"/>
+                <requiredEntity createDataKey="getAttributeOption1Handle"/>
+                <requiredEntity createDataKey="getAttributeOption2Handle"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle1">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="configProductHandle2">
+                <requiredEntity createDataKey="baseConfigProductHandle"/>
+                <requiredEntity createDataKey="childProductHandle2"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <createData entity="DefaultProductVideoConfig" stepKey="setYoutubeApiKeyDefaultConfig"/>
+            <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
+            <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
+            <deleteData createDataKey="childProductHandle2" stepKey="deleteChild2"/>
+            <deleteData createDataKey="baseConfigProductHandle" stepKey="deleteConfig"/>
+            <deleteData createDataKey="categoryHandle" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>
+
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGrid">
+            <argument name="product" value="$$childProductHandle1$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProducForEditByClickingRow1Column2InProductGrid1"/>
+
+        <actionGroup ref="AddProductVideoActionGroup" stepKey="addVideoForProduct" />
+
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!-- Assert product image in admin product form -->
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="$$baseConfigProductHandle$$"/>
+        </actionGroup>
+
+        <!-- Select configurable option to load child variant (image/video) on storefront -->
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="waitForConfigurableAttributeSelect"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$productAttributeOption1Handle.option[store_labels][0][label]$$" stepKey="fillDropDownAttributeOption"/>
+        <waitForPageLoad stepKey="waitForConfigurableOptionSelection"/>
+        <waitForAjaxLoad stepKey="waitForGalleryAjaxLoad"/>
+        <waitForElementNotVisible selector="{{StorefrontProductMediaSection.gallerySpinner}}" stepKey="waitForGallerySpinnerDisappear"/>
+
+        <!-- Assert product video in storefront product page (video is usually the active slide after option select) -->
+        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoStorefrontProductPage"/>
+
+        <!-- Assert product image in storefront product page -->
+        <waitForElementClickable selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="waitForGalleryNextButton"/>
+        <click selector="{{StorefrontProductMediaSection.fotoramaNextButtonVideo}}" stepKey="clickGalleryNextButton"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile(MagentoLogo.filename)}}" stepKey="assertProductImageInGallery"/>
+    </test>
+</tests>

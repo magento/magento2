@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Config\Test\Unit\Model\Config\Structure\Mapper;
 
 use Magento\Config\Model\Config\Structure\Mapper\ExtendsMapper;
 use Magento\Config\Model\Config\Structure\Mapper\Helper\RelativePathConverter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ExtendsTest extends TestCase
@@ -26,10 +27,10 @@ class ExtendsTest extends TestCase
     }
 
     /**
-     * @dataProvider mapDataProvider
      * @param array $sourceData
      * @param array $resultData
      */
+    #[DataProvider('mapDataProvider')]
     public function testMap($sourceData, $resultData)
     {
         $this->assertEquals($resultData, $this->_sut->map($sourceData));
@@ -51,21 +52,21 @@ class ExtendsTest extends TestCase
     /**
      * @return array
      */
-    public function mapDataProvider()
+    public static function mapDataProvider()
     {
         return [
             [[], []],
-            $this->_emptySectionsNodeData(),
-            $this->_extendFromASiblingData(),
-            $this->_extendFromNodeOnHigherLevelData(),
-            $this->_extendWithMerge()
+            self::_emptySectionsNodeData(),
+            self::_extendFromASiblingData(),
+            self::_extendFromNodeOnHigherLevelData(),
+            self::_extendWithMerge()
         ];
     }
 
     /**
      * @return array
      */
-    protected function _emptySectionsNodeData()
+    protected static function _emptySectionsNodeData()
     {
         $data = ['config' => ['system' => ['sections' => 'some_non_array']]];
 
@@ -75,7 +76,7 @@ class ExtendsTest extends TestCase
     /**
      * @return array
      */
-    protected function _extendFromASiblingData()
+    protected static function _extendFromASiblingData()
     {
         $source = $result = [
             'config' => [
@@ -97,7 +98,7 @@ class ExtendsTest extends TestCase
     /**
      * @return array
      */
-    protected function _extendFromNodeOnHigherLevelData()
+    protected static function _extendFromNodeOnHigherLevelData()
     {
         $source = $result = [
             'config' => [
@@ -133,7 +134,7 @@ class ExtendsTest extends TestCase
     /**
      * @return array
      */
-    protected function _extendWithMerge()
+    protected static function _extendWithMerge()
     {
         $source = $result = [
             'config' => [

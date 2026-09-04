@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\SalesRule\Api\Data;
 
@@ -25,5 +24,5 @@ interface CouponSearchResultInterface extends \Magento\Framework\Api\SearchResul
      * @param \Magento\SalesRule\Api\Data\CouponInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(?array $items = null);
 }

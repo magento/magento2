@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Quote\Test\Unit\Observer;
 
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Observer\SubmitObserver;
@@ -22,10 +23,14 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Test for sending order email during order place on frontend
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SubmitObserverTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var SubmitObserver
      */
@@ -40,11 +45,6 @@ class SubmitObserverTest extends TestCase
      * @var OrderSender|MockObject
      */
     private $orderSenderMock;
-
-    /**
-     * @var InvoiceSender|MockObject
-     */
-    private $invoiceSender;
 
     /**
      * @var Observer|MockObject
@@ -66,27 +66,28 @@ class SubmitObserverTest extends TestCase
      */
     private $paymentMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->orderMock = $this->createMock(Order::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
-        $this->invoiceSender = $this->createMock(InvoiceSender::class);
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', 'getOrder'])
-            ->getMock();
+        $eventMock = $this->createPartialMockWithReflection(
+            Event::class,
+            ['setQuote', 'getQuote', 'setOrder', 'getOrder']
+        );
+        $eventMock->method('getQuote')->willReturn($this->quoteMock);
+        $eventMock->method('getOrder')->willReturn($this->orderMock);
         $this->observerMock = $this->createPartialMock(Observer::class, ['getEvent']);
-        $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
-        $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
-        $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);
+        $this->observerMock->method('getEvent')->willReturn($eventMock);
         $this->quoteMock->expects($this->once())->method('getPayment')->willReturn($this->paymentMock);
         $this->model = new SubmitObserver(
             $this->loggerMock,
-            $this->orderSenderMock,
-            $this->invoiceSender
+            $this->orderSenderMock
         );
     }
 
@@ -97,19 +98,17 @@ class SubmitObserverTest extends TestCase
     {
         $this->paymentMock->method('getOrderPlaceRedirectUrl')->willReturn('');
         $invoice = $this->createMock(Invoice::class);
+        $invoice->method('getOrder')->willReturn($this->orderMock);
         $invoiceCollection = $this->createMock(Collection::class);
         $invoiceCollection->method('getItems')
             ->willReturn([$invoice]);
 
         $this->orderMock->method('getInvoiceCollection')
             ->willReturn($invoiceCollection);
+        $this->orderMock->method('getPayment')->willReturn($this->paymentMock);
         $this->orderMock->method('getCanSendNewEmailFlag')->willReturn(true);
         $this->orderSenderMock->expects($this->once())
             ->method('send')->willReturn(true);
-        $this->invoiceSender->expects($this->once())
-            ->method('send')
-            ->with($invoice)
-            ->willReturn(true);
         $this->loggerMock->expects($this->never())
             ->method('critical');
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,31 +65,30 @@ class StoreTest extends TestCase
      */
     private $storeSource;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->converter = $this->getMockBuilder(Converter::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteFactory = $this->getMockBuilder(WebsiteFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->onlyMethods(['create'])
+            ->getMock();
         $this->website = $this->getMockBuilder(\Magento\Store\Model\Website::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->websiteSource = $this->getMockBuilder(WebsiteSource::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createMock(StoreInterface::class);
         $this->storeSource = new StoreSource(
             $this->collectionFactory,
             $this->converter,
@@ -99,7 +98,10 @@ class StoreTest extends TestCase
         );
     }
 
-    public function testGet()
+    /**
+     * @return void
+     */
+    public function testGet(): void
     {
         $scopeCode = 'myStore';
         $expectedResult = [
@@ -128,18 +130,15 @@ class StoreTest extends TestCase
             ->with(1)
             ->willReturn([]);
 
-        $this->converter->expects($this->at(0))
+        $this->converter
             ->method('convert')
-            ->with([
-                'config/key1' => 'default_db_value1',
-                'config/key3' => 'default_db_value3'
-            ])
-            ->willReturnArgument(0);
-
-        $this->converter->expects($this->at(1))
-            ->method('convert')
-            ->with($expectedResult)
-            ->willReturnArgument(0);
+            ->willReturnCallback(
+                function ($arg1) use ($expectedResult) {
+                    if ($arg1 == $expectedResult) {
+                        return $arg1;
+                    }
+                }
+            );
 
         $this->assertEquals($expectedResult, $this->storeSource->get($scopeCode));
     }

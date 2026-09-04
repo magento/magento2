@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
@@ -12,5 +12,6 @@
         <element name="headerByName" type="text" selector="//div[@data-role='grid-wrapper']//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
         <element name="columnsNames" type="text" selector="[data-role='grid-wrapper'] .data-grid-th &gt; span"/>
         <element name="totalRecords" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__control-support-text"/>
+        <element name="numberOfPages" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__data-grid-pager > label"/>
     </section>
 </sections>

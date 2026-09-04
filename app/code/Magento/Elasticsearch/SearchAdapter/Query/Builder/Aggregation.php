@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Elasticsearch\SearchAdapter\Query\Builder;
 
@@ -12,6 +12,8 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 /**
  * @api
  * @since 100.1.0
+ * @deprecated Elasticsearch is no longer supported by Adobe
+ * @see this class will be responsible for ES only
  */
 class Aggregation
 {
@@ -73,10 +75,13 @@ class Aggregation
         switch ($bucket->getType()) {
             case BucketInterface::TYPE_TERM:
                 $searchQuery['body']['aggregations'][$bucket->getName()]= [
-                    'terms' => [
-                        'field' => $field,
-                        'size' => self::$maxTermBacketSize,
-                    ],
+                    'terms' => array_merge(
+                        $bucket->getParameters(),
+                        [
+                            'field' => $field,
+                            'size' => self::$maxTermBacketSize,
+                        ]
+                    ),
                 ];
                 break;
             case BucketInterface::TYPE_DYNAMIC:

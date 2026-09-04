@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\App\ObjectManager;
 
@@ -24,7 +24,6 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        CacheCleaner::cleanAll();
         $data = $this->object->load('global');
         $this->assertNotEmpty($data);
         $cachedData = $this->object->load('global');

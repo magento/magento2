@@ -1,9 +1,7 @@
 <?php
 /**
- * Translate Inline Phrase renderer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\Phrase\Renderer;
 
@@ -12,6 +10,9 @@ use Magento\Framework\TranslateInterface;
 use Magento\Framework\Translate\Inline\ProviderInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Translate Inline Phrase renderer
+ */
 class Inline implements RendererInterface
 {
     /**
@@ -62,7 +63,8 @@ class Inline implements RendererInterface
                 return $text;
             }
 
-            if (strpos($text, '{{{') === false
+            if ($text === null
+                || strpos($text, '{{{') === false
                 || strpos($text, '}}}') === false
                 || strpos($text, '}}{{') === false
             ) {

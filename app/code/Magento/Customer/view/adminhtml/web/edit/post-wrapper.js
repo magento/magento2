@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -25,7 +25,7 @@ define([
         }));
     }
 
-    $('#customer-edit-delete-button').click(function () {
+    $('#customer-edit-delete-button').on('click', function () {
         var msg = $.mage.__('Are you sure you want to do this?'),
             url = $('#customer-edit-delete-button').data('url');
 

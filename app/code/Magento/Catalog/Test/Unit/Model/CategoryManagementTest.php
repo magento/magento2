@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -65,13 +65,9 @@ class CategoryManagementTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->createMock(CategoryRepositoryInterface::class);
         $this->categoryTreeMock = $this->createMock(Tree::class);
-        $this->categoriesFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->addMethods(['addFilter', 'getFirstItem'])
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->categoriesFactoryMock = $this->createMock(CollectionFactory::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             CategoryManagement::class,
@@ -82,9 +78,9 @@ class CategoryManagementTest extends TestCase
             ]
         );
 
-        $this->scopeResolverMock = $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->scopeResolverMock = $this->createMock(ScopeResolverInterface::class);
 
-        $this->scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->scopeMock = $this->createMock(ScopeInterface::class);
 
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->model,
@@ -154,10 +150,9 @@ class CategoryManagementTest extends TestCase
     {
         $depth = null;
         $categoriesMock = $this->createMock(Collection::class);
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $categoryMock = $this->createMock(Category::class);
+
         $categoriesMock
             ->expects($this->once())
             ->method('getFirstItem')
@@ -201,31 +196,38 @@ class CategoryManagementTest extends TestCase
 
     public function testMove()
     {
-        $categoryId = 2;
-        $parentId = 1;
+        $categoryId = 4;
+        $parentId = 40;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('parentCategoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $categoryMock = $this->createMock(Category::class);
+
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(6))
             ->method('get')
             ->willReturnMap([
                 [$categoryId, null, $categoryMock],
                 [$parentId, null, $parentCategoryMock],
             ]);
-        $parentCategoryMock->expects($this->once())->method('hasChildren')->willReturn(true);
+        $parentCategoryMock->expects($this->exactly(3))->method('hasChildren')
+            ->willReturn(true, false, false);
         $parentCategoryMock->expects($this->once())->method('getChildren')->willReturn('5,6,7');
-        $categoryMock->expects($this->once())->method('getPath');
-        $parentCategoryMock->expects($this->once())->method('getPath');
-        $categoryMock->expects($this->once())->method('move')->with($parentId, '7');
+        $categoryMock->expects($this->exactly(3))->method('getPath')
+            ->willReturnOnConsecutiveCalls('2/4', '2/3/4', '2/3/4');
+        $parentCategoryMock->expects($this->exactly(3))->method('getPath')
+            ->willReturnOnConsecutiveCalls('2/40', '2/3/40', '2/3/44/40');
+        $categoryMock->expects($this->exactly(3))->method('move')
+            ->willReturnCallback(function ($arg1, $arg2) use ($parentId) {
+                if ($arg1 == $parentId && ($arg2 == 7 || is_null($arg2))) {
+                    return null;
+                }
+            });
+
         $this->assertTrue($this->model->move($categoryId, $parentId, $afterId));
+        $this->assertTrue($this->model->move($categoryId, $parentId));
+        $this->assertTrue($this->model->move($categoryId, $parentId));
     }
 
     public function testMoveWithException()
@@ -235,14 +237,8 @@ class CategoryManagementTest extends TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('categoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->setMockClassName('parentCategoryMock')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -251,8 +247,8 @@ class CategoryManagementTest extends TestCase
                 [$categoryId, null, $categoryMock],
                 [$parentId, null, $parentCategoryMock],
             ]);
-        $categoryMock->expects($this->once())->method('getPath')->willReturn('test');
-        $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test');
+        $categoryMock->expects($this->once())->method('getPath')->willReturn('test/2');
+        $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test/2/1');
         $this->model->move($categoryId, $parentId, $afterId);
     }
 
@@ -263,14 +259,8 @@ class CategoryManagementTest extends TestCase
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMockClassName('categoryMock')
-            ->getMock();
-        $parentCategoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMockClassName('parentCategoryMock')
-            ->getMock();
+        $categoryMock = $this->createMock(Category::class);
+        $parentCategoryMock = $this->createMock(Category::class);
 
         $this->categoryRepositoryMock
             ->expects($this->exactly(2))
@@ -294,6 +284,7 @@ class CategoryManagementTest extends TestCase
             ->expects($this->once())
             ->method('create')
             ->willReturn($categoriesMock);
+
         $categoriesMock
             ->expects($this->once())
             ->method('addAttributeToFilter')

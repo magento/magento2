@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -166,12 +166,17 @@ class MassSchedule
             }
         }
 
-        $this->saveMultipleOperations->execute($operations);
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
-            throw new LocalizedException(
-                __('Something went wrong while processing the request.')
-            );
+            try {
+                $this->bulkManagement->deleteBulk($groupId);
+            } finally {
+                throw new LocalizedException(
+                    __('Something went wrong while processing the request.')
+                );
+            }
         }
+        $this->saveMultipleOperations->execute($operations);
+
         /** @var AsyncResponseInterface $asyncResponse */
         $asyncResponse = $this->asyncResponseFactory->create();
         $asyncResponse->setBulkUuid($groupId);

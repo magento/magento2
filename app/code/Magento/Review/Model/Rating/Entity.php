@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Review\Model\Rating;
 
@@ -11,12 +11,13 @@ namespace Magento\Review\Model\Rating;
  * @method string getEntityCode()
  * @method \Magento\Review\Model\Rating\Entity setEntityCode(string $value)
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @codeCoverageIgnore
  */
 class Entity extends \Magento\Framework\Model\AbstractModel
 {
     /**
+     * Initialise the model
+     *
      * @return void
      */
     protected function _construct()
@@ -25,6 +26,8 @@ class Entity extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Return the ID for the specified code
+     *
      * @param string $entityCode
      * @return int
      */

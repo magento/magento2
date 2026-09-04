@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,12 +68,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_different_option_labeles_per_stores.php
      *
-     * @dataProvider expectedLabelsDataProvider
-     *
      * @param array $expectedStoreData
      * @param array $expectedSecondStoreData
      * @return void
      */
+    #[DataProvider('expectedLabelsDataProvider')]
     public function testMultiStoreLabelView(array $expectedStoreData, array $expectedSecondStoreData): void
     {
         $this->executeInStoreContext->execute('default', [$this, 'assertProductLabel'], $expectedStoreData);
@@ -82,11 +82,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedLabelsDataProvider(): array
+    public static function expectedLabelsDataProvider(): array
     {
         return [
             [
-                'options_first_store' => [
+                'expectedStoreData' => [
                     'simple_option_1_default_store' => [
                         'label' => 'Option 1 Default Store',
                     ],
@@ -97,7 +97,7 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
                         'label' => 'Option 3 Default Store',
                     ],
                 ],
-                'options_second_store' => [
+                'expectedSecondStoreData' => [
                     'simple_option_1_default_store' => [
                         'label' => 'Option 1 Second Store',
                     ],
@@ -129,12 +129,11 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_two_websites.php
      *
-     * @dataProvider expectedProductDataProvider
-     *
      * @param array $expectedProducts
      * @param array $expectedSecondStoreProducts
      * @return void
      */
+    #[DataProvider('expectedProductDataProvider')]
     public function testMultiStoreOptionsView(array $expectedProducts, array $expectedSecondStoreProducts): void
     {
         $this->prepareConfigurableProduct('configurable', 'fixture_second_store');
@@ -149,12 +148,12 @@ class MultiStoreConfigurableViewOnProductPageTest extends TestCase
     /**
      * @return array
      */
-    public function expectedProductDataProvider(): array
+    public static function expectedProductDataProvider(): array
     {
         return [
             [
-                'expected_store_products' => ['simple_option_1', 'simple_option_2'],
-                'expected_second_store_products' => ['simple_option_2'],
+                'expectedProducts' => ['simple_option_1', 'simple_option_2'],
+                'expectedSecondStoreProducts' => ['simple_option_2'],
             ],
         ];
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Composer;
@@ -261,7 +261,7 @@ class ComposerInformation
      */
     public function isSystemPackage($packageName = '')
     {
-        if (preg_match('/magento\/product-*/', $packageName) == 1) {
+        if (preg_match('/magento\/product-.*?-edition/', $packageName) == 1) {
             return true;
         }
         return false;
@@ -276,7 +276,7 @@ class ComposerInformation
     {
         $rootPackage = $this->getComposer()->getPackage();
 
-        return (boolean)preg_match('/magento\/magento2...?/', $rootPackage->getName());
+        return (bool)preg_match('/magento\/magento2...?/', $rootPackage->getName());
     }
 
     /**

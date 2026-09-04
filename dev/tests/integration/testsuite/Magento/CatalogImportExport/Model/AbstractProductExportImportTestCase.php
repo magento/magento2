@@ -1,16 +1,19 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\CatalogImportExport\Model;
 
+use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Annotation\DataFixture;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -40,7 +43,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     protected $fixtures;
 
     /**
-     * skipped attributes
+     * List of attributes which will be skipped
      *
      * @var array
      */
@@ -66,11 +69,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     ];
 
     /**
-     * @var AbstractAdapter
-     */
-    private $writer;
-
-    /**
      * @var string
      */
     private $csvFile;
@@ -93,10 +91,12 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function tearDown(): void
     {
-        $this->executeFixtures($this->fixtures, true);
+        if ($this->fixtures !== null) {
+            $this->executeFixtures($this->fixtures, true);
+        }
 
         if ($this->csvFile !== null) {
-            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             $directoryWrite->delete($this->csvFile);
         }
     }
@@ -112,8 +112,8 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @return void
-     * @dataProvider exportImportDataProvider
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
         $this->csvFile = null;
@@ -124,8 +124,29 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $csvFile = $this->executeExportTest($skus, $skippedAttributes);
 
         $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
-        $this->executeImportReplaceTest($skus, $skippedAttributes, true, $csvFile);
         $this->executeImportDeleteTest($skus, $csvFile);
+    }
+
+    /**
+     * Run import/export test with pagination.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    #[DataProvider('exportImportDataProvider')]
+    public function testImportExportWithPagination(array $fixtures, array $skus, array $skippedAttributes = [])
+    {
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, true);
     }
 
     /**
@@ -133,7 +154,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      *
      * @return array
      */
-    abstract public function exportImportDataProvider(): array;
+    abstract public static function exportImportDataProvider(): array;
 
     /**
      * Modify data.
@@ -235,7 +256,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * @param string|null $csvFile
      * @return void
      */
-    protected function executeImportDeleteTest(array $skus, string $csvFile = null): void
+    protected function executeImportDeleteTest(array $skus, ?string $csvFile = null): void
     {
         $csvFile = $csvFile ?? $this->exportProducts();
         $this->importProducts($csvFile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
@@ -315,7 +336,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $skus,
         $skippedAttributes,
         $usePagination = false,
-        string $csvfile = null
+        ?string $csvfile = null
     ) {
         $replacedAttributes = [
             'row_id',
@@ -337,14 +358,10 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
             $index++;
         }
 
-        $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
+        $exportProduct = $this->objectManager->create(Product::class);
         if ($usePagination) {
             /** @var \ReflectionProperty $itemsPerPageProperty */
-            $itemsPerPageProperty = $this->objectManager->create(\ReflectionProperty::class, [
-                'class' => \Magento\CatalogImportExport\Model\Export\Product::class,
-                'name' => '_itemsPerPage'
-            ]);
-            $itemsPerPageProperty->setAccessible(true);
+            $itemsPerPageProperty = new \ReflectionProperty(Product::class, '_itemsPerPage');
             $itemsPerPageProperty->setValue($exportProduct, 1);
         }
 
@@ -386,24 +403,25 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * Export products in the system.
      *
-     * @param \Magento\CatalogImportExport\Model\Export\Product|null $exportProduct
+     * @param Product|null $exportProduct
      * @return string Return exported file
      */
-    private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
+    private function exportProducts(?Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $this->csvFile = $csvfile;
-
         $exportProduct = $exportProduct ?: $this->objectManager->create(
-            \Magento\CatalogImportExport\Model\Export\Product::class
+            Product::class
         );
-        $this->writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-            ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
+            ['fileSystem' => $this->fileSystem]
         );
-        $exportProduct->setWriter($this->writer);
-        $this->assertNotEmpty($exportProduct->export());
-
+        $exportProduct->setWriter($writer);
+        $content = $exportProduct->export();
+        $this->assertNotEmpty($content);
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
+        $directory->getDriver()->filePutContents($directory->getAbsolutePath($csvfile), $content);
         return $csvfile;
     }
 
@@ -420,7 +438,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $importModel = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Product::class
         );
-        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         $source = $this->objectManager->create(
             \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
@@ -428,34 +446,29 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
                 'directory' => $directory
             ]
         );
-
         $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
             ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
-        $uploader = $importModel->getUploader();
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $destDir = $rootDirectory->getRelativePath(
-            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product'
-        );
-        $tmpDir = $rootDirectory->getRelativePath(
-            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import'
-        );
-
-        $rootDirectory->create($destDir);
-        $rootDirectory->create($tmpDir);
-        $this->assertTrue($uploader->setDestDir($destDir));
-        $this->assertTrue($uploader->setTmpDir($tmpDir));
-
-        $errors = $importModel->setParameters(
+        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $mediaDir = $mediaDirectory->getDriver() instanceof File ?
+            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] : 'media';
+        $mediaDirectory->create('catalog/product');
+        $mediaDirectory->create('import');
+        $importModel->setParameters(
             [
-                'behavior' => $behavior,
-                'entity' => 'catalog_product',
+                \Magento\ImportExport\Model\Import::FIELD_NAME_IMG_FILE_DIR => $mediaDir . '/import'
             ]
-        )->setSource(
-            $source
-        )->validateData();
+        );
+        $uploader = $importModel->getUploader();
+        $this->assertTrue($uploader->setDestDir($mediaDir . '/catalog/product'));
+        $this->assertTrue($uploader->setTmpDir($mediaDir . '/import'));
+        $importModel->setParameters([
+            'behavior' => $behavior,
+            'entity' => 'catalog_product',
+        ]);
+        $importModel->setSource($source);
+        $errors = $importModel->validateData();
         $errorMessage = $this->extractErrorMessage($errors->getAllErrors());
-
         $this->assertEmpty(
             $errorMessage,
             'Product import from file ' . $csvfile . ' validation errors: ' . $errorMessage
@@ -481,7 +494,6 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         foreach ($errors as $error) {
             $errorMessage = "\n" . $error->getErrorMessage();
         }
-
         return $errorMessage;
     }
 

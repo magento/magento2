@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -103,7 +103,7 @@ class FlagTest extends TestCase
         $contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $connectionMock = $this->createMock(AdapterInterface::class);
         $connectionMock->expects($this->any())
             ->method('beginTransaction')
             ->willReturnSelf();
@@ -116,7 +116,7 @@ class FlagTest extends TestCase
             ->method('getResources')
             ->willReturn($appResource);
         $resourceMock = $this->getMockBuilder(FlagResource::class)
-            ->setMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
+            ->onlyMethods(['__wakeup', 'load', 'save', 'addCommitCallback', 'commit', 'rollBack'])
             ->setConstructorArgs(['context' => $dbContextMock])
             ->getMock();
 

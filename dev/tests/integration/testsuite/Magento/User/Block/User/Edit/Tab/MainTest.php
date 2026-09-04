@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\User\Block\User\Edit\Tab;
 
@@ -28,6 +28,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
         $this->_block = $objectManager->create(\Magento\User\Block\User\Edit\Tab\Main::class);
         $this->_block->setArea('adminhtml');
+        $this->_block->setNameInLayout('test');
         $this->_user = $objectManager->create(\Magento\User\Model\User::class);
 
         $objectManager->get(\Magento\Framework\Registry::class)->register('permissions_user', $this->_user);

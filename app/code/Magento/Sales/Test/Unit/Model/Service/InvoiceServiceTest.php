@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -20,9 +20,21 @@ use Magento\Sales\Model\Order\InvoiceNotifier;
 use Magento\Sales\Model\Service\InvoiceService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Convert\Order as ConvertOrder;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Sales\Model\Order as SalesOrder;
+use Magento\Sales\Model\Order\Invoice as InvoiceModel;
+use Magento\Framework\Data\Collection;
+use Magento\Sales\Api\Data\InvoiceInterface;
 
+/**
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InvoiceServiceTest extends TestCase
 {
+
     /**
      * Repository
      *
@@ -70,18 +82,8 @@ class InvoiceServiceTest extends TestCase
     {
         $objectManager = new ObjectManagerHelper($this);
 
-        $this->repositoryMock = $this->getMockForAbstractClass(
-            InvoiceRepositoryInterface::class,
-            ['get'],
-            '',
-            false
-        );
-        $this->commentRepositoryMock = $this->getMockForAbstractClass(
-            InvoiceCommentRepositoryInterface::class,
-            ['getList'],
-            '',
-            false
-        );
+        $this->repositoryMock = $this->createMock(InvoiceRepositoryInterface::class);
+        $this->commentRepositoryMock = $this->createMock(InvoiceCommentRepositoryInterface::class);
         $this->searchCriteriaBuilderMock = $this->createPartialMock(
             SearchCriteriaBuilder::class,
             ['create', 'addFilters']
@@ -173,12 +175,7 @@ class InvoiceServiceTest extends TestCase
         $id = 123;
         $returnValue = 'return-value';
 
-        $modelMock = $this->getMockForAbstractClass(
-            AbstractModel::class,
-            [],
-            '',
-            false
-        );
+        $modelMock = $this->createMock(AbstractModel::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -211,5 +208,59 @@ class InvoiceServiceTest extends TestCase
             ->willReturn($returnValue);
 
         $this->assertTrue($this->invoiceService->setVoid($id));
+    }
+
+    public function testPrepareInvoiceSetsHistoryEntityNameWhenOriginalEntityTypePresent(): void
+    {
+        $orderRepository   = $this->createMock(OrderRepositoryInterface::class);
+        $orderConverter    = $this->createMock(ConvertOrder::class);
+        $serializer   = $this->createMock(Json::class);
+
+        $service = new InvoiceService(
+            $this->repositoryMock,
+            $this->commentRepositoryMock,
+            $this->searchCriteriaBuilderMock,
+            $this->filterBuilderMock,
+            $this->invoiceNotifierMock,
+            $orderRepository,
+            $orderConverter,
+            $serializer
+        );
+
+        $order = $this->getMockBuilder(SalesOrder::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAllItems', 'getEntityType', 'setHistoryEntityName', 'getInvoiceCollection'])
+            ->getMock();
+
+        $invoice = $this->getMockBuilder(InvoiceModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setTotalQty', 'collectTotals'])
+            ->getMock();
+
+        $invoiceCollection = $this->getMockBuilder(Collection::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addItem'])
+            ->getMock();
+
+        $order->method('getAllItems')->willReturn([]);
+        $order->method('getEntityType')->willReturn('order');
+        $order->method('getInvoiceCollection')->willReturn($invoiceCollection);
+
+        $order->expects($this->once())
+            ->method('setHistoryEntityName')
+            ->with('order');
+
+        $orderConverter->expects($this->once())
+            ->method('toInvoice')
+            ->with($order)
+            ->willReturn($invoice);
+
+        $invoice->expects($this->once())->method('setTotalQty')->with(0);
+        $invoice->expects($this->once())->method('collectTotals');
+
+        $invoiceCollection->expects($this->once())->method('addItem')->with($invoice);
+
+        $result = $service->prepareInvoice($order, []);
+        $this->assertInstanceOf(InvoiceInterface::class, $result);
     }
 }

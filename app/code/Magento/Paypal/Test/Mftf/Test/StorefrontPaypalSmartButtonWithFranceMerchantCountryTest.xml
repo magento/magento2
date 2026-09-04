@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,10 +16,8 @@
             <description value="Users are able to place order using Paypal Smart Button using Euro currency and merchant country is France"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
-            <skip>
-                <issueId value="MC-37236"/>
-            </skip>
             <group value="paypalExpress"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set price scope global-->
@@ -29,7 +27,7 @@
             <!--Enable Advanced Setting-->
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
@@ -60,7 +58,9 @@
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
 
         <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
-        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="USD / EUR rate" stepKey="seeEURandUSDRate"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="USD / EUR rate"/>
+        </actionGroup>
         <assertEquals stepKey="assertSelectedCategories">
             <actualResult type="variable">grabRate</actualResult>
             <expectedResult type="array">[USD / EUR rate:]</expectedResult>

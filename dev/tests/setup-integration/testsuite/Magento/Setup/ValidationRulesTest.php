@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Setup;
@@ -81,6 +81,29 @@ class ValidationRulesTest extends SetupTestCase
         $this->moduleManager->updateRevision(
             'Magento_TestSetupDeclarationModule8',
             'incosistence_reference_definition',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->schemaConfig->getDeclarationConfig();
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule8
+     */
+    public function testFailOnInconsistentReferenceTypeDefinition()
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessageMatches(
+            '/Column definition "page_id_on" and reference column definition "page_id"'
+            . ' are different in tables "dependent" and "test_table"/'
+        );
+
+        $this->cliCommad->install(
+            ['Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'inconsistent_reference_type_definition',
             'db_schema.xml',
             'etc'
         );

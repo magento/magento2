@@ -1,9 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
+
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Text\ListText;
 
 /**
  * Order Invoices grid
@@ -11,11 +17,31 @@ namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
  * @api
  * @since 100.0.2
  */
-class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Invoices extends ListText implements TabInterface
 {
     /**
-     * {@inheritdoc}
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
+     * Invoices constructor.
+     *
+     * @param Context $context
+     * @param array $data
+     * @param AuthorizationInterface|null $authorization
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?AuthorizationInterface $authorization = null
+    ) {
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -23,7 +49,7 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -31,15 +57,15 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
-        return true;
+        return $this->authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {

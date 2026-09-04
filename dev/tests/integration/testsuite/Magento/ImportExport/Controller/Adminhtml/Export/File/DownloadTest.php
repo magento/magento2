@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Backend\Model\UrlInterface as BackendUrl;
 use Magento\Backend\Model\Auth;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Download class.
@@ -65,18 +66,18 @@ class DownloadTest extends AbstractBackendController
         $this->backendUrl->turnOnSecretKey();
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
         //Refers to tests 'var' directory
-        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
      * Check that file can be downloaded.
      *
      * @param string $file
-     * @dataProvider testExecuteProvider
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      * @magentoAppArea adminhtml
      */
+    #[DataProvider('csvExecuteProvider')]
     public function testExecute($file): void
     {
         $this->copyFile('export/' . $file);
@@ -124,9 +125,11 @@ class DownloadTest extends AbstractBackendController
      */
     private function copyFile($destinationFilePath): void
     {
-        //Refers to application root directory
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $rootDirectory->copyFile($this->sourceFilePath, $this->varDirectory->getAbsolutePath($destinationFilePath));
+        $driver = $this->varDirectory->getDriver();
+        $absolutePath = $this->varDirectory->getAbsolutePath($destinationFilePath);
+
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($absolutePath, file_get_contents($this->sourceFilePath));
     }
 
     /**
@@ -134,7 +137,7 @@ class DownloadTest extends AbstractBackendController
      *
      * @return array
      */
-    public static function testExecuteProvider(): array
+    public static function csvExecuteProvider(): array
     {
         return [
             ['catalog_product.csv'],

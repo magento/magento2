@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -219,7 +219,7 @@ define([
 
             if (key === 'enterKey') {
                 event.preventDefault();
-                modalElement.find('.page-action-buttons button.save').click();
+                modalElement.find('.page-action-buttons button.save').trigger('click');
             }
 
             return true;

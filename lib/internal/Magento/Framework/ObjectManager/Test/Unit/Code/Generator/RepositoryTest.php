@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -46,7 +46,7 @@ class RepositoryTest extends EntityChildTestAbstract
 
     protected function mockDefinedClassesCall()
     {
-        $this->definedClassesMock->expects($this->at(0))
+        $this->definedClassesMock
             ->method('isClassLoadable')
             ->with($this->getSourceClassName() . 'Interface')
             ->willReturn(true);

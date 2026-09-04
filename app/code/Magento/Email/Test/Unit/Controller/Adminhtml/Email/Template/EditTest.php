@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Email\Controller\Adminhtml\Email\Template\Edit;
 use Magento\Email\Model\BackendTemplate;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\View;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Page\Config;
@@ -28,6 +29,8 @@ use PHPUnit\Framework\TestCase;
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Edit
      */
@@ -99,38 +102,38 @@ class EditTest extends TestCase
             ->getMock();
         $this->viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
-            ->setMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
+            ->onlyMethods(['loadLayout', 'getLayout', 'getPage', 'renderLayout'])
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getBlock', 'createBlock', 'setChild'])
+            ->onlyMethods(['getBlock', 'createBlock', 'setChild'])
             ->getMock();
-        $this->menuBlockMock = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActive', 'getMenuModel', 'getParentItems'])
-            ->getMock();
+        $this->menuBlockMock = $this->createPartialMockWithReflection(
+            Menu::class,
+            ['setActive', 'getParentItems', 'getMenuModel']
+        );
         $this->breadcrumbsBlockMock = $this->getMockBuilder(Breadcrumbs::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addLink'])
+            ->onlyMethods(['addLink'])
             ->getMock();
-        $this->editBlockMock = $this->getMockBuilder(Breadcrumbs::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setEditMode'])
-            ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setActiveMenu', 'getConfig', 'addBreadcrumb'])
-            ->getMock();
+        $this->editBlockMock = $this->createPartialMockWithReflection(
+            Breadcrumbs::class,
+            ['setEditMode']
+        );
+        $this->resultPageMock = $this->createPartialMockWithReflection(
+            Page::class,
+            ['setActiveMenu', 'addBreadcrumb', 'getConfig']
+        );
         $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->pageTitleMock = $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->templateMock = $this->getMockBuilder(BackendTemplate::class)
-            ->setMethods(['getId', 'getTemplateCode', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->templateMock = $this->createPartialMockWithReflection(
+            BackendTemplate::class,
+            ['getTemplateCode', 'getId', 'load']
+        );
         $this->templateMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
@@ -217,20 +220,10 @@ class EditTest extends TestCase
             ->willReturn(0);
         $this->pageTitleMock->expects($this->any())
             ->method('prepend')
-            ->willReturnMap(
-                [
-                    ['Email Templates', $this->returnSelf()],
-                    ['New Template', $this->returnSelf()]
-                ]
-            );
+            ->willReturnSelf();
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
-            ->willReturnMap(
-                [
-                    ['Transactional Emails', 'Transactional Emails', null, $this->returnSelf()],
-                    ['New Template', 'New System Template', null, $this->returnSelf()]
-                ]
-            );
+            ->willReturnSelf();
 
         $this->assertNull($this->editController->execute());
     }
@@ -246,20 +239,10 @@ class EditTest extends TestCase
             ->willReturn(1);
         $this->pageTitleMock->expects($this->any())
             ->method('prepend')
-            ->willReturnMap(
-                [
-                    ['Email Templates', $this->returnSelf()],
-                    ['My Template', $this->returnSelf()]
-                ]
-            );
+            ->willReturnSelf();
         $this->breadcrumbsBlockMock->expects($this->any())
             ->method('addLink')
-            ->willReturnMap(
-                [
-                    ['Transactional Emails', 'Transactional Emails', null, $this->returnSelf()],
-                    ['Edit Template', 'Edit System Template', null, $this->returnSelf()]
-                ]
-            );
+            ->willReturnSelf();
 
         $this->assertNull($this->editController->execute());
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Product\Compare;
@@ -40,8 +40,6 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $_useLinkForAsLowAs = false;
 
     /**
-     * Customer id
-     *
      * @var null|int
      */
     protected $_customerId = null;
@@ -52,22 +50,16 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     protected $httpContext;
 
     /**
-     * Customer visitor
-     *
      * @var \Magento\Customer\Model\Visitor
      */
     protected $_customerVisitor;
 
     /**
-     * Catalog product visibility
-     *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Item collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
@@ -204,6 +196,9 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
             $value = $attribute->getFrontend()->getValue($product);
         } else {
             $value = $product->getData($attribute->getAttributeCode());
+        }
+        if (is_array($value)) {
+            return __('N/A');
         }
         return (string)$value == '' ? __('No') : $value;
     }

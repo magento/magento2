@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,17 +12,21 @@ use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Customer\Model\Context;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\Template\Context as TemplateContext;
 use Magento\Sales\Block\Reorder\Sidebar;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Item as OrderItem;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  *
@@ -30,60 +34,65 @@ use PHPUnit\Framework\TestCase;
  */
 class SidebarTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Sidebar|MockObject
      */
-    protected $block;
+    private $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|MockObject
+     * @var TemplateContext|MockObject
      */
-    protected $context;
+    private $context;
 
     /**
      * @var CollectionFactory|MockObject
      */
-    protected $orderCollectionFactory;
+    private $orderCollectionFactory;
 
     /**
      * @var Session|MockObject
      */
-    protected $customerSession;
+    private $customerSession;
 
     /**
      * @var Config|MockObject
      */
-    protected $orderConfig;
+    private $orderConfig;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|MockObject
+     * @var HttpContext|MockObject
      */
-    protected $httpContext;
+    private $httpContext;
 
     /**
      * @var Collection|MockObject
      */
-    protected $orderCollection;
+    private $orderCollection;
 
     /**
      * @var ObjectManager
      */
-    protected $objectManagerHelper;
+    private $objectManagerHelper;
 
     /** @var MockObject */
-    protected $stockItemMock;
+    private $stockItemMock;
 
     /**
      * @var MockObject
      */
-    protected $stockRegistry;
+    private $stockRegistry;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->markTestIncomplete('MAGETWO-36789');
+        $this->markTestSkipped('MAGETWO-36789');
         $this->objectManagerHelper = new ObjectManager($this);
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->httpContext = $this->createPartialMock(\Magento\Framework\App\Http\Context::class, ['getValue']);
+        $this->context = $this->createMock(TemplateContext::class);
+        $this->httpContext = $this->createPartialMock(HttpContext::class, ['getValue']);
         $this->orderCollectionFactory = $this->createPartialMock(
             CollectionFactory::class,
             ['create']
@@ -93,14 +102,13 @@ class SidebarTest extends TestCase
             Config::class,
             ['getVisibleOnFrontStatuses']
         );
-        $this->orderCollection = $this->getMockBuilder(Collection::class)
-            ->addMethods(['setOrders'])
-            ->onlyMethods(['addAttributeToFilter', 'addAttributeToSort', 'setPage'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderCollection = $this->createPartialMockWithReflection(
+            Collection::class,
+            ['setOrders', 'addAttributeToFilter', 'addAttributeToSort', 'setPage']
+        );
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
 
         $this->stockItemMock = $this->createPartialMock(
@@ -113,12 +121,18 @@ class SidebarTest extends TestCase
             ->willReturn($this->stockItemMock);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
         $this->block = null;
     }
 
-    protected function createBlockObject()
+    /**
+     * @return void
+     */
+    protected function createBlockObject(): void
     {
         $this->block = $this->objectManagerHelper->getObject(
             Sidebar::class,
@@ -128,12 +142,15 @@ class SidebarTest extends TestCase
                 'orderConfig' => $this->orderConfig,
                 'customerSession' => $this->customerSession,
                 'httpContext' => $this->httpContext,
-                'stockRegistry' => $this->stockRegistry,
+                'stockRegistry' => $this->stockRegistry
             ]
         );
     }
 
-    public function testGetIdentities()
+    /**
+     * @return void
+     */
+    public function testGetIdentities(): void
     {
         $websiteId = 1;
         $storeId = null;
@@ -165,9 +182,10 @@ class SidebarTest extends TestCase
             ->method('getWebsiteIds')
             ->willReturn([$websiteId]);
 
-        $item = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Item::class)->addMethods(['getProduct'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            OrderItem::class,
+            ['getProduct']
+        );
         $item->expects($this->atLeastOnce())
             ->method('getProduct')
             ->willReturn($product);
@@ -186,7 +204,10 @@ class SidebarTest extends TestCase
         $this->assertEquals($productTags, $this->block->getIdentities());
     }
 
-    public function testInitOrders()
+    /**
+     * @return void
+     */
+    public function testInitOrders(): void
     {
         $customerId = 25;
         $attribute = ['customer_id', 'status'];
@@ -205,21 +226,22 @@ class SidebarTest extends TestCase
             ->method('getVisibleOnFrontStatuses')
             ->willReturn($statuses);
 
-        $this->orderCollection->expects($this->at(0))
-            ->method('addAttributeToFilter')
-            ->with(
-                $attribute[0],
-                $customerId
-            )->willReturnSelf();
-        $this->orderCollection->expects($this->at(1))
-            ->method('addAttributeToFilter')
-            ->with($attribute[1], ['in' => $statuses])->willReturnSelf();
-        $this->orderCollection->expects($this->at(2))
-            ->method('addAttributeToSort')
-            ->with('created_at', 'desc')->willReturnSelf();
-        $this->orderCollection->expects($this->at(3))
-            ->method('setPage')
-            ->with(1, 1)->willReturnSelf();
+        $this->orderCollection->method('addAttributeToFilter')
+            ->willReturnCallback(
+                function ($arg1, $arg2) use ($attribute, $customerId, $statuses) {
+                    if ($arg1 === $attribute[0] && $arg2 === $customerId) {
+                        return $this->orderCollection;
+                    } elseif ($arg1 === $attribute[1] && $arg2 === ['in' => $statuses]) {
+                        return $this->orderCollection;
+                    }
+                }
+            );
+        $this->orderCollection->method('setPage')
+            ->with(1, 1)
+            ->willReturn($this->orderCollection);
+        $this->orderCollection->method('addAttributeToSort')
+            ->with('created_at', 'desc')
+            ->willReturn($this->orderCollection);
 
         $this->orderCollectionFactory->expects($this->atLeastOnce())
             ->method('create')
@@ -228,7 +250,10 @@ class SidebarTest extends TestCase
         $this->assertEquals($this->orderCollection, $this->block->getOrders());
     }
 
-    public function testIsItemAvailableForReorder()
+    /**
+     * @return void
+     */
+    public function testIsItemAvailableForReorder(): void
     {
         $productId = 1;
         $result = true;
@@ -243,7 +268,7 @@ class SidebarTest extends TestCase
             ->method('getStockItem')
             ->willReturn($this->stockItemMock);
 
-        $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, ['getStore', 'getProduct']);
+        $orderItem = $this->createPartialMock(Order\Item::class, ['getStore', 'getProduct']);
         $orderItem->expects($this->any())
             ->method('getProduct')
             ->willReturn($product);
@@ -259,14 +284,17 @@ class SidebarTest extends TestCase
         $this->assertSame($result, $this->block->isItemAvailableForReorder($orderItem));
     }
 
-    public function testItemNotAvailableForReorderWhenProductNotExist()
+    /**
+     * @return void
+     */
+    public function testItemNotAvailableForReorderWhenProductNotExist(): void
     {
         $this->stockItemMock->expects($this->never())->method('getIsInStock');
         $this->stockRegistry->expects($this->any())
             ->method('getStockItem')
             ->willReturn($this->stockItemMock);
 
-        $orderItem = $this->createMock(\Magento\Sales\Model\Order\Item::class);
+        $orderItem = $this->createMock(Order\Item::class);
         $orderItem->expects($this->any())
             ->method('getProduct')
             ->willThrowException(new NoSuchEntityException());

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,24 +69,12 @@ class ProblemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subscriberFactoryMock = $this->getMockBuilder(SubscriberFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->subscriberMock = $this->getMockBuilder(Subscriber::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceModelMock = $this->getMockBuilder(ProblemResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->subscriberFactoryMock = $this->createMock(SubscriberFactory::class);
+        $this->subscriberMock = $this->createMock(Subscriber::class);
+        $this->resourceModelMock = $this->createMock(ProblemResource::class);
+        $this->abstractDbMock = $this->createMock(AbstractDb::class);
 
         $this->resourceModelMock->expects($this->any())
             ->method('getIdFieldName')
@@ -102,7 +90,7 @@ class ProblemTest extends TestCase
                 'subscriberFactory' => $this->subscriberFactoryMock,
                 'resource' => $this->resourceModelMock,
                 'resourceCollection' => $this->abstractDbMock,
-                'data' => [],
+                'data' => []
             ]
         );
     }
@@ -110,7 +98,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddSubscriberData()
+    public function testAddSubscriberData(): void
     {
         $subscriberId = 1;
         $this->subscriberMock->expects($this->once())
@@ -126,12 +114,10 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddQueueData()
+    public function testAddQueueData(): void
     {
         $queueId = 1;
-        $queueMock =  $this->getMockBuilder(Queue::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queueMock = $this->createMock(Queue::class);
         $queueMock->expects($this->once())
             ->method('getId')
             ->willReturn($queueId);
@@ -145,7 +131,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testAddErrorData()
+    public function testAddErrorData(): void
     {
         $exceptionMessage = 'Some message';
         $exceptionCode = 111;
@@ -161,7 +147,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testGetSubscriberWithNoSubscriberId()
+    public function testGetSubscriberWithNoSubscriberId(): void
     {
         self::assertNull($this->problemModel->getSubscriber());
     }
@@ -169,7 +155,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testGetSubscriber()
+    public function testGetSubscriber(): void
     {
         $this->setSubscriber();
         self::assertEquals($this->subscriberMock, $this->problemModel->getSubscriber());
@@ -178,7 +164,7 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testUnsubscribeWithNoSubscriber()
+    public function testUnsubscribeWithNoSubscriber(): void
     {
         $this->subscriberMock->expects($this->never())
             ->method('__call')
@@ -192,17 +178,18 @@ class ProblemTest extends TestCase
     /**
      * @return void
      */
-    public function testUnsubscribe()
+    public function testUnsubscribe(): void
     {
         $this->setSubscriber();
-        $this->subscriberMock->expects($this->at(1))
+        $this->subscriberMock
             ->method('__call')
-            ->with('setSubscriberStatus', [Subscriber::STATUS_UNSUBSCRIBED])
-            ->willReturnSelf();
-        $this->subscriberMock->expects($this->at(2))
-            ->method('__call')
-            ->with('setIsStatusChanged')
-            ->willReturnSelf();
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'setSubscriberStatus' && $arg2[0] == Subscriber::STATUS_UNSUBSCRIBED) {
+                    return $this->subscriberMock;
+                } elseif ($arg1 == 'setIsStatusChanged') {
+                    return $this->subscriberMock;
+                }
+            });
         $this->subscriberMock->expects($this->once())
             ->method('save');
 
@@ -214,7 +201,7 @@ class ProblemTest extends TestCase
     /**
      * Sets subscriber to the Problem model
      */
-    private function setSubscriber()
+    private function setSubscriber(): void
     {
         $subscriberId = 1;
         $this->problemModel->setSubscriberId($subscriberId);

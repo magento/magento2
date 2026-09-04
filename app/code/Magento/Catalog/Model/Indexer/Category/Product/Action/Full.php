@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -12,6 +12,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\Catalog\Model\Indexer\Category\Product;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
@@ -64,6 +66,18 @@ class Full extends AbstractAction
     private $processManager;
 
     /**
+     * @var DeploymentConfig|null
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Config $config
@@ -73,20 +87,22 @@ class Full extends AbstractAction
      * @param MetadataPool|null $metadataPool
      * @param int|null $batchRowsCount
      * @param ActiveTableSwitcher|null $activeTableSwitcher
-     * @param ProcessManager $processManager
+     * @param ProcessManager|null $processManager
+     * @param DeploymentConfig|null $deploymentConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
         StoreManagerInterface $storeManager,
         Config $config,
-        QueryGenerator $queryGenerator = null,
-        BatchSizeManagementInterface $batchSizeManagement = null,
-        BatchProviderInterface $batchProvider = null,
-        MetadataPool $metadataPool = null,
+        ?QueryGenerator $queryGenerator = null,
+        ?BatchSizeManagementInterface $batchSizeManagement = null,
+        ?BatchProviderInterface $batchProvider = null,
+        ?MetadataPool $metadataPool = null,
         $batchRowsCount = null,
-        ActiveTableSwitcher $activeTableSwitcher = null,
-        ProcessManager $processManager = null
+        ?ActiveTableSwitcher $activeTableSwitcher = null,
+        ?ProcessManager $processManager = null,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         parent::__construct(
             $resource,
@@ -107,6 +123,7 @@ class Full extends AbstractAction
         $this->batchRowsCount = $batchRowsCount;
         $this->activeTableSwitcher = $activeTableSwitcher ?: $objectManager->get(ActiveTableSwitcher::class);
         $this->processManager = $processManager ?: $objectManager->get(ProcessManager::class);
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -170,7 +187,6 @@ class Full extends AbstractAction
     protected function reindex(): void
     {
         $userFunctions = [];
-
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
                 $userFunctions[$store->getId()] = function () use ($store) {
@@ -178,7 +194,6 @@ class Full extends AbstractAction
                 };
             }
         }
-
         $this->processManager->execute($userFunctions);
     }
 
@@ -189,6 +204,9 @@ class Full extends AbstractAction
      */
     private function reindexStore($store): void
     {
+        // Ensure the same adapter instance that created the TEMP table is used for all operations
+        // phpcs:ignore
+        $this->connection = $this->tableMaintainer->getSameAdapterConnection();
         $this->reindexRootCategory($store);
         $this->reindexAnchorCategories($store);
         $this->reindexNonAnchorCategories($store);
@@ -266,6 +284,11 @@ class Full extends AbstractAction
         $columns = array_keys(
             $this->connection->describeTable($this->tableMaintainer->getMainTmpTable((int)$store->getId()))
         );
+
+        $this->batchRowsCount = $this->deploymentConfig->get(
+            self::DEPLOYMENT_CONFIG_INDEXER_BATCHES . Product::INDEXER_ID
+        ) ?? $this->batchRowsCount;
+
         $this->batchSizeManagement->ensureBatchSize($this->connection, $this->batchRowsCount);
 
         $select = $this->connection->select();

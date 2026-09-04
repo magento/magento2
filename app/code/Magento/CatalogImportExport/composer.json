@@ -5,19 +5,21 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~7.3.0||~7.4.0",
+        "php": "~8.3.0||~8.4.0||~8.5.0",
         "ext-ctype": "*",
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-inventory": "*",
         "magento/module-catalog-url-rewrite": "*",
         "magento/module-customer": "*",
+        "magento/module-downloadable": "*",
         "magento/module-eav": "*",
         "magento/module-import-export": "*",
         "magento/module-media-storage": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-authorization": "*"
+        "magento/module-authorization": "*",
+        "magento/module-aws-s3": "*"
     },
     "type": "magento2-module",
     "license": [

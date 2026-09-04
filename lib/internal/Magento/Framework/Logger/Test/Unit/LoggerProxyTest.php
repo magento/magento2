@@ -1,23 +1,28 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Logger\Test\Unit;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Logger\LoggerProxy;
 use Magento\Framework\Logger\Monolog;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-class LoggerProxyTest extends \PHPUnit\Framework\TestCase
+class LoggerProxyTest extends TestCase
 {
     /**
      * @return array
      */
-    public static function methodsList()
+    public static function methodsList(): array
     {
         return [
             [LogLevel::EMERGENCY],
@@ -27,35 +32,36 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
             [LogLevel::WARNING],
             [LogLevel::NOTICE],
             [LogLevel::INFO],
-            [LogLevel::DEBUG],
+            [LogLevel::DEBUG]
         ];
     }
 
     /**
-     * @test
-     * @dataProvider methodsList
-     * @param $method
+     * @param string $method
+     * @return void
      */
-    public function logMessage($method)
+    #[Test]
+    #[DataProvider('methodsList')]
+    public function logMessage($method): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
-        $objectManager->expects($this->at(0))
+        $objectManager
             ->method('get')
-            ->with(DeploymentConfig::class)
-            ->willReturn($deploymentConfig);
-
-        $objectManager->expects($this->at(1))
-            ->method('get')
-            ->with(Monolog::class)
-            ->willReturn($logger);
+            ->willReturnCallback(
+                function ($arg1) use ($deploymentConfig, $logger) {
+                    if ($arg1 == DeploymentConfig::class) {
+                        return $deploymentConfig;
+                    } elseif ($arg1 == Monolog::class) {
+                        return $logger;
+                    }
+                }
+            );
         $logger->expects($this->once())->method($method)->with('test');
 
         $loggerProxy = new LoggerProxy($objectManager);
@@ -63,29 +69,40 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @test
+     * @return void
      */
-    public function createWithArguments()
+    #[Test]
+    public function createWithArguments(): void
     {
         $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+        $logger = $this->createMock(LoggerInterface::class);
 
         $args = ['name' => 'test'];
-        $deploymentConfig->expects($this->at(1))
+        $deploymentConfig
             ->method('get')
-            ->with('log/args')
-            ->willReturn($args);
+            ->willReturnCallback(
+                function ($arg1) use ($args) {
+                    if (empty($arg1)) {
+                        return null;
+                    } elseif ($arg1 == 'log/args') {
+                        return $args;
+                    }
+                }
+            );
 
-        $objectManager->expects($this->at(0))
+        $objectManager
             ->method('get')
-            ->with(DeploymentConfig::class)
-            ->willReturn($deploymentConfig);
+            ->willReturnCallback(
+                function ($arg1) use ($deploymentConfig) {
+                    if ($arg1 == DeploymentConfig::class) {
+                        return $deploymentConfig;
+                    }
+                }
+            );
 
         $objectManager->expects($this->once())
             ->method('create')
@@ -95,5 +112,40 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
 
         $loggerProxy = new LoggerProxy($objectManager);
         $loggerProxy->log(LogLevel::ALERT, 'test');
+    }
+
+    /**
+     * @param string $method
+     * @return void
+     */
+    #[Test]
+    #[DataProvider('methodsList')]
+    public function logException($method): void
+    {
+        $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
+
+        $logger = $this->createMock(LoggerInterface::class);
+
+        $objectManager
+            ->method('get')
+            ->willReturnCallback(
+                function ($arg1) use ($deploymentConfig, $logger) {
+                    if ($arg1 == DeploymentConfig::class) {
+                        return $deploymentConfig;
+                    } elseif ($arg1 == Monolog::class) {
+                        return $logger;
+                    }
+                }
+            );
+
+        $message = new \Exception('This is an exception.');
+
+        $logger->expects($this->once())->method($method)->with($message);
+
+        $loggerProxy = new LoggerProxy($objectManager);
+        $loggerProxy->$method($message);
     }
 }

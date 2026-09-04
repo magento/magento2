@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,100 +17,106 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Url\Helper\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExpressRedirectTest extends TestCase
 {
     /**
      * @var MockObject
      */
-    protected $_actionFlag;
+    protected $actionFlag;
 
     /**
      * @var MockObject
      */
-    protected $_objectManager;
-
-    /**
-     * Customer session
-     *
-     * @var MockObject
-     */
-    protected $_customerSession;
+    protected $objectManager;
 
     /**
      * @var MockObject
      */
-    protected $_context;
+    protected $customerSession;
+
+    /**
+     * @var MockObject
+     */
+    protected $context;
 
     /**
      * @var ExpressRedirect
      */
-    protected $_helper;
+    protected $helper;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_actionFlag = $this->getMockBuilder(
-            ActionFlag::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['set']
-            )->getMock();
+        $this->actionFlag = $this->getMockBuilder(ActionFlag::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['set'])
+            ->getMock();
 
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->_customerSession = $this->getMockBuilder(
-            Session::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['setBeforeAuthUrl']
-            )->getMock();
+        $this->customerSession = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setBeforeAuthUrl'])->getMock();
 
-        $this->_context = $this->getMockBuilder(Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_helper = new ExpressRedirect(
-            $this->_actionFlag,
-            $this->_objectManager,
-            $this->_customerSession,
-            $this->_context
+        $this->helper = new ExpressRedirect(
+            $this->actionFlag,
+            $this->objectManager,
+            $this->customerSession,
+            $this->context
         );
     }
 
     /**
-     * @dataProvider redirectLoginDataProvider
      * @param array $actionFlagList
      * @param string|null $customerBeforeAuthUrl
      * @param string|null $customerBeforeAuthUrlDefault
+     *
+     * @return void
      */
-    public function testRedirectLogin($actionFlagList, $customerBeforeAuthUrl, $customerBeforeAuthUrlDefault)
-    {
-        $expressRedirectMock = $this->getMockBuilder(
-            RedirectLoginInterface::class
-        )->disableOriginalConstructor()
-            ->setMethods(
+    #[DataProvider('redirectLoginDataProvider')]
+    public function testRedirectLogin(
+        array $actionFlagList,
+        ?string $customerBeforeAuthUrl,
+        ?string $customerBeforeAuthUrlDefault
+    ): void {
+        $expressRedirectMock = $this->getMockBuilder(RedirectLoginInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
                 [
                     'getActionFlagList',
                     'getResponse',
                     'getCustomerBeforeAuthUrl',
                     'getLoginUrl',
-                    'getRedirectActionName',
+                    'getRedirectActionName'
                 ]
             )->getMock();
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getActionFlagList'
-        )->willReturn(
+        $expressRedirectMock->method('getActionFlagList')->willReturn(
             $actionFlagList
         );
-
-        $atIndex = 0;
         $actionFlagList = array_merge(['no-dispatch' => true], $actionFlagList);
+        $withArgs = [];
+
         foreach ($actionFlagList as $actionKey => $actionFlag) {
-            $this->_actionFlag->expects($this->at($atIndex))->method('set')->with('', $actionKey, $actionFlag);
-            $atIndex++;
+            $withArgs[] = ['', $actionKey, $actionFlag];
         }
+        $this->actionFlag
+            ->method('set')
+            ->willReturnCallback(function (...$args) use ($withArgs) {
+                static $callCount = 0;
+                $callCount++;
+                $expectedArgs = $withArgs[$callCount - 1];
+                if ($args === $expectedArgs) {
+                    return null;
+                }
+            });
 
         $expectedLoginUrl = 'loginURL';
         $expressRedirectMock->expects(
@@ -121,12 +127,9 @@ class ExpressRedirectTest extends TestCase
             $expectedLoginUrl
         );
 
-        $urlMock = $this->getMockBuilder(
-            Data::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['addRequestParam']
-            )->getMock();
+        $urlMock = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['addRequestParam'])->getMock();
         $urlMock->expects(
             $this->once()
         )->method(
@@ -138,7 +141,7 @@ class ExpressRedirectTest extends TestCase
             $expectedLoginUrl
         );
 
-        $this->_objectManager->expects(
+        $this->objectManager->expects(
             $this->once()
         )->method(
             'get'
@@ -148,27 +151,19 @@ class ExpressRedirectTest extends TestCase
             $urlMock
         );
 
-        $responseMock = $this->getMockBuilder(
-            Http::class
-        )->disableOriginalConstructor()
-            ->setMethods(
-                ['setRedirect']
-            )->getMock();
+        $responseMock = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['setRedirect'])->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
-
         $expressRedirectMock->expects($this->once())->method('getResponse')->willReturn($responseMock);
-
-        $expressRedirectMock->expects(
-            $this->any()
-        )->method(
-            'getCustomerBeforeAuthUrl'
-        )->willReturn(
+        $expressRedirectMock->method('getCustomerBeforeAuthUrl')->willReturn(
             $customerBeforeAuthUrl
         );
         $expectedCustomerBeforeAuthUrl = $customerBeforeAuthUrl !== null
         ? $customerBeforeAuthUrl : $customerBeforeAuthUrlDefault;
+
         if ($expectedCustomerBeforeAuthUrl) {
-            $this->_customerSession->expects(
+            $this->customerSession->expects(
                 $this->once()
             )->method(
                 'setBeforeAuthUrl'
@@ -176,14 +171,15 @@ class ExpressRedirectTest extends TestCase
                 $expectedCustomerBeforeAuthUrl
             );
         }
-        $this->_helper->redirectLogin($expressRedirectMock, $customerBeforeAuthUrlDefault);
+        $this->helper->redirectLogin($expressRedirectMock, $customerBeforeAuthUrlDefault);
     }
 
     /**
-     * Data provider
+     * Data provider.
+     *
      * @return array
      */
-    public function redirectLoginDataProvider()
+    public static function redirectLoginDataProvider(): array
     {
         return [
             [[], 'beforeCustomerUrl', 'beforeCustomerUrlDEFAULT'],

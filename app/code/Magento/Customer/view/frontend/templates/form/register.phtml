@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\Customer\Helper\Address;
@@ -9,11 +9,15 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Customer\Block\Form\Register $block */
 /** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\View\Element\ButtonLockManager|null $buttonLockManager */
+$buttonLockManager = $block->getData('button_lock_manager');
 
 /** @var Magento\Customer\Helper\Address $addressHelper */
 $addressHelper = $block->getData('addressHelper');
 /** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
+/** @var \Magento\Customer\ViewModel\Address\RegionProvider $regionProvider */
+$regionProvider = $block->getRegionProvider();
 $formData = $block->getFormData();
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
@@ -25,7 +29,8 @@ $formData = $block->getFormData();
       method="post"
       id="form-validate"
       enctype="multipart/form-data"
-      autocomplete="off">
+      autocomplete="off"
+      data-mage-init='{"validation":{"errorClass":"mage-error","errorElement":"div"}}'>
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
     <fieldset class="fieldset create info">
         <legend class="legend"><span><?= $escaper->escapeHtml(__('Personal Information')) ?></span></legend><br>
@@ -102,14 +107,15 @@ $formData = $block->getFormData();
                 </label>
                 <div class="control">
                     <input type="text"
-                           name="street[]"
+                           name="street[0]"
                            value="<?= $escaper->escapeHtmlAttr($formData->getStreet(0)) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('street') ?>"
                            id="street_1"
                            class="input-text <?= $escaper->escapeHtmlAttr($_streetValidationClass) ?>">
                     <div class="nested">
                         <?php
-                            $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
+                            $_streetValidationClass = $_streetValidationClass !== null ?
+                                trim(str_replace('required-entry', '', $_streetValidationClass)) : '';
                             $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>
@@ -119,7 +125,7 @@ $formData = $block->getFormData();
                                 </label>
                                 <div class="control">
                                     <input type="text"
-                                           name="street[]"
+                                           name="street[<?= /* @noEscape */ $_i ?>]"
                                            value="<?= $escaper->escapeHtml($formData->getStreetLine($_i - 1)) ?>"
                                            title="<?= $escaper->escapeHtmlAttr(__('Street Address %1', $_i)) ?>"
                                            id="street_<?= /* @noEscape */ $_i ?>"
@@ -130,6 +136,23 @@ $formData = $block->getFormData();
                     </div>
                 </div>
             </div>
+
+            <?php if ($addressHelper->isVatAttributeVisible()): ?>
+                <?php $_vatidValidationClass = $addressHelper->getAttributeValidationClass('vat_id'); ?>
+                <div class="field taxvat">
+                    <label class="label" for="vat_id">
+                        <span><?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?></span>
+                    </label>
+                    <div class="control">
+                        <input type="text"
+                               name="vat_id"
+                               value="<?= $escaper->escapeHtmlAttr($formData->getVatId()) ?>"
+                               title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('vat_id') ?>"
+                               class="input-text <?= $escaper->escapeHtmlAttr($_vatidValidationClass) ?>"
+                               id="vat_id">
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <div class="field country required">
                 <label for="country" class="label">
@@ -259,6 +282,9 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
     </fieldset>
 
     <fieldset class="fieldset additional_info">
@@ -269,7 +295,11 @@ $formData = $block->getFormData();
         <div class="primary">
             <button type="submit"
                     class="action submit primary"
-                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>">
+                    title="<?= $escaper->escapeHtmlAttr(__('Create an Account')) ?>"
+                    id="send2"
+                <?php if ($buttonLockManager?->isDisabled('customer_create_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
                 <span><?= $escaper->escapeHtml(__('Create an Account')) ?></span>
             </button>
         </div>
@@ -281,20 +311,14 @@ $formData = $block->getFormData();
         </div>
     </div>
 </form>
-<?php $ignore = /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null';
-$scriptString = <<<script
+<?php if ($_dob->isEnabled()): ?>
+<script>
 require([
     'jquery',
     'mage/mage'
 ], function($){
-
     var dataForm = $('#form-validate');
-    var ignore = {$ignore};
-
     dataForm.mage('validation', {
-script;
-if ($_dob->isEnabled()):
-    $scriptString .= <<<script
         errorPlacement: function(error, element) {
             if (element.prop('id').search('full') !== -1) {
                 var dobElement = $(element).parents('.customer-dob'),
@@ -307,43 +331,36 @@ if ($_dob->isEnabled()):
                 error.insertAfter(element);
             }
         },
-        ignore: ':hidden:not(' + ignore + ')'
-script;
-else:
-    $scriptString .= <<<script
-        ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-script;
-endif;
-$scriptString .= <<<script
+        ignore: ':hidden:not(input[id$="full"])'
     }).find('input:text').attr('autocomplete', 'off');
 });
-script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+</script>
+<?php endif; ?>
 <?php if ($block->getShowAddressFields()): ?>
     <?php
-    $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
+    $regionJson = /* @noEscape */ $regionProvider->getRegionJson();
     $regionId = (int) $formData->getRegionId();
     $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         "#country": {
-            "regionUpdater": {
+            "directoryRegionUpdater": {
                 "optionalRegionAllowed": <?= /* @noEscape */ $displayAll ? 'true' : 'false' ?>,
                 "regionListId": "#region_id",
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": {$regionJson},
-                "defaultRegion": "{$regionId}",
-                "countriesWithOptionalZip": {$countriesWithOptionalZip}
+                "regionJson": <?= /* @noEscape */ $regionJson ?>,
+                "defaultRegion": <?= /* @noEscape */ $regionId ?>,
+                "countriesWithOptionalZip": <?=  /* @noEscape */ $countriesWithOptionalZip ?>
             }
         }
     }
 </script>
 <?php endif; ?>
-
+<?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
 <script type="text/x-magento-init">
     {
         ".field.password": {
@@ -354,6 +371,14 @@ script;
         "*": {
             "Magento_Customer/js/block-submit-on-send": {
                 "formId": "form-validate"
+            },
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

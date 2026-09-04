@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,54 +15,81 @@ use Magento\Framework\DB\Helper;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\Currency\DefaultLocator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PriceTest extends TestCase
 {
-    /** @var RequestInterface|MockObject  */
+    use MockCreationTrait;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
     private $requestMock;
 
-    /** @var Context|MockObject */
+    /**
+     * @var Context|MockObject
+     */
     private $context;
 
-    /** @var Helper|MockObject */
+    /**
+     * @var Helper|MockObject
+     */
     private $helper;
 
-    /** @var Currency|MockObject */
+    /**
+     * @var Currency|MockObject
+     */
     private $currency;
 
-    /** @var DefaultLocator|MockObject */
+    /**
+     * @var DefaultLocator|MockObject
+     */
     private $currencyLocator;
 
-    /** @var Column|MockObject */
+    /**
+     * @var Column|MockObject
+     */
     private $columnMock;
 
-    /** @var Price  */
+    /**
+     * @var Price
+     */
     private $blockPrice;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManagerHelper;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
 
         $this->context = $this->createMock(Context::class);
         $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
 
         $this->helper = $this->createMock(Helper::class);
 
-        $this->currency = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getAnyRate'])
-            ->getMock();
+        $this->currency = $this->createPartialMock(
+            Currency::class,
+            ['getAnyRate']
+        );
 
         $this->currencyLocator = $this->createMock(DefaultLocator::class);
 
-        $this->columnMock = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCurrencyCode'])
-            ->getMock();
+        $this->objectManagerHelper = new ObjectManager($this);
 
-        $helper = new ObjectManager($this);
+        $this->columnMock = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getCurrencyCode']
+        );
+
+        $helper = $this->objectManagerHelper;
 
         $this->blockPrice = $helper->getObject(Price::class, [
             'context'         => $this->context,
@@ -73,7 +100,10 @@ class PriceTest extends TestCase
         $this->blockPrice->setColumn($this->columnMock);
     }
 
-    public function testGetCondition()
+    /**
+     * @return void
+     */
+    public function testGetCondition(): void
     {
         $this->currencyLocator->expects(
             $this->any()
@@ -85,14 +115,14 @@ class PriceTest extends TestCase
             'defaultCurrency'
         );
 
-        $this->currency->expects($this->at(0))
+        $this->currency
             ->method('getAnyRate')
             ->with('defaultCurrency')
             ->willReturn(1.0);
 
         $testValue = [
             'value' => [
-                'from' => '1234a',
+                'from' => '1234a'
             ]
         ];
 

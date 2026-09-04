@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -59,7 +59,10 @@ define([
          *
          * @returns {Range} Chainable.
          */
-        initialize: function () {
+        initialize: function (config) {
+            if (config.dateFormat) {
+                this.constructor.defaults.templates.date.pickerDefaultDateFormat = config.dateFormat;
+            }
             this._super()
                 .initChildren();
 

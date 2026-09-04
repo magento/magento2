@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
@@ -51,17 +52,17 @@ class DeleteTest extends AbstractBackendController
         $this->fileSystem = $this->_objectManager->get(Filesystem::class);
         $this->sourceFilePath = __DIR__ . '/../../Import/_files' . DIRECTORY_SEPARATOR . $this->fileName;
         //Refers to tests 'var' directory
-        $this->varDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
+        $this->varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
      * Check that file can be removed under var/export directory.
      *
      * @param string $file
-     * @dataProvider testExecuteProvider
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
      */
+    #[DataProvider('csvExecuteProvider')]
     public function testExecute($file): void
     {
         $fullPath = 'export/' . $file;
@@ -84,12 +85,15 @@ class DeleteTest extends AbstractBackendController
      *
      * @param $destinationFilePath
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function copyFile($destinationFilePath): void
     {
-        //Refers to application root directory
-        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $rootDirectory->copyFile($this->sourceFilePath, $this->varDirectory->getAbsolutePath($destinationFilePath));
+        $driver = $this->varDirectory->getDriver();
+        $absolutePath = $this->varDirectory->getAbsolutePath($destinationFilePath);
+
+        $driver->createDirectory(dirname($absolutePath));
+        $driver->filePutContents($absolutePath, file_get_contents($this->sourceFilePath));
     }
 
     /**
@@ -97,7 +101,7 @@ class DeleteTest extends AbstractBackendController
      *
      * @return array
      */
-    public static function testExecuteProvider(): array
+    public static function csvExecuteProvider(): array
     {
         return [
             ['catalog_product.csv'],
@@ -112,7 +116,7 @@ class DeleteTest extends AbstractBackendController
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */
-        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
         if ($directory->isExist('export')) {
             $directory->delete('export');
         }

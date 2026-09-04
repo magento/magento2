@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,12 +21,12 @@ use PHPUnit\Framework\TestCase;
 class DocRootLocatorTest extends TestCase
 {
     /**
-     * @dataProvider isPubDataProvider
      *
      * @param string $path
      * @param bool $isExist
      * @param bool $result
      */
+    #[DataProvider('isPubDataProvider')]
     public function testIsPub($path, $isExist, $result)
     {
         $request = $this->createMock(Http::class);
@@ -45,7 +46,7 @@ class DocRootLocatorTest extends TestCase
     /**
      * @return array
      */
-    public function isPubDataProvider()
+    public static function isPubDataProvider()
     {
         return [
             ['/some/path/to/root', false, false],

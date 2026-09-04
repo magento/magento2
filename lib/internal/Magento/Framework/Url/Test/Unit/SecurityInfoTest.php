@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,6 +10,7 @@ namespace Magento\Framework\Url\Test\Unit;
 use Magento\Framework\Url\SecurityInfo;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SecurityInfoTest extends TestCase
 {
@@ -30,9 +31,8 @@ class SecurityInfoTest extends TestCase
 
     /**
      * @param string $url
-     * @param bool $expected
-     * @dataProvider secureUrlDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('secureUrlDataProvider')]
     public function testIsSecureChecksIfUrlIsInSecureList($url, $expected)
     {
         $this->assertEquals($expected, $this->_model->isSecure($url));
@@ -41,7 +41,7 @@ class SecurityInfoTest extends TestCase
     /**
      * @return array
      */
-    public function secureUrlDataProvider()
+    public static function secureUrlDataProvider()
     {
         return [
             ['/account', true],

@@ -1,20 +1,26 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Gallery\UpdateHandler;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Registry;
+use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ContentTest extends \PHPUnit\Framework\TestCase
 {
@@ -36,6 +42,16 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     private $dataPersistor;
 
     /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -51,6 +67,8 @@ class ContentTest extends \PHPUnit\Framework\TestCase
         $this->block->setElement($gallery);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
         $this->dataPersistor = Bootstrap::getObjectManager()->get(DataPersistorInterface::class);
+        $this->storeRepository = Bootstrap::getObjectManager()->create(StoreRepositoryInterface::class);
+        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }
 
     public function testGetUploader()
@@ -61,12 +79,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get images json using registry or data persistor.
      *
-     * @dataProvider getImagesAndImageTypesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoAppIsolation enabled
      * @param bool $isProductNew
      * @return void
      */
+    #[DataProvider('getImagesAndImageTypesDataProvider')]
     public function testGetImagesJson(bool $isProductNew)
     {
         $this->prepareProduct($isProductNew);
@@ -83,12 +101,12 @@ class ContentTest extends \PHPUnit\Framework\TestCase
     /**
      * Test get image types json using registry or data persistor.
      *
-     * @dataProvider getImagesAndImageTypesDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoAppIsolation enabled
      * @param bool $isProductNew
      * @return void
      */
+    #[DataProvider('getImagesAndImageTypesDataProvider')]
     public function testGetImageTypes(bool $isProductNew)
     {
         $this->prepareProduct($isProductNew);
@@ -108,7 +126,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function getImagesAndImageTypesDataProvider()
+    public static function getImagesAndImageTypesDataProvider()
     {
         return [
             [
@@ -118,6 +136,119 @@ class ContentTest extends \PHPUnit\Framework\TestCase
                 'isProductNew' => false,
             ],
         ];
+    }
+
+    /**
+     * Tests images positions in store view
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    #[DataProvider('imagesPositionStoreViewDataProvider')]
+    public function testImagesPositionStoreView(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $images = $product->getData('media_gallery')['images'];
+        $images = array_merge($images, $newImages);
+        $product->setData('media_gallery', ['images' => $images]);
+        $updateHandler = Bootstrap::getObjectManager()->create(UpdateHandler::class);
+        $updateHandler->execute($product);
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
+        $this->registry->register('current_product', $product);
+        $actualImages = array_map(
+            function ($item) {
+                return [
+                    'file' => $item['file'],
+                    'label' => $item['label'],
+                    'position' => $item['position'],
+                ];
+            },
+            json_decode($this->block->getImagesJson(), true)
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function imagesPositionStoreViewDataProvider(): array
+    {
+        return [
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => null,
+                        'position' => 2,
+                    ],
+                ]
+            ],
+            [
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Returns product for testing.
+     *
+     * @param int $storeId
+     * @param string $sku
+     * @return ProductInterface
+     */
+    private function getProduct(int $storeId = Store::DEFAULT_STORE_ID, string $sku = 'simple'): ProductInterface
+    {
+        return $this->productRepository->get($sku, false, $storeId, true);
     }
 
     /**

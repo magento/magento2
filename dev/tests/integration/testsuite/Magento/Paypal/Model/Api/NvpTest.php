@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Paypal\Model\Api;
 
@@ -71,7 +71,6 @@ class NvpTest extends \PHPUnit\Framework\TestCase
 
         $refObject = new \ReflectionObject($config);
         $refProperty = $refObject->getProperty('productMetadata');
-        $refProperty->setAccessible(true);
         $refProperty->setValue($config, $productMetadata);
 
         $this->nvpApi->setConfigObject($config);
@@ -156,6 +155,7 @@ class NvpTest extends \PHPUnit\Framework\TestCase
                 [],
                 $httpQuery
             );
+        $this->httpClient->method('read')->willReturn('');
 
         $this->nvpApi->callRefundTransaction();
     }

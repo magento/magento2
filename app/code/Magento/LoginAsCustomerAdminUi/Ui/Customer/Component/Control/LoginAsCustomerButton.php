@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -61,7 +61,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     {
         $customerId = (int)$this->getCustomerId();
         $data = [];
-        $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
+        $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
         $isEnabled = $this->config->isEnabled();
         if ($isAllowed && $isEnabled) {
             $data = $this->dataProvider->getData($customerId);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,9 +16,14 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * Contains tests for Price class
+ */
 class PriceTest extends TestCase
 {
+
     /**
      * @var Price
      */
@@ -34,22 +39,21 @@ class PriceTest extends TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(ContextInterface::class)
-            ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
             ->getMock();
+        $processor = $this->createMock(Processor::class);
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
         $this->currencyMock = $this->getMockBuilder(Currency::class)
-            ->setMethods(['load', 'format'])
+            ->onlyMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->model = $objectManager->getObject(
             Price::class,
             ['currency' => $this->currencyMock, 'context' => $contextMock, 'storeManager' => $this->storeManagerMock]
@@ -57,48 +61,57 @@ class PriceTest extends TestCase
     }
 
     /**
-     * @param $hasCurrency
-     * @param $dataSource
-     * @param $currencyCode
-     * @dataProvider testPrepareDataSourceDataProvider
+     * Test for prepareDataSource method
+     *
+     * @param bool $hasCurrency
+     * @param array $dataSource
+     * @param string $currencyCode
+     * @param int|null $expectedStoreId
      */
-    public function testPrepareDataSource($hasCurrency, $dataSource, $currencyCode)
-    {
-        $itemName = 'itemName';
-        $oldItemValue = 'oldItemValue';
-        $newItemValue = 'newItemValue';
+    #[DataProvider('prepareDataSourceDataProvider')]
+    public function testPrepareDataSource(
+        bool $hasCurrency,
+        array $dataSource,
+        string $currencyCode,
+        ?int $expectedStoreId = null
+    ): void {
+         $itemName = 'itemName';
+         $oldItemValue = 'oldItemValue';
+         $newItemValue = 'newItemValue';
 
-        $store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock = $this->getMockBuilder(Currency::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $currencyMock->expects($hasCurrency ? $this->never() : $this->once())
+         $store = $this->createMock(Store::class);
+         $currencyMock = $this->createMock(Currency::class);
+         $currencyMock->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getCurrencyCode')
             ->willReturn($currencyCode);
-        $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
+         $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getStore')
+            ->with($expectedStoreId)
             ->willReturn($store);
-        $store->expects($hasCurrency ? $this->never() : $this->once())
+         $store->expects($hasCurrency ? $this->never() : $this->once())
             ->method('getBaseCurrency')
             ->willReturn($currencyMock);
 
-        $this->currencyMock->expects($this->once())
+         $this->currencyMock->expects($this->once())
             ->method('load')
             ->willReturnSelf();
 
-        $this->currencyMock->expects($this->once())
+         $this->currencyMock->expects($this->once())
             ->method('format')
             ->with($oldItemValue, [], false)
             ->willReturn($newItemValue);
 
-        $this->model->setData('name', $itemName);
-        $dataSource = $this->model->prepareDataSource($dataSource);
-        $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+         $this->model->setData('name', $itemName);
+         $dataSource = $this->model->prepareDataSource($dataSource);
+         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
     }
 
-    public function testPrepareDataSourceDataProvider()
+    /**
+     * Provider for testPrepareDataSource
+     *
+     * @return array
+     */
+    public static function prepareDataSourceDataProvider(): array
     {
         $dataSource1 = [
             'data' => [
@@ -119,9 +132,44 @@ class PriceTest extends TestCase
                 ]
             ]
         ];
+        $dataSource3 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => '2'
+                    ]
+                ]
+            ]
+        ];
+        $dataSource4 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => 'abc'
+                    ]
+                ]
+            ]
+        ];
+        $dataSource5 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'store_id' => '123Test',
+                        'base_currency_code' => '',
+                    ]
+                ]
+            ]
+        ];
+
         return [
             [true, $dataSource1, 'US'],
             [false, $dataSource2, 'SAR'],
+            [false, $dataSource3, 'SAR', 2],
+            [false, $dataSource4, 'SAR'],
+            [false, $dataSource5, 'INR'],
         ];
     }
 }

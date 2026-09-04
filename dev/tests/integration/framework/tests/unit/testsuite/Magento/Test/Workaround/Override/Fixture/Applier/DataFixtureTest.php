@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture\Applier;
 
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\DataFixture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Fixture\Applier\DataFixture
@@ -34,7 +35,7 @@ class DataFixtureTest extends TestCase
     public function testGetPrioritizedConfig(): void
     {
         $this->object = $this->getMockBuilder(DataFixture::class)
-            ->setMethods(['getGlobalConfig','getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
+            ->onlyMethods(['getGlobalConfig','getClassConfig', 'getMethodConfig', 'getDataSetConfig'])
             ->getMock();
         $this->object->expects($this->once())
             ->method('getGlobalConfig')
@@ -55,18 +56,16 @@ class DataFixtureTest extends TestCase
             ['data_set_config'],
         ];
         $reflectionMethod = new \ReflectionMethod(DataFixture::class, 'getPrioritizedConfig');
-        $reflectionMethod->setAccessible(true);
         $this->assertEquals($expectedResult, $reflectionMethod->invoke($this->object));
     }
 
     /**
-     * @dataProvider fixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('fixturesProvider')]
     public function testSortFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -76,11 +75,11 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function fixturesProvider(): array
+    public static function fixturesProvider(): array
     {
         return [
             'sort_fixtures_before_all' => [
-                'existing_fixtures' => ['fixture'],
+                'existingFixtures' => [['factory' => 'fixture']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -90,10 +89,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['added_fixture', 'fixture'],
+                'expectedOrder' => [['factory' => 'added_fixture'], ['factory' => 'fixture']],
             ],
             'sort_fixtures_after_all' => [
-                'existing_fixtures' => ['fixture'],
+                'existingFixtures' => [['factory' => 'fixture']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -103,10 +102,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture', 'added_fixture'],
+                'expectedOrder' => [['factory' => 'fixture'], ['factory' => 'added_fixture']],
             ],
             'sort_fixture_before_specific' => [
-                'existing_fixtures' => ['fixture1', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture1'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -116,10 +115,18 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture1', 'added_fixture', 'fixture2'],
+                'expectedOrder' => [
+                    ['factory' => 'fixture1'],
+                    ['factory' => 'added_fixture'],
+                    ['factory' => 'fixture2']
+                ],
             ],
             'sort_fixture_after_specific' => [
-                'existing_fixtures' => ['fixture1', 'fixture2', 'fixture3'],
+                'existingFixtures' => [
+                    ['factory' => 'fixture1'],
+                    ['factory' => 'fixture2'],
+                    ['factory' => 'fixture3']
+                ],
                 'config' => [
                     [
                         'path' => 'added_fixture',
@@ -129,19 +136,23 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['fixture1', 'fixture2', 'added_fixture', 'fixture3'],
+                'expectedOrder' => [
+                    ['factory' => 'fixture1'],
+                    ['factory' => 'fixture2'],
+                    ['factory' => 'added_fixture'],
+                    ['factory' => 'fixture3']
+                ],
             ],
         ];
     }
 
     /**
-     * @dataProvider removeFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('removeFixturesProvider')]
     public function testRemoveFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -151,11 +162,11 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function removeFixturesProvider(): array
+    public static function removeFixturesProvider(): array
     {
         return [
             'remove_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -165,10 +176,10 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture2'],
+                'expectedOrder' => [['factory' => 'fixture2']],
             ],
             'remove_one_of_same_fixtures' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture'], ['factory' => 'fixture'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -178,10 +189,10 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture', 'fixture2'],
+                'expectedOrder' => [['factory' => 'fixture'], ['factory' => 'fixture2']],
             ],
             'remove_all_of_same_fixtures' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture'], ['factory' => 'fixture'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -198,19 +209,18 @@ class DataFixtureTest extends TestCase
                         'remove' => true,
                     ]
                 ],
-                'expected_order' => ['fixture2'],
+                'expectedOrder' => [['factory' => 'fixture2']],
             ],
         ];
     }
 
     /**
-     * @dataProvider replaceFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('replaceFixturesProvider')]
     public function testReplaceFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -220,11 +230,11 @@ class DataFixtureTest extends TestCase
     /**
      * @return array
      */
-    public function replaceFixturesProvider(): array
+    public static function replaceFixturesProvider(): array
     {
         return [
             'replace_one_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -234,10 +244,10 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['new_fixture', 'fixture2'],
+                'expectedOrder' => [['factory' => 'new_fixture'], ['factory' => 'fixture2']],
             ],
             'replace_all_fixture' => [
-                'existing_fixtures' => ['fixture', 'fixture', 'fixture2'],
+                'existingFixtures' => [['factory' => 'fixture'], ['factory' => 'fixture'], ['factory' => 'fixture2']],
                 'config' => [
                     [
                         'path' => 'fixture',
@@ -247,7 +257,11 @@ class DataFixtureTest extends TestCase
                         'remove' => false,
                     ]
                 ],
-                'expected_order' => ['new_fixture', 'new_fixture', 'fixture2'],
+                'expectedOrder' => [
+                    ['factory' => 'new_fixture'],
+                    ['factory' => 'new_fixture'],
+                    ['factory' => 'fixture2']
+                ],
             ],
         ];
     }

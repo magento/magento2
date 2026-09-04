@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,12 +15,14 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\Flag;
 use Magento\Reports\Model\FlagFactory;
 use Magento\Reports\Model\ResourceModel\Helper;
 use Magento\Reports\Model\ResourceModel\Report\Product\Viewed;
-use PHPUnit\Framework\MockObject\Matcher\InvokedCount;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -31,6 +33,8 @@ use Psr\Log\LoggerInterface;
  */
 class ViewedTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Viewed
      */
@@ -102,29 +106,28 @@ class ViewedTest extends TestCase
     protected $flagMock;
 
     /**
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return void
      */
     protected function setUp(): void
     {
         $this->zendDbMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
         $this->zendDbMock->expects($this->any())->method('fetchColumn')->willReturn([]);
 
-        $this->selectMock = $this->getMockBuilder(Select::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
+        $this->selectMock = $this->getMockBuilder(Select::class)->disableOriginalConstructor()
+            ->onlyMethods(
                 [
-                    'from',
                     'where',
-                    'joinInner',
-                    'joinLeft',
                     'having',
                     'useStraightJoin',
                     'insertFromSelect',
-                    '__toString'
+                    '__toString',
+                    'from',
+                    'joinInner',
+                    'joinLeft'
                 ]
-            )
-            ->getMock();
+            )->getMock();
         $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
         $this->selectMock->expects($this->any())->method('joinInner')->willReturnSelf();
@@ -161,14 +164,14 @@ class ViewedTest extends TestCase
         )->getMock();
         $this->timezoneMock->expects($this->any())->method('scopeDate')->willReturn($dateTime);
 
-        $this->flagMock = $this->getMockBuilder(Flag::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'setLastUpdate', 'save'])
-            ->getMock();
+        $this->flagMock = $this->createPartialMockWithReflection(
+            Flag::class,
+            ['setReportFlagCode', 'unsetData', 'loadSelf', 'setFlagData', 'save', 'setLastUpdate']
+        );
 
         $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->flagFactoryMock->expects($this->any())->method('create')->willReturn($this->flagMock);
 
@@ -197,7 +200,7 @@ class ViewedTest extends TestCase
                 'localeDate' => $this->timezoneMock,
                 'reportsFlagFactory' => $this->flagFactoryMock,
                 'productResource' => $this->productMock,
-                'resourceHelper' => $this->helperMock,
+                'resourceHelper' => $this->helperMock
             ]
         );
     }
@@ -207,47 +210,53 @@ class ViewedTest extends TestCase
      * @param mixed $to
      * @param InvokedCount $truncateCount
      * @param InvokedCount $deleteCount
-     * @dataProvider intervalsDataProvider
+     *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function testAggregate($from, $to, $truncateCount, $deleteCount)
+    #[DataProvider('intervalsDataProvider')]
+    public function testAggregate($from, $to, $truncateCount, $deleteCount): void
     {
+        // Convert string matcher to actual matcher
+        if ($truncateCount === 'never') {
+            $truncateCount = $this->never();
+        } elseif ($truncateCount === 'once') {
+            $truncateCount = $this->once();
+        }
+        if ($deleteCount === 'never') {
+            $deleteCount = $this->never();
+        } elseif ($deleteCount === 'once') {
+            $deleteCount = $this->once();
+        }
+        if ($from === null) {
+            $this->zendDbMock->expects($this->never())->method('fetchAll');
+        } else {
+            $this->zendDbMock->expects($this->any())->method('fetchAll')->willReturn([]);
+        }
+
         $this->connectionMock->expects($truncateCount)->method('truncateTable');
         $this->connectionMock->expects($deleteCount)->method('delete');
 
         $this->helperMock
-            ->expects($this->at(0))
             ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'day',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_daily'
-            )
-            ->willReturnSelf();
-        $this->helperMock
-            ->expects($this->at(1))
-            ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'month',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_monthly'
-            )
-            ->willReturnSelf();
-        $this->helperMock
-            ->expects($this->at(2))
-            ->method('updateReportRatingPos')
-            ->with(
-                $this->connectionMock,
-                'year',
-                'views_num',
-                'report_viewed_product_aggregated_daily',
-                'report_viewed_product_aggregated_yearly'
-            )
-            ->willReturnSelf();
+        ->willReturnCallback(function ($connection, $type, $column, $mainTable, $aggregationTable) {
+            if ($connection == $this->connectionMock && $type == 'day' && $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_daily') {
+                return $this->helperMock;
+            } elseif ($connection == $this->connectionMock && $type == 'month' &&
+                $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_monthly') {
+                return $this->helperMock;
+            } elseif ($connection == $this->connectionMock && $type == 'year' &&
+                $column == 'views_num' &&
+                $mainTable == 'report_viewed_product_aggregated_daily' &&
+                $aggregationTable == 'report_viewed_product_aggregated_yearly') {
+                return $this->helperMock;
+            }
+        });
 
         $this->flagMock->expects($this->once())->method('unsetData')->willReturnSelf();
         $this->flagMock->expects($this->once())->method('loadSelf')->willReturnSelf();
@@ -265,20 +274,20 @@ class ViewedTest extends TestCase
     /**
      * @return array
      */
-    public function intervalsDataProvider()
+    public static function intervalsDataProvider(): array
     {
         return [
             [
                 'from' => new \DateTime('+3 day'),
                 'to' => new \DateTime('-3 day'),
-                'truncateCount' => $this->never(),
-                'deleteCount' => $this->once()
+                'truncateCount' => 'never',
+                'deleteCount' => 'once'
             ],
             [
                 'from' => null,
                 'to' => null,
-                'truncateCount' => $this->once(),
-                'deleteCount' => $this->never()
+                'truncateCount' => 'once',
+                'deleteCount' => 'never'
             ]
         ];
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -17,8 +17,8 @@
         </arguments>
 
         <click userInput="{{ImageFolder.name}}" stepKey="clickOnCreatedFolder"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
-        <see selector="{{MediaGallerySection.DeleteFolder}}" userInput="Delete Folder" stepKey="seeDeleteFolderBtn"/>
+        <waitForPageLoad stepKey="waitForLoading"/>
+        <waitForText selector="{{MediaGallerySection.DeleteFolder}}" userInput="Delete Folder" stepKey="seeDeleteFolderBtn"/>
         <click selector="{{MediaGallerySection.DeleteFolder}}" stepKey="clickDeleteFolderBtn"/>
         <waitForText userInput="OK" stepKey="waitForConfirm"/>
         <click selector="{{MediaGallerySection.confirmDelete}}" stepKey="confirmDelete"/>

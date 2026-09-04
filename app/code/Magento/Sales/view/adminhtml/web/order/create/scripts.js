@@ -1,9 +1,9 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
-define([
+ define([
     'jquery',
     'Magento_Ui/js/modal/confirm',
     'Magento_Ui/js/modal/alert',
@@ -157,7 +157,14 @@ define([
             this.sidebarShow();
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-            this.loadArea(['header', 'data'], true);
+            this.loadArea(
+                ['header', 'data'],
+                true,
+                null,
+                function () {
+                    location.reload();
+                }
+            );
         },
 
         setCurrencyId: function (id) {
@@ -184,7 +191,7 @@ define([
             }
             this.selectAddressEvent = false;
 
-            var data = this.serializeData(container);
+            let data = this.serializeData(container).toObject();
             data[el.name] = id;
 
             this.resetPaymentMethod();
@@ -274,6 +281,14 @@ define([
                 data['reset_shipping'] = true;
             }
 
+            if (name !== 'customer_address_id' && this.selectAddressEvent === false) {
+                if (this.shippingAsBilling) {
+                    $('order-shipping_address_customer_address_id').value = '';
+                }
+
+                $('order-' + type + '_address_customer_address_id').value = '';
+            }
+
             data['order[' + type + '_address][customer_address_id]'] = null;
             data['shipping_as_billing'] = +this.shippingAsBilling;
 
@@ -311,12 +326,26 @@ define([
 
             if (this.isBillingField(fieldName)) {
                 syncName = fieldName.replace('billing', 'shipping');
+
+                if (fieldName.indexOf('country')) {
+                    jQuery('#order-shipping_address_region').css(
+                        'display',
+                        jQuery('#order-billing_address_region').css('display')
+                    );
+                    jQuery('#order-shipping_address_region_id').css(
+                        'display',
+                        jQuery('#order-billing_address_region_id').css('display')
+                    );
+                }
             }
 
             $(container).select('[name="' + syncName + '"]').each(function (element) {
                 if (~['input', 'textarea', 'select'].indexOf(element.tagName.toLowerCase())) {
                     if (element.type === "checkbox") {
                         element.checked = fieldValue.checked;
+                    } else if (element.type === "select" || element.type === "select-one") {
+                        element.innerHTML = fieldValue.innerHTML;
+                        element.value = fieldValue.value;
                     } else {
                         element.value = fieldValue.value;
                     }
@@ -411,13 +440,16 @@ define([
          */
         setShippingAsBilling: function (flag) {
             var data,
-                areasToLoad = ['billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
+                areasToLoad = ['items', 'billing_method', 'shipping_address', 'shipping_method', 'totals', 'giftmessage'];
 
             this.disableShippingAddress(flag);
             data = this.serializeData(flag ? this.billingAddressContainer : this.shippingAddressContainer);
             data = data.toObject();
             data['shipping_as_billing'] = flag ? 1 : 0;
             data['reset_shipping'] = 1;
+            // set customer_address_id to null for shipping address in order to treat it as new from backend
+            // Checkbox(Same As Billing Address) uncheck event
+            data['order[shipping_address][customer_address_id]'] = null;
             this.loadArea(areasToLoad, true, data);
         },
 
@@ -475,7 +507,7 @@ define([
         loadPaymentMethods: function () {
             var data = this.serializeData(this.billingAddressContainer).toObject();
 
-            this.loadArea(['billing_method', 'totals'], true, data);
+            this.loadArea(['items', 'billing_method', 'totals'], true, data);
 
             return false;
         },
@@ -492,7 +524,7 @@ define([
             this.setPaymentMethod(method);
             var data = {};
             data['order[payment_method]'] = method;
-            this.loadArea(['card_validation'], true, data);
+            this.loadArea(['items', 'card_validation'], true, data);
         },
 
         setPaymentMethod: function (method) {
@@ -574,7 +606,20 @@ define([
         applyCoupon: function (code) {
             this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
                 'order[coupon][code]': code,
-                reset_shipping: 0
+                'order[coupon][append]': code,
+                reset_shipping: true
+            });
+            this.orderItemChanged = false;
+            jQuery('html, body').animate({
+                scrollTop: 0
+            });
+        },
+
+        removeCoupon: function (code) {
+            this.loadArea(['items', 'shipping_method', 'totals', 'billing_method'], true, {
+                'order[coupon][code]': '',
+                'order[coupon][remove]': code,
+                reset_shipping: true
             });
             this.orderItemChanged = false;
             jQuery('html, body').animate({
@@ -738,11 +783,27 @@ define([
                 var getPrice = function (elm) {
                     var optQty = 1;
                     if (elm.hasAttribute('qtyId')) {
-                        if (!$(elm.getAttribute('qtyId')).value) {
-                            return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
+                        var qtyId = elm.getAttribute('qtyId'),
+                            confirmedBlock = $(productConfigure.confirmedCurrentId),
+                            qtyEl = null,
+                            qtyInputs, j;
+
+                        if (confirmedBlock) {
+                            qtyInputs = confirmedBlock.getElementsByTagName('input');
+
+                            for (j = 0; j < qtyInputs.length; j++) {
+                                if (qtyInputs[j].id === qtyId) {
+                                    qtyEl = qtyInputs[j];
+                                    break;
+                                }
+                            }
                         }
+
+                        if (!qtyEl || !qtyEl.value) {
+                            return 0;
+                        }
+
+                        optQty = parseFloat(qtyEl.value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;
@@ -942,7 +1003,8 @@ define([
          */
         sidebarConfigureProduct: function (listType, productId, itemId) {
             // create additional fields
-            var params = {};
+            var params = {},
+                isWishlist = !!itemId;
             params.reset_shipping = true;
             params.add_product = productId;
             this.prepareParams(params);
@@ -963,10 +1025,18 @@ define([
             }.bind(this));
             // response handler
             productConfigure.setOnLoadIFrameCallback(listType, function (response) {
+                var areas = ['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
+
                 if (!response.ok) {
                     return;
                 }
-                this.loadArea(['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'], true);
+                if (isWishlist) {
+                    this.removeSidebarItem(itemId, 'wishlist').done(function () {
+                        this.loadArea(areas, true);
+                    }.bind(this));
+                } else {
+                    this.loadArea(areas, true);
+                }
             }.bind(this));
             // show item configuration
             itemId = itemId ? itemId : productId;
@@ -975,7 +1045,10 @@ define([
         },
 
         removeSidebarItem: function (id, from) {
-            this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {remove_item: id, from: from});
+            return this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {
+                remove_item: id,
+                from: from
+            });
         },
 
         itemsUpdate: function () {
@@ -1140,7 +1213,7 @@ define([
             }
         },
 
-        loadArea: function (area, indicator, params) {
+        loadArea: function (area, indicator, params, callback) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
             if (area) {
@@ -1159,6 +1232,9 @@ define([
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
                         this.loadAreaResponseHandler(response);
+                        if (callback instanceof Function) {
+                            callback();
+                        }
                         deferred.resolve();
                     }.bind(this)
                 });
@@ -1316,15 +1392,26 @@ define([
 
         submit: function () {
             var $editForm = jQuery('#edit_form'),
+                $submitButton = jQuery('#submit_order_top_button'),
                 beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
+                $submitButton.prop('disabled', true);
+
                 $editForm.trigger('processStart');
                 beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
                 $editForm.trigger(beforeSubmitOrderEvent);
+
                 if (beforeSubmitOrderEvent.result !== false) {
                     $editForm.trigger('submitOrder');
+                } else {
+                    $submitButton.prop('disabled', false);
                 }
+
+                $editForm.on('submitOrderComplete', function () {
+                    $submitButton.prop('disabled', false);
+                    $editForm.trigger('processStop');
+                });
             }
         },
 

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- *
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 
 use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -63,8 +63,8 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
      * @param string $endpoint
      * @param string $identityLinkUrl
      * @param int $expectedResult
-     * @dataProvider renderTokenExchangeProvider
      */
+    #[DataProvider('renderTokenExchangeProvider')]
     public function testRenderTokenExchange($endpoint, $identityLinkUrl, $expectedResult)
     {
         $integration = $this->getFixtureIntegration();
@@ -82,7 +82,7 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('>Reauthorize</a>', $buttonHtml);
     }
 
-    public function renderTokenExchangeProvider()
+    public static function renderTokenExchangeProvider()
     {
         return [
             ['http://example.com/endpoint', 'http://example.com/identity', 1],

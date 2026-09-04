@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -22,6 +22,9 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="block_id"/>
         </constraint>
+        <index referenceId="CMS_BLOCK_IDENTIFIER" indexType="btree">
+            <column name="identifier"/>
+        </index>
         <index referenceId="CMS_BLOCK_TITLE_IDENTIFIER_CONTENT" indexType="fulltext">
             <column name="title"/>
             <column name="identifier"/>

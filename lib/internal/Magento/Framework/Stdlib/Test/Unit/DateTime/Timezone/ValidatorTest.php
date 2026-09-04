@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Timezone;
 
 use Magento\Framework\Stdlib\DateTime\Timezone\Validator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ValidatorTest extends TestCase
 {
@@ -17,9 +18,8 @@ class ValidatorTest extends TestCase
      */
     protected $_validator;
 
-    /**
-     * @dataProvider validateWithTimestampOutOfSystemRangeDataProvider
-     */
+    /**     */
+    #[DataProvider('validateWithTimestampOutOfSystemRangeDataProvider')]
     public function testValidateWithTimestampOutOfSystemRangeThrowsException($range, $validateArgs)
     {
         $this->expectException('Magento\Framework\Exception\ValidatorException');
@@ -42,7 +42,7 @@ class ValidatorTest extends TestCase
     /**
      * @return array
      */
-    public function validateWithTimestampOutOfSystemRangeDataProvider()
+    public static function validateWithTimestampOutOfSystemRangeDataProvider()
     {
         return [
             [['min' => 2000, 'max' => 2030], ['timestamp' => PHP_INT_MAX, 'to_date' => PHP_INT_MAX]],

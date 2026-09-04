@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,10 +17,10 @@ class CurrencyTest extends TestCase
      * @var array
      */
     protected $expectedCurrencies = [
-        'USD',
-        'EUR',
-        'UAH',
-        'GBP',
+        'USD' => 'US Dollar (USD)',
+        'EUR' => 'Euro (EUR)',
+        'UAH' => 'Ukrainian Hryvnia (UAH)',
+        'GBP' => 'British Pound (GBP)'
     ];
 
     public function testIsValid()

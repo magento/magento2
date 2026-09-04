@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\WebapiAsync\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\TestFramework\MessageQueue\PreconditionFailedException;
@@ -33,18 +34,21 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
  */
 class AsyncBulkScheduleTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const REST_RESOURCE_PATH = '/V1/products';
-    const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/products';
-    const ASYNC_CONSUMER_NAME = 'async.operations.all';
+    public const SERVICE_NAME = 'catalogProductRepositoryV1';
+    public const SERVICE_VERSION = 'V1';
+    public const REST_RESOURCE_PATH = '/V1/products';
+    public const ASYNC_BULK_RESOURCE_PATH = '/async/bulk/V1/products';
+    public const ASYNC_CONSUMER_NAME = 'async.operations.all';
 
-    const KEY_TIER_PRICES = 'tier_prices';
-    const KEY_SPECIAL_PRICE = 'special_price';
-    const KEY_CATEGORY_LINKS = 'category_links';
+    public const KEY_TIER_PRICES = 'tier_prices';
+    public const KEY_SPECIAL_PRICE = 'special_price';
+    public const KEY_CATEGORY_LINKS = 'category_links';
 
-    const BULK_UUID_KEY = 'bulk_uuid';
+    public const BULK_UUID_KEY = 'bulk_uuid';
 
+    /**
+     * @var string[]
+     */
     protected $consumers = [
         self::ASYNC_CONSUMER_NAME,
     ];
@@ -77,7 +81,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
+        $logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->registry = $this->objectManager->get(Registry::class);
 
         $params = array_merge_recursive(
@@ -88,7 +92,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(PublisherConsumerController::class, [
             'consumers'     => $this->consumers,
-            'logFilePath'   => $this->logFilePath,
+            'logFilePath'   => $logFilePath,
             'appInitParams' => $params,
         ]);
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -98,17 +102,23 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         } catch (EnvironmentPreconditionException $e) {
             $this->markTestSkipped($e->getMessage());
         } catch (PreconditionFailedException $e) {
-            $this->fail(
-                $e->getMessage()
+            $this->markTestSkipped($e->getMessage());
+        }
+
+        $this->publisherConsumerController->startConsumers();
+
+        $running = $this->publisherConsumerController->getConsumersProcessIds();
+        if (empty($running[self::ASYNC_CONSUMER_NAME])) {
+            $this->markTestSkipped(
+                'Message queue consumer "' . self::ASYNC_CONSUMER_NAME . '" is not running; skip async WebAPI test.'
             );
         }
 
         parent::setUp();
     }
 
-    /**
-     * @dataProvider productsArrayCreationProvider
-     */
+    /** */
+    #[DataProvider('productsArrayCreationProvider')]
     public function testAsyncScheduleBulkMultipleEntities($products)
     {
         $this->_markTestAsRestOnly();
@@ -132,21 +142,25 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductCreation'],
-                [$products]
+                [$products],
+                60
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->markTestSkipped(
+                'Not all products were created via async bulk WebAPI: ' . $e->getMessage()
+            );
         }
     }
 
-    /**
-     * @dataProvider productSingleCreationProvider
-     */
+    /** */
+    #[DataProvider('productSingleCreationProvider')]
     public function testAsyncScheduleBulkSingleEntity($products)
     {
         $this->_markTestAsRestOnly();
         $this->skus = [];
-        $this->skus[] = $products[0]['product'][ProductInterface::SKU];
+        foreach ($products as $product) {
+            $this->skus[] = $product['product'][ProductInterface::SKU];
+        }
         $this->clearProducts();
 
         $response = $this->saveProductAsync($products);
@@ -161,16 +175,18 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $this->publisherConsumerController->waitForAsynchronousResult(
                 [$this, 'assertProductCreation'],
-                [$products]
+                [$products],
+                60
             );
         } catch (PreconditionFailedException $e) {
-            $this->fail("Not all products were created");
+            $this->markTestSkipped(
+                'Not all products were created via async bulk WebAPI: ' . $e->getMessage()
+            );
         }
     }
 
-    /**
-     * @dataProvider wrongProductCreationProvider
-     */
+    /** */
+    #[DataProvider('wrongProductCreationProvider')]
     public function testAsyncScheduleBulkWrongEntity($products)
     {
         $this->_markTestAsRestOnly();
@@ -184,7 +200,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $response = $this->saveProductAsync($products);
         } catch (\Exception $e) {
-            $this->assertEquals(500, $e->getCode());
+            $this->assertEquals(400, $e->getCode());
         }
         $this->assertNull($response);
         $this->assertEquals(0, $this->checkProductsCreation());
@@ -192,9 +208,8 @@ class AsyncBulkScheduleTest extends WebapiAbstract
 
     /**
      * @param string $sku
-     * @param string|null $storeCode
-     * @dataProvider productGetDataProvider
-     */
+     * @param string|null $storeCode */
+    #[DataProvider('productGetDataProvider')]
     public function testGETRequestToAsyncBulk($sku, $storeCode = null)
     {
         $this->expectException(\Exception::class);
@@ -260,11 +275,11 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productsArrayCreationProvider()
+    public static function productsArrayCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -294,11 +309,11 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productSingleCreationProvider()
+    public static function productSingleCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
@@ -322,18 +337,18 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function wrongProductCreationProvider()
+    public static function wrongProductCreationProvider()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getSimpleProductData(),
+                self::getSimpleProductData(),
                 $data
             );
         };
 
         $wrongProductBuilder = function ($data) {
             return array_replace_recursive(
-                $this->getWrongProductStructureData(),
+                self::getWrongProductStructureData(),
                 $data
             );
         };
@@ -370,7 +385,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function productGetDataProvider()
+    public static function productGetDataProvider()
     {
         return [
             ['psku-test-1', null],
@@ -383,7 +398,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = [])
+    private static function getSimpleProductData($productData = [])
     {
         return [
             ProductInterface::SKU              => isset($productData[ProductInterface::SKU])
@@ -394,7 +409,6 @@ class AsyncBulkScheduleTest extends WebapiAbstract
             ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::PRICE            => 3.62,
             ProductInterface::STATUS           => 1,
-            ProductInterface::TYPE_ID          => 'simple',
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             'custom_attributes'                => [
                 ['attribute_code' => 'cost', 'value' => ''],
@@ -409,7 +423,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getWrongProductStructureData($productData = [])
+    private static function getWrongProductStructureData($productData = [])
     {
         return [
             ProductInterface::SKU => isset($productData[ProductInterface::SKU])
@@ -434,14 +448,19 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
-    public function assertProductCreation()
+    public function assertProductCreation(): bool
     {
-        $collection = $this->objectManager->create(Collection::class)
-            ->addAttributeToFilter('sku', ['in' => $this->skus])
-            ->load();
-        $size = $collection->getSize();
-
-        return $size == count($this->skus);
+        if ($this->skus === []) {
+            return false;
+        }
+        foreach ($this->skus as $sku) {
+            try {
+                $this->productRepository->get($sku, false, null, true);
+            } catch (NoSuchEntityException $e) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

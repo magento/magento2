@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Model\Entity;
@@ -36,7 +36,7 @@ class Scope implements ScopeInterface
     public function __construct(
         $identifier,
         $value,
-        ScopeInterface $fallback = null
+        ?ScopeInterface $fallback = null
     ) {
         $this->identifier = $identifier;
         $this->value = $value;

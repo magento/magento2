@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -20,5 +20,12 @@
     </entity>
     <entity name="DisableMAP" type="msrp_settings_config">
         <data key="value">0</data>
+    </entity>
+
+    <entity name="MsrpDisplayPriceOnGesture" type="msrp_settings_config">
+        <requiredEntity type="display_price_type">DisplayPriceOnGesture</requiredEntity>
+    </entity>
+    <entity name="DisplayPriceOnGesture" type="msrp_settings_config">
+        <data key="value">1</data>
     </entity>
 </entities>

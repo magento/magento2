@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
@@ -65,7 +65,7 @@ script;
                 function($) {
                     var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    $(parent.document).find('#multishipping-billing-form').submit();
+                    $(parent.document).find('#multishipping-billing-form').trigger('submit');
                 }
             );
 script;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -10,17 +10,22 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\Mime\Test\Constraint\EmailTextBodyContains;
 
 /**
  * Tests from customer account create post action.
@@ -97,6 +102,52 @@ class CreatePostTest extends AbstractController
     }
 
     /**
+     * Check that DateTime option is NOT changed after creating Customer account for which guest order was placed.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Sales/_files/guest_order_with_product_and_custom_options.php
+     */
+    public function testCreateCustomerAccountAfterIssuingGuestOrder(): void
+    {
+        /** @var Order $order */
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        /** @var CustomerInterface $customer */
+        $customer = $this->_objectManager->create(CustomerInterface::class);
+
+        /** @var DelegatedStorage $delegatedStorage */
+        $delegatedStorage = $this->_objectManager->get(DelegatedStorage::class);
+        $delegatedStorage->storeNewOperation($customer, ['__sales_assign_order_id' => $order->getId()]);
+
+        $this->fillRequestWithAccountData('customer@example.com');
+        $this->dispatch('customer/account/createPost');
+
+        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        $expectedResult = [
+            'year' => '2021',
+            'month' => '9',
+            'day' => '9',
+            'hour' => '2',
+            'minute' => '2',
+            'day_part' => 'am',
+            'date_internal' => '2021-09-09 02:02:00',
+        ];
+        /** @var OrderItem $orderItem */
+        $orderItem = $order->getItemsCollection()->getFirstItem();
+        $actualResult = current($orderItem->getBuyRequest()->getOptions());
+        $this->assertIsArray($actualResult);
+        $this->assertEquals($expectedResult, $actualResult);
+    }
+
+    /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_website customer/create_account/confirm 0
@@ -121,6 +172,37 @@ class CreatePostTest extends AbstractController
         $this->assertEquals(1, $customer->getDataModel()->getGroupId());
         //Assert customer increment id generation
         $this->assertNull($customer->getData('increment_id'));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_website customer/create_account/confirm 0
+     * @magentoConfigFixture current_store customer/create_account/default_group 1
+     * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 0
+     *
+     * @param string $email
+     * @param string $expectedEmail
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    #[DataProvider('emailDataProvider')]
+    public function testNoConfirmCreatePostPunycodeEmailAction(string $email, string $expectedEmail): void
+    {
+        $this->fillRequestWithAccountData($email);
+        $this->dispatch('customer/account/createPost');
+        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+        $customer = $this->customerRegistry->retrieveByEmail($expectedEmail);
+        //Assert customer group
+        $this->assertEquals(1, $customer->getDataModel()->getGroupId());
+        //Assert customer email
+        $this->assertEquals($expectedEmail, $customer->getData('email'));
     }
 
     /**
@@ -206,22 +288,22 @@ class CreatePostTest extends AbstractController
         $message = 'You must confirm your account.'
             . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
         $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
+
         $this->assertSessionMessages($this->containsEqual((string)__($message, $url)), MessageInterface::TYPE_SUCCESS);
         /** @var CustomerInterface $customer */
         $customer = $this->customerRepository->get($email);
         $confirmation = $customer->getConfirmation();
         $sendMessage = $this->transportBuilderMock->getSentMessage();
         $this->assertNotNull($sendMessage);
-        $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
+        $rawMessage = quoted_printable_decode($sendMessage->getBody()->bodyToString());
+
         $this->assertStringContainsString(
-            (string)__(
-                'You must confirm your %customer_email email before you can sign in (link is only valid once):',
-                ['customer_email' => $email]
+            sprintf(
+                'customer/account/confirm/?email=%s&amp;id=%s&amp;key=%s',
+                urlencode($customer->getEmail()),
+                $customer->getId(),
+                $confirmation
             ),
-            $rawMessage
-        );
-        $this->assertStringContainsString(
-            sprintf('customer/account/confirm/?id=%s&amp;key=%s', $customer->getId(), $confirmation),
             $rawMessage
         );
         $this->resetRequest();
@@ -237,6 +319,25 @@ class CreatePostTest extends AbstractController
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertEmpty($this->customerRepository->get($email)->getConfirmation());
+    }
+
+    /**
+     * Email data provider for testing punycode functionality
+     *
+     * @return array[]
+     */
+    public static function emailDataProvider(): array
+    {
+        return [
+            'encoded' => [
+                'email' => 'test@xn--smething-v3a.com',
+                'expectedEmail' => 'test@sómething.com',
+            ],
+            'non-encoded' => [
+                'email' => 'test@sómething.com',
+                'expectedEmail' => 'test@sómething.com',
+            ]
+        ];
     }
 
     /**

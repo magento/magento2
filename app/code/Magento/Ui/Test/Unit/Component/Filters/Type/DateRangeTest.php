@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\DateRange;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DateRangeTest extends TestCase
@@ -46,12 +47,7 @@ class DateRangeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createPartialMock(
             UiComponentFactory::class,
             ['create']
@@ -87,17 +83,14 @@ class DateRangeTest extends TestCase
      * @param string $name
      * @param array $filterData
      * @param array|null $expectedCondition
-     * @dataProvider getPrepareDataProvider
-     * @return void
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare($name, $filterData, $expectedCondition)
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate $uiComponent */
-        $uiComponent = $this->createMock(\Magento\Ui\Component\Form\Element\DataType\Date::class);
+        $uiComponent = $this->createMock(FormDate::class);
 
         $uiComponent->expects($this->any())
             ->method('getContext')
@@ -113,12 +106,7 @@ class DateRangeTest extends TestCase
             ->method('getRequestParam')
             ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
-        $dataProvider = $this->getMockForAbstractClass(
-            DataProviderInterface::class,
-            [],
-            '',
-            false
-        );
+        $dataProvider = $this->createMock(DataProviderInterface::class);
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
@@ -157,7 +145,7 @@ class DateRangeTest extends TestCase
     /**
      * @return array
      */
-    public function getPrepareDataProvider()
+    public static function getPrepareDataProvider()
     {
         return [
             [

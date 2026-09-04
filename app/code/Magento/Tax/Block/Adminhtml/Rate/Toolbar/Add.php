@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * Admin tax class product toolbar
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
@@ -50,7 +48,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     }
 
     /**
-     * {$@inheritdoc}
+     * @inheritDoc
      */
     public function addButton($buttonId, $data, $level = 0, $sortOrder = 0, $region = 'toolbar')
     {
@@ -59,7 +57,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     }
 
     /**
-     * {$@inheritdoc}
+     * @inheritDoc
      */
     public function removeButton($buttonId)
     {
@@ -68,6 +66,8 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     }
 
     /**
+     * Prepare the layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -86,7 +86,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     }
 
     /**
-     * {$@inheritdoc}
+     * @inheritDoc
      */
     public function updateButton($buttonId, $key, $data)
     {
@@ -95,7 +95,7 @@ class Add extends \Magento\Backend\Block\Template implements \Magento\Backend\Bl
     }
 
     /**
-     * {$@inheritdoc}
+     * @inheritDoc
      */
     public function canRender(\Magento\Backend\Block\Widget\Button\Item $item)
     {

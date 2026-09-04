@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\Oauth;
 
+use Exception;
 use Laminas\Validator\Uri as LaminasUriValidator;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Event\ManagerInterface;
@@ -16,11 +17,14 @@ use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Url\Validator as UrlValidator;
 use Magento\Integration\Helper\Oauth\Data;
+use Magento\Integration\Model\ResourceModel\Oauth\Consumer as ConsumerResourceModel;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Integration\Model\Oauth\Consumer;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLength;
 use Magento\Integration\Model\Oauth\Consumer\Validator\KeyLengthFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 
 /**
  * Test for \Magento\Integration\Model\Oauth\Consumer
@@ -28,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ConsumerTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Consumer
      */
@@ -78,18 +83,13 @@ class ConsumerTest extends TestCase
      */
     protected $validDataArray;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
-        $eventManagerMock = $this->getMockForAbstractClass(
-            ManagerInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['dispatch']
-        );
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($eventManagerMock);
@@ -108,12 +108,10 @@ class ConsumerTest extends TestCase
             ->method('getConsumerExpirationPeriod')
             ->willReturn(Data::CONSUMER_EXPIRATION_PERIOD_DEFAULT);
 
-        $this->resourceMock = $this->getMockBuilder(
-            \Magento\Integration\Model\ResourceModel\Oauth\Consumer::class
-        )->addMethods(['selectByCompositeKey', 'deleteOldEntries'])
-            ->onlyMethods(['getIdFieldName'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resourceMock = $this->createPartialMockWithReflection(
+            ConsumerResourceModel::class,
+            ['selectByCompositeKey', 'deleteOldEntries', 'getIdFieldName']
+        );
         $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
         $this->consumerModel = new Consumer(
             $this->contextMock,
@@ -133,23 +131,32 @@ class ConsumerTest extends TestCase
         ];
     }
 
-    public function testBeforeSave()
+    /**
+     * @return void
+     */
+    public function testBeforeSave(): void
     {
         try {
             $this->consumerModel->setData($this->validDataArray);
             $this->consumerModel->beforeSave();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->fail('Exception not expected for beforeSave with valid data.');
         }
     }
 
-    public function testValidate()
+    /**
+     * @return void
+     */
+    public function testValidate(): void
     {
         $this->consumerModel->setData($this->validDataArray);
         $this->assertTrue($this->consumerModel->validate());
     }
 
-    public function testValidateInvalidData()
+    /**
+     * @return void
+     */
+    public function testValidateInvalidData(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Invalid Callback URL');
@@ -158,7 +165,10 @@ class ConsumerTest extends TestCase
         $this->consumerModel->validate();
     }
 
-    public function testValidateInvalidCallback()
+    /**
+     * @return void
+     */
+    public function testValidateInvalidCallback(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Invalid Callback URL');
@@ -167,7 +177,10 @@ class ConsumerTest extends TestCase
         $this->consumerModel->validate();
     }
 
-    public function testValidateInvalidRejectedCallback()
+    /**
+     * @return void
+     */
+    public function testValidateInvalidRejectedCallback(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Invalid Rejected Callback URL');
@@ -176,7 +189,10 @@ class ConsumerTest extends TestCase
         $this->consumerModel->validate();
     }
 
-    public function testValidateInvalidConsumerKey()
+    /**
+     * @return void
+     */
+    public function testValidateInvalidConsumerKey(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Consumer Key \'invalid\' is less than 32 characters long');
@@ -185,7 +201,10 @@ class ConsumerTest extends TestCase
         $this->consumerModel->validate();
     }
 
-    public function testValidateInvalidConsumerSecret()
+    /**
+     * @return void
+     */
+    public function testValidateInvalidConsumerSecret(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('Consumer Secret \'invalid\' is less than 32 characters long');
@@ -194,32 +213,38 @@ class ConsumerTest extends TestCase
         $this->consumerModel->validate();
     }
 
-    public function testGetConsumerExpirationPeriodValid()
+    /**
+     * @return void
+     */
+    public function testGetConsumerExpirationPeriodValid(): void
     {
         $dateHelperMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $dateHelperMock->expects($this->at(0))->method('gmtTimestamp')->willReturn(time());
-        $dateHelperMock->expects($this->at(1))->method('gmtTimestamp')->willReturn(time() - 100);
+        $dateHelperMock
+            ->method('gmtTimestamp')
+            ->willReturnOnConsecutiveCalls(time(), time() - 100);
 
-        $dateHelper = new \ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
+        $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
-        $this->consumerModel->setUpdatedAt((string)time());
+        $this->consumerModel->setUpdatedAt((string) time());
         $this->assertTrue($this->consumerModel->isValidForTokenExchange());
     }
 
-    public function testGetConsumerExpirationPeriodExpired()
+    /**
+     * @return void
+     */
+    public function testGetConsumerExpirationPeriodExpired(): void
     {
         $dateHelperMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $dateHelperMock->expects($this->at(0))->method('gmtTimestamp')->willReturn(time());
-        $dateHelperMock->expects($this->at(1))->method('gmtTimestamp')->willReturn(time() - 1000);
+        $dateHelperMock
+            ->method('gmtTimestamp')
+            ->willReturnOnConsecutiveCalls(time(), time() - 1000);
 
-        $dateHelper = new \ReflectionProperty(Consumer::class, '_dateHelper');
-        $dateHelper->setAccessible(true);
+        $dateHelper = new ReflectionProperty(Consumer::class, '_dateHelper');
         $dateHelper->setValue($this->consumerModel, $dateHelperMock);
 
         $this->consumerModel->setUpdatedAt((string)time());

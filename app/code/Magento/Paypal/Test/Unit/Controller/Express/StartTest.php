@@ -1,38 +1,40 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
 use Magento\Paypal\Model\Express\Checkout;
-use Magento\Paypal\Test\Unit\Controller\ExpressTest;
+use Magento\Paypal\Test\Unit\Controller\ExpressTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
-class StartTest extends ExpressTest
+class StartTest extends ExpressTestCase
 {
+    /**
+     * @var string
+     */
     protected $name = 'Start';
 
     /**
      * @param null|bool $buttonParam
-     * @dataProvider startActionDataProvider
+     *
+     * @return void
      */
-    public function testStartAction($buttonParam)
+    #[DataProvider('startActionDataProvider')]
+    public function testStartAction($buttonParam): void
     {
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('bml')
-            ->willReturn($buttonParam);
         $this->checkout->expects($this->once())
             ->method('setIsBml')
             ->with((bool)$buttonParam);
 
-        $this->request->expects($this->at(2))
-            ->method('getParam')
-            ->with(Checkout::PAYMENT_INFO_BUTTON)
-            ->willReturn($buttonParam);
+        $this->request->method('getParam')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                ['bml'] => $buttonParam,
+                [Checkout::PAYMENT_INFO_BUTTON] => $buttonParam
+            });
         $this->customerData->expects($this->any())
             ->method('getId')
             ->willReturn(1);
@@ -45,7 +47,7 @@ class StartTest extends ExpressTest
     /**
      * @return array
      */
-    public function startActionDataProvider()
+    public static function startActionDataProvider(): array
     {
         return [['1'], [null]];
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Page\Title;
 use Magento\Sales\Block\Order\History;
 use Magento\Sales\Model\Order\Config;
@@ -58,7 +59,7 @@ class HistoryTest extends TestCase
     protected $orderConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|MockObject
+     * @var PageConfig|MockObject
      */
     protected $pageConfig;
 
@@ -67,40 +68,46 @@ class HistoryTest extends TestCase
      */
     protected $pageTitleMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
         $this->orderCollectionFactory =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])->getMock();
+                ->onlyMethods(['create'])
+                ->getMock();
         $this->orderCollectionFactoryInterface =
             $this->getMockBuilder(CollectionFactoryInterface::class)
                 ->disableOriginalConstructor()
-                ->setMethods(['create'])->getMockForAbstractClass();
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+                ->onlyMethods(['create'])
+                ->getMock();
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturn($this->orderCollectionFactoryInterface);
         ObjectManager::setInstance($this->objectManager);
 
         $this->customerSession = $this->getMockBuilder(Session::class)
-            ->setMethods(['getCustomerId'])->disableOriginalConstructor()
+            ->onlyMethods(['getCustomerId'])
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->orderConfig = $this->getMockBuilder(Config::class)
-            ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()
+            ->onlyMethods(['getVisibleOnFrontStatuses'])
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->pageConfig = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->pageConfig = $this->createMock(PageConfig::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
     }
 
-    public function testConstructMethod()
+    /**
+     * @return void
+     */
+    public function testConstructMethod(): void
     {
         $data = [];
 
@@ -123,15 +130,18 @@ class HistoryTest extends TestCase
             ->method('getPageConfig')
             ->willReturn($this->pageConfig);
 
-        $orderCollection->expects($this->at(0))
+        $orderCollection
             ->method('addFieldToSelect')
-            ->with('*')->willReturnSelf();
-        $orderCollection->expects($this->at(1))
-            ->method('addFieldToFilter')
-            ->with('status', ['in' => $statuses])->willReturnSelf();
-        $orderCollection->expects($this->at(2))
+            ->with('*')
+            ->willReturn($orderCollection);
+        $orderCollection
             ->method('setOrder')
-            ->with('created_at', 'desc')->willReturnSelf();
+            ->with('created_at', 'desc')
+            ->willReturn($orderCollection);
+        $orderCollection
+            ->method('addFieldToFilter')
+            ->with('status', ['in' => $statuses])
+            ->willReturn($orderCollection);
         $this->orderCollectionFactoryInterface->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($orderCollection);

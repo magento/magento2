@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Message\ManagerInterface;
@@ -23,6 +24,7 @@ use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\View\Asset\File;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme\DownloadCss;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +35,8 @@ use Psr\Log\LoggerInterface;
  */
 class DownloadCssTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Registry|MockObject
      */
@@ -88,25 +92,27 @@ class DownloadCssTest extends TestCase
      */
     protected $controller;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
+
     protected function setUp(): void
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $context = $this->createMock(Context::class);
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $this->redirect = $this->getMockBuilder(RedirectInterface::class)
             ->getMock();
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->setMethods(['sendResponse', 'setRedirect'])
-            ->getMockForAbstractClass();
+        $this->response = $this->createPartialMockWithReflection(
+            ResponseInterface::class,
+            ['setRedirect', 'sendResponse']
+        );
         $this->objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->resultFactory = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultFactory = $this->createMock(ResultFactory::class);
         $context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->request);
@@ -126,19 +132,13 @@ class DownloadCssTest extends TestCase
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
 
-        $this->registry = $this->getMockBuilder(
+        $this->registry = $this->createMock(
             Registry::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->repository = $this->getMockBuilder(Repository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        );
+        $this->fileFactory = $this->createMock(FileFactory::class);
+        $this->repository = $this->createMock(Repository::class);
+        $this->filesystem = $this->createMock(Filesystem::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
 
         /** @var Context $context */
         $this->controller = new DownloadCss(
@@ -146,7 +146,8 @@ class DownloadCssTest extends TestCase
             $this->registry,
             $this->fileFactory,
             $this->repository,
-            $this->filesystem
+            $this->filesystem,
+            $this->escaperMock
         );
     }
 
@@ -166,16 +167,17 @@ class DownloadCssTest extends TestCase
                     ['file', null, $fileParam],
                 ]
             );
-        $file = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getId', 'load'])
-            ->getMockForAbstractClass();
-        $urlDecoder = $this->getMockBuilder(DecoderInterface::class)
-            ->getMock();
-        $directoryRead = $this->getMockBuilder(ReadInterface::class)
-            ->getMock();
+        $file = $this->createMock(File::class);
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'load'
+            ]
+        );
+        $urlDecoder = $this->createMock(DecoderInterface::class);
+        $directoryRead = $this->createMock(ReadInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->with(DecoderInterface::class)
@@ -234,13 +236,16 @@ class DownloadCssTest extends TestCase
                     ['file', null, $fileParam],
                 ]
             );
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->setMethods(['getId', 'load'])
-            ->getMockForAbstractClass();
-        $urlDecoder = $this->getMockBuilder(DecoderInterface::class)
-            ->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'load'
+            ]
+        );
+        $urlDecoder = $this->createMock(DecoderInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->willReturnMap(
@@ -274,6 +279,7 @@ class DownloadCssTest extends TestCase
         $this->response->expects($this->once())
             ->method('setRedirect')
             ->with($refererUrl);
+        $this->escaperMock->expects($this->once())->method('escapeHtml')->with($themeId)->willReturn($themeId);
 
         $this->controller->execute();
     }

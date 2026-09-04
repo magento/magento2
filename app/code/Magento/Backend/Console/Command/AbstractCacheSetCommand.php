@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Backend\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -23,9 +25,9 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
     abstract protected function isEnable();
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $isEnable = $this->isEnable();
         $types = $this->getRequestedTypes($input);
@@ -43,5 +45,7 @@ abstract class AbstractCacheSetCommand extends AbstractCacheManageCommand
             $output->writeln('Cleaned cache types:');
             $output->writeln(join(PHP_EOL, $changedTypes));
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

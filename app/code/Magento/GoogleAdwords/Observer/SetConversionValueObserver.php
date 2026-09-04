@@ -1,9 +1,7 @@
 <?php
 /**
- * Google AdWords module observer
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\GoogleAdwords\Observer;
 
@@ -20,6 +18,11 @@ class SetConversionValueObserver implements ObserverInterface
      * @var \Magento\Sales\Model\ResourceModel\Order\Collection
      */
     protected $_collection;
+
+    /**
+     * @var \Magento\Framework\Registry
+     */
+    private $_registry;
 
     /**
      * Constructor

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Developer\Model\Config\Backend;
+
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AllowedIpsTest extends \PHPUnit\Framework\TestCase
 {
@@ -11,8 +13,8 @@ class AllowedIpsTest extends \PHPUnit\Framework\TestCase
      * @param string $value
      * @param string $expected
      * @magentoDbIsolation enabled
-     * @dataProvider fieldDataProvider
      */
+    #[DataProvider('fieldDataProvider')]
     public function testSaveWithEscapeHtml($value, $expected)
     {
         /**
@@ -31,7 +33,7 @@ class AllowedIpsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function fieldDataProvider()
+    public static function fieldDataProvider()
     {
         return [
             ['<'.'script>alert(\'XSS\')</script>', '' ],

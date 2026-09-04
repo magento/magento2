@@ -1,9 +1,7 @@
 <?php
 /**
- * Configurable product type resource model
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
@@ -58,9 +56,9 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         DbContext $context,
         ProductRelation $catalogProductRelation,
         $connectionName = null,
-        ScopeResolverInterface $scopeResolver = null,
-        AttributeOptionProviderInterface $attributeOptionProvider = null,
-        OptionProvider $optionProvider = null
+        ?ScopeResolverInterface $scopeResolver = null,
+        ?AttributeOptionProviderInterface $attributeOptionProvider = null,
+        ?OptionProvider $optionProvider = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
         $this->scopeResolver = $scopeResolver;
@@ -203,7 +201,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ['e' => $this->getTable('catalog_product_entity')],
                 'e.' . $this->optionProvider->getProductEntityLinkField() . ' = l.parent_id',
                 ['e.entity_id']
-            )->where('l.product_id IN(?)', $childId);
+            )->where('l.product_id IN(?)', $childId, \Zend_Db::INT_TYPE);
         $parentIds = $this->getConnection()->fetchCol($select);
 
         return $parentIds;

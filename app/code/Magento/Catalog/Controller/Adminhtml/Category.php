@@ -1,13 +1,14 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filter\FilterInput;
 use Magento\Store\Model\Store;
 use Magento\Framework\Controller\ResultFactory;
 
@@ -22,7 +23,7 @@ abstract class Category extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Catalog::categories';
+    public const ADMIN_RESOURCE = 'Magento_Catalog::categories';
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
@@ -59,11 +60,11 @@ abstract class Category extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        \Magento\Framework\Registry $registry = null,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwigConfig = null,
-        \Magento\Backend\Model\Auth\Session $authSession = null
+        ?\Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter = null,
+        ?\Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        ?\Magento\Framework\Registry $registry = null,
+        ?\Magento\Cms\Model\Wysiwyg\Config $wysiwigConfig = null,
+        ?\Magento\Backend\Model\Auth\Session $authSession = null
     ) {
         $this->dateFilter = $dateFilter;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(
@@ -154,6 +155,7 @@ abstract class Category extends \Magento\Backend\App\Action
      * @return \Magento\Framework\Controller\Result\Json
      *
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
@@ -213,7 +215,7 @@ abstract class Category extends \Magento\Backend\App\Action
                 }
             }
         }
-        $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $postData);
+        $inputFilter = new FilterInput($dateFieldFilters, [], $postData);
         return $inputFilter->getUnescaped();
     }
 }

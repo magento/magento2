@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Setup\Module\Di\App\Task\OperationException;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
 use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class OperationFactoryTest extends TestCase
@@ -33,8 +34,7 @@ class OperationFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->setMethods([])
-            ->getMockForAbstractClass();
+            ->getMock();
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProviderMock->expects($this->once())->method('get')->willReturn($this->objectManagerMock);
         $this->factory = new OperationFactory(
@@ -45,8 +45,8 @@ class OperationFactoryTest extends TestCase
     /**
      * @param string $alias
      * @param mixed $arguments
-     * @dataProvider aliasesDataProvider
      */
+    #[DataProvider('aliasesDataProvider')]
     public function testCreateSuccess($alias, $arguments, $instanceName)
     {
         $operationInstance = $this->getMockBuilder(OperationInterface::class)
@@ -73,7 +73,7 @@ class OperationFactoryTest extends TestCase
     /**
      * @return array
      */
-    public function aliasesDataProvider()
+    public static function aliasesDataProvider()
     {
         return  [
             [OperationFactory::AREA_CONFIG_GENERATOR, [], Area::class],

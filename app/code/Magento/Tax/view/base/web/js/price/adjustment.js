@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -59,6 +59,16 @@ define([
          */
         getTax: function (row) {
             return row['price_info']['extension_attributes']['tax_adjustments']['formatted_prices'][this.taxPriceType];
+        },
+
+        /**
+         * UnsanitizedHtml version of getTax.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} tax html
+         */
+        getTaxUnsanitizedHtml: function (row) {
+            return this.getTax(row);
         },
 
         /**

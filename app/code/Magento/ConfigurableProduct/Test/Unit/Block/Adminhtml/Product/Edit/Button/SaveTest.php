@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -38,12 +38,11 @@ class SaveTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->registryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
-            ->setMethods(['isReadonly', 'isDuplicable', 'isComposite'])
-            ->getMockForAbstractClass();
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->productMock = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['isReadonly', 'isDuplicable', 'isComposite']
+        );
 
         $this->registryMock->expects(static::any())
             ->method('registry')
@@ -63,5 +62,6 @@ class SaveTest extends TestCase
 
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertArrayHasKey('options', $result);
+        $this->assertArrayHasKey('dropdown_button_aria_label', $result);
     }
 }

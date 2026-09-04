@@ -1,27 +1,36 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Controller;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
+use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Catalog\Model\Session;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Responsible for testing category view action on strorefront.
  *
  * @see \Magento\Catalog\Controller\Category\View
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends AbstractController
 {
@@ -46,6 +55,16 @@ class CategoryTest extends AbstractController
     private $layout;
 
     /**
+     * @var Context
+     */
+    private $httpContext;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $categoryCollectionFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -54,14 +73,14 @@ class CategoryTest extends AbstractController
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->objectManager->configure([
-            'preferences' => [
-                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
-                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
-            ]
+            'preferences' => [LayoutUpdateManager::class => CategoryLayoutUpdateManager::class]
         ]);
+
+        $this->categoryCollectionFactory = $this->objectManager->create(CollectionFactory::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->session = $this->objectManager->get(Session::class);
+        $this->httpContext = $this->objectManager->get(Context::class);
     }
 
     /**
@@ -77,11 +96,11 @@ class CategoryTest extends AbstractController
     /**
      * @return array
      */
-    public function getViewActionDataProvider(): array
+    public static function getViewActionDataProvider(): array
     {
         return [
             'category without children' => [
-                'categoryId' => 5,
+                5,
                 ['catalog_category_view_type_layered', 'catalog_category_view_type_layered_without_children'],
                 [
                     '%acategorypath-category-1-category-1-1-category-1-1-1%a',
@@ -93,7 +112,7 @@ class CategoryTest extends AbstractController
                 ],
             ],
             'anchor category' => [
-                'categoryId' => 4,
+                4,
                 ['catalog_category_view_type_layered'],
                 [
                     '%acategorypath-category-1-category-1-1%a',
@@ -110,7 +129,6 @@ class CategoryTest extends AbstractController
     }
 
     /**
-     * @dataProvider getViewActionDataProvider
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      * @magentoDbIsolation disabled
      * @param int $categoryId
@@ -118,6 +136,7 @@ class CategoryTest extends AbstractController
      * @param array $expectedContent
      * @return void
      */
+    #[DataProvider('getViewActionDataProvider')]
     public function testViewAction(int $categoryId, array $expectedHandles, array $expectedContent): void
     {
         $this->dispatch("catalog/category/view/id/{$categoryId}");
@@ -204,5 +223,73 @@ class CategoryTest extends AbstractController
             ->getUpdate()
             ->getHandles();
         $this->assertContains("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
+    }
+
+    /**
+     * Checks that pagination value can be changed to a new one if remember pagination enabled and already have saved
+     * some value
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoConfigFixture default/catalog/frontend/remember_pagination 1
+     *
+     * @return void
+     */
+    public function testViewWithRememberPaginationAndPreviousValue(): void
+    {
+        $this->session->setData(ToolbarModel::LIMIT_PARAM_NAME, 16);
+        $newPaginationValue = 24;
+        $this->getRequest()->setParams([ToolbarModel::LIMIT_PARAM_NAME => $newPaginationValue]);
+        $this->dispatch("catalog/category/view/id/333");
+        $block = $this->layout->getBlock('product_list_toolbar');
+        $this->assertNotFalse($block);
+        $this->assertEquals($newPaginationValue, $block->getLimit());
+        $this->assertEquals($newPaginationValue, $this->session->getData(ToolbarModel::LIMIT_PARAM_NAME));
+        $this->assertEquals($newPaginationValue, $this->httpContext->getValue(ToolbarModel::LIMIT_PARAM_NAME));
+    }
+
+    /**
+     * Test to generate category page without duplicate html element ids
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_category_product_reindex_all.php
+     * @magentoDataFixture Magento/Catalog/_files/catalog_product_category_reindex_all.php
+     * @magentoDbIsolation disabled
+     */
+    public function testViewWithoutDuplicateHmlElementIds(): void
+    {
+        $category = $this->loadCategory('Category 999', Store::DEFAULT_STORE_ID);
+        $this->dispatch('catalog/category/view/id/' . $category->getId());
+
+        $responseHtml = $this->getResponse()->getBody();
+        $htmlElementIds = ['modes-label', 'mode-list', 'toolbar-amount', 'sorter', 'limiter'];
+        foreach ($htmlElementIds as $elementId) {
+            $matches = [];
+            $idAttribute = "id=\"$elementId\"";
+            preg_match_all("/$idAttribute/mx", $responseHtml, $matches);
+            $this->assertCount(1, $matches[0]);
+            $this->assertEquals($idAttribute, $matches[0][0]);
+        }
+    }
+
+    /**
+     * Loads category by id
+     *
+     * @param string $categoryName
+     * @param int $storeId
+     * @return CategoryInterface
+     */
+    private function loadCategory(string $categoryName, int $storeId): CategoryInterface
+    {
+        /** @var Collection $categoryCollection */
+        $categoryCollection = $this->categoryCollectionFactory->create();
+        /** @var CategoryInterface $category */
+        $category = $categoryCollection->setStoreId($storeId)
+            ->addAttributeToSelect('display_mode', 'left')
+            ->addAttributeToFilter(CategoryInterface::KEY_NAME, $categoryName)
+            ->setPageSize(1)
+            ->getFirstItem();
+        $category->setStoreId($storeId);
+
+        return $category;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -43,21 +43,22 @@ class ThemeUninstallerTest extends TestCase
      */
     private $output;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->themePackageInfo = $this->createMock(ThemePackageInfo::class);
         $this->remove = $this->createMock(Remove::class);
         $this->themeProvider = $this->createMock(ThemeProvider::class);
         $this->themeUninstaller = new ThemeUninstaller($this->themePackageInfo, $this->remove, $this->themeProvider);
-        $this->output = $this->getMockForAbstractClass(
-            OutputInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->output = $this->createMock(OutputInterface::class);
     }
 
-    public function testUninstallRegistry()
+    /**
+     * @return void
+     */
+    public function testUninstallRegistry(): void
     {
         $this->output->expects($this->atLeastOnce())->method('writeln');
         $this->themePackageInfo->expects($this->never())->method($this->anything());
@@ -71,12 +72,15 @@ class ThemeUninstallerTest extends TestCase
         );
     }
 
-    public function testUninstallCode()
+    /**
+     * @return void
+     */
+    public function testUninstallCode(): void
     {
         $this->output->expects($this->atLeastOnce())->method('writeln');
-        $this->themePackageInfo->expects($this->at(0))->method('getPackageName')->willReturn('packageA');
-        $this->themePackageInfo->expects($this->at(1))->method('getPackageName')->willReturn('packageB');
-        $this->themePackageInfo->expects($this->at(2))->method('getPackageName')->willReturn('packageC');
+        $this->themePackageInfo
+            ->method('getPackageName')
+            ->willReturnOnConsecutiveCalls('packageA', 'packageB', 'packageC');
         $this->remove->expects($this->once())
             ->method('remove')
             ->with(['packageA', 'packageB', 'packageC'])

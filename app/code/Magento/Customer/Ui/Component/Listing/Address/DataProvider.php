@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Ui\Component\Listing\Address;
 
@@ -87,7 +87,8 @@ class DataProvider extends AbstractDataProvider
         /** @var GridCollection $collection */
         $collection = $this->getCollection();
         if ($filter->getField() === 'fulltext') {
-            $collection->addFullTextFilter(trim($filter->getValue()));
+            $value = $filter->getValue() !== null ? trim($filter->getValue()) : '';
+            $collection->addFullTextFilter($value);
         } else {
             $collection->addFieldToFilter(
                 $filter->getField(),

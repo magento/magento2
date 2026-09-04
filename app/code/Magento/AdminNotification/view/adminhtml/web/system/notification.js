@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -12,7 +12,7 @@ define([
     'jquery/ui',
     'Magento_Ui/js/modal/modal'
 ], function ($, mageTemplate) {
-    'use strict';
+    'use strict'; // eslint-disable-line strict
 
     $.widget('mage.systemMessageDialog', $.mage.modal, {
         options: {
@@ -52,7 +52,7 @@ define([
                 tmpl = $(tmpl);
 
                 this.element.html(
-                    $('<ul />', {
+                    $('<ul></ul>', {
                         'class': 'message-system-list'
                     }).append(tmpl)
                 ).trigger('contentUpdated');
@@ -69,7 +69,7 @@ define([
         }
     });
 
-    $(document).ready(function () {
+    $(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
             $('#message-system-all').systemMessageDialog('openModal', 1);
         });

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -81,6 +81,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
@@ -91,7 +94,9 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <comment userInput="Filter and edit simple product 1" stepKey="filterAndEditComment1"/>
@@ -189,7 +194,7 @@
         <click selector="{{StorefrontProductRelatedProductsSection.relatedProductCheckBoxButton('$$simple2Handle.name$$')}}" stepKey="checkRelatedProcut"/>
 
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$baseConfigProductHandle.name$$"/>
+            <argument name="productName" value="$$baseConfigProductHandle.name$$ and $$simple2Handle.name$$"/>
         </actionGroup>
 
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="2" stepKey="seeItemCounterInMiniCart"/>

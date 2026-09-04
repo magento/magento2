@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,6 +14,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Index as IndexDto;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for index (key) definition.
@@ -55,15 +56,14 @@ class IndexTest extends TestCase
      *
      * @dataProvider toDefinitionDataProvider()
      */
+    #[DataProvider('toDefinitionDataProvider')]
     public function testToDefinition($name, $type, $columns, $expectedExpression)
     {
         /** @var IndexDto|MockObject $index */
         $index = $this->getMockBuilder(IndexDto::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())
             ->method('getConnection')
             ->willReturn($adapterMock);
@@ -88,7 +88,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function toDefinitionDataProvider()
+    public static function toDefinitionDataProvider()
     {
         return [
             [
@@ -125,6 +125,7 @@ class IndexTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->index->fromDefinition($definition);
@@ -134,7 +135,7 @@ class IndexTest extends TestCase
     /**
      * @return array
      */
-    public function definitionDataProvider()
+    public static function definitionDataProvider()
     {
         return [
             [
@@ -143,7 +144,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'ft_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'fulltext',
                     'name' => 'ft_index',
                     'column' => ['text' => 'text'],
@@ -156,7 +157,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'bt_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'btree',
                     'name' => 'bt_index',
                     'column' => ['text' => 'text'],
@@ -169,7 +170,7 @@ class IndexTest extends TestCase
                     'Key_name' => 'ht_index',
                     'Column_name' => 'text',
                 ],
-                'excpectedDefiniton' => [
+                'expectedDefinition' => [
                     'indexType' => 'hash',
                     'name' => 'ht_index',
                     'column' => ['text' => 'text'],

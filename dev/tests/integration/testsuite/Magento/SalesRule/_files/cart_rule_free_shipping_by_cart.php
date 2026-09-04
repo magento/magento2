@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 use Magento\SalesRule\Model\Rule;
@@ -64,7 +64,7 @@ $row =
         'is_rss' => 1,
         'use_auto_generation' => 0,
         'uses_per_coupon' => 0,
-        'simple_free_shipping' => 2,
+        'simple_free_shipping' => 1,
 
         'website_ids' => [
             $objectManager->get(StoreManagerInterface::class)->getWebsite()->getId()

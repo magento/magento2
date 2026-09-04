@@ -1,7 +1,7 @@
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
@@ -35,6 +35,9 @@
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
+        </div>
+        <div class="payment-method-extra-content">
+            <each args="$parent.getRegion('paypal-method-extra-content')" render=""></each>
         </div>
         <div class="actions-toolbar">
             <div class="primary">

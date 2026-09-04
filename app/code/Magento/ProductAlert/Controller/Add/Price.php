@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\ProductAlert\Controller\Add;
@@ -61,7 +61,7 @@ class Price extends AddController implements HttpGetActionInterface
      */
     protected function isInternal($url)
     {
-        if (strpos($url, 'http') === false) {
+        if ($url === null || strpos($url, 'http') === false) {
             return false;
         }
         $currentStore = $this->storeManager->getStore();

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -39,7 +39,6 @@ class CategoriesTest extends \PHPUnit\Framework\TestCase
     {
         $inputMeta = include __DIR__ . '/_files/input_meta_for_categories.php';
         $expectedCategories = include __DIR__ . '/_files/expected_categories.php';
-        CacheCleaner::cleanAll();
         $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));
         // Verify cached data
         $this->assertCategoriesInMeta($expectedCategories, $this->object->modifyMeta($inputMeta));

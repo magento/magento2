@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -44,7 +44,7 @@ define([
          */
         closeModal: function () {
             this.options.actions.always();
-            this.element.bind('alertclosed', _.bind(this._remove, this));
+            this.element.on('alertclosed', _.bind(this._remove, this));
 
             return this._super();
         }

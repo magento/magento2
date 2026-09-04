@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
-
 namespace Magento\Weee\Model\Total\Quote;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -25,11 +24,11 @@ class Weee extends AbstractTotal
     /**
      * Constant for weee item code prefix
      */
-    const ITEM_CODE_WEEE_PREFIX = 'weee';
+    public const ITEM_CODE_WEEE_PREFIX = 'weee';
     /**
      * Constant for weee item type
      */
-    const ITEM_TYPE = 'weee';
+    public const ITEM_TYPE = 'weee';
 
     /**
      * @var WeeHelper
@@ -42,7 +41,7 @@ class Weee extends AbstractTotal
     protected $_store;
 
     /**
-     * Counter
+     * Counter to keep track of count for weee
      *
      * @var int
      */
@@ -89,6 +88,15 @@ class Weee extends AbstractTotal
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('weee');
+    }
+
+    /**
      * Collect Weee amounts for the quote / order
      *
      * @param Quote $quote
@@ -120,12 +128,13 @@ class Weee extends AbstractTotal
                 continue;
             }
             $this->resetItemData($item);
-            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            if ($item->getHasChildren()) {
+                $child = null;
                 foreach ($item->getChildren() as $child) {
                     $this->resetItemData($child);
                     $this->process($address, $total, $child);
                 }
-                $this->recalculateParent($item);
+                $this->recalculateParent($item, $child);
             } else {
                 $this->process($address, $total, $item);
             }
@@ -227,6 +236,7 @@ class Weee extends AbstractTotal
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE => $baseValueExclTax,
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_QUANTITY => $item->getTotalQty(),
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID => $item->getProduct()->getTaxClassId(),
+                    CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_PRICE_INCLUDES_TAX => false,
                 ];
                 $this->weeeCodeToItemMap[$weeeItemCode] = $item;
             }
@@ -245,6 +255,7 @@ class Weee extends AbstractTotal
 
         $this->processTotalAmount(
             $total,
+            $address,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
             $totalRowValueInclTax,
@@ -258,6 +269,7 @@ class Weee extends AbstractTotal
      * Process row amount based on FPT total amount configuration setting
      *
      * @param Total $total
+     * @param Address $address
      * @param float $rowValueExclTax
      * @param float $baseRowValueExclTax
      * @param float $rowValueInclTax
@@ -266,6 +278,7 @@ class Weee extends AbstractTotal
      */
     protected function processTotalAmount(
         $total,
+        $address,
         $rowValueExclTax,
         $baseRowValueExclTax,
         $rowValueInclTax,
@@ -284,6 +297,8 @@ class Weee extends AbstractTotal
         $total->setBaseSubtotalInclTax(
             $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
+        $address->setBaseSubtotalTotalInclTax($total->getBaseSubtotalInclTax());
+        $address->setSubtotalInclTax($total->getSubtotalInclTax());
         return $this;
     }
 
@@ -301,18 +316,23 @@ class Weee extends AbstractTotal
      * Recalculate parent item amounts based on children results
      *
      * @param AbstractItem $item
+     * @param AbstractItem|null $childItem
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function recalculateParent(AbstractItem $item)
+    protected function recalculateParent(AbstractItem $item, ?AbstractItem $childItem = null)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
             $associatedTaxables[] = $child->getAssociatedTaxables();
         }
-        $item->setAssociatedTaxables(
-            array_unique(array_merge([], ...$associatedTaxables))
-        );
+        $associatedTaxables = array_merge([], ...$associatedTaxables);
+        $item->setAssociatedTaxables($associatedTaxables);
+
+        if (isset($childItem)) {
+            $item->setWeeeTaxApplied($childItem->getWeeeTaxApplied());
+            $item->setWeeeTaxAppliedAmount($childItem->getWeeeTaxAppliedAmount());
+            $item->setBaseWeeeTaxAppliedAmount($childItem->getBaseWeeeTaxAppliedAmount());
+        }
     }
 
     /**

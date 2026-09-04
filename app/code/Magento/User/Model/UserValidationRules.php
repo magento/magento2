@@ -1,11 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\User\Model;
 
+use Laminas\Validator\Identical;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\DataObject;
 use Magento\Framework\Validator\EmailAddress;
 use Magento\Framework\Validator\NotEmpty;
 use Magento\Framework\Validator\Regex;
@@ -20,40 +24,71 @@ use Magento\Framework\Validator\StringLength;
 class UserValidationRules
 {
     /**
-     * Minimum length of admin password
+     * Configuration path for minimum admin password length
      */
-    const MIN_PASSWORD_LENGTH = 7;
+    private const XML_PATH_MINIMUM_PASSWORD_LENGTH = 'admin/security/minimum_password_length';
+
+    /**
+     * Minimum length of admin password (fallback)
+     */
+    public const MIN_PASSWORD_LENGTH = 7;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param ScopeConfigInterface|null $scopeConfig
+     */
+    public function __construct(?ScopeConfigInterface $scopeConfig = null)
+    {
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+    }
+
+    /**
+     * Get minimum password length from configuration
+     *
+     * @return int
+     */
+    private function getMinimumPasswordLength(): int
+    {
+        $configValue = $this->scopeConfig ?
+            $this->scopeConfig->getValue(self::XML_PATH_MINIMUM_PASSWORD_LENGTH) : null;
+
+        return $configValue ? (int) $configValue : self::MIN_PASSWORD_LENGTH;
+    }
 
     /**
      * Adds validation rule for user first name, last name, username and email
      *
-     * @param \Magento\Framework\Validator\DataObject $validator
-     * @return \Magento\Framework\Validator\DataObject
+     * @param DataObject $validator
+     * @return DataObject
      */
-    public function addUserInfoRules(\Magento\Framework\Validator\DataObject $validator)
+    public function addUserInfoRules(DataObject $validator)
     {
         $userNameNotEmpty = new NotEmpty();
         $userNameNotEmpty->setMessage(
             __('"User Name" is required. Enter and try again.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
+            NotEmpty::IS_EMPTY
         );
         $firstNameNotEmpty = new NotEmpty();
         $firstNameNotEmpty->setMessage(
             __('"First Name" is required. Enter and try again.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
+            NotEmpty::IS_EMPTY
         );
         $lastNameNotEmpty = new NotEmpty();
         $lastNameNotEmpty->setMessage(
             __('"Last Name" is required. Enter and try again.'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
+            NotEmpty::IS_EMPTY
         );
         $emailValidity = new EmailAddress();
         $emailValidity->setMessage(
             __('Please enter a valid email.'),
-            \Zend_Validate_EmailAddress::INVALID
+            EmailAddress::INVALID
         );
 
-        /** @var $validator \Magento\Framework\Validator\DataObject */
+        /** @var $validator DataObject */
         $validator->addRule(
             $userNameNotEmpty,
             'username'
@@ -74,23 +109,23 @@ class UserValidationRules
     /**
      * Adds validation rule for user password
      *
-     * @param \Magento\Framework\Validator\DataObject $validator
-     * @return \Magento\Framework\Validator\DataObject
+     * @param DataObject $validator
+     * @return DataObject
      */
-    public function addPasswordRules(\Magento\Framework\Validator\DataObject $validator)
+    public function addPasswordRules(DataObject $validator)
     {
         $passwordNotEmpty = new NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), NotEmpty::IS_EMPTY);
-        $minPassLength = self::MIN_PASSWORD_LENGTH;
+        $minPassLength = $this->getMinimumPasswordLength();
         $passwordLength = new StringLength(['min' => $minPassLength, 'encoding' => 'UTF-8']);
         $passwordLength->setMessage(
             __('Your password must be at least %1 characters.', $minPassLength),
-            \Zend_Validate_StringLength::TOO_SHORT
+            StringLength::TOO_SHORT
         );
         $passwordChars = new Regex('/[a-z].*\d|\d.*[a-z]/iu');
         $passwordChars->setMessage(
             __('Your password must include both numeric and alphabetic characters.'),
-            \Zend_Validate_Regex::NOT_MATCH
+            Regex::NOT_MATCH
         );
         $validator->addRule(
             $passwordNotEmpty,
@@ -109,18 +144,18 @@ class UserValidationRules
     /**
      * Adds validation rule for user password confirmation
      *
-     * @param \Magento\Framework\Validator\DataObject $validator
+     * @param DataObject $validator
      * @param string $passwordConfirmation
-     * @return \Magento\Framework\Validator\DataObject
+     * @return DataObject
      */
     public function addPasswordConfirmationRule(
-        \Magento\Framework\Validator\DataObject $validator,
+        DataObject $validator,
         $passwordConfirmation
     ) {
-        $passwordConfirmation = new \Zend_Validate_Identical($passwordConfirmation);
+        $passwordConfirmation = new Identical($passwordConfirmation);
         $passwordConfirmation->setMessage(
             __('Your password confirmation must match your password.'),
-            \Zend_Validate_Identical::NOT_SAME
+            Identical::NOT_SAME
         );
         $validator->addRule($passwordConfirmation, 'password');
         return $validator;

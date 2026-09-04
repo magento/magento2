@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -124,7 +124,7 @@ define([
          * @param {String} actions
          */
         renderActions: function (actions) {
-            var $container = $('<div/>');
+            var $container = $('<div></div>');
 
             $container
                 .addClass(this.actionsContainerClass)

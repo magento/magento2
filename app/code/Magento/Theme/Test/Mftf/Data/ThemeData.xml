@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2021 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="MagentoBlankTheme">
+        <data key="pageTitle">Theme: Magento Blank</data>
+        <data key="themePath">Magento/blank</data>
+        <data key="themeTitle">Magento Blank</data>
+    </entity>
+</entities>

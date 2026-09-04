@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -133,7 +133,7 @@ abstract class EntityChildTestAbstract extends TestCase
 
     protected function mockDefinedClassesCall()
     {
-        $this->definedClassesMock->expects($this->at(0))
+        $this->definedClassesMock
             ->method('isClassLoadable')
             ->with($this->getSourceClassName())
             ->willReturn(true);

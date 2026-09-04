@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
 /**
  * New category creation form
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
@@ -50,7 +48,7 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = [],
-        SecureHtmlRenderer $htmlRenderer = null
+        ?SecureHtmlRenderer $htmlRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_categoryFactory = $categoryFactory;

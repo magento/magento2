@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -137,6 +137,25 @@ class ViewTest extends TestCase
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals($product->getId(), $config['productId']);
+    }
+
+    /**
+     * Verifies that product tier prices config contains price and basePrice.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_fixed_tier_price.php
+     *
+     * @return void
+     */
+    public function testTierPriceGetJsonConfig(): void
+    {
+        $product = $this->productRepository->get('simple-product-tax-none');
+        $this->registerProduct($product);
+        $config = $this->json->unserialize($this->block->getJsonConfig());
+
+        $this->assertNotEmpty($config);
+        $this->assertArrayHasKey('tierPrices', $config);
+        $this->assertArrayHasKey('basePrice', $config['tierPrices'][0]);
+        $this->assertArrayHasKey('price', $config['tierPrices'][0]);
     }
 
     /**

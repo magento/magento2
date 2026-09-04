@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
+
 namespace Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 /**
- * Token
+ * The PHP tokenizer token for i18n parser
  */
 class Token
 {
@@ -83,6 +84,16 @@ class Token
     public function isNew()
     {
         return $this->getName() == T_NEW;
+    }
+
+    /**
+     * Check if a token has a Qualified Name type, which was introduced in PHP 8.
+     *
+     * @return bool
+     */
+    public function isFullQualifiedName(): bool
+    {
+        return $this->getName() === T_NAME_FULLY_QUALIFIED;
     }
 
     /**
@@ -167,6 +178,8 @@ class Token
     }
 
     /**
+     * Checks value if this is concatenation operator
+     *
      * @return bool
      */
     public function isConcatenateOperator()

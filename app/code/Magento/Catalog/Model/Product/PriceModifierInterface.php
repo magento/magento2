@@ -1,9 +1,7 @@
 <?php
 /**
- * Price calculation extension point
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\Product;
 
@@ -21,7 +19,6 @@ interface PriceModifierInterface
      * @param mixed $price
      * @param Product $product
      * @return mixed
-     * @api
      */
     public function modifyPrice($price, Product $product);
 }

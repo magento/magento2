@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
@@ -15,7 +15,7 @@
             <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="order.date" template="Magento_Sales::order/order_date.phtml" />
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="Magento_Sales::order/print/shipment.phtml">
+            <block class="Magento\Sales\Block\Order\PrintOrder\Shipment" name="sales.order.print.shipment" template="Magento_Sales::order/print/shipment.phtml" cacheable="false">
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.shipment.renderers" as="renderer.list" />
             </block>
         </referenceContainer>

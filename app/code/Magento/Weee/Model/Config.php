@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Weee\Model;
 
@@ -37,6 +37,11 @@ class Config
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
+
+    /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    private $taxHelper;
 
     /**
      * @param \Magento\Tax\Helper\Data $taxData

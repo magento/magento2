@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\Locale\ResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RequestQuantityProcessorTest extends TestCase
 {
@@ -26,37 +27,37 @@ class RequestQuantityProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
-            ->getMockForAbstractClass();
-
-        $this->localeResolver->method('getLocale')
-            ->willReturn('en_US');
-
-        $this->requestProcessor = new RequestQuantityProcessor(
-            $this->localeResolver
-        );
+        $this->localeResolver = $this->createMock(ResolverInterface::class);
     }
 
     /**
      * Test of cart data processing.
      *
      * @param array $cartData
+     * @param string $locale
      * @param array $expected
-     * @dataProvider cartDataProvider
      */
-    public function testProcess($cartData, $expected)
+    #[DataProvider('cartDataProvider')]
+    public function testProcess(array $cartData, string $locale, array $expected): void
     {
+        $this->localeResolver->method('getLocale')
+            ->willReturn($locale);
+        $this->requestProcessor = new RequestQuantityProcessor(
+            $this->localeResolver
+        );
+
         $this->assertEquals($this->requestProcessor->process($cartData), $expected);
     }
 
     /**
      * @return array
      */
-    public function cartDataProvider()
+    public static function cartDataProvider()
     {
         return [
             'empty_array' => [
                 'cartData' => [],
+                'locale' => 'en_US',
                 'expected' => [],
             ],
             'strings_array' => [
@@ -64,6 +65,7 @@ class RequestQuantityProcessorTest extends TestCase
                     ['qty' => ' 10 '],
                     ['qty' => ' 0.5 ']
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => 10],
                     ['qty' => 0.5]
@@ -74,6 +76,7 @@ class RequestQuantityProcessorTest extends TestCase
                     ['qty' => 1],
                     ['qty' => 0.002]
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => 1],
                     ['qty' => 0.002]
@@ -83,8 +86,20 @@ class RequestQuantityProcessorTest extends TestCase
                 'cartData' => [
                     ['qty' => [1, 2 ,3]],
                 ],
+                'locale' => 'en_US',
                 'expected' => [
                     ['qty' => [1, 2, 3]],
+                ],
+            ],
+            'strings_array_spain_locale' => [
+                'cartData' => [
+                    ['qty' => ' 10 '],
+                    ['qty' => ' 0.5 ']
+                ],
+                'locale' => 'es_CL',
+                'expected' => [
+                    ['qty' => 10],
+                    ['qty' => 0.5]
                 ],
             ],
         ];

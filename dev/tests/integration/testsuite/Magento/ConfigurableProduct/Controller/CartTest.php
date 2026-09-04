@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 /**
@@ -97,5 +97,19 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(['The coupon code &quot;test&quot; is not valid.']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setValue($this, null);
+            }
+        }
     }
 }

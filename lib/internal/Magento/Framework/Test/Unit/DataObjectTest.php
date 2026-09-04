@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,10 +11,13 @@ declare(strict_types=1);
 namespace Magento\Framework\Test\Unit;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataObjectTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var DataObject
      */
@@ -164,10 +167,10 @@ string',
      */
     public function testSetGetDataUsingMethod()
     {
-        $mock = $this->getMockBuilder(DataObject::class)
-            ->addMethods(['setTestData', 'getTestData'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['setTestData', 'getTestData']
+        );
         $mock->expects($this->once())->method('setTestData')->with('data');
         $mock->expects($this->once())->method('getTestData');
 
@@ -378,14 +381,12 @@ string',
 
     /**
      * Tests _underscore method directly
-     *
-     * @dataProvider underscoreDataProvider
      */
+    #[DataProvider('underscoreDataProvider')]
     public function testUnderscore($input, $expectedOutput)
     {
         $refObject = new \ReflectionObject($this->dataObject);
         $refMethod = $refObject->getMethod('_underscore');
-        $refMethod->setAccessible(true);
         $output = $refMethod->invoke($this->dataObject, $input);
         $this->assertEquals($expectedOutput, $output);
     }
@@ -393,16 +394,16 @@ string',
     /**
      * @return array
      */
-    public function underscoreDataProvider()
+    public static function underscoreDataProvider()
     {
         return [
-            'Test 1' => ['Stone1Color', 'stone_1_color'],
-            'Test 2' => ['StoneColor', 'stone_color'],
-            'Test 3' => ['StoneToXml', 'stone_to_xml'],
-            'Test 4' => ['1StoneColor', '1_stone_color'],
-            'Test 5' => ['getCcLast4', 'get_cc_last_4'],
-            'Test 6' => ['99Bottles', '99_bottles'],
-            'Test 7' => ['XApiLogin', 'x_api_login']
+            'Test 1' => ['GetStone1Color', 'stone_1_color'],
+            'Test 2' => ['SetStoneColor', 'stone_color'],
+            'Test 3' => ['GetStoneToXml', 'stone_to_xml'],
+            'Test 4' => ['Set1StoneColor', '1_stone_color'],
+            'Test 5' => ['GetgetCcLast4', 'get_cc_last_4'],
+            'Test 6' => ['Set99Bottles', '99_bottles'],
+            'Test 7' => ['GetXApiLogin', 'x_api_login']
         ];
     }
 }

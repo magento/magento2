@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -13,6 +13,8 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\Item\Compare;
 use Magento\Quote\Model\Quote\Item\Option;
+use Magento\Quote\Model\Quote\Item\Option\Comparator;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CompareTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Compare
      */
@@ -37,11 +40,6 @@ class CompareTest extends TestCase
     private $comparedMock;
 
     /**
-     * @var Option|MockObject
-     */
-    private $optionMock;
-
-    /**
      * @var JsonValidator|MockObject
      */
     private $jsonValidatorMock;
@@ -51,25 +49,22 @@ class CompareTest extends TestCase
      */
     protected function setUp(): void
     {
+        $objectManagerHelper = new ObjectManager($this);
+        $constrArgs = $objectManagerHelper->getConstructArguments(
+            Item::class,
+            [
+                'itemOptionComparator' => new Comparator()
+            ]
+        );
         $this->itemMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
-            ->disableOriginalConstructor()
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode', 'getSku'])
+            ->setConstructorArgs($constrArgs)
             ->getMock();
         $this->comparedMock = $this->getMockBuilder(Item::class)
-            ->addMethods(['getProductId'])
-            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode'])
-            ->disableOriginalConstructor()
+            ->onlyMethods(['__wakeup', 'getOptions', 'getOptionsByCode', 'getSku'])
+            ->setConstructorArgs($constrArgs)
             ->getMock();
-        $this->optionMock = $this->getMockBuilder(Option::class)
-            ->addMethods(['getCode'])
-            ->onlyMethods(['__wakeup', 'getValue'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $serializer = $this->getMockBuilder(Json::class)
-            ->setMethods(['unserialize'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $serializer = $this->createMock(Json::class);
         $serializer->expects($this->any())
             ->method('unserialize')
             ->willReturnCallback(
@@ -82,7 +77,6 @@ class CompareTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManager($this);
         $this->helper = $objectManagerHelper->getObject(
             Compare::class,
             [
@@ -95,18 +89,17 @@ class CompareTest extends TestCase
     /**
      * @param string $code
      * @param mixed $value
-     * @return MockObject
+     * @return Option
      */
-    protected function getOptionMock($code, $value)
+    protected function getOption($code, $value): Option
     {
-        $optionMock = clone $this->optionMock;
-        $optionMock->expects($this->any())
-            ->method('getCode')
-            ->willReturn($code);
-        $optionMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($value);
-        return $optionMock;
+        $option = $this->createPartialMockWithReflection(
+            Option::class,
+            ['setCode', 'getCode', 'setValue', 'getValue']
+        );
+        $option->method('getCode')->willReturn($code);
+        $option->method('getValue')->willReturn($value);
+        return $option;
     }
 
     /**
@@ -114,12 +107,8 @@ class CompareTest extends TestCase
      */
     public function testCompareDifferentProduct()
     {
-        $this->itemMock->expects($this->once())
-            ->method('getProductId')
-            ->willReturn(1);
-        $this->itemMock->expects($this->once())
-            ->method('getProductId')
-            ->willReturn(2);
+        $this->itemMock->setData('product_id', 1);
+        $this->comparedMock->setData('product_id', 2);
 
         $this->assertFalse($this->helper->compare($this->itemMock, $this->comparedMock));
     }
@@ -130,31 +119,23 @@ class CompareTest extends TestCase
     public function testCompareProductWithDifferentOptions()
     {
         // Identical Product Ids
-        $this->itemMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
-        $this->comparedMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
+        $this->itemMock->setData('product_id', 1);
+        $this->comparedMock->setData('product_id', 1);
 
         // Identical Option Keys
-        $this->itemMock->expects($this->any())
-            ->method('getOptions')
-            ->willReturn([$this->getOptionMock('identical', 'value')]);
-        $this->comparedMock->expects($this->any())
-            ->method('getOptions')
-            ->willReturn([$this->getOptionMock('identical', 'value')]);
+        $this->itemMock->method('getOptions')->willReturn([$this->getOption('identical', 'value')]);
+        $this->comparedMock->method('getOptions')->willReturn([$this->getOption('identical', 'value')]);
 
         // Different Option Values
         $this->itemMock->expects($this->once())
             ->method('getOptionsByCode')
             ->willReturn(
                 [
-                    'info_buyRequest' => $this->getOptionMock('info_buyRequest', ['value-1']),
-                    'option' => $this->getOptionMock('option', 1),
-                    'simple_product' => $this->getOptionMock('simple_product', 3),
-                    'product_qty_2' => $this->getOptionMock('product_qty_2', 10),
-                    'attributes' => $this->getOptionMock('attributes', 93),
+                    'info_buyRequest' => $this->getOption('info_buyRequest', ['value-1']),
+                    'option' => $this->getOption('option', 1),
+                    'simple_product' => $this->getOption('simple_product', 3),
+                    'product_qty_2' => $this->getOption('product_qty_2', 10),
+                    'attributes' => $this->getOption('attributes', 93),
                 ]
             );
 
@@ -162,11 +143,11 @@ class CompareTest extends TestCase
             ->method('getOptionsByCode')
             ->willReturn(
                 [
-                    'info_buyRequest' => $this->getOptionMock('info_buyRequest', ['value-2']),
-                    'option' => $this->getOptionMock('option', 1),
-                    'simple_product' => $this->getOptionMock('simple_product', 3),
-                    'product_qty_2' => $this->getOptionMock('product_qty_2', 10),
-                    'attributes' => $this->getOptionMock('attributes', 94),
+                    'info_buyRequest' => $this->getOption('info_buyRequest', ['value-2']),
+                    'option' => $this->getOption('option', 1),
+                    'simple_product' => $this->getOption('simple_product', 3),
+                    'product_qty_2' => $this->getOption('product_qty_2', 10),
+                    'attributes' => $this->getOption('attributes', 94),
                 ]
             );
 
@@ -178,26 +159,20 @@ class CompareTest extends TestCase
      */
     public function testCompareItemWithComparedWithoutOption()
     {
-        $this->itemMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
-        $this->comparedMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
+        $this->itemMock->setData('product_id', 1);
+        $this->comparedMock->setData('product_id', 1);
         $this->itemMock->expects($this->once())
             ->method('getOptionsByCode')
             ->willReturn(
                 [
-                    'info_buyRequest' => $this->getOptionMock('info_buyRequest', ['value-1']),
-                    'option' => $this->getOptionMock('option', 1),
-                    'simple_product' => $this->getOptionMock('simple_product', 3),
-                    'product_qty_2' => $this->getOptionMock('product_qty_2', 10),
-                    'attributes' => $this->getOptionMock('attributes', 93),
+                    'info_buyRequest' => $this->getOption('info_buyRequest', ['value-1']),
+                    'option' => $this->getOption('option', 1),
+                    'simple_product' => $this->getOption('simple_product', 3),
+                    'product_qty_2' => $this->getOption('product_qty_2', 10),
+                    'attributes' => $this->getOption('attributes', 93),
                 ]
             );
-        $this->comparedMock->expects($this->any())
-            ->method('getOptionsByCode')
-            ->willReturn([]);
+        $this->comparedMock->method('getOptionsByCode')->willReturn([]);
         $this->assertFalse($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 
@@ -206,27 +181,21 @@ class CompareTest extends TestCase
      */
     public function testCompareItemWithoutOptionWithCompared()
     {
-        $this->itemMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
-        $this->comparedMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn(1);
+        $this->itemMock->setData('product_id', 1);
+        $this->comparedMock->setData('product_id', 1);
 
         $this->comparedMock->expects($this->once())
             ->method('getOptionsByCode')
             ->willReturn(
                 [
-                    'info_buyRequest' => $this->getOptionMock('info_buyRequest', ['value-2']),
-                    'option' => $this->getOptionMock('option', 1),
-                    'simple_product' => $this->getOptionMock('simple_product', 3),
-                    'product_qty_2' => $this->getOptionMock('product_qty_2', 10),
-                    'attributes' => $this->getOptionMock('attributes', 94),
+                    'info_buyRequest' => $this->getOption('info_buyRequest', ['value-2']),
+                    'option' => $this->getOption('option', 1),
+                    'simple_product' => $this->getOption('simple_product', 3),
+                    'product_qty_2' => $this->getOption('product_qty_2', 10),
+                    'attributes' => $this->getOption('attributes', 94),
                 ]
             );
-        $this->itemMock->expects($this->any())
-            ->method('getOptionsByCode')
-            ->willReturn([]);
+        $this->itemMock->method('getOptionsByCode')->willReturn([]);
         $this->assertFalse($this->helper->compare($this->itemMock, $this->comparedMock));
     }
 }

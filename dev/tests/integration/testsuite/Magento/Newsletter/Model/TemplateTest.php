@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Newsletter\Model;
 
 use Magento\Framework\App\TemplateTypesInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
@@ -33,8 +35,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation  enabled
      * @magentoAppArea adminhtml
-     * @dataProvider getProcessedTemplateFrontendDataProvider
      */
+    #[DataProvider('getProcessedTemplateFrontendDataProvider')]
     public function testGetProcessedTemplateFrontend($store, $design)
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
@@ -63,7 +65,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateFrontendDataProvider()
+    public static function getProcessedTemplateFrontendDataProvider()
     {
         return [
             'frontend' => ['default', 'Magento/luma'],
@@ -76,8 +78,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * adminhtml/design/theme/full_name Magento/backend
      *
      * @magentoAppIsolation  enabled
-     * @dataProvider getProcessedTemplateAreaDataProvider
      */
+    #[DataProvider('getProcessedTemplateAreaDataProvider')]
     public function testGetProcessedTemplateArea($area, $design)
     {
         $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
@@ -95,18 +97,21 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function getProcessedTemplateAreaDataProvider()
+    public static function getProcessedTemplateAreaDataProvider()
     {
+        $designTheme = Bootstrap::getObjectManager()
+            ->get(DesignInterface::class)
+            ->getConfigurationDesignTheme('adminhtml');
         return [
-            'backend' => ['adminhtml', 'Magento/backend']
+            'backend' => ['adminhtml', $designTheme]
         ];
     }
 
     /**
      * @magentoConfigFixture current_store system/smtp/disable 0
      * @magentoAppIsolation enabled
-     * @dataProvider isValidToSendDataProvider
      */
+    #[DataProvider('isValidToSendDataProvider')]
     public function testIsValidToSend($senderEmail, $senderName, $subject, $isValid)
     {
         $this->_model->setTemplateSenderEmail(
@@ -122,7 +127,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function isValidToSendDataProvider()
+    public static function isValidToSendDataProvider()
     {
         return [
             ['john.doe@example.com', 'john.doe', 'Test Subject', true],
@@ -140,7 +145,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
-    public function testLegacyTemplateFromDbLoadsInLegacyMode()
+    public function testLegacyTemplateFromDbLoadsInStrictMode()
     {
         $objectManager = Bootstrap::getObjectManager();
 
@@ -151,7 +156,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $template = $objectManager->create(\Magento\Email\Model\Template::class);
         $templateData = [
-            'is_legacy' => '1',
             'template_code' => 'some_unique_code',
             'template_type' => TemplateTypesInterface::TYPE_HTML,
             'template_text' => '{{var this.template_code}}'
@@ -171,7 +175,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code - 1 - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 
     /**
@@ -208,6 +212,6 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             'frontend',
             [$this->_model, 'getProcessedTemplate']
         );
-        self::assertEquals('1 - some_unique_code -  - some_unique_code', $processedTemplate);
+        self::assertEquals(' - some_unique_code -  - some_unique_code', $processedTemplate);
     }
 }

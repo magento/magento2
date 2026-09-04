@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Eav\Model\ResourceModel\Attribute;
 
@@ -10,6 +10,7 @@ use Magento\Store\Model\Website;
 /**
  * EAV additional attribute resource collection (Using Forms)
  *
+ * phpcs:disable Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -18,7 +19,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     /**
      * code of password hash in customer's EAV tables
      */
-    const EAV_CODE_PASSWORD_HASH = 'password_hash';
+    public const EAV_CODE_PASSWORD_HASH = 'password_hash';
 
     /**
      * Current website scope instance
@@ -57,11 +58,20 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        ?\Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        ?\Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $eavConfig, $connection, $resource);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
+    {
+        /* Note: because Eav attribute loading takes significant performance,
+        we are not resetting it like other collections. */
     }
 
     /**
@@ -212,6 +222,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
 
     /**
      * Specify attribute entity type filter.
+     *
      * Entity type is defined.
      *
      * @param  int $type

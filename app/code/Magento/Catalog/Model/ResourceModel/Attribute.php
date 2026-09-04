@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
@@ -15,8 +15,6 @@ use Magento\Framework\App\ObjectManager;
 class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
@@ -47,7 +45,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
         $connectionName = null,
-        RemoveProductAttributeData $removeProductAttributeData = null
+        ?RemoveProductAttributeData $removeProductAttributeData = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
@@ -101,7 +99,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
             $attributeStoreIds = array_keys($this->_storeManager->getStores());
             if (!empty($attributeStoreIds)) {
                 $delCondition = [
-                    'attribute_id = ?' => $object->getId(),
+                    'attribute_id = ?' => (int)$object->getId(),
                     'store_id IN(?)' => $attributeStoreIds,
                 ];
                 $this->getConnection()->delete($object->getBackendTable(), $delCondition);

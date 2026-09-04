@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,7 +11,7 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test ExpressSetPaymentMethodTest graphql endpoint for guest
@@ -43,7 +43,6 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
      *
      * @param string $paymentMethod
      * @return void
-     * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -54,6 +53,7 @@ class PaypalExpressSetPaymentMethodTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolveGuest(string $paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);
@@ -132,44 +132,49 @@ QUERY;
         $paypalRequest['AMT'] = '30.00';
         $paypalRequest['SHIPPINGAMT'] = '10.00';
 
-        $this->nvpMock
-            ->expects($this->at(0))
-            ->method('call')
-            ->with(Nvp::SET_EXPRESS_CHECKOUT, $paypalRequest)
-            ->willReturn($paypalResponse);
-
         $paypalRequestDetails = [
             'TOKEN' => $token,
         ];
 
         $paypalRequestDetailsResponse = include __DIR__ . '/../../../_files/paypal_set_payer_id_repsonse.php';
-
-        $this->nvpMock
-            ->expects($this->at(1))
-            ->method('call')
-            ->with(Nvp::GET_EXPRESS_CHECKOUT_DETAILS, $paypalRequestDetails)
-            ->willReturn($paypalRequestDetailsResponse);
-
         $paypalRequestPlaceOrder = include __DIR__ . '/../../../_files/paypal_place_order_request.php';
 
         $this->nvpMock
-            ->expects($this->at(2))
             ->method('call')
-            ->with(Nvp::DO_EXPRESS_CHECKOUT_PAYMENT, $paypalRequestPlaceOrder)
-            ->willReturn(
-                [
-                    'RESULT' => '0',
-                    'PNREF' => 'B7PPAC033FF2',
-                    'RESPMSG' => 'Approved',
-                    'AVSADDR' => 'Y',
-                    'AVSZIP' => 'Y',
-                    'TOKEN' => $token,
-                    'PAYERID' => $payerId,
-                    'PPREF' => '7RK43642T8939154L',
-                    'CORRELATIONID' => $correlationId,
-                    'PAYMENTTYPE' => 'instant',
-                    'PENDINGREASON' => 'authorization',
-                ]
+            ->willReturnCallback(
+                function (
+                    $arg1,
+                    $arg2
+                ) use (
+                    $paypalRequest,
+                    $paypalResponse,
+                    $paypalRequestDetails,
+                    $paypalRequestDetailsResponse,
+                    $paypalRequestPlaceOrder,
+                    $token,
+                    $payerId,
+                    $correlationId
+                ) {
+                    if ($arg1 == Nvp::SET_EXPRESS_CHECKOUT && $arg2 == $paypalRequest) {
+                        return $paypalResponse;
+                    } elseif ($arg1 == Nvp::GET_EXPRESS_CHECKOUT_DETAILS && $arg2 == $paypalRequestDetails) {
+                        return $paypalRequestDetailsResponse;
+                    } elseif ($arg1 == Nvp::DO_EXPRESS_CHECKOUT_PAYMENT && $arg2 == $paypalRequestPlaceOrder) {
+                        return [
+                            'RESULT' => '0',
+                            'PNREF' => 'B7PPAC033FF2',
+                            'RESPMSG' => 'Approved',
+                            'AVSADDR' => 'Y',
+                            'AVSZIP' => 'Y',
+                            'TOKEN' => $token,
+                            'PAYERID' => $payerId,
+                            'PPREF' => '7RK43642T8939154L',
+                            'CORRELATIONID' => $correlationId,
+                            'PAYMENTTYPE' => 'instant',
+                            'PENDINGREASON' => 'authorization'
+                        ];
+                    }
+                }
             );
 
         $response = $this->graphQlRequest->send($query);
@@ -204,7 +209,7 @@ QUERY;
      *
      * @return array
      */
-    public function getPaypalCodesProvider(): array
+    public static function getPaypalCodesProvider(): array
     {
         return [
             ['paypal_express'],

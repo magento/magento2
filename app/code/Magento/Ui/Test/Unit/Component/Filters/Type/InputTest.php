@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class InputTest extends TestCase
@@ -46,12 +47,7 @@ class InputTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(
-            ContextInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->contextMock = $this->createMock(ContextInterface::class);
         $this->uiComponentFactory = $this->createPartialMock(
             UiComponentFactory::class,
             ['create']
@@ -85,25 +81,17 @@ class InputTest extends TestCase
     /**
      * Run test prepare method
      *
-     * @param string $name
+     * @param array $data
      * @param array $filterData
      * @param array|null $expectedCondition
-     * @dataProvider getPrepareDataProvider
-     * @return void
      */
-    public function testPrepare(string $name, array $filterData, ?array $expectedCondition): void
+    #[DataProvider('getPrepareDataProvider')]
+    public function testPrepare(array $data, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var UiComponentInterface $uiComponent */
-        $uiComponent = $this->getMockForAbstractClass(
-            UiComponentInterface::class,
-            [],
-            '',
-            false
-        );
+        $uiComponent = $this->createMock(UiComponentInterface::class);
 
         $uiComponent->expects($this->any())
             ->method('getContext')
@@ -118,12 +106,7 @@ class InputTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getFiltersParams')
             ->willReturn($filterData);
-        $dataProvider = $this->getMockForAbstractClass(
-            DataProviderInterface::class,
-            [],
-            '',
-            false
-        );
+        $dataProvider = $this->createMock(DataProviderInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
@@ -131,28 +114,26 @@ class InputTest extends TestCase
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
-            ->with($name, Input::COMPONENT, ['context' => $this->contextMock])
+            ->with($data['name'], Input::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
         if ($expectedCondition !== null) {
             $this->filterBuilderMock->expects($this->once())
                 ->method('setConditionType')
-                ->with('like')
+                ->with($expectedCondition['setConditionType'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setField')
-                ->with($name)
+                ->with($data['name'])
                 ->willReturnSelf();
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('setValue')
-                ->with($expectedCondition['like'])
+                ->with($expectedCondition['setValue'])
                 ->willReturnSelf();
 
-            $filterMock = $this->getMockBuilder(Filter::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $filterMock = $this->createMock(Filter::class);
 
             $this->filterBuilderMock->expects($this->once())
                 ->method('create')
@@ -165,42 +146,123 @@ class InputTest extends TestCase
             $this->filterBuilderMock,
             $this->filterModifierMock,
             [],
-            ['name' => $name]
+            $data
         );
 
         $date->prepare();
     }
 
     /**
+     * SuppressWarnings was added due to the big size of data provider
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPrepareDataProvider(): array
+    public static function getPrepareDataProvider(): array
     {
         return [
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => ''],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => null],
                 null,
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '0'],
-                ['like' => '%0%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%0%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => 'some_value'],
-                ['like' => '%some\_value%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%some\_value%',
+                ],
             ],
             [
-                'test_date',
+                [
+                    'name' => 'test_date',
+                ],
                 ['test_date' => '%'],
-                ['like' => '%\%%'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%\%%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'test_date',
+                ],
+                ['test_date' => 'some\\value'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%some\\\\value%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'eq',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'eq',
+                    'setValue' => 'something',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => '%something%',
+                ],
+            ],
+            [
+                [
+                    'name' => 'text_attr',
+                    'config' => [
+                        'filter' => [
+                            'filterType' => 'text',
+                            'conditionType' => 'like',
+                            'valueExpression' => '%s%%'
+                        ]
+                    ]
+                ],
+                ['text_attr' => 'something'],
+                [
+                    'setConditionType' => 'like',
+                    'setValue' => 'something%',
+                ],
             ],
         ];
     }

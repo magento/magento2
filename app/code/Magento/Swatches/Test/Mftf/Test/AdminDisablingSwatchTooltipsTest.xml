@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
+  * Copyright 2018 Adobe
+  * All Rights Reserved.
   */
 -->
 
@@ -35,6 +35,9 @@
             <waitForPageLoad stepKey="waitToClickSave"/>
             <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSaveAndEdit"/>
 
+            <!-- Delete all products via API using ProductApiHelper -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
@@ -43,9 +46,7 @@
 
             <!-- Enable swatch tooltips -->
             <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 1" stepKey="disableTooltips"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnabling">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterEnabling"/>
         </after>
 
         <!-- Go to the edit page for the "color" attribute -->
@@ -79,7 +80,7 @@
         <!-- Assert that the Save was successful after round trip to server -->
         <actionGroup ref="AssertSwatchColorActionGroup" stepKey="assertSwatchAdmin">
             <argument name="nthSwatch" value="1"/>
-            <argument name="expectedStyle" value="background: rgb(231, 77, 60);"/>
+            <argument name="expectedStyle" value="background: rgb(231, 76, 60);"/>
         </actionGroup>
 
         <!-- Create a configurable product to verify the storefront with -->
@@ -94,8 +95,9 @@
                    stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}"
                    stepKey="fillPrice"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}"
-                   stepKey="fillQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
                                     parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
@@ -139,7 +141,7 @@
         <!-- Verify that the storefront shows the swatches too -->
         <actionGroup ref="AssertStorefrontSwatchColorActionGroup" stepKey="assertSwatchStorefront">
             <argument name="nthSwatch" value="1"/>
-            <argument name="expectedRgb" value="rgb(231, 77, 60)"/>
+            <argument name="expectedRgb" value="rgb(231, 76, 60)"/>
         </actionGroup>
 
         <!-- Verify swatch tooltips are visible-->
@@ -150,7 +152,7 @@
         <!-- Disable swatch tooltips -->
         <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 0" stepKey="disableTooltips"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisabling">
-            <argument name="tags" value=""/>
+            <argument name="tags" value="config full_page"/>
         </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->

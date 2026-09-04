@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -28,7 +29,7 @@ class Confirmation extends Column
      * @param ScopeConfigInterface $scopeConfig @deprecated
      * @param array $components
      * @param array $data
-     * @param AccountConfirmation $accountConfirmation
+     * @param AccountConfirmation|null $accountConfirmation
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -37,7 +38,7 @@ class Confirmation extends Column
         ScopeConfigInterface $scopeConfig,
         array $components,
         array $data,
-        AccountConfirmation $accountConfirmation = null
+        ?AccountConfirmation $accountConfirmation = null
     ) {
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
@@ -65,18 +66,35 @@ class Confirmation extends Column
      */
     private function getFieldLabel(array $item)
     {
-        $isConfirmationRequired = $this->accountConfirmation->isConfirmationRequired(
-            $item['website_id'][0] ?? null,
-            $item[$item['id_field_name']],
-            $item['email']
-        );
-
-        if ($isConfirmationRequired) {
+        if ($this->getIsConfirmationRequired($item)) {
             if ($item[$this->getData('name')] === null) {
                 return __('Confirmed');
             }
             return __('Confirmation Required');
         }
         return __('Confirmation Not Required');
+    }
+
+    /**
+     * Retrieve is confirmation required flag for customer considering requested website may not exist.
+     *
+     * @param array $customer
+     * @return bool
+     */
+    private function getIsConfirmationRequired(array $customer): bool
+    {
+        try {
+            return $this->accountConfirmation->isConfirmationRequired(
+                $customer['website_id'][0] ?? null,
+                $customer[$customer['id_field_name']],
+                $customer['email']
+            );
+        } catch (NoSuchEntityException $e) {
+            return $this->accountConfirmation->isConfirmationRequired(
+                null,
+                $customer[$customer['id_field_name']],
+                $customer['email']
+            );
+        }
     }
 }

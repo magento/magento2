@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2011 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 
@@ -12,35 +12,26 @@ use Magento\Framework\Math\Random;
  * Adminhtml order tax totals block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Tax extends \Magento\Tax\Block\Sales\Order\Tax
 {
     /**
-     * Tax helper
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxHelper;
 
     /**
-     * Tax calculation
-     *
      * @var \Magento\Tax\Model\Calculation
      */
     protected $_taxCalculation;
 
     /**
-     * Tax factory
-     *
      * @var \Magento\Tax\Model\Sales\Order\TaxFactory
      */
     protected $_taxOrderFactory;
 
     /**
-     * Sales admin helper
-     *
      * @var \Magento\Sales\Helper\Admin
      */
     protected $_salesAdminHelper;
@@ -89,13 +80,13 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         }
 
         $taxClassAmount = [];
-        if (empty($source)) {
+        if ($source == null) {
             return $taxClassAmount;
         }
 
         $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($source);
         if (empty($taxClassAmount)) {
-            $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($source)->toArray();
+            $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($this->getOrder())->toArray();
             $taxClassAmount = $this->_taxCalculation->reproduceProcess($rates['items']);
         }
 

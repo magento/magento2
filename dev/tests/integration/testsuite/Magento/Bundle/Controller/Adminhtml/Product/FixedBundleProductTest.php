@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,6 +9,7 @@ namespace Magento\Bundle\Controller\Adminhtml\Product;
 
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks fixed bundle product save behavior
@@ -20,11 +21,10 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider fixedBundleProductDataProvider
-     *
      * @param array $post
      * @return void
      */
+    #[DataProvider('fixedBundleProductDataProvider')]
     public function testBundleProductSave(array $post): void
     {
         $post = $this->prepareRequestData($post);
@@ -35,7 +35,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function fixedBundleProductDataProvider(): array
+    public static function fixedBundleProductDataProvider(): array
     {
         return [
             'with_dropdown_option' => [
@@ -113,11 +113,10 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      *
-     * @dataProvider multiOptionsDataProvider
-     *
      * @param array $post
      * @return void
      */
+    #[DataProvider('multiOptionsDataProvider')]
     public function testBundleProductSaveMultiOptions(array $post): void
     {
         $post = $this->prepareRequestData($post);
@@ -128,7 +127,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function multiOptionsDataProvider(): array
+    public static function multiOptionsDataProvider(): array
     {
         return [
             'with_two_options_few_selections' => [
@@ -168,11 +167,10 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
      * @magentoDataFixture Magento/Bundle/_files/bundle_product_checkbox_options.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      *
-     * @dataProvider updateProductDataProvider
-     *
      * @param array $post
      * @return void
      */
+    #[DataProvider('updateProductDataProvider')]
     public function testUpdateProduct(array $post): void
     {
         $id = $this->productRepository->get('bundle-product-checkbox-options')->getId();
@@ -184,7 +182,7 @@ class FixedBundleProductTest extends AbstractBundleProductSaveTest
     /**
      * @return array
      */
-    public function updateProductDataProvider(): array
+    public static function updateProductDataProvider(): array
     {
         return [
             'update_existing_product' => [

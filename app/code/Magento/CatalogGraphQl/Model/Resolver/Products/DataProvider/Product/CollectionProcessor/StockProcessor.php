@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -55,10 +55,12 @@ class StockProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context = null
+        ?ContextInterface $context = null
     ): Collection {
-        if (!$this->stockConfig->isShowOutOfStock()) {
-            $this->stockStatusResource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $this->stockStatusResource->addStockDataToCollection($collection, !$this->stockConfig->isShowOutOfStock());
+            $collection->setFlag($stockFlag, true);
         }
 
         return $collection;

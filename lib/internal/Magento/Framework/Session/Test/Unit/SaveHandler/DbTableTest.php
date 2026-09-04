@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -9,41 +9,45 @@ namespace Magento\Framework\Session\Test\Unit\SaveHandler;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Session\SaveHandler\DbTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class DbTableTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Session table name
      */
-    const SESSION_TABLE = 'session_table_name';
+    private const SESSION_TABLE = 'session_table_name';
 
     /**#@+
      * Table column names
      */
-    const COLUMN_SESSION_ID = 'session_id';
+    private const COLUMN_SESSION_ID = 'session_id';
 
-    const COLUMN_SESSION_DATA = 'session_data';
+    private const COLUMN_SESSION_DATA = 'session_data';
 
-    const COLUMN_SESSION_EXPIRES = 'session_expires';
+    private const COLUMN_SESSION_EXPIRES = 'session_expires';
 
     /**#@-*/
 
     /**
      * Test select object
      */
-    const SELECT_OBJECT = 'select_object';
+    private const SELECT_OBJECT = 'select_object';
 
     /**#@+
      * Test session data
      */
-    const SESSION_ID = 'custom_session_id';
+    private const SESSION_ID = 'custom_session_id';
 
-    const SESSION_DATA = 'custom_session_data';
+    private const SESSION_DATA = 'custom_session_data';
 
-    /**#@-*/
     /**
      * Model under test
      *
@@ -61,11 +65,11 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function readDataProvider()
+    public static function readDataProvider()
     {
         return [
-            'session_encoded' => ['$dataEncoded' => true],
-            'session_not_encoded' => ['$dataEncoded' => false]
+            'session_encoded' => ['isDataEncoded' => true],
+            'session_not_encoded' => ['isDataEncoded' => false]
         ];
     }
 
@@ -89,7 +93,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -104,7 +107,6 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
@@ -130,15 +132,13 @@ class DbTableTest extends TestCase
         $this->_model = new DbTable($resource);
 
         $method = new \ReflectionMethod(DbTable::class, 'checkConnection');
-        $method->setAccessible(true);
         $this->assertNull($method->invoke($this->_model));
     }
 
     /**
      * @param bool $isDataEncoded
-     *
-     * @dataProvider readDataProvider
      */
+    #[DataProvider('readDataProvider')]
     public function testRead($isDataEncoded)
     {
         $this->_prepareMockForRead($isDataEncoded);
@@ -157,7 +157,10 @@ class DbTableTest extends TestCase
         $resource->expects($this->once())->method('getTableName')->willReturn(self::SESSION_TABLE);
         $resource->expects($this->once())->method('getConnection')->willReturn($connection);
 
-        $this->_model = new DbTable($resource);
+        $encryptorMock = $this->createMock(EncryptorInterface::class);
+        $encryptorMock->expects($this->any())->method('hash')->willReturnArgument(0);
+
+        $this->_model = new DbTable($resource, $encryptorMock);
     }
 
     /**
@@ -167,11 +170,10 @@ class DbTableTest extends TestCase
      */
     protected function _prepareMockForRead($isDataEncoded)
     {
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['from', 'where'])
-            ->onlyMethods(['select', 'fetchOne', 'isTableExists'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ['from', 'where', 'select', 'fetchOne', 'isTableExists']
+        );
 
         $connection->expects($this->once())->method('isTableExists')->willReturn(true);
 
@@ -217,19 +219,18 @@ class DbTableTest extends TestCase
      *
      * @return array
      */
-    public function writeDataProvider()
+    public static function writeDataProvider()
     {
         return [
-            'session_exists' => ['$sessionExists' => true],
-            'session_not_exists' => ['$sessionExists' => false]
+            'session_exists' => ['sessionExists' => true],
+            'session_not_exists' => ['sessionExists' => false]
         ];
     }
 
     /**
      * @param bool $sessionExists
-     *
-     * @dataProvider writeDataProvider
      */
+    #[DataProvider('writeDataProvider')]
     public function testWrite($sessionExists)
     {
         $this->_prepareMockForWrite($sessionExists);
@@ -243,11 +244,10 @@ class DbTableTest extends TestCase
      */
     protected function _prepareMockForWrite($sessionExists)
     {
-        $connection = $this->getMockBuilder(Mysql::class)
-            ->addMethods(['from', 'where'])
-            ->onlyMethods(['select', 'fetchOne', 'update', 'insert', 'isTableExists'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createPartialMockWithReflection(
+            Mysql::class,
+            ['from', 'where', 'select', 'fetchOne', 'update', 'insert', 'isTableExists']
+        );
         $connection->expects($this->once())->method('isTableExists')->willReturn(true);
         $connection->expects($this->once())->method('select')->willReturnSelf();
         $connection->expects($this->once())->method('from')->with(self::SESSION_TABLE)->willReturnSelf();

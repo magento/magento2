@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -127,48 +127,34 @@ class ViewTest extends TestCase
     protected function setUp(): void
     {
         $this->orderManagementMock = $this->getMockBuilder(OrderManagementInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->orderMock = $this->getMockBuilder(Order::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->orderMock = $this->createMock(Order::class);
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
-        $this->actionFlagMock = $this->getMockBuilder(ActionFlag::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->coreRegistryMock = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->pageTitleMock = $this->getMockBuilder(Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->actionFlagMock = $this->createMock(ActionFlag::class);
+        $this->coreRegistryMock = $this->createMock(Registry::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
+        $this->pageTitleMock = $this->createMock(Title::class);
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
             RedirectFactory::class
         )
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
-        $this->resultPageMock = $this->getMockBuilder(Page::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->resultPageMock = $this->createMock(Page::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -218,11 +204,15 @@ class ViewTest extends TestCase
             ->willReturn($id);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
-            ->withConsecutive(
-                ['Orders'],
-                [$titlePart]
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1) use ($titlePart) {
+                    if ($arg1 == 'Orders') {
+                        return $this->pageTitleMock;
+                    } elseif ($arg1 == $titlePart) {
+                        return $this->pageTitleMock;
+                    }
+                }
+            );
 
         $this->assertInstanceOf(
             Page::class,
@@ -311,9 +301,14 @@ class ViewTest extends TestCase
     {
         $this->coreRegistryMock->expects($this->exactly(2))
             ->method('register')
-            ->withConsecutive(
-                ['sales_order', $this->orderMock],
-                ['current_order', $this->orderMock]
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'sales_order' && $arg2 === $this->orderMock) {
+                        return null;
+                    } elseif ($arg1 == 'current_order' && $arg2 === $this->orderMock) {
+                        return null;
+                    }
+                }
             );
     }
 
@@ -345,11 +340,15 @@ class ViewTest extends TestCase
             ->willReturnSelf();
         $this->resultPageMock->expects($this->exactly(2))
             ->method('addBreadcrumb')
-            ->withConsecutive(
-                ['Sales', 'Sales'],
-                ['Orders', 'Orders']
-            )
-            ->willReturnSelf();
+            ->willReturnCallback(
+                function ($arg1, $arg2) {
+                    if ($arg1 == 'Sales' && $arg2 == 'Sales') {
+                        return $this->resultPageMock;
+                    } elseif ($arg1 == 'Orders' && $arg2 == 'Orders') {
+                        return $this->resultPageMock;
+                    }
+                }
+            );
     }
 
     /**

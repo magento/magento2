@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,6 +16,6 @@
         <waitForPageLoad stepKey="waitForGiftOptionsOpen"/>
         <uncheckOption selector="{{AdminProductGiftOptionsSection.useConfigSettingsMessage}}" stepKey="uncheckConfigSettingsMessage"/>
         <click selector="{{AdminProductGiftOptionsSection.toggleProductGiftMessage}}" stepKey="clickToGiftMessageSwitcher"/>
-        <seeElement selector="{{AdminProductGiftOptionsSection.giftMessageStatus('status')}}" stepKey="assertGiftMessageStatus"/>
+        <waitForElementVisible selector="{{AdminProductGiftOptionsSection.giftMessageStatus('status')}}" stepKey="assertGiftMessageStatus"/>
     </actionGroup>
 </actionGroups>

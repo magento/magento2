@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -78,6 +78,10 @@ define([
         }
 
         component.set(property, value, owner);
+
+        if (property === 'disabled' && value) {
+            component.set('validate', value, owner);
+        }
 
         if (linked) {
             linked.mute = false;

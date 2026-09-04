@@ -2,13 +2,14 @@
 /**
  * Set of tests of layout directives handling behavior
  *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\View;
 
 use Magento\Framework\App\State;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -161,7 +162,6 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
 
     public function testLayoutObjectArgumentUpdatersDirective()
     {
-        $this->markTestSkipped('Will be fixed after MAGETWO-33840 will be done');
         $layout = $this->_getLayoutModel('arguments_object_type_updaters.xml');
 
         $expectedObjectData = [0 => 'updater call', 1 => 'updater call'];
@@ -276,9 +276,9 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $case
      * @param string $expectedResult
-     * @dataProvider sortSpecialCasesDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('sortSpecialCasesDataProvider')]
     public function testSortSpecialCases($case, $expectedResult)
     {
         $layout = $this->_getLayoutModel($case);
@@ -288,7 +288,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function sortSpecialCasesDataProvider()
+    public static function sortSpecialCasesDataProvider()
     {
         return [
             'Before element which is after' => ['sort_before_after.xml', '312'],

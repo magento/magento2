@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2024 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddCustomOptionsActionGroup">
+        <annotations>
+            <description>Clicks on 'Add Option'. Adds the provided Options under the provided Custom Option Name to a Product on the Admin Product creation/edit page under the 'Customizable Options' section.</description>
+        </annotations>
+        <arguments>
+                <argument name="title" type="string"/>
+                <argument name="price" type="string"/>
+        </arguments>
+        <!-- Add option based on the parameter -->
+        <click stepKey="clickAddValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+        <fillField stepKey="fillInCustomOptionValueTitle" selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="{{title}}"/>
+        <fillField stepKey="fillInCustomOptionValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="{{price}}"/>
+    </actionGroup>
+</actionGroups>

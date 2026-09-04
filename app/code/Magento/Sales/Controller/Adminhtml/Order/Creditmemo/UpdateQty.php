@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
@@ -15,7 +15,7 @@ class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInt
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
@@ -25,7 +25,7 @@ class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInt
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $pagePageFactory;
+    protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

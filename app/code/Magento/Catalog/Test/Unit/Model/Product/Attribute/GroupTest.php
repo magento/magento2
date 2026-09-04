@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -45,16 +45,9 @@ class GroupTest extends TestCase
     {
         $mockedCollection = $this->getMockedCollection();
 
-        $mockBuilder = $this->getMockBuilder(
-            CollectionFactory::class
-        );
-        $mock = $mockBuilder->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createPartialMock(CollectionFactory::class, ['create']);
 
-        $mock->expects($this->any())
-            ->method('create')
-            ->willReturn($mockedCollection);
+        $mock->method('create')->willReturn($mockedCollection);
 
         return $mock;
     }
@@ -64,19 +57,13 @@ class GroupTest extends TestCase
      */
     private function getMockedCollection()
     {
-        $mockBuilder = $this->getMockBuilder(Collection::class);
-        $mock = $mockBuilder->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createMock(Collection::class);
 
         $item = new DataObject();
         $item->setIsUserDefine(false);
 
-        $mock->expects($this->any())
-            ->method('setAttributeGroupFilter')
-            ->willReturn($mock);
-        $mock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$item]));
+        $mock->method('setAttributeGroupFilter')->willReturn($mock);
+        $mock->method('getIterator')->willReturn(new \ArrayIterator([$item]));
 
         return $mock;
     }

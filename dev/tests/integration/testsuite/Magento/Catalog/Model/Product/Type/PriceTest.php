@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -221,5 +221,18 @@ class PriceTest extends TestCase
         }
 
         return $this->objectManager->create(DataObject::class, ['data' => ['qty' => 1, 'options' => $options]]);
+    }
+
+    /**
+     * Assert price for different product with decimal qty.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_and_decimal_qty.php
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testTierPriceWithDecimalInventory(): void
+    {
+        $product = $this->productRepository->get('simple');
+        $this->assertEquals(2.99, $this->productPrice->getFinalPrice(0.5, $product));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -17,6 +17,7 @@ use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * checks that qty of configurable product is updated in cart
@@ -46,9 +47,9 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
     /**
      * @param string $itemArgName
      * @param string $reservedOrderId
-     * @dataProvider updateConfigurableCartItemQuantityDataProvider
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      */
+    #[DataProvider('updateConfigurableCartItemQuantityDataProvider')]
     public function testUpdateConfigurableCartItemQuantity(string $itemArgName, string $reservedOrderId)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
@@ -72,7 +73,7 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
      *
      * @return array
      */
-    public function updateConfigurableCartItemQuantityDataProvider(): array
+    public static function updateConfigurableCartItemQuantityDataProvider(): array
     {
         return [
             ['cart_item_id', 'test_cart_with_configurable'],

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -11,5 +11,8 @@
     <section name="AdminEditAndNewRatingSection">
         <element name="defaultStoreViewTitleLabel" type="text" selector=".field-rating_code_1 label"/>
         <element name="defaultStoreViewTitleInput" type="input" selector=".field-rating_code_1 input"/>
+        <element name="defaultValue" type="input" selector=".admin__field-control.control #rating_code"/>
+        <element name="visibility" type="select" selector=".admin__field.field.field-stores #stores"/>
+        <element name="isActive" type="input" selector="#is_active"/>
     </section>
 </sections>

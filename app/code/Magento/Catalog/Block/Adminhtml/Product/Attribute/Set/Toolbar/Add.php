@@ -1,14 +1,9 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 
-/**
- * description
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Toolbar;
 
 use Magento\Framework\View\Element\AbstractBlock;
@@ -21,6 +16,8 @@ class Add extends \Magento\Backend\Block\Template
     protected $_template = 'Magento_Catalog::catalog/product/attribute/set/toolbar/add.phtml';
 
     /**
+     * Prepare the layout
+     *
      * @return AbstractBlock
      */
     protected function _prepareLayout()
@@ -53,6 +50,8 @@ class Add extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return header text
+     *
      * @return \Magento\Framework\Phrase
      */
     protected function _getHeader()
@@ -61,6 +60,8 @@ class Add extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Return HTML for the form
+     *
      * @return string
      */
     public function getFormHtml()

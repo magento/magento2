@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Backend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Category\Attribute\Backend\Sortby;
 use Magento\Eav\Model\Entity\AbstractEntity;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -18,38 +19,40 @@ use PHPUnit\Framework\TestCase;
 
 class SortbyTest extends TestCase
 {
-    const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
+    private const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
 
     /**
      * @var Sortby
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var ObjectManager
      */
-    protected $_objectHelper;
+    private $objectHelper;
 
     /**
      * @var AbstractAttribute
      */
-    protected $_attribute;
+    private $attribute;
 
     /**
      * @var ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->markTestSkipped('Due to MAGETWO-48956');
-        $this->_objectHelper = new ObjectManager($this);
-        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
-        $this->_model = $this->_objectHelper->getObject(
+        $this->objectHelper = new ObjectManager($this);
+        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->model = $this->objectHelper->getObject(
             Sortby::class,
-            ['scopeConfig' => $this->_scopeConfig]
+            ['scopeConfig' => $this->scopeConfig]
         );
-        $this->_attribute = $this->createPartialMock(
+        $this->attribute = $this->createPartialMock(
             AbstractAttribute::class,
             [
                 'getName',
@@ -62,20 +65,22 @@ class SortbyTest extends TestCase
             ]
         );
 
-        $this->_model->setAttribute($this->_attribute);
+        $this->model->setAttribute($this->attribute);
     }
 
     /**
      * @param $attributeCode
      * @param $data
      * @param $expected
-     * @dataProvider beforeSaveDataProvider
+     *
+     * @return void
      */
-    public function testBeforeSave($attributeCode, $data, $expected)
+    #[DataProvider('beforeSaveDataProvider')]
+    public function testBeforeSave($attributeCode, $data, $expected): void
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
+        $this->attribute->method('getName')->willReturn($attributeCode);
         $object = new DataObject($data);
-        $this->_model->beforeSave($object);
+        $this->model->beforeSave($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
     }
@@ -83,33 +88,33 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function beforeSaveDataProvider()
+    public static function beforeSaveDataProvider(): array
     {
         return [
             'attribute with specified value' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [self::DEFAULT_ATTRIBUTE_CODE => 'test_value'],
-                'test_value',
+                'test_value'
             ],
             'attribute with default value' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [self::DEFAULT_ATTRIBUTE_CODE => null],
-                null,
+                null
             ],
             'attribute does not exist' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [],
-                null,
+                null
             ],
             'attribute sort by empty' => [
                 'available_sort_by',
                 ['available_sort_by' => null],
-                null,
+                null
             ],
             'attribute sort by' => [
                 'available_sort_by',
                 ['available_sort_by' => ['test', 'value']],
-                'test,value',
+                'test,value'
             ]
         ];
     }
@@ -118,13 +123,15 @@ class SortbyTest extends TestCase
      * @param $attributeCode
      * @param $data
      * @param $expected
-     * @dataProvider afterLoadDataProvider
+     *
+     * @return void
      */
-    public function testAfterLoad($attributeCode, $data, $expected)
+    #[DataProvider('afterLoadDataProvider')]
+    public function testAfterLoad($attributeCode, $data, $expected): void
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
+        $this->attribute->method('getName')->willReturn($attributeCode);
         $object = new DataObject($data);
-        $this->_model->afterLoad($object);
+        $this->model->afterLoad($object);
         $this->assertTrue($object->hasData($attributeCode));
         $this->assertSame($expected, $object->getData($attributeCode));
     }
@@ -132,23 +139,23 @@ class SortbyTest extends TestCase
     /**
      * @return array
      */
-    public function afterLoadDataProvider()
+    public static function afterLoadDataProvider(): array
     {
         return [
             'attribute with specified value' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [self::DEFAULT_ATTRIBUTE_CODE => 'test_value'],
-                'test_value',
+                'test_value'
             ],
             'attribute sort by empty' => [
                 'available_sort_by',
                 ['available_sort_by' => null],
-                null,
+                null
             ],
             'attribute sort by' => [
                 'available_sort_by',
                 ['available_sort_by' => 'test,value'],
-                ['test', 'value'],
+                ['test', 'value']
             ]
         ];
     }
@@ -157,120 +164,104 @@ class SortbyTest extends TestCase
      * @param $attributeData
      * @param $data
      * @param $expected
-     * @dataProvider validateDataProvider
+     *
+     * @return void
      */
-    public function testValidate($attributeData, $data, $expected)
+    #[DataProvider('validateDataProvider')]
+    public function testValidate($attributeData, $data, $expected): void
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeData['code']);
-        $this->_attribute
-            ->expects($this->at(1))
-            ->method('getIsRequired')
+        $this->attribute->method('getName')->willReturn($attributeData['code']);
+        $this->attribute->method('getIsRequired')
             ->willReturn($attributeData['isRequired']);
-        $this->_attribute
-            ->expects($this->any())
-            ->method('isValueEmpty')
-            ->willReturn($attributeData['isValueEmpty']);
+        $this->attribute
+            ->method('isValueEmpty')->willReturn($attributeData['isValueEmpty']);
         $object = new DataObject($data);
-        $this->assertSame($expected, $this->_model->validate($object));
+        $this->assertSame($expected, $this->model->validate($object));
     }
 
     /**
      * @return array
      */
-    public function validateDataProvider()
+    public static function validateDataProvider(): array
     {
         return [
             'is not required' => [
                 ['code' => self::DEFAULT_ATTRIBUTE_CODE, 'isRequired' => false, 'isValueEmpty' => false],
                 [],
-                true,
+                true
             ],
             'required, empty, not use config case 1' => [
                 ['code' => self::DEFAULT_ATTRIBUTE_CODE, 'isRequired' => true, 'isValueEmpty' => true],
                 [self::DEFAULT_ATTRIBUTE_CODE => [], 'use_post_data_config' => []],
-                false,
+                false
             ],
             'required, empty, not use config case 2' => [
                 ['code' => self::DEFAULT_ATTRIBUTE_CODE, 'isRequired' => true, 'isValueEmpty' => true],
                 [self::DEFAULT_ATTRIBUTE_CODE => [], 'use_post_data_config' => ['config']],
-                false,
+                false
             ],
             'required, empty, use config' => [
                 ['code' => self::DEFAULT_ATTRIBUTE_CODE, 'isRequired' => true, 'isValueEmpty' => true],
                 [self::DEFAULT_ATTRIBUTE_CODE => [], 'use_post_data_config' => [self::DEFAULT_ATTRIBUTE_CODE]],
-                true,
-            ],
+                true
+            ]
         ];
     }
 
-    public function testValidateUnique()
+    /**
+     * @return void
+     */
+    public function testValidateUnique(): void
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
-        $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
+        $this->attribute->method('getName')->willReturn('attribute_name');
+        $this->attribute->method('getIsRequired');
+        $this->attribute->method('getIsUnique')
+            ->willReturn(true);
 
-        $entityMock = $this->getMockForAbstractClass(
-            AbstractEntity::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['checkAttributeUniqueValue']
-        );
-        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
-        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(true);
-        $this->assertTrue($this->_model->validate(new DataObject()));
+        $entityMock = $this->createMock(AbstractEntity::class);
+        $this->attribute->method('getEntity')->willReturn($entityMock);
+        $entityMock->method('checkAttributeUniqueValue')
+            ->willReturn(true);
+        $this->assertTrue($this->model->validate(new DataObject()));
     }
 
-    public function testValidateUniqueException()
+    /**
+     * @return void
+     */
+    public function testValidateUniqueException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->_attribute->expects($this->any())->method('getName')->willReturn('attribute_name');
-        $this->_attribute->expects($this->at(1))->method('getIsRequired');
-        $this->_attribute->expects($this->at(2))->method('getIsUnique')->willReturn(true);
+        $this->attribute->method('getName')->willReturn('attribute_name');
+        $this->attribute->method('getIsRequired');
+        $this->attribute->method('getIsUnique')->willReturn(true);
 
-        $entityMock = $this->getMockForAbstractClass(
-            AbstractEntity::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['checkAttributeUniqueValue']
-        );
-        $frontMock = $this->getMockForAbstractClass(
-            AbstractFrontend::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getLabel']
-        );
-        $this->_attribute->expects($this->any())->method('getEntity')->willReturn($entityMock);
-        $this->_attribute->expects($this->any())->method('getFrontend')->willReturn($frontMock);
-        $entityMock->expects($this->at(0))->method('checkAttributeUniqueValue')->willReturn(false);
-        $this->assertTrue($this->_model->validate(new DataObject()));
+        $entityMock = $this->createMock(AbstractEntity::class);
+        $frontMock = $this->createMock(AbstractFrontend::class);
+        $this->attribute->method('getEntity')->willReturn($entityMock);
+        $this->attribute->method('getFrontend')->willReturn($frontMock);
+        $entityMock->method('checkAttributeUniqueValue')->willReturn(false);
+        $this->assertTrue($this->model->validate(new DataObject()));
     }
 
     /**
      * @param $attributeCode
      * @param $data
-     * @dataProvider validateDefaultSortDataProvider
+     *
+     * @return void
      */
-    public function testValidateDefaultSort($attributeCode, $data)
+    #[DataProvider('validateDefaultSortDataProvider')]
+    public function testValidateDefaultSort($attributeCode, $data): void
     {
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('value2');
+        $this->attribute->method('getName')->willReturn($attributeCode);
+        $this->scopeConfig->method('getValue')->willReturn('value2');
         $object = new DataObject($data);
-        $this->assertTrue($this->_model->validate($object));
+        $this->assertTrue($this->model->validate($object));
     }
 
     /**
      * @return array
      */
-    public function validateDefaultSortDataProvider()
+    public static function validateDefaultSortDataProvider(): array
     {
         return [
             [
@@ -279,7 +270,7 @@ class SortbyTest extends TestCase
                     'available_sort_by' => ['value1', 'value2'],
                     'default_sort_by' => 'value2',
                     'use_post_data_config' => []
-                ],
+                ]
             ],
             [
                 'default_sort_by',
@@ -295,28 +286,30 @@ class SortbyTest extends TestCase
                     'default_sort_by' => null,
                     'use_post_data_config' => ['available_sort_by', 'default_sort_by', 'filter_price_range']
                 ]
-            ],
+            ]
         ];
     }
 
     /**
      * @param $attributeCode
      * @param $data
-     * @dataProvider validateDefaultSortException
+     *
+     * @return void
      */
-    public function testValidateDefaultSortException($attributeCode, $data)
+    #[DataProvider('validateDefaultSortException')]
+    public function testValidateDefaultSortException($attributeCode, $data): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
-        $this->_attribute->expects($this->any())->method('getName')->willReturn($attributeCode);
-        $this->_scopeConfig->expects($this->any())->method('getValue')->willReturn('another value');
+        $this->attribute->method('getName')->willReturn($attributeCode);
+        $this->scopeConfig->method('getValue')->willReturn('another value');
         $object = new DataObject($data);
-        $this->_model->validate($object);
+        $this->model->validate($object);
     }
 
     /**
      * @return array
      */
-    public function validateDefaultSortException()
+    public static function validateDefaultSortException(): array
     {
         return [
             [
@@ -324,7 +317,7 @@ class SortbyTest extends TestCase
                 [
                     'available_sort_by' => null,
                     'use_post_data_config' => ['default_sort_by']
-                ],
+                ]
             ],
             [
                 'default_sort_by',
@@ -347,7 +340,7 @@ class SortbyTest extends TestCase
                     'available_sort_by' => 'value1',
                     'use_post_data_config' => []
                 ]
-            ],
+            ]
         ];
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Deploy\Source;
 
@@ -18,7 +18,7 @@ use Magento\Deploy\Package\PackageFileFactory;
  */
 class Lib implements SourceInterface
 {
-    const TYPE = 'lib';
+    public const TYPE = 'lib';
 
     /**
      * @var Files
@@ -59,6 +59,7 @@ class Lib implements SourceInterface
     {
         $files = [];
         foreach ($this->filesUtil->getStaticLibraryFiles() as $fileName) {
+            $fileName = $fileName === null ? '' : $fileName;
             if (strpos($fileName, 'css/docs') === 0) {
                 continue;
             }

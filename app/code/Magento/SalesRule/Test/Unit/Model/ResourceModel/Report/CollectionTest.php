@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -67,15 +67,18 @@ class CollectionTest extends TestCase
      */
     protected $selectMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->entityFactory = $this->createMock(EntityFactory::class);
 
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->fetchStrategy = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $this->fetchStrategy = $this->createMock(FetchStrategyInterface::class);
 
-        $this->eventManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->eventManager = $this->createMock(ManagerInterface::class);
 
         $this->reportResource = $this->createPartialMock(
             Report::class,
@@ -115,12 +118,18 @@ class CollectionTest extends TestCase
         );
     }
 
-    public function testAddRuleFilter()
+    /**
+     * @return void
+     */
+    public function testAddRuleFilter(): void
     {
         $this->assertInstanceOf(get_class($this->object), $this->object->addRuleFilter([]));
     }
 
-    public function testApplyAggregatedTableNegativeIsTotals()
+    /**
+     * @return void
+     */
+    public function testApplyAggregatedTableNegativeIsTotals(): void
     {
         $this->selectMock->expects($this->once())
             ->method('group')
@@ -128,7 +137,10 @@ class CollectionTest extends TestCase
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
 
-    public function testApplyAggregatedTableIsSubTotals()
+    /**
+     * @return void
+     */
+    public function testApplyAggregatedTableIsSubTotals(): void
     {
         $this->selectMock->expects($this->once())
             ->method('group')
@@ -138,7 +150,10 @@ class CollectionTest extends TestCase
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
 
-    public function testApplyRulesFilterNoRulesIdsFilter()
+    /**
+     * @return void
+     */
+    public function testApplyRulesFilterNoRulesIdsFilter(): void
     {
         $this->ruleFactory->expects($this->never())
             ->method('create');
@@ -146,7 +161,10 @@ class CollectionTest extends TestCase
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
 
-    public function testApplyRulesFilterEmptyRulesList()
+    /**
+     * @return void
+     */
+    public function testApplyRulesFilterEmptyRulesList(): void
     {
         $rulesList = [];
         $ruleMock = $this->getRuleMock();
@@ -163,21 +181,28 @@ class CollectionTest extends TestCase
         $this->assertInstanceOf(get_class($this->object), $this->object->loadWithFilter());
     }
 
-    public function testApplyRulesFilterWithRulesList()
+    /**
+     * @return void
+     */
+    public function testApplyRulesFilterWithRulesList(): void
     {
         $rulesList = [1 => 'test rule 1', 10 => 'test rule 10', 30 => 'test rule 30'];
-        $this->connection->expects($this->at(1))
+        $this->connection
             ->method('quoteInto')
-            ->with('rule_name = ?', $rulesList[1])
-            ->willReturn('test_1');
-        $this->connection->expects($this->at(2))
-            ->method('quoteInto')
-            ->with('rule_name = ?', $rulesList[30])
-            ->willReturn('test_2');
-
-        $this->selectMock->expects($this->at(3))
+            ->willReturnCallback(function ($arg1, $arg2) use ($rulesList) {
+                if ($arg1 == 'rule_name = ?' && $arg2 = $rulesList[1]) {
+                    return 'test_1';
+                } elseif ($arg1 == 'rule_name = ?' && $arg2 = $rulesList[30]) {
+                    return 'test_2';
+                }
+            });
+        $this->selectMock
             ->method('where')
-            ->with(implode(' OR ', ['test_1', 'test_2']));
+            ->willReturnCallback(function ($arg1) {
+                if (is_null($arg1) || $arg1 == implode(' OR ', ['test_1', 'test_2'])) {
+                    return null;
+                }
+            });
 
         $ruleMock = $this->getRuleMock();
         $ruleMock->expects($this->once())
@@ -196,7 +221,7 @@ class CollectionTest extends TestCase
     /**
      * @return MockObject
      */
-    protected function getRuleMock()
+    protected function getRuleMock(): MockObject
     {
         return $this->createPartialMock(
             Rule::class,

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Framework\DB\Ddl;
 
+/**
+ * @api
+ */
 class TriggerFactory
 {
     /**
@@ -22,7 +25,7 @@ class TriggerFactory
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
-        $this->_objectManager = $objectManager;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -33,6 +36,6 @@ class TriggerFactory
      */
     public function create(array $data = [])
     {
-        return $this->_objectManager->create(self::INSTANCE_NAME, $data);
+        return $this->objectManager->create(self::INSTANCE_NAME, $data);
     }
 }

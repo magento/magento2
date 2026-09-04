@@ -1,20 +1,18 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Ui\Component\Control\Container;
 
-/**
- * Class SaveButton
- * @package Magento\Customer\Block\Adminhtml\Edit
- */
 class SaveButton extends GenericButton implements ButtonProviderInterface
 {
     /**
+     * Get button data
+     *
      * @return array
      */
     public function getButtonData()
@@ -42,6 +40,7 @@ class SaveButton extends GenericButton implements ButtonProviderInterface
             ],
             'class_name' => Container::SPLIT_BUTTON,
             'options' => $this->getOptions(),
+            'dropdown_button_aria_label' => __('Save options'),
         ];
     }
 

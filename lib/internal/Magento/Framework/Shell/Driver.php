@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Shell;
@@ -42,6 +42,8 @@ class Driver
         }
 
         $command = $this->commandRenderer->render($command, $arguments);
+        // exec() have to be called here
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         return new Response(['output' => $output, 'exit_code' => $exitCode, 'escaped_command' => $command]);

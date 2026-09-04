@@ -1,13 +1,15 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Customer\Block\Form;
 
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Element\ButtonLockInterface;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
@@ -20,8 +22,13 @@ use PHPUnit\Framework\TestCase;
  */
 class LoginTest extends TestCase
 {
+    /**
+     * @see login.phtml - submit button uses this code with ButtonLockManager
+     */
+    private const LOGIN_SUBMIT_BUTTON_LOCK_CODE = 'customer_login_form_submit';
+
     private const EMAIL_LABEL_XPATH = "//label[@for='email']/span[contains(text(), 'Email')]";
-    private const PASSWORD_LABEL_XPATH = "//label[@for='pass' ]/span[contains(text(), 'Password')]";
+    private const PASSWORD_LABEL_XPATH = "//label[@for='password']/span[contains(text(), 'Password')]";
     private const EMAIL_INPUT_XPATH = "//input[@name ='login[username]' and contains(@data-validate,'required:true')"
     . "and contains(@data-validate, \"'validate-email':true\")]";
     private const PASSWORD_INPUT_XPATH = "//input[@name='login[password]'"
@@ -44,12 +51,23 @@ class LoginTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+
+        $buttonLock = $this->createConfiguredStub(ButtonLockInterface::class, [
+            'getCode' => self::LOGIN_SUBMIT_BUTTON_LOCK_CODE,
+            'isDisabled' => false,
+        ]);
+        $buttonLockManager = $this->objectManager->create(
+            ButtonLockManager::class,
+            ['buttonLockPool' => [self::LOGIN_SUBMIT_BUTTON_LOCK_CODE => $buttonLock]]
+        );
+
         $this->block = $this->layout->createBlock(Login::class);
         $this->block->setTemplate('Magento_Customer::form/login.phtml');
-
-        parent::setUp();
+        $this->block->setButtonLockManager($buttonLockManager);
     }
 
     /**

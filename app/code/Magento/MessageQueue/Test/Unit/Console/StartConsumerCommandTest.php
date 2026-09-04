@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -15,6 +15,7 @@ use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\ConsumerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MessageQueue\Console\StartConsumerCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,17 +61,10 @@ class StartConsumerCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->appState = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->writeFactoryMock = $this->getMockBuilder(WriteFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->lockManagerMock = $this->createMock(LockManagerInterface::class);
+        $this->consumerFactory = $this->createMock(ConsumerFactory::class);
+        $this->appState = $this->createMock(State::class);
+        $this->writeFactoryMock = $this->createMock(WriteFactory::class);
 
         $this->objectManager = new ObjectManager($this);
         $this->command = $this->objectManager->getObject(
@@ -90,58 +84,53 @@ class StartConsumerCommandTest extends TestCase
      *
      * @param string|null $pidFilePath
      * @param bool $singleThread
+     * @param int|null $multiProcess
      * @param int $lockExpects
-     * @param int $isLockedExpects
      * @param bool $isLocked
      * @param int $unlockExpects
      * @param int $runProcessExpects
      * @param int $expectedReturn
      * @return void
-     * @dataProvider executeDataProvider
+     * @throws \Exception
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute(
-        $pidFilePath,
-        $singleThread,
-        $lockExpects,
-        $isLocked,
-        $unlockExpects,
-        $runProcessExpects,
-        $expectedReturn
-    ) {
+        ?string $pidFilePath,
+        bool $singleThread,
+        ?int $multiProcess,
+        int $lockExpects,
+        bool $isLocked,
+        int $unlockExpects,
+        int $runProcessExpects,
+        int $expectedReturn
+    ): void {
         $areaCode = 'area_code';
         $numberOfMessages = 10;
         $batchSize = null;
         $consumerName = 'consumer_name';
-        $input = $this->getMockBuilder(InputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $output = $this->getMockBuilder(OutputInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $input = $this->createMock(InputInterface::class);
+        $output = $this->createMock(OutputInterface::class);
         $input->expects($this->once())->method('getArgument')
             ->with(StartConsumerCommand::ARGUMENT_CONSUMER)
             ->willReturn($consumerName);
-        $input->expects($this->exactly(5))->method('getOption')
-            ->withConsecutive(
-                [StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES],
-                [StartConsumerCommand::OPTION_BATCH_SIZE],
-                [StartConsumerCommand::OPTION_AREACODE],
-                [StartConsumerCommand::PID_FILE_PATH],
-                [StartConsumerCommand::OPTION_SINGLE_THREAD]
-            )->willReturnOnConsecutiveCalls(
-                $numberOfMessages,
-                $batchSize,
-                $areaCode,
-                $pidFilePath,
-                $singleThread
-            );
+        $input->expects($this->exactly(6))->method('getOption')
+            ->willReturnCallback(fn($param) => match ([$param]) {
+                [StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES] => $numberOfMessages,
+                [StartConsumerCommand::OPTION_BATCH_SIZE] => $batchSize,
+                [StartConsumerCommand::OPTION_AREACODE] => $areaCode,
+                [StartConsumerCommand::PID_FILE_PATH] => $pidFilePath,
+                [StartConsumerCommand::OPTION_SINGLE_THREAD] => $singleThread,
+                [StartConsumerCommand::OPTION_MULTI_PROCESS] => $multiProcess
+            });
         $this->appState->expects($this->exactly($runProcessExpects))->method('setAreaCode')->with($areaCode);
-        $consumer = $this->getMockBuilder(ConsumerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $consumer = $this->createMock(ConsumerInterface::class);
         $this->consumerFactory->expects($this->exactly($runProcessExpects))
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
+
+        if ($multiProcess !== null) {
+            $consumerName .= '-' . $multiProcess;
+        }
 
         $this->lockManagerMock->expects($this->exactly($lockExpects))
             ->method('lock')
@@ -161,12 +150,13 @@ class StartConsumerCommandTest extends TestCase
     /**
      * @return array
      */
-    public function executeDataProvider()
+    public static function executeDataProvider(): array
     {
         return [
             [
                 'pidFilePath' => null,
                 'singleThread' => false,
+                'multiProcess' => null,
                 'lockExpects' => 0,
                 'isLocked' => true,
                 'unlockExpects' => 0,
@@ -176,6 +166,7 @@ class StartConsumerCommandTest extends TestCase
             [
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
+                'multiProcess' => null,
                 'lockExpects' => 1,
                 'isLocked' => true,
                 'unlockExpects' => 1,
@@ -185,6 +176,27 @@ class StartConsumerCommandTest extends TestCase
             [
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
+                'multiProcess' => null,
+                'lockExpects' => 1,
+                'isLocked' => false,
+                'unlockExpects' => 0,
+                'runProcessExpects' => 0,
+                'expectedReturn' => Cli::RETURN_FAILURE,
+            ],
+            [
+                'pidFilePath' => null,
+                'singleThread' => false,
+                'multiProcess' => 3,
+                'lockExpects' => 1,
+                'isLocked' => true,
+                'unlockExpects' => 1,
+                'runProcessExpects' => 1,
+                'expectedReturn' => Cli::RETURN_SUCCESS,
+            ],
+            [
+                'pidFilePath' => null,
+                'singleThread' => false,
+                'multiProcess' => 3,
                 'lockExpects' => 1,
                 'isLocked' => false,
                 'unlockExpects' => 0,

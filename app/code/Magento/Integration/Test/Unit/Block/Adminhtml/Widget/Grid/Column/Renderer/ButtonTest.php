@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -11,6 +11,7 @@ use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,6 +21,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class ButtonTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Context|MockObject
      */
@@ -81,12 +83,12 @@ class ButtonTest extends TestCase
     /**
      * Test the basic render action.
      */
-    public function testRender()
+    public function testRender(): void
     {
-        $column = $this->getMockBuilder(Column::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getType', 'getId', 'getIndex', 'getStyle', 'getOnclick'])
-            ->getMock();
+        $column = $this->createPartialMockWithReflection(
+            Column::class,
+            ['getId', 'getType', 'getIndex', 'getStyle', 'getOnclick']
+        );
         $column->expects($this->any())
             ->method('getType')
             ->willReturn('bigButton');

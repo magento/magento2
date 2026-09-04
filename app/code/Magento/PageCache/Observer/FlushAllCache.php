@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -62,7 +62,7 @@ class FlushAllCache implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        if ($this->_config->getType() == Config::BUILT_IN) {
+        if ($this->_config->getType() === Config::BUILT_IN) {
             $this->fullPageCache->clean();
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -21,8 +21,9 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="You are about to Login as Customer"
              stepKey="seeModal"/>
-         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

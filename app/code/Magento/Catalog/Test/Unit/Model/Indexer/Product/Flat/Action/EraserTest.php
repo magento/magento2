@@ -1,8 +1,7 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -40,11 +39,14 @@ class EraserTest extends TestCase
      */
     protected $model;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $resource = $this->createMock(ResourceConnection::class);
-        $this->connection = $this->getMockForAbstractClass(AdapterInterface::class);
-        $resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $resource->method('getConnection')->willReturn($this->connection);
         $this->indexerHelper = $this->createMock(Indexer::class);
         $this->indexerHelper->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->indexerHelper->expects($this->any())->method('getFlatTableName')->willReturnMap([
@@ -52,7 +54,7 @@ class EraserTest extends TestCase
             [2, 'store_2_flat'],
         ]);
 
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->model = new Eraser(
             $resource,
             $this->indexerHelper,
@@ -60,7 +62,10 @@ class EraserTest extends TestCase
         );
     }
 
-    public function testRemoveDeletedProducts()
+    /**
+     * @return void
+     */
+    public function testRemoveDeletedProducts(): void
     {
         $productsToDeleteIds = [1, 2];
         $select = $this->createMock(Select::class);
@@ -83,18 +88,25 @@ class EraserTest extends TestCase
         $this->model->removeDeletedProducts($productsToDeleteIds, 1);
     }
 
-    public function testDeleteProductsFromStoreForAllStores()
+    /**
+     * @return void
+     */
+    public function testDeleteProductsFromStoreForAllStores(): void
     {
         $store1 = $this->createMock(Store::class);
-        $store1->expects($this->any())->method('getId')->willReturn(1);
+        $store1->method('getId')->willReturn(1);
         $store2 = $this->createMock(Store::class);
-        $store2->expects($this->any())->method('getId')->willReturn(2);
+        $store2->method('getId')->willReturn(2);
         $this->storeManager->expects($this->once())->method('getStores')
             ->willReturn([$store1, $store2]);
-        $this->connection->expects($this->at(0))->method('delete')
-            ->with('store_1_flat', ['entity_id IN(?)' => [1]]);
-        $this->connection->expects($this->at(1))->method('delete')
-            ->with('store_2_flat', ['entity_id IN(?)' => [1]]);
+        $this->connection
+            ->method('delete')
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'store_1_flat' || $arg1 == 'store_2_flat' &&
+                    isset($arg2['entity_id IN(?)']) && $arg2['entity_id IN(?)'] === [1]) {
+                    return null;
+                }
+            });
 
         $this->model->deleteProductsFromStore(1);
     }

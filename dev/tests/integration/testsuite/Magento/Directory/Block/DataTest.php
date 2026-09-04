@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Directory\Block;
 
@@ -22,7 +22,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCountryHtmlSelect()
     {
-        CacheCleaner::cleanAll();
         $result = $this->block->getCountryHtmlSelect();
         $resultTwo = $this->block->getCountryHtmlSelect();
         $this->assertEquals($result, $resultTwo);
@@ -30,7 +29,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetRegionHtmlSelect()
     {
-        CacheCleaner::cleanAll();
         $result = $this->block->getRegionHtmlSelect();
         $resultTwo = $this->block->getRegionHtmlSelect();
         $this->assertEquals($result, $resultTwo);

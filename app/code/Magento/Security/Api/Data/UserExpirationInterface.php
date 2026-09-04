@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Security\Api\Data;
@@ -12,6 +11,8 @@ use \Magento\Security\Api\Data\UserExpirationExtensionInterface;
 
 /**
  * Interface UserExpirationInterface to be used as a DTO for expires_at property on User model.
+ *
+ * @api
  */
 interface UserExpirationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {

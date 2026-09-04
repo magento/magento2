@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
@@ -44,8 +44,8 @@ class Discount extends AbstractTotal
                 continue;
             }
 
-            $orderItemDiscount = (double)$orderItem->getDiscountAmount();
-            $baseOrderItemDiscount = (double)$orderItem->getBaseDiscountAmount();
+            $orderItemDiscount = (float)$orderItem->getDiscountAmount();
+            $baseOrderItemDiscount = (float)$orderItem->getBaseDiscountAmount();
             $orderItemQty = $orderItem->getQtyOrdered();
 
             if ($orderItemDiscount && $orderItemQty) {
@@ -71,9 +71,9 @@ class Discount extends AbstractTotal
         $invoice->setDiscountAmount(-$totalDiscountAmount);
         $invoice->setBaseDiscountAmount(-$baseTotalDiscountAmount);
 
-        $grandTotal = $invoice->getGrandTotal() - $totalDiscountAmount < 0.0001
+        $grandTotal = abs($invoice->getGrandTotal() - $totalDiscountAmount) < 0.0001
             ? 0 : $invoice->getGrandTotal() - $totalDiscountAmount;
-        $baseGrandTotal = $invoice->getBaseGrandTotal() - $baseTotalDiscountAmount < 0.0001
+        $baseGrandTotal = abs($invoice->getBaseGrandTotal() - $baseTotalDiscountAmount) < 0.0001
             ? 0 : $invoice->getBaseGrandTotal() - $baseTotalDiscountAmount;
         $invoice->setGrandTotal($grandTotal);
         $invoice->setBaseGrandTotal($baseGrandTotal);

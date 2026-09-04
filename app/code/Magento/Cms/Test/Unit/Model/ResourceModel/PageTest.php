@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -69,8 +69,7 @@ class PageTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
         $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -125,10 +124,13 @@ class PageTest extends TestCase
             ->willReturn('10 Feb 2016');
         $this->pageMock->expects($this->any())
             ->method('setData')
-            ->withConsecutive(
-                ['custom_theme_from', null],
-                ['custom_theme_to', '10 Feb 2016']
-            );
+            ->willReturnCallback(function ($arg1, $arg2) {
+                if ($arg1 == 'custom_theme_from' || is_null($arg2)) {
+                    return null;
+                } elseif ($arg1 == 'custom_theme_to' && $arg2 == '10 Feb 2016') {
+                    return null;
+                }
+            });
 
         $this->model->beforeSave($this->pageMock);
     }

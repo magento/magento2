@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -14,12 +14,12 @@ use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\PayflowConfig;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class PayflowConfigTest extends TestCase
 {
-
     /**
      * @var ScopeConfigInterface|MockObject
      */
@@ -35,13 +35,13 @@ class PayflowConfigTest extends TestCase
      */
     protected $config;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->setMethods(['getValue', 'isSetFlag'])
-            ->getMockForAbstractClass();
-        $this->methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->methodInterfaceMock = $this->createMock(MethodInterface::class);
 
         $om = new ObjectManager($this);
         $this->config = $om->getObject(
@@ -56,9 +56,10 @@ class PayflowConfigTest extends TestCase
      * @param string $paymentAction
      * @param string|null $expectedValue
      *
-     * @dataProvider getTrxTypeDataProvider
+     * @return void
      */
-    public function testGetTrxType($paymentAction, $expectedValue)
+    #[DataProvider('getTrxTypeDataProvider')]
+    public function testGetTrxType($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -70,12 +71,12 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getTrxTypeDataProvider()
+    public static function getTrxTypeDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, PayflowConfig::TRXTYPE_AUTH_ONLY],
             [PayflowConfig::PAYMENT_ACTION_SALE, PayflowConfig::TRXTYPE_SALE],
-            ['other', null],
+            ['other', null]
         ];
     }
 
@@ -83,9 +84,10 @@ class PayflowConfigTest extends TestCase
      * @param string $paymentAction
      * @param string|null $expectedValue
      *
-     * @dataProvider getPaymentActionDataProvider
+     * @return void
      */
-    public function testGetPaymentAction($paymentAction, $expectedValue)
+    #[DataProvider('getPaymentActionDataProvider')]
+    public function testGetPaymentAction($paymentAction, $expectedValue): void
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -97,16 +99,19 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getPaymentActionDataProvider()
+    public static function getPaymentActionDataProvider(): array
     {
         return [
             [PayflowConfig::PAYMENT_ACTION_AUTH, AbstractMethod::ACTION_AUTHORIZE],
             [PayflowConfig::PAYMENT_ACTION_SALE, AbstractMethod::ACTION_AUTHORIZE_CAPTURE],
-            ['other', null],
+            ['other', null]
         ];
     }
 
-    public function testGetTransactionUrlWithTestModeOn()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeOn(): void
     {
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
@@ -119,7 +124,10 @@ class PayflowConfigTest extends TestCase
         $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl(1));
     }
 
-    public function testGetTransactionUrlWithTestModeOff()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeOff(): void
     {
         $this->scopeConfigMock->expects($this->never())
             ->method('getValue');
@@ -132,7 +140,10 @@ class PayflowConfigTest extends TestCase
         $this->assertEquals('transaction_url', $this->config->getTransactionUrl(0));
     }
 
-    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -146,7 +157,10 @@ class PayflowConfigTest extends TestCase
         $this->assertEquals('transaction_url_test_mode', $this->config->getTransactionUrl());
     }
 
-    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff()
+    /**
+     * @return void
+     */
+    public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff(): void
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
@@ -165,9 +179,10 @@ class PayflowConfigTest extends TestCase
      * @param string $currentMethod
      * @param bool $result
      *
-     * @dataProvider dataProviderForTestIsMethodActive
+     * @return void
      */
-    public function testIsMethodActive(array $expectsMethods, $currentMethod, $result)
+    #[DataProvider('dataProviderForTestIsMethodActive')]
+    public function testIsMethodActive(array $expectsMethods, $currentMethod, $result): void
     {
         $this->config->setStoreId(5);
 
@@ -176,16 +191,24 @@ class PayflowConfigTest extends TestCase
             ->with('paypal/general/merchant_country')
             ->willReturn('US');
 
-        $i = 0;
+        $withArgs = $willReturnArgs = [];
+
         foreach ($expectsMethods as $method => $isActive) {
-            $this->scopeConfigMock->expects($this->at($i++))
-                ->method('isSetFlag')
-                ->with(
-                    "payment/{$method}/active",
-                    ScopeInterface::SCOPE_STORE,
-                    5
-                )->willReturn($isActive);
+            $withArgs[] = [
+                "payment/{$method}/active",
+                ScopeInterface::SCOPE_STORE,
+                5
+            ];
+            $willReturnArgs[] = $isActive;
         }
+        $this->scopeConfigMock
+            ->method('isSetFlag')
+            ->willReturnCallback(function ($withArgs) use ($willReturnArgs) {
+                static $callCount = 0;
+                $returnValue = $willReturnArgs[$callCount] ?? null;
+                $callCount++;
+                return $returnValue;
+            });
 
         $this->assertEquals($result, $this->config->isMethodActive($currentMethod));
     }
@@ -193,32 +216,32 @@ class PayflowConfigTest extends TestCase
     /**
      * @return array
      */
-    public function dataProviderForTestIsMethodActive()
+    public static function dataProviderForTestIsMethodActive(): array
     {
         return [
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 0,
-                    Config::METHOD_PAYFLOWPRO => 1,
+                    Config::METHOD_PAYFLOWPRO => 1
                 ],
                 'currentMethod' => Config::METHOD_PAYMENT_PRO,
-                'result' => true,
+                'result' => true
             ],
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 1
                 ],
                 'currentMethod' => Config::METHOD_PAYFLOWPRO,
-                'result' => true,
+                'result' => true
             ],
             [
                 'expectsMethods' => [
                     Config::METHOD_PAYMENT_PRO => 0,
-                    Config::METHOD_PAYFLOWPRO => 0,
+                    Config::METHOD_PAYFLOWPRO => 0
                 ],
                 'currentMethod' => 777,
-                'result' => false,
-            ],
+                'result' => false
+            ]
         ];
     }
 }

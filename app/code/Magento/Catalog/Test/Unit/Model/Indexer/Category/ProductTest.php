@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Indexer\Category\Product\Action\RowsFactory;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\IndexMutexInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,6 +52,9 @@ class ProductTest extends TestCase
      */
     protected $cacheContextMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->fullMock = $this->createPartialMock(
@@ -63,25 +67,28 @@ class ProductTest extends TestCase
             ['create']
         );
 
-        $this->indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getId', 'load', 'isInvalid', 'isWorking']
-        );
+        $this->indexerMock = $this->createMock(IndexerInterface::class);
 
         $this->indexerRegistryMock = $this->createPartialMock(
             IndexerRegistry::class,
             ['get']
         );
 
+        $indexMutexMock = $this->createMock(IndexMutexInterface::class);
+        $indexMutexMock->method('execute')
+            ->willReturnCallback(
+                function (string $indexerName, callable $callback) {
+                    if ($indexerName) {
+                        $callback();
+                    }
+                }
+            );
+
         $this->model = new Product(
             $this->fullMock,
             $this->rowsMock,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $indexMutexMock
         );
 
         $this->cacheContextMock = $this->createMock(CacheContext::class);
@@ -90,11 +97,13 @@ class ProductTest extends TestCase
             Product::class,
             'cacheContext'
         );
-        $cacheContextProperty->setAccessible(true);
         $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 
-    public function testExecuteWithIndexerWorking()
+    /**
+     * @return void
+     */
+    public function testExecuteWithIndexerWorking(): void
     {
         $ids = [1, 2, 3];
 
@@ -104,14 +113,20 @@ class ProductTest extends TestCase
             Rows::class,
             ['execute']
         );
-        $rowMock->expects($this->at(0))->method('execute')->with($ids)->willReturnSelf();
+        $rowMock
+            ->method('execute')
+            ->with($ids)
+            ->willReturn($rowMock);
 
         $this->rowsMock->expects($this->once())->method('create')->willReturn($rowMock);
 
         $this->model->execute($ids);
     }
 
-    public function testExecuteWithIndexerNotWorking()
+    /**
+     * @return void
+     */
+    public function testExecuteWithIndexerNotWorking(): void
     {
         $ids = [1, 2, 3];
 
@@ -132,7 +147,10 @@ class ProductTest extends TestCase
         $this->model->execute($ids);
     }
 
-    protected function prepareIndexer()
+    /**
+     * @return void
+     */
+    protected function prepareIndexer(): void
     {
         $this->indexerRegistryMock->expects($this->any())
             ->method('get')
@@ -140,7 +158,10 @@ class ProductTest extends TestCase
             ->willReturn($this->indexerMock);
     }
 
-    public function testExecuteFull()
+    /**
+     * @return void
+     */
+    public function testExecuteFull(): void
     {
         /** @var Full $productIndexerFlatFull */
         $productIndexerFlatFull = $this->createMock(Full::class);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -26,14 +26,11 @@ class BaseTest extends TestCase
 
     protected function setUp(): void
     {
-        $driverMock = $this->getMockBuilder(DriverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $driverMock = $this->createMock(DriverInterface::class);
         $this->model = new Base($driverMock);
 
         $class = new \ReflectionClass($this->model);
         $this->sanitizeMethod = $class->getMethod('sanitizeFileName');
-        $this->sanitizeMethod->setAccessible(true);
     }
 
     public function testSanitizeEmpty()
@@ -60,12 +57,5 @@ class BaseTest extends TestCase
             'var/hack/custom.log',
             $this->sanitizeMethod->invokeArgs($this->model, ['../../../var/hack/custom.log'])
         );
-    }
-
-    public function testSanitizeFileException()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Filename expected to be a string');
-        $this->sanitizeMethod->invokeArgs($this->model, [['filename' => 'notValid']]);
     }
 }

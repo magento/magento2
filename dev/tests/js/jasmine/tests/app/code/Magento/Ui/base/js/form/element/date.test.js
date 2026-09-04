@@ -1,6 +1,6 @@
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 define([
@@ -65,5 +65,47 @@ define([
             expect(model.getPreview()).toBe('28-11-2020');
         });
 
+        it('Check date will have correct value with timeOnly config value.', function () {
+            model.options.timeOnly = true;
+            model.options.timeFormat = 'h:mm a';
+            model.prepareDateTimeFormats();
+            model.value('02:43:58');
+            expect(model.getPreview()).toBe('2:43 am');
+
+            model.options.timeFormat = 'HH:mm:ss';
+            model.prepareDateTimeFormats();
+            model.value('02:43:58');
+            expect(model.getPreview()).toBe('02:43:58');
+
+            model.options.timeFormat = 'HH:mm:ss';
+            model.prepareDateTimeFormats();
+            model.value('2:43 am');
+            expect(model.getPreview()).toBe('02:43:00');
+        });
+
+        it('Prefers pickerDateTimeFormat for date-only display format', function () {
+            // simulate UI XML providing pickerDateTimeFormat while showsTime is false
+            model.options.showsTime = false;
+            model.options.pickerDateTimeFormat = 'MM/dd/y';
+
+            // Re-init to adopt option and set options.dateFormat accordingly
+            model.initConfig();
+
+            expect(model.options.dateFormat).toBe('MM/dd/y');
+        });
+
+        it('Displays value using pickerDateTimeFormat when date-only', function () {
+            model.options.showsTime = false;
+            // Ensure consistent IO formats for this test case
+            model.outputDateFormat = 'MM/dd/y';
+            model.inputDateFormat = 'MM/dd/y';
+            model.pickerDateTimeFormat = 'MM/dd/y';
+
+            // Make sure formats are prepared
+            model.prepareDateTimeFormats();
+
+            model.value('21-11-2025');
+            expect(model.getPreview()).toBe('21-11-2025');
+        });
     });
 });

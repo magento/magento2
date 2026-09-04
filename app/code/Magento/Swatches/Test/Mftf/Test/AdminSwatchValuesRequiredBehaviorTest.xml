@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2025 Adobe
+  * All Rights Reserved.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSwatchValuesRequiredBehaviorTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Values required behavior for text and visual swatch attributes"/>
+            <title value="Values required setting for text and visual Swatch"/>
+            <description value="This test case verifies values required setting for text and visual swatch."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-5526"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Step 1: Create a text swatch attribute with two options -->
+            <actionGroup ref="AddTextSwatchToProductWithTwoOptionsActionGroup" stepKey="createTextSwatch">
+                <argument name="attributeName" value="{{textSwatchAttribute.default_label}}"/>
+                <argument name="attributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+                <argument name="option1" value="textSwatchOption1"/>
+                <argument name="option2" value="textSwatchOption2"/>
+                <argument name="usedInProductListing" value="No"/>
+            </actionGroup>
+            <!-- Step 2: Create a visual swatch attribute with two image options -->
+            <actionGroup ref="AddVisualSwatchNoDefaultActionGroup" stepKey="createVisualSwatch"/>
+            <!-- Assign both attributes to default attribute Set -->
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignTextSwatchToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage2"/>
+            <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet2"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignVisualSwatchToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet2"/>
+        </before>
+        <after>
+            <!-- Cleanup attributes -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextSwatchForDelete">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteTextSwatch">
+                <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+            </actionGroup>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openVisualSwatchForDelete">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteVisualSwatch">
+                <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <!-- Cleanup products -->
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openCatalog"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSuccessProductBySku">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteOptionalProductBySku">
+                <argument name="sku" value="{{SimpleProduct3.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 2: Set both swatch attributes to required (yes) -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextSwatchForEdit">
+            <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="Yes" stepKey="setTextSwatchRequiredYes"/>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveTextSwatchAttributeYes"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openVisualSwatchForEdit">
+            <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="Yes" stepKey="setVisualSwatchRequiredYes"/>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveVisualSwatchAttributeYes"/>
+        <!-- Step 3: Make sure a user is obliged to enter values during creation of the Product based on the attributes. -->
+        <!-- Save with neither swatch selected → expect required error -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goProductIndexRequired"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goCreateProductRequired">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainFormRequired">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveWithoutAnySwatch"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeFieldError}}" stepKey="seeRequiredErrorBothMissing"/>
+        <!-- Select only visual swatch → expect required error (text missing) -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goProductIndexRequiredBeforeVisual"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goCreateProductRequiredBeforeVisual">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainFormRequiredBeforeVisual">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(ProductAttributeFrontendLabel.label)}}" userInput="visualSwatchOption2" stepKey="selectOnlyVisualSwatch"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveWithOnlyVisual"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeFieldError}}" stepKey="seeRequiredErrorTextMissing"/>
+        <!-- Select only text swatch → expect required error (visual missing) -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goProductIndexRequiredBeforeText"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goCreateProductRequiredBeforeText">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainFormRequiredBeforeText">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption1" stepKey="selectOnlyTextSwatch"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveWithOnlyText"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.attributeFieldError}}" stepKey="seeRequiredErrorVisualMissing"/>
+        <!-- Select both swatches → expect success -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goProductIndexBeforeSuccess"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goCreateProductBeforeSuccess">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainFormBeforeSuccess">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption1" stepKey="selectTextSwatchForSuccess"/>
+        <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(ProductAttributeFrontendLabel.label)}}" userInput="visualSwatchOption2" stepKey="selectVisualSwatchForSuccess"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveWithBothSelected"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSavedProductBothRequired"/>
+        <!-- Step 4: Set both swatch attributes to not required (no) -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openTextSwatchToUnrequire">
+            <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="No" stepKey="setTextSwatchRequiredToNo"/>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveTextSwatchAttributeToNo"/>
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openVisualSwatchToUnrequire">
+            <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <selectOption selector="{{AttributePropertiesSection.ValueRequired}}" userInput="No" stepKey="setVisualSwatchRequiredToNo"/>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveVisualSwatchAttributeToNo"/>
+        <!-- Step 5: Leave both swatches empty and save: expect success -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goProductIndexOptional"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goCreateProductOptional">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainFormOptional">
+            <argument name="product" value="SimpleProduct3"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveNoSwatchesOptional"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSavedProductBothOptional"/>
+    </test>
+</tests>

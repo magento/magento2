@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2020 Adobe
+ * All Rights Reserved.
  */
 
 declare(strict_types=1);
@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GetRenditionPathTest extends TestCase
@@ -39,21 +40,21 @@ class GetRenditionPathTest extends TestCase
         $this->getRenditionPath = Bootstrap::getObjectManager()->get(GetRenditionPathInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
     /**
-     * @dataProvider getImageProvider
-     *
      * Test for getting a rendition path.
      */
+    #[DataProvider('getImageProvider')]
     public function testExecute(string $path, string $expectedRenditionPath): void
     {
         $imagePath = realpath(__DIR__ . '/../../_files' . $path);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($path);
-        $this->driver->copy(
-            $imagePath,
-            $modifiableFilePath
+        $this->mediaDirectory->create(dirname($path));
+        $this->driver->filePutContents(
+            $modifiableFilePath,
+            file_get_contents($imagePath)
         );
         $this->assertEquals($expectedRenditionPath, $this->getRenditionPath->execute($path));
     }
@@ -61,7 +62,7 @@ class GetRenditionPathTest extends TestCase
     /**
      * @return array
      */
-    public function getImageProvider(): array
+    public static function getImageProvider(): array
     {
         return [
             'return_original_path' => [

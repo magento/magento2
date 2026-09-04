@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2019 Adobe
+ * All Rights Reserved.
+ */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
@@ -17,7 +17,8 @@
                 <testCaseId value="MC-19134"/>
                 <useCaseId value="MC-18963"/>
                 <group value="bundle"/>
-            </annotations>
+            <group value="pr_exclude"/>
+        </annotations>
             <before>
                 <!-- Create the Simple product with Special price -->
                 <createData entity="SimpleProduct2" stepKey="simpleProduct"/>

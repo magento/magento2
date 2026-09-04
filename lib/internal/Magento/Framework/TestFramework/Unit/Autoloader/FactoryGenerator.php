@@ -1,7 +1,7 @@
 <?php
 /**
- *  Copyright © Magento, Inc. All rights reserved.
- *  See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\TestFramework\Unit\Autoloader;
@@ -43,7 +43,7 @@ class FactoryGenerator implements GeneratorInterface
      */
     private function isFactory($className)
     {
-        if (!preg_match('/[\\\A-Z]/', substr(ltrim($className), 0, 1))) {
+        if ($className === null || !preg_match('/[\\\A-Z]/', substr(ltrim($className), 0, 1))) {
             return false;
         }
         $sourceName = rtrim(substr($className, 0, -strlen('Factory')), '\\');
