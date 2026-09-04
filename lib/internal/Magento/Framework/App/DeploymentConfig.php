@@ -167,6 +167,7 @@ class DeploymentConfig
             $this->overrideData ?? [],
             $this->getEnvOverride()
         );
+        $this->data = array_replace_recursive($this->data, $this->getNestedEnvVars());
         $this->flatData = null;
     }
 
@@ -186,7 +187,6 @@ class DeploymentConfig
 
         // flatten data for config retrieval using get()
         $this->flatData = $this->flattenParams($this->data);
-        $this->flatData = $this->getEnvVars() + $this->flatData;
     }
 
     /**
@@ -209,7 +209,7 @@ class DeploymentConfig
      *
      * @return array
      */
-    private function getEnvVars(): array
+    private function getNestedEnvVars(): array
     {
         $envVars = [];
         // allow reading values from env variables by convention
@@ -223,7 +223,45 @@ class DeploymentConfig
             }
         }
 
-        return $envVars;
+        uksort(
+            $envVars,
+            static function (string $firstPath, string $secondPath): int {
+                $depthComparison = substr_count($firstPath, '/') <=> substr_count($secondPath, '/');
+                return $depthComparison ?: strcmp($firstPath, $secondPath);
+            }
+        );
+
+        $nestedEnvVars = [];
+        foreach ($envVars as $path => $value) {
+            $this->setNestedValue($nestedEnvVars, explode('/', $path), $value);
+        }
+
+        return $nestedEnvVars;
+    }
+
+    /**
+     * Set value in a nested array using path segments
+     *
+     * Deeper paths replace conflicting scalar parent values.
+     *
+     * @param array $data
+     * @param array $path
+     * @param mixed $value
+     * @return void
+     */
+    private function setNestedValue(array &$data, array $path, $value): void
+    {
+        $current = &$data;
+        $lastKey = array_pop($path);
+
+        foreach ($path as $key) {
+            if (!isset($current[$key]) || !is_array($current[$key])) {
+                $current[$key] = [];
+            }
+            $current = &$current[$key];
+        }
+
+        $current[$lastKey] = $value;
     }
 
     /**
