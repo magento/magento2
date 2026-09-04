@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2014 Adobe
+ * Copyright 2013 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Framework\Event\Config;
@@ -75,6 +75,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $shredAttribute = $observerConfig->attributes->getNamedItem('shared');
         if ($shredAttribute && $shredAttribute->nodeValue == 'false') {
             $output['shared'] = false;
+        }
+
+        /** Parse condition configuration */
+        $ifconfigAttribute = $observerConfig->attributes->getNamedItem('ifconfig');
+        if ($ifconfigAttribute && !empty($ifconfigAttribute->nodeValue)) {
+            $output['ifconfig'] = $ifconfigAttribute->nodeValue;
         }
 
         return $output;
