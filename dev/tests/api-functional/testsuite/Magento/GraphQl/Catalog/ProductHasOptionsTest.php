@@ -16,14 +16,14 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ProductHasOptionsTest extends GraphQlAbstract
 {
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_custom_options.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_options.php
      *
      * @return void
      * @throws Exception
      */
     public function testHasOptionsAndRequiredOptionsAttribute(): void
     {
-        $productSku = 'simple_with_custom_options';
+        $productSku = 'simple';
         $query = <<<QUERY
 {
   products(filter: {sku: {eq: "{$productSku}"}}) {
