@@ -852,7 +852,7 @@ class CommonTaxCollectorTest extends TestCase
         );
         $addressItem->method('getTaxCalculationItemId')->willReturn('code-1');
         $addressItem->method('getId')->willReturn(123);
-        $addressItem->expects($this->once())->method('setAppliedTaxes')->with($this->isType('array'));
+        $addressItem->expects($this->once())->method('setAppliedTaxes')->with($this->isArray());
 
         $address = $this->getMockBuilder(QuoteAddress::class)
             ->onlyMethods(['getQuote'])->disableOriginalConstructor()->getMock();
