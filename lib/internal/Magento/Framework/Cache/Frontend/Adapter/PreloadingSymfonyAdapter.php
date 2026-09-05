@@ -97,8 +97,9 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     }
 
     /**
-     * Preload configured keys in one batched request via the adapter's MultiLoadInterface; adapters
-     * without it skip preload (load() still serves per key). Keys must be runtime IDs, no id_prefix.
+     * Preload configured keys in one batched request via the adapter's MultiLoadInterface.
+     *
+     * Adapters without it skip preload (load() still serves per key). Keys are runtime IDs, no id_prefix.
      *
      * @return void
      */

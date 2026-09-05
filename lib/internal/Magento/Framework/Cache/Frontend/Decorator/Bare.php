@@ -71,8 +71,9 @@ class Bare implements FrontendInterface, MultiLoadInterface
     }
 
     /**
-     * Batched multi-load passthrough: delegate when the wrapped frontend is MultiLoadInterface,
-     * else per-key (keeps the decorator transparent for non-batching frontends).
+     * Batched multi-load passthrough.
+     *
+     * Delegates when the wrapped frontend is MultiLoadInterface, else per-key (stays transparent).
      *
      * @param string[] $identifiers
      * @return array<string, mixed>

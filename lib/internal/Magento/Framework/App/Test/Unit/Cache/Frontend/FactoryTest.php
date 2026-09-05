@@ -15,6 +15,7 @@ use Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDum
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapperFactory;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelBackend;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontend;
 use Magento\Framework\Cache\FrontendInterface;
@@ -395,7 +396,11 @@ class FactoryTest extends TestCase
                 case Symfony::class:
                     $defaultLifetime = $params['defaultLifetime'] ?? 7200;
                     $idPrefix = $params['idPrefix'] ?? '';
-                    return new $class($cacheFactory, $adapterMock, $defaultLifetime, $idPrefix);
+                    $bwFactory = $this->createMock(BackendWrapperFactory::class);
+                    $bwFactory->method('create')->willReturnCallback(
+                        fn(array $a) => new BackendWrapper($a['cache'], $a['adapter'], $a['symfony'])
+                    );
+                    return new $class($cacheFactory, $adapterMock, $defaultLifetime, $idPrefix, null, $bwFactory);
                 default:
                     throw new \Exception("Test is not designed to create {$class} objects");
             }

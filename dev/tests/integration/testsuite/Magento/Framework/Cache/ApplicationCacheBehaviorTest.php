@@ -36,8 +36,11 @@ use PHPUnit\Framework\TestCase;
  * reflection) and asserts the value is served from its cache type and rebuilt after a clean.
  * No synthetic keys or low-level cache pokes — the operations are what a request performs.
  *
+ * High object coupling is inherent: the test intentionally drives five unrelated subsystems.
+ *
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ApplicationCacheBehaviorTest extends TestCase
 {
@@ -142,7 +145,11 @@ class ApplicationCacheBehaviorTest extends TestCase
         $this->assertNotFalse($frontend->load($cacheKey), 'Merged layout must be saved in the layout cache.');
 
         // Prove it is LOADED: a fresh processor returns the same XML.
-        $this->assertSame($expected, $this->mergeDefaultHandle(), 'Merged layout must be served from the layout cache.');
+        $this->assertSame(
+            $expected,
+            $this->mergeDefaultHandle(),
+            'Merged layout must be served from the layout cache.'
+        );
 
         // Prove the clean removes it, then it is rebuilt identically.
         $this->cleanCacheType(LayoutCacheType::TYPE_IDENTIFIER);
@@ -168,10 +175,17 @@ class ApplicationCacheBehaviorTest extends TestCase
         $frontend = $this->cacheFrontend(TranslateCacheType::TYPE_IDENTIFIER);
 
         // Prove it was SAVED: the dictionary is now present in the translate cache under that key.
-        $this->assertNotFalse($frontend->load($cacheKey), 'Translation dictionary must be saved in the translate cache.');
+        $this->assertNotFalse(
+            $frontend->load($cacheKey),
+            'Translation dictionary must be saved in the translate cache.'
+        );
 
         // Prove it is LOADED: a fresh Translate instance returns the same dictionary.
-        $this->assertSame($warm, $this->loadFrontendTranslation(), 'Dictionary must be served from the translate cache.');
+        $this->assertSame(
+            $warm,
+            $this->loadFrontendTranslation(),
+            'Dictionary must be served from the translate cache.'
+        );
 
         // Prove the clean removes it, then it rebuilds.
         $this->cleanCacheType(TranslateCacheType::TYPE_IDENTIFIER);

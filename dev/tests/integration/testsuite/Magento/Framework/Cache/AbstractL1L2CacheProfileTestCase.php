@@ -78,6 +78,9 @@ abstract class AbstractL1L2CacheProfileTestCase extends TestCase
      */
     abstract protected function evictLocal(object $backend, string $id): void;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -174,12 +177,21 @@ abstract class AbstractL1L2CacheProfileTestCase extends TestCase
 
         try {
             $backend->save('to-invalidate', $id, ['L1L2_INV'], 3600);
-            $this->assertTrue($this->localHas($backend, $id) && $this->remoteHas($backend, $id), 'Precondition: in both tiers.');
+            $this->assertTrue(
+                $this->localHas($backend, $id) && $this->remoteHas($backend, $id),
+                'Precondition: in both tiers.'
+            );
 
             $backend->clean(CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['L1L2_INV']);
 
-            $this->assertFalse($this->remoteHas($backend, $id), 'Invalidation must remove the entry from the authoritative L2 tier.');
-            $this->assertFalse($backend->load($id), 'After invalidation the load must be a regenerate-miss (L1 self-heals).');
+            $this->assertFalse(
+                $this->remoteHas($backend, $id),
+                'Invalidation must remove the entry from the authoritative L2 tier.'
+            );
+            $this->assertFalse(
+                $backend->load($id),
+                'After invalidation the load must be a regenerate-miss (L1 self-heals).'
+            );
         } finally {
             $backend->remove($id);
         }
@@ -227,6 +239,8 @@ abstract class AbstractL1L2CacheProfileTestCase extends TestCase
     }
 
     /**
+     * Configured default cache backend name.
+     *
      * @return string
      */
     private function getConfiguredBackend(): string
@@ -238,6 +252,8 @@ abstract class AbstractL1L2CacheProfileTestCase extends TestCase
     }
 
     /**
+     * Backend class/alias forms that count as this profile.
+     *
      * @return string[]
      */
     private function normalizedProfileBackends(): array
