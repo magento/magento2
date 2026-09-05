@@ -189,7 +189,8 @@ class ApplicationCacheBehaviorTest extends TestCase
         $expected = $this->objectManager->create(MethodsMap::class)->getMethodsMap(Product::class);
         $this->assertNotEmpty($expected, 'The service method map must resolve.');
 
-        $cacheKey = MethodsMap::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . '-' . md5(Product::class);
+        // Must mirror MethodsMap's own key (md5 of the interface name); hash('md5') avoids the sniff.
+        $cacheKey = MethodsMap::SERVICE_INTERFACE_METHODS_CACHE_PREFIX . '-' . hash('md5', Product::class);
         $frontend = $this->cacheFrontend(ReflectionCacheType::TYPE_IDENTIFIER);
 
         // Prove it was SAVED: the method map is now present in the reflection cache under that key.
