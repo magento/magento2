@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Theme\Model\Indexer\Design\Config;
 
@@ -48,7 +48,7 @@ class FieldsProvider implements FieldsetInterface
     {
         $fields = [];
         foreach ($metadata as $itemName => $itemData) {
-            if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
+            if (isset($itemData['use_in_grid']) && (bool)$itemData['use_in_grid']) {
                 $fields[$itemName] = [
                     'name' => $itemName,
                     'origin' => 'value',

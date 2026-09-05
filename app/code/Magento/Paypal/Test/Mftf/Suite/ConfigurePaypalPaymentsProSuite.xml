@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2024 Adobe
+ * All Rights Reserved.
+ */
 -->
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="ConfigurePaypalPaymentsProSuite">
@@ -13,6 +13,10 @@
             <!--Config PayPal Payments Pro-->
             <actionGroup ref="AdminConfigurePayPalPaymentsProActionGroup" stepKey="configPayPalPaymentsPro">
                 <argument name="credentials" value="SamplePaypalPaymentsProConfig"/>
+            </actionGroup>
+            <!-- Clean config cache so the payment method is active on storefront -->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheAfterConfig">
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
         <after>

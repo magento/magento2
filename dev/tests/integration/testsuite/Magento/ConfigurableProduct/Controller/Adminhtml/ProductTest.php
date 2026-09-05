@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -21,6 +21,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests for configurable product admin save.
@@ -94,10 +95,10 @@ class ProductTest extends AbstractBackendController
 
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     * @dataProvider saveNewProductDataProvider
      * @param array $childProducts
      * @return void
      */
+    #[DataProvider('saveNewProductDataProvider')]
     public function testSaveNewProduct(array $childProducts): void
     {
         $this->serRequestParams($childProducts);
@@ -158,11 +159,11 @@ class ProductTest extends AbstractBackendController
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_one_simple.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute_2.php
-     * @dataProvider saveExistProductDataProvider
      * @param array $childProducts
      * @param array $associatedProducts
      * @return void
      */
+    #[DataProvider('saveExistProductDataProvider')]
     public function testSaveExistProduct(array $childProducts, array $associatedProducts): void
     {
         $configurableProduct = $this->productRepository->get('configurable');
@@ -342,7 +343,7 @@ class ProductTest extends AbstractBackendController
             $this->assertEquals($expectedProduct['price'], $product->getPrice());
 
             if (!empty($expectedProduct['weight'])) {
-                $this->assertEquals($expectedProduct['weight'], (double)$product->getWeight());
+                $this->assertEquals($expectedProduct['weight'], (float)$product->getWeight());
                 $this->assertInstanceOf(Simple::class, $product->getTypeInstance());
             } else {
                 $this->assertInstanceOf(Virtual::class, $product->getTypeInstance());
@@ -529,7 +530,6 @@ class ProductTest extends AbstractBackendController
         $reflection = new \ReflectionObject($this);
         foreach ($reflection->getProperties() as $property) {
             if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
                 $property->setValue($this, null);
             }
         }

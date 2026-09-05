@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\MessageQueue\Console;
 
@@ -18,14 +18,14 @@ use Magento\Framework\Lock\LockManagerInterface;
  */
 class StartConsumerCommand extends Command
 {
-    const ARGUMENT_CONSUMER = 'consumer';
-    const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
-    const OPTION_BATCH_SIZE = 'batch-size';
-    const OPTION_AREACODE = 'area-code';
-    const OPTION_SINGLE_THREAD = 'single-thread';
-    const OPTION_MULTI_PROCESS = 'multi-process';
-    const PID_FILE_PATH = 'pid-file-path';
-    const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
+    public const ARGUMENT_CONSUMER = 'consumer';
+    public const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
+    public const OPTION_BATCH_SIZE = 'batch-size';
+    public const OPTION_AREACODE = 'area-code';
+    public const OPTION_SINGLE_THREAD = 'single-thread';
+    public const OPTION_MULTI_PROCESS = 'multi-process';
+    public const PID_FILE_PATH = 'pid-file-path';
+    public const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
      * @var ConsumerFactory
@@ -64,7 +64,7 @@ class StartConsumerCommand extends Command
     /**
      * @inheritdoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);

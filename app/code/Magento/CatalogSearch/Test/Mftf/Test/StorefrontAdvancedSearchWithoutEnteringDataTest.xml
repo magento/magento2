@@ -6,30 +6,38 @@
  */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAdvancedSearchWithoutEnteringDataTest">
         <annotations>
-            <stories value="Use Advanced Search"/>
-            <title value="Do Advanced Search without entering data"/>
-            <description value="'Enter a search term and try again.' error message is missed in Advanced Search"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-14859"/>
+            <stories value="Use advanced search"/>
+            <title value="Do advanced search without entering data"/>
+            <description value="Verify catalog advanced search with empty data submits and stays on form with error"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-13670"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
-            <group value="pr_exclude"/>
             <group value="cloud"/>
         </annotations>
-        <!-- 1. Navigate to Frontend -->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
-
-        <!-- 2. Click "Advanced Search" -->
+        <before>
+            <!-- Precondition 1: Have a logged-in customer for front end login -->
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="logInFromCustomer">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Logout from Storefront, delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Step 1: Open Home page and go to Advanced Search from footer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHome"/>
         <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
-
-        <!-- 3. Fill test data in to field(s) 4. Click "Search" button-->
-        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search"/>
-
-        <!-- 5. Perform all asserts -->
-        <see userInput="Enter a search term and try again." selector="{{StorefrontQuickSearchResultsSection.messageSection}}" stepKey="see"/>
+        <!-- Step 2: Click search with no data and verify page should stay in the advance search page with error enter a search term and try again-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="submitEmpty"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchAdvancedFormPage.url}}" stepKey="assertStillOnAdvancedForm"/>
+        <waitForText userInput="{{ErrorMessage.message}}" selector="{{StorefrontQuickSearchResultsSection.messageSection}}" stepKey="assertErrorMessage"/>
     </test>
 </tests>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -40,6 +40,7 @@
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>

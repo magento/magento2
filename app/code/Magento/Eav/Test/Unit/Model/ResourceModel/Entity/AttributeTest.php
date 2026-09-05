@@ -44,7 +44,7 @@ class AttributeTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
         $eventManagerMock->expects($this->any())->method('dispatch');
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($eventManagerMock);
     }

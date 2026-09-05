@@ -38,7 +38,7 @@ class AddStockStatusToCollectionTest extends TestCase
         $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getCurrentSearchEngine'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->plugin = (new ObjectManager($this))->getObject(
             AddStockStatusToCollection::class,
@@ -55,9 +55,7 @@ class AddStockStatusToCollectionTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->engineResolver->expects($this->any())
-            ->method('getCurrentSearchEngine')
-            ->willReturn('mysql');
+        $this->engineResolver->method('getCurrentSearchEngine')->willReturn('mysql');
 
         $this->stockHelper->expects($this->once())
             ->method('addIsInStockFilterToCollection')

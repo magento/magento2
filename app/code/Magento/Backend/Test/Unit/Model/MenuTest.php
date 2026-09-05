@@ -11,12 +11,15 @@ use Magento\Backend\Model\Menu;
 use Magento\Backend\Model\Menu\Item;
 use Magento\Backend\Model\Menu\Item\Factory;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 class MenuTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Menu
      */
@@ -49,7 +52,7 @@ class MenuTest extends TestCase
         $this->_items['item3'] = $this->createMock(Item::class);
         $this->_items['item3']->expects($this->any())->method('getId')->willReturn('item3');
 
-        $this->_logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->_logger = $this->createMock(LoggerInterface::class);
 
         $this->_model = $this->objectManagerHelper->getObject(
             Menu::class,
@@ -75,9 +78,7 @@ class MenuTest extends TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subMenu = $this->createMock(Menu::class);
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
@@ -158,9 +159,7 @@ class MenuTest extends TestCase
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
 
-        $subMenu = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $subMenu = $this->createMock(Menu::class);
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->willReturn($subMenu);
@@ -205,9 +204,7 @@ class MenuTest extends TestCase
 
     public function testRemoveRemovesMenuItemRecursively()
     {
-        $menuMock = $this->getMockBuilder(Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $menuMock = $this->createMock(Menu::class);
         $menuMock->expects($this->once())->method('remove')->with('item2');
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->willReturn(true);
@@ -274,11 +271,10 @@ class MenuTest extends TestCase
 
     public function testGetFirstAvailableReturnsLeafNode()
     {
-        $item = $this->getMockBuilder(Item::class)
-            ->addMethods(['getFirstAvailable'])
-            ->onlyMethods(['isAllowed'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createPartialMockWithReflection(
+            Item::class,
+            ['getFirstAvailable', 'isAllowed']
+        );
         $item->expects($this->never())->method('getFirstAvailable');
         $this->_model->add($item);
 
@@ -353,7 +349,7 @@ class MenuTest extends TestCase
 
     public function testSerialize()
     {
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('serialize')
             ->with([['arrayData']])
@@ -376,7 +372,7 @@ class MenuTest extends TestCase
 
     public function testUnserialize()
     {
-        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $serializerMock = $this->createMock(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn([['unserializedData']]);

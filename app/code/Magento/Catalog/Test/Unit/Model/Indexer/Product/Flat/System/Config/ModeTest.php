@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\System\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
 use Magento\Catalog\Model\Indexer\Product\Flat\System\Config\Mode;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -40,7 +41,7 @@ class ModeTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->configMock = $this->createMock(ScopeConfigInterface::class);
         $this->indexerStateMock = $this->createPartialMock(
             State::class,
             ['loadByIndexer', 'setStatus', 'save']
@@ -72,8 +73,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueEqual
      */
+    #[DataProvider('dataProviderProcessValueEqual')]
     public function testProcessValueEqual($oldValue, $value)
     {
         $this->configMock->expects(
@@ -109,8 +110,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueOn
      */
+    #[DataProvider('dataProviderProcessValueOn')]
     public function testProcessValueOn($oldValue, $value)
     {
         $this->configMock->expects(
@@ -158,8 +159,8 @@ class ModeTest extends TestCase
     /**
      * @param string $oldValue
      * @param string $value
-     * @dataProvider dataProviderProcessValueOff
      */
+    #[DataProvider('dataProviderProcessValueOff')]
     public function testProcessValueOff($oldValue, $value)
     {
         $this->configMock->expects(
@@ -179,15 +180,7 @@ class ModeTest extends TestCase
         $this->indexerStateMock->expects($this->never())->method('setStatus');
         $this->indexerStateMock->expects($this->never())->method('save');
 
-        $indexerMock = $this->getMockForAbstractClass(
-            IndexerInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['setScheduled']
-        );
+        $indexerMock = $this->createMock(IndexerInterface::class);
         $indexerMock->expects($this->once())->method('setScheduled')->with(false);
 
         $this->indexerProcessorMock->expects(

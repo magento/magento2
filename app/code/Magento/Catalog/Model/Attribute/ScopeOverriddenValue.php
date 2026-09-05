@@ -105,6 +105,7 @@ class ScopeOverriddenValue
      * @return array
      *
      * @deprecated 101.0.0
+     * @see MAGETWO-71174
      */
     public function getDefaultValues($entityType, $entity)
     {
@@ -155,6 +156,10 @@ class ScopeOverriddenValue
                     ->where('t.attribute_id IN (?)', $attributeCodes)
                     ->where('t.store_id IN (?)', $storeIds);
                 $selects[] = $select;
+            }
+
+            if (empty($selects)) {
+                return;
             }
 
             $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
@@ -223,7 +228,7 @@ class ScopeOverriddenValue
     private function getAttributesValues(string $entityType, DataObject $entity): array
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $entityId = $entity->getData($metadata->getLinkField());
+        $entityId = $entity->getData($metadata->getLinkField()) ?? '';
         return $this->attributesValues[$entityType][$entityId] ?? [];
     }
 
@@ -239,7 +244,7 @@ class ScopeOverriddenValue
     private function setAttributesValues(string $entityType, DataObject $entity, array $values): void
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $entityId = $entity->getData($metadata->getLinkField());
+        $entityId = $entity->getData($metadata->getLinkField()) ?? '';
         $this->attributesValues[$entityType][$entityId] = $values;
     }
 }

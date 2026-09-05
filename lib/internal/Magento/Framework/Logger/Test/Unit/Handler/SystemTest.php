@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -42,8 +42,7 @@ class SystemTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
-            ->getMockForAbstractClass();
+        $this->filesystemMock = $this->createMock(DriverInterface::class);
         $this->exceptionHandlerMock = $this->getMockBuilder(
             ExceptionHandler::class
         )->disableOriginalConstructor()->getMock();

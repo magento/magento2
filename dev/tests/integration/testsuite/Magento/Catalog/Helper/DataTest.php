@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2013 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Catalog\Helper;
 
@@ -9,6 +9,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Model\ClassModel;
 use Magento\Tax\Model\Config;
 use Magento\Tax\Model\TaxRuleFixtureFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -16,14 +17,14 @@ use Magento\Tax\Model\TaxRuleFixtureFactory;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Tax helper
+     * Subject under test for tax and catalog logic.
      *
      * @var \Magento\Catalog\Helper\Data
      */
     private $helper;
 
     /**
-     * Object Manager
+     * Application object manager for resolving dependencies.
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -249,8 +250,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @dataProvider getTaxPriceDataProvider
      */
+    #[DataProvider('getTaxPriceDataProvider')]
     public function testGetTaxPrice(
         $input,
         $expectOutputPrice,

@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 
 namespace Magento\Quote\Model;
@@ -10,6 +10,7 @@ use Magento\Customer\Model\Config\Backend\Show\Customer;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -51,12 +52,18 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
     protected $totalsCollector;
 
     /**
+     * @var QuoteAddressValidationService
+     */
+    private $quoteAddressValidationService;
+
+    /**
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Quote\TotalsCollector $totalsCollector
+     * @param QuoteAddressValidationService|null $quoteAddressValidationService
      *
      */
     public function __construct(
@@ -65,7 +72,8 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        ?QuoteAddressValidationService $quoteAddressValidationService = null
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressValidator = $addressValidator;
@@ -73,6 +81,8 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
         $this->totalsCollector = $totalsCollector;
+        $this->quoteAddressValidationService = $quoteAddressValidationService ??
+            ObjectManager::getInstance()->get(QuoteAddressValidationService::class);
     }
 
     /**
@@ -93,11 +103,17 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
         $customerAddressId = $address->getCustomerAddressId();
-        if ($saveInAddressBook &&
-            !$this->scopeConfig->getValue(Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY)) {
+        if ($saveInAddressBook && !$this->isCompanyFieldVisibleForAddress()) {
             $address->setCompany(null);
         }
+
         $this->addressValidator->validateForCart($quote, $address);
+
+        $this->quoteAddressValidationService->validateAddressesWithRules(
+            $quote,
+            $address
+        );
+
         $quote->setShippingAddress($address);
         $address = $quote->getShippingAddress();
 
@@ -138,5 +154,18 @@ class ShippingAddressManagement implements \Magento\Quote\Model\ShippingAddressM
         }
         /** @var \Magento\Quote\Model\Quote\Address $address */
         return $quote->getShippingAddress();
+    }
+
+    /**
+     * Determine whether the company field should be displayed for the customer address.
+     *
+     * @return bool
+     */
+    private function isCompanyFieldVisibleForAddress(): bool
+    {
+        return (bool)$this->scopeConfig->getValue(
+            Customer::XML_PATH_CUSTOMER_ADDRESS_SHOW_COMPANY,
+            ScopeInterface::SCOPE_WEBSITE
+        );
     }
 }

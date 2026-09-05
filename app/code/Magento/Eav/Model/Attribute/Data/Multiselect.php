@@ -105,7 +105,12 @@ class Multiselect extends AbstractData
         }
 
         if (!empty($value) && $attribute->getSourceModel()) {
-            $values = is_array($value) ? $value : explode(',', (string) $value);
+            if (is_array($value)) {
+                $values = $value;
+            } else {
+                $values = preg_split('/[,\n\r]+/', (string) $value);
+            }
+            $values = array_map('trim', $values);
             $errors = array_merge(
                 $errors,
                 $this->validateBySource($values)
@@ -125,7 +130,9 @@ class Multiselect extends AbstractData
     {
         $errors = [];
         foreach ($values as $value) {
-            if (!$this->getAttribute()->getSource()->getOptionText($value)) {
+            $optionText = $this->getAttribute()->getSource()->getOptionText($value);
+            // Sources report a missing option either with false or with null, while a valid label may be "0"
+            if ($optionText === false || $optionText === null) {
                 $errors[] = __(
                     'Attribute %1 does not contain option with Id %2',
                     $this->getAttribute()->getAttributeCode(),

@@ -1,13 +1,13 @@
 <?php
 /**
- *
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GiftMessage\Api\Data\MessageInterface;
 use Magento\GiftMessage\Model\GuestItemRepository;
 use Magento\GiftMessage\Model\ItemRepository;
@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 class GuestCartRepositoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var GuestItemRepository
      */
@@ -35,14 +37,12 @@ class GuestCartRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repositoryMock = $this->getMockBuilder(ItemRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->repositoryMock = $this->createMock(ItemRepository::class);
 
         $this->quoteIdMaskFactoryMock = $this->getMockBuilder(QuoteIdMaskFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $this->model = new GuestItemRepository(
             $this->repositoryMock,
@@ -57,11 +57,10 @@ class GuestCartRepositoryTest extends TestCase
         $itemId = 234;
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
-        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getQuoteId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['getQuoteId', 'load']
+        );
 
         $this->quoteIdMaskFactoryMock->expects($this->once())
             ->method('create')
@@ -76,8 +75,7 @@ class GuestCartRepositoryTest extends TestCase
             ->willReturn($quoteId);
 
         /** @var MessageInterface|MockObject $messageMock */
-        $messageMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
+        $messageMock = $this->createMock(MessageInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('get')
@@ -94,11 +92,10 @@ class GuestCartRepositoryTest extends TestCase
         $itemId = 234;
 
         /** @var QuoteIdMask|MockObject $quoteIdMaskMock */
-        $quoteIdMaskMock = $this->getMockBuilder(QuoteIdMask::class)
-            ->addMethods(['getQuoteId'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteIdMaskMock = $this->createPartialMockWithReflection(
+            QuoteIdMask::class,
+            ['getQuoteId', 'load']
+        );
 
         $this->quoteIdMaskFactoryMock->expects($this->once())
             ->method('create')
@@ -113,8 +110,7 @@ class GuestCartRepositoryTest extends TestCase
             ->willReturn($quoteId);
 
         /** @var MessageInterface|MockObject $messageMock */
-        $messageMock = $this->getMockBuilder(MessageInterface::class)
-            ->getMockForAbstractClass();
+        $messageMock = $this->createMock(MessageInterface::class);
 
         $this->repositoryMock->expects($this->once())
             ->method('save')

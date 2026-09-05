@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright 2023 Adobe
-  * All Rights Reserved.
-  */
+/**
+ * Copyright 2018 Adobe
+ * All Rights Reserved.
+ */
 -->
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -47,5 +47,9 @@
     </entity>
     <entity name="AdminPaymentErrorMessage" type="message">
         <data key="error_Message">This payment method is not available.</data>
+    </entity>
+    <entity name="AdminOrderEmailsSendMessage" type="text">
+        <data key="emailSuccessMessage">You sent the message.</data>
+        <data key="shipmentEmailSuccessMessage">You sent the shipment.</data>
     </entity>
 </entities>

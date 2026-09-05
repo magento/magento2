@@ -11,6 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Rule\Model\Condition\Combine;
 use Magento\Rule\Model\ConditionFactory;
 use Magento\SalesRule\Model\Rule\Condition\Product;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -43,17 +44,11 @@ class CombineTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->conditionFactoryMock = $this->getMockBuilder(ConditionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->conditionFactoryMock = $this->createMock(ConditionFactory::class);
 
-        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->loggerMock = $this->createMock(LoggerInterface::class);
 
-        $this->conditionObjectMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->conditionObjectMock = $this->createMock(Product::class);
 
         $this->combine = (new ObjectManagerHelper($this))->getObject(
             Combine::class,
@@ -65,14 +60,12 @@ class CombineTest extends TestCase
     }
 
     /**
-     *
      * @covers \Magento\Rule\Model\Condition\AbstractCondition::getValueName
-     *
-     * @dataProvider optionValuesData
      *
      * @param string|array $value
      * @param string $expectingData
      */
+    #[DataProvider('optionValuesData')]
     public function testGetValueName($value, $expectingData)
     {
         $this->combine

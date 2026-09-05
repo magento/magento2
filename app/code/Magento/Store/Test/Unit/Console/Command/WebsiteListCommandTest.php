@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2017 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -37,7 +37,7 @@ class WebsiteListCommandTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->websiteRepositoryMock = $this->getMockForAbstractClass(WebsiteRepositoryInterface::class);
+        $this->websiteRepositoryMock = $this->createMock(WebsiteRepositoryInterface::class);
 
         $this->command = $this->objectManager->getObject(
             WebsiteListCommand::class,
