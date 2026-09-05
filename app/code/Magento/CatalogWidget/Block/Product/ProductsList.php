@@ -23,6 +23,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -65,6 +66,11 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      * Default value whether show pager or not
      */
     public const DEFAULT_SHOW_PAGER = false;
+
+    /**
+     * Product id field of the collection select
+     */
+    private const ID_FIELD = 'e.entity_id';
 
     /**
      * @var Pager
@@ -368,8 +374,68 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     protected function _beforeToHtml()
     {
-        $this->setProductCollection($this->createCollection());
+        $this->setProductCollection($this->resolveCollectionPage($this->createCollection()));
         return parent::_beforeToHtml();
+    }
+
+    /**
+     * Resolve the ids of the requested page and restrict the collection to them
+     *
+     * The widget selects whole product rows and de-duplicates them with DISTINCT, so the database has to
+     * materialize and sort every matching row before the LIMIT can be applied. Reading the ids of the page
+     * first keeps that sort down to a single column and leaves the wide select to the products actually shown.
+     *
+     * @param Collection $collection
+     * @return Collection
+     */
+    private function resolveCollectionPage(Collection $collection): Collection
+    {
+        $select = $collection->getSelect();
+        if (!$select->getPart(Select::LIMIT_COUNT)) {
+            return $collection;
+        }
+
+        if ($this->showPager()) {
+            // The pager total has to be read while the collection still matches the whole condition set.
+            $collection->getSize();
+        }
+
+        $idsSelect = clone $select;
+        $idsSelect->reset(Select::COLUMNS)->columns(self::ID_FIELD);
+        $this->selectSortExpressions($idsSelect);
+        $ids = $collection->getConnection()->fetchCol($idsSelect);
+
+        $select->reset(Select::WHERE)
+            ->reset(Select::LIMIT_COUNT)
+            ->reset(Select::LIMIT_OFFSET)
+            ->where(self::ID_FIELD . ' IN (?)', $ids ?: [0]);
+
+        return $collection;
+    }
+
+    /**
+     * Add the sort expressions of a DISTINCT select to its select list
+     *
+     * MySQL rejects a DISTINCT query whose ORDER BY expression is neither equal to one in the select list nor
+     * built from selected columns, so an id-only select cannot carry the sort orders the widget produces - the
+     * SKU condition, for one, orders by FIELD() over `sku`. Only the first column is read back.
+     *
+     * @param Select $select
+     * @return void
+     */
+    private function selectSortExpressions(Select $select): void
+    {
+        $columns = [];
+        foreach ($select->getPart(Select::ORDER) as $index => $order) {
+            $expression = is_array($order) ? $order[0] : $order;
+            if ((string)$expression !== self::ID_FIELD) {
+                $columns['sort_' . $index] = $expression;
+            }
+        }
+
+        if ($columns) {
+            $select->columns($columns);
+        }
     }
 
     /**

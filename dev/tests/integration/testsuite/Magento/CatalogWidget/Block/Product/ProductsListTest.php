@@ -114,6 +114,77 @@ class ProductsListTest extends TestCase
     }
 
     /**
+     * The rendered collection must hold only the requested page, in the widget sort order,
+     * while the pager still reports the total number of products matching the condition
+     */
+    #[
+        DataFixture(CategoryFixture::class, ['is_anchor' => 0], 'category'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product1'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product2'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product3'),
+        DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], 'product4'),
+    ]
+    public function testRenderedCollectionHoldsRequestedPageOnly(): void
+    {
+        $this->objectManager->get(Processor::class)->reindexAll();
+
+        $categoryId = $this->fixtures->get('category')->getId();
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+            . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:'
+            . '^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+            . '`attribute`:`category_ids`,`operator`:`^[^]`,'
+            . '`value`:[`' . $categoryId . '`]^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->block->setData('show_pager', true);
+        $this->block->setData('products_per_page', 2);
+        $this->block->setData('products_count', 4);
+        $this->block->setData('page_var_name', 'np');
+
+        (new \ReflectionMethod($this->block, '_beforeToHtml'))->invoke($this->block);
+        $collection = $this->block->getProductCollection();
+
+        $this->assertSame(
+            [
+                $this->fixtures->get('product4')->getSku(),
+                $this->fixtures->get('product3')->getSku(),
+            ],
+            $collection->getColumnValues('sku')
+        );
+        $this->assertEquals(4, $collection->getSize());
+    }
+
+    /**
+     * A SKU condition orders by FIELD(sku, ...), which the page id query has to carry in its select list
+     * to stay valid under ONLY_FULL_GROUP_BY
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+        DataFixture(ProductFixture::class, as: 'product3'),
+    ]
+    public function testRenderedCollectionKeepsSkuConditionOrder(): void
+    {
+        $skus = [
+            $this->fixtures->get('product3')->getSku(),
+            $this->fixtures->get('product1')->getSku(),
+            $this->fixtures->get('product2')->getSku(),
+        ];
+        $encodedConditions = '^[`1`:^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Combine`,'
+            . '`aggregator`:`all`,`value`:`1`,`new_child`:``^],`1--1`:'
+            . '^[`type`:`Magento||CatalogWidget||Model||Rule||Condition||Product`,'
+            . '`attribute`:`sku`,`operator`:`()`,`value`:`' . implode(',', $skus) . '`^]^]';
+
+        $this->block->setData('conditions_encoded', $encodedConditions);
+        $this->block->setData('products_count', 3);
+        $this->block->setData('page_var_name', 'np');
+
+        (new \ReflectionMethod($this->block, '_beforeToHtml'))->invoke($this->block);
+
+        $this->assertSame($skus, $this->block->getProductCollection()->getColumnValues('sku'));
+    }
+
+    /**
      * Test product list widget can process condition with dropdown type of attribute
      */
     #[
