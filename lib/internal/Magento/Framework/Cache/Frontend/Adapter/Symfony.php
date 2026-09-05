@@ -9,11 +9,13 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Closure;
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapterProvider;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\GenericTagAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -25,7 +27,7 @@ use Symfony\Component\Cache\CacheItem;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Symfony implements FrontendInterface
+class Symfony implements FrontendInterface, MultiLoadInterface
 {
     public const DEFAULT_CACHE_PREFIX = '69d_';
     public const DEFAULT_LIFETIME = 7200;
@@ -102,6 +104,11 @@ class Symfony implements FrontendInterface
     private bool $hasPendingWrites = false;
 
     /**
+     * @var Symfony\BackendWrapperFactory|null
+     */
+    private ?Symfony\BackendWrapperFactory $backendWrapperFactory;
+
+    /**
      * Constructor
      *
      * @param Closure $cacheFactory Factory that creates the cache pool
@@ -109,6 +116,7 @@ class Symfony implements FrontendInterface
      * @param int $defaultLifetime Default cache lifetime in seconds
      * @param string $idPrefix Cache ID prefix
      * @param Closure|null $adapterFactory Factory that (re)builds the tag adapter
+     * @param Symfony\BackendWrapperFactory|null $backendWrapperFactory Factory for the backend wrapper
      * @SuppressWarnings(Magento.TypeDuplication)
      */
     public function __construct(
@@ -116,7 +124,8 @@ class Symfony implements FrontendInterface
         ?TagAdapterInterface $adapter = null,
         int $defaultLifetime = self::DEFAULT_LIFETIME,
         string $idPrefix = self::DEFAULT_CACHE_PREFIX,
-        ?Closure $adapterFactory = null
+        ?Closure $adapterFactory = null,
+        ?Symfony\BackendWrapperFactory $backendWrapperFactory = null
     ) {
         $this->cacheFactory = $cacheFactory;
         $this->adapterFactory = $adapterFactory;
@@ -125,6 +134,7 @@ class Symfony implements FrontendInterface
         $this->defaultLifetime = $defaultLifetime;
         $this->idPrefix = $idPrefix;
         $this->adapter = $adapter ?? new GenericTagAdapter($this->cache);
+        $this->backendWrapperFactory = $backendWrapperFactory;
     }
 
     /**
@@ -856,7 +866,15 @@ class Symfony implements FrontendInterface
      */
     public function getBackend()
     {
-        return new Symfony\BackendWrapper($this->getCache(), $this->adapter, $this);
+        // Lazy resolve so construction never needs the ObjectManager (direct `new` stays test-friendly).
+        $factory = $this->backendWrapperFactory
+            ??= ObjectManager::getInstance()->get(Symfony\BackendWrapperFactory::class);
+
+        return $factory->create([
+            'cache' => $this->getCache(),
+            'adapter' => $this->adapter,
+            'symfony' => $this,
+        ]);
     }
 
     /**

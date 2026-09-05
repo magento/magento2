@@ -10,7 +10,11 @@ namespace Magento\Framework\Cache\Backend;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\RedisTagAdapter;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\ClearableInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
+use Symfony\Component\Cache\PruneableInterface;
 
 /**
  * Two-level Symfony cache backend with fast per-worker L1 and shared persistent L2 storage.
@@ -19,7 +23,10 @@ use Magento\Framework\Cache\FrontendInterface;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
+class SymfonyL2Cache extends AbstractBackend implements
+    ExtendedBackendInterface,
+    MultiLoadInterface,
+    TwoTierBackendInterface
 {
     use LockSignTrait;
 
@@ -183,17 +190,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         if (empty($ids)) {
             return [];
         }
-        if (method_exists($this->remote, 'loadMultiple')) {
+        if ($this->remote instanceof MultiLoadInterface) {
             return $this->remote->loadMultiple($ids);
         }
-        $out = [];
-        foreach ($ids as $id) {
-            $value = $this->remote->load($id);
-            if ($value !== false) {
-                $out[$id] = $value;
-            }
-        }
-        return $out;
+
+        // loadMultiple() is a batch-preload optimization. When the remote cannot batch, falling back
+        // to per-key loads defeats the single-round-trip purpose and only adds latency for no gain —
+        // so skip it. The keys are simply not preloaded and load lazily on first real access.
+        return [];
     }
 
     /**
@@ -248,13 +252,13 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         }
 
         // If L1 disk usage is high, clear it before saving so the current value survives the flush.
-        // clearLocal() is required because tag-scoped clean() cannot clear an index_tags=false L1.
+        // clearLocal() is required because tag-scoped clean() cannot clear a tag-less L1.
         if ($this->shouldCheckLocalSpace() && $this->isLocalCacheSpaceExceeded()) {
             $this->clearLocal();
         }
 
-        // Save to local cache
-        $this->local->save($data, $id, $tags, $specificLifetime);
+        // L1 mirrors data only; tags go to L2 (keeps L1 free of any tag index), like legacy RSC.
+        $this->local->save($data, $id, [], $specificLifetime);
 
         if ($remoteSaved !== false && $hashSaved !== false) {
             $this->markValid($id);
@@ -309,7 +313,7 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
     {
         if ($mode === CacheConstants::CLEANING_MODE_ALL) {
-            // Clear L1 directly because tag-scoped clean() cannot reach an index_tags=false pool;
+            // Clear L1 directly because tag-scoped clean() cannot reach a tag-less pool;
             // otherwise cache:flush could leave stale local data behind.
             $this->clearLocal();
             return $this->remote->clean($mode, $tags);
@@ -332,7 +336,10 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     private function pruneLocal(): void
     {
         $localBackend = $this->local->getBackend();
-        if (method_exists($localBackend, 'prune')) {
+        // Only backends that advertise the pruning contract are pruned. When the L1 backend is not
+        // pruneable, doing nothing is intentional and correct: such backends reclaim expired entries
+        // through their own native TTL / lazy expiry, so an explicit prune would have no effect.
+        if ($localBackend instanceof PruneableInterface) {
             $localBackend->prune();
         }
     }
@@ -349,14 +356,16 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     }
 
     /**
-     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see an index_tags=false
+     * Empty the local (L1) tier completely, bypassing the tag-scoped clean() that cannot see a tag-less pool
      *
      * @return void
      */
     private function clearLocal(): void
     {
         $localBackend = $this->local->getBackend();
-        if (method_exists($localBackend, 'clear')) {
+        // Symfony/PSR-6 L1 backends can wipe the whole pool directly and cheaply via clear();
+        // legacy backends implement only the Zend clean() contract, so fall back to clean(ALL).
+        if ($localBackend instanceof ClearableInterface) {
             $localBackend->clear();
         } else {
             $this->local->clean(CacheConstants::CLEANING_MODE_ALL);
@@ -449,7 +458,10 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
     public function getFillingPercentage()
     {
         try {
-            return $this->remote->getLowLevelFrontend()->getTagAdapter()->getFillingPercentage();
+            // No tag adapter (e.g. legacy Zend) => no fill metric => 0.
+            $tagAdapter = $this->remote->getLowLevelFrontend()->getTagAdapter();
+
+            return $tagAdapter instanceof TagAdapterInterface ? $tagAdapter->getFillingPercentage() : 0;
         } catch (\Throwable $e) {
             return 0;
         }
@@ -496,9 +508,14 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
      */
     protected function shouldCheckLocalSpace(): bool
     {
-        // mt_rand() here is not for cryptographic use.
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        return !mt_rand(0, 100);
+        try {
+            // Probabilistically throttle the disk-space check (~1 in 101 saves). random_int avoids the
+            // insecure-function static warning; a crypto-grade source is not required here but is fine.
+            return random_int(0, 100) === 0;
+        } catch (\Throwable $e) {
+            // A failing CSPRNG must never break a cache save; just skip the check this time.
+            return false;
+        }
     }
 
     /**
@@ -727,6 +744,10 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $adapter = $this->getLockAdapter();
         if ($adapter !== null) {
             $adapter->releaseLock($id, $this->lockSign);
+        } else {
+            // Fallback path stored the lock via remote->save(); remove it so the lock is
+            // released immediately instead of lingering until LOCK_TTL expires.
+            $this->remote->remove(self::LOCK_PREFIX . $id);
         }
         unset($this->heldLocks[$id]);
     }
@@ -772,14 +793,10 @@ class SymfonyL2Cache extends AbstractBackend implements ExtendedBackendInterface
         $this->lockAdapterResolved = true;
 
         try {
-            if (method_exists($this->remote, 'getLowLevelFrontend')) {
-                $lowLevel = $this->remote->getLowLevelFrontend();
-                if (method_exists($lowLevel, 'getTagAdapter')) {
-                    $adapter = $lowLevel->getTagAdapter();
-                    if ($adapter instanceof RedisTagAdapter) {
-                        $this->lockAdapter = $adapter;
-                    }
-                }
+            $lowLevel = $this->remote->getLowLevelFrontend();
+            $adapter = $lowLevel->getTagAdapter();
+            if ($adapter instanceof RedisTagAdapter) {
+                $this->lockAdapter = $adapter;
             }
         } catch (\Throwable $e) {
             $this->lockAdapter = null;

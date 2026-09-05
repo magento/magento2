@@ -9,6 +9,7 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
 use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
+use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapperFactory;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\LowLevelFrontend;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
@@ -35,6 +36,11 @@ class SymfonyTest extends TestCase
     private $tagAdapter;
 
     /**
+     * @var BackendWrapperFactory|MockObject
+     */
+    private $backendWrapperFactory;
+
+    /**
      * @var Symfony
      */
     private Symfony $model;
@@ -46,7 +52,15 @@ class SymfonyTest extends TestCase
     {
         $this->pool = new ArrayAdapter();
         $this->tagAdapter = $this->createMock(TagAdapterInterface::class);
-        $this->model = new Symfony(fn () => $this->pool, $this->tagAdapter, 7200, 'test_');
+        $this->backendWrapperFactory = $this->createMock(BackendWrapperFactory::class);
+        $this->model = new Symfony(
+            fn () => $this->pool,
+            $this->tagAdapter,
+            7200,
+            'test_',
+            null,
+            $this->backendWrapperFactory
+        );
     }
 
     /**
@@ -154,11 +168,21 @@ class SymfonyTest extends TestCase
     }
 
     /**
-     * getBackend() returns a Symfony BackendWrapper.
+     * getBackend() builds the wrapper through the injected factory, passing the pool, adapter and self.
      */
     public function testGetBackendReturnsBackendWrapper(): void
     {
-        $this->assertInstanceOf(BackendWrapper::class, $this->model->getBackend());
+        $wrapper = $this->createMock(BackendWrapper::class);
+        $this->backendWrapperFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'cache' => $this->pool,
+                'adapter' => $this->tagAdapter,
+                'symfony' => $this->model,
+            ])
+            ->willReturn($wrapper);
+
+        $this->assertSame($wrapper, $this->model->getBackend());
     }
 
     /**

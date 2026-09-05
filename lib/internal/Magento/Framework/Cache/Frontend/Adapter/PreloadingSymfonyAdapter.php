@@ -9,6 +9,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 
 /**
  * Preloads frequently accessed Symfony cache keys into local PHP memory to avoid Redis network roundtrips.
@@ -96,10 +97,8 @@ class PreloadingSymfonyAdapter implements FrontendInterface
     }
 
     /**
-     * Preloads all configured keys in one batched request and serves them from local memory
-     *
-     * With per-key fallback if batching is unsupported.
-     * Keys must match the application’s runtime IDs and should not include the backend id_prefix.
+     * Preload configured keys in one batched request via the adapter's MultiLoadInterface; adapters
+     * without it skip preload (load() still serves per key). Keys must be runtime IDs, no id_prefix.
      *
      * @return void
      */
@@ -114,17 +113,9 @@ class PreloadingSymfonyAdapter implements FrontendInterface
             return;
         }
 
-        if (method_exists($this->adapter, 'loadMultiple')) {
+        if ($this->adapter instanceof MultiLoadInterface) {
             // one batched round-trip for all keys
             $this->localCache = $this->adapter->loadMultiple($this->preloadKeys);
-        } else {
-            // fallback: per-key (no batching available on the underlying adapter)
-            foreach ($this->preloadKeys as $key) {
-                $value = $this->adapter->load($key);
-                if ($value !== false) {
-                    $this->localCache[$key] = $value;
-                }
-            }
         }
 
         // Builds a normalized fast-path index so preload keys match runtime IDs regardless of case or separators.

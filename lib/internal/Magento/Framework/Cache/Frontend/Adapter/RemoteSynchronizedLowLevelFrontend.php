@@ -7,18 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter;
 
-use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
+use Magento\Framework\Cache\Backend\TwoTierBackendInterface;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\LowLevelFrontendInterface;
 
 /**
- * Low-level frontend wrapper for a remote-synchronized Symfony frontend.
+ * Low-level frontend for a two-tier backend. Depends downward on the backend, not on FrontendInterface.
  */
 class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
 {
     /**
-     * @param FrontendInterface $frontend
+     * @param ExtendedBackendInterface $backend
      */
-    public function __construct(private FrontendInterface $frontend)
+    public function __construct(private ExtendedBackendInterface $backend)
     {
     }
 
@@ -27,22 +29,22 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
      */
     public function clean($mode = 'all', $tags = []): bool
     {
-        return $this->frontend->clean($mode, $tags);
+        return $this->backend->clean($mode, $tags);
     }
 
     /**
-     * Load a cache entry through the Magento frontend contract.
+     * Load a cache entry through the backend contract.
      *
      * @param string $id
      * @return mixed
      */
     public function load(string $id)
     {
-        return $this->frontend->load($id);
+        return $this->backend->load($id);
     }
 
     /**
-     * Save a cache entry through the Magento frontend contract.
+     * Save a cache entry through the backend contract.
      *
      * @param mixed $data
      * @param string $id
@@ -52,31 +54,29 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
      */
     public function save($data, string $id, array $tags = [], $lifetime = false): bool
     {
-        return $this->frontend->save($data, $id, $tags, $lifetime);
+        return $this->backend->save($data, $id, $tags, $lifetime);
     }
 
     /**
-     * Remove a cache entry through the Magento frontend contract.
+     * Remove a cache entry through the backend contract.
      *
      * @param string $id
      * @return bool
      */
     public function remove(string $id): bool
     {
-        return $this->frontend->remove($id);
+        return $this->backend->remove($id);
     }
 
     /**
-     * Return metadata through the wrapped frontend when supported.
+     * Return metadata through the backend contract (guaranteed by ExtendedBackendInterface).
      *
      * @param string $id
      * @return array|false
      */
     public function getMetadatas(string $id)
     {
-        return method_exists($this->frontend, 'getMetadatas')
-            ? $this->frontend->getMetadatas($id)
-            : false;
+        return $this->backend->getMetadatas($id);
     }
 
     /**
@@ -124,27 +124,28 @@ class RemoteSynchronizedLowLevelFrontend implements LowLevelFrontendInterface
     }
 
     /**
-     * Reach through the RemoteSynchronizedLowLevelFrontend backend to the remote (L2) tier's low-level frontend.
+     * Reach through to the remote (L2) tier's tag adapter.
+     *
+     * @return TagAdapterInterface|null
+     */
+    public function getTagAdapter(): ?TagAdapterInterface
+    {
+        $lowLevel = $this->getRemoteLowLevelFrontend();
+
+        return $lowLevel instanceof LowLevelFrontendInterface ? $lowLevel->getTagAdapter() : null;
+    }
+
+    /**
+     * Reach the remote (L2) tier's low-level frontend via the two-tier backend contract.
      *
      * @return mixed|null
      */
     private function getRemoteLowLevelFrontend()
     {
-        if (!method_exists($this->frontend, 'getBackend')) {
+        if (!$this->backend instanceof TwoTierBackendInterface) {
             return null;
         }
 
-        $backend = $this->frontend->getBackend();
-        if ($backend === null) {
-            return null;
-        }
-
-        if (!method_exists($backend, 'getRemote')) {
-            return null;
-        }
-
-        $remote = $backend->getRemote();
-
-        return method_exists($remote, 'getLowLevelFrontend') ? $remote->getLowLevelFrontend() : null;
+        return $this->backend->getRemote()->getLowLevelFrontend();
     }
 }

@@ -12,8 +12,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Frontend\Decorator;
 
 use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 
-class Bare implements \Magento\Framework\Cache\FrontendInterface
+class Bare implements FrontendInterface, MultiLoadInterface
 {
     /**
      * Cache frontend instance to delegate actual cache operations to
@@ -69,9 +71,8 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * Batched multi-load passthrough (used by the preloading wrapper). Delegates to the wrapped
-     * frontend's loadMultiple() when it has one; otherwise falls back to per-key loads so the chain
-     * still works for non-batching backends.
+     * Batched multi-load passthrough: delegate when the wrapped frontend is MultiLoadInterface,
+     * else per-key (keeps the decorator transparent for non-batching frontends).
      *
      * @param string[] $identifiers
      * @return array<string, mixed>
@@ -79,7 +80,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     public function loadMultiple(array $identifiers): array
     {
         $frontend = $this->_getFrontend();
-        if (method_exists($frontend, 'loadMultiple')) {
+        if ($frontend instanceof MultiLoadInterface) {
             return $frontend->loadMultiple($identifiers);
         }
         $out = [];

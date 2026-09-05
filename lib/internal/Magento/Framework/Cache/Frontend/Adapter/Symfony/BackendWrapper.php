@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter\Symfony;
 
-use InvalidArgumentException;
 use Magento\Framework\Cache\Backend\BackendInterface;
+use Magento\Framework\Cache\ClearableInterface;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\Cache\PruneableInterface;
  * Provides BackendInterface-compatible wrapper for Symfony PSR-6 cache.
  * Delegates operations to the Symfony frontend for proper tag and metadata handling.
  */
-class BackendWrapper implements BackendInterface
+class BackendWrapper implements BackendInterface, PruneableInterface, ClearableInterface
 {
     /**
      * @var CacheItemPoolInterface
@@ -106,34 +106,15 @@ class BackendWrapper implements BackendInterface
     }
 
     /**
-     * Clean some cache records
+     * Clean cache records; delegates all 5 modes to the Symfony frontend (single source of truth).
      *
-     * @param string $mode Clean mode ('all', 'old')
-     * @param array $tags Array of tags (unused for backend clean)
+     * @param string $mode Clean mode
+     * @param array $tags Array of tags (used by the tag-based modes)
      * @return bool True if no problem
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function clean($mode = 'all', $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
     {
-        return match ($mode) {
-            CacheConstants::CLEANING_MODE_ALL, 'all' => $this->clear(),
-            CacheConstants::CLEANING_MODE_OLD, 'old' => $this->cleanOld(),
-            default => throw new InvalidArgumentException("Backend clean only supports ALL and OLD modes")
-        };
-    }
-
-    /**
-     * Garbage-collect expired items and orphaned tag-index members, similar to legacy clean(OLD) behavior.
-     *
-     * @return bool
-     */
-    private function cleanOld(): bool
-    {
-        // Remove expired entries from the underlying store. FilesystemAdapter physically deletes
-        // expired files here (parity with the legacy file backend); Redis auto-expires so this no-ops.
-        $this->prune();
-        // Sweep orphaned tag-index members (ids whose data key already expired). No-op on file/generic.
-        return $this->adapter->garbageCollect() >= 0;
+        return $this->symfony->clean($mode, $tags);
     }
 
     /**

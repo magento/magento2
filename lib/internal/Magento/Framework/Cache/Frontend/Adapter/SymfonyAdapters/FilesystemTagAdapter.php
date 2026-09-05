@@ -37,27 +37,16 @@ class FilesystemTagAdapter implements TagAdapterInterface
     private string $reverseDirectory;
 
     /**
-     * Controls whether the on-disk tag index is maintained, disabling it for Redis L2-backed L1 caches
-     * and enabling it for file-only caches.
-     *
-     * @var bool
-     */
-    private bool $indexTags;
-
-    /**
      * @param CacheItemPoolInterface $cachePool
      * @param string $tagDirectory Directory to store tag index files
-     * @param bool $indexTags Whether to write/maintain the on-disk tag index
      */
-    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory, bool $indexTags = true)
+    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory)
     {
         $this->cachePool = $cachePool;
         $base = rtrim($tagDirectory, '/');
         $this->tagDirectory = $base . '/tags/';
         $this->reverseDirectory = $base . '/idtags/';
-        $this->indexTags = $indexTags;
-        // Directories are created lazily on the first real write, so a tier that never indexes tags
-        // leaves no empty var/cache/symfony/{tags,idtags} directories behind.
+        // Index written only when a save carries tags; dirs created lazily on first write.
     }
 
     /**
@@ -397,10 +386,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
             $this->cachePool->commit();
         }
 
-        // Prunes deleted IDs from the tag index using the reverse index, updating each affected tag file only once.
-        if ($this->indexTags) {
-            $this->pruneIdsFromIndex($ids);
-        }
+        // Prune deleted ids from the index via the reverse index (no-op when nothing was indexed).
+        $this->pruneIdsFromIndex($ids);
 
         return $success;
     }
@@ -446,7 +433,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function onSave(string $id, array $tags): void
     {
-        if (!$this->indexTags || empty($tags)) {
+        if (empty($tags)) {
             return;
         }
 
@@ -472,12 +459,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function onRemove(string $id): void
     {
-        if (!$this->indexTags) {
-            return;
-        }
-
-        // No reverse entry => the id was saved without tags (e.g. an L2 invalid marker) or is not
-        // indexed. Either way there is nothing to prune, so this is O(1) rather than a full scan.
+        // No reverse entry => saved without tags; nothing to prune (O(1), not a full scan).
         $tags = $this->getIdTags($id);
         if (empty($tags)) {
             return;

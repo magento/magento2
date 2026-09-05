@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters;
 
-use InvalidArgumentException;
 use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
 use Predis\Client as PredisClient;
 
@@ -23,9 +22,9 @@ class RedisLuaHelper
     /**
      * Redis connection
      *
-     * @var mixed Redis connection object
+     * @var \Redis|\RedisCluster|PredisClient|OptimizedPredisClient
      */
-    private $redis;
+    private \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis;
 
     /**
      * @var bool Whether Lua scripts are enabled
@@ -231,25 +230,13 @@ LUA;
     /**
      * Constructor
      *
-     * Note: Uses untyped parameter to avoid DI compilation issues with PHP extension classes
-     *
-     * @param mixed $redis Redis connection from Symfony RedisAdapter
+     * @param \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis Connection from Symfony RedisAdapter
      * @param bool $enabled Whether Lua scripts are enabled
      */
-    public function __construct($redis, bool $enabled = true)
-    {
-        // Accept either a phpredis handle (\Redis / \RedisCluster — checked without referencing the
-        // class directly so DI compilation works when the extension is absent) or a Predis client.
-        $isPhpRedis = is_object($redis)
-            && class_exists('\Redis', false)
-            && ($redis instanceof \Redis || $redis instanceof \RedisCluster);
-        $isPredis = $redis instanceof PredisClient || $redis instanceof OptimizedPredisClient;
-        if (!$isPhpRedis && !$isPredis) {
-            throw new InvalidArgumentException(
-                'Redis connection must be a phpredis (\Redis/\RedisCluster) or Predis client'
-            );
-        }
-
+    public function __construct(
+        \Redis|\RedisCluster|PredisClient|OptimizedPredisClient $redis,
+        bool $enabled = true
+    ) {
         $this->redis = $redis;
         $this->enabled = $enabled;
     }

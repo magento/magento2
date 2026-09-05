@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 
 /**
  * Frontend adapter for RemoteSynchronizedCache with Symfony backends
@@ -18,12 +19,18 @@ use Magento\Framework\Cache\FrontendInterface;
  * allowing L2 cache to work seamlessly with Symfony cache backends.
  */
 class RemoteSynchronizedSymfonyAdapter implements
-    FrontendInterface
+    FrontendInterface,
+    MultiLoadInterface
 {
     /**
      * @var ExtendedBackendInterface
      */
     private ExtendedBackendInterface $backend;
+
+    /**
+     * @var RemoteSynchronizedLowLevelFrontendFactory
+     */
+    private RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory;
 
     /**
      * @var RemoteSynchronizedLowLevelFrontend|null
@@ -37,14 +44,17 @@ class RemoteSynchronizedSymfonyAdapter implements
      * save() forwards the lifetime unchanged, including null for no expiry, matching legacy behavior.
      *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
+     * @param RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory Factory for the low-level view
      * @param int $defaultLifetime Kept for DI wiring; applied by the underlying Symfony adapter, not here
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExtendedBackendInterface $backend,
+        RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory,
         int $defaultLifetime = 7200
     ) {
         $this->backend = $backend;
+        $this->lowLevelFrontendFactory = $lowLevelFrontendFactory;
     }
 
     /**
@@ -64,26 +74,16 @@ class RemoteSynchronizedSymfonyAdapter implements
     }
 
     /**
-     * Batched multi-load (used by the preloading wrapper). Delegates to the L2 backend's loadMultiple()
-     *
-     * When available (one round-trip to the remote tier); otherwise falls back to per-key loads.
+     * Batched multi-load; delegates to the backend's MultiLoadInterface, else returns [] (no per-key emulation).
      *
      * @param string[] $identifiers
      * @return array<string, mixed>
      */
     public function loadMultiple(array $identifiers): array
     {
-        if (method_exists($this->backend, 'loadMultiple')) {
-            return $this->backend->loadMultiple($identifiers);
-        }
-        $out = [];
-        foreach ($identifiers as $id) {
-            $value = $this->backend->load($id);
-            if ($value !== false) {
-                $out[$id] = $value;
-            }
-        }
-        return $out;
+        return $this->backend instanceof MultiLoadInterface
+            ? $this->backend->loadMultiple($identifiers)
+            : [];
     }
 
     /**
@@ -140,6 +140,6 @@ class RemoteSynchronizedSymfonyAdapter implements
      */
     public function getLowLevelFrontend()
     {
-        return $this->lowLevelFrontend ??= new RemoteSynchronizedLowLevelFrontend($this);
+        return $this->lowLevelFrontend ??= $this->lowLevelFrontendFactory->create(['backend' => $this->backend]);
     }
 }

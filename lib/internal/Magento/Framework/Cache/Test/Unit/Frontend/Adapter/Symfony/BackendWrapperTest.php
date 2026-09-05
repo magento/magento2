@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter\Symfony;
 
-use InvalidArgumentException;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
@@ -233,92 +233,50 @@ class BackendWrapperTest extends TestCase
     }
 
     /**
-     * Test clean() with 'all' mode
+     * clean() delegates every mode (and its tags) to the Symfony frontend and returns its result.
+     *
+     * @param string $mode
+     * @param array $tags
      */
-    public function testCleanWithAllMode(): void
+    #[DataProvider('cleanModeDataProvider')]
+    public function testCleanDelegatesToFrontend(string $mode, array $tags): void
     {
-        $this->adapterMock
+        $this->symfonyMock
             ->expects($this->once())
-            ->method('clearAllIndices');
-
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
+            ->method('clean')
+            ->with($mode, $tags)
             ->willReturn(true);
 
-        $result = $this->backendWrapper->clean('all');
-
-        $this->assertTrue($result);
+        $this->assertTrue($this->backendWrapper->clean($mode, $tags));
     }
 
     /**
-     * Test clean() with CLEANING_MODE_ALL constant
+     * All cleaning modes supported by the Symfony frontend, matching the Zend backend's coverage.
+     *
+     * @return array<string, array{0: string, 1: array}>
      */
-    public function testCleanWithAllModeConstant(): void
+    public static function cleanModeDataProvider(): array
     {
-        $this->adapterMock
+        return [
+            'all' => [CacheConstants::CLEANING_MODE_ALL, []],
+            'old' => [CacheConstants::CLEANING_MODE_OLD, []],
+            'matchingTag' => [CacheConstants::CLEANING_MODE_MATCHING_TAG, ['tag1']],
+            'notMatchingTag' => [CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tag1']],
+            'matchingAnyTag' => [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag1', 'tag2']],
+        ];
+    }
+
+    /**
+     * clean() propagates a false result from the frontend.
+     */
+    public function testCleanReturnsFrontendFailure(): void
+    {
+        $this->symfonyMock
             ->expects($this->once())
-            ->method('clearAllIndices');
+            ->method('clean')
+            ->willReturn(false);
 
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
-            ->willReturn(true);
-
-        $result = $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_ALL);
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test clean() with 'old' mode
-     */
-    public function testCleanWithOldMode(): void
-    {
-        // 'old' mode is a no-op (returns true without doing anything)
-        $this->adapterMock
-            ->expects($this->never())
-            ->method('clearAllIndices');
-
-        $this->cacheMock
-            ->expects($this->never())
-            ->method('clear');
-
-        $result = $this->backendWrapper->clean('old');
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test clean() with CLEANING_MODE_OLD constant
-     */
-    public function testCleanWithOldModeConstant(): void
-    {
-        $result = $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_OLD);
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test clean() with unsupported mode throws exception
-     */
-    public function testCleanWithUnsupportedModeThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Backend clean only supports ALL and OLD modes");
-
-        $this->backendWrapper->clean('unsupported_mode');
-    }
-
-    /**
-     * Test clean() with CLEANING_MODE_MATCHING_TAG throws exception
-     */
-    public function testCleanWithMatchingTagModeThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Backend clean only supports ALL and OLD modes");
-
-        $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, ['tag1']);
+        $this->assertFalse($this->backendWrapper->clean(CacheConstants::CLEANING_MODE_ALL));
     }
 
     /**

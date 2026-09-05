@@ -9,8 +9,10 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
 use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\Frontend\Adapter\RemoteSynchronizedLowLevelFrontend;
+use Magento\Framework\Cache\Frontend\Adapter\RemoteSynchronizedLowLevelFrontendFactory;
 use Magento\Framework\Cache\Frontend\Adapter\RemoteSynchronizedSymfonyAdapter;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -25,6 +27,11 @@ class RemoteSynchronizedSymfonyAdapterTest extends TestCase
     private $backend;
 
     /**
+     * @var RemoteSynchronizedLowLevelFrontendFactory|MockObject
+     */
+    private $lowLevelFrontendFactory;
+
+    /**
      * @var RemoteSynchronizedSymfonyAdapter
      */
     private RemoteSynchronizedSymfonyAdapter $model;
@@ -35,7 +42,8 @@ class RemoteSynchronizedSymfonyAdapterTest extends TestCase
     protected function setUp(): void
     {
         $this->backend = $this->createMock(ExtendedBackendInterface::class);
-        $this->model = new RemoteSynchronizedSymfonyAdapter($this->backend);
+        $this->lowLevelFrontendFactory = $this->createMock(RemoteSynchronizedLowLevelFrontendFactory::class);
+        $this->model = new RemoteSynchronizedSymfonyAdapter($this->backend, $this->lowLevelFrontendFactory);
     }
 
     /**
@@ -138,29 +146,45 @@ class RemoteSynchronizedSymfonyAdapterTest extends TestCase
      */
     public function testGetLowLevelFrontendReturnsMemoizedWrapper(): void
     {
+        $wrapper = $this->createMock(RemoteSynchronizedLowLevelFrontend::class);
+        $this->lowLevelFrontendFactory->expects($this->once())
+            ->method('create')
+            ->with(['backend' => $this->backend])
+            ->willReturn($wrapper);
+
         $first = $this->model->getLowLevelFrontend();
         $second = $this->model->getLowLevelFrontend();
 
-        $this->assertInstanceOf(RemoteSynchronizedLowLevelFrontend::class, $first);
+        $this->assertSame($wrapper, $first);
         $this->assertSame($first, $second, 'The low-level frontend must be created only once');
     }
 
     /**
-     * loadMultiple() falls back to per-key loads when the backend has no loadMultiple(),
-     * and omits misses (false values).
+     * loadMultiple() delegates to the backend's MultiLoadInterface contract in one round-trip.
      */
-    public function testLoadMultipleFallsBackToPerKeyLoads(): void
+    public function testLoadMultipleDelegatesToBatchCapableBackend(): void
     {
-        $this->backend->method('load')
-            ->willReturnMap([
-                ['id1', 'value1'],
-                ['id2', false],
-                ['id3', 'value3'],
-            ]);
-
-        $this->assertSame(
-            ['id1' => 'value1', 'id3' => 'value3'],
-            $this->model->loadMultiple(['id1', 'id2', 'id3'])
+        $backend = $this->createMockForIntersectionOfInterfaces(
+            [ExtendedBackendInterface::class, MultiLoadInterface::class]
         );
+        $backend->expects($this->once())
+            ->method('loadMultiple')
+            ->with(['id1', 'id2'])
+            ->willReturn(['id1' => 'value1', 'id2' => 'value2']);
+
+        $model = new RemoteSynchronizedSymfonyAdapter($backend, $this->lowLevelFrontendFactory);
+
+        $this->assertSame(['id1' => 'value1', 'id2' => 'value2'], $model->loadMultiple(['id1', 'id2']));
+    }
+
+    /**
+     * loadMultiple() returns nothing when the backend has no batch support: partial per-key emulation
+     * provides no benefit, so the caller falls back to on-demand load() instead.
+     */
+    public function testLoadMultipleReturnsEmptyWhenBackendNotBatchCapable(): void
+    {
+        $this->backend->expects($this->never())->method('load');
+
+        $this->assertSame([], $this->model->loadMultiple(['id1', 'id2']));
     }
 }

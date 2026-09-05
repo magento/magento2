@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
+use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
+use Magento\Framework\Cache\Backend\SymfonyL2Cache;
 use Magento\Framework\Cache\Frontend\Adapter\RemoteSynchronizedLowLevelFrontend;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Cache\LowLevelFrontendInterface;
@@ -19,9 +21,9 @@ use PHPUnit\Framework\TestCase;
 class RemoteSynchronizedLowLevelFrontendTest extends TestCase
 {
     /**
-     * @var FrontendInterface|MockObject
+     * @var ExtendedBackendInterface|MockObject
      */
-    private $frontend;
+    private $backend;
 
     /**
      * @var RemoteSynchronizedLowLevelFrontend
@@ -33,8 +35,8 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->frontend = $this->createMock(FrontendInterface::class);
-        $this->model = new RemoteSynchronizedLowLevelFrontend($this->frontend);
+        $this->backend = $this->createMock(ExtendedBackendInterface::class);
+        $this->model = new RemoteSynchronizedLowLevelFrontend($this->backend);
     }
 
     /**
@@ -46,11 +48,11 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
     }
 
     /**
-     * clean() must delegate mode and tags to the wrapped frontend and return its result.
+     * clean() must delegate mode and tags to the backend and return its result.
      */
-    public function testCleanDelegatesToFrontend(): void
+    public function testCleanDelegatesToBackend(): void
     {
-        $this->frontend->expects($this->once())
+        $this->backend->expects($this->once())
             ->method('clean')
             ->with('matchingTag', ['TAG_A'])
             ->willReturn(true);
@@ -63,7 +65,7 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
      */
     public function testCleanUsesDefaultArguments(): void
     {
-        $this->frontend->expects($this->once())
+        $this->backend->expects($this->once())
             ->method('clean')
             ->with('all', [])
             ->willReturn(false);
@@ -72,16 +74,24 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
     }
 
     /**
-     * getBackend() must reach through frontend->getBackend()->getRemote()->getLowLevelFrontend()->getBackend().
+     * getMetadatas() must delegate to the backend contract (guaranteed by ExtendedBackendInterface).
+     */
+    public function testGetMetadatasDelegatesToBackend(): void
+    {
+        $this->backend->expects($this->once())
+            ->method('getMetadatas')
+            ->with('id1')
+            ->willReturn(['mtime' => 123]);
+
+        $this->assertSame(['mtime' => 123], $this->model->getMetadatas('id1'));
+    }
+
+    /**
+     * getBackend() must reach through backend->getRemote()->getLowLevelFrontend()->getBackend().
      */
     public function testGetBackendReachesThroughToRemoteLowLevelFrontendBackend(): void
     {
-        $remoteBackend = new class {
-            public function getIdsMatchingTags(array $tags): array
-            {
-                return ['id1'];
-            }
-        };
+        $remoteBackend = new \stdClass();
         $remoteLowLevelFrontend = new class ($remoteBackend) {
             public function __construct(private $backend)
             {
@@ -92,38 +102,22 @@ class RemoteSynchronizedLowLevelFrontendTest extends TestCase
                 return $this->backend;
             }
         };
-        $remote = new class ($remoteLowLevelFrontend) {
-            public function __construct(private $lowLevelFrontend)
-            {
-            }
+        $remote = $this->createMock(FrontendInterface::class);
+        $remote->method('getLowLevelFrontend')->willReturn($remoteLowLevelFrontend);
 
-            public function getLowLevelFrontend()
-            {
-                return $this->lowLevelFrontend;
-            }
-        };
-        $backend = new class ($remote) {
-            public function __construct(private $remote)
-            {
-            }
+        // Use the real two-tier backend so getRemote() is exercised as in production
+        // (SymfonyL2Cache is the ExtendedBackendInterface that exposes it).
+        $backend = new SymfonyL2Cache($remote, $this->createMock(FrontendInterface::class));
 
-            public function getRemote()
-            {
-                return $this->remote;
-            }
-        };
+        $model = new RemoteSynchronizedLowLevelFrontend($backend);
 
-        $this->frontend->expects($this->once())
-            ->method('getBackend')
-            ->willReturn($backend);
-
-        $this->assertSame($remoteBackend, $this->model->getBackend());
+        $this->assertSame($remoteBackend, $model->getBackend());
     }
 
     /**
-     * getBackend() must return null when the wrapped frontend can't expose a backend.
+     * getBackend() must return null when the backend is not two-tier (no getRemote()).
      */
-    public function testGetBackendReturnsNullWhenUnavailable(): void
+    public function testGetBackendReturnsNullWhenBackendIsNotTwoTier(): void
     {
         $this->assertNull($this->model->getBackend());
     }

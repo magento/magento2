@@ -10,7 +10,6 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Cm_Cache_Backend_File;
-use Exception;
 use LogicException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
@@ -435,17 +434,10 @@ class Factory
             default:
                 // Accept custom legacy backend classes only when they implement the Zend cache interface.
                 // Symfony adapters are routed to the Symfony stack before this method is called.
-                if ($type != $this->_defaultBackend) {
-                    try {
-                        if (class_exists($type, true)) {
-                            $implements = class_implements($type, true);
-                            if (in_array('Zend_Cache_Backend_Interface', $implements)) {
-                                $backendType = $type;
-                            }
-                        }
-                        // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
-                    } catch (Exception $e) {
-                    }
+                if ($type != $this->_defaultBackend
+                    && is_a($type, \Zend_Cache_Backend_Interface::class, true)
+                ) {
+                    $backendType = $type;
                 }
         }
 
@@ -850,9 +842,8 @@ class Factory
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
-        // Disable the L1 disk tag index to prevent excessive tiny files and ENOSPC failures.
-        // L2 remains authoritative for tags/hash; L1 data self-heals and tag cleaning stays remote.
-        $localBackendOptions['index_tags'] = false;
+        // L1 stores data only: SymfonyL2Cache saves it tag-less, so no on-disk tag index is written
+        // (avoids tiny-file/ENOSPC churn). L2 stays authoritative for tags; tag cleaning stays remote.
 
         // Resolve the default L1 file directory for both tiers; SymfonyL2Cache uses it to measure
         // disk usage and trigger size-based L1 eviction.

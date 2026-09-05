@@ -21,11 +21,12 @@ use PHPUnit\Framework\TestCase;
 class RedisLuaHelperTest extends TestCase
 {
     /**
-     * The constructor must reject anything that is neither a phpredis nor a Predis client.
+     * The typed constructor rejects anything that is neither a phpredis nor a Predis client
+     * at the language level (union type), so an unsupported object raises a TypeError.
      */
     public function testConstructorRejectsInvalidConnection(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(\TypeError::class);
 
         new RedisLuaHelper(new \stdClass());
     }
