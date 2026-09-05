@@ -82,6 +82,7 @@
         <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$110.70" stepKey="verifyOrderTotalOnPaypalPage"/>
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
         <!-- I see order successful Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
