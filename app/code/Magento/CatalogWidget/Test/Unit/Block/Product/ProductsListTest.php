@@ -19,6 +19,9 @@ use Magento\Directory\Model\Currency;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Select\SelectRenderer;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -503,6 +506,163 @@ class ProductsListTest extends TestCase
             'page 3 of 3 with 12 total' => [3, 5, 12, 2, 10],
             'page beyond limit' => [3, 5, 9, 0, 10],
         ];
+    }
+
+    /**
+     * The rendered collection must be narrowed to the ids of the requested page, resolved by a separate query
+     */
+    public function testCollectionIsNarrowedToResolvedPageIds()
+    {
+        $idsSelectColumns = null;
+        $adapter = $this->createAdapter();
+        $adapter->expects($this->once())
+            ->method('fetchCol')
+            ->willReturnCallback(function (Select $idsSelect) use (&$idsSelectColumns) {
+                $idsSelectColumns = $idsSelect->getPart(Select::COLUMNS);
+                return [15, 9, 3];
+            });
+
+        $select = $this->createSelect($adapter);
+        $collection = $this->configureCollection($select, $adapter);
+        $collection->expects($this->never())->method('getSize');
+
+        $this->productsList->setData('show_pager', false);
+        $this->productsList->setData('products_count', 3);
+
+        $this->renderProductCollection();
+
+        $this->assertSame([['e', 'entity_id', null]], $idsSelectColumns);
+        $this->assertNull($select->getPart(Select::LIMIT_COUNT));
+        $this->assertNull($select->getPart(Select::LIMIT_OFFSET));
+        $this->assertSame(['(e.entity_id IN (15, 9, 3))'], $select->getPart(Select::WHERE));
+    }
+
+    /**
+     * A DISTINCT select is invalid on MySQL unless its ORDER BY expressions are part of the select list
+     */
+    public function testIdSelectCarriesSortExpressionsOfDistinctQuery()
+    {
+        $idsSelectColumns = null;
+        $adapter = $this->createAdapter();
+        $adapter->method('fetchCol')
+            ->willReturnCallback(function (Select $idsSelect) use (&$idsSelectColumns) {
+                $idsSelectColumns = $idsSelect->getPart(Select::COLUMNS);
+                return [15, 9, 3];
+            });
+
+        $sortExpression = new \Zend_Db_Expr("FIELD(e.sku, 'sku3', 'sku1', 'sku2')");
+        $select = $this->createSelect($adapter);
+        $select->reset(Select::ORDER)->order($sortExpression);
+
+        $this->configureCollection($select, $adapter);
+        $this->productsList->setData('show_pager', false);
+        $this->productsList->setData('products_count', 3);
+
+        $this->renderProductCollection();
+
+        $this->assertSame([['e', 'entity_id', null]], array_slice($idsSelectColumns, 0, 1));
+        $this->assertSame(
+            ["FIELD(e.sku, 'sku3', 'sku1', 'sku2')"],
+            array_map(static fn ($column) => (string)$column[1], array_slice($idsSelectColumns, 1))
+        );
+    }
+
+    /**
+     * The pager total must be read while the collection still matches the whole condition set
+     */
+    public function testPagerTotalIsResolvedBeforeCollectionIsNarrowed()
+    {
+        $adapter = $this->createAdapter();
+        $adapter->method('fetchCol')->willReturn([15, 9]);
+
+        $select = $this->createSelect($adapter);
+        $collection = $this->configureCollection($select, $adapter);
+
+        $whereBeforeSize = null;
+        $collection->expects($this->once())
+            ->method('getSize')
+            ->willReturnCallback(function () use ($select, &$whereBeforeSize) {
+                $whereBeforeSize = $select->getPart(Select::WHERE);
+                return 42;
+            });
+
+        $this->productsList->setData('show_pager', true);
+        $this->productsList->setData('products_per_page', 2);
+        $this->productsList->setData('products_count', 6);
+
+        $this->renderProductCollection();
+
+        $this->assertSame(['(at_status.value = 1)'], $whereBeforeSize);
+    }
+
+    /**
+     * @return Mysql|MockObject
+     */
+    private function createAdapter()
+    {
+        $adapter = $this->createMock(Mysql::class);
+        $adapter->method('quoteInto')->willReturnCallback(
+            static function ($text, $value) {
+                return str_replace('?', is_array($value) ? implode(', ', $value) : (string)$value, $text);
+            }
+        );
+
+        return $adapter;
+    }
+
+    /**
+     * @param Mysql $adapter
+     * @return Select
+     */
+    private function createSelect(Mysql $adapter): Select
+    {
+        $select = new Select($adapter, $this->createMock(SelectRenderer::class));
+        $select->from(['e' => 'catalog_product_entity'], ['e.*'])
+            ->distinct(true)
+            ->where('at_status.value = 1')
+            ->order('e.entity_id DESC');
+
+        return $select;
+    }
+
+    /**
+     * @param Select $select
+     * @param Mysql $adapter
+     * @return Collection|MockObject
+     */
+    private function configureCollection(Select $select, Mysql $adapter)
+    {
+        $collection = $this->createMock(Collection::class);
+        $collection->method('setVisibility')->willReturnSelf();
+        $collection->method('addMinimalPrice')->willReturnSelf();
+        $collection->method('addFinalPrice')->willReturnSelf();
+        $collection->method('addTaxPercents')->willReturnSelf();
+        $collection->method('addAttributeToSelect')->willReturnSelf();
+        $collection->method('addUrlRewrite')->willReturnSelf();
+        $collection->method('addStoreFilter')->willReturnSelf();
+        $collection->method('addAttributeToFilter')->willReturnSelf();
+        $collection->method('addAttributeToSort')->willReturnSelf();
+        $collection->method('distinct')->willReturnSelf();
+        $collection->method('getSelect')->willReturn($select);
+        $collection->method('getConnection')->willReturn($adapter);
+
+        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
+        $this->widgetConditionsHelper->method('decode')->willReturn([]);
+        $this->productsList->setData('conditions_encoded', 'some_serialized_conditions');
+        $this->productsList->setData('page_var_name', 'page');
+        $this->request->method('getParam')->with('page')->willReturn(1);
+        $this->getConditionsForCollection($collection);
+
+        return $collection;
+    }
+
+    /**
+     * @return void
+     */
+    private function renderProductCollection(): void
+    {
+        $method = new \ReflectionMethod($this->productsList, '_beforeToHtml');
+        $method->invoke($this->productsList);
     }
 
     public function testGetProductsCount()
