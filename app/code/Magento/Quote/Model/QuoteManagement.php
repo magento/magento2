@@ -634,7 +634,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                 $quote->getShippingAddress(),
                 [
                     'address_type' => 'shipping',
-                    'email' => $quote->getCustomerEmail()
+                    'email' => $quote->getShippingAddress()->getEmail() ?: $quote->getCustomerEmail()
                 ]
             );
             $shippingAddress->setData('quote_address_id', $quote->getShippingAddress()->getId());
@@ -646,7 +646,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             $quote->getBillingAddress(),
             [
                 'address_type' => 'billing',
-                'email' => $quote->getCustomerEmail()
+                'email' => $quote->getBillingAddress()->getEmail() ?: $quote->getCustomerEmail()
             ]
         );
         $billingAddress->setData('quote_address_id', $quote->getBillingAddress()->getId());
