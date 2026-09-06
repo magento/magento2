@@ -17,6 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ConfigOptionsListTest extends TestCase
 {
@@ -41,6 +42,11 @@ class ConfigOptionsListTest extends TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var OutputInterface|MockObject
+     */
+    private $outputMock;
+
+    /**
      * @var array
      */
     private $options;
@@ -60,11 +66,13 @@ class ConfigOptionsListTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->connectionValidatorMock = $this->createMock(ConnectionValidator::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
 
         $this->model = $this->objectManager->getObject(
             ConfigOptionsList::class,
             [
                 'connectionValidator' => $this->connectionValidatorMock,
+                'output' => $this->outputMock,
             ]
         );
     }
@@ -156,6 +164,7 @@ class ConfigOptionsListTest extends TestCase
         $this->connectionValidatorMock->expects($this->once())
             ->method('getServerVersion')
             ->willReturn('4.3.1');
+        $this->outputMock->expects($this->never())->method('writeln');
         $this->assertEquals($expectedResult, $this->model->validate($this->options, $this->deploymentConfigMock));
     }
 
@@ -168,21 +177,20 @@ class ConfigOptionsListTest extends TestCase
         $this->assertEquals($expectedResult, $this->model->validate($options, $this->deploymentConfigMock));
     }
 
-    public function testValidateVersionTooLow()
+    public function testValidateVersionBelowMinimumEmitsWarning()
     {
         $this->connectionValidatorMock->expects($this->once())->method('isConnectionValid')->willReturn(true);
         $this->connectionValidatorMock->expects($this->once())
             ->method('getServerVersion')
             ->willReturn('4.2.0');
 
+        $this->outputMock->expects($this->once())
+            ->method('writeln')
+            ->with($this->stringContains('Warning: RabbitMQ version "4.2.0" detected'));
+
         $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
 
-        $this->assertNotEmpty($errors);
-        $this->assertStringContainsString('RabbitMQ version "4.2.0" detected', $errors[0]);
-        $this->assertStringContainsString(
-            ConnectionValidator::MINIMUM_RABBITMQ_VERSION,
-            $errors[0]
-        );
+        $this->assertEmpty($errors, 'Version warning should not block setup as an error.');
     }
 
     public function testValidateVersionExactMinimum()
@@ -191,6 +199,7 @@ class ConfigOptionsListTest extends TestCase
         $this->connectionValidatorMock->expects($this->once())
             ->method('getServerVersion')
             ->willReturn(ConnectionValidator::MINIMUM_RABBITMQ_VERSION);
+        $this->outputMock->expects($this->never())->method('writeln');
 
         $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
 
@@ -203,6 +212,7 @@ class ConfigOptionsListTest extends TestCase
         $this->connectionValidatorMock->expects($this->once())
             ->method('getServerVersion')
             ->willReturn(null);
+        $this->outputMock->expects($this->never())->method('writeln');
 
         $errors = $this->model->validate($this->options, $this->deploymentConfigMock);
 

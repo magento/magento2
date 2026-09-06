@@ -152,7 +152,7 @@ class UpgradeCommand extends AbstractSetupCommand
         try {
             $request = $input->getOptions();
             $keepGenerated = $input->getOption(self::INPUT_KEY_KEEP_GENERATED);
-            
+
             // Clean up deprecated 'SET NAMES utf8;' from database connections
             $output->writeln('<info>Cleaning up deprecated SET NAMES utf8 from database connections...</info>');
             $this->dbInitStatementsCleanup->execute();
@@ -165,8 +165,11 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig->validateSearchEngine();
             $amqpVersionError = $this->validateAmqpVersion();
             if ($amqpVersionError !== null) {
-                $output->writeln('<error>' . $amqpVersionError . '</error>');
-                return Cli::RETURN_FAILURE;
+                $output->writeln(
+                    '<comment>Warning: ' . $amqpVersionError
+                    . ' If using a managed broker (e.g. AWS MQ), this version may not yet be available'
+                    . ' — proceed with caution.</comment>'
+                );
             }
             $installer->installSchema($request);
             $installer->removeUnusedTriggers();
@@ -252,7 +255,7 @@ class UpgradeCommand extends AbstractSetupCommand
         ) {
             return sprintf(
                 'RabbitMQ version "%s" detected. Magento requires RabbitMQ version %s or later. '
-                . 'Please upgrade RabbitMQ and rerun setup.',
+                . 'Please upgrade RabbitMQ when a compatible version is available. Setup will continue.',
                 $version,
                 ConnectionValidator::MINIMUM_RABBITMQ_VERSION
             );

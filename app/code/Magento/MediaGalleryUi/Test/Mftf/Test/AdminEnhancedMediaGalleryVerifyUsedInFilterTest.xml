@@ -67,6 +67,9 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
 
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="deselectEditedImageInGrid">
+            <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectCategoryImageInGrid">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
