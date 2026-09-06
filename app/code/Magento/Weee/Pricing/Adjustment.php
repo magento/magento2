@@ -20,17 +20,17 @@ class Adjustment implements AdjustmentInterface
     /**
      * Adjustment code weee
      */
-    const ADJUSTMENT_CODE = 'weee';
+    public const ADJUSTMENT_CODE = 'weee';
 
     /**
-     * Weee helper
+     * Weee helper class
      *
      * @var WeeeHelper
      */
     protected $weeeHelper;
 
     /**
-     * Sort order
+     * Sort order value
      *
      * @var int|null
      */
@@ -119,7 +119,8 @@ class Adjustment implements AdjustmentInterface
         if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
             return $amount;
         }
-        return $amount + $this->getAmount($saleableItem);
+        
+        return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
     }
 
     /**
