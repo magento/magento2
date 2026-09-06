@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Zend;
 
+use Magento\Framework\Cache\AbstractL1L2CacheProfileTestCase;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
 
 /**
