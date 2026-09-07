@@ -169,12 +169,8 @@ class Utility
         } catch (\Throwable $e) {
             return false;
         }
-        if (!$actions instanceof \Magento\Rule\Model\Condition\Combine) {
-            return false;
-        }
-        $conditions = $actions->getConditions();
 
-        return !empty($conditions) && is_array($conditions);
+        return $this->combineHasConditions($actions);
     }
 
     /**
@@ -185,13 +181,23 @@ class Utility
      */
     private function ruleHasAddressConditions(Rule $rule): bool
     {
-        $conditions = $rule->getConditions();
-        if (!$conditions instanceof \Magento\Rule\Model\Condition\Combine) {
+        return $this->combineHasConditions($rule->getConditions());
+    }
+
+    /**
+     * Whether a condition combine instance carries at least one child condition
+     *
+     * @param mixed $combine
+     * @return bool
+     */
+    private function combineHasConditions($combine): bool
+    {
+        if (!$combine instanceof \Magento\Rule\Model\Condition\Combine) {
             return false;
         }
-        $nestedConditions = $conditions->getConditions();
+        $conditions = $combine->getConditions();
 
-        return is_array($nestedConditions) && $nestedConditions !== [];
+        return is_array($conditions) && $conditions !== [];
     }
 
     /**
