@@ -82,20 +82,26 @@ class ConvertToCsv
             ->setCurrentPage($i)
             ->setPageSize($this->pageSize);
 
-        $totalCount = null;
-        $totalPagesCount = null;
+        // Compute total count exactly once. The data provider's
+        // getSearchResult() builds a fresh collection on each invocation
+        // (via Reporting::search), so any setTotalCount() called on a
+        // search result instance is lost when the next iteration runs.
+        // Pre-caching here avoids one getSelectCountSql per page.
+        $firstSearchResult = $dataProvider->getSearchResult();
+        $totalCount = (int) $firstSearchResult->getTotalCount();
+        $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
+        $searchResult = $firstSearchResult;
 
         do {
-            $searchResult = $dataProvider->getSearchResult();
-            $items = $searchResult->getItems();
-
-            if ($totalCount === null) { // get total count only once
-                $totalCount = $searchResult->getTotalCount();
-                $totalPagesCount = (int) ceil($totalCount / $this->pageSize);
+            if ($searchResult === null) {
+                $searchResult = $dataProvider->getSearchResult();
+                // Seed total count on the fresh collection so any
+                // downstream code that calls getTotalCount() reuses it
+                // instead of issuing another count query.
+                $searchResult->setTotalCount($totalCount);
             }
 
-            // call setTotalCount to prevent total count from being calculate in subsequent iterations of this loop
-            $searchResult->setTotalCount($totalCount);
+            $items = $searchResult->getItems();
             // Ensure $items is always an array
             if ($items === null) {
                 $items = [];
@@ -105,6 +111,7 @@ class ConvertToCsv
                 $stream->writeCsv($this->metadataProvider->getRowData($item, $fields, $options));
             }
 
+            $searchResult = null;
             $searchCriteria->setCurrentPage(++$i);
         } while ($i <= $totalPagesCount);
 
