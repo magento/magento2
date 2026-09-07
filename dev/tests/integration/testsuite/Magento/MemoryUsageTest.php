@@ -15,7 +15,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
     /**
      * Number of warm-up reinitialization iterations conducted before measuring memory usage.
      */
-    private const WARM_UP_LOOPS = 5;
+    private const WARM_UP_LOOPS = 10;
 
     /**
      * @var \Magento\TestFramework\Helper\Memory
@@ -48,6 +48,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
             $this->_deallocateUnusedMemory();
         }
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage() - $actualMemoryUsage;
+        fwrite(STDERR, "DEBUG final actualMemoryUsage=$actualMemoryUsage\n");
         $this->assertLessThanOrEqual(
             $this->_getAllowedMemoryUsage(),
             $actualMemoryUsage,
