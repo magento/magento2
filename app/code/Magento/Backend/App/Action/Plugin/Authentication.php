@@ -141,7 +141,6 @@ class Authentication
                 }
             }
         }
-        $this->_auth->getAuthStorage()->refreshAcl();
         return $proceed($request);
     }
 

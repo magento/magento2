@@ -139,7 +139,10 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
             return $this;
         }
         if (!$this->getAcl() || $user->getReloadAclFlag()) {
-            $this->setAcl($this->_aclBuilder->getAcl());
+            $acl = $this->_aclBuilder->getAcl();
+            if ($acl !== null) {
+                $this->setAcl($acl);
+            }
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
@@ -158,19 +161,28 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function isAllowed($resource, $privilege = null)
     {
         $user = $this->getUser();
-        $acl = $this->getAcl();
+        if (!$user) {
+            return false;
+        }
 
-        if ($user && $acl) {
+        if (!$this->getAcl() || $user->getReloadAclFlag()) {
+            $this->refreshAcl($user);
+        }
+
+        $acl = $this->getAcl();
+        if (!$acl) {
+            return false;
+        }
+
+        try {
+            return $acl->isAllowed($user->getAclRole(), $resource, $privilege);
+        } catch (\Exception $e) {
             try {
-                return $acl->isAllowed($user->getAclRole(), $resource, $privilege);
-            } catch (\Exception $e) {
-                try {
-                    if (!$acl->hasResource($resource)) {
-                        return $acl->isAllowed($user->getAclRole(), null, $privilege);
-                    }
-                } catch (\Exception $e) {
-                    return false;
+                if (!$acl->hasResource($resource)) {
+                    return $acl->isAllowed($user->getAclRole(), null, $privilege);
                 }
+            } catch (\Exception $e) {
+                return false;
             }
         }
         return false;
