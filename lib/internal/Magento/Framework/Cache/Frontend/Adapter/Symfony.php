@@ -89,6 +89,14 @@ class Symfony implements FrontendInterface, MultiLoadInterface
     private bool $batchMode = false;
 
     /**
+     * Nesting depth of beginBatch()/endBatch() calls; only the outermost endBatch() commits,
+     * so an inner caller's batch cannot prematurely turn off batching for an outer caller.
+     *
+     * @var int
+     */
+    private int $batchDepth = 0;
+
+    /**
      * @var array
      */
     private array $batchedItems = [];
@@ -434,6 +442,7 @@ class Symfony implements FrontendInterface, MultiLoadInterface
      */
     public function beginBatch(): void
     {
+        $this->batchDepth++;
         $this->batchMode = true;
         $this->alwaysDeferSaves = true;  // Enable automatic deferring
         $this->batchedItems = [];
@@ -442,6 +451,10 @@ class Symfony implements FrontendInterface, MultiLoadInterface
     /**
      * End batch mode and commit all deferred cache operations
      *
+     * Only the outermost endBatch() (matching the first beginBatch()) actually turns off batch
+     * mode and commits; nested calls just decrement the depth, so an inner caller cannot end
+     * batching that an outer caller is still relying on.
+     *
      * Note: With alwaysDeferSaves mode, this is optional since commits
      * happen automatically before reads and at request end.
      *
@@ -449,6 +462,14 @@ class Symfony implements FrontendInterface, MultiLoadInterface
      */
     public function endBatch(): bool
     {
+        if ($this->batchDepth > 0) {
+            $this->batchDepth--;
+        }
+
+        if ($this->batchDepth > 0) {
+            return true;
+        }
+
         $this->batchMode = false;
         $this->alwaysDeferSaves = false;  // Disable automatic deferring
         return $this->commitPendingWrites();

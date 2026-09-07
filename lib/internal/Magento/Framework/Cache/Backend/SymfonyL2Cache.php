@@ -345,7 +345,11 @@ class SymfonyL2Cache extends AbstractBackend implements
     }
 
     /**
-     * Fully wipe both cache tiers (L1 + L2). Used by FlushAll / cache:flush via getBackend()->clear().
+     * Fully wipe both cache tiers (L1 + L2), for direct callers of getBackend()->clear().
+     *
+     * Admin "Flush Cache Storage" (FlushAll) and `bin/magento cache:flush` do not call this
+     * method; they call clean(CLEANING_MODE_ALL), which reaches the same result via a separate
+     * code path (the CLEANING_MODE_ALL branch of clean() below).
      *
      * @return bool
      */
