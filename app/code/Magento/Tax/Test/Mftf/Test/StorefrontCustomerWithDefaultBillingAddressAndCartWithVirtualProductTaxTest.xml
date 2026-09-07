@@ -77,6 +77,10 @@
         <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible2"/>
         <!-- Verify tax on payment page -->
         <see selector="{{CheckoutPaymentSection.tax}}" userInput="$7.25" stepKey="verifyTaxOnPaymentPage"/>
+        <!-- Select Check/Money order payment method -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="waitForCheckMoneyOrderPayment"/>
+        <click selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" stepKey="selectCheckMoneyOrderPayment"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="waitForCheckMoneyOrderActive"/>
         <!-- Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
         <!-- Navigate to order details page -->
