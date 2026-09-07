@@ -147,6 +147,11 @@ sub vcl_backend_response {
 
     set beresp.grace = 3d;
 
+    # Preserve stale object when a background fetch returns a server error
+    if (beresp.status >= 500 && bereq.is_bgfetch) {
+        return (abandon);
+    }
+
     if (beresp.http.content-type ~ "text") {
         set beresp.do_esi = true;
     }
