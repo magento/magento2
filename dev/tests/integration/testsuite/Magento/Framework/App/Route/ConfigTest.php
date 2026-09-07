@@ -8,6 +8,7 @@ namespace Magento\Framework\App\Route;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,8 +25,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $route
      * @param string $scope
-     * @dataProvider getRouteFrontNameDataProvider
      */
+    #[DataProvider('getRouteFrontNameDataProvider')]
     public function testGetRouteFrontName($route, $scope)
     {
         self::assertEquals(

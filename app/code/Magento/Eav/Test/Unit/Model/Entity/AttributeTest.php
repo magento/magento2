@@ -10,9 +10,11 @@ namespace Magento\Eav\Test\Unit\Model\Entity;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabel;
 use Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for EAV Entity attribute model
@@ -44,9 +46,9 @@ class AttributeTest extends TestCase
     /**
      * @param string $givenFrontendInput
      * @param string $expectedBackendType
-     * @dataProvider dataGetBackendTypeByInput
      * @return void
      */
+    #[DataProvider('dataGetBackendTypeByInput')]
     public function testGetBackendTypeByInput($givenFrontendInput, $expectedBackendType)
     {
         $this->assertEquals($expectedBackendType, $this->_model->getBackendTypeByInput($givenFrontendInput));
@@ -77,8 +79,8 @@ class AttributeTest extends TestCase
     /**
      * @param string $givenFrontendInput
      * @param string $expectedDefaultValue
-     * @dataProvider dataGetDefaultValueByInput
      */
+    #[DataProvider('dataGetDefaultValueByInput')]
     public function testGetDefaultValueByInput($givenFrontendInput, $expectedDefaultValue)
     {
         $this->assertEquals($expectedDefaultValue, $this->_model->getDefaultValueByInput($givenFrontendInput));
@@ -109,8 +111,8 @@ class AttributeTest extends TestCase
     /**
      * @param array|null $sortWeights
      * @param float $expected
-     * @dataProvider getSortWeightDataProvider
      */
+    #[DataProvider('getSortWeightDataProvider')]
     public function testGetSortWeight($sortWeights, $expected)
     {
         $setId = 123;
@@ -141,14 +143,14 @@ class AttributeTest extends TestCase
     {
         $attributeId = 1;
         $storeLabels = ['test_attribute_store1'];
-        $frontendLabelFactory = $this->getMockBuilder(FrontendLabelFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $resource = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute::class)
-            ->onlyMethods(['getStoreLabelsByAttributeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $frontendLabelFactory = $this->createPartialMock(
+            FrontendLabelFactory::class,
+            ['create']
+        );
+        $resource = $this->createPartialMock(
+            AttributeResource::class,
+            ['getStoreLabelsByAttributeId']
+        );
         $arguments = [
             '_resource' => $resource,
             'frontendLabelFactory' => $frontendLabelFactory,
@@ -161,10 +163,10 @@ class AttributeTest extends TestCase
             ->method('getStoreLabelsByAttributeId')
             ->with($attributeId)
             ->willReturn($storeLabels);
-        $frontendLabel = $this->getMockBuilder(FrontendLabel::class)
-            ->onlyMethods(['setStoreId', 'setLabel'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $frontendLabel = $this->createPartialMock(
+            FrontendLabel::class,
+            ['setStoreId', 'setLabel']
+        );
         $frontendLabelFactory->expects($this->once())
             ->method('create')
             ->willReturn($frontendLabel);

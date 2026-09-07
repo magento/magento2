@@ -17,10 +17,11 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\CartItem\ProductStock;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Resolver for ProductInterface quantity
- * Returns the available stock quantity based on cataloginventory/options/not_available_message
+ * Resolves the salable quantity for a product returns null
+ * when unavailable and store shows "Not enough items" message.
  */
 class QuantityResolver implements ResolverInterface
 {
@@ -61,12 +62,6 @@ class QuantityResolver implements ResolverInterface
         ?array $args = null
     ): ?float {
 
-        if ((int) $this->scopeConfig->getValue(
-            self::CONFIG_PATH_NOT_AVAILABLE_MESSAGE
-        ) === NotAvailableMessage::VALUE_NOT_ENOUGH_ITEMS) {
-            return null;
-        }
-
         if (isset($value['cart_item']) && $value['cart_item'] instanceof Item) {
             return $this->productStock->getSaleableQtyByCartItem($value['cart_item'], null);
         }
@@ -80,6 +75,15 @@ class QuantityResolver implements ResolverInterface
 
         if ($product->getTypeId() === self::PRODUCT_TYPE_CONFIGURABLE) {
             $product = $this->productRepositoryInterface->get($product->getSku());
+        }
+
+        if (!$this->productStock->checkIfProductIsAvailable($product)
+            && (int) $this->scopeConfig->getValue(
+                self::CONFIG_PATH_NOT_AVAILABLE_MESSAGE,
+                ScopeInterface::SCOPE_STORE
+            ) === NotAvailableMessage::VALUE_NOT_ENOUGH_ITEMS
+        ) {
+            return null;
         }
 
         return $this->productStock->getSaleableQty($product, null);

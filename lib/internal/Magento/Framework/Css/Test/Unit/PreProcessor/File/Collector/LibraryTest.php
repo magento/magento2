@@ -21,6 +21,7 @@ use Magento\Framework\View\File\FileList;
 use Magento\Framework\View\File\FileList\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Library
@@ -141,14 +142,13 @@ class LibraryTest extends TestCase
     }
 
     /**
-     *
-     * @dataProvider getFilesDataProvider
-     *
+     *     *
      * @param array $libraryFiles Files in lib directory
      * @param array $themeFiles Files in theme
      * *
      * @return void
      */
+    #[DataProvider('getFilesDataProvider')]
     public function testGetFiles($libraryFiles, $themeFiles)
     {
         $this->fileListMock->expects($this->any())->method('getAll')->willReturn(['returnedFile']);

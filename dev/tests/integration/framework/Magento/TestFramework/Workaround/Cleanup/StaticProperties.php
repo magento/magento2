@@ -31,6 +31,9 @@ class StaticProperties
         '/dev/tests/integration/framework' => [],
     ];
 
+    /**
+     * @var array
+     */
     protected static $backupStaticVariables = [];
 
     /**
@@ -150,7 +153,7 @@ class StaticProperties
             $reflectionClass = self::getReflectionClass($class);
             $staticProperties = $reflectionClass->getProperties(\ReflectionProperty::IS_STATIC);
             foreach ($staticProperties as $staticProperty) {
-                $staticProperty->setValue(self::$backupStaticVariables[$class][$staticProperty->getName()]);
+                $staticProperty->setValue(null, self::$backupStaticVariables[$class][$staticProperty->getName()]);
             }
         }
     }

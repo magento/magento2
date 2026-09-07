@@ -10,6 +10,7 @@ namespace Magento\PageCache\Model\System\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -83,9 +84,9 @@ class AccessListTest extends TestCase
     /**
      * Test that valid IP addresses are accepted
      *
-     * @dataProvider validIpAddressesDataProvider
      * @param string $value
      */
+    #[DataProvider('validIpAddressesDataProvider')]
     public function testValidIpAddresses(string $value): void
     {
         $this->prepareModel($value);
@@ -121,9 +122,9 @@ class AccessListTest extends TestCase
     /**
      * Test that valid hostnames are accepted
      *
-     * @dataProvider validHostnamesDataProvider
      * @param string $value
      */
+    #[DataProvider('validHostnamesDataProvider')]
     public function testValidHostnames(string $value): void
     {
         $this->prepareModel($value);
@@ -154,9 +155,9 @@ class AccessListTest extends TestCase
     /**
      * Test that valid CIDR notation is accepted for IPv4
      *
-     * @dataProvider validCidrIpv4DataProvider
      * @param string $value
      */
+    #[DataProvider('validCidrIpv4DataProvider')]
     public function testValidCidrNotationIpv4(string $value): void
     {
         $this->prepareModel($value);
@@ -189,9 +190,9 @@ class AccessListTest extends TestCase
     /**
      * Test that valid CIDR notation is accepted for IPv6
      *
-     * @dataProvider validCidrIpv6DataProvider
      * @param string $value
      */
+    #[DataProvider('validCidrIpv6DataProvider')]
     public function testValidCidrNotationIpv6(string $value): void
     {
         $this->prepareModel($value);
@@ -221,9 +222,9 @@ class AccessListTest extends TestCase
     /**
      * Test that multiple valid values separated by commas are accepted
      *
-     * @dataProvider validMultipleValuesDataProvider
      * @param string $value
      */
+    #[DataProvider('validMultipleValuesDataProvider')]
     public function testValidMultipleValues(string $value): void
     {
         $this->prepareModel($value);
@@ -269,9 +270,9 @@ class AccessListTest extends TestCase
     /**
      * Test that invalid CIDR notation is rejected
      *
-     * @dataProvider invalidCidrDataProvider
      * @param string $value
      */
+    #[DataProvider('invalidCidrDataProvider')]
     public function testInvalidCidrNotation(string $value): void
     {
         $this->expectException(LocalizedException::class);
@@ -302,9 +303,9 @@ class AccessListTest extends TestCase
     /**
      * Test that invalid characters are rejected
      *
-     * @dataProvider invalidCharactersDataProvider
      * @param string $value
      */
+    #[DataProvider('invalidCharactersDataProvider')]
     public function testInvalidCharacters(string $value): void
     {
         $this->expectException(LocalizedException::class);
@@ -336,9 +337,9 @@ class AccessListTest extends TestCase
     /**
      * Test that non-string values are rejected
      *
-     * @dataProvider invalidTypeDataProvider
      * @param mixed $value
      */
+    #[DataProvider('invalidTypeDataProvider')]
     public function testInvalidValueTypes($value): void
     {
         $this->expectException(LocalizedException::class);
@@ -368,9 +369,9 @@ class AccessListTest extends TestCase
     /**
      * Test that mixed valid and invalid values in comma-separated list are rejected
      *
-     * @dataProvider mixedValidInvalidDataProvider
      * @param string $value
      */
+    #[DataProvider('mixedValidInvalidDataProvider')]
     public function testMixedValidAndInvalidValues(string $value): void
     {
         $this->expectException(LocalizedException::class);

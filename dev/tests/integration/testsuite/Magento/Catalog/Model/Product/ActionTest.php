@@ -6,7 +6,11 @@
 namespace Magento\Catalog\Model\Product;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use PHPUnit\Framework\Attributes\DataProvider;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -89,9 +93,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
      * @magentoAppArea adminhtml
      * @param string $status
      * @param string $productsCount
-     * @dataProvider updateAttributesDataProvider
      * @magentoDbIsolation disabled
      */
+    #[DataProvider('updateAttributesDataProvider')]
     public function testUpdateAttributes($status, $productsCount)
     {
         /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */

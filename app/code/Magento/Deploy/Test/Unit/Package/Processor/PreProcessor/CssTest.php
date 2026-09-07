@@ -60,8 +60,7 @@ class CssTest extends TestCase
         $this->minification = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->staticDir = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $this->staticDir = $this->createMock(ReadInterface::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->willReturn($this->staticDir);

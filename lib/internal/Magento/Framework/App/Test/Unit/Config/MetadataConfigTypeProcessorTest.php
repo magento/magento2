@@ -57,9 +57,9 @@ class MetadataConfigTypeProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->_backendModelMock= $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configSourceMock = $this->getMockBuilder(ConfigSourceInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->configPathResolverMock = $this->getMockBuilder(ConfigPathResolver::class)
             ->disableOriginalConstructor()
             ->getMock();

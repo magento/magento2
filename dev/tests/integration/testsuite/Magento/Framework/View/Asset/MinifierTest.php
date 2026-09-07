@@ -23,6 +23,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\TestFramework\App\State;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\Theme\Model\Theme\Registration;
@@ -141,9 +142,7 @@ class MinifierTest extends TestCase
         $request->setRequestUri($requestedUri);
         $request->setParam('resource', $requestedUri);
 
-        $response = $this->getMockBuilder(FileInterface::class)
-            ->onlyMethods(['setFilePath'])
-            ->getMockForAbstractClass();
+        $response = $this->createMock(FileInterface::class);
         $response
             ->expects($this->any())
             ->method('setFilePath')

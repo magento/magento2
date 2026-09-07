@@ -21,7 +21,7 @@ Extension developers can interact with the Magento_ProductVideo module. For more
 
 [The dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_ProductVideo module.
 
-A lot of functionality in the module is in JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins/) to extend it.
+A lot of functionality in the module is in JavaScript, use [mixins](https://developer.adobe.com/commerce/frontend-core/javascript/mixins) to extend it.
 
 ### Layouts
 
@@ -47,4 +47,4 @@ For information about a UI component, see [Overview of UI components](https://de
 You can get more information at the following articles:
 
 - [Learn how to add Product Video](https://experienceleague.adobe.com/en/docs/commerce-admin/catalog/products/digital-assets/product-video)
-- [Learn how to configure Product Video](https://developer.adobe.com/commerce/frontend-core/guide/themes/product-video/)
+- [Learn how to configure Product Video](https://developer.adobe.com/commerce/frontend-core/guide/themes/product-video)

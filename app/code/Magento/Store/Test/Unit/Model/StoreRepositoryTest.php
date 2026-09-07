@@ -164,14 +164,14 @@ class StoreRepositoryTest extends TestCase
      */
     public function testGetList(): void
     {
-        $storeMock1 = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock1 = $this->createMock(StoreInterface::class);
         $storeMock1->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code');
         $storeMock1->expects($this->once())
             ->method('getId')
             ->willReturn(1);
-        $storeMock2 = $this->getMockForAbstractClass(StoreInterface::class);
+        $storeMock2 = $this->createMock(StoreInterface::class);
         $storeMock2->expects($this->once())
             ->method('getCode')
             ->willReturn('some_code_2');

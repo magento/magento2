@@ -12,16 +12,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PrimaryTest extends TestCase
 {
-    /**
-     * @param array $fileList
-     * @param string $scope
-     * @param string $filename
-     * @dataProvider getMethodDataProvider
+    /**     * @param string $filename
      */
+    #[DataProvider('getMethodDataProvider')]
     public function testGet(array $fileList, $scope, $filename)
     {
         $directory = $this->createMock(Read::class);

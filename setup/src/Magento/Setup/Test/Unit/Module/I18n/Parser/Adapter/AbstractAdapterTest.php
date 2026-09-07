@@ -25,15 +25,10 @@ class AbstractAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_adapterMock = $this->getMockForAbstractClass(
-            AbstractAdapter::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['_parse']
-        );
+        $this->_adapterMock = $this->getMockBuilder(AbstractAdapter::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['_parse'])
+            ->getMock();
         $this->_adapterReflection = new \ReflectionMethod(
             AbstractAdapter::class,
             '_addPhrase'

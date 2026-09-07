@@ -10,6 +10,7 @@ namespace Magento\Dhl\Test\Unit\Model\Validator;
 use Magento\Dhl\Model\Validator\ResponseErrorProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Shipping\Model\Simplexml\Element;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ResponseErrorProcessorTest extends TestCase
@@ -35,8 +36,8 @@ class ResponseErrorProcessorTest extends TestCase
      * Test process outputs correctly formatted error messages
      *
      * @param array $data
-     * @dataProvider processProvider
      */
+    #[DataProvider('processProvider')]
     public function testProcess($data)
     {
         $xml = $this->getXml($data['file']);

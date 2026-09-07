@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestModuleOverrideConfig\Inheritance\Skip;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class checks that test method can be skipped using inherited from abstract class/interface override config
  *
@@ -33,11 +35,10 @@ class SkipTest extends SkipAbstractClass implements SkipInterface
     }
 
     /**
-     * @dataProvider skipDataProvider
-     *
      * @param string $message
      * @return void
      */
+    #[DataProvider('skipDataProvider')]
     public function testSkipDataSet(string $message): void
     {
         $this->fail($message);

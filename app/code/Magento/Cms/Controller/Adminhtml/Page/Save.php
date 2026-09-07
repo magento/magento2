@@ -31,7 +31,7 @@ class Save extends Action implements HttpPostActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Cms::save';
+    public const ADMIN_RESOURCE = 'Magento_Cms::save';
 
     /**
      * @var PostDataProcessor
@@ -149,6 +149,7 @@ class Save extends Action implements HttpPostActionInterface
             $identifier = $model->getIdentifier() . '-' . uniqid();
             $newPage->setIdentifier($identifier);
             $newPage->setIsActive(false);
+            $newPage->setData('layout_update_selected', null);
             $this->pageRepository->save($newPage);
             $this->messageManager->addSuccessMessage(__('You duplicated the page.'));
             return $resultRedirect->setPath(

@@ -55,15 +55,13 @@ class DescriptionParagraphGeneratorTest extends TestCase
         ];
         // @codingStandardsIgnoreEnd
 
+        $callCount = 0;
         $this->sentenceGeneratorMock
             ->expects($this->exactly(4))
             ->method('generate')
-            ->will($this->onConsecutiveCalls(
-                $consecutiveSentences[0],
-                $consecutiveSentences[1],
-                $consecutiveSentences[2],
-                $consecutiveSentences[3]
-            ));
+            ->willReturnCallback(function() use (&$callCount, $consecutiveSentences) {
+                return $consecutiveSentences[$callCount++];
+            });
 
         $this->assertEquals(
             implode(' ', $consecutiveSentences),

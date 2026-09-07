@@ -70,7 +70,9 @@ class View extends OrderView
         if ($order === null) {
             return;
         }
-        $message = __('Are you sure you want to authorize full order amount?');
+        $message = $this->_escaper->escapeJs(
+            $this->_escaper->escapeHtml(__('Are you sure you want to authorize full order amount?'))
+        );
         if ($this->_isAllowedAction('Magento_Paypal::authorization') && $this->canAuthorize($order)) {
             $this->addButton(
                 'order_authorize',

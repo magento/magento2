@@ -94,7 +94,7 @@ class SubscriptionTest extends TestCase
             ->with(DefaultProcessor::class)
             ->willReturn($this->defaultProcessor);
         $this->triggerFactoryMock = $this->createMock(TriggerFactory::class);
-        $this->viewCollectionMock = $this->getMockForAbstractClass(
+        $this->viewCollectionMock = $this->createMock(
             CollectionInterface::class,
             [],
             '',
@@ -103,7 +103,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $this->viewMock = $this->getMockForAbstractClass(
+        $this->viewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -211,7 +211,7 @@ class SubscriptionTest extends TestCase
                 }
             );
 
-        $changelogMock = $this->getMockForAbstractClass(
+        $changelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -235,7 +235,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
+        $otherChangelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -251,7 +251,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
+        $otherViewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -330,7 +330,7 @@ class SubscriptionTest extends TestCase
             ->method('create')
             ->willReturn($triggerMock);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(
+        $otherChangelogMock = $this->createMock(
             ChangelogInterface::class,
             [],
             '',
@@ -346,7 +346,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $otherViewMock = $this->getMockForAbstractClass(
+        $otherViewMock = $this->createMock(
             ViewInterface::class,
             [],
             '',
@@ -445,7 +445,7 @@ class SubscriptionTest extends TestCase
                 $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
             ]);
 
-        $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
+        $otherChangelogMock = $this->createMock(ChangelogInterface::class);
         $otherChangelogMock->expects($this->any())
             ->method('getViewId')
             ->willReturn($viewId);

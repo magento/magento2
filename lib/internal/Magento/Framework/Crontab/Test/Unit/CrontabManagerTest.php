@@ -19,6 +19,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\ShellInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests crontab manager functionality.
@@ -45,8 +46,7 @@ class CrontabManagerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->shellMock = $this->getMockBuilder(ShellInterface::class)
-            ->getMockForAbstractClass();
+        $this->shellMock = $this->createMock(ShellInterface::class);
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalClone()
             ->disableOriginalConstructor()
@@ -79,9 +79,8 @@ class CrontabManagerTest extends TestCase
      * @param string $content
      * @param array $tasks
      *
-     * @return void
-     * @dataProvider getTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('getTasksDataProvider')]
     public function testGetTasks($content, $tasks): void
     {
         $this->shellMock->expects($this->once())
@@ -160,9 +159,8 @@ class CrontabManagerTest extends TestCase
      * @param string $contentBefore
      * @param string $contentAfter
      *
-     * @return void
-     * @dataProvider removeTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('removeTasksDataProvider')]
     public function testRemoveTasks($contentBefore, $contentAfter): void
     {
         $this->shellMock
@@ -222,13 +220,11 @@ class CrontabManagerTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The list of tasks is empty. Add tasks and try again.');
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->never())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->never())
             ->method('getAbsolutePath');
 
@@ -251,13 +247,11 @@ class CrontabManagerTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The command shouldn\'t be empty. Enter and try again.');
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/var/log/');
@@ -281,18 +275,15 @@ class CrontabManagerTest extends TestCase
      * @param string $content
      * @param string $contentToSave
      *
-     * @return void
-     * @dataProvider saveTasksDataProvider
-     */
+     * @return void     */
+    #[DataProvider('saveTasksDataProvider')]
     public function testSaveTasks($tasks, $content, $contentToSave): void
     {
-        $baseDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $baseDirMock = $this->createMock(ReadInterface::class);
         $baseDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/');
-        $logDirMock = $this->getMockBuilder(ReadInterface::class)
-            ->getMockForAbstractClass();
+        $logDirMock = $this->createMock(ReadInterface::class);
         $logDirMock->expects($this->once())
             ->method('getAbsolutePath')
             ->willReturn('/var/www/magento2/var/log/');

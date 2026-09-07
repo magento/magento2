@@ -56,19 +56,34 @@ class DefaultValueProcessor
         $storeValues = $this->getStoreValues($ids, $storeId);
 
         foreach ($images as &$image) {
-            if (($image['media_type'] ?? null) === ExternalVideoEntryConverter::MEDIA_TYPE_CODE) {
-                $image['video_title_use_default'] = 1;
-                $image['video_description_use_default'] = 1;
-                if (isset($storeValues[$image['value_id']])) {
-                    $storeValue = $storeValues[$image['value_id']];
-                    $image['video_title_use_default'] = $storeValue['title'] === null ? 1 : 0;
-                    $image['video_description_use_default'] = $storeValue['description'] === null ? 1 : 0;
-                }
+            if (!$this->isProcessable($image)) {
+                continue;
+            }
+            $image['video_title_use_default'] = 1;
+            $image['video_description_use_default'] = 1;
+            if (isset($storeValues[$image['value_id']])) {
+                $storeValue = $storeValues[$image['value_id']];
+                $image['video_title_use_default'] = $storeValue['title'] === null ? 1 : 0;
+                $image['video_description_use_default'] = $storeValue['description'] === null ? 1 : 0;
             }
         }
         $result['images'] = $images;
 
         return $result;
+    }
+
+    /**
+     * Check if media gallery image is valid for processing
+     *
+     * @param array $image
+     * @return bool
+     */
+    private function isProcessable(array $image): bool
+    {
+        return !empty($image['value_id'])
+            && ($image['media_type'] ?? null) === ExternalVideoEntryConverter::MEDIA_TYPE_CODE
+            // skip already processed media entries
+            && !isset($image['video_title_use_default'], $image['video_description_use_default']);
     }
 
     /**
@@ -92,10 +107,7 @@ class DefaultValueProcessor
     {
         $ids = [];
         foreach ($images as $image) {
-            if (($image['media_type'] ?? null) === ExternalVideoEntryConverter::MEDIA_TYPE_CODE
-                // skip already processed media entries
-                && !isset($image['video_title_use_default'], $image['video_description_use_default'])
-            ) {
+            if ($this->isProcessable($image)) {
                 $ids[] = $image['value_id'];
             }
         }

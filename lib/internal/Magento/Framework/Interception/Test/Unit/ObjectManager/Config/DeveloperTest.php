@@ -26,7 +26,7 @@ class DeveloperTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->interceptionConfig = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->interceptionConfig = $this->createMock(ConfigInterface::class);
         $this->model = new Developer();
     }
 

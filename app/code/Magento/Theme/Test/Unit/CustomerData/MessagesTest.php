@@ -40,10 +40,8 @@ class MessagesTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
-            ->getMock();
-        $this->messageProvider = $this->getMockBuilder(MessagesProviderInterface::class)
-            ->getMock();
+        $this->messageManager = $this->createMock(ManagerInterface::class);
+        $this->messageProvider = $this->createMock(MessagesProviderInterface::class);
         $this->messageInterpretationStrategy = $this->createMock(
             InterpretationStrategyInterface::class
         );
@@ -58,11 +56,9 @@ class MessagesTest extends TestCase
     {
         $msgType = 'error';
         $msgText = 'All is lost';
-        $msg = $this->getMockBuilder(MessageInterface::class)
-            ->getMock();
+        $msg = $this->createMock(MessageInterface::class);
         $messages = [$msg];
-        $msgCollection = $this->getMockBuilder(Collection::class)
-            ->getMock();
+        $msgCollection = $this->createMock(Collection::class);
 
         $msg->expects($this->once())
             ->method('getType')

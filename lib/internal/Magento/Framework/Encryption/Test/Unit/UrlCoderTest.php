@@ -36,7 +36,7 @@ class UrlCoderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->_urlMock = $this->createMock(UrlInterface::class);
         $this->_urlCoder = new UrlCoder($this->_urlMock);
     }
 

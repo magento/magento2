@@ -6,6 +6,7 @@
 namespace Magento\Framework;
 
 use ReflectionClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,10 +16,10 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider applyConfigDataProvider
      * @param array $config
      * @param array $expectedDrivers
      */
+    #[DataProvider('applyConfigDataProvider')]
     public function testApplyConfigWithDrivers(array $config, array $expectedDrivers)
     {
         $profiler = new \Magento\Framework\Profiler();

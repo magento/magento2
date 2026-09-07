@@ -344,6 +344,88 @@ class TierPriceStorageTest extends TestCase
     }
 
     /**
+     * Test delete method with different website IDs.
+     *
+     * @return void
+     */
+    public function testDeleteWithMultipleWebsites(): void
+    {
+        $priceWebsite1 = $this->createMock(TierPriceInterface::class);
+        $priceWebsite1->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn('simple');
+        $priceWebsite2 = $this->createMock(TierPriceInterface::class);
+        $priceWebsite2->expects($this->atLeastOnce())
+            ->method('getSku')
+            ->willReturn('simple');
+        $result = $this->createMock(PriceValidationResult::class);
+        $result->expects($this->once())
+            ->method('getFailedRowIds')
+            ->willReturn([]);
+        $this->tierPriceValidator->expects($this->once())
+            ->method('retrieveValidationResult')
+            ->willReturn($result);
+        $this->productIdLocator->expects($this->atLeastOnce())
+            ->method('retrieveProductIdsBySkus')
+            ->willReturn(['simple' => ['2' => 'simple']]);
+        $this->tierPricePersistence->expects($this->once())
+            ->method('get')
+            ->willReturn(
+                [
+                    [
+                        'value_id' => 10,
+                        'entity_id' => 2,
+                        'all_groups' => 1,
+                        'customer_group_id' => 0,
+                        'qty' => 5.0000,
+                        'value' => 6.0000,
+                        'percentage_value' => null,
+                        'website_id' => 1
+                    ],
+                    [
+                        'value_id' => 11,
+                        'entity_id' => 2,
+                        'all_groups' => 1,
+                        'customer_group_id' => 0,
+                        'qty' => 5.0000,
+                        'value' => 6.0000,
+                        'percentage_value' => null,
+                        'website_id' => 2
+                    ]
+                ]
+            );
+        $this->tierPriceFactory->expects($this->exactly(2))
+            ->method('createSkeleton')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'entity_id' => 2,
+                    'all_groups' => 1,
+                    'customer_group_id' => 0,
+                    'qty' => 5,
+                    'value' => 6,
+                    'percentage_value' => null,
+                    'website_id' => 1
+                ],
+                [
+                    'entity_id' => 2,
+                    'all_groups' => 1,
+                    'customer_group_id' => 0,
+                    'qty' => 5,
+                    'value' => 6,
+                    'percentage_value' => null,
+                    'website_id' => 2
+                ]
+            );
+        $this->tierPricePersistence->expects($this->once())
+            ->method('delete')
+            ->with([10, 11]);
+        $this->priceIndexProcessor->expects($this->once())
+            ->method('reindexList')
+            ->with([2]);
+        $this->assertEmpty($this->tierPriceStorage->delete([$priceWebsite1, $priceWebsite2]));
+    }
+
+    /**
      * Test delete method with null input - should throw InputException
      */
     public function testDeleteWithNullInput(): void

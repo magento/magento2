@@ -11,6 +11,8 @@ use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class BareTest extends TestCase
@@ -19,14 +21,14 @@ class BareTest extends TestCase
      * @param string $method
      * @param array $params
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+     #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $expectedResult)
     {
         if (is_callable($expectedResult)) {
             $expectedResult = $expectedResult($this);
         }
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
         $object = new Bare($frontendMock);
         $helper = new ProxyTesting();

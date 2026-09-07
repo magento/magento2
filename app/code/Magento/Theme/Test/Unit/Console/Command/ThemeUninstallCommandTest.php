@@ -26,6 +26,7 @@ use Magento\Theme\Model\Theme\ThemeUninstaller;
 use Magento\Theme\Model\ThemeValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -141,12 +142,7 @@ class ThemeUninstallCommandTest extends TestCase
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
         $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
@@ -169,12 +165,7 @@ class ThemeUninstallCommandTest extends TestCase
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(false);
         $this->tester->execute(['theme' => ['area/vendor/test1', 'area/vendor/test2']]);
@@ -202,12 +193,7 @@ class ThemeUninstallCommandTest extends TestCase
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->collection
             ->method('hasTheme')
@@ -243,12 +229,7 @@ class ThemeUninstallCommandTest extends TestCase
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn(
-                $this->getMockForAbstractClass(
-                    ThemeInterface::class,
-                    [],
-                    '',
-                    false
-                )
+                $this->createMock(ThemeInterface::class)
             );
         $this->themeDependencyChecker->expects($this->any())->method('checkChildTheme')->willReturn([]);
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
@@ -397,8 +378,8 @@ class ThemeUninstallCommandTest extends TestCase
      * @param $themePath
      *
      * @return void
-     * @dataProvider dataProviderThemeFormat
      */
+    #[DataProvider('dataProviderThemeFormat')]
     public function testExecuteWrongThemeFormat($themePath): void
     {
         $this->tester->execute(['theme' => [$themePath]]);

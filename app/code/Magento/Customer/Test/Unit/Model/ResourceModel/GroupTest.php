@@ -22,6 +22,7 @@ use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -212,7 +213,7 @@ class GroupTest extends TestCase
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage('You can\'t delete group "Default Group".');
 
-        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $dbAdapter = $this->createMock(AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 
         // Mock the group to use as default
@@ -238,7 +239,7 @@ class GroupTest extends TestCase
      */
     public function testBeforeDeleteAllowsNonDefaultGroup(): void
     {
-        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
+        $dbAdapter = $this->createMock(AdapterInterface::class);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 
         // Mock the group to NOT use as default
@@ -275,11 +276,11 @@ class GroupTest extends TestCase
     /**
      * Test that _beforeSave correctly truncates multibyte characters
      *
-     * @dataProvider multibyteCharacterProvider
      * @param string $input
      * @param string $expected
      * @return void
      */
+    #[DataProvider('multibyteCharacterProvider')]
     public function testBeforeSaveTruncatesMultibyteCharacters(string $input, string $expected): void
     {
         $this->snapshotMock->expects($this->once())->method('isModified')->willReturn(true);
@@ -299,18 +300,15 @@ class GroupTest extends TestCase
             ->method('setCode')
             ->with($expected);
 
-        $dbAdapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['describeTable', 'update', 'select'])
-            ->getMockForAbstractClass();
-        $dbAdapter->expects($this->any())->method('describeTable')->willReturn(['customer_group_id' => []]);
-        $dbAdapter->expects($this->any())->method('update')->willReturnSelf();
-        
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $dbAdapter->expects($this->any())->method('select')->willReturn($selectMock);
-        $selectMock->expects($this->any())->method('from')->willReturnSelf();
+        
+        $dbAdapter = $this->createMock(AdapterInterface::class);
+        $dbAdapter->method('describeTable')->willReturn(['customer_group_id' => []]);
+        $dbAdapter->method('update')->willReturnSelf();
+        $dbAdapter->method('select')->willReturn($selectMock);
+        $selectMock->method('from')->willReturnSelf();
         
         $this->resource->expects($this->any())->method('getConnection')->willReturn($dbAdapter);
 

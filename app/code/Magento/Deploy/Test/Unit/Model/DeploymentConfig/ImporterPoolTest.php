@@ -36,8 +36,7 @@ class ImporterPoolTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,8 +98,7 @@ class ImporterPoolTest extends TestCase
 
     public function testGetValidator()
     {
-        $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
-            ->getMockForAbstractClass();
+        $validatorMock = $this->createMock(ValidatorInterface::class);
         $this->validatorFactoryMock->expects($this->once())
             ->method('create')
             ->with('Validator\SomeValidator\Class')

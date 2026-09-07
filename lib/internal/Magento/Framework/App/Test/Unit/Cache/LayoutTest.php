@@ -11,6 +11,7 @@ use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\App\Cache\Type\Layout;
 use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class LayoutTest extends TestCase
@@ -36,12 +37,9 @@ class LayoutTest extends TestCase
         $this->layoutCacheType = new Layout($frontendPoolMock);
     }
 
-    /**
-     * @param string $data
-     * @param string $identifier
-     * @return void
-     * @dataProvider dataProviderForSaveDataTest
+    /**     * @return void
      */
+    #[DataProvider('dataProviderForSaveDataTest')]
     public function testSaveData(string $data, string $identifier)
     {
         $tags = ['tag1', 'tag2'];
@@ -99,14 +97,9 @@ class LayoutTest extends TestCase
         ];
     }
 
-    /**
-     * @param string $identifier
-     * @param bool|string|null $firstLoadReturn
-     * @param string|null $secondLoadReturn
-     * @param bool|string|null $expectedResult
-     * @return void
-     * @dataProvider loadDataProvider
+    /**     * @return void
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoadData(
         string $identifier,
         bool|string|null $firstLoadReturn,

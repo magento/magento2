@@ -19,6 +19,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Model\CustomerFactory;
 
 /**
@@ -79,11 +80,11 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider dataProviderInvalidCustomerInfo
      * @param string $email
      * @param string $password
      * @param string $message
      */
+    #[DataProvider('dataProviderInvalidCustomerInfo')]
     public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message): void
     {
         $this->expectException(\Exception::class);

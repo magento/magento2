@@ -14,6 +14,7 @@ use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -76,12 +77,11 @@ class SendTest extends TestCase
     }
 
     /**
-     * @dataProvider formDataProvider
-     *
      * @param string $field
      * @param string $value
      * @return void
      */
+    #[DataProvider('formDataProvider')]
     public function testGetCustomerFieldFromFormData(string $field, string $value): void
     {
         $formData = ['sender' => [$field => $value]];
@@ -103,14 +103,13 @@ class SendTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @dataProvider customerSessionDataProvider
-     *
      * @magentoAppIsolation enabled
      *
      * @param string $field
      * @param string $value
      * @return void
      */
+    #[DataProvider('customerSessionDataProvider')]
     public function testGetCustomerFieldFromSession(string $field, string $value): void
     {
         $customer = $this->accountManagement->authenticate('customer@example.com', 'password');

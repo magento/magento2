@@ -15,6 +15,46 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
+/**
+ * Invoice fixture
+ *
+ * Usage examples:
+ *
+ * 1. Create an invoice for an order using default data:
+ * <pre>
+ *  #[
+ *      DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice')
+ *  ]
+ * </pre>
+ *
+ * 2. Create an invoice and capture payment:
+ * <pre>
+ *  #[
+ *      DataFixture(
+ *          InvoiceFixture::class,
+ *          ['order_id' => '$order.id$', 'capture' => true],
+ *          'invoice'
+ *      )
+ *  ]
+ * </pre>
+ *
+ * 3. Create an invoice for specific items (by SKU) with quantities:
+ * <pre>
+ *  #[
+ *      DataFixture(
+ *          InvoiceFixture::class,
+ *          [
+ *              'order_id' => '$order.id$',
+ *              'items' => [
+ *                  ['sku' => '$p1.sku$', 'qty' => 1],
+ *                  ['sku' => '$p2.sku$', 'qty' => 2],
+ *              ]
+ *          ],
+ *          'invoice'
+ *      )
+ *  ]
+ * </pre>
+ */
 class Invoice implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
@@ -60,15 +100,37 @@ class Invoice implements RevertibleDataFixtureInterface
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as Invoice::DEFAULT_DATA.
-     * Fields structure fields:
-     * - $data['items']: can be supplied in following formats:
-     *      - array of arrays [{"sku":"$product1.sku$","qty":1}, {"sku":"$product2.sku$","qty":1}]
-     *      - array of arrays [{"order_item_id":"$oItem1.sku$","qty":1}, {"order_item_id":"$oItem2.sku$","qty":1}]
-     *      - array of arrays [{"product_id":"$product1.id$","qty":1}, {"product_id":"$product2.id$","qty":1}]
-     *      - array of arrays [{"quote_item_id":"$qItem1.id$","qty":1}, {"quote_item_id":"$qItem2.id$","qty":1}]
-     *      - array of SKUs ["$product1.sku$", "$product2.sku$"]
-     *      - array of order items IDs ["$oItem1.id$", "$oItem2.id$"]
-     *      - array of product instances ["$product1$", "$product2$"]
+     *
+     * Fields structure:
+     *
+     * - `$data['items']` as array of arrays with sku and qty:
+     * <pre>
+     * ['items' => [['sku' => '$p1.sku$', 'qty' => 1], ['sku' => '$p2.sku$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with order_item_id and qty:
+     * <pre>
+     * ['items' => [['order_item_id' => '$oItem1.id$', 'qty' => 1], ['order_item_id' => '$oItem2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with product_id and qty:
+     * <pre>
+     * ['items' => [['product_id' => '$p1.id$', 'qty' => 1], ['product_id' => '$p2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of arrays with quote_item_id and qty:
+     * <pre>
+     * ['items' => [['quote_item_id' => '$qItem1.id$', 'qty' => 1], ['quote_item_id' => '$qItem2.id$', 'qty' => 1]]]
+     * </pre>
+     * - `$data['items']` as array of SKUs:
+     * <pre>
+     * ['items' => ['$p1.sku$', '$p2.sku$']]
+     * </pre>
+     * - `$data['items']` as array of order item IDs:
+     * <pre>
+     * ['items' => ['$oItem1.id$', '$oItem2.id$']]
+     * </pre>
+     * - `$data['items']` as array of product instances:
+     * <pre>
+     * ['items' => ['$p1$', '$p2$']]
+     * </pre>
      */
     public function apply(array $data = []): ?DataObject
     {
@@ -130,7 +192,7 @@ class Invoice implements RevertibleDataFixtureInterface
             } elseif ($itemToInvoice instanceof ProductInterface) {
                 $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice->getSku()];
             } else {
-                $invoiceItem = array_intersect($itemToInvoice, $invoiceItem) + $invoiceItem;
+                $invoiceItem = array_intersect_key($itemToInvoice, $invoiceItem) + $invoiceItem;
                 if (isset($itemToInvoice['sku'])) {
                     $invoiceItem['order_item_id'] = $orderItemIdsBySku[$itemToInvoice['sku']];
                 } elseif (isset($itemToInvoice['product_id'])) {

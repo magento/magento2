@@ -39,8 +39,6 @@ $customer->setWebsiteId($website->getId())
     ->setMiddlename('A')
     ->setLastname('Smith')
     ->setSuffix('Esq.')
-    ->setDefaultBilling(1)
-    ->setDefaultShipping(1)
     ->setConfirmation($random->getUniqueHash())
     ->setGender($gender);
 

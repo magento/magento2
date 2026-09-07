@@ -10,15 +10,16 @@ namespace Magento\Framework\App\Test\Unit\Response\HeaderProvider;
 use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Framework\HTTP\Header;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class XssProtectionTest extends TestCase
 {
     /**
-     * @dataProvider userAgentDataProvider
      * @param string $userAgent
      * @param string $expectedHeader
      */
+    #[DataProvider('userAgentDataProvider')]
     public function testGetValue($userAgent, $expectedHeader)
     {
         $headerServiceMock = $this->getMockBuilder(Header::class)

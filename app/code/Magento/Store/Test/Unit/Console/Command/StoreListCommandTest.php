@@ -37,7 +37,7 @@ class StoreListCommandTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->command = $this->objectManager->getObject(
             StoreListCommand::class,

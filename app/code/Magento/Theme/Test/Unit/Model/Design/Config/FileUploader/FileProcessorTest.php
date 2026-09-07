@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -26,6 +27,8 @@ use PHPUnit\Framework\TestCase;
  */
 class FileProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|MockObject */
     protected $uploaderFactory;
 
@@ -74,17 +77,21 @@ class FileProcessorTest extends TestCase
         $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryWrite = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->directoryWrite = $this->createMock(WriteInterface::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->directoryWrite);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMockForAbstractClass();
-        $this->store = $this->getMockBuilder(StoreInterface::class)
-            ->addMethods(['getBaseUrl'])
-            ->getMockForAbstractClass();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->store = $this->createPartialMockWithReflection(
+            StoreInterface::class,
+            [
+                'getId', 'setId', 'getCode', 'setCode', 'getName', 'setName',
+                'getWebsiteId', 'setWebsiteId', 'getStoreGroupId', 'setIsActive',
+                'getIsActive', 'setStoreGroupId', 'getExtensionAttributes',
+                'setExtensionAttributes', 'getBaseUrl'
+            ]
+        );
 
         $this->fileProcessor = new FileProcessor(
             $this->uploaderFactory,

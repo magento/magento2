@@ -150,7 +150,20 @@ class BestsellersTest extends TestCase
         $select->expects($this->once())->method('joinLeft')->willReturn($select);
         $select->expects($this->any())->method('where')->willReturn($select);
         $select->expects($this->once())->method('useStraightJoin');
-        $select->expects($this->exactly(2))->method('insertFromSelect');
+        $select->expects($this->exactly(2))
+            ->method('insertFromSelect')
+            ->with(
+                null,
+                [
+                    'period',
+                    'store_id',
+                    'product_id',
+                    'product_name',
+                    'product_price',
+                    'qty_ordered',
+                    'period_month'
+                ]
+            );
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->exactly(4))
             ->method('getDatePartSql')

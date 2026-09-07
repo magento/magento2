@@ -15,6 +15,7 @@ use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\GraphQl\Query\Uid;
 
 /**
@@ -80,10 +81,10 @@ class CreateCustomerTest extends GraphQlAbstract
     /**
      * Create customer account with valid email addresses
      *
-     * @dataProvider validEmailAddressDataProvider
      * @param string $email
      * @throws Exception
      */
+    #[DataProvider('validEmailAddressDataProvider')]
     public function testCreateCustomerAccountWithPassword(string $email): void
     {
         $response = $this->graphQlMutation($this->getCreateCustomerMutation([
@@ -201,11 +202,10 @@ class CreateCustomerTest extends GraphQlAbstract
     }
 
     /**
-     * @dataProvider invalidEmailAddressDataProvider
-     *
      * @param string $email
      * @throws Exception
      */
+    #[DataProvider('invalidEmailAddressDataProvider')]
     public function testCreateCustomerIfEmailIsNotValid(string $email): void
     {
         $this->expectExceptionMessage('"' . $email . '" is not a valid email address.');

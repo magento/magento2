@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test group product minimum advertised price model
@@ -42,11 +43,11 @@ class MsrpPriceCalculatorTest extends TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
-     * @dataProvider getMsrpPriceValueDataProvider
      * @param float|null $simpleProductPriceMsrp
      * @param float|null $virtualProductMsrp
      * @param float|null $expectedMsrp
      */
+    #[DataProvider('getMsrpPriceValueDataProvider')]
     public function testGetMsrpPriceValue(
         ?float $simpleProductPriceMsrp,
         ?float $virtualProductMsrp,

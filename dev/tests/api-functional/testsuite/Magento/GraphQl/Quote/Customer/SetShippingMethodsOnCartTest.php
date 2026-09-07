@@ -12,6 +12,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting shipping methods on cart for customer
@@ -147,9 +148,9 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
      *
      * @param string $input
      * @param string $message
-     * @dataProvider dataProviderSetShippingMethodWithWrongParameters
      * @throws Exception
      */
+    #[DataProvider('dataProviderSetShippingMethodWithWrongParameters')]
     public function testSetShippingMethodWithWrongParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

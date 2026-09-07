@@ -11,6 +11,7 @@ namespace Magento\Framework\MessageQueue;
 use Magento\TestFramework\Helper\Amqp;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
@@ -57,10 +58,10 @@ class TopologyTest extends TestCase
     }
 
     /**
-     * @dataProvider exchangeDataProvider
      * @param array $expectedConfig
      * @param array $bindingConfig
      */
+    #[DataProvider('exchangeDataProvider')]
     public function testTopologyInstallation(array $expectedConfig, array $bindingConfig): void
     {
         if ($this->connectionType === 'stomp') {

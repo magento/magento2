@@ -65,12 +65,11 @@ class UspsUrl extends Value
         if ($isValid) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $host = parse_url((string)$this->getValue(), \PHP_URL_HOST);
-
-            if (!empty($host) && !preg_match("/(?:.+\.|^)(usps|shippingapis)\.com$/i", $host)) {
-                throw new ValidatorException(__('USPS API endpoint URL\'s must use usps.com or shippingapis.com'));
-            }
         }
-
+        if (!$isValid || (!empty($host) && !preg_match("/(?:.+\.|^)(usps|shippingapis)\.com$/i", $host))) {
+            throw new ValidatorException(__('USPS API endpoint URL\'s must use usps.com or shippingapis.com'));
+        }
+        
         return parent::beforeSave();
     }
 }

@@ -17,9 +17,11 @@ use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInter
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class FileFactoryTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var ObjectManager
      */
@@ -56,12 +58,10 @@ class FileFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->fileSystemMock =
-            $this->getMockBuilder(Filesystem::class)
-                ->addMethods(['isFile'])
-                ->onlyMethods(['getDirectoryWrite'])
-                ->disableOriginalConstructor()
-                ->getMock();
+        $this->fileSystemMock = $this->createPartialMockWithReflection(
+            Filesystem::class,
+            ['isFile', 'getDirectoryWrite']
+        );
         $this->dirMock = $this->getMockBuilder(
             Write::class
         )->disableOriginalConstructor()
@@ -131,7 +131,7 @@ class FileFactoryTest extends TestCase
         $content = ['type' => 'filename', 'value' => $file];
         $fileSize = 100;
 
-        $responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $responseMock = $this->createMock(ResponseInterface::class);
         $this->fileResponseFactory->expects($this->once())
             ->method('create')
             ->with([
@@ -169,7 +169,7 @@ class FileFactoryTest extends TestCase
         $this->dirMock->expects($this->once())
             ->method('stat')
             ->willReturn(['size' => $fileSize]);
-        $responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
+        $responseMock = $this->createMock(ResponseInterface::class);
         $this->fileResponseFactory->expects($this->once())
             ->method('create')
             ->with([

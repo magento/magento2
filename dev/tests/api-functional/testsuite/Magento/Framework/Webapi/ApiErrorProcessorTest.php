@@ -1,14 +1,14 @@
 <?php
 /**
  * Copyright 2025 Adobe
- * All rights reserved.
- * See COPYING.txt for license details.
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Indexer\Test\Fixture\Indexer as IndexerFixture;
 use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
@@ -43,9 +43,8 @@ class ApiErrorProcessorTest extends WebapiAbstract
      * @param array $requestData
      * @param string $endpoint
      * @param int $expectedExceptionCode
-     *
-     * @dataProvider malformedRequestParamsDataProvider
-     */
+     * */
+    #[DataProvider('malformedRequestParamsDataProvider')]
     public function testMalformedRequestParams(array $requestData, string $endpoint, int $expectedExceptionCode)
     {
         $this->expectException(\Exception::class);

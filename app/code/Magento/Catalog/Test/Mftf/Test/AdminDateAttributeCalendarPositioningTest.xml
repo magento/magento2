@@ -46,6 +46,8 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
+            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -61,6 +63,7 @@
         <conditionalClick selector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" dependentSelector="{{AdminProductGridSection.productCollapsibleColumns('closed','Design')}}" visible="true" stepKey="expandDesign"/>
 
         <!-- Click on the date input field to trigger the calendar -->
+        <waitForElementClickable selector="{{AdminProductFormSection.datePickerCalendar('1')}}" stepKey="waitForDatePickerInput"/>
         <click selector="{{AdminProductFormSection.datePickerCalendar('1')}}" stepKey="clickDatePickerTrigger"/>
 
         <!-- Assert that the calendar is fully visible on screen -->

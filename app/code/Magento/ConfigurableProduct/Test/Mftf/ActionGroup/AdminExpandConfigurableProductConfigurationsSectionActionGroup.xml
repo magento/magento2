@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright 2026 Adobe
+  * All Rights Reserved.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminExpandConfigurableProductConfigurationsSectionActionGroup">
+        <annotations>
+            <description>Scrolls to and expands the Configurations section on the admin product edit page</description>
+        </annotations>
+        <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToConfigurationsSection"/>
+        <conditionalClick selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" dependentSelector="{{AdminProductFormConfigurationsSection.currentVariations}}" visible="false" stepKey="expandConfigurationsSection"/>
+        <waitForElementVisible selector="{{AdminProductFormConfigurationsSection.currentVariations}}" stepKey="waitForVariationsVisible"/>
+    </actionGroup>
+</actionGroups>

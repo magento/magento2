@@ -10,6 +10,7 @@ namespace Magento\Customer\Model;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class GroupTest extends TestCase
@@ -45,13 +46,13 @@ class GroupTest extends TestCase
      * causing multibyte characters to be truncated incorrectly.
      *
      * @magentoDbIsolation enabled
-     * @dataProvider customerGroupCodeDataProvider
      * @param string $code
      * @param string $expectedCode
      * @param int $charLength
      * @return void
      * @throws LocalizedException
      */
+    #[DataProvider('customerGroupCodeDataProvider')]
     public function testMultibyteAndNormalCharacterHandling(string $code, string $expectedCode, int $charLength): void
     {
         $this->groupModel->setCode($code);

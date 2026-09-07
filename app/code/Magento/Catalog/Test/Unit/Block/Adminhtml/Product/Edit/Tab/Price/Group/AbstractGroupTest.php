@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Price\Group
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Group\AbstractGroup;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Customer\Api\Data\GroupInterface;
@@ -25,7 +26,7 @@ use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\Registry;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\Website;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractGroupTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractGroup
      */
@@ -103,22 +106,28 @@ class AbstractGroupTest extends TestCase
         $this->objectManager->prepareObjectManager();
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->groupRepositoryMock = $this->getMockForAbstractClass(GroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->createMock(GroupRepositoryInterface::class);
         $this->directoryHelperMock = $this->createMock(DirectoryHelper::class);
         $this->moduleManagerMock = $this->createMock(ModuleManager::class);
         $this->registryMock = $this->createMock(Registry::class);
-        $this->groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->groupManagementMock = $this->createMock(GroupManagementInterface::class);
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
-        $this->localeCurrencyMock = $this->getMockForAbstractClass(CurrencyInterface::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->localeCurrencyMock = $this->createMock(CurrencyInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getStoreManager')
             ->willReturn($this->storeManagerMock);
 
-        // Create mock for abstract class for testing
-        $this->block = $this->getMockForAbstractClass(
-            AbstractGroup::class,
+        // Setup default group for Tier class initialization (without expects to allow test overrides)
+        $defaultGroupMock = $this->createMock(GroupInterface::class);
+        $defaultGroupMock->method('getId')->willReturn(0);
+        $this->groupManagementMock->method('getAllCustomersGroup')
+            ->willReturn($defaultGroupMock);
+
+        // Create mock for abstract class for testing using ObjectManager
+        $this->block = $this->objectManager->getObject(
+            Tier::class,
             [
                 'context' => $this->contextMock,
                 'groupRepository' => $this->groupRepositoryMock,
@@ -167,7 +176,7 @@ class AbstractGroupTest extends TestCase
         $blockMock = $this->getMockBuilder(AbstractGroup::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['setElement', 'toHtml'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $blockMock->expects($this->once())
             ->method('setElement')
@@ -248,20 +257,20 @@ class AbstractGroupTest extends TestCase
      */
     public function testGetCustomerGroupsReturnsGroupsWhenCustomerModuleEnabled(): void
     {
-        $groupMock1 = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock1 = $this->createMock(GroupInterface::class);
         $groupMock1->expects($this->once())->method('getId')->willReturn(1);
         $groupMock1->expects($this->once())->method('getCode')->willReturn('General');
 
-        $groupMock2 = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock2 = $this->createMock(GroupInterface::class);
         $groupMock2->expects($this->once())->method('getId')->willReturn(2);
         $groupMock2->expects($this->once())->method('getCode')->willReturn('Wholesale');
 
-        $searchResultsMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $searchResultsMock = $this->createMock(GroupSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$groupMock1, $groupMock2]);
 
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
@@ -295,16 +304,16 @@ class AbstractGroupTest extends TestCase
     public function testGetCustomerGroupsWithGroupIdReturnsGroupName(): void
     {
         $groupId = 1;
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
+        $groupMock = $this->createMock(GroupInterface::class);
         $groupMock->expects($this->once())->method('getId')->willReturn($groupId);
         $groupMock->expects($this->once())->method('getCode')->willReturn('General');
 
-        $searchResultsMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $searchResultsMock = $this->createMock(GroupSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())
             ->method('getItems')
             ->willReturn([$groupMock]);
 
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
@@ -332,12 +341,12 @@ class AbstractGroupTest extends TestCase
     public function testGetCustomerGroupsWithNonExistentGroupIdReturnsEmptyArray(): void
     {
         $nonExistentGroupId = 999;
-        $searchResultsMock = $this->getMockForAbstractClass(GroupSearchResultsInterface::class);
+        $searchResultsMock = $this->createMock(GroupSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())
             ->method('getItems')
             ->willReturn([]);
 
-        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
 
         $this->moduleManagerMock->expects($this->once())
             ->method('isEnabled')
@@ -368,7 +377,7 @@ class AbstractGroupTest extends TestCase
         $blockMock = $this->getMockBuilder(AbstractGroup::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getWebsites'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $websites = [
             0 => ['name' => 'All Websites'],
@@ -428,15 +437,6 @@ class AbstractGroupTest extends TestCase
     public function testGetDefaultCustomerGroupReturnsAllCustomersGroupId(): void
     {
         $allCustomersGroupId = 0;
-        $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
-        $groupMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($allCustomersGroupId);
-
-        $this->groupManagementMock->expects($this->once())
-            ->method('getAllCustomersGroup')
-            ->willReturn($groupMock);
-
         $result = $this->block->getDefaultCustomerGroup();
 
         $this->assertSame($allCustomersGroupId, $result);
@@ -517,10 +517,10 @@ class AbstractGroupTest extends TestCase
     public function testGetAttributeReturnsEntityAttributeFromElement(): void
     {
         $attributeMock = $this->createMock(Attribute::class);
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getEntityAttribute'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getEntityAttribute']
+        );
 
         $elementMock->expects($this->once())
             ->method('getEntityAttribute')
@@ -548,10 +548,10 @@ class AbstractGroupTest extends TestCase
             ->willReturn($isScopeGlobal);
 
         $methods = array_merge(['getEntityAttribute'], $additionalMethods);
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods($methods)
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            $methods
+        );
         $elementMock->expects($this->any())
             ->method('getEntityAttribute')
             ->willReturn($attributeMock);
@@ -604,7 +604,7 @@ class AbstractGroupTest extends TestCase
         $blockMock = $this->getMockBuilder(AbstractGroup::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getChildHtml'])
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $blockMock->expects($this->once())
             ->method('getChildHtml')
@@ -942,10 +942,10 @@ class AbstractGroupTest extends TestCase
             ->method('getBaseCurrencyCode')
             ->willReturn($baseCurrency);
 
-        $elementMock = $this->getMockBuilder(AbstractElement::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValue'])
-            ->getMock();
+        $elementMock = $this->createPartialMockWithReflection(
+            AbstractElement::class,
+            ['getValue']
+        );
         $elementMock->expects($this->once())
             ->method('getValue')
             ->willReturn(null);

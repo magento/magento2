@@ -64,7 +64,7 @@ class CronCommandTest extends TestCase
      */
     public function testExecute()
     {
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $cron = $this->createMock(Cron::class);
         $objectManager->expects($this->once())
             ->method('create')

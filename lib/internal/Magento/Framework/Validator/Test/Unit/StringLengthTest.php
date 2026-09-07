@@ -9,6 +9,7 @@ namespace Magento\Framework\Validator\Test\Unit;
 
 use Magento\Framework\Validator\StringLength;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test case for \Magento\Framework\Validator\StringLength
@@ -30,12 +31,11 @@ class StringLengthTest extends TestCase
         $this->assertEquals('UTF-8', $this->_validator->getEncoding());
     }
 
-    /**
-     * @dataProvider isValidDataProvider
-     * @param string $value
+    /**     * @param string $value
      * @param int $maxLength
      * @param bool $isValid
      */
+    #[DataProvider('isValidDataProvider')]
     public function testIsValid($value, $maxLength, $isValid)
     {
         $this->_validator->setMax($maxLength);

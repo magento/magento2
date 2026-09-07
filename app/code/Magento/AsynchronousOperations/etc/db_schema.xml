@@ -67,6 +67,10 @@
             <column name="status"/>
             <column name="started_at"/>
         </index>
+        <index referenceId="MAGENTO_OPERATION_BULK_UUID_OPERATION_KEY" indexType="btree">
+            <column name="bulk_uuid"/>
+            <column name="operation_key"/>
+        </index>
     </table>
     <table name="magento_acknowledged_bulk" resource="default" engine="innodb"
            comment="Bulk that was viewed by user from notification area">

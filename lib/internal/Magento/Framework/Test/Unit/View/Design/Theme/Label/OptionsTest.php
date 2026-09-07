@@ -22,8 +22,7 @@ class OptionsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->listMock = $this->getMockBuilder(ListInterface::class)
-            ->getMockForAbstractClass();
+        $this->listMock = $this->createMock(ListInterface::class);
 
         $this->model = new Options($this->listMock);
     }

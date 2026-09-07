@@ -11,6 +11,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Theme\Model\Theme\StoreThemesResolver;
 use Magento\Theme\Model\Theme\StoreThemesResolverInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -67,8 +68,8 @@ class StoreThemesResolverTest extends TestCase
      *
      * @param array $themes
      * @param array $expected
-     * @dataProvider getThemesDataProvider
      */
+    #[DataProvider('getThemesDataProvider')]
     public function testGetThemes(array $themes, array $expected): void
     {
         $store = $this->createMock(StoreInterface::class);

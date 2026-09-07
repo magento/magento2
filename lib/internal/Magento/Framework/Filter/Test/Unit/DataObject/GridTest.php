@@ -18,7 +18,7 @@ class GridTest extends TestCase
 {
     public function testFilter()
     {
-        $entityFactoryMock = $this->getMockForAbstractClass(EntityFactoryInterface::class);
+        $entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
         $entityFactoryMock
             ->expects($this->any())
             ->method('create')

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\SendFriend;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -187,10 +188,10 @@ class SendFriendTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store sendfriend/email/enabled 1
-     * @dataProvider sendFriendsErrorsDataProvider
      * @param string $input
      * @param string $errorMessage
      */
+    #[DataProvider('sendFriendsErrorsDataProvider')]
     public function testErrors(string $input, string $errorMessage)
     {
         $query =

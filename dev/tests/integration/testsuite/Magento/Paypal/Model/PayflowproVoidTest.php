@@ -31,6 +31,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -91,8 +92,8 @@ class PayflowproVoidTest extends TestCase
      * @param DataObject $response
      * @magentoDataFixture Magento/Paypal/_files/order_payflowpro.php
      * @magentoConfigFixture current_store payment/payflowpro/active 1
-     * @dataProvider orderCancelSuccessDataProvider
      */
+    #[DataProvider('orderCancelSuccessDataProvider')]
     public function testOrderCancelSuccess(DataObject $response): void
     {
         $order = $this->getOrder();

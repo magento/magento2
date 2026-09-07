@@ -73,7 +73,7 @@ class PriceTest extends TestCase
 
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->registry = $this->createMock(Registry::class);
-        $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->layout = $this->createMock(LayoutInterface::class);
         $this->product = $this->createMock(Product::class);
 
         $context = $this->createMock(Context::class);

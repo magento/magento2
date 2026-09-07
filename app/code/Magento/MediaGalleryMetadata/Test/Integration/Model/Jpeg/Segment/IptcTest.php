@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteIptc;
 use Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadIptc;
 use Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile;
@@ -72,14 +73,13 @@ class IptcTest extends TestCase
 
     /**
      * Test for IPTC reader and writer
-     *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testWriteRead(
         string $fileName,
         string $title,

@@ -13,9 +13,13 @@ use Magento\Framework\Filter\Sprintf;
 use Magento\Framework\Filter\Template;
 use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class AbstractFactoryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractFactory
      */
@@ -45,12 +49,15 @@ class AbstractFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
 
-        $this->_factory = $this->getMockForAbstractClass(
-            AbstractFactory::class,
-            ['objectManger' => $this->_objectManager]
-        );
+        // Use getMockBuilder with onlyMethods([]) to allow real implementations
+        // This creates a partial mock that doesn't override any methods
+        $this->_factory = $this->getMockBuilder(AbstractFactory::class)
+            ->setConstructorArgs([$this->_objectManager])
+            ->onlyMethods([])
+            ->getMock();
+            
         $property = new \ReflectionProperty(AbstractFactory::class, 'invokableClasses');
         $property->setValue($this->_factory, $this->_invokableList);
 
@@ -58,11 +65,10 @@ class AbstractFactoryTest extends TestCase
         $property->setValue($this->_factory, $this->_sharedList);
     }
 
-    /**
-     * @dataProvider canCreateFilterDataProvider
-     * @param string $alias
+    /**     * @param string $alias
      * @param bool $expectedResult
      */
+    #[DataProvider('canCreateFilterDataProvider')]
     public function testCanCreateFilter($alias, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->_factory->canCreateFilter($alias));
@@ -76,11 +82,10 @@ class AbstractFactoryTest extends TestCase
         return [['arrayFilter', true], ['notExist', false]];
     }
 
-    /**
-     * @dataProvider isSharedDataProvider
-     * @param string $alias
+    /**     * @param string $alias
      * @param bool $expectedResult
      */
+    #[DataProvider('isSharedDataProvider')]
     public function testIsShared($alias, $expectedResult)
     {
         $this->assertEquals($expectedResult, $this->_factory->isShared($alias));
@@ -99,17 +104,19 @@ class AbstractFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider createFilterDataProvider
      * @param string $alias
      * @param array $arguments
      * @param bool $isShared
      */
+    #[DataProvider('createFilterDataProvider')]
     public function testCreateFilter($alias, $arguments, $isShared)
     {
         $property = new \ReflectionProperty(AbstractFactory::class, 'sharedInstances');
 
-        $filterMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['filter'])->getMock();
+        $filterMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['filter']
+        );
         $this->_objectManager->expects(
             $this->atLeastOnce()
         )->method(

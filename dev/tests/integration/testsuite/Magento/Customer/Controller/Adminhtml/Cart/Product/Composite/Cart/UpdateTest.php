@@ -24,6 +24,7 @@ use Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -106,13 +107,13 @@ class UpdateTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider updateWithQuoteProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/quote.php
      * @param bool $hasQuoteItem
      * @param array $expectedUpdateResult
      * @return void
      */
+    #[DataProvider('updateWithQuoteProvider')]
     public function testUpdateWithQuote(bool $hasQuoteItem, array $expectedUpdateResult): void
     {
         $itemsCollection = $this->quoteItemCollectionFactory->create();
@@ -209,11 +210,11 @@ class UpdateTest extends AbstractBackendController
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_bundle_product.php
-     * @dataProvider bundleOptionQuantityProvider
      * @param string $quantity
      * @param string|null $message
      * @return void
      */
+    #[DataProvider('bundleOptionQuantityProvider')]
     public function testUpdateBundleOptionQuantity(string $quantity, ?string $message): void
     {
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);

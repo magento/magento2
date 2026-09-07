@@ -41,7 +41,14 @@
             <xs:element type="connectionType" name="connection" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
         <xs:attribute type="xs:string" name="topic" use="required" />
-        <xs:attribute type="xs:string" name="queue" />
+        <xs:attribute type="xs:string" name="queue" use="optional">
+            <xs:annotation>
+                <xs:documentation>
+                    @deprecated
+                    It's not used anymore. Queue declaration is part of topology config.
+                </xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
         <xs:attribute type="xs:boolean" name="disabled" use="optional" />
     </xs:complexType>
 

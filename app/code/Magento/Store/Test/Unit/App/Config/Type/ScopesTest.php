@@ -10,6 +10,7 @@ namespace Magento\Store\Test\Unit\App\Config\Type;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\App\Config\Type\Scopes;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,9 +38,7 @@ class ScopesTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider getDataProvider
-     */
+    #[DataProvider('getDataProvider')]
     public function testGet($path, $expectedResult)
     {
         $configData = [

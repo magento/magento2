@@ -56,20 +56,12 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $this->reader = $this->createPartialMock(Reader::class, ['read']);
-        $this->cache = $this->getMockForAbstractClass(
-            CacheInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['test', 'load', 'save']
-        );
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->stateCollection = $this->createPartialMock(
             Collection::class,
             ['getItems']
         );
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
     }
 
     public function testConstructorWithCache()

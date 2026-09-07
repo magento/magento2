@@ -10,6 +10,7 @@ namespace Magento\Framework\Config\Test\Unit;
 use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Config\Theme;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ThemeTest extends TestCase
 {
@@ -43,9 +44,8 @@ class ThemeTest extends TestCase
 
     /**
      * @param string $themePath
-     * @param array $expected
-     * @dataProvider dataGetterDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('dataGetterDataProvider')]
     public function testDataGetter($themePath, $expected)
     {
         $expected = reset($expected);

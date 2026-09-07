@@ -264,16 +264,24 @@ class MagentoStyleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $input = $this->getMockBuilder(InputInterface::class)
-            ->onlyMethods(['isInteractive'])
+            ->onlyMethods([
+                'getFirstArgument', 'hasParameterOption', 'getParameterOption', 'bind',
+                'validate', 'getArguments', 'getArgument', 'setArgument', 'hasArgument',
+                'getOptions', 'getOption', 'setOption', 'hasOption', 'isInteractive', 'setInteractive',
+                '__toString'
+            ])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $input->expects($this->exactly(2))
             ->method('isInteractive')
             ->willReturn(false);
         $output = $this->getMockBuilder(OutputInterface::class)
-            ->onlyMethods(['getVerbosity', 'getFormatter'])
+            ->onlyMethods([
+                'write', 'writeln', 'setVerbosity', 'getVerbosity', 'isQuiet', 'isVerbose',
+                'isVeryVerbose', 'isDebug', 'setDecorated', 'isDecorated', 'setFormatter', 'getFormatter'
+            ])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $output->expects($this->once())
             ->method('getVerbosity')
             ->willReturn(32);

@@ -15,6 +15,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Block\Product\Gallery;
@@ -26,6 +28,8 @@ use Magento\Framework\Registry;
  */
 class GalleryTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Gallery
      */
@@ -86,10 +90,7 @@ class GalleryTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['registry'])
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParam'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestInterface::class);
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getMediaGalleryImages'])
@@ -126,10 +127,10 @@ class GalleryTest extends TestCase
     {
         $imageId = 123;
         $expectedFile = 'path/to/image.jpg';
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFile'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getFile']
+        );
 
         $this->requestMock->method('getParam')->with('image')->willReturn($imageId);
         $this->productMock->expects($this->once())->method('getMediaGalleryImages')->willReturn($this->collectionMock);
@@ -147,10 +148,10 @@ class GalleryTest extends TestCase
     public function testGetImageFileReturnsFileWhenImageParamIsNotPresent(): void
     {
         $expectedFile = 'path/to/image.jpg';
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getFile'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getFile']
+        );
 
         $this->requestMock->method('getParam')->with('image')->willReturn(null);
         $this->productMock->expects($this->once())->method('getMediaGalleryImages')->willReturn($this->collectionMock);
@@ -163,20 +164,20 @@ class GalleryTest extends TestCase
     /**
      * Consolidated test for getImageWidth() using a data provider to cover multiple scenarios.
      *
-     * @dataProvider imageWidthProvider
      * @param array $fileStat
      * @param bool $isFile
      * @param int|bool $expectedSize
      */
+    #[DataProvider('imageWidthProvider')]
     public function testGetImageWidth(array $fileStat, bool $isFile, $expectedSize): void
     {
         $imageId = 123;
         $expectedFile = 'path/to/image.jpg';
 
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getPath'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getPath']
+        );
         $dirReadMock = $this->getMockBuilder(Read::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['stat', 'isFile'])
@@ -222,10 +223,10 @@ class GalleryTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getItemById', 'getFirstItem'])
             ->getMock();
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUrl'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl']
+        );
 
         $this->requestMock->method('getParam')->with('image')->willReturn($imageId);
         $this->productMock->expects($this->exactly(2))->method('getMediaGalleryImages')->willReturn($collectionMock);
@@ -244,10 +245,10 @@ class GalleryTest extends TestCase
     public function testGetImageUrlWithoutImageParam(): void
     {
         $imageUrl = 'http://example.com/media/image.jpg';
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getUrl'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getUrl']
+        );
 
         $this->requestMock->method('getParam')->with('image')->willReturn(null);
         $this->productMock->expects($this->once())->method('getMediaGalleryImages')->willReturn($this->collectionMock);
@@ -267,14 +268,14 @@ class GalleryTest extends TestCase
     {
         $imageId = 100;
         $expectedImageUrl = 'http://example.com/media/image.jpg';
-        $imageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
-        $currentImageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
+        $imageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
+        $currentImageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
 
         $this->collectionMock->addItem($imageMock);
         $this->requestMock->method('getParam')
@@ -339,22 +340,22 @@ class GalleryTest extends TestCase
         $imageId = 100;
         $expectedImageUrl = 'http://example.com/media/next_image.jpg';
 
-        $imageBefore = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
-        $imageCurrentInCollection = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
-        $imageNext = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
-        $currentImageMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValueId'])
-            ->getMock();
+        $imageBefore = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
+        $imageCurrentInCollection = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
+        $imageNext = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
+        $currentImageMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getValueId']
+        );
 
         $this->collectionMock->addItem($imageBefore);
         $this->collectionMock->addItem($imageCurrentInCollection);

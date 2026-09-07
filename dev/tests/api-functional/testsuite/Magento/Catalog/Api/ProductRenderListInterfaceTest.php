@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
@@ -14,19 +15,19 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class ProductRenderListInterfaceTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRenderListV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products-render-info/';
+    public const SERVICE_NAME = 'catalogProductRenderListV1';
+    public const SERVICE_VERSION = 'V1';
+    public const RESOURCE_PATH = '/V1/products-render-info/';
 
     /**
      * Test get list of products render information: prices, buttons data, etc...
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_special_price.php
-     * @dataProvider productRenderInfoProvider
      * @param array $expectedRenderInfo
      * @return void
      */
+    #[DataProvider('productRenderInfoProvider')]
     public function testGetList(array $expectedRenderInfo)
     {
         $expectedIds = [21, 31];

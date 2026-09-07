@@ -9,14 +9,15 @@ namespace Magento\Setup\Test\Unit\Model\Installer;
 
 use Magento\Setup\Model\Installer\Progress;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ProgressTest extends TestCase
 {
     /**
      * @param int $total
      * @param int $current
-     * @dataProvider constructorExceptionInvalidTotalDataProvider
      */
+    #[DataProvider('constructorExceptionInvalidTotalDataProvider')]
     public function testConstructorExceptionInvalidTotal($total, $current)
     {
         $this->expectException('LogicException');
@@ -76,8 +77,8 @@ class ProgressTest extends TestCase
     /**
      * @param int $total
      * @param int $current
-     * @dataProvider ratioDataProvider
      */
+    #[DataProvider('ratioDataProvider')]
     public function testRatio($total, $current)
     {
         $progress = new Progress($total, $current);

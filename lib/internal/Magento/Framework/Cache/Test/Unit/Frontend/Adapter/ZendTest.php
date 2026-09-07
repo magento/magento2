@@ -9,6 +9,8 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter;
 
 use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,8 +40,8 @@ class ZendTest extends TestCase
      * @param array $params
      * @param array $expectedParams
      * @param mixed $expectedResult
-     * @dataProvider proxyMethodDataProvider
      */
+     #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $expectedParams, $expectedResult)
     {
         if (is_callable($expectedResult)) {
@@ -113,8 +115,8 @@ class ZendTest extends TestCase
     /**
      * @param string $cleaningMode
      * @param string $expectedErrorMessage
-     * @dataProvider cleanExceptionDataProvider
      */
+     #[DataProvider('cleanExceptionDataProvider')]
     public function testCleanException($cleaningMode, $expectedErrorMessage)
     {
         $this->expectException('InvalidArgumentException');

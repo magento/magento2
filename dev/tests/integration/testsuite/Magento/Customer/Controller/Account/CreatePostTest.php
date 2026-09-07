@@ -24,6 +24,7 @@ use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Mime\Test\Constraint\EmailTextBodyContains;
 
 /**
@@ -180,12 +181,12 @@ class CreatePostTest extends AbstractController
      * @magentoConfigFixture current_store customer/create_account/default_group 1
      * @magentoConfigFixture current_store customer/create_account/generate_human_friendly_id 0
      *
-     * @dataProvider emailDataProvider
      * @param string $email
      * @param string $expectedEmail
      * @return void
      * @throws NoSuchEntityException
      */
+    #[DataProvider('emailDataProvider')]
     public function testNoConfirmCreatePostPunycodeEmailAction(string $email, string $expectedEmail): void
     {
         $this->fillRequestWithAccountData($email);
@@ -330,11 +331,11 @@ class CreatePostTest extends AbstractController
         return [
             'encoded' => [
                 'email' => 'test@xn--smething-v3a.com',
-                'expected' => 'test@sómething.com',
+                'expectedEmail' => 'test@sómething.com',
             ],
             'non-encoded' => [
                 'email' => 'test@sómething.com',
-                'expected' => 'test@sómething.com',
+                'expectedEmail' => 'test@sómething.com',
             ]
         ];
     }

@@ -5,27 +5,28 @@
  */
 namespace Magento\SalesRule\Api;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 class CouponManagementTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'salesRuleCouponManagementV1';
-    const RESOURCE_PATH = '/V1/coupons';
-    const SERVICE_VERSION = "V1";
+    public const SERVICE_NAME = 'salesRuleCouponManagementV1';
+    public const RESOURCE_PATH = '/V1/coupons';
+    public const SERVICE_VERSION = "V1";
 
-    const SERVICE_NAME_COUPON = 'salesRuleCouponRepositoryV1';
-    const RESOURCE_PATH_COUPON = '/V1/coupons';
-    const SERVICE_VERSION_COUPON = "V1";
+    public const SERVICE_NAME_COUPON = 'salesRuleCouponRepositoryV1';
+    public const RESOURCE_PATH_COUPON = '/V1/coupons';
+    public const SERVICE_VERSION_COUPON = "V1";
 
     /**
      * @param int $count
      * @param int $length
      * @param string $format
      * @param string $regex
-     * @dataProvider dataProviderForTestGenerate
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_autogeneration.php
      */
+    #[DataProvider('dataProviderForTestGenerate')]
     public function testManagement($count, $length, $format, $regex)
     {
         /** @var $registry \Magento\Framework\Registry */

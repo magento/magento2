@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\UserTokenReaderInterface;
@@ -93,12 +94,11 @@ class CustomerTokenServiceTest extends WebapiAbstract
     /**
      * Create customer access token
      *
-     * @dataProvider storesDataProvider
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
      * @param string|null $store
      * @return void
      */
+    #[DataProvider('storesDataProvider')]
     public function testCreateCustomerAccessToken(?string $store): void
     {
         $userName = 'customer@example.com';
@@ -146,9 +146,8 @@ class CustomerTokenServiceTest extends WebapiAbstract
         ];
     }
 
-    /**
-     * @dataProvider validationDataProvider
-     */
+    /** */
+    #[DataProvider('validationDataProvider')]
     public function testCreateCustomerAccessTokenEmptyOrNullCredentials($username, $password)
     {
         $noExceptionOccurred = false;

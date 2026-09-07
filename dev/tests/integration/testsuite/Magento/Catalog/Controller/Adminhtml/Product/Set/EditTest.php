@@ -93,4 +93,30 @@ class EditTest extends AbstractBackendController
             MessageInterface::TYPE_ERROR
         );
     }
+
+    /**
+     * Test edit without ID parameter shows error and redirects.
+     *
+     * @return void
+     */
+    public function testEditWithMissingIdParameter(): void
+    {
+        // Suppress deprecation warnings from AdminNotification Feed (pre-existing issue)
+        $errorReporting = error_reporting();
+        error_reporting($errorReporting & ~E_DEPRECATED);
+
+        // Dispatch without /id/ parameter
+        $this->dispatch('backend/catalog/product_set/edit');
+
+        error_reporting($errorReporting);
+
+        // Should redirect to index page
+        $this->assertRedirect($this->stringContains('catalog/product_set/index'));
+
+        // Should show error message (with empty value for %1 placeholder when ID is null)
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('Attribute set %1 does not exist.', null)]),
+            MessageInterface::TYPE_ERROR
+        );
+    }
 }

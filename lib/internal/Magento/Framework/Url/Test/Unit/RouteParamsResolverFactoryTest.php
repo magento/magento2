@@ -24,7 +24,7 @@ class RouteParamsResolverFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->object = $objectManager->getObject(
@@ -35,7 +35,7 @@ class RouteParamsResolverFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $producedInstance = $this->getMockForAbstractClass(RouteParamsResolverInterface::class);
+        $producedInstance = $this->createMock(RouteParamsResolverInterface::class);
         $this->objectManager->expects($this->once())
             ->method('create')
             ->with(RouteParamsResolverInterface::class)

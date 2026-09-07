@@ -94,12 +94,10 @@ class CollectionTest extends TestCase
     public function testToOptionArray($optionsArray, $emptyLabel, $foregroundCountries, $expectedResults)
     {
         $website1 = $this->createMock(WebsiteInterface::class);
-        $website1->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(1);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->willReturn([$website1]);
+        $website1->expects($this->never())
+            ->method('getId');
+        $this->storeManagerMock->expects($this->never())
+            ->method('getWebsites');
 
         foreach ($optionsArray as $itemData) {
             $this->_model->addItem(new DataObject($itemData));

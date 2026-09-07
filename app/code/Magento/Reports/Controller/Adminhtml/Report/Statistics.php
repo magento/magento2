@@ -9,10 +9,12 @@ namespace Magento\Reports\Controller\Adminhtml\Report;
 use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Report statistics admin controller.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -23,7 +25,7 @@ abstract class Statistics extends \Magento\Backend\App\Action implements HttpGet
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Reports::statistics';
+    public const ADMIN_RESOURCE = 'Magento_Reports::statistics_refresh';
 
     /**
      * Admin session model
@@ -76,13 +78,13 @@ abstract class Statistics extends \Magento\Backend\App\Action implements HttpGet
      * Retrieve array of collection names by code specified in request
      *
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     protected function _getCollectionNames()
     {
         $codes = $this->getRequest()->getParam('code');
         if (!$codes) {
-            throw new \Exception(__('No report code is specified.'));
+            throw new LocalizedException(__('No report code is specified.'));
         }
 
         if (!is_array($codes) && strpos($codes, ',') === false) {

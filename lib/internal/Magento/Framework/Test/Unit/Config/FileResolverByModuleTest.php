@@ -58,21 +58,11 @@ class FileResolverByModuleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->readerMock = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fileIteratorFactoryMock = $this->getMockBuilder(FileIteratorFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->fileDriver = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerMock = $this->createMock(Reader::class);
+        $this->filesystemMock = $this->createMock(Filesystem::class);
+        $this->fileIteratorFactoryMock = $this->createMock(FileIteratorFactory::class);
+        $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
+        $this->fileDriver = $this->createMock(File::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             FileResolverByModule::class,
@@ -88,25 +78,19 @@ class FileResolverByModuleTest extends TestCase
 
     public function testGet()
     {
-        $iterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $iterator = $this->createMock(FileIterator::class);
         $iterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 'some_path' => '<xml>Some Content</xml>'
             ]);
-        $primaryIterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $primaryIterator = $this->createMock(FileIterator::class);
         $primaryIterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $directoryMock = $this->createMock(ReadInterface::class);
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
@@ -140,25 +124,19 @@ class FileResolverByModuleTest extends TestCase
     public function testGetWithException()
     {
         $this->expectExceptionMessage('Primary db_schema file doesn`t exist');
-        $iterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $iterator = $this->createMock(FileIterator::class);
         $iterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 'some_path' => '<xml>Some Content</xml>'
             ]);
-        $primaryIterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $primaryIterator = $this->createMock(FileIterator::class);
         $primaryIterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $directoryMock = $this->createMock(ReadInterface::class);
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')
@@ -185,25 +163,19 @@ class FileResolverByModuleTest extends TestCase
 
     public function testGetOneModule()
     {
-        $iterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $iterator = $this->createMock(FileIterator::class);
         $iterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 'some_path/etc/db_schema.xml' => '<xml>Some Content</xml>'
             ]);
-        $primaryIterator = $this->getMockBuilder(FileIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $primaryIterator = $this->createMock(FileIterator::class);
         $primaryIterator->expects(self::once())
             ->method('toArray')
             ->willReturn([
                 '/www/app/etc/db_schema.xml' => '<xml>Primary Content</xml>'
             ]);
-        $directoryMock = $this->getMockBuilder(ReadInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $directoryMock = $this->createMock(ReadInterface::class);
         $directoryMock->expects(self::once())
             ->method('search')
             ->with('{db_schema.xml,*/db_schema.xml}')

@@ -6,6 +6,8 @@
 
 namespace Magento\Eav\Model\ResourceModel;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -42,8 +44,8 @@ class AttributeLoaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @param string[] $expectedAttributeCodes
      * @param int|null $attributeSetId
-     * @dataProvider getAttributesDataProvider
      */
+    #[DataProvider('getAttributesDataProvider')]
     public function testGetAttributes($expectedAttributeCodes, $attributeSetId = null)
     {
         $attributes = $this->attributeLoader->getAttributes('Test\Entity\Type', $attributeSetId);

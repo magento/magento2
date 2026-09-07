@@ -22,6 +22,7 @@ use Magento\Indexer\Model\Indexer\StateFactory;
 use Magento\Indexer\Model\WorkingStateProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -78,15 +79,7 @@ class IndexerTest extends TestCase
         $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockForAbstractClass(
-            ConfigInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['getIndexer']
-        );
+        $this->configMock = $this->createMock(ConfigInterface::class);
         $this->actionFactoryMock = $this->createPartialMock(
             ActionFactory::class,
             ['create']
@@ -95,15 +88,7 @@ class IndexerTest extends TestCase
             IndexerInterfaceFactory::class,
             ['create']
         );
-        $this->viewMock = $this->getMockForAbstractClass(
-            ViewInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['load', 'isEnabled', 'getUpdated', 'getStatus', '__wakeup', 'getId', 'suspend', 'resume']
-        );
+        $this->viewMock = $this->createMock(ViewInterface::class);
         $this->stateFactoryMock = $this->createPartialMock(
             StateFactory::class,
             ['create']
@@ -180,8 +165,8 @@ class IndexerTest extends TestCase
      * @param bool $getViewIsEnabled
      * @param string $getViewGetUpdated
      * @param string $getStateGetUpdated
-     * @dataProvider getLatestUpdatedDataProvider
      */
+    #[DataProvider('getLatestUpdatedDataProvider')]
     public function testGetLatestUpdated($getViewIsEnabled, $getViewGetUpdated, $getStateGetUpdated)
     {
         $indexId = 'indexer_internal_name';
@@ -616,8 +601,8 @@ class IndexerTest extends TestCase
     /**
      * @param bool $scheduled
      * @param string $method
-     * @dataProvider setScheduledDataProvider
      */
+    #[DataProvider('setScheduledDataProvider')]
     public function testSetScheduled($scheduled, $method)
     {
         $stateMock = $this->createPartialMock(State::class, ['load', 'save', 'setStatus']);
@@ -659,8 +644,8 @@ class IndexerTest extends TestCase
     /**
      * @param string $method
      * @param string $status
-     * @dataProvider statusDataProvider
      */
+    #[DataProvider('statusDataProvider')]
     public function testStatus($method, $status)
     {
         $stateMock = $this->createPartialMock(State::class, ['load', 'getStatus']);

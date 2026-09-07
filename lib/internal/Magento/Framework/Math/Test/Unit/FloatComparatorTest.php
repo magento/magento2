@@ -9,6 +9,7 @@ namespace Magento\Framework\Math\Test\Unit;
 
 use Magento\Framework\Math\FloatComparator;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FloatComparatorTest extends TestCase
 {
@@ -30,9 +31,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider eqDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('eqDataProvider')]
     public function testEq(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->equal($a, $b));
@@ -59,9 +59,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider gtDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('gtDataProvider')]
     public function testGt(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->greaterThan($a, $b));
@@ -88,9 +87,8 @@ class FloatComparatorTest extends TestCase
      *
      * @param float $a
      * @param float $b
-     * @param bool $expected
-     * @dataProvider gteDataProvider
-     */
+     * @param bool $expected     */
+    #[DataProvider('gteDataProvider')]
     public function testGte(float $a, float $b, bool $expected)
     {
         self::assertEquals($expected, $this->comparator->greaterThanOrEqual($a, $b));

@@ -43,13 +43,9 @@ class MessageStatusProcessorTest extends TestCase
      */
     public function testAcknowledgeMessages()
     {
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
         $queue->expects($this->atLeastOnce())->method('acknowledge');
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $message = $this->createMock(EnvelopeInterface::class);
 
         $this->messageStatusProcessor->acknowledgeMessages($queue, [$message]);
     }
@@ -61,13 +57,9 @@ class MessageStatusProcessorTest extends TestCase
      */
     public function testRejectMessages()
     {
-        $queue = $this->getMockBuilder(QueueInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $queue = $this->createMock(QueueInterface::class);
         $queue->expects($this->atLeastOnce())->method('reject');
-        $message = $this->getMockBuilder(EnvelopeInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $message = $this->createMock(EnvelopeInterface::class);
 
         $this->messageStatusProcessor->rejectMessages($queue, [$message]);
     }

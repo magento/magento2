@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\OrderCancellation;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -146,12 +147,10 @@ class CancelOrderErrorCodeTest extends GraphQlAbstract
         );
     }
 
-    /**
-     * @dataProvider orderStatusProvider
-     */
     #[
         Config('sales/cancellation/enabled', 1)
     ]
+    #[DataProvider('orderStatusProvider')]
     public function testAttemptToCancelOrderWithSomeStatuses(
         string $status,
         string $expectedStatus

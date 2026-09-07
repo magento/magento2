@@ -12,26 +12,21 @@ use Magento\Framework\App\Cache\Type\AccessProxy;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ProxyTesting;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AccessProxyTest extends TestCase
 {
-    /**
-     * @param string $method
-     * @param array $params
-     * @param bool $disabledResult
-     * @param mixed $enabledResult
-     *
-     * @return void
-     * @dataProvider proxyMethodDataProvider
+    /**     * @return void
      */
+    #[DataProvider('proxyMethodDataProvider')]
     public function testProxyMethod($method, $params, $disabledResult, $enabledResult): void
     {
         $identifier = 'cache_type_identifier';
 
-        $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendMock = $this->createMock(FrontendInterface::class);
 
-        $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
+        $cacheEnabler = $this->createMock(StateInterface::class);
         $cacheEnabler
             ->method('isEnabled')
             ->willReturnCallback(function ($arg1) use ($identifier) {

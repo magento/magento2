@@ -19,13 +19,13 @@ class Favicon extends \Magento\Config\Model\Config\Backend\Image
      * The tail part of directory path for uploading
      *
      */
-    const UPLOAD_DIR = 'favicon';
+    public const UPLOAD_DIR = 'favicon';
 
     /**
      * Return path to directory for upload file
      *
      * @return string
-     * @throw \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getUploadDir()
     {

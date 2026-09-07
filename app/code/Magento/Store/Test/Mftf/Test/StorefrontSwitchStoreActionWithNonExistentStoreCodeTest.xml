@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwitchStoreActionWithNonExistentStoreCodeTest">
+        <annotations>
+            <features value="Store"/>
+            <stories value="Store switching"/>
+            <title value="Store switcher shows error message when target store code does not exist"/>
+            <description value="Verify store switcher shows error message when target store code does not exist"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-16296"/>
+            <group value="store"/>
+        </annotations>
+        <!-- Step 1: Open stores/store/switchaction -->
+        <amOnPage url="/stores/store/switchaction" stepKey="openStoreSwitchAction"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterOpeningSwitchAction"/>
+        <!-- Step 2: Assert the store not found error message is displayed immediately -->
+        <waitForText selector="{{StorefrontMessagesSection.error}}" userInput="{{StoreNotFoundErrorMessageData.message}}" stepKey="seeStoreNotFoundErrorMessage"/>
+    </test>
+</tests>

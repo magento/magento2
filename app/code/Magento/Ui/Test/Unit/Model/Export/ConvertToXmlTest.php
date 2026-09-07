@@ -81,41 +81,25 @@ class ConvertToXmlTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->directory = $this->getMockBuilder(DirectoryWriteInterface::class)
-            ->getMockForAbstractClass();
+        $this->directory = $this->createMock(DirectoryWriteInterface::class);
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystem = $this->createMock(Filesystem::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
             ->willReturn($this->directory);
 
-        $this->filter = $this->getMockBuilder(Filter::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filter = $this->createMock(Filter::class);
 
-        $this->metadataProvider = $this->getMockBuilder(MetadataProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->metadataProvider = $this->createMock(MetadataProvider::class);
 
-        $this->excelFactory = $this->getMockBuilder(ExcelFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->excelFactory = $this->createPartialMock(ExcelFactory::class, ['create']);
 
-        $this->iteratorFactory = $this->getMockBuilder(SearchResultIteratorFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
+        $this->iteratorFactory = $this->createPartialMock(SearchResultIteratorFactory::class, ['create']);
 
-        $this->component = $this->getMockBuilder(UiComponentInterface::class)
-            ->getMockForAbstractClass();
+        $this->component = $this->createMock(UiComponentInterface::class);
 
-        $this->stream = $this->getMockBuilder(FileWriteInterface::class)
-            ->onlyMethods(['lock', 'unlock', 'close'])
-            ->getMockForAbstractClass();
+        $this->stream = $this->createMock(FileWriteInterface::class);
 
         $this->model = new ConvertToXml(
             $this->filesystem,
@@ -134,8 +118,7 @@ class ConvertToXmlTest extends TestCase
         $data = ['data_value'];
 
         /** @var DocumentInterface $document */
-        $document = $this->getMockBuilder(DocumentInterface::class)
-            ->getMockForAbstractClass();
+        $document = $this->createMock(DocumentInterface::class);
 
         $this->metadataProvider->expects($this->once())
             ->method('getRowData')
@@ -165,8 +148,7 @@ class ConvertToXmlTest extends TestCase
         $componentName = 'component_name';
 
         /** @var DocumentInterface $document */
-        $document = $this->getMockBuilder(DocumentInterface::class)
-            ->getMockForAbstractClass();
+        $document = $this->createMock(DocumentInterface::class);
 
         $this->mockComponent($componentName, $document);
         $this->mockStream();
@@ -215,13 +197,9 @@ class ConvertToXmlTest extends TestCase
      */
     protected function mockExcel(string $componentName, DocumentInterface $document): void
     {
-        $searchResultIterator = $this->getMockBuilder(SearchResultIterator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $searchResultIterator = $this->createMock(SearchResultIterator::class);
 
-        $excel = $this->getMockBuilder(Excel::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $excel = $this->createMock(Excel::class);
 
         $this->iteratorFactory->expects($this->once())
             ->method('create')
@@ -254,17 +232,11 @@ class ConvertToXmlTest extends TestCase
      */
     protected function mockComponent(string $componentName, ?DocumentInterface $document = null): void
     {
-        $context = $this->getMockBuilder(ContextInterface::class)
-            ->onlyMethods(['getDataProvider'])
-            ->getMockForAbstractClass();
+        $context = $this->createMock(ContextInterface::class);
 
-        $dataProvider = $this->getMockBuilder(DataProviderInterface::class)
-            ->onlyMethods(['getSearchResult', 'setLimit'])
-            ->getMockForAbstractClass();
+        $dataProvider = $this->createMock(DataProviderInterface::class);
 
-        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
-            ->onlyMethods(['getItems'])
-            ->getMockForAbstractClass();
+        $searchResult = $this->createMock(SearchResultInterface::class);
 
         $this->component->expects($this->any())
             ->method('getName')

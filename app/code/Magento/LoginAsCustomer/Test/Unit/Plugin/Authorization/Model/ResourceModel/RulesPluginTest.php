@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\LoginAsCustomer\Model\Validator\UserRolePermission;
 use Magento\LoginAsCustomer\Plugin\Authorization\Model\ResourceModel\RulesPlugin;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForListOfUserInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -25,6 +26,8 @@ use Psr\Log\LoggerInterface;
  */
 class RulesPluginTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var RulesPlugin
      */
@@ -75,10 +78,10 @@ class RulesPluginTest extends TestCase
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->subjectMock = $this->createMock(Subject::class);
 
-        $this->ruleMock = $this->getMockBuilder(Rules::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getRoleUnassignedUsers'])
-            ->getMock();
+        $this->ruleMock = $this->createPartialMockWithReflection(
+            Rules::class,
+            ['getRoleUnassignedUsers']
+        );
 
         $this->plugin = $this->objectManager->getObject(
             RulesPlugin::class,

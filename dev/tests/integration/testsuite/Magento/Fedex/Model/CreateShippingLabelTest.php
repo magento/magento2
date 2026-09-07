@@ -32,6 +32,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -267,8 +268,8 @@ class CreateShippingLabelTest extends TestCase
      * @param array $trackingData
      * @param array $packages
      * @return void
-     * @dataProvider singleProductShipmentDataProvider
      */
+    #[DataProvider('singleProductShipmentDataProvider')]
     #[
         ConfigFixture('carriers/fedex/active', '1', 'store', 'default'),
         DataFixture(ProductFixture::class, ['sku' => 'test-product', 'price' => 100.00], 'product'),

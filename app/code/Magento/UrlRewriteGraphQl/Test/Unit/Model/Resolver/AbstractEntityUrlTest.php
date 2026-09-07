@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -32,6 +33,8 @@ use PHPUnit\Framework\TestCase;
  */
 class AbstractEntityUrlTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var AbstractEntityUrl|MockObject
      */
@@ -96,10 +99,10 @@ class AbstractEntityUrlTest extends TestCase
         $this->storeMock = $this->createMock(StoreInterface::class);
         $this->urlRewriteMock = $this->createMock(UrlRewrite::class);
 
-        $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getStore'])
-            ->getMockForAbstractClass();
+        $this->extensionAttributesMock = $this->createPartialMockWithReflection(
+            ContextExtensionInterface::class,
+            ['getStore']
+        );
         $this->extensionAttributesMock->method('getStore')
             ->willReturn($this->storeMock);
 
@@ -112,7 +115,8 @@ class AbstractEntityUrlTest extends TestCase
                 $this->customUrlLocatorMock,
                 $this->idEncoderMock
             ])
-            ->getMockForAbstractClass();
+            ->onlyMethods([])
+            ->getMock();
     }
 
     /**

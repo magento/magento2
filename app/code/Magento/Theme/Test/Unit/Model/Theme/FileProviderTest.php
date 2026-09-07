@@ -31,9 +31,7 @@ class FileProviderTest extends TestCase
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->file = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->file = $this->createMock(Collection::class);
         $fileFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->file);

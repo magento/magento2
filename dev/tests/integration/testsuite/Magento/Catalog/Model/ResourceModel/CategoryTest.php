@@ -27,6 +27,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Indexer\Cron\UpdateMview;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -141,10 +142,10 @@ class CategoryTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/catalog_category_product_reindex_all.php
      * @magentoDataFixture Magento/Catalog/_files/catalog_product_category_reindex_all.php
      * @magentoDataFixture Magento/Catalog/_files/enable_catalog_product_reindex_schedule.php
-     * @dataProvider catalogProductChangesWithScheduledUpdateDataProvider
      * @param array $products
      * @return void
      */
+    #[DataProvider('catalogProductChangesWithScheduledUpdateDataProvider')]
     public function testCatalogProductChangesWithScheduledUpdate(array $products): void
     {
         // products are ordered by entity_id DESC because their positions are same and equal to 0

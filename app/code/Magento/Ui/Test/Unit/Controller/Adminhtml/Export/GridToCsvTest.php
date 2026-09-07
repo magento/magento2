@@ -9,6 +9,7 @@ namespace Magento\Ui\Test\Unit\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Controller\Adminhtml\Export\GridToCsv;
 use Magento\Ui\Model\Export\ConvertToCsv;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,19 +37,21 @@ class GridToCsvTest extends TestCase
      */
     protected $fileFactory;
 
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->objectManager = new ObjectManager($this);
+        $this->objectManager->prepareObjectManager();
 
-        $this->converter = $this->getMockBuilder(ConvertToCsv::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->converter = $this->createMock(ConvertToCsv::class);
+
+        $this->fileFactory = $this->createMock(FileFactory::class);
 
         $this->controller = new GridToCsv(
             $this->context,

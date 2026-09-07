@@ -32,7 +32,7 @@ class ProxyTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->dataMock = $this->createMock(Data::class);
     }
 

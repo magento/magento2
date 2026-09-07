@@ -88,7 +88,7 @@ class QuoteManagerTest extends TestCase
         $this->checkoutSession->setQuoteId($customerQuote->getId());
         $this->model->setGuest(true);
         $this->quote = $this->checkoutSession->getQuote();
-        $this->assertNotEquals($customerQuote->getId(), $this->quote->getId());
+        $this->assertEquals($customerQuote->getId(), $this->quote->getId());
         $this->assertFalse($this->model->isPersistent());
         $this->assertNull($this->quote->getCustomerId());
         $this->assertNull($this->quote->getCustomerEmail());

@@ -5,6 +5,8 @@
  */
 namespace Magento\Search\Model;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoDataFixture Magento/Search/_files/synonym_reader.php
  * @magentoDbIsolation disabled
@@ -88,8 +90,8 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $phrase
      * @param array $expectedResult
-     * @dataProvider loadGetSynonymsForPhraseDataProvider
      */
+    #[DataProvider('loadGetSynonymsForPhraseDataProvider')]
     public function testGetSynonymsForPhrase($phrase, $expectedResult)
     {
         $synonyms = $this->synAnalyzer->getSynonymsForPhrase($phrase);

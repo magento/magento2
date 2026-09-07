@@ -12,6 +12,7 @@ namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -23,6 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class ThemeValidatorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var ThemeValidator
      */
@@ -48,13 +51,12 @@ class ThemeValidatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->themeProvider = $this->getMockForAbstractClass(ThemeProviderInterface::class);
-        $this->configData = $this->getMockBuilder(Value::class)
-            ->addMethods(['addFieldToFilter'])
-            ->onlyMethods(['getCollection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->themeProvider = $this->createMock(ThemeProviderInterface::class);
+        $this->configData = $this->createPartialMockWithReflection(
+            Value::class,
+            ['addFieldToFilter', 'getCollection']
+        );
         $this->themeValidator = new ThemeValidator(
             $this->storeManager,
             $this->themeProvider,

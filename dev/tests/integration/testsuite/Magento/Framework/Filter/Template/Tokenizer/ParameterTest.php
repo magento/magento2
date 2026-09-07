@@ -14,17 +14,18 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for \Magento\Framework\Filter\Template\Tokenizer\Parameter.
  */
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class ParameterTest extends TestCase
 {
     /**
      * Test for getValue
      *
-     * @dataProvider getValueDataProvider
-     *
      * @param string $string
      * @param array $values
      * @return void
      */
+    #[DataProvider('getValueDataProvider')]
     public function testGetValue($string, $values): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -40,12 +41,11 @@ class ParameterTest extends TestCase
     /**
      * Test for tokenize
      *
-     * @dataProvider tokenizeDataProvider
-     *
      * @param string $string
      * @param array $params
      * @return void
      */
+    #[DataProvider('tokenizeDataProvider')]
     public function testTokenize(string $string, array $params): void
     {
         $objectManager = Bootstrap::getObjectManager();

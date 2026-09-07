@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Model\MessageControllerDecorator;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
@@ -121,6 +122,12 @@ class MessageControllerDecoratorTest extends TestCase
             ->with($envelope, $consumerName)
             ->willReturn($lock);
         $connection->expects($this->once())
+            ->method('beginTransaction');
+        $connection->expects($this->once())
+            ->method('commit');
+        $connection->expects($this->never())
+            ->method('rollBack');
+        $connection->expects($this->once())
             ->method('formatDate')
             ->with($timestamp)
             ->willReturn($date);
@@ -137,5 +144,193 @@ class MessageControllerDecoratorTest extends TestCase
                 ]
             );
         $this->assertSame($lock, $this->model->lock($envelope, $consumerName));
+    }
+
+    /**
+     * ER_CHECKREAD / similar messages should trigger one retry after rollback.
+     */
+    public function testLockRetriesOnceWhenUpdateFailsWithRecordChangedMessage(): void
+    {
+        $bUuid = uniqid();
+        $operationId = 0;
+        $operationTableName = 'table_1';
+        $connectionName = 'connection_1';
+        $timestamp = 1631104794;
+        $date = '2021-09-08 12:39:54';
+        $this->dateTime->method('gmtTimestamp')
+            ->willReturn($timestamp);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata->method('getEntityConnectionName')
+            ->willReturn($connectionName);
+        $metadata->method('getEntityTable')
+            ->willReturn($operationTableName);
+        $this->metadataPool->method('getMetadata')
+            ->with(OperationInterface::class)
+            ->willReturn($metadata);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->resource->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($connection);
+        $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getId')
+            ->willReturn($operationId);
+        $operation->method('getBulkUuid')
+            ->willReturn($bUuid);
+        $this->messageEncoder->method('decode')
+            ->willReturn($operation);
+        $envelope = $this->createMock(EnvelopeInterface::class);
+        $lock = $this->createMock(LockInterface::class);
+        $consumerName = 'consumer_1';
+        $this->messageController->expects($this->exactly(2))
+            ->method('lock')
+            ->with($envelope, $consumerName)
+            ->willReturn($lock);
+        $connection->expects($this->exactly(2))
+            ->method('beginTransaction');
+        $connection->expects($this->once())
+            ->method('rollBack');
+        $connection->expects($this->once())
+            ->method('commit');
+        $connection->expects($this->exactly(2))
+            ->method('formatDate')
+            ->with($timestamp)
+            ->willReturn($date);
+        $connection->expects($this->exactly(2))
+            ->method('update')
+            ->with(
+                $operationTableName,
+                [
+                    'started_at' => $date
+                ],
+                [
+                    'bulk_uuid = ?' => $bUuid,
+                    'operation_key = ?' => $operationId
+                ]
+            )->willReturnOnConsecutiveCalls(
+                $this->throwException(
+                    new \Exception(
+                        'SQLSTATE[HY000]: General error: 1020 Record has changed since last read in table '
+                        . '`magento_operation`'
+                    )
+                ),
+                1
+            );
+        $this->assertSame($lock, $this->model->lock($envelope, $consumerName));
+    }
+
+    /**
+     * DeadlockException should be retried until update succeeds.
+     */
+    public function testLockRetriesOnceOnDeadlockException(): void
+    {
+        $bUuid = uniqid();
+        $operationId = 0;
+        $operationTableName = 'table_1';
+        $connectionName = 'connection_1';
+        $timestamp = 1631104794;
+        $date = '2021-09-08 12:39:54';
+        $this->dateTime->method('gmtTimestamp')
+            ->willReturn($timestamp);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata->method('getEntityConnectionName')
+            ->willReturn($connectionName);
+        $metadata->method('getEntityTable')
+            ->willReturn($operationTableName);
+        $this->metadataPool->method('getMetadata')
+            ->with(OperationInterface::class)
+            ->willReturn($metadata);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->resource->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($connection);
+        $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getId')
+            ->willReturn($operationId);
+        $operation->method('getBulkUuid')
+            ->willReturn($bUuid);
+        $this->messageEncoder->method('decode')
+            ->willReturn($operation);
+        $envelope = $this->createMock(EnvelopeInterface::class);
+        $lock = $this->createMock(LockInterface::class);
+        $consumerName = 'consumer_1';
+        $this->messageController->expects($this->exactly(2))
+            ->method('lock')
+            ->with($envelope, $consumerName)
+            ->willReturn($lock);
+        $connection->expects($this->exactly(2))
+            ->method('beginTransaction');
+        $connection->expects($this->once())
+            ->method('rollBack');
+        $connection->expects($this->once())
+            ->method('commit');
+        $connection->expects($this->exactly(2))
+            ->method('formatDate')
+            ->with($timestamp)
+            ->willReturn($date);
+        $connection->expects($this->exactly(2))
+            ->method('update')
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new DeadlockException('Deadlock found when trying to get lock', 1213)),
+                1
+            );
+        $this->assertSame($lock, $this->model->lock($envelope, $consumerName));
+    }
+
+    /**
+     * Non-transient failures must not retry message controller lock.
+     */
+    public function testLockDoesNotRetryOnNonTransientUpdateFailure(): void
+    {
+        $bUuid = uniqid();
+        $operationId = 0;
+        $operationTableName = 'table_1';
+        $connectionName = 'connection_1';
+        $timestamp = 1631104794;
+        $date = '2021-09-08 12:39:54';
+        $this->dateTime->method('gmtTimestamp')
+            ->willReturn($timestamp);
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $metadata->method('getEntityConnectionName')
+            ->willReturn($connectionName);
+        $metadata->method('getEntityTable')
+            ->willReturn($operationTableName);
+        $this->metadataPool->method('getMetadata')
+            ->with(OperationInterface::class)
+            ->willReturn($metadata);
+        $connection = $this->createMock(AdapterInterface::class);
+        $this->resource->method('getConnection')
+            ->with($connectionName)
+            ->willReturn($connection);
+        $operation = $this->createMock(OperationInterface::class);
+        $operation->method('getId')
+            ->willReturn($operationId);
+        $operation->method('getBulkUuid')
+            ->willReturn($bUuid);
+        $this->messageEncoder->method('decode')
+            ->willReturn($operation);
+        $envelope = $this->createMock(EnvelopeInterface::class);
+        $lock = $this->createMock(LockInterface::class);
+        $consumerName = 'consumer_1';
+        $this->messageController->expects($this->once())
+            ->method('lock')
+            ->with($envelope, $consumerName)
+            ->willReturn($lock);
+        $connection->expects($this->once())
+            ->method('beginTransaction');
+        $connection->expects($this->once())
+            ->method('rollBack');
+        $connection->expects($this->never())
+            ->method('commit');
+        $connection->expects($this->once())
+            ->method('formatDate')
+            ->with($timestamp)
+            ->willReturn($date);
+        $connection->expects($this->once())
+            ->method('update')
+            ->willThrowException(new \Exception('Unknown SQL error'));
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unknown SQL error');
+        $this->model->lock($envelope, $consumerName);
     }
 }

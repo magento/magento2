@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular\Magento\Customer;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,8 +25,8 @@ class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $file
-     * @dataProvider fileFormatDataProvider
      */
+    #[DataProvider('fileFormatDataProvider')]
     public function testFileFormat($file)
     {
         $validationStateMock = $this->createMock(\Magento\Framework\Config\ValidationStateInterface::class);

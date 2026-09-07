@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter;
 
 use Magento\AdvancedSearch\Model\Client\ClientException;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -15,6 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Adapter
      */
@@ -44,11 +46,10 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
         $contentManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
-            ->addMethods(['query'])
-            ->onlyMethods(['testConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->clientMock = $this->createPartialMockWithReflection(
+            \Magento\AdvancedSearch\Model\Client\ClientInterface::class,
+            ['query', 'testConnection']
+        );
         $contentManager
             ->expects($this->any())
             ->method('getConnection')
@@ -68,7 +69,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Search\Request\Builder::class,
             ['config' => $config]
         );
-        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
+        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
 
         $this->adapter = $objectManager->create(
             \Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Adapter::class,

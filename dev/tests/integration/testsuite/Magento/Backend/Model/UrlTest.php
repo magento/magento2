@@ -11,6 +11,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test class for \Magento\Backend\Model\UrlInterface.
@@ -53,9 +54,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param array|null $routeParams
      * @return void
      *
-     * @dataProvider getUrlDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl(
         string $routePath,
         array $requestParams,
@@ -144,9 +145,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @param string $expectedHash
      * @return void
      *
-     * @dataProvider getSecretKeyDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getSecretKeyDataProvider')]
     public function testGetSecretKey(string $routeName, string $controller, string $action, string $expectedHash): void
     {
         $this->request->setControllerName('default_controller')

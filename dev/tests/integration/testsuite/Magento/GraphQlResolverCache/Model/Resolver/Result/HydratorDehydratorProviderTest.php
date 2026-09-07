@@ -80,7 +80,7 @@ class HydratorDehydratorProviderTest extends TestCase
         $resolver = $this->getMockBuilder(StoreConfigResolver::class)
             ->disableOriginalConstructor()
             ->setMockClassName('StoreConfigResolverDerivedMock')
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $testResolverData = [
             'id' => 2,
@@ -169,9 +169,7 @@ class HydratorDehydratorProviderTest extends TestCase
      */
     public function testHydratorDoesNotExist()
     {
-        $resolver = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resolver = $this->createMock(ResolverInterface::class);
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
     }
 
@@ -203,9 +201,7 @@ class HydratorDehydratorProviderTest extends TestCase
                 ]
             ]
         );
-        $resolver = $this->getMockBuilder(StoreConfigResolver::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resolver = $this->createMock(StoreConfigResolver::class);
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
     }
 
@@ -237,9 +233,7 @@ class HydratorDehydratorProviderTest extends TestCase
                 ]
             ]
         );
-        $resolver = $this->getMockBuilder(StoreConfigResolver::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resolver = $this->createMock(StoreConfigResolver::class);
         $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 
@@ -250,9 +244,7 @@ class HydratorDehydratorProviderTest extends TestCase
      */
     public function testDehydratorDoesNotExist()
     {
-        $resolver = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $resolver = $this->createMock(ResolverInterface::class);
         $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 }

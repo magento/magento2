@@ -6,6 +6,7 @@
 namespace Magento\Shipping\Helper;
 
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DataTest extends \PHPUnit\Framework\TestCase
 {
@@ -27,8 +28,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param int $entityId
      * @param string $code
      * @param string $expected
-     * @dataProvider getTrackingPopupUrlBySalesModelDataProvider
      */
+    #[DataProvider('getTrackingPopupUrlBySalesModelDataProvider')]
     public function testGetTrackingPopupUrlBySalesModel($modelName, $getIdMethod, $entityId, $code, $expected)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -65,8 +66,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * @param string $expected
      * @magentoAppArea adminhtml
      * @magentoConfigFixture admin_store web/unsecure/base_link_url http://admin.localhost/
-     * @dataProvider getTrackingPopupUrlBySalesModelDataProvider
      */
+    #[DataProvider('getTrackingPopupUrlBySalesModelDataProvider')]
     public function testGetTrackingPopupUrlBySalesModelFromAdmin($modelName, $getIdMethod, $entityId, $code, $expected)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

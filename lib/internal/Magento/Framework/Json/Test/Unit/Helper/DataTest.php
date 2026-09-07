@@ -30,12 +30,8 @@ class DataTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->jsonDecoderMock = $this->getMockBuilder(DecoderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->jsonDecoderMock = $this->createMock(DecoderInterface::class);
         $this->helper = $objectManager->getObject(
             Data::class,
             [

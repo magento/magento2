@@ -37,6 +37,9 @@
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
                 <argument name="tags" value="config"/>
             </actionGroup>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
         </after>
         <remove keyForRemoval="navigateToCategoryStorefront"/>
         <!-- Step 7: Open direct Category 1.2 url -> Check that Cat 1.2 is highlighted & parent Cat 1 is also highlighted -->

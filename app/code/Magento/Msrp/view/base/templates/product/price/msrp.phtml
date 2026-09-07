@@ -65,7 +65,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     $data = [
         'origin'=> 'msrp',
         'popupId' => '#' . $popupId,
-        'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
+        'productName' => $escaper->escapeJs($escaper->escapeHtml($product->getName())),
         'productId' => $productId,
         'productIdInput' => 'input[type="hidden"][name="product"]',
         'realPrice' => $block->getRealPriceHtml(),
@@ -76,8 +76,19 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         'addToCartUrl' => $addToCartUrl,
         'paymentButtons' => '[data-label=or]'
     ];
-    if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
+    $fullActionName = $block->getRequest()->getFullActionName();
+    if ($fullActionName === 'catalog_product_view') {
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
+    } elseif (in_array($fullActionName, ['wishlist_index_index', 'wishlist_search_view'], true)) {
+        $data['addToCartButton'] = sprintf(
+            '#wishlist-view-form li.product-item:has([id^="msrp-popup-%1$s"]) button[data-role="tocart"]',
+            $productId
+        );
+    } elseif ($fullActionName === 'wishlist_shared_index') {
+        $data['addToCartButton'] = sprintf(
+            'form.shared.wishlist tr:has([id^="msrp-popup-%1$s"]) button.action.tocart',
+            $productId
+        );
     } else {
         $data['addToCartButton'] = sprintf(
             'form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"],' .
@@ -86,14 +97,14 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         );
     }
     ?>
-    <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId); ?>
+    <?php $priceId = $escaper->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId); ?>
     <span id="s_<?= /* @noEscape*/ $priceId ?>"></span>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none", 'span#s_' . $priceId) ?>
     <a href="#"
        id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
        data-mage-init='{"addToCart":<?= /* @noEscape */ $block->jsonEncode($data) ?>}'>
-        <?= $block->escapeHtml(__('Click for price')) ?>
+        <?= $escaper->escapeHtml(__('Click for price')) ?>
     </a>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
@@ -102,7 +113,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     ) ?>
 <?php else: ?>
     <span class="msrp-message">
-     <?= $block->escapeHtml($priceType->getMsrpPriceMessage()) ?>
+     <?= $escaper->escapeHtml($priceType->getMsrpPriceMessage()) ?>
     </span>
 <?php endif; ?>
 
@@ -113,9 +124,9 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
        class="action map-show-info"
        data-mage-init='{"addToCart":{"origin": "info",
                                      "helpLinkId": "#<?= /* @noEscape */ $helpLinkId ?>",
-                                     "productName": "<?= $block->escapeJs($product->getName()) ?>",
+                                     "productName": "<?= $escaper->escapeJs($product->getName()) ?>",
                                      "closeButtonId": "#map-popup-close"}}'>
-        <span><?= $block->escapeHtml(__("What's this?")) ?></span>
+        <span><?= $escaper->escapeHtml(__("What's this?")) ?></span>
     </a>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',

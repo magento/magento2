@@ -285,6 +285,7 @@ class TierPriceStorage implements TierPriceStorageInterface
                 && $existingPrice['qty'] == $price['qty']
                 && $this->isCorrectPriceValue($existingPrice, $price)
                 && $existingPrice[$linkField] == $price[$linkField]
+                && $existingPrice['website_id'] == $price['website_id']
             ) {
                 return (int) $existingPrice['value_id'];
             }

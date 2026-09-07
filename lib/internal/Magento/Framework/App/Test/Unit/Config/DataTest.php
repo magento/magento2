@@ -10,6 +10,7 @@ namespace Magento\Framework\App\Test\Unit\Config;
 use Magento\Framework\App\Config\Data;
 use Magento\Framework\App\Config\MetadataProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class DataTest extends TestCase
@@ -31,11 +32,9 @@ class DataTest extends TestCase
         $this->_model = new Data($this->_metaDataProcessor, []);
     }
 
-    /**
-     * @param string $path
-     * @param mixed $value
-     * @dataProvider setValueDataProvider
+    /**     * @param mixed $value
      */
+    #[DataProvider('setValueDataProvider')]
     public function testSetValue($path, $value)
     {
         $this->_model->setValue($path, $value);

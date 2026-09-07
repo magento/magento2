@@ -14,6 +14,7 @@ use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Factory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AbstractFormTest extends TestCase
 {
@@ -140,9 +141,8 @@ class AbstractFormTest extends TestCase
      * @param array $keys
      * @param array $data
      * @param array $customAttributes
-     * @param string $result
-     * @dataProvider dataProviderSerialize
-     */
+     * @param string $result     */
+    #[DataProvider('dataProviderSerialize')]
     public function testSerialize(
         $keys,
         $data,

@@ -12,16 +12,16 @@ use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ConflictCheckerTest extends TestCase
 {
-    /**
-     * @dataProvider checkConflictWhenEnableModuleDataProvider
-     * @param array $conflictReturnMap
+    /**     * @param array $conflictReturnMap
      * @param array $enabledModules
      * @param string $moduleName
      * @param array $expected
      */
+    #[DataProvider('checkConflictWhenEnableModuleDataProvider')]
     public function testCheckConflictsWhenEnableModules(
         $conflictReturnMap,
         $enabledModules,

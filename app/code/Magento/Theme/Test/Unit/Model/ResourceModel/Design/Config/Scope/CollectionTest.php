@@ -40,19 +40,12 @@ class CollectionTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->entityFactoryMock = $this->getMockBuilder(
-            EntityFactoryInterface::class
-        )->getMockForAbstractClass();
-        $this->scopeTreeMock = $this->getMockBuilder(ScopeTreeProviderInterface::class)
-            ->getMockForAbstractClass();
+        $this->entityFactoryMock = $this->createMock(EntityFactoryInterface::class);
+        $this->scopeTreeMock = $this->createMock(ScopeTreeProviderInterface::class);
         $this->metadataProviderMock =
-            $this->getMockBuilder(MetadataProviderInterface::class)
-                ->getMockForAbstractClass();
-        $this->appConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
-        $this->valueProcessor = $this->getMockBuilder(ValueProcessor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            $this->createMock(MetadataProviderInterface::class);
+        $this->appConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->valueProcessor = $this->createMock(ValueProcessor::class);
 
         $this->collection = new Collection(
             $this->entityFactoryMock,

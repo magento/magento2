@@ -63,6 +63,7 @@
         </actionGroup>
         <!-- Click on reviews and add reviews with current user -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab1"/>
+        <waitForElementVisible selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="waitForReviewFormVisible1"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars1">
             <argument name="ratingName" value="Quality"/>
@@ -84,6 +85,7 @@
         </actionGroup>
         <!-- Click on reviews and add reviews with current user -->
         <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="openReviewTab2"/>
+        <waitForElementVisible selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="waitForReviewFormVisible2"/>
         <!-- Set product rating stars -->
         <actionGroup ref="StorefrontSetProductRatingStarsActionGroup" stepKey="setQualityStars2">
             <argument name="ratingName" value="Quality"/>

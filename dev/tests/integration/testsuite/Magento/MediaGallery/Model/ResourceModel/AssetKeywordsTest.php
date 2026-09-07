@@ -16,6 +16,7 @@ use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Testing assets keywords operation
@@ -65,11 +66,11 @@ class AssetKeywordsTest extends TestCase
      * Testing assets keywords save and get
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     * @dataProvider keywordsProvider
      * @param string[] $keywords
      * @param string[] $updatedKeywords
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    #[DataProvider('keywordsProvider')]
     public function testSaveAndGetKeywords(array $keywords, array $updatedKeywords): void
     {
         $loadedAssets = $this->getAssetsByPath->execute([self::FIXTURE_ASSET_PATH]);

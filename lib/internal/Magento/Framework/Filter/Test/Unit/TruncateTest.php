@@ -10,6 +10,7 @@ namespace Magento\Framework\Filter\Test\Unit;
 use Magento\Framework\Filter\Truncate;
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TruncateTest extends TestCase
 {
@@ -17,9 +18,8 @@ class TruncateTest extends TestCase
      * @param string $string
      * @param array $args
      * @param string $expected
-     * @param string $expectedReminder
-     * @dataProvider truncateDataProvider
-     */
+     * @param string $expectedReminder     */
+    #[DataProvider('truncateDataProvider')]
     public function testTruncate($string, $args, $expected, $expectedReminder)
     {
         list($strLib, $length, $etc, $reminder, $breakWords) = $args;

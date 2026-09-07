@@ -197,15 +197,16 @@ class PublisherConsumerController
      *
      * @param callable $condition
      * @param array $params
+     * @param int $maxIterations Maximum loop iterations; each iteration sleeps 3 seconds before evaluating $condition
      * @throws PreconditionFailedException
      */
-    public function waitForAsynchronousResult(callable $condition, $params = [])
+    public function waitForAsynchronousResult(callable $condition, $params = [], int $maxIterations = 20)
     {
         $i = 0;
         do {
             sleep(3);
             $assertion = call_user_func_array($condition, $params);
-        } while (!$assertion && ($i++ < 20));
+        } while (!$assertion && ($i++ < $maxIterations));
 
         if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");

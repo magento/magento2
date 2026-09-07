@@ -6,6 +6,7 @@
 namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\TestFramework\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -13,9 +14,9 @@ use Magento\TestFramework\Bootstrap;
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider saveDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('saveDataProvider')]
     public function testSaveAction($password, $passwordConfirmation, $isPasswordChanged)
     {
         $userId = $this->_session->getUser()->getId();

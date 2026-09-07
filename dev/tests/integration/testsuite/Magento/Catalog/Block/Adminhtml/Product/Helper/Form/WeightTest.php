@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class WeightTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -25,8 +27,8 @@ class WeightTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $type
-     * @dataProvider virtualTypesDataProvider
      */
+    #[DataProvider('virtualTypesDataProvider')]
     public function testProductWithoutWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */
@@ -58,8 +60,8 @@ class WeightTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $type
-     * @dataProvider physicalTypesDataProvider
      */
+    #[DataProvider('physicalTypesDataProvider')]
     public function testProductHasWeight($type)
     {
         /** @var $currentProduct \Magento\Catalog\Model\Product */

@@ -24,6 +24,8 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use PHPUnit\Framework\Attributes\Depends;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Scan source code for incorrect or undeclared modules dependencies
@@ -823,10 +825,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      * Collect redundant dependencies
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @test
-     * @depends testUndeclared
      * @throws \Exception
      */
+    #[Test]
+    #[Depends('testUndeclared')]
     public function collectRedundant()
     {
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
@@ -849,9 +851,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Check redundant dependencies
-     *
-     * @depends collectRedundant
      */
+    #[Depends('collectRedundant')]
     public function testRedundant()
     {
         $output = [];

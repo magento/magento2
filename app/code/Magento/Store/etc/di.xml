@@ -474,4 +474,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Store\Model\Config\PlaceholderInterface" type="Magento\Store\Model\Config\Placeholder"/>
 </config>

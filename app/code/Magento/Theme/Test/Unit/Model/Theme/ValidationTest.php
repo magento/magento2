@@ -12,6 +12,7 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Design\Theme\Validator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ValidationTest extends TestCase
@@ -22,8 +23,8 @@ class ValidationTest extends TestCase
      * @param array $messages
      *
      * @covers \Magento\Framework\View\Design\Theme\Validator::validate
-     * @dataProvider dataProviderValidate
      */
+    #[DataProvider('dataProviderValidate')]
     public function testValidate(array $data, $result, array $messages)
     {
         /** @var DataObject $themeMock */

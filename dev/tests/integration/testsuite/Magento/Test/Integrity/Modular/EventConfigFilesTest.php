@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class EventConfigFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -20,8 +22,8 @@ class EventConfigFilesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $file
-     * @dataProvider eventConfigFilesDataProvider
      */
+    #[DataProvider('eventConfigFilesDataProvider')]
     public function testEventConfigFiles($file)
     {
         $errors = [];

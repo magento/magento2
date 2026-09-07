@@ -20,11 +20,15 @@ use Magento\Csp\Model\SubresourceIntegrityFactory;
 use Magento\Csp\Model\SubresourceIntegrity\HashGenerator;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Csp\Model\SubresourceIntegrityCollector;
+use Magento\Csp\Model\SubresourceIntegrityRepositoryPool;
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Adds Integrity attribute to requirejs-map.js asset
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
 {
@@ -36,6 +40,8 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
 
     /**
      * @var SubresourceIntegrityCollector
+     * @deprecated
+     * @see sri hashes directly saved to repository instead of being collected
      */
     private SubresourceIntegrityCollector $integrityCollector;
 
@@ -60,6 +66,16 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
     private FileSystem $filesystem;
 
     /**
+     * @var SubresourceIntegrityRepositoryPool
+     */
+    private SubresourceIntegrityRepositoryPool $repositoryPool;
+
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * Constructor
      *
      * @param DeployStaticFile $deployStaticFile
@@ -71,6 +87,8 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
      * @param DriverInterface $driver
      * @param SubresourceIntegrityCollector $integrityCollector
      * @param FileSystem $filesystem
+     * @param SubresourceIntegrityRepositoryPool|null $repositoryPool
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         DeployStaticFile $deployStaticFile,
@@ -81,7 +99,9 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
         HashGenerator $hashGenerator,
         DriverInterface $driver,
         SubresourceIntegrityCollector $integrityCollector,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ?SubresourceIntegrityRepositoryPool $repositoryPool = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->minification = $minification;
         $this->integrityFactory = $integrityFactory;
@@ -89,38 +109,50 @@ class Map extends \Magento\Deploy\Package\Processor\PostProcessor\Map
         $this->driver = $driver;
         $this->integrityCollector = $integrityCollector;
         $this->filesystem = $filesystem;
+        $this->repositoryPool = $repositoryPool
+            ?? ObjectManager::getInstance()->get(SubresourceIntegrityRepositoryPool::class);
+        $this->logger = $logger
+            ?? ObjectManager::getInstance()->get(LoggerInterface::class);
         parent::__construct($deployStaticFile, $formatter, $packageFileFactory, $minification);
     }
 
     /**
      * @inheritdoc
-     *
-     * @throws FileSystemException
      */
     public function process(Package $package, array $options): bool
     {
         parent::process($package, $options);
-        $fileName = $this->minification->addMinifiedSign(RepositoryMap::REQUIRE_JS_MAP_NAME);
+
         $path = $package->getPath();
-        $relativePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
-        if ($this->fileExists($relativePath)) {
-            $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-            $absolutePath = $dir->getAbsolutePath($relativePath);
-            $fileContent = $this->driver->fileGetContents($absolutePath);
+        try {
+            $fileName = $this->minification->addMinifiedSign(RepositoryMap::REQUIRE_JS_MAP_NAME);
+            $relativePath = $path . DIRECTORY_SEPARATOR . $fileName;
 
-            if ($fileContent) {
-                $integrity = $this->integrityFactory->create(
-                    [
-                        "data" => [
-                            'hash' => $this->hashGenerator->generate($fileContent),
-                            'path' => $relativePath
+            if ($this->fileExists($relativePath)) {
+                $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+                $absolutePath = $dir->getAbsolutePath($relativePath);
+                $fileContent = $this->driver->fileGetContents($absolutePath);
+
+                if ($fileContent) {
+                    $integrity = $this->integrityFactory->create(
+                        [
+                            "data" => [
+                                'hash' => $this->hashGenerator->generate($fileContent),
+                                'path' => $relativePath
+                            ]
                         ]
-                    ]
-                );
-                $this->integrityCollector->collect($integrity);
+                    );
+                    $this->repositoryPool->get($path)->save($integrity);
+                }
             }
+        } catch (\Exception $e) {
+            $this->logger->error(
+                'Map PostProcessor: Failed to save SRI hash for requirejs-map.js',
+                ['path' => $path, 'exception' => $e->getMessage()]
+            );
         }
+
         return true;
     }
 

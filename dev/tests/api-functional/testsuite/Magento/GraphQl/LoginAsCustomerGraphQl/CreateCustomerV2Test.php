@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\LoginAsCustomerGraphQl;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\GraphQl\Query\Uid;
@@ -72,11 +73,11 @@ class CreateCustomerV2Test extends GraphQlAbstract
     /**
      * Test creating customer account with various allow_remote_shopping_assistance scenarios
      *
-     * @dataProvider allowRemoteShoppingAssistanceDataProvider
      * @param bool|null $allowValue
      * @param bool $expectedValue
      * @throws Exception
      */
+    #[DataProvider('allowRemoteShoppingAssistanceDataProvider')]
     public function testCreateCustomerAccountWithAllowRemoteShoppingAssistance(
         ?bool $allowValue,
         bool $expectedValue

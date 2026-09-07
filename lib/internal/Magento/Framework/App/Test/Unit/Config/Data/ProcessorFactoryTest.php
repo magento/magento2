@@ -31,10 +31,9 @@ class ProcessorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->_model = new ProcessorFactory($this->_objectManager);
-        $this->_processorMock = $this->getMockForAbstractClass(
-            ProcessorInterface::class
+        $this->_processorMock = $this->createMock(ProcessorInterface::class
         );
     }
 
@@ -72,10 +71,7 @@ class ProcessorFactoryTest extends TestCase
         )->with(
             \Magento\Framework\App\Config\Data\WrongBackendModel::class
         )->willReturn(
-            
-                $this->getMockBuilder('WrongBackendModel')
-                    ->getMock()
-            
+            new \stdClass()
         );
 
         $this->_model->get(\Magento\Framework\App\Config\Data\WrongBackendModel::class);

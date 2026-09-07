@@ -783,11 +783,27 @@
                 var getPrice = function (elm) {
                     var optQty = 1;
                     if (elm.hasAttribute('qtyId')) {
-                        if (!$(elm.getAttribute('qtyId')).value) {
-                            return 0;
-                        } else {
-                            optQty = parseFloat($(elm.getAttribute('qtyId')).value);
+                        var qtyId = elm.getAttribute('qtyId'),
+                            confirmedBlock = $(productConfigure.confirmedCurrentId),
+                            qtyEl = null,
+                            qtyInputs, j;
+
+                        if (confirmedBlock) {
+                            qtyInputs = confirmedBlock.getElementsByTagName('input');
+
+                            for (j = 0; j < qtyInputs.length; j++) {
+                                if (qtyInputs[j].id === qtyId) {
+                                    qtyEl = qtyInputs[j];
+                                    break;
+                                }
+                            }
                         }
+
+                        if (!qtyEl || !qtyEl.value) {
+                            return 0;
+                        }
+
+                        optQty = parseFloat(qtyEl.value);
                     }
                     if (elm.hasAttribute('price') && !elm.disabled) {
                         return parseFloat(elm.readAttribute('price')) * optQty;

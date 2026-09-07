@@ -69,7 +69,7 @@ class CartQuantityValidator implements CartQuantityValidatorInterface
                 $mergePreference = $this->config->getCartMergePreference();
 
                 if ($mergePreference === Config::CART_PREFERENCE_CUSTOMER) {
-                    $this->safeDeleteCartItem((int)$guestCart->getId(), (int)$guestCartItem->getItemId());
+                    $this->safeDeleteCartItem($guestCart, (int)$guestCartItem->getItemId());
                     $modified = true;
                     break;
                 }
@@ -89,12 +89,12 @@ class CartQuantityValidator implements CartQuantityValidatorInterface
                     );
 
                 if ($mergePreference === Config::CART_PREFERENCE_GUEST) {
-                    $this->safeDeleteCartItem((int)$customerCart->getId(), (int)$customerCartItem->getItemId());
+                    $this->safeDeleteCartItem($customerCart, (int)$customerCartItem->getItemId());
                     $modified = true;
                 }
 
                 if (!$isQtyValid) {
-                    $this->safeDeleteCartItem((int)$guestCart->getId(), (int)$guestCartItem->getItemId());
+                    $this->safeDeleteCartItem($guestCart, (int)$guestCartItem->getItemId());
                     $modified = true;
                 }
 
@@ -210,15 +210,15 @@ class CartQuantityValidator implements CartQuantityValidatorInterface
     /**
      * Safely delete a cart item by ID, logging any exceptions
      *
-     * @param int $cartId
+     * @param CartInterface $cart
      * @param int $itemId
      * @return void
      */
-    private function safeDeleteCartItem(int $cartId, int $itemId): void
+    private function safeDeleteCartItem(CartInterface $cart, int $itemId): void
     {
         try {
-            $this->cartItemRepository->deleteById($cartId, $itemId);
-        } catch (NoSuchEntityException | CouldNotSaveException $e) {
+            $cart->removeItem($itemId);
+        } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
     }

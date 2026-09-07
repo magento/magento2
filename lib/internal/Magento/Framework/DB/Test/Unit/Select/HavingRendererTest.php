@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select\HavingRenderer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HavingRendererTest extends TestCase
 {
@@ -38,9 +39,8 @@ class HavingRendererTest extends TestCase
     }
 
     /**
-     * @param array $mapValues
-     * @dataProvider renderNoPartDataProvider
-     */
+     * @param array $mapValues     */
+    #[DataProvider('renderNoPartDataProvider')]
     public function testRenderNoPart($mapValues)
     {
         $sql = 'SELECT';

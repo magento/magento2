@@ -11,6 +11,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFiles;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class DeleteFilesTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Files
      */
@@ -51,17 +53,16 @@ class DeleteFilesTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->storage = $this->createMock(WisiwygStorage::class);
         $this->response = $this->createMock(Http::class);
-        $this->request = $this->getMockForAbstractClass(
+        $this->request = $this->createPartialMockWithReflection(
             RequestInterface::class,
-            [],
-            '',
-            false,
-            false,
-            true,
-            ['isPost', 'getParam']
+            [
+                'getModuleName', 'setModuleName', 'getActionName', 'setActionName',
+                'getParam', 'setParams', 'getParams', 'getCookie', 'isSecure',
+                'isPost'
+            ]
         );
 
         $helper = new ObjectManager($this);

@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override;
 
 use Magento\TestFramework\Workaround\Override\Config;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Config.
@@ -32,12 +33,11 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider skipValuesProvider
-     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedClass(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())
@@ -51,13 +51,12 @@ class ConfigTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider skipValuesProvider
-     *
+    /**     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedMethod(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())
@@ -76,12 +75,11 @@ class ConfigTest extends TestCase
     }
 
     /**
-     * @dataProvider skipValuesProvider
-     *
      * @param bool $skip
      * @param string $skipMessage
      * @return void
      */
+    #[DataProvider('skipValuesProvider')]
     public function testSkippedDataSet(bool $skip, string $skipMessage): void
     {
         $this->object->expects($this->once())

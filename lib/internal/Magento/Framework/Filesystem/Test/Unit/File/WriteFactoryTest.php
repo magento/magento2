@@ -20,7 +20,7 @@ class WriteFactoryTest extends TestCase
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
         $driverPool->expects($this->never())->method('getDriver');
         $factory = new WriteFactory($driverPool);
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->any())->method('isExists')->willReturn(true);
         $result = $factory->create('path', $driver);
         $this->assertInstanceOf(Write::class, $result);
@@ -29,7 +29,7 @@ class WriteFactoryTest extends TestCase
     public function testCreateWithDriverCode()
     {
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
-        $driverMock = $this->getMockForAbstractClass(DriverInterface::class);
+        $driverMock = $this->createMock(DriverInterface::class);
         $driverMock->expects($this->any())->method('isExists')->willReturn(true);
         $driverPool->expects($this->once())->method('getDriver')->willReturn($driverMock);
         $factory = new WriteFactory($driverPool);
@@ -41,7 +41,7 @@ class WriteFactoryTest extends TestCase
     {
         $driverPool = $this->createPartialMock(DriverPool::class, ['getDriver']);
         $driverPool->expects($this->never())->method('getDriver');
-        $driver = $this->getMockForAbstractClass(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $driver->expects($this->any())->method('isExists')->willReturn(true);
         $factory = new WriteFactory($driverPool);
         $result = $factory->create('path', $driver, 'a+');

@@ -13,6 +13,7 @@ use Magento\Framework\TestFramework\Unit\BaseTestCase;
 use Magento\Framework\View\Asset\Config;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Tests Magento\Framework\View\Asset\Config
@@ -34,16 +35,14 @@ class ConfigTest extends BaseTestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->model = new Config($this->scopeConfigMock);
     }
 
     /**
-     * @param bool $booleanData
-     * @dataProvider booleanDataProvider
-     * @return void
+     * @param bool $booleanData     * @return void
      */
+    #[DataProvider('booleanDataProvider')]
     public function testIsMergeCssFiles($booleanData)
     {
         $this->scopeConfigMock->expects($this->once())
@@ -54,10 +53,9 @@ class ConfigTest extends BaseTestCase
     }
 
     /**
-     * @param bool $booleanData
-     * @dataProvider booleanDataProvider
-     * @return void
+     * @param bool $booleanData     * @return void
      */
+    #[DataProvider('booleanDataProvider')]
     public function testIsMergeJsFiles($booleanData)
     {
         $this->scopeConfigMock->expects($this->once())

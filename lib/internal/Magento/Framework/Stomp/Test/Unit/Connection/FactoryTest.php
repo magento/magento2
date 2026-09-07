@@ -55,7 +55,7 @@ class FactoryTest extends TestCase
         }
 
         $connectionMock = $this->createMock(Connection::class);
-        $connectionMock->expects($this->once())->method('connect');
+        $connectionMock->expects($this->never())->method('connect');
 
         $factory = new class($connectionMock) extends Factory {
             /** @var Connection */

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassUpdateProductSpecialPriceDateValidationTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Mass update product special price with invalid date range should display validation error"/>
+            <description value="Validates special price date range during mass product attribute update"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-15367"/>
+            <group value="catalog"/>
+            <group value="product_attributes"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Login to magento admin panel. -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create test data: category and SIMPLE products -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Cleanup: Delete created products and category -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 2: Navigate to Catalog > Products to open the product grid -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <!-- Step 3: Select one or more products using the checkbox. -->
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectFirstProduct">
+            <argument name="product" value="$createProductOne$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectSecondProduct">
+            <argument name="product" value="$createProductTwo$"/>
+        </actionGroup>
+        <!-- Step 4: From the Actions dropdown, choose Update Attributes -->
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickMassUpdateAttributes"/>
+        <!-- Step 5: Enable special price date fields and set invalid dates -->
+        <checkOption selector="{{AdminUpdateAttributesSection.toggleSpecialFromDate}}" stepKey="enableSpecialFromDateToggle"/>
+        <checkOption selector="{{AdminUpdateAttributesSection.toggleSpecialToDate}}" stepKey="enableSpecialToDateToggle"/>
+        <checkOption selector="{{AdminUpdateAttributesSection.toggleSpecialPrice}}" stepKey="enableSpecialPriceToggle"/>
+        <waitForElementVisible selector="{{AdminEditProductAttributesSection.attributeInput('special_from_date')}}" stepKey="waitForFromDateField"/>
+        <!-- Set Special Price From Date to a date AFTER Special Price To Date (Invalid) -->
+        <fillField selector="{{AdminEditProductAttributesSection.attributeInput('special_from_date')}}" userInput="12/31/2026" stepKey="fillSpecialPriceFromDateWithInvalidFutureDate"/>
+        <fillField selector="{{AdminEditProductAttributesSection.attributeInput('special_to_date')}}" userInput="01/01/2026" stepKey="fillToDate"/>
+        <fillField selector="{{AdminEditProductAttributesSection.attributeInput('special_price')}}" userInput="5.00" stepKey="fillSpecialPrice"/>
+        <!-- Click Save button -->
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSaveAction"/>
+        <!-- Step 6: Verify error message -->
+        <waitForText selector="{{AdminMessagesSection.errorMessage}}" userInput="{{ProductAttributeMessages.special_price_date_validation_error}}" stepKey="seeValidationErrorMessage"/>
+    </test>
+</tests>

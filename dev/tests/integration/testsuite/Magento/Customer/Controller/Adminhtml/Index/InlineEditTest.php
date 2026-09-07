@@ -20,6 +20,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test inline edit action on customers grid.
@@ -105,11 +106,10 @@ class InlineEditTest extends AbstractBackendController
     }
 
     /**
-     * @dataProvider inlineEditParametersDataProvider
-     *
      * @param array $params
      * @return void
      */
+    #[DataProvider('inlineEditParametersDataProvider')]
     public function testInlineEditWithWrongParams(array $params): void
     {
         $actual = $this->performInlineEditRequest($params);

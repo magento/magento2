@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SignUpNewUserFromStorefrontWithCompanyHeaderActionGroup" extends="SignUpNewUserFromStorefrontActionGroup">
+        <annotations>
+            <description>Goes to the Storefront and opens customer registration for B2C direct link or B2B Company header dropdown, then completes sign-up.</description>
+        </annotations>
+        <remove keyForRemoval="waitForCreateAccountLink"/>
+        <remove keyForRemoval="clickOnCreateAccountLink"/>
+        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad" after="amOnStorefrontPage"/>
+        <conditionalClick selector="{{StorefrontPanelHeaderCompanySection.createAccountDropdownToggle}}" dependentSelector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" visible="false" stepKey="openCreateAccountDropdownIfNeeded" after="waitForStorefrontHomePageLoad"/>
+        <conditionalClick selector="{{StorefrontPanelHeaderCompanySection.createNewCustomerLink}}" dependentSelector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" visible="false" stepKey="clickCreateNewCustomerLink" after="openCreateAccountDropdownIfNeeded"/>
+        <conditionalClick selector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" dependentSelector="{{StorefrontPanelHeaderSection.createAnAccountLink}}" visible="true" stepKey="clickOnCreateAccountLink" after="clickCreateNewCustomerLink"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.firstnameField}}" stepKey="waitForRegistrationForm" after="clickOnCreateAccountLink"/>
+    </actionGroup>
+</actionGroups>

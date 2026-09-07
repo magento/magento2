@@ -72,12 +72,7 @@ class RollbackCommandTest extends TestCase
     {
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
         $maintenanceMode = $this->createMock(MaintenanceMode::class);
-        $this->objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
         $this->backupRollback = $this->createMock(BackupRollback::class);
@@ -86,12 +81,7 @@ class RollbackCommandTest extends TestCase
             ->method('create')
             ->willReturn($this->backupRollback);
         $appState = $this->createMock(State::class);
-        $configLoader = $this->getMockForAbstractClass(
-            ConfigLoaderInterface::class,
-            [],
-            '',
-            false
-        );
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
         $configLoader->expects($this->any())->method('load')->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')

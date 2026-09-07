@@ -7,6 +7,7 @@ namespace Magento\Customer\Helper;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,8 +33,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      * @param bool $isPrefixAllowed
      * @param bool $isMiddleNameAllowed
      * @param bool $isSuffixAllowed
-     * @dataProvider getCustomerNameDataProvider
      */
+    #[DataProvider('getCustomerNameDataProvider')]
     public function testGetCustomerName(
         $customerData,
         $expectedCustomerName,

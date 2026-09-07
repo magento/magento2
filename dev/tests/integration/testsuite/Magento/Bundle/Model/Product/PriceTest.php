@@ -22,6 +22,7 @@ use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -89,13 +90,13 @@ class PriceTest extends TestCase
     /**
      * Test calculation final price for bundle product with tire price in simple product
      * @magentoDataFixture Magento/Bundle/_files/product_with_simple_tier_pricing.php
-     * @dataProvider getSelectionFinalTotalPriceWithSimpleTierPriceDataProvider
      *
      * @param float $bundleQty
      * @param float $selectionQty
      * @param float $finalPrice
      * @return void
      */
+    #[DataProvider('getSelectionFinalTotalPriceWithSimpleTierPriceDataProvider')]
     public function testGetSelectionFinalTotalPriceWithSimpleTierPrice(
         float $bundleQty,
         float $selectionQty,

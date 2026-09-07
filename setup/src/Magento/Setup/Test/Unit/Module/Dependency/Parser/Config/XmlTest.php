@@ -10,6 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Parser\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Module\Dependency\Parser\Config\Xml;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class XmlTest extends TestCase
 {
@@ -26,8 +27,8 @@ class XmlTest extends TestCase
 
     /**
      * @param array $options
-     * @dataProvider dataProviderWrongOptionFilesForParse
      */
+    #[DataProvider('dataProviderWrongOptionFilesForParse')]
     public function testParseWithWrongOptionFilesForParse($options)
     {
         $this->expectException('InvalidArgumentException');

@@ -15,4 +15,7 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
         <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\SalesRule\Api\Data\ConditionInterface">
+        <attribute code="attribute_scope" type="string" />
+    </extension_attributes>
 </config>

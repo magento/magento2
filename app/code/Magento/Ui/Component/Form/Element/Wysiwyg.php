@@ -6,11 +6,13 @@
 
 namespace Magento\Ui\Component\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\Editor;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+use Magento\Ui\Model\Validation\WysiwygValidationConfigResolver;
 
 /**
  * WYSIWYG form element
@@ -20,7 +22,7 @@ use Magento\Ui\Component\Wysiwyg\ConfigInterface;
  */
 class Wysiwyg extends AbstractElement
 {
-    const NAME = 'wysiwyg';
+    public const NAME = 'wysiwyg';
 
     /**
      * @var Form
@@ -35,12 +37,18 @@ class Wysiwyg extends AbstractElement
     protected $editor;
 
     /**
+     * @var WysiwygValidationConfigResolver
+     */
+    private WysiwygValidationConfigResolver $validationConfigResolver;
+
+    /**
      * @param ContextInterface $context
      * @param FormFactory $formFactory
      * @param ConfigInterface $wysiwygConfig
      * @param array $components
      * @param array $data
      * @param array $config
+     * @param WysiwygValidationConfigResolver|null $validationConfigResolver
      */
     public function __construct(
         ContextInterface $context,
@@ -48,12 +56,16 @@ class Wysiwyg extends AbstractElement
         ConfigInterface $wysiwygConfig,
         array $components = [],
         array $data = [],
-        array $config = []
+        array $config = [],
+        ?WysiwygValidationConfigResolver $validationConfigResolver = null
     ) {
+        $this->validationConfigResolver = $validationConfigResolver
+            ?? ObjectManager::getInstance()->get(WysiwygValidationConfigResolver::class);
         $wysiwygConfigData = isset($config['wysiwygConfigData']) ? $config['wysiwygConfigData'] : [];
-
         $this->form = $formFactory->create();
         $wysiwygId = $context->getNamespace() . '_' . $data['name'];
+        $data['config']['validationParams']['allowUtf8mb4'] = $this->validationConfigResolver
+            ->resolveAllowUtf8mb4($config);
         $this->editor = $this->form->addField(
             $wysiwygId,
             \Magento\Framework\Data\Form\Element\Editor::class,

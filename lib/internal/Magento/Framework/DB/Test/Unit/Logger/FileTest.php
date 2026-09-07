@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\File\WriteInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileTest extends TestCase
 {
@@ -47,8 +48,8 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->stream = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
+        $this->stream = $this->createMock(WriteInterface::class);
+        $this->dir = $this->createMock(\Magento\Framework\Filesystem\Directory\WriteInterface::class);
         $this->dir->expects($this->any())
             ->method('openFile')
             ->with(self::DEBUG_FILE, 'a')
@@ -99,9 +100,8 @@ class FileTest extends TestCase
      * @param string $type
      * @param string $q
      * @param array $bind
-     * @param string $expected
-     * @dataProvider logStatsDataProvider
-     */
+     * @param string $expected     */
+    #[DataProvider('logStatsDataProvider')]
     public function testLogStats(string $type, string $q, array $bind, string $expected)
     {
         $this->stream->expects($this->once())

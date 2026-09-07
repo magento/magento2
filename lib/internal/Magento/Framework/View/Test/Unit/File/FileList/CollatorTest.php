@@ -58,7 +58,7 @@ class CollatorTest extends TestCase
     {
         $theme = null;
         if ($themeFullPath !== null) {
-            $theme = $this->getMockForAbstractClass(ThemeInterface::class);
+            $theme = $this->createMock(ThemeInterface::class);
             $theme->expects($this->any())->method('getFullPath')->willReturn($themeFullPath);
         }
         return new File($filename, $module, $theme);

@@ -15,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Design\Theme\Image\PathInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Theme\Model\Theme;
@@ -25,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 class PathTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Path|MockObject
      */
@@ -56,7 +59,7 @@ class PathTest extends TestCase
     protected function setUp(): void
     {
         $this->filesystem = $this->createMock(Filesystem::class);
-        $this->mediaDirectory = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->mediaDirectory = $this->createMock(ReadInterface::class);
         $this->_assetRepo = $this->createMock(Repository::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
 
@@ -79,11 +82,10 @@ class PathTest extends TestCase
     public function testGetPreviewImageUrl()
     {
         /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
-        $theme = $this->getMockBuilder(Theme::class)
-            ->addMethods(['getPreviewImage'])
-            ->onlyMethods(['isPhysical', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $theme = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getPreviewImage', 'isPhysical', '__wakeup']
+        );
         $theme->expects($this->any())
             ->method('getPreviewImage')
             ->willReturn('image.png');
@@ -100,11 +102,10 @@ class PathTest extends TestCase
         $expectedPath = 'theme/preview/preview.jpg';
 
         /** @var Theme|\PHPUnit\Framework\MockObject\MockObject $theme */
-        $theme = $this->getMockBuilder(Theme::class)
-            ->addMethods(['getPreviewImage'])
-            ->onlyMethods(['isPhysical', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $theme = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['getPreviewImage', 'isPhysical', '__wakeup']
+        );
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')

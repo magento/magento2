@@ -27,9 +27,7 @@ class ConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->dataStorage = $this->getMockBuilder(DataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->dataStorage = $this->createMock(DataInterface::class);
         $this->_model = new Config($this->dataStorage);
     }
 

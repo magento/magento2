@@ -19,10 +19,18 @@
             <useCaseId value="MC-38509"/>
             <group value="customer"/>
             <group value="cloud"/>
-            <skip>
-                <issueId value="AC-13608">Skipped</issueId>
-            </skip>
         </annotations>
+
+        <after>
+            <!--Log in as Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <!--Delete customer created during test execution-->
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomerFromGrid">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <!--Log out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
 
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <!--Try to submit register form with wrong password.-->

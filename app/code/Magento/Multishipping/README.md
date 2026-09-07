@@ -133,6 +133,6 @@ This module introduces the new pages:
 - `checkout_cart_multishipping_shipping` - Multishipping Checkout Shipping Information Step
 - `checkout_cart_multishipping_success` - Multishipping Checkout Success
 
-More information about [layout types](https://developer.adobe.com/commerce/frontend-core/guide/layouts/types/).
+More information about [layout types](https://developer.adobe.com/commerce/frontend-core/guide/layouts/types).
 
 For information about significant changes in patch releases, see [Release information](https://experienceleague.adobe.com/en/docs/commerce-operations/release/notes/overview).

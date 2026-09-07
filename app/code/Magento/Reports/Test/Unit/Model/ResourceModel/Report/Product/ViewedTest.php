@@ -213,6 +213,7 @@ class ViewedTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     #[DataProvider('intervalsDataProvider')]
     public function testAggregate($from, $to, $truncateCount, $deleteCount): void
@@ -228,7 +229,12 @@ class ViewedTest extends TestCase
         } elseif ($deleteCount === 'once') {
             $deleteCount = $this->once();
         }
-        
+        if ($from === null) {
+            $this->zendDbMock->expects($this->never())->method('fetchAll');
+        } else {
+            $this->zendDbMock->expects($this->any())->method('fetchAll')->willReturn([]);
+        }
+
         $this->connectionMock->expects($truncateCount)->method('truncateTable');
         $this->connectionMock->expects($deleteCount)->method('delete');
 

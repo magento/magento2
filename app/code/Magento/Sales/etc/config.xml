@@ -38,6 +38,7 @@
                 <async_sending>0</async_sending>
                 <async_sending_attempts>3</async_sending_attempts>
                 <sending_limit>50</sending_limit>
+                <stale_claim_minutes>10</stale_claim_minutes>
             </general>
             <order>
                 <enabled>1</enabled>

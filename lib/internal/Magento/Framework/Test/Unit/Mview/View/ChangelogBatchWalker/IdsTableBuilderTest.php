@@ -44,13 +44,9 @@ class IdsTableBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->changeLog = $this->getMockBuilder(ChangelogInterface::class)
-            ->getMockForAbstractClass();
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
-        $this->table = $this->getMockBuilder(Table::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->changeLog = $this->createMock(ChangelogInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
+        $this->table = $this->createMock(Table::class);
 
         $this->resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()

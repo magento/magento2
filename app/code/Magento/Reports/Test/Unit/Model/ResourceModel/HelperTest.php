@@ -78,10 +78,11 @@ class HelperTest extends TestCase
     /**
      * @param string $type
      * @param array $result
+     * @param bool $exists
      * @return void
      */
     #[DataProvider('typesDataProvider')]
-    public function testUpdateReportRatingPos($type, $result)
+    public function testUpdateReportRatingPos($type, $result, $exists)
     {
         $mainTable = 'mainTable';
         $column = 'column';
@@ -115,6 +116,10 @@ class HelperTest extends TestCase
             ->expects($this->any())
             ->method('select')
             ->willReturn($selectMock);
+        $this->connectionMock
+            ->expects($this->atLeastOnce())
+            ->method('tableColumnExists')
+            ->willReturn($exists);
 
         $helper = new Helper(
             $this->resourceMock,
@@ -128,13 +133,38 @@ class HelperTest extends TestCase
      */
     public static function typesDataProvider()
     {
-        $mResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'column', 'rating_pos'];
-        $dResult = ['period', 'store_id', 'product_id', 'product_name', 'product_price', 'id', 'column', 'rating_pos'];
+        $mResult = [
+            'period',
+            'store_id',
+            'product_id',
+            'product_name',
+            'product_price',
+            'column',
+            'rating_pos'
+        ];
+        $dResult = [
+            'period',
+            'store_id',
+            'product_id',
+            'product_name',
+            'product_price',
+            'id',
+            'column',
+            'rating_pos'
+        ];
         return [
-            ['type' => 'year', 'result' => $mResult],
-            ['type' => 'month', 'result' => $mResult],
-            ['type' => 'day', 'result' => $dResult],
-            ['type' => null, 'result' => $mResult]
+            ['type' => 'year', 'result' => $mResult, 'exists' => false],
+            ['type' => 'month', 'result' => [
+                'store_id',
+                'product_id',
+                'product_name',
+                'product_price',
+                'period',
+                'column',
+                'rating_pos'
+            ], 'exists' => true],
+            ['type' => 'day', 'result' => $dResult, 'exists' => false],
+            ['type' => null, 'result' => $mResult, 'exists' => false]
         ];
     }
 }

@@ -12,6 +12,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Ui\Controller\Adminhtml\Export\GridToXml;
 use Magento\Ui\Model\Export\ConvertToXml;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 class GridToXmlTest extends TestCase
@@ -38,17 +39,11 @@ class GridToXmlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->context = $this->createMock(Context::class);
 
-        $this->converter = $this->getMockBuilder(ConvertToXml::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->converter = $this->createMock(ConvertToXml::class);
 
-        $this->fileFactory = $this->getMockBuilder(FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileFactory = $this->createMock(FileFactory::class);
 
         $this->controller = new GridToXml(
             $this->context,

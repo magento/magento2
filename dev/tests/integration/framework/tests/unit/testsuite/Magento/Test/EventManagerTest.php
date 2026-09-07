@@ -9,8 +9,12 @@
  */
 namespace Magento\Test;
 
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class EventManagerTest extends \PHPUnit\Framework\TestCase
 {
+    use MockCreationTrait;
     /**
      * @var \Magento\TestFramework\EventManager
      */
@@ -28,12 +32,14 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->_subscriberOne = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['testEvent'])
-            ->getMock();
-        $this->_subscriberTwo = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['testEvent'])
-            ->getMock();
+        $this->_subscriberOne = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['testEvent']
+        );
+        $this->_subscriberTwo = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['testEvent']
+        );
         $this->_eventManager = new \Magento\TestFramework\EventManager(
             [$this->_subscriberOne, $this->_subscriberTwo]
         );
@@ -42,8 +48,8 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @param bool $reverseOrder
      * @param array $expectedSubscribers
-     * @dataProvider fireEventDataProvider
      */
+    #[DataProvider('fireEventDataProvider')]
     public function testFireEvent($reverseOrder, $expectedSubscribers)
     {
         $actualSubscribers = [];

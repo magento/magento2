@@ -10,6 +10,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test command that sets indexer mode for catalog_product_price indexer
@@ -67,8 +68,8 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      *
      * @param string $previousMode
      * @param string $currentMode
-     * @dataProvider modesDataProvider
      */
+    #[DataProvider('modesDataProvider')]
     public function testSwitchMode($previousMode, $currentMode)
     {
         $this->commandTester->execute(

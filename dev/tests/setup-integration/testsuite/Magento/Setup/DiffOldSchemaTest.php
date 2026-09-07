@@ -13,6 +13,7 @@ use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\SetupTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * The purpose of this test is verifying initial InstallSchema, InstallData scripts.
@@ -100,8 +101,8 @@ class DiffOldSchemaTest extends SetupTestCase
      * @moduleName Magento_TestSetupDeclarationModule1
      * @param string $dbPrefix
      * @throws \Exception
-     * @dataProvider oldSchemaUpgradeDataProvider
      */
+    #[DataProvider('oldSchemaUpgradeDataProvider')]
     public function testOldSchemaUpgrade(string $dbPrefix)
     {
         $this->moduleManager->updateRevision(

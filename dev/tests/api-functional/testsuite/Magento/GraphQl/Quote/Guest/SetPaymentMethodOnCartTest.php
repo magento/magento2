@@ -14,6 +14,7 @@ use Magento\OfflinePayments\Model\Checkmo;
 use Magento\OfflinePayments\Model\Purchaseorder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting payment methods on cart by guest
@@ -153,9 +154,9 @@ class SetPaymentMethodOnCartTest extends GraphQlAbstract
      *
      * @param string $input
      * @param string $message
-     * @dataProvider dataProviderSetPaymentMethodWithoutRequiredParameters
      * @throws Exception
      */
+    #[DataProvider('dataProviderSetPaymentMethodWithoutRequiredParameters')]
     public function testSetPaymentMethodWithoutRequiredParameters(string $input, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

@@ -27,7 +27,7 @@ class RedirectFactoryTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->model = $objectManager->getObject(
             RedirectFactory::class,
             ['objectManager' => $this->objectManagerMock]

@@ -10,6 +10,7 @@ namespace Magento\Framework\View\Test\Unit\Element;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Text;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TextTest extends TestCase
 {
@@ -39,9 +40,8 @@ class TextTest extends TestCase
      * @param string $text
      * @param bool $before
      * @param string $expectedResult
-     *
-     * @dataProvider addTextDataProvider
-     */
+     *     */
+    #[DataProvider('addTextDataProvider')]
     public function testAddText($text, $before, $expectedResult)
     {
         $this->elementText->setText('example');

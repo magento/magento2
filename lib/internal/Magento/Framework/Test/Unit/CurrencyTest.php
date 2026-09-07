@@ -21,10 +21,10 @@ class CurrencyTest extends TestCase
 {
     public function testConstruct()
     {
-        $frontendCache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $frontendCache = $this->createMock(FrontendInterface::class);
         $cachePoolMock = $this->createMock(CacheItemPoolInterface::class);
         /** @var CacheInterface|MockObject $appCache */
-        $appCache = $this->getMockForAbstractClass(CacheInterface::class);
+        $appCache = $this->createMock(CacheInterface::class);
         $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($cachePoolMock);
         $appCache->expects($this->once())
             ->method('getFrontend')

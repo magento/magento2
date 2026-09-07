@@ -16,6 +16,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFacto
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for graphql resolver-level cache key calculator.
@@ -86,9 +87,8 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      * @return void
      *
      * @magentoAppArea graphql
-     *
-     * @dataProvider keyFactorDataProvider
      */
+    #[DataProvider('keyFactorDataProvider')]
     public function testKeyCalculator(array $factorDataArray, ?array $parentResolverData, $expectedCacheKey)
     {
         $this->initMocksForObjectManager($factorDataArray, $parentResolverData);
@@ -293,10 +293,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
 
         $this->initFactorMocks();
 
-        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['preProcessParentValue'])
-            ->getMockForAbstractClass();
+        $valueProcessorMock = $this->createMock(ValueProcessorInterface::class);
 
         $valueProcessorMock->expects($this->once())
             ->method('preProcessParentValue')
@@ -327,19 +324,13 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     private function initFactorMocks()
     {
-        $mockContextFactor = $this->getMockBuilder(GenericFactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
+        $mockContextFactor = $this->createMock(GenericFactorProviderInterface::class);
 
-        $mockPlainParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
-            ->getMockForAbstractClass();
+        $mockPlainParentValueFactor = $this->createMock(ParentValueFactorProviderInterface::class);
 
         $mockPlainParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(false);
 
-        $mockProcessedParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
-            ->getMockForAbstractClass();
+        $mockProcessedParentValueFactor = $this->createMock(ParentValueFactorProviderInterface::class);
 
         $mockProcessedParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(true);
 
@@ -361,10 +352,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
 
         $this->initFactorMocks();
 
-        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['preProcessParentValue'])
-            ->getMockForAbstractClass();
+        $valueProcessorMock = $this->createMock(ValueProcessorInterface::class);
 
         $valueProcessorMock->expects($this->never())
             ->method('preProcessParentValue');
@@ -396,18 +384,13 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueProcessingIsSkippedForContextOnlyFactors()
     {
-        $mockContextFactor = $this->getMockBuilder(GenericFactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
+        $mockContextFactor = $this->createMock(GenericFactorProviderInterface::class);
 
         $value = ['data' => 'some data'];
 
         $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
 
-        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['preProcessParentValue'])
-            ->getMockForAbstractClass();
+        $valueProcessorMock = $this->createMock(ValueProcessorInterface::class);
 
         $valueProcessorMock->expects($this->never())
             ->method('preProcessParentValue');

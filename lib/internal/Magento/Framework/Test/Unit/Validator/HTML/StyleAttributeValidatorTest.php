@@ -10,6 +10,8 @@ namespace Magento\Framework\Test\Unit\Validator\HTML;
 
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\StyleAttributeValidator;
+use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 class StyleAttributeValidatorTest extends TestCase
@@ -40,8 +42,8 @@ class StyleAttributeValidatorTest extends TestCase
      * @param string $value
      * @param bool $expectedValid
      * @return void
-     * @dataProvider getAttributes
      */
+    #[DataProvider('getAttributes')]
     public function testValidate(string $attr, string $value, bool $expectedValid): void
     {
         $validator = new StyleAttributeValidator();

@@ -13,6 +13,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\DeadlockRecoveryExecutor;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Sales\Api\Data\OrderStatusHistorySearchResultInterface;
@@ -180,7 +181,7 @@ class OrderServiceTest extends TestCase
             $this->orderCommentSender,
             $paymentFailures,
             $logger,
-            new OrderMutex($this->resourceConnectionMock),
+            new OrderMutex($this->resourceConnectionMock, new DeadlockRecoveryExecutor(5, 0)),
             $this->orderConfigMock
         );
     }

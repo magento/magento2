@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Csp\Model\SubresourceIntegrity\StorageInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class contains methods equivalent to repository design to manage SRI hashes.
@@ -38,11 +39,17 @@ class SubresourceIntegrityRepository
     private StorageInterface $storage;
 
     /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    /**
      * @param CacheInterface $cache
      * @param SerializerInterface $serializer
      * @param SubresourceIntegrityFactory $integrityFactory
      * @param string|null $context
      * @param StorageInterface|null $storage
+     * @param LoggerInterface|null $logger
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -51,13 +58,17 @@ class SubresourceIntegrityRepository
         SerializerInterface $serializer,
         SubresourceIntegrityFactory $integrityFactory,
         ?string $context = null,
-        ?StorageInterface $storage = null
+        ?StorageInterface $storage = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->serializer = $serializer;
         $this->context = $context;
 
         $this->storage = $storage ?? ObjectManager::getInstance()->get(
             StorageInterface::class
+        );
+        $this->logger = $logger ?? ObjectManager::getInstance()->get(
+            LoggerInterface::class
         );
     }
 
@@ -155,7 +166,23 @@ class SubresourceIntegrityRepository
         if ($this->data === null) {
             $rawData = $this->storage->load($this->context);
 
-            $this->data = $rawData ? $this->serializer->unserialize($rawData) : [];
+            if ($rawData) {
+                try {
+                    $unserialized = $this->serializer->unserialize($rawData);
+                    $this->data = is_array($unserialized) ? $unserialized : [];
+                } catch (\InvalidArgumentException $e) {
+                    $this->logger->warning(
+                        'SRI: Failed to parse integrity hashes file',
+                        [
+                            'context' => $this->context,
+                            'exception' => $e->getMessage()
+                        ]
+                    );
+                    $this->data = [];
+                }
+            } else {
+                $this->data = [];
+            }
 
             foreach ($this->data as $path => $hash) {
                 $this->data[$path] = new SubresourceIntegrity(["path" => $path, "hash" => $hash]);

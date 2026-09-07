@@ -38,6 +38,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -230,12 +231,12 @@ class UpdateHandlerTest extends TestCase
      * Tests updating image roles during product save.
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
      * @throws LocalizedException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRoles(array $roles): void
     {
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
@@ -255,7 +256,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_multiple_images.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider executeWithTwoImagesAndRolesDataProvider
      * @magentoDbIsolation enabled
      * @param array $roles
      * @return void
@@ -263,6 +263,7 @@ class UpdateHandlerTest extends TestCase
      * @throws ConfigurationMismatchException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('executeWithTwoImagesAndRolesDataProvider')]
     public function testExecuteWithTwoImagesAndDifferentRolesOnStoreView(array $roles): void
     {
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
@@ -578,7 +579,6 @@ class UpdateHandlerTest extends TestCase
      * Check that product images should be updated successfully regardless if the existing images exist or not
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
-     * @dataProvider updateImageDataProvider
      * @param string $newFile
      * @param string $expectedFile
      * @param bool $exist
@@ -587,6 +587,7 @@ class UpdateHandlerTest extends TestCase
      * @throws NoSuchEntityException
      * @throws FileSystemException
      */
+    #[DataProvider('updateImageDataProvider')]
     public function testUpdateImage(string $newFile, string $expectedFile, bool $exist): void
     {
         $product = $this->getProduct(Store::DEFAULT_STORE_ID);
@@ -668,7 +669,6 @@ class UpdateHandlerTest extends TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
-     * @dataProvider addImagesDataProvider
      * @param string $addFromStore
      * @param array $newImages
      * @param string $viewFromStore
@@ -678,6 +678,7 @@ class UpdateHandlerTest extends TestCase
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
+    #[DataProvider('addImagesDataProvider')]
     public function testAddImages(
         string $addFromStore,
         array $newImages,
@@ -762,6 +763,7 @@ class UpdateHandlerTest extends TestCase
     }
     
     #[
+        DataProvider('useDefaultWithMultipleStoresDataProvider'),
         DbIsolation(false),
         DataFixture(ScopeFixture::class, as: 'global_scope'),
         DataFixture(StoreFixture::class, as: 'store_view_2'),
@@ -772,7 +774,7 @@ class UpdateHandlerTest extends TestCase
             scope: 'global_scope'
         ),
     ]
-    public function testUseDefaultWithMultipleStores(): void
+    public function testUseDefaultWithMultipleStores(array $storeImageData): void
     {
         $fixtures = DataFixtureStorageManager::getStorage();
         $sku = $fixtures->get('p1')->getSku();
@@ -787,11 +789,6 @@ class UpdateHandlerTest extends TestCase
             'position' => 3,
             'disabled' => 1,
             'label' => 'global label updated'
-        ];
-        $storeImageData = [
-            'position' => 5,
-            'disabled' => 1,
-            'label' => 'etiquette de test'
         ];
         $storeImageDataUseDefault = [
             'position_use_default' => 1,
@@ -816,7 +813,6 @@ class UpdateHandlerTest extends TestCase
         // Check image in store view 2
         $product = $this->productRepository->get($sku, true, $store2->getId(), true);
         $this->assertImage($storeImageData, current($product->getData('media_gallery', 'images')));
-        $this->assertEquals($storeImageData['label'], $product->getData('image_label'));
         
         // Use default values in store view 2
         $this->updateImage($product, $storeImageDataUseDefault);
@@ -848,6 +844,26 @@ class UpdateHandlerTest extends TestCase
         $this->assertEquals($defaultImageDataUpdated['label'], $product->getData('image_label'));
     }
 
+    public static function useDefaultWithMultipleStoresDataProvider(): array
+    {
+        return [
+            'custom store label, position, disabled' => [
+                [
+                    'position' => 5,
+                    'disabled' => 1,
+                    'label' => 'etiquette de test'
+                ]
+            ],
+            'empty store label' => [
+                [
+                    'position' => 5,
+                    'disabled' => 1,
+                    'label' => ''
+                ]
+            ]
+        ];
+    }
+
     /**
      * @param ProductInterface $product
      * @param array $imageData
@@ -870,7 +886,7 @@ class UpdateHandlerTest extends TestCase
     {
         $this->assertEquals($expected['position'], $actual['position']);
         $this->assertEquals($expected['disabled'], $actual['disabled']);
-        $this->assertEquals($expected['label'], $actual['label']);
+        $this->assertSame($expected['label'], $actual['label']);
     }
 
     /**

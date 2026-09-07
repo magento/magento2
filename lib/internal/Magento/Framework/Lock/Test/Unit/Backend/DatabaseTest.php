@@ -55,15 +55,11 @@ class DatabaseTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->statement = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->statement = $this->createMock(\Zend_Db_Statement_Interface::class);
 
         $this->resource->expects($this->any())
             ->method('getConnection')

@@ -36,13 +36,9 @@ class CheckThemeIsAssignedObserverTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->themeConfig = $this->getMockBuilder(Customization::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeConfig = $this->createMock(Customization::class);
 
-        $this->eventDispatcher = $this->getMockBuilder(ManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->eventDispatcher = $this->createMock(ManagerInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
@@ -56,18 +52,12 @@ class CheckThemeIsAssignedObserverTest extends TestCase
 
     public function testCheckThemeIsAssigned()
     {
-        $themeMock = $this->getMockBuilder(
-            ThemeInterface::class
-        )->getMockForAbstractClass();
+        $themeMock = $this->createMock(ThemeInterface::class);
 
-        $eventMock = $this->getMockBuilder(Event::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $eventMock = $this->createMock(Event::class);
         $eventMock->expects($this->any())->method('getData')->with('theme')->willReturn($themeMock);
 
-        $observerMock = $this->getMockBuilder(Observer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $observerMock = $this->createMock(Observer::class);
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
 
         $this->themeConfig->expects($this->any())->method('isThemeAssignedToStore')->with($themeMock)->willReturn(true);

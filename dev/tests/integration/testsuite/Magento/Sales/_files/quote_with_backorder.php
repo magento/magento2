@@ -38,6 +38,16 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$moduleManager = $objectManager->get(\Magento\Framework\Module\Manager::class);
+if ($moduleManager->isEnabled('Magento_InventoryIndexer')) {
+    $objectManager->get(\Magento\InventoryIndexer\Model\GetStockItemData\CacheStorage::class)->_resetState();
+}
+if ($moduleManager->isEnabled('Magento_InventoryReservations')) {
+    $objectManager->get(\Magento\InventoryReservations\Model\GetReservationsQuantity\CacheStorage::class)
+        ->_resetState();
+}
+
 $addressData = include __DIR__ . '/address_data.php';
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Quote\Model\Quote\Address::class,

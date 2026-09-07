@@ -337,6 +337,9 @@ class GraphQlStateDiff
         if (isset($result['Magento\Framework\Webapi\Request']['properties']['sslOffloadHeader'])) {
             unset($result['Magento\Framework\Webapi\Request']);
         }
+        if (isset($result['Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy'])) {
+            unset($result['Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy']);
+        }
         return $result;
     }
 }

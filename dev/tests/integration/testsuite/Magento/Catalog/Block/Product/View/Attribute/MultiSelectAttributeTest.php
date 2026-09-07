@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Attribute;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Class checks multi select attribute displaying on frontend
  *
@@ -47,7 +49,6 @@ class MultiSelectAttributeTest extends AbstractAttributeTest
     }
 
     /**
-     * @dataProvider attributeWithTagsProvider
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Catalog/_files/multiselect_attribute_with_html.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
@@ -56,6 +57,7 @@ class MultiSelectAttributeTest extends AbstractAttributeTest
      * @param string $expectedAttributeValue
      * @return void
      */
+    #[DataProvider('attributeWithTagsProvider')]
     public function testAttributeWithHtmlTags(
         bool $allowHtmlTags,
         string $attributeValue,

@@ -19,6 +19,9 @@
 
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!-- Expand "Other PayPal payment solutions" accordion if collapsed (Payment Services extension moves config inside it) -->
+        <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPayPalTab" dependentSelector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" visible="false"/>
+        <waitForElementClickable selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="waitForConfigureBtn"/>
         <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
         <waitForElementVisible selector="{{PayPalAdvancedSettingConfigSection.advancedSettingTab(countryCode)}}" stepKey="waitForAdvancedSettingTab"/>
         <fillField selector ="{{PayPalExpressCheckoutConfigSection.email(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_business_account}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>

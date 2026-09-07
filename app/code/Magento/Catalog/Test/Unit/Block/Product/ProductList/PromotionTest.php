@@ -114,7 +114,7 @@ class PromotionTest extends TestCase
                 'context' => $this->contextMock,
                 'postDataHelper' => $this->createMock(PostHelper::class),
                 'layerResolver' => $this->layerResolverMock,
-                'categoryRepository' => $this->getMockForAbstractClass(CategoryRepositoryInterface::class),
+                'categoryRepository' => $this->createMock(CategoryRepositoryInterface::class),
                 'urlHelper' => $this->createMock(UrlHelper::class),
                 'productCollectionFactory' => $this->productCollectionFactoryMock
             ]

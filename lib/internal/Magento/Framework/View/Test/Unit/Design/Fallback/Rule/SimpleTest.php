@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Test\Unit\Design\Fallback\Rule;
 
 use Magento\Framework\View\Design\Fallback\Rule\Simple;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SimpleTest extends TestCase
 {
@@ -20,9 +21,8 @@ class SimpleTest extends TestCase
         $model->getPatternDirs([]);
     }
 
-    /**
-     * @dataProvider getPatternDirsDataProvider
-     */
+    /**     */
+    #[DataProvider('getPatternDirsDataProvider')]
     public function testGetPatternDirs($pattern, $optionalParameter = null, $expectedResult = null)
     {
         $params = ['optional_parameter' => $optionalParameter, 'required_parameter' => 'required_parameter'];

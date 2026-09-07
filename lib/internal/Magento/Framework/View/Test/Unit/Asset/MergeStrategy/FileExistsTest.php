@@ -42,8 +42,8 @@ class FileExistsTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mergerMock = $this->getMockForAbstractClass(MergeStrategyInterface::class);
-        $this->dirMock = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->mergerMock = $this->createMock(MergeStrategyInterface::class);
+        $this->dirMock = $this->createMock(ReadInterface::class);
         $filesystem = $this->createMock(Filesystem::class);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')

@@ -49,7 +49,7 @@ class ReadEntityRowTest extends TestCase
     {
         $this->select = $this->createMock(Select::class);
 
-        $this->connection = $this->getMockForAbstractClass(
+        $this->connection = $this->createMock(
             AdapterInterface::class,
             [],
             '',

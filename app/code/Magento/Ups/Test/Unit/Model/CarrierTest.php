@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -24,6 +25,7 @@ use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -36,6 +38,8 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
+    use MockCreationTrait;
+
     public const FREE_METHOD_NAME = 'free_method';
 
     public const PAID_METHOD_NAME = 'paid_method';
@@ -105,11 +109,12 @@ class CarrierTest extends TestCase
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getValue', 'isSetFlag'])
-            ->getMockForAbstractClass();
-
-        $this->error = $this->getMockBuilder(Error::class)
-            ->addMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
             ->getMock();
+
+        $this->error = $this->createPartialMockWithReflection(
+            Error::class,
+            ['setCarrier', 'setCarrierTitle', 'setErrorMessage']
+        );
 
         $this->errorFactory = $this->getMockBuilder(ErrorFactory::class)
             ->disableOriginalConstructor()
@@ -139,7 +144,7 @@ class CarrierTest extends TestCase
 
         $httpClientFactory = $this->getHttpClientFactory();
 
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->configHelper = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -185,7 +190,6 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @dataProvider getMethodPriceProvider
      * @param int $cost
      * @param string $shippingMethod
      * @param bool $freeShippingEnabled
@@ -193,6 +197,7 @@ class CarrierTest extends TestCase
      * @param int $expectedPrice
      * @return void
      */
+    #[DataProvider('getMethodPriceProvider')]
     public function testGetMethodPrice(
         int $cost,
         string $shippingMethod,
@@ -275,8 +280,8 @@ class CarrierTest extends TestCase
      * @param array $rawRequestData
      *
      * @return void
-     * @dataProvider countryDataProvider
      */
+    #[DataProvider('countryDataProvider')]
     public function testSetRequest(array $requestData, array $rawRequestData): void
     {
         /** @var RateRequest $request */
@@ -356,8 +361,8 @@ class CarrierTest extends TestCase
     /**
      * @param array $requestData
      * @param array $expectedRequestData
-     * @dataProvider requestToShipmentDataProvider
      */
+    #[DataProvider('requestToShipmentDataProvider')]
     public function testRequestToShipment(array $requestData, array $expectedRequestData): void
     {
         /** @var \Magento\Shipping\Model\Shipment\Request $request */
@@ -461,8 +466,12 @@ class CarrierTest extends TestCase
         ];
         $countryMock = $this->getMockBuilder(Country::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->onlyMethods(['getData', '__call'])
+            ->getMock();
         $countryMock->setData('iso2_code', $countries[$id] ?? null);
+        $countryMock->method('getData')
+            ->with('iso2_code')
+            ->willReturn($countries[$id] ?? null);
         return $countryMock;
     }
 
@@ -475,8 +484,8 @@ class CarrierTest extends TestCase
      * @param array $expectedMethods
      *
      * @return void
-     * @dataProvider allowedMethodsDataProvider
      */
+    #[DataProvider('allowedMethodsDataProvider')]
     public function testGetAllowedMethods(
         string $carrierType,
         string $methodType,
@@ -567,7 +576,7 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMock();
-        $this->httpClient = $this->getMockForAbstractClass(ClientInterface::class);
+        $this->httpClient = $this->createMock(ClientInterface::class);
         $httpClientFactory->method('create')
             ->willReturn($this->httpClient);
 

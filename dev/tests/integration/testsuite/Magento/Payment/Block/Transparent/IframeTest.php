@@ -5,6 +5,8 @@
  */
 namespace Magento\Payment\Block\Transparent;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test for \Magento\Payment\Block\Transparent\Iframe
  */
@@ -13,8 +15,8 @@ class IframeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
-     * @dataProvider xssDataProvider
      */
+    #[DataProvider('xssDataProvider')]
     public function testToHtml($xssString)
     {
         /** @var $block Iframe */
@@ -43,7 +45,7 @@ class IframeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function xssDataProvider()
+    public static function xssDataProvider(): array
     {
         return [
             ['</script><script>alert("XSS")</script>'],

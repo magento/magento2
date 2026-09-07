@@ -125,25 +125,50 @@ class DownloadableProduct extends Product
         $links = [];
         foreach ($data['extension_attributes']['downloadable_product_links'] as $link) {
 
-            if ($link['link_type'] == 'url') {
-                $link['link_url'] = 'http://example.com/downloadable.txt';
-                $link['link_file'] = '';
-            } else {
-                $link['link_file'] = $this->generateDownloadableLink($link['link_file'] ?? 'test-' . uniqid() . '.txt');
-                $link['link_url'] = '';
-            }
-
-            $links[] = [
+            $linkType = $link['link_type'] ?? 'file';
+            $linkData = [
                 'id' => null,
                 'title' => $link['title'] ?? 'Test Link%uniqid%',
                 'price' => $link['price'] ?? 0,
-                'link_type' => $link['link_type'] ?? 'file',
-                'link_url' => $link['link_url'],
-                'link_file' => $link['link_file'],
+                'link_type' => $linkType,
                 'is_shareable' => $link['is_shareable'] ?? 0,
                 'number_of_downloads' => $link['number_of_downloads'] ?? 5,
                 'sort_order' => $link['sort_order'] ?? 10,
             ];
+
+            if ($linkType === 'url') {
+                $linkData['link_url'] = $link['link_url'] ?? 'http://example.com/downloadable.txt';
+            } else {
+                $fileName = $link['link_file'] ?? 'test-' . uniqid() . '.txt';
+                $fileName = basename(ltrim($fileName, '/'));
+                if ($fileName === '') {
+                    $fileName = 'test-' . uniqid() . '.txt';
+                }
+                $linkData['link_file_content'] = $link['link_file_content'] ?? [
+                    'name' => $fileName,
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    'file_data' => base64_encode('This is a temporary text file.'),
+                ];
+            }
+
+            if (($link['sample_type'] ?? null) === 'url') {
+                $linkData['sample_type'] = 'url';
+                $linkData['sample_url'] = $link['sample_url'] ?? 'http://example.com/downloadable_sample.txt';
+            } elseif (($link['sample_type'] ?? null) === 'file') {
+                $sampleFileName = $link['sample_file'] ?? ('sample-' . uniqid() . '.txt');
+                $sampleFileName = basename(ltrim($sampleFileName, '/'));
+                if ($sampleFileName === '') {
+                    $sampleFileName = 'sample-' . uniqid() . '.txt';
+                }
+                $linkData['sample_type'] = 'file';
+                $linkData['sample_file_content'] = $link['sample_file_content'] ?? [
+                    'name' => $sampleFileName,
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    'file_data' => base64_encode('This is a temporary sample file.'),
+                ];
+            }
+
+            $links[] = $linkData;
         }
 
         return $links;

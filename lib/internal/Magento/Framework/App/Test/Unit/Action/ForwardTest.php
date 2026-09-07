@@ -47,7 +47,7 @@ class ForwardTest extends TestCase
             CookieMetadataFactory::class
         )->disableOriginalConstructor()
             ->getMock();
-        $cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();

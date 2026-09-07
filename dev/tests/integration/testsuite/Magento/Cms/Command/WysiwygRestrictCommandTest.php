@@ -12,6 +12,7 @@ use Magento\Cms\Model\Wysiwyg\Validator;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -62,9 +63,9 @@ class WysiwygRestrictCommandTest extends TestCase
      * @param string $argument
      * @param bool $expectedFlag
      * @return void
-     * @dataProvider getExecuteCases
      * @magentoConfigFixture default_store cms/wysiwyg/force_valid 0
      */
+    #[DataProvider('getExecuteCases')]
     public function testExecute(string $argument, bool $expectedFlag): void
     {
         /** @var WysiwygRestrictCommand $model */

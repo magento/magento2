@@ -51,9 +51,7 @@ class BundleTest extends TestCase
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->bundleConfigMock = $this->createMock(ConfigInterface::class);
         $this->minificationMock = $this->getMockBuilder(Minification::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,9 +97,7 @@ class BundleTest extends TestCase
             ->method('getPath')
             ->willReturn('path-to-theme');
 
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->onlyMethods(['getContentType', 'getContext'])
-            ->getMockForAbstractClass();
+        $assetMock = $this->createMock(LocalInterface::class);
         $assetMock->method('getContext')
             ->willReturn($contextMock);
         $assetMock->method('getContentType')
@@ -112,7 +108,7 @@ class BundleTest extends TestCase
             ->willReturn('');   // PHP 8.1 compatibility
 
         $writeMock = $this->getMockBuilder(WriteInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
         $writeMock
             ->expects($this->once())
             ->method('delete')

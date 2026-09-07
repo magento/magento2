@@ -98,6 +98,8 @@ class ToDataModel
     }
 
     /**
+     * Convert conditions from array to condition data model
+     *
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
@@ -116,6 +118,8 @@ class ToDataModel
     }
 
     /**
+     * Convert action conditions from array to condition data model
+     *
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
@@ -134,6 +138,8 @@ class ToDataModel
     }
 
     /**
+     * Convert store labels from associative array to array of objects with store_id and store_label fields
+     *
      * @param RuleDataModel $dataModel
      * @return $this
      */
@@ -154,6 +160,8 @@ class ToDataModel
     }
 
     /**
+     * Convert coupon type ID to its string representation in data model
+     *
      * @param RuleDataModel $dataModel
      * @return $this
      */
@@ -194,6 +202,8 @@ class ToDataModel
     }
 
     /**
+     * Convert rule model fields to data model fields
+     *
      * @param RuleDataModel $dataModel
      * @param Rule $ruleModel
      * @return $this
@@ -225,6 +235,11 @@ class ToDataModel
                 case 'attribute':
                     $conditionDataModel->setAttributeName($value);
                     break;
+                case 'attribute_scope':
+                    $extensions = $conditionDataModel->getExtensionAttributes();
+                    $extensions->setAttributeScope($value);
+                    $conditionDataModel->setExtensionAttributes($extensions);
+                    break;
                 case 'operator':
                     $conditionDataModel->setOperator($value);
                     break;
@@ -235,10 +250,7 @@ class ToDataModel
                     $conditionDataModel->setAggregatorType($value);
                     break;
                 case 'conditions':
-                    $conditions = [];
-                    foreach ($value as $condition) {
-                        $conditions[] = $this->arrayToConditionDataModel($condition);
-                    }
+                    $conditions = array_values(array_map($this->arrayToConditionDataModel(...), $value));
                     $conditionDataModel->setConditions($conditions);
                     break;
                 default:

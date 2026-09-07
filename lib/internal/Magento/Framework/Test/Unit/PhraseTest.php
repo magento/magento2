@@ -33,8 +33,7 @@ class PhraseTest extends TestCase
     protected function setUp(): void
     {
         $this->defaultRenderer = Phrase::getRenderer();
-        $this->rendererMock = $this->getMockBuilder(RendererInterface::class)
-            ->getMock();
+        $this->rendererMock = $this->createMock(RendererInterface::class);
     }
 
     /**

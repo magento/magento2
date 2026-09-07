@@ -27,8 +27,7 @@ class ImporterFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->importerFactory = new ImporterFactory($this->objectManagerMock);
     }
 
@@ -37,8 +36,7 @@ class ImporterFactoryTest extends TestCase
         $className = 'some/class/name';
 
         /** @var ImporterInterface|MockObject $importerMock */
-        $importerMock = $this->getMockBuilder(ImporterInterface::class)
-            ->getMockForAbstractClass();
+        $importerMock = $this->createMock(ImporterInterface::class);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')

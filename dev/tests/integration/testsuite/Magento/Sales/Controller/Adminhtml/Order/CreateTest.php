@@ -19,6 +19,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -134,9 +135,8 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      *
      * @param string $block Block name.
      * @param string $expected Contains HTML.
-     *
-     * @dataProvider loadBlockActionsDataProvider
      */
+    #[DataProvider('loadBlockActionsDataProvider')]
     public function testLoadBlockActions($block, $expected)
     {
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
@@ -150,7 +150,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @return array
      */
-    public static function loadBlockActionsDataProvider()
+    public static function loadBlockActionsDataProvider(): array
     {
         return [
             'shipping_method' => ['shipping_method', 'id=\"shipping-method-overlay\"'],
@@ -244,9 +244,9 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      * @param boolean $reordered
      * @param string $expectedResult
      *
-     * @dataProvider getAclResourceDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getAclResourceDataProvider')]
     public function testGetAclResource($actionName, $reordered, $expectedResult)
     {
         $this->_objectManager->get(SessionQuote::class)->setReordered($reordered);
@@ -264,7 +264,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @return array
      */
-    public static function getAclResourceDataProvider()
+    public static function getAclResourceDataProvider(): array
     {
         return [
             ['index', false, 'Magento_Sales::create'],

@@ -11,12 +11,16 @@ use Magento\Config\App\Config\Source\DumpConfigSourceAggregated;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\Design\Config\Plugin\Dump;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DumpTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Dump
      */
@@ -46,11 +50,10 @@ class DumpTest extends TestCase
     protected function setUp(): void
     {
         $this->arrayManager = new ArrayManager();
-        $this->themeList = $this->getMockBuilder(ListInterface::class)
-            ->addMethods(['getItemById'])
-            ->onlyMethods(['getThemeByFullPath'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->themeList = $this->createPartialMockWithReflection(
+            ListInterface::class,
+            ['getItemById', 'getThemeByFullPath']
+        );
         $this->prepareThemeMock();
 
         $this->dumpPlugin = new Dump($this->themeList, $this->arrayManager);
@@ -59,8 +62,8 @@ class DumpTest extends TestCase
     /**
      * @param array $actualResult
      * @param array $expectedResult
-     * @dataProvider getDumpConfigDataProvider
      */
+    #[DataProvider('getDumpConfigDataProvider')]
     public function testAfterGet($actualResult, $expectedResult)
     {
         $dumpConfig = $this->getMockBuilder(DumpConfigSourceAggregated::class)
@@ -78,8 +81,7 @@ class DumpTest extends TestCase
     {
         $themesMap = [];
         foreach ($this->themes as $themeId => $themeFullPath) {
-            $themeMock = $this->getMockBuilder(ThemeInterface::class)
-                ->getMockForAbstractClass();
+            $themeMock = $this->createMock(ThemeInterface::class);
             $themeMock->expects(static::any())->method('getFullPath')->willReturn($themeFullPath);
 
             $themesMap[] = [$themeId, $themeMock];

@@ -12,6 +12,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\Message\EmptyGroupCategory;
 use Magento\Store\Model\ResourceModel\Group\Collection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -47,8 +48,7 @@ class EmptyGroupCategoryTest extends TestCase
         $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
 
         $this->model = new EmptyGroupCategory(
             $this->collectionMock,
@@ -59,8 +59,8 @@ class EmptyGroupCategoryTest extends TestCase
     /**
      * @param boolean $expected
      * @param array $items
-     * @dataProvider isDisplayedDataProvider
      */
+    #[DataProvider('isDisplayedDataProvider')]
     public function testIsDisplayed($expected, array $items)
     {
         $this->collectionMock->expects($this->once())

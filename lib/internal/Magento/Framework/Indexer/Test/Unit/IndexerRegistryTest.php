@@ -19,13 +19,13 @@ class IndexerRegistryTest extends TestCase
      */
     public function testGetCreatesIndexerInstancesAndReusesExistingOnes(): void
     {
-        $firstIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $firstIndexer = $this->createMock(IndexerInterface::class);
         $firstIndexer->expects($this->once())->method('load')->with('first-indexer')->willReturnSelf();
 
-        $secondIndexer = $this->getMockForAbstractClass(IndexerInterface::class);
+        $secondIndexer = $this->createMock(IndexerInterface::class);
         $secondIndexer->expects($this->once())->method('load')->with('second-indexer')->willReturnSelf();
 
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $objectManager
             ->method('create')
             ->willReturnOnConsecutiveCalls($firstIndexer, $secondIndexer);

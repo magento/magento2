@@ -36,8 +36,7 @@ class ProcessorFactoryTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = new ProcessorFactory(
             $this->objectManagerMock,
@@ -51,8 +50,7 @@ class ProcessorFactoryTest extends TestCase
 
     public function testCreate()
     {
-        $processorMock = $this->getMockBuilder(ProcessorInterface::class)
-            ->getMockForAbstractClass();
+        $processorMock = $this->createMock(ProcessorInterface::class);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with(Create::class)

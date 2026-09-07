@@ -12,6 +12,7 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test createPaypalExpressToken graphql endpoint for customer
@@ -42,7 +43,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * Test create paypal token for customer
      *
      * @param string $paymentMethod
-     * @dataProvider getPaypalCodesProvider
      * @magentoConfigFixture default_store paypal/wpp/sandbox_flag 1
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
@@ -53,6 +53,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolve($paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);

@@ -27,8 +27,7 @@ class StorageConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlConverter = $this->getMockBuilder(ConverterInterface::class)
-            ->getMockForAbstractClass();
+        $this->urlConverter = $this->createMock(ConverterInterface::class);
         $this->converter = new StorageConfig($this->urlConverter, new ConverterUtils());
     }
 

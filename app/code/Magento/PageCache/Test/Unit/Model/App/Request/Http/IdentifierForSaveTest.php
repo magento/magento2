@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Test\Unit\Model\App\Request\Http;
 
-use Laminas\Stdlib\Parameters;
-use Laminas\Uri\Http as HttpUri;
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\PageCache\Identifier;
@@ -18,9 +16,13 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\PageCache\Model\App\Request\Http\IdentifierForSave;
 use Magento\PageCache\Model\App\Request\Http\IdentifierStoreReader;
 use Magento\Framework\App\Response\Http;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class IdentifierForSaveTest extends TestCase
 {
     /**
@@ -52,9 +54,6 @@ class IdentifierForSaveTest extends TestCase
      */
     private $identifierStoreReader;
 
-    /** @var Parameters|MockObject */
-    private $fileParams;
-
     /**
      * @var Identifier
      */
@@ -82,8 +81,6 @@ class IdentifierForSaveTest extends TestCase
                     return json_encode($value);
                 }
             );
-        $this->fileParams = $this->createMock(Parameters::class);
-
         $this->identifierStoreReader = $this->getMockBuilder(IdentifierStoreReader::class)
             ->onlyMethods(['getPageTagsWithStoreCacheTags'])
             ->disableOriginalConstructor()
@@ -124,24 +121,14 @@ class IdentifierForSaveTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getUriString')
             ->willReturn('http://example.com/path1/');
-
-        $this->requestMock->expects($this->any())
-            ->method('getQuery')
-            ->willReturn($this->fileParams);
-
-        $this->fileParams->expects($this->any())
-            ->method('toArray')
-            ->willReturn([]);
+        $this->identifierMock->expects($this->once())
+            ->method('reconstructUrl')
+            ->with('http://example.com/path1/')
+            ->willReturn(['http://example.com/path1/', '']);
 
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
-
-        $uri = $this->createMock(HttpUri::class);
-        $uri->expects($this->any())->method('getQueryAsArray')->willReturn('');
-        $this->requestMock->expects($this->any())
-            ->method('getUri')
-            ->willReturn($uri);
 
         $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
             function ($value) {
@@ -171,6 +158,9 @@ class IdentifierForSaveTest extends TestCase
      */
     public function testGetValueWithQuery(): void
     {
+        $this->identifierMock->expects($this->once())
+            ->method('getMarketingParameterPatterns')
+            ->willReturn([]);
         $this->requestMock->expects($this->any())
             ->method('isSecure')
             ->willReturn(true);
@@ -178,30 +168,14 @@ class IdentifierForSaveTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getUriString')
             ->willReturn('http://example.com/path1/?b=2&a=1');
-
-        $this->requestMock->expects($this->any())
-            ->method('getQuery')
-            ->willReturn($this->fileParams);
-
-        $this->fileParams->expects($this->any())
-            ->method('toArray')
-            ->willReturn([
-                'b' => 2,
-                'a' => 1,
-            ]);
+        $this->identifierMock->expects($this->once())
+            ->method('reconstructUrl')
+            ->with('http://example.com/path1/?b=2&a=1')
+            ->willReturn(['http://example.com/path1/', 'a=1&b=2']);
 
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
-
-        $uri = $this->createMock(HttpUri::class);
-        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([
-            'b' => 2,
-            'a' => 1,
-        ]);
-        $this->requestMock->expects($this->any())
-            ->method('getUri')
-            ->willReturn($uri);
 
         $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
             function ($value) {
@@ -242,16 +216,14 @@ class IdentifierForSaveTest extends TestCase
         $this->requestMock->expects($this->any())
             ->method('getUriString')
             ->willReturn('http://example.com/path1/?abc=123&gclid=456&utm_source=abc');
+        $this->identifierMock->expects($this->once())
+            ->method('reconstructUrl')
+            ->with('http://example.com/path1/?abc=123')
+            ->willReturn(['http://example.com/path1/', 'abc=123']);
 
         $this->contextMock->expects($this->any())
             ->method('getVaryString')
             ->willReturn(self::VARY);
-
-        $uri = $this->createMock(HttpUri::class);
-        $uri->expects($this->any())->method('getQueryAsArray')->willReturn(['abc' => '123']);
-        $this->requestMock->expects($this->any())
-            ->method('getUri')
-            ->willReturn($uri);
 
         $this->identifierStoreReader->method('getPageTagsWithStoreCacheTags')->willReturnCallback(
             function ($value) {
@@ -281,9 +253,9 @@ class IdentifierForSaveTest extends TestCase
      * @param string $expectedVaryString
      * @param bool $expectContextCall
      * @return void
-     * @dataProvider varyStringDataProvider
      * @covers \Magento\PageCache\Model\App\Request\Http\IdentifierForSave::getValue
      */
+    #[DataProvider('varyStringDataProvider')]
     public function testGetValueVaryStringResolution(
         ?string $cookieVaryString,
         string $contextVaryString,
@@ -299,6 +271,10 @@ class IdentifierForSaveTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getUriString')
             ->willReturn('http://example.com/path1/');
+        $this->identifierMock->expects($this->once())
+            ->method('reconstructUrl')
+            ->with('http://example.com/path1/')
+            ->willReturn(['http://example.com/path1/', '']);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with(Http::COOKIE_VARY_STRING)
@@ -307,14 +283,6 @@ class IdentifierForSaveTest extends TestCase
         $this->contextMock->expects($expectContextCall ? $this->once() : $this->never())
             ->method('getVaryString')
             ->willReturn($contextVaryString);
-
-        $uri = $this->createMock(HttpUri::class);
-        $uri->expects($this->once())
-            ->method('getQueryAsArray')
-            ->willReturn([]);
-        $this->requestMock->expects($this->once())
-            ->method('getUri')
-            ->willReturn($uri);
         $this->identifierStoreReader->expects($this->once())
             ->method('getPageTagsWithStoreCacheTags')
             ->willReturnArgument(0);

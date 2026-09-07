@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\MediaGalleryMetadata\Model\Png\Segment\WriteXmp;
 use Magento\MediaGalleryMetadata\Model\Png\Segment\ReadXmp;
@@ -74,13 +75,13 @@ class XmpTest extends TestCase
     /**
      * Test for Xmp reader and writer
      *
-     * @dataProvider filesProvider
      * @param string $fileName
      * @param string $title
      * @param string $description
      * @param array $keywords
      * @throws LocalizedException
      */
+    #[DataProvider('filesProvider')]
     public function testWriteRead(
         string $fileName,
         string $title,

@@ -15,9 +15,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class FilterProcessorTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * Return model
      *
@@ -136,6 +138,7 @@ class FilterProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'addFieldToFilter'])
             ->getMock();
 
         $customFilterMock->expects($this->once())
@@ -169,9 +172,7 @@ class FilterProcessorTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         /** @var \stdClass|MockObject $customFilterMock */
-        $customFilterMock = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['apply'])
-            ->getMock();
+        $customFilterMock = $this->createPartialMockWithReflection(\stdClass::class, ['apply']);
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];
@@ -206,6 +207,7 @@ class FilterProcessorTest extends TestCase
         /** @var AbstractDb|MockObject $searchCriteriarMock */
         $collectionMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
+            ->onlyMethods(['getResource', 'addFieldToFilter'])
             ->getMock();
 
         $customFilterMock->expects($this->never())

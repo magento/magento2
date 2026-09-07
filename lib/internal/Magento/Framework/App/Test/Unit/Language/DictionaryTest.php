@@ -64,7 +64,7 @@ class DictionaryTest extends TestCase
             $expected[$item[0]] = $item[1];
         }
 
-        $file = $this->getMockForAbstractClass(ReadInterface::class);
+        $file = $this->createMock(ReadInterface::class);
         $willReturnArgs = [];
 
         for ($i = 0, $count = count($data); $i < $count; $i++) {
@@ -75,7 +75,7 @@ class DictionaryTest extends TestCase
             ->method('readCsv')
             ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
-        $readMock = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
+        $readMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
         $readMock->expects($this->any())->method('readFile')->willReturnMap([
             ['language.xml', $readMock],
             [$csvFileName, $file],

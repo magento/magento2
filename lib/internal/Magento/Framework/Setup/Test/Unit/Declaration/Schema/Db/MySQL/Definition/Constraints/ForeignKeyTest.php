@@ -16,6 +16,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Foreign Key constraint definition.
@@ -67,9 +68,7 @@ class ForeignKeyTest extends TestCase
         $refColumnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $tableMock = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,6 +117,7 @@ class ForeignKeyTest extends TestCase
      * @param array $expectedDefinition
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedDefinition)
     {
         $result = $this->foreignKey->fromDefinition(['Create Table' => $definition]);

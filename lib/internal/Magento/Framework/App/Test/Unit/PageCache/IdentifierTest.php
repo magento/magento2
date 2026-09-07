@@ -15,6 +15,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase
@@ -175,12 +176,9 @@ class IdentifierTest extends TestCase
         $this->assertNotEquals($valuePath1, $valuePath2);
     }
 
-    /**
-     * @param $cookieExists
-     *
-     * @return void
-     * @dataProvider trueFalseDataProvider
+    /**     * @return void
      */
+    #[DataProvider('trueFalseDataProvider')]
     public function testVaryStringSource($cookieExists): void
     {
         $this->requestMock->method('get')->willReturn($cookieExists ? 'vary-string-from-cookie' : null);
@@ -334,6 +332,46 @@ class IdentifierTest extends TestCase
                         true,
                         'http://example.com/path1/',
                         'abc=123',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
+
+    /**
+     * Test get identifier value with invalid URL.
+     *
+     * @return void
+     */
+    public function testGetValueWithInvalidUrl(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com:invalid_port/path1/?a=1');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com:invalid_port/path1/',
+                        '',
                         self::VARY
                     ]
                 )

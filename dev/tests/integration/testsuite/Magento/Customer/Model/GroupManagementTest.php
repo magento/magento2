@@ -8,6 +8,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Magento\Customer\Model\GroupManagement
@@ -33,9 +34,8 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $testGroup
      * @param $storeId
-     *
-     * @dataProvider getDefaultGroupDataProvider
      */
+    #[DataProvider('getDefaultGroupDataProvider')]
     public function testGetDefaultGroupWithStoreId($testGroup, $storeId)
     {
         $this->assertDefaultGroupMatches($testGroup, $storeId);

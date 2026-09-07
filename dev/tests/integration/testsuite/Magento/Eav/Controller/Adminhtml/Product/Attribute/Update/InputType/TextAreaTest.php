@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Eav\Controller\Adminhtml\Product\Attribute\Update\InputType;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Update\AbstractUpdateAttributeTest;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Test cases related to update attribute with input type text_area.
@@ -20,13 +21,13 @@ class TextAreaTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getUpdateProvider
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProviderExternal(\Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::class, 'getUpdateProvider')]
     public function testUpdateAttribute(array $postData, array $expectedData): void
     {
         $this->updateAttributeUsingData('text_attribute', $postData);
@@ -36,13 +37,13 @@ class TextAreaTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute with error.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getUpdateProviderWithErrorMessage
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      *
      * @param array $postData
      * @param string $errorMessage
      * @return void
      */
+    #[DataProviderExternal(\Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::class, 'getUpdateProviderWithErrorMessage')]
     public function testUpdateAttributeWithError(array $postData, string $errorMessage): void
     {
         $this->updateAttributeUsingData('text_attribute', $postData);
@@ -52,7 +53,6 @@ class TextAreaTest extends AbstractUpdateAttributeTest
     /**
      * Test update attribute frontend labels on stores.
      *
-     * @dataProvider \Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::getUpdateFrontendLabelsProvider
      * @magentoDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
      *
@@ -60,6 +60,7 @@ class TextAreaTest extends AbstractUpdateAttributeTest
      * @param array $expectedData
      * @return void
      */
+    #[DataProviderExternal(\Magento\TestFramework\Eav\Model\Attribute\DataProvider\TextArea::class, 'getUpdateFrontendLabelsProvider')]
     public function testUpdateFrontendLabelOnStores(array $postData, array $expectedData): void
     {
         $this->processUpdateFrontendLabelOnStores('text_attribute', $postData, $expectedData);

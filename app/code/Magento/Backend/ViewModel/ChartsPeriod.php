@@ -49,6 +49,17 @@ class ChartsPeriod implements ArgumentInterface
     }
 
     /**
+     * Get selected dashboard period
+     *
+     * @param string|null $requestPeriod
+     * @return string
+     */
+    public function getSelectedPeriod(?string $requestPeriod): string
+    {
+        return $this->period->resolvePeriod($requestPeriod);
+    }
+
+    /**
      * Get json-encoded chart period units
      *
      * @return string

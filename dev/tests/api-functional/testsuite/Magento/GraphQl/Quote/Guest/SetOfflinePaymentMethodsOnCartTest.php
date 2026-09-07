@@ -14,6 +14,7 @@ use Magento\OfflinePayments\Model\Checkmo;
 use Magento\OfflinePayments\Model\Purchaseorder;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting offline payment methods on cart
@@ -46,8 +47,8 @@ class SetOfflinePaymentMethodsOnCartTest extends GraphQlAbstract
      *
      * @param string $methodCode
      * @param string $methodTitle
-     * @dataProvider offlinePaymentMethodDataProvider
      */
+    #[DataProvider('offlinePaymentMethodDataProvider')]
     public function testSetOfflinePaymentMethod(string $methodCode, string $methodTitle)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

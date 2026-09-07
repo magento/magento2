@@ -9,6 +9,7 @@ namespace Magento\Framework\Shell\Test\Unit;
 
 use Magento\Framework\Shell\ComplexParameter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ComplexParameterTest extends TestCase
 {
@@ -22,9 +23,8 @@ class ComplexParameterTest extends TestCase
 
     /**
      * @param string $str
-     * @param array $expected
-     * @dataProvider getFromStringDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('getFromStringDataProvider')]
     public function testGetFromString($str, $expected)
     {
         $object = new ComplexParameter('foo');

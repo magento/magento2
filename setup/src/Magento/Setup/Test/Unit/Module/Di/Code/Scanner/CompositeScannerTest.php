@@ -29,8 +29,8 @@ class CompositeScannerTest extends TestCase
         $configFiles = ['one/file/config', 'two/file/config'];
         $files = ['php' => $phpFiles, 'config' => $configFiles];
 
-        $scannerPhp = $this->getMockForAbstractClass(ScannerInterface::class);
-        $scannerXml = $this->getMockForAbstractClass(ScannerInterface::class);
+        $scannerPhp = $this->createMock(ScannerInterface::class);
+        $scannerXml = $this->createMock(ScannerInterface::class);
 
         $scannerPhpExpected = ['Model_OneProxy', 'Model_TwoFactory'];
         $scannerXmlExpected = ['Model_OneProxy', 'Model_ThreeFactory'];

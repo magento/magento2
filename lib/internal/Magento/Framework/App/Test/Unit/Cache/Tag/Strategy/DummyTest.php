@@ -33,7 +33,7 @@ class DummyTest extends TestCase
 
         $this->assertEquals($emptyArray, $this->model->getTags(new \stdClass()));
 
-        $identityInterface = $this->getMockForAbstractClass(IdentityInterface::class);
+        $identityInterface = $this->createMock(IdentityInterface::class);
         $this->assertEquals($emptyArray, $this->model->getTags($identityInterface));
     }
 }

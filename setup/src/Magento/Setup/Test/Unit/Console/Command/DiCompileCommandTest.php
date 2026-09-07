@@ -72,12 +72,7 @@ class DiCompileCommandTest extends TestCase
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
-        $this->objectManagerMock = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->cacheMock = $this->getMockBuilder(Cache::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -114,7 +109,7 @@ class DiCompileCommandTest extends TestCase
         ]);
 
         $this->outputFormatter = new OutputFormatter();
-        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
         $this->outputMock->method('getFormatter')
             ->willReturn($this->outputFormatter);
         $this->fileMock = $this->getMockBuilder(Filesystem\Io\File::class)
@@ -164,7 +159,7 @@ class DiCompileCommandTest extends TestCase
             ->with(Cache::class)
             ->willReturn($this->cacheMock);
         $this->cacheMock->expects($this->once())->method('clean');
-        $writeDirectory = $this->getMockForAbstractClass(WriteInterface::class);
+        $writeDirectory = $this->createMock(WriteInterface::class);
         $writeDirectory->expects($this->atLeastOnce())->method('delete');
         $this->filesystemMock->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn($writeDirectory);
 

@@ -59,7 +59,6 @@ class PublisherTest extends TestCase
     }
 
     /**
-     * @dataProvider filesProvider
      * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
@@ -69,6 +68,7 @@ class PublisherTest extends TestCase
      * @throws IntegrationException
      * @throws LocalizedException
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('filesProvider')]
     public function testExecute(array $contentIdentities): void
     {
         // publish message to the queue

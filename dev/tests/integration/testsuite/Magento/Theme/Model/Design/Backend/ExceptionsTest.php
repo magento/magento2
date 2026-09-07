@@ -6,6 +6,7 @@
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ExceptionsTest extends \PHPUnit\Framework\TestCase
 {
@@ -71,11 +72,9 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $designException
-     * @param string $regexp
-     * @dataProvider saveExceptionDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('saveExceptionDataProvider')]
     public function testSaveException($designException, $regexp)
     {
         $this->exceptions->setValue(['1' => $designException]);
@@ -85,10 +84,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($processedValue['1']['regexp'], $regexp);
     }
 
-    /**
-     * @return array
-     */
-    public static function saveExceptionDataProvider()
+    public static function saveExceptionDataProvider(): array
     {
         $result = [
             [['search' => 'Opera', 'value' => 'Magento/blank'], '/Opera/i'],
@@ -104,10 +100,9 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @var array $value
-     * @dataProvider saveWrongExceptionDataProvider
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('saveWrongExceptionDataProvider')]
     public function testSaveWrongException($value)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -116,10 +111,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
         $this->exceptions->save();
     }
 
-    /**
-     * @return array
-     */
-    public static function saveWrongExceptionDataProvider()
+    public static function saveWrongExceptionDataProvider(): array
     {
         $result = [
             [

@@ -14,6 +14,7 @@ use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price;
 use Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Phrase;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
  */
 class AlertsTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Alerts
      */
@@ -69,11 +71,10 @@ class AlertsTest extends TestCase
         ?Accordion $accordionMock = null
     ): MockObject {
         if ($accordionMock === null) {
-            $accordionMock = $this->getMockBuilder(Accordion::class)
-                ->disableOriginalConstructor()
-                ->onlyMethods(['addItem'])
-                ->addMethods(['setId'])
-                ->getMock();
+            $accordionMock = $this->createPartialMockWithReflection(
+                Accordion::class,
+                ['addItem', 'setId']
+            );
 
             $accordionMock->method('setId')
                 ->with('productAlerts')
@@ -112,11 +113,10 @@ class AlertsTest extends TestCase
      */
     private function createAccordionMock(): MockObject
     {
-        $accordionMock = $this->getMockBuilder(Accordion::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addItem'])
-            ->addMethods(['setId'])
-            ->getMock();
+        $accordionMock = $this->createPartialMockWithReflection(
+            Accordion::class,
+            ['addItem', 'setId']
+        );
 
         $accordionMock->method('setId')->willReturnSelf();
 
@@ -249,11 +249,10 @@ class AlertsTest extends TestCase
     {
         $this->scopeConfigMock->method('getValue')->willReturn(false);
 
-        $accordionMock = $this->getMockBuilder(Accordion::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['addItem'])
-            ->addMethods(['setId'])
-            ->getMock();
+        $accordionMock = $this->createPartialMockWithReflection(
+            Accordion::class,
+            ['addItem', 'setId']
+        );
 
         $accordionMock->expects($this->atLeastOnce())
             ->method('setId')

@@ -9,6 +9,7 @@ namespace Magento\Framework\Data\Test\Unit;
 
 use Magento\Framework\Data\Structure;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StructureTest extends TestCase
 {
@@ -27,9 +28,8 @@ class StructureTest extends TestCase
 
     /**
      * @param array $elements
-     * @return void
-     * @dataProvider importExportElementsDataProvider
-     */
+     * @return void     */
+    #[DataProvider('importExportElementsDataProvider')]
     public function testConstructImportExportElements($elements)
     {
         $this->assertSame([], $this->_structure->exportElements());
@@ -72,9 +72,8 @@ class StructureTest extends TestCase
 
     /**
      * @param array $elements
-     * @return void
-     * @dataProvider importExceptionDataProvider
-     */
+     * @return void     */
+    #[DataProvider('importExceptionDataProvider')]
     public function testImportException($elements)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -143,9 +142,8 @@ class StructureTest extends TestCase
 
     /**
      * @param array $elements
-     * @return void
-     * @dataProvider importExceptionElementNotFoundDataProvider
-     */
+     * @return void     */
+    #[DataProvider('importExceptionElementNotFoundDataProvider')]
     public function testImportExceptionElementNotFound($elements)
     {
         $this->expectException('OutOfBoundsException');
@@ -241,9 +239,8 @@ class StructureTest extends TestCase
 
     /**
      * @param string $attribute
-     * @return void
-     * @dataProvider setAttributeArgumentExceptionDataProvider
-     */
+     * @return void     */
+    #[DataProvider('setAttributeArgumentExceptionDataProvider')]
     public function testSetAttributeArgumentException($attribute)
     {
         $this->expectException('InvalidArgumentException');
@@ -325,9 +322,8 @@ class StructureTest extends TestCase
     /**
      * @param int $offset
      * @param int $expectedOffset
-     * @return void
-     * @dataProvider setAsChildOffsetDataProvider
-     */
+     * @return void     */
+    #[DataProvider('setAsChildOffsetDataProvider')]
     public function testSetAsChildOffset($offset, $expectedOffset)
     {
         $this->_populateSampleSortStructure();
@@ -369,9 +365,8 @@ class StructureTest extends TestCase
     /**
      * @param string $elementId
      * @param string $parentId
-     * @return void
-     * @dataProvider setAsChildExceptionDataProvider
-     */
+     * @return void     */
+    #[DataProvider('setAsChildExceptionDataProvider')]
     public function testSetAsChildException($elementId, $parentId)
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
@@ -413,9 +408,8 @@ class StructureTest extends TestCase
      * @param int $initialOffset
      * @param int $newOffset
      * @param int $expectedOffset
-     * @return void
-     * @dataProvider reorderChildDataProvider
-     */
+     * @return void     */
+    #[DataProvider('reorderChildDataProvider')]
     public function testReorderChild($initialOffset, $newOffset, $expectedOffset)
     {
         $this->_populateSampleSortStructure();
@@ -478,9 +472,8 @@ class StructureTest extends TestCase
      * @param string $sibling
      * @param int $delta
      * @param int $expectedOffset
-     * @return void
-     * @dataProvider reorderSiblingDataProvider
-     */
+     * @return void     */
+    #[DataProvider('reorderSiblingDataProvider')]
     public function testReorderToSibling($initialOffset, $sibling, $delta, $expectedOffset)
     {
         $this->_populateSampleSortStructure();

@@ -62,16 +62,8 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->getGroups()) {
-            /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */
-            foreach ($object->getGroups() as $group) {
-                $group->setAttributeSetId($object->getId());
-                if ($group->itemExists() && !$group->getId()) {
-                    continue;
-                }
-                $group->save();
-            }
-        }
+        $this->saveAttributeGroups($object);
+        
         if ($object->getRemoveGroups()) {
             foreach ($object->getRemoveGroups() as $group) {
                 /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */
@@ -86,7 +78,70 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
         }
 
+        $this->cleanAttributeSetCache($object);
+
         return parent::_afterSave($object);
+    }
+
+    /**
+     * Save attribute groups
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    private function saveAttributeGroups(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($object->getGroups()) {
+            /* @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+            foreach ($object->getGroups() as $group) {
+                $group->setAttributeSetId($object->getId());
+                if ($group->itemExists() && !$group->getId()) {
+                    continue;
+                }
+                $group->save();
+            }
+        }
+    }
+
+    /**
+     * Clean attribute set cache
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return void
+     */
+    private function cleanAttributeSetCache(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($this->eavConfig->isCacheEnabled()) {
+            $this->eavConfig->getCache()->remove($this->getCacheKey());
+            $this->eavConfig->getCache()->remove($this->getCacheKey($object->getId()));
+        }
+    }
+
+    /**
+     * Perform actions after object delete
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _afterDelete(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if ($this->eavConfig->isCacheEnabled()) {
+            $this->eavConfig->getCache()->remove($this->getCacheKey($object->getEntityId()));
+        }
+
+        return parent::_afterDelete($object);
+    }
+
+    /**
+     *  Get cache key for attribute set
+     *
+     * @param null|int|string $setId
+     * @return string
+     */
+    protected function getCacheKey($setId = null): string
+    {
+        return self::ATTRIBUTES_CACHE_ID . $setId;
     }
 
     /**
@@ -150,7 +205,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getSetInfo(array $attributeIds, $setId = null)
     {
-        $cacheKey = self::ATTRIBUTES_CACHE_ID . $setId;
+        $cacheKey = $this->getCacheKey($setId);
 
         if ($this->eavConfig->isCacheEnabled() && ($cache = $this->eavConfig->getCache()->load($cacheKey))) {
             $setInfoData = $this->getSerializer()->unserialize($cache);

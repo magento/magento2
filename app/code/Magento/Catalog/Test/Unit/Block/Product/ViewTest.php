@@ -31,9 +31,11 @@ use Magento\Framework\Url\EncoderInterface as UrlEncoderInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,6 +46,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ViewTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var View
      */
@@ -410,10 +413,10 @@ class ViewTest extends TestCase
      */
     public function testIsStartCustomizationReturnsTrueWithConfigureMode(): void
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getConfigureMode'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getConfigureMode']
+        );
 
         $this->registryMock->method('registry')
             ->with('product')
@@ -427,20 +430,22 @@ class ViewTest extends TestCase
     /**
      * Unit test for getProductDefaultQty() with data provider
      *
-     * @dataProvider productQtyDataProvider
-     * @param int $minQty
-     * @param int $configuredQty
-     * @param int $expectedQty
+     * Covers integer and decimal min sale / preconfigured quantities (decimal qty support).
+     *
+     * @param float|int $minQty
+     * @param float|int $configuredQty
+     * @param float $expectedQty
      * @return void
      */
-    public function testGetProductDefaultQty(int $minQty, int $configuredQty, int $expectedQty): void
+    #[DataProvider('productQtyDataProvider')]
+    public function testGetProductDefaultQty(float|int $minQty, float|int $configuredQty, float $expectedQty): void
     {
         $storeMock = $this->createMock(Store::class);
         $stockItemMock = $this->createMock(Item::class);
-        $configMock = $this->getMockBuilder(DataObject::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getQty'])
-            ->getMock();
+        $configMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getQty']
+        );
 
         $this->registryMock->method('registry')
             ->with('product')
@@ -456,7 +461,7 @@ class ViewTest extends TestCase
         $configMock->method('getQty')
             ->willReturn($configuredQty);
 
-        $this->assertSame($expectedQty, $this->view->getProductDefaultQty());
+        $this->assertEquals($expectedQty, $this->view->getProductDefaultQty());
     }
 
     /**
@@ -467,9 +472,77 @@ class ViewTest extends TestCase
     public static function productQtyDataProvider(): array
     {
         return [
-            [5, 10, 10],
-            [5, 2, 5],
+            'integer min and higher preconfigured' => [5, 10, 10],
+            'integer min wins over lower preconfigured' => [5, 2, 5],
+            'decimal min sale qty' => [2.5, 1.0, 2.5],
+            'decimal min below one uses min not one' => [0.5, 1.0, 1.0],
+            'decimal preconfigured qty above min' => [1.0, 4.25, 4.25],
+            'decimal preconfigured higher than decimal min' => [2.0, 3.5, 3.5],
+            'decimal min higher than preconfigured' => [5.5, 3.0, 5.5],
         ];
+    }
+
+    /**
+     * Non-numeric preconfigured qty must be ignored; default follows min sale qty only.
+     *
+     * @return void
+     */
+    public function testGetProductDefaultQtyIgnoresNonNumericPreconfiguredQty(): void
+    {
+        $storeMock = $this->createMock(Store::class);
+        $stockItemMock = $this->createMock(Item::class);
+        $configMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getQty']
+        );
+
+        $this->registryMock->method('registry')
+            ->with('product')
+            ->willReturn($this->productMock);
+        $this->productMock->method('getStore')
+            ->willReturn($storeMock);
+        $this->stockRegistryMock->method('getStockItem')
+            ->willReturn($stockItemMock);
+        $this->productMock->method('getPreconfiguredValues')
+            ->willReturn($configMock);
+        $stockItemMock->method('getMinSaleQty')
+            ->willReturn(6);
+        $configMock->method('getQty')
+            ->willReturn('not-a-number');
+
+        $this->assertEquals(6.0, $this->view->getProductDefaultQty());
+    }
+
+    /**
+     * When a product is passed explicitly, that product's stock and preconfigured qty are used (not registry product).
+     *
+     * @return void
+     */
+    public function testGetProductDefaultQtyUsesExplicitProductArgument(): void
+    {
+        $storeMock = $this->createMock(Store::class);
+        $stockItemMock = $this->createMock(Item::class);
+        $configMock = $this->createPartialMockWithReflection(
+            DataObject::class,
+            ['getQty']
+        );
+        $otherProduct = $this->createMock(Product::class);
+
+        $this->registryMock->method('registry')
+            ->with('product')
+            ->willReturn($this->productMock);
+
+        $otherProduct->method('getId')->willReturn(99);
+        $otherProduct->method('getStore')->willReturn($storeMock);
+        $storeMock->method('getWebsiteId')->willReturn(1);
+        $otherProduct->method('getPreconfiguredValues')->willReturn($configMock);
+        $configMock->method('getQty')->willReturn(8);
+        $this->stockRegistryMock->method('getStockItem')
+            ->willReturn($stockItemMock);
+        $stockItemMock->method('getMinSaleQty')
+            ->willReturn(7);
+
+        $this->assertEquals(8.0, $this->view->getProductDefaultQty($otherProduct));
     }
 
     /**
@@ -480,10 +553,10 @@ class ViewTest extends TestCase
     public function testGetOptionsContainerReturnsContainer1(): void
     {
         $expectedOptionsContainer = 'container1';
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getOptionsContainer'])
-            ->getMock();
+        $productMock = $this->createPartialMockWithReflection(
+            Product::class,
+            ['getOptionsContainer']
+        );
         $this->registryMock->method('registry')
             ->with('product')
             ->willReturn($productMock);
@@ -548,11 +621,10 @@ class ViewTest extends TestCase
     /**
      * Unit test for hasOptions() using data provider
      *
-     * @dataProvider hasOptionsDataProvider
-     *
      * @param bool $hasOptions
      * @return void
      */
+    #[DataProvider('hasOptionsDataProvider')]
     public function testHasOptionsWithProvider(bool $hasOptions): void
     {
         $typeMock = $this->createMock(AbstractType::class);

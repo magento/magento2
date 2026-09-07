@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
@@ -18,9 +20,9 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundle(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');
@@ -54,10 +56,10 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
     /**
      * @param array $strategyModifiers
      * @param array $expectedResults
-     * @dataProvider getTestCases
      * @magentoConfigFixture current_store catalog/price/scope 1
      * @magentoDataFixture Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product.php
      */
+    #[DataProvider('getTestCases')]
     public function testPriceForDynamicBundleInWebsiteScope(array $strategyModifiers, array $expectedResults)
     {
         $this->prepareFixture($strategyModifiers, 'bundle_product');

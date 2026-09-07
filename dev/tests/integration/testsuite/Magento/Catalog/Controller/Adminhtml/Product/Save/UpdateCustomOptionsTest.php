@@ -14,11 +14,13 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
+use Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProviderExternal;
 
 /**
  * Base test cases for update product custom options with type "field".
- * Option updating via dispatch product controller action save with updated options data in POST data.
+ * Option updating via product controller save with updated options data in POST.
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
@@ -34,12 +36,11 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     /**
      * Test add to product custom option with type "field".
      *
-     * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForUpdateOptions
-     *
      * @param array $optionData
      * @param array $updateData
      * @return void
      */
+    #[DataProviderExternal(Field::class, 'getDataForUpdateOptions')]
     public function testUpdateCustomOptionWithTypeField(array $optionData, array $updateData): void
     {
         $productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);

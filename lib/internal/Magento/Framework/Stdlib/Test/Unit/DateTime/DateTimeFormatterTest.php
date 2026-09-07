@@ -12,6 +12,7 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateTimeFormatterTest extends TestCase
 {
@@ -31,9 +32,7 @@ class DateTimeFormatterTest extends TestCase
             $this->markTestSkipped('Skip this test for hhvm due to problem with \IntlDateFormatter::formatObject');
         }
         $this->objectManager = new ObjectManager($this);
-        $this->localeResolverMock = $this->getMockBuilder(ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->localeResolverMock->expects($this->any())
             ->method('getLocale')
             ->willReturn('fr-FR');
@@ -43,9 +42,8 @@ class DateTimeFormatterTest extends TestCase
      * @param \IntlCalendar|\DateTimeInterface $object
      * @param string|int|array|null $format
      * @param string|null $locale
-     * @param boolean $useIntlFormatObject
-     * @dataProvider dataProviderFormatObject
-     */
+     * @param boolean $useIntlFormatObject     */
+    #[DataProvider('dataProviderFormatObject')]
     public function testFormatObject($object, $format = null, $locale = null, $useIntlFormatObject = false)
     {
         $dateTimeFormatter = $this->objectManager->getObject(
@@ -138,9 +136,8 @@ class DateTimeFormatterTest extends TestCase
         $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \StdClass());
     }
 
-    /**
-     * @dataProvider formatObjectNumericFormatDataProvider
-     */
+    /**     */
+    #[DataProvider('formatObjectNumericFormatDataProvider')]
     public function testFormatObjectNumericFormat($format, $expected)
     {
         /** @var DateTimeFormatter $dateTimeFormatter */

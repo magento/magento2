@@ -68,6 +68,9 @@ interface CartRepositoryInterface
      *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(\Magento\Quote\Api\Data\CartInterface $quote);
 

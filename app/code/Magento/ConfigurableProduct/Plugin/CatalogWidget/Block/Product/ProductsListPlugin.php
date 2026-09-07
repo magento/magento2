@@ -162,10 +162,8 @@ class ProductsListPlugin
             return $result;
         }
 
-        $filteredCollection = $subject->getBaseCollection();
-        $filteredCollection->setVisibility($visibleCatalogIds);
-        $filteredCollection->getSelect()->orWhere('e.entity_id IN (?)', $configurableEntityIds);
+        $result->getSelect()->orWhere('e.entity_id IN (?)', $configurableEntityIds);
 
-        return $filteredCollection;
+        return $result;
     }
 }

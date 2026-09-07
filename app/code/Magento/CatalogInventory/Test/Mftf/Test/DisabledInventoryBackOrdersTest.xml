@@ -44,6 +44,9 @@
         <after>
             <magentoCLI command="config:set {{EnableInventoryCheckOnCartLoad.path}} {{EnableInventoryCheckOnCartLoad.value}}" stepKey="enableCartLoad"/>
             <magentoCLI command="config:set cataloginventory/item_options/backorders 0" stepKey="EnableBackorders"/>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
             <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>

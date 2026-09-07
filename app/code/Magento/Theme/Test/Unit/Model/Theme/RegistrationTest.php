@@ -10,6 +10,9 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
 use Magento\Framework\View\Design\Theme\Image;
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDataCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory as ThemeDataCollectionFactory;
 use Magento\Theme\Model\Theme\Data\Collection;
 use Magento\Theme\Model\Theme\Registration;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,13 +20,15 @@ use PHPUnit\Framework\TestCase;
 
 class RegistrationTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Registration
      */
     protected $model;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory|MockObject
+     * @var ThemeDataCollectionFactory|MockObject
      */
     protected $collectionFactory;
 
@@ -34,14 +39,11 @@ class RegistrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->collectionFactory =
-            $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory::class)
-                ->onlyMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->filesystemCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->collectionFactory = $this->createPartialMock(
+            ThemeDataCollectionFactory::class,
+            ['create']
+        );
+        $this->filesystemCollection = $this->createMock(Collection::class);
 
         $this->model = new Registration(
             $this->collectionFactory,
@@ -60,44 +62,36 @@ class RegistrationTest extends TestCase
         $themeFilePath = 'any/path';
         $parentId = 1;
         $fullPath = '/full/path';
-        $theme = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(
-                [
-                    'getId',
-                    'getFullPath',
-                    'getParentTheme'
-                ]
-            )
-            ->addMethods(
-                [
-                    'setParentId',
-                    'getCustomization',
-                    'getPreviewImage',
-                    'getThemeImage',
-                    'setType',
-                    'save'
-                ]
-            )
-            ->getMockForAbstractClass();
-        $parentTheme = $this->getMockBuilder(ThemeInterface::class)
-            ->getMock();
+        $theme = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'setParentId', 'getCustomization', 'getPreviewImage',
+                'getThemeImage', 'setType', 'save'
+            ]
+        );
+        $parentTheme = $this->createMock(ThemeInterface::class);
         $parentThemeFromCollectionId = 123;
-        $parentThemeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->onlyMethods(['getId'])
-            ->addMethods(['getType'])
-            ->getMockForAbstractClass();
-        $themeFromCollection = $this->getMockBuilder(ThemeInterface::class)
-            ->addMethods(['setType', 'save', 'getType', 'getParentId', 'setParentId'])
-            ->onlyMethods(['getParentTheme'])
-            ->getMockForAbstractClass();
-        $collection = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Data\Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $customization = $this->getMockBuilder(CustomizationInterface::class)
-            ->getMock();
-        $imageModel = $this->getMockBuilder(Image::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $parentThemeFromCollection = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'getType'
+            ]
+        );
+        $themeFromCollection = $this->createPartialMockWithReflection(
+            ThemeInterface::class,
+            [
+                'getArea', 'getThemePath', 'getFullPath', 'getParentTheme',
+                'getCode', 'isPhysical', 'getInheritedThemes', 'getId',
+                'setType', 'save', 'getType', 'getParentId', 'setParentId'
+            ]
+        );
+        $collection = $this->createMock(ThemeDataCollection::class);
+        $customization = $this->createMock(CustomizationInterface::class);
+        $imageModel = $this->createMock(Image::class);
 
         $theme->expects($this->once())
             ->method('save')

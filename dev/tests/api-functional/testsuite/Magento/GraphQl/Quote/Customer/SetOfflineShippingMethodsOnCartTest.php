@@ -11,6 +11,7 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for setting offline shipping methods on cart
@@ -54,8 +55,8 @@ class SetOfflineShippingMethodsOnCartTest extends GraphQlAbstract
      * @param string $methodTitle
      * @param array $amount
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @dataProvider offlineShippingMethodDataProvider
      */
+    #[DataProvider('offlineShippingMethodDataProvider')]
     public function testSetOfflineShippingMethod(
         string $carrierCode,
         string $methodCode,

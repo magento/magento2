@@ -9,15 +9,15 @@ namespace Magento\Framework\Math\Test\Unit;
 
 use Magento\Framework\Math\Random;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class RandomTest extends TestCase
 {
     /**
      * @param int    $length
      * @param string $chars
-     *
-     * @dataProvider getRandomStringDataProvider
-     */
+     *     */
+    #[DataProvider('getRandomStringDataProvider')]
     public function testGetRandomString($length, $chars = null)
     {
         $mathRandom = new Random();
@@ -73,9 +73,8 @@ class RandomTest extends TestCase
     /**
      * @param $min
      * @param $max
-     *
-     * @dataProvider getRandomNumberProvider
-     */
+     *     */
+    #[DataProvider('getRandomNumberProvider')]
     public function testGetRandomNumber($min, $max)
     {
         $number = Random::getRandomNumber($min, $max);

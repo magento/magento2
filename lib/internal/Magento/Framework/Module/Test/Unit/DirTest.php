@@ -27,7 +27,7 @@ class DirTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->moduleRegistryMock = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->moduleRegistryMock = $this->createMock(ComponentRegistrarInterface::class);
 
         $this->_model = new Dir($this->moduleRegistryMock);
     }

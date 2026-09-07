@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Config;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Tests Magento\Framework\Config\Convert
  */
@@ -21,8 +23,8 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sourceString
      * @param array $expected
-     * @dataProvider parseVarElementDataProvider
      */
+    #[DataProvider('parseVarElementDataProvider')]
     public function testParseVarElement($sourceString, $expected)
     {
         $document = new \DOMDocument();

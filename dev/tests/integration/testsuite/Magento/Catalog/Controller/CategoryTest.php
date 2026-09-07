@@ -23,12 +23,14 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Responsible for testing category view action on strorefront.
  *
  * @see \Magento\Catalog\Controller\Category\View
  * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends AbstractController
 {
@@ -98,7 +100,7 @@ class CategoryTest extends AbstractController
     {
         return [
             'category without children' => [
-                'categoryId' => 5,
+                5,
                 ['catalog_category_view_type_layered', 'catalog_category_view_type_layered_without_children'],
                 [
                     '%acategorypath-category-1-category-1-1-category-1-1-1%a',
@@ -110,7 +112,7 @@ class CategoryTest extends AbstractController
                 ],
             ],
             'anchor category' => [
-                'categoryId' => 4,
+                4,
                 ['catalog_category_view_type_layered'],
                 [
                     '%acategorypath-category-1-category-1-1%a',
@@ -127,7 +129,6 @@ class CategoryTest extends AbstractController
     }
 
     /**
-     * @dataProvider getViewActionDataProvider
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      * @magentoDbIsolation disabled
      * @param int $categoryId
@@ -135,6 +136,7 @@ class CategoryTest extends AbstractController
      * @param array $expectedContent
      * @return void
      */
+    #[DataProvider('getViewActionDataProvider')]
     public function testViewAction(int $categoryId, array $expectedHandles, array $expectedContent): void
     {
         $this->dispatch("catalog/category/view/id/{$categoryId}");

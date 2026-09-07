@@ -7,9 +7,9 @@ namespace Magento\Paypal\Controller;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Session\Generic as GenericSession;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\Type\Factory as ApiFactory;
-use Magento\Paypal\Model\Session as PaypalSession;
 use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -20,6 +20,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
 {
+    use MockCreationTrait;
     /**
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDataFixture Magento/Paypal/_files/quote_payment.php
@@ -63,9 +64,13 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
         )->setQuoteId(
             $order->getQuoteId()
         );
-        /** @var $paypalSession PaypalSession */
-        $paypalSession = $this->_objectManager->get(PaypalSession::class); // @phpstan-ignore-line
+        /** @var GenericSession $paypalSession */
+        $paypalSession = $this->_objectManager->create(
+            GenericSession::class,
+            ['sessionNamespace' => 'paypal']
+        );
         $paypalSession->setExpressCheckoutToken('token');
+        $this->_objectManager->addSharedInstance($paypalSession, 'Magento\Paypal\Model\Session');
 
         $this->dispatch('paypal/express/cancel');
 
@@ -174,13 +179,12 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
             'getExportedBillingAddress'
         ];
 
-        $nvpMock = $this->getMockBuilder(Nvp::class)
-            ->onlyMethods([
+        $nvpMock = $this->createPartialMockWithReflection(
+            Nvp::class,
+            [
                 'setPaypalCart',
                 'callDoExpressCheckoutPayment',
                 'callGetExpressCheckoutDetails',
-            ])
-            ->addMethods([
                 'setToken',
                 'setPayerId',
                 'setAmount',
@@ -192,14 +196,23 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'setAddress',
                 'setBillingAddress',
                 'getExportedBillingAddress'
-            ])
-            ->disableOriginalConstructor()
-            ->getMock();
+            ]
+        );
 
-        foreach ($nvpMethods as $method) {
-            $nvpMock->method($method)
-                ->willReturnSelf();
-        }
+        $nvpMock->method('setPaypalCart')->willReturnSelf();
+        $nvpMock->method('callDoExpressCheckoutPayment')->willReturnSelf();
+        $nvpMock->method('callGetExpressCheckoutDetails')->willReturnSelf();
+        $nvpMock->method('setToken')->willReturnSelf();
+        $nvpMock->method('setPayerId')->willReturnSelf();
+        $nvpMock->method('setAmount')->willReturnSelf();
+        $nvpMock->method('setPaymentAction')->willReturnSelf();
+        $nvpMock->method('setNotifyUrl')->willReturnSelf();
+        $nvpMock->method('setInvNum')->willReturnSelf();
+        $nvpMock->method('setCurrencyCode')->willReturnSelf();
+        $nvpMock->method('setIsLineItemsEnabled')->willReturnSelf();
+        $nvpMock->method('setAddress')->willReturnSelf();
+        $nvpMock->method('setBillingAddress')->willReturnSelf();
+        $nvpMock->method('getExportedBillingAddress')->willReturnSelf();
 
         $apiFactoryMock = $this->getMockBuilder(ApiFactory::class)
             ->disableOriginalConstructor()
@@ -212,34 +225,17 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->_objectManager->addSharedInstance($apiFactoryMock, ApiFactory::class);
 
-        $sessionMock = $this->getMockBuilder(GenericSession::class)
-            ->addMethods(['getExpressCheckoutToken'])
-            ->setConstructorArgs(
-                [
-                    $this->_objectManager->get(\Magento\Framework\App\Request\Http::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\SidResolverInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\Config\ConfigInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\SaveHandlerInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\ValidatorInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Session\StorageInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Stdlib\CookieManagerInterface::class),
-                    $this->_objectManager->get(\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class),
-                    $this->_objectManager->get(\Magento\Framework\App\State::class),
-                ]
-            )
-            ->getMock();
-
-        $sessionMock->method('getExpressCheckoutToken')
-            ->willReturn(true);
-
-        // @phpstan-ignore-next-line
-        $this->_objectManager->addSharedInstance($sessionMock, PaypalSession::class);
+        /** @var GenericSession $paypalSession */
+        $paypalSession = $this->_objectManager->create(
+            GenericSession::class,
+            ['sessionNamespace' => 'paypal']
+        );
+        $paypalSession->setExpressCheckoutToken('token');
+        $this->_objectManager->addSharedInstance($paypalSession, 'Magento\Paypal\Model\Session');
 
         $this->dispatch('paypal/express/returnAction');
         $this->assertRedirect($this->stringContains('checkout/onepage/success'));
 
         $this->_objectManager->removeSharedInstance(ApiFactory::class);
-        // @phpstan-ignore-next-line
-        $this->_objectManager->removeSharedInstance(PaypalSession::class);
     }
 }

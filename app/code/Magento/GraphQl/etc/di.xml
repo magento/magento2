@@ -101,6 +101,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Query\QueryParser">
+        <arguments>
+            <argument name="maxNestingDepth" xsi:type="number">200</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\GraphQl\Query\QueryComplexityLimiter">
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
@@ -110,9 +115,8 @@
     <type name="Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\CompositeValidator">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="backpressureValidator" xsi:type="object">
-                    Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator
-                </item>
+                <item name="searchCriteriaValidator" xsi:type="object">Magento\Framework\GraphQl\Query\Resolver\Argument\Validator\SearchCriteriaValidator</item>
+                <item name="backpressureValidator" xsi:type="object">Magento\GraphQl\Model\Backpressure\BackpressureFieldValidator</item>
             </argument>
         </arguments>
     </type>

@@ -70,6 +70,8 @@ namespace Magento\Framework\Session {
         return call_user_func_array('\session_set_save_handler', func_get_args());
     }
 
+    use PHPUnit\Framework\Attributes\DataProvider;
+
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
@@ -284,10 +286,10 @@ namespace Magento\Framework\Session {
 
         /**
          * @param string $saveMethod
-         * @dataProvider dataConstructor
          *
          * @return void
          */
+        #[DataProvider('dataConstructor')]
         public function testConstructor(string $saveMethod): void
         {
             global $mockPHPFunctions;

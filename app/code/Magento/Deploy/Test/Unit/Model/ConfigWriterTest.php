@@ -14,11 +14,14 @@ use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigWriterTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Writer|MockObject
      */
@@ -64,13 +67,11 @@ class ConfigWriterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->valueInterfaceMock = $this->getMockBuilder(ValueInterface::class)
-            ->getMockForAbstractClass();
-        $this->valueMock = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValue'])
-            ->onlyMethods(['validateBeforeSave', 'beforeSave', 'afterSave'])
-            ->getMock();
+        $this->valueInterfaceMock = $this->createMock(ValueInterface::class);
+        $this->valueMock = $this->createPartialMockWithReflection(
+            Value::class,
+            ['getValue', 'validateBeforeSave', 'beforeSave', 'afterSave']
+        );
 
         $this->model = new ConfigWriter(
             $this->writerMock,

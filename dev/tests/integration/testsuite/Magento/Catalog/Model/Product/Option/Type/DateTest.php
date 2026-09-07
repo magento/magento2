@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\DataObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for customizable product option with "Date" type
@@ -38,12 +39,12 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * Check if option value for request is the same as expected
      *
-     * @dataProvider prepareOptionValueForRequestDataProvider
      * @param array $optionValue
      * @param array $infoBuyRequest
      * @param array $expectedOptionValueForRequest
      * @param array $productOptionData
      */
+    #[DataProvider('prepareOptionValueForRequestDataProvider')]
     public function testPrepareOptionValueForRequest(
         array $optionValue,
         array $infoBuyRequest,
@@ -119,7 +120,6 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * Check date in prepareForCart method with javascript calendar and Asia/Singapore timezone
      *
-     * @dataProvider datePrepareForCartDataProvider
      * @param array $dateData
      * @param array $productOptionData
      * @param array $requestData
@@ -127,6 +127,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
      * @magentoConfigFixture current_store general/locale/timezone Asia/Singapore
      */
+    #[DataProvider('datePrepareForCartDataProvider')]
     public function testPrepareForCart(
         array $dateData,
         array $productOptionData,

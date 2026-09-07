@@ -191,6 +191,10 @@ class CreateHandler implements ExtensionInterface
         $this->mediaEavCache = null;
         $attrCode = $this->getAttribute()->getAttributeCode();
 
+        if (!$this->hasDataChanges($product, $attrCode)) {
+            return $product;
+        }
+
         $value = $product->getData($attrCode);
 
         if (!is_array($value) || !isset($value['images'])) {
@@ -361,28 +365,29 @@ class CreateHandler implements ExtensionInterface
         ];
         
         foreach ($fields as $field => $meta) {
-            if (!isset($image[$field]) || $image[$field] === '') {
-                $result[$field] = $meta['default'];
+            $value = $image[$field] ?? null;
+            if ($storeId === Store::DEFAULT_STORE_ID) {
+                $value = $value === null || $value === '' ? $meta['default'] : $value;
             } else {
-                $result[$field] = match ($meta['type']) {
-                    'int' => (int) $image[$field],
-                    default => (string) $image[$field],
-                };
-            }
-            if ($storeId !== Store::DEFAULT_STORE_ID) {
-                $useDefaultKey = $field . '_use_default';
-                if (isset($image[$useDefaultKey])) {
-                    if ($image[$useDefaultKey]) {
-                        $result[$field] = null;
-                    } elseif ($result[$field] === null) {
-                        $result[$field] = match ($meta['type']) {
-                            // the empty string will allow clearing label in store view scope
-                            // null value is interpreted as "use default"
-                            'string' => '',
-                            default => $result[$field],
-                        };
-                    }
+                if (!empty($image[$field . '_use_default'])) {
+                    $value = null;
                 }
+                if ($value === '') {
+                    $value = match ($meta['type']) {
+                        'int' => null,
+                        // Empty string allows clearing label in store view scope
+                        // NULL is interpreted as "use default" in store view scope
+                        default => $value,
+                    };
+                }
+            }
+
+            $result[$field] = null;
+            if ($value !== null) {
+                $result[$field] = match ($meta['type']) {
+                    'int' => (int) $value,
+                    default => (string) $value,
+                };
             }
         }
         return $result;
@@ -705,10 +710,11 @@ class CreateHandler implements ExtensionInterface
             $resetLabel = true;
         }
 
-        if (in_array($attrData, array_keys($newImages))) {
-            $newImages[$attrData] = $this->prepareImageData($newImages[$attrData], $storeId)
-                + $newImages[$attrData];
-            $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
+        $newImageKey = $this->resolveNewImageKey($newImages, (string) $attrData);
+        if ($newImageKey !== null) {
+            $newImages[$newImageKey] = $this->prepareImageData($newImages[$newImageKey], $storeId)
+                + $newImages[$newImageKey];
+            $product->setData($mediaAttrCode . '_label', $newImages[$newImageKey]['label']);
         }
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
@@ -734,6 +740,29 @@ class CreateHandler implements ExtensionInterface
                 $storeId
             );
         }
+    }
+
+    /**
+     * Resolve new image key matching the current media attribute value
+     *
+     * The media attribute value may already have been remapped to the moved file name,
+     * while new images remain keyed by their original file name.
+     *
+     * @param array $newImages
+     * @param string $attrData
+     * @return string|null
+     */
+    private function resolveNewImageKey(array $newImages, string $attrData): ?string
+    {
+        if (isset($newImages[$attrData])) {
+            return $attrData;
+        }
+        foreach ($newImages as $originalFile => $newImage) {
+            if (isset($newImage['new_file']) && $newImage['new_file'] === $attrData) {
+                return (string) $originalFile;
+            }
+        }
+        return null;
     }
 
     /**
@@ -833,5 +862,28 @@ class CreateHandler implements ExtensionInterface
                 );
             }
         }
+    }
+
+    /**
+     * Checks whether media gallery data changed
+     *
+     * @param Product $product
+     * @param string $attributeCode
+     * @return bool
+     */
+    private function hasDataChanges(Product $product, string $attributeCode): bool
+    {
+        $value = $product->getData($attributeCode);
+        $oldValue = $product->getOrigData($attributeCode);
+
+        if ($value !== $oldValue) {
+            return true;
+        }
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
+            if ($product->dataHasChangedFor($mediaAttrCode)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

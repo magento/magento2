@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleShipTogetherOrderCompleteAfterInvoiceAndShipmentTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product order fulfillment"/>
+            <title value="Bundle ship together order reaches Complete after invoice and shipment"/>
+            <description value="Verify bundle product with ship together order reaches complete after invoice and shipment"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3947"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create two simple products, one bundle product with option ship together and login as admin -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+                <field key="price">75.00</field>
+            </createData>
+            <createData entity="FixedBundleProduct" stepKey="bundleProduct">
+                <field key="price">25.00</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption1">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <field key="title">Option1</field>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="bundleOption2">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <field key="title">Option2</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOption1ToProduct1">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+                <field key="is_default">1</field>
+            </createData>
+            <createData entity="ApiBundleLinkFixed" stepKey="linkOption2ToProduct2">
+                <requiredEntity createDataKey="bundleProduct"/>
+                <requiredEntity createDataKey="bundleOption2"/>
+                <requiredEntity createDataKey="simpleProduct2"/>
+                <field key="is_default">1</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete simple, bundle product and logout from admin -->
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+        <!-- Step 2: Place order with bundle product -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="product" value="$$bundleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart">
+            <argument name="productUrl" value="$$bundleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterQuantityAndAddToCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckoutFromShoppingCart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrderPayment"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderId"/>
+        <!-- Step 3: In admin panel, go to order view, invoice bundle product -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderInAdmin">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
+        <!-- Step 4: Ship bundle product -->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
+        <!-- Step 5 Assertion: Order changes status to complete -->
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="assertOrderStatusComplete">
+            <argument name="status" value="Complete"/>
+        </actionGroup>
+    </test>
+</tests>

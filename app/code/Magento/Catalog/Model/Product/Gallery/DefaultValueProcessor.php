@@ -39,36 +39,42 @@ class DefaultValueProcessor
         $data ??= $product->getData('media_gallery');
         $storeId ??= (int) $product->getStoreId();
         $images = $this->getImages($data);
-        if ($storeId !== Store::DEFAULT_STORE_ID && !empty($images) && !$this->isProcessed($images)) {
-            $storeValues = $this->getStoreValues($product, $storeId);
-            $useDefaultSorting = 1;
-            foreach ($images as &$image) {
-                $image['label_use_default'] = 1;
-                $image['disabled_use_default'] = 1;
-                $image['position_use_default'] = &$useDefaultSorting;
-                if (isset($storeValues[$image['value_id']])) {
-                    $storeValue = $storeValues[$image['value_id']];
-                    $image['label_use_default'] = $storeValue['label'] === null ? 1 : 0;
-                    $image['disabled_use_default'] = $storeValue['disabled'] === null ? 1 : 0;
-                    $useDefaultSorting = $storeValue['position'] === null ? $useDefaultSorting : 0;
-                }
-            }
-            $data['images'] = $images;
+        if ($storeId === Store::DEFAULT_STORE_ID || array_filter($images, $this->isProcessable(...)) === []) {
+            return $data;
         }
+
+        $storeValues = $this->getStoreValues($product, $storeId);
+        $useDefaultSorting = 1;
+        foreach ($images as &$image) {
+            if (!$this->isProcessable($image)) {
+                continue;
+            }
+            $image['label_use_default'] = 1;
+            $image['disabled_use_default'] = 1;
+            $image['position_use_default'] = &$useDefaultSorting;
+            if (isset($storeValues[$image['value_id']])) {
+                $storeValue = $storeValues[$image['value_id']];
+                $image['label_use_default'] = $storeValue['label'] === null ? 1 : 0;
+                $image['disabled_use_default'] = $storeValue['disabled'] === null ? 1 : 0;
+                $useDefaultSorting = $storeValue['position'] === null ? $useDefaultSorting : 0;
+            }
+        }
+        $data['images'] = $images;
         
         return $data;
     }
 
     /**
-     * Check if media gallery images are already processed
+     * Check if media gallery image is valid for processing
      *
-     * @param array $images
+     * @param array $image
      * @return bool
      */
-    private function isProcessed(array $images): bool
+    private function isProcessable(array $image): bool
     {
-        $image = current($images);
-        return isset($image['label_use_default'], $image['disabled_use_default'], $image['position_use_default']);
+        return !empty($image['value_id'])
+            // Check if media gallery images are not already processed
+            && !isset($image['label_use_default'], $image['disabled_use_default'], $image['position_use_default']);
     }
 
     /**

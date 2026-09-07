@@ -15,6 +15,7 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 
 #[
@@ -54,10 +55,10 @@ class CustomerEmailUpdateTest extends GraphQlAbstract
      * @param string $email
      * @param string $password
      * @param string $message
-     * @dataProvider customerInputFieldDataProvider
      * @return void
      * @throws AuthenticationException
      */
+    #[DataProvider('customerInputFieldDataProvider')]
     public function testUpdateCustomerEmailWithEmptyFields(
         string $email,
         string $password,

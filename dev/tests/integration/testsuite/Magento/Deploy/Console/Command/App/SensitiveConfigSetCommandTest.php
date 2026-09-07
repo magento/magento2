@@ -16,6 +16,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -86,12 +87,12 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider executeDataProvider
      * @return void
      */
+    #[DataProvider('executeDataProvider')]
     public function testExecute($scope, $scopeCode, callable $assertCallback)
     {
-        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock
             ->method('writeln')
             ->willReturnCallback(
@@ -180,14 +181,14 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      * @param callable $assertCallback
      * @magentoDataFixture Magento/Store/_files/website.php
      * @magentoDbIsolation enabled
-     * @dataProvider executeInteractiveDataProvider
      * @return void
      */
+    #[DataProvider('executeInteractiveDataProvider')]
     public function testExecuteInteractive($scope, $scopeCode, callable $assertCallback)
     {
         $inputMock = $this->createInputMock(null, null, $scope, $scopeCode);
 
-        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
+        $outputMock = $this->createMock(OutputInterface::class);
         $outputMock
             ->method('writeln')
             ->willReturnCallback(
@@ -307,7 +308,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
      */
     private function createInputMock($key, $val, $scope, $scopeCode)
     {
-        $inputMock = $this->getMockForAbstractClass(InputInterface::class);
+        $inputMock = $this->createMock(InputInterface::class);
         $isInteractive = $key === null;
 
         if (!$isInteractive) {

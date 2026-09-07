@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6436"/>
             <group value="checkout"/>
-            <skip>
-                <issueId value="MQE-1576"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>

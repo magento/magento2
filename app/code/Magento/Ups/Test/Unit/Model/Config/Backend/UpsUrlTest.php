@@ -10,6 +10,7 @@ namespace Magento\Ups\Test\Unit\Model\Config\Backend;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ups\Model\Config\Backend\UpsUrl;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,9 +32,9 @@ class UpsUrlTest extends TestCase
     }
 
     /**
-     * @dataProvider validDataProvider
      * @param string $data The valid data
      */
+    #[DataProvider('validDataProvider')]
     public function testBeforeSave($data = null)
     {
         $this->config->setValue($data);
@@ -41,9 +42,9 @@ class UpsUrlTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidDataProvider
      * @param string $data The invalid data
      */
+    #[DataProvider('invalidDataProvider')]
     public function testBeforeSaveErrors($data)
     {
         $this->expectException('Magento\Framework\Exception\ValidatorException');

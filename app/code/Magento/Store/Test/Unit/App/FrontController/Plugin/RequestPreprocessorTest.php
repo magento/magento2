@@ -75,7 +75,7 @@ class RequestPreprocessorTest extends TestCase
         };
         $this->_storeManagerMock = $this->createMock(StoreManager::class);
         $this->_urlMock = $this->createMock(Url::class);
-        $this->_scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->subjectMock = $this->createMock(FrontController::class);
 
         $this->baseUrlChecker = $this->createMock(BaseUrlChecker::class);

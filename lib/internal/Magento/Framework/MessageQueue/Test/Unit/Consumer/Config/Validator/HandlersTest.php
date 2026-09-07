@@ -12,6 +12,7 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class HandlersTest extends TestCase
 {
@@ -37,10 +38,9 @@ class HandlersTest extends TestCase
         $this->validator = $objectManager->getObject(HandlersValidator::class, ['methodsMap' => $this->methodsMap]);
     }
 
-    /**
-     * @dataProvider validConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      */
+    #[DataProvider('validConfigDataProvider')]
     public function testValidateValid($configData)
     {
         $this->validator->validate($configData);
@@ -88,11 +88,10 @@ class HandlersTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidConfigDataProvider
-     * @param array $configData
+    /**     * @param array $configData
      * @param string $expectedExceptionMessage
      */
+    #[DataProvider('invalidConfigDataProvider')]
     public function testValidateInvalid($configData, $expectedExceptionMessage)
     {
         $this->expectException('\LogicException');

@@ -27,7 +27,7 @@ class CompositePolicyCollectorTest extends TestCase
      */
     private function createMockCollectors(): array
     {
-        $mockCollector1 = $this->getMockForAbstractClass(PolicyCollectorInterface::class);
+        $mockCollector1 = $this->createMock(PolicyCollectorInterface::class);
         $mockCollector1->method('collect')
             ->willReturnCallback(
                 function (array $prevPolicies) {
@@ -55,7 +55,7 @@ class CompositePolicyCollectorTest extends TestCase
                     );
                 }
             );
-        $mockCollector2 = $this->getMockForAbstractClass(PolicyCollectorInterface::class);
+        $mockCollector2 = $this->createMock(PolicyCollectorInterface::class);
         $mockCollector2->method('collect')
             ->willReturnCallback(
                 function (array $prevPolicies) {

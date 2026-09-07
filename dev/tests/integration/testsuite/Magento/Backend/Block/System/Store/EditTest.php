@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\System\Store;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -38,8 +40,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @param $registryData
      * @param $expected
-     * @dataProvider getStoreTypesForLayout
      */
+    #[DataProvider('getStoreTypesForLayout')]
     public function testStoreTypeFormCreated($registryData, $expected)
     {
         $this->_initStoreTypesInRegistry($registryData);
@@ -80,8 +82,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @param $registryData
      * @param $expected
-     * @dataProvider getStoreDataForBlock
      */
+    #[DataProvider('getStoreDataForBlock')]
     public function testGetHeaderText($registryData, $expected)
     {
         $this->_initStoreTypesInRegistry($registryData);

@@ -14,6 +14,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 use Magento\Framework\Serialize\SerializerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class MysqlTest extends TestCase
 {
@@ -34,16 +35,15 @@ class MysqlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->selectFactoryMock = $this->createMock(SelectFactory::class);
         $this->mysqlFactoryMock = $this->createMock(MysqlFactory::class);
     }
 
     /**
      * @param array $inputConfig
-     * @param array $expectedConfig
-     * @dataProvider constructorDataProvider
-     */
+     * @param array $expectedConfig     */
+    #[DataProvider('constructorDataProvider')]
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
@@ -116,7 +116,7 @@ class MysqlTest extends TestCase
             $config,
             $this->mysqlFactoryMock
         );
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $this->assertNull($object->getConnection($loggerMock, $this->selectFactoryMock));
     }
 }

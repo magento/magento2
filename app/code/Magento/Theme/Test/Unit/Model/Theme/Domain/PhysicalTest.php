@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Magento\Theme\Test\Unit\Model\Theme\Domain;
 
 use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Theme\Model\CopyService;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\Theme;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 class PhysicalTest extends TestCase
 {
+    use MockCreationTrait;
+
     public function testCreateVirtualTheme()
     {
         $physicalTheme = $this->createPartialMock(Theme::class, ['__wakeup']);
@@ -27,11 +30,10 @@ class PhysicalTest extends TestCase
         $copyService = $this->createPartialMock(CopyService::class, ['copy']);
         $copyService->expects($this->once())->method('copy')->willReturn($copyService);
 
-        $virtualTheme = $this->getMockBuilder(Theme::class)
-            ->addMethods(['createPreviewImageCopy'])
-            ->onlyMethods(['__wakeup', 'getThemeImage', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $virtualTheme = $this->createPartialMockWithReflection(
+            Theme::class,
+            ['createPreviewImageCopy', '__wakeup', 'getThemeImage', 'save']
+        );
         $virtualTheme->expects($this->once())->method('getThemeImage')->willReturn($virtualTheme);
 
         $virtualTheme->expects(
@@ -61,7 +63,7 @@ class PhysicalTest extends TestCase
         $themeCollection->expects($this->once())->method('count')->willReturn(1);
 
         $domainModel = new Physical(
-            $this->getMockForAbstractClass(ThemeInterface::class),
+            $this->createMock(ThemeInterface::class),
             $themeFactory,
             $copyService,
             $themeCollection

@@ -27,8 +27,7 @@ class ValidatorFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
 
         $this->model = new ValidatorFactory($this->objectManagerMock);
     }

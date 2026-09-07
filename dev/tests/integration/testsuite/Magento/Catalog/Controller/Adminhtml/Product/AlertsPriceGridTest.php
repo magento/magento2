@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Tests for price alert grid controller
  *
@@ -18,8 +20,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 class AlertsPriceGridTest extends AbstractAlertTest
 {
     /**
-     * @dataProvider priceLimitProvider
-     *
      * @magentoDataFixture Magento/ProductAlert/_files/simple_product_with_two_alerts.php
      *
      * @param string $email
@@ -27,6 +27,7 @@ class AlertsPriceGridTest extends AbstractAlertTest
      * @param $expectedCount
      * @return void
      */
+    #[DataProvider('priceLimitProvider')]
     public function testExecute(string $email, ?int $limit, $expectedCount): void
     {
         $this->prepareRequest('simple', 'default', $limit);

@@ -15,10 +15,13 @@ use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Observer\SetBasePriceObserver;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SetBasePriceObserverTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var CatalogHelper
      */
@@ -140,12 +143,11 @@ class SetBasePriceObserverTest extends TestCase
         return new Observer(['event' => $event]);
     }
 
-    private function createQuoteItemMock(): Item
+    private function createQuoteItemMock(): Item|MockObject
     {
-        return $this->getMockBuilder(Item::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getProduct', 'getPrice'])
-            ->addMethods(['getBasePrice', 'setBasePrice'])
-            ->getMock();
+        return $this->createPartialMockWithReflection(
+            Item::class,
+            ['getProduct', 'getPrice', 'getBasePrice', 'setBasePrice']
+        );
     }
 }

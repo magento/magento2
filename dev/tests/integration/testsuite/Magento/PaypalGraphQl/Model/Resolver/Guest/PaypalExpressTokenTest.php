@@ -13,6 +13,7 @@ use Magento\Paypal\Model\Api\Nvp;
 use Magento\PaypalGraphQl\PaypalExpressAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test create PaypalExpressToken graphql endpoint for guest
@@ -44,7 +45,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      *
      * @param string $paymentMethod
      * @return void
-     * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -53,6 +53,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolve($paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);
@@ -95,7 +96,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      *
      * @param string $paymentMethod
      * @return void
-     * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -104,6 +104,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolveWithPaypalError($paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);
@@ -144,7 +145,6 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      *
      * @param string $paymentMethod
      * @return void
-     * @dataProvider getPaypalCodesProvider
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -153,6 +153,7 @@ class PaypalExpressTokenTest extends PaypalExpressAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      */
+    #[DataProvider('getPaypalCodesProvider')]
     public function testResolveWithInvalidRedirectUrl($paymentMethod): void
     {
         $this->enablePaymentMethod($paymentMethod);

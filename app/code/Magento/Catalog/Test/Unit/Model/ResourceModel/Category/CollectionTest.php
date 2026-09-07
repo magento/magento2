@@ -194,6 +194,7 @@ class CollectionTest extends TestCase
         $categoryCount = 401;
         $items = [];
         $categoryIds = [];
+        $categoryRows = [];
         for ($i = 1; $i <= $categoryCount; $i++) {
             $category = $this->createPartialMock(Category::class, ['getId', 'setProductCount']);
             $category->method('getId')->willReturn($i);
@@ -201,6 +202,10 @@ class CollectionTest extends TestCase
             $category->expects($this->once())->method('setProductCount')->with(5);
             $items[$i] = $category;
             $categoryIds[] = $i;
+            $categoryRows[] = [
+                'entity_id' => $i,
+                'path' => 1 . "/" . $i
+            ];
         }
         $storeMock = $this->createMock(Store::class);
         $storeMock->method('getWebsiteId')->willReturn($websiteId);
@@ -217,12 +222,6 @@ class CollectionTest extends TestCase
         $this->connection->expects($this->once())->method('dropTemporaryTable')
             ->with($this->stringContains('temp_category_descendants_'));
         $this->select->method('from')->willReturnSelf();
-        $this->select->expects($this->once())->method('joinInner')
-            ->with(
-                ['ce2' => null],
-                'ce2.path LIKE CONCAT(ce.path, \'/%\')',
-                []
-            )->willReturnSelf();
         $this->select->method('where')->willReturnSelf();
         $this->connection->method('select')->willReturn($this->select);
         $this->connection->method('insertFromSelect')->willReturn('INSERT QUERY');
@@ -235,6 +234,8 @@ class CollectionTest extends TestCase
         $this->connection->method('fetchPairs')
             ->with($this->isInstanceOf(Select::class))
             ->willReturn($counts);
+        $this->connection->expects($this->once())->method('insertMultiple');
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn($categoryRows);
         $this->collection->setProductStoreId($storeId);
         $this->collection->loadProductCount($items, false, true);
     }

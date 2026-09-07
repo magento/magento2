@@ -19,6 +19,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeGroupByName;
 use Magento\TestFramework\Eav\Model\ResourceModel\GetEntityIdByAttributeId;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provides tests for attribute set model saving.
@@ -92,11 +93,11 @@ class SetTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Eav/_files/attribute_with_options.php
-     * @dataProvider addAttributeToSetDataProvider
      * @param string $groupName
      * @param string $attributeCode
      * @return void
      */
+    #[DataProvider('addAttributeToSetDataProvider')]
     public function testSaveWithGroupsAndAttributes(string $groupName, string $attributeCode): void
     {
         $set = $this->setRepository->get($this->defaultSetId);

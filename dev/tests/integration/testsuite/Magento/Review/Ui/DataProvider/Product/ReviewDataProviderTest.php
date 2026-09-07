@@ -11,6 +11,7 @@ namespace Magento\Review\Ui\DataProvider\Product;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Api\Filter;
 
@@ -45,13 +46,13 @@ class ReviewDataProviderTest extends TestCase
      * Sorting dataProvider test
      *
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
-     * @dataProvider sortingDataProvider
      *
      * @param string $field
      * @param string $direction
      * @param array $expectedSortedTitles
      * @return void
      */
+    #[DataProvider('sortingDataProvider')]
     public function testSorting(string $field, string $direction, array $expectedSortedTitles): void
     {
         $request = $this->objectManager->create(RequestInterface::class);

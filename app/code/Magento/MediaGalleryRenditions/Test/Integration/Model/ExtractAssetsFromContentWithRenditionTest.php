@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryRenditions\Test\Integration\Model;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for Extracting assets from rendition paths/urls in content
@@ -34,11 +35,10 @@ class ExtractAssetsFromContentWithRenditionTest extends TestCase
      * Assert rendition urls/path in the content are associated with an asset
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     *
-     * @dataProvider contentProvider
      * @param string $content
      * @param array $assetIds
      */
+    #[DataProvider('contentProvider')]
     public function testExecute(string $content, array $assetIds): void
     {
         $assets = $this->extractAssetsFromContent->execute($content);

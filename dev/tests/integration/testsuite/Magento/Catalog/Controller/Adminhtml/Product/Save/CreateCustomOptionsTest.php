@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Base test cases for product custom options with type "field".
@@ -31,12 +32,11 @@ class CreateCustomOptionsTest extends AbstractBackendController
     /**
      * Test add to product custom option with type "field".
      *
-     * @dataProvider productWithNewOptionsDataProvider
-     *
      * @param array $productPostData
      *
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('productWithNewOptionsDataProvider')]
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {
         $this->getRequest()->setPostValue($productPostData);

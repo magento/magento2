@@ -16,6 +16,7 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\StringBinary as Strin
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for StringBinary class.
@@ -97,9 +98,7 @@ class StringBinaryTest extends TestCase
         $column->expects($this->any())
             ->method('getDefault')
             ->willReturn('test');
-        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $adapterMock = $this->createMock(AdapterInterface::class);
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
@@ -120,11 +119,12 @@ class StringBinaryTest extends TestCase
     }
 
     /**
-     * @param array $definition
-     * @param bool $expectedLength
+     * @param string $definition
+     * @param bool|int $expectedLength
      * @dataProvider definitionDataProvider()
      */
-    public function testGetBinaryDefaultValueFromDefinition($definition)
+    #[DataProvider('definitionDataProvider')]
+    public function testGetBinaryDefaultValueFromDefinition($definition, $expectedLength = false)
     {
         $defaultValue = 'test';
         if (preg_match('/^(binary|varbinary)/', $definition)) {
@@ -144,6 +144,7 @@ class StringBinaryTest extends TestCase
      * @param bool $expectedLength
      * @dataProvider definitionDataProvider()
      */
+    #[DataProvider('definitionDataProvider')]
     public function testFromDefinition($definition, $expectedLength = false)
     {
         $expectedData = [

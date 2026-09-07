@@ -5,11 +5,11 @@
  */
 namespace Magento\Test\Integrity\Magento\Widget;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 class SkinFilesTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider widgetPlaceholderImagesDataProvider
-     */
+    #[DataProvider('widgetPlaceholderImagesDataProvider')]
     public function testWidgetPlaceholderImages($skinImage)
     {
         /** @var \Magento\Framework\View\Asset\Repository $assetRepo */

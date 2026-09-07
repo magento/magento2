@@ -41,24 +41,16 @@ class WysiwygTest extends AbstractElementTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->formFactoryMock = $this->getMockBuilder(FormFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wysiwygConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->getMockForAbstractClass();
+        $this->formFactoryMock = $this->createPartialMock(FormFactory::class, ['create']);
+        $this->formMock = $this->createMock(Form::class);
+        $this->wysiwygConfig = $this->createMock(ConfigInterface::class);
         $dataObject = new DataObject();
         $this->wysiwygConfig
             ->expects($this->once())
             ->method('getConfig')
             ->willReturn($dataObject);
 
-        $this->editorMock = $this->getMockBuilder(Editor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->editorMock = $this->createMock(Editor::class);
 
         $this->formFactoryMock->expects($this->any())
             ->method('create')

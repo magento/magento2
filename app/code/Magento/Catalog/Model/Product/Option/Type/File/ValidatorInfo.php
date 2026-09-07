@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Size;
@@ -14,6 +15,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use Magento\Catalog\Helper\Product\Validator\ProductOptionValidator;
 
 /**
  * Validator for existing files.
@@ -56,6 +58,11 @@ class ValidatorInfo extends Validator
     private $fileValidator;
 
     /**
+     * @var ProductOptionValidator $productOptionValidator
+     */
+    private $productOptionValidator;
+
+    /**
      * Construct method
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -65,6 +72,7 @@ class ValidatorInfo extends Validator
      * @param ValidateFactory $validateFactory
      * @param NotProtectedExtension $fileValidator
      * @param IoFile $ioFile
+     * @param ProductOptionValidator|null $productOptionValidator
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -73,12 +81,15 @@ class ValidatorInfo extends Validator
         Database $coreFileStorageDatabase,
         ValidateFactory $validateFactory,
         NotProtectedExtension $fileValidator,
-        IoFile $ioFile
+        IoFile $ioFile,
+        ?ProductOptionValidator $productOptionValidator = null
     ) {
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->validateFactory = $validateFactory;
         $this->fileValidator = $fileValidator;
         $this->ioFile = $ioFile;
+        $this->productOptionValidator = $productOptionValidator ??
+            ObjectManager::getInstance()->get(ProductOptionValidator::class);
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
@@ -175,6 +186,7 @@ class ValidatorInfo extends Validator
      *
      * @param array $optionValue
      * @return void
+     * @throws LocalizedException
      */
     protected function initFilePath($optionValue)
     {
@@ -185,11 +197,16 @@ class ValidatorInfo extends Validator
          *              check them.
          */
         $checkPaths = [];
+
         if (isset($optionValue['quote_path'])) {
             $checkPaths[] = $optionValue['quote_path'];
         }
         if (isset($optionValue['order_path']) && !$this->useQuotePath) {
             $checkPaths[] = $optionValue['order_path'];
+        }
+
+        if (count($checkPaths) === 2) {
+            $this->productOptionValidator->validateOptionsFilePath($checkPaths);
         }
 
         foreach ($checkPaths as $path) {

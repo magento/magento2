@@ -9,12 +9,12 @@ namespace Magento\Framework\Simplexml\Test\Unit;
 
 use Magento\Framework\Simplexml\Element;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ElementTest extends TestCase
 {
-    /**
-     * @dataProvider xmlDataProvider
-     */
+    /**     */
+    #[DataProvider('xmlDataProvider')]
     public function testUnsetSelf($xmlData)
     {
         /** @var Element $xml */
@@ -31,9 +31,8 @@ class ElementTest extends TestCase
         $this->assertTrue(property_exists($xml, 'node1'));
     }
 
-    /**
-     * @dataProvider xmlDataProvider
-     */
+    /**     */
+    #[DataProvider('xmlDataProvider')]
     public function testGetParent($xmlData)
     {
         $this->expectException('InvalidArgumentException');
@@ -103,11 +102,10 @@ XML;
         $this->assertEquals($value, (string)$xml->xpath('/root/node1/node2')[0]);
     }
 
-    /**
-     * @dataProvider setAttributeDataProvider
-     * @param string $name
+    /**     * @param string $name
      * @param string $value
      */
+    #[DataProvider('setAttributeDataProvider')]
     public function testSetAttribute($name, $value)
     {
         /** @var Element $xml */

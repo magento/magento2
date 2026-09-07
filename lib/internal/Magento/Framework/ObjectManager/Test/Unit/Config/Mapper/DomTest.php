@@ -13,6 +13,7 @@ use Magento\Framework\ObjectManager\Config\Mapper\Dom;
 use Magento\Framework\Stdlib\BooleanUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DomTest extends TestCase
 {
@@ -46,7 +47,7 @@ class DomTest extends TestCase
             [['true', true], ['false', false]]
         );
 
-        $this->argumentInterpreter = $this->getMockForAbstractClass(InterpreterInterface::class);
+        $this->argumentInterpreter = $this->createMock(InterpreterInterface::class);
         $this->argumentInterpreter->expects(
             $this->any()
         )->method(
@@ -84,9 +85,8 @@ class DomTest extends TestCase
     }
 
     /**
-     * @param string $xmlData
-     * @dataProvider wrongXmlDataProvider
-     */
+     * @param string $xmlData     */
+    #[DataProvider('wrongXmlDataProvider')]
     public function testMapThrowsExceptionWhenXmlHasWrongFormat($xmlData)
     {
         $this->expectException('Exception');

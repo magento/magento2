@@ -32,6 +32,7 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -116,8 +117,8 @@ class ProductSearchTest extends GraphQlAbstract
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @dataProvider sortByPriceAndNameDataProvider
      */
+    #[DataProvider('sortByPriceAndNameDataProvider')]
     #[
         DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 1'], 'prod1'),
         DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'search product 2'], 'prod2'),
@@ -182,7 +183,7 @@ QUERY;
     /**
      * @return array
      */
-    public function sortByPriceAndNameDataProvider(): array
+    public static function sortByPriceAndNameDataProvider(): array
     {
         return [
             [
@@ -204,9 +205,7 @@ QUERY;
         ];
     }
 
-    /**
-     * @dataProvider filterByNameWithMatchTypeSpecifiedDataProvider
-     */
+    #[DataProvider('filterByNameWithMatchTypeSpecifiedDataProvider')]
     #[
         DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Cronus Yoga Pant'], 'prod1'),
         DataFixture(ProductFixture::class, ['price' => 10, 'name' => 'Lucia Cross-Fit Bra'], 'prod2'),
@@ -251,7 +250,7 @@ QUERY;
     /**
      * @return array
      */
-    public function filterByNameWithMatchTypeSpecifiedDataProvider(): array
+    public static function filterByNameWithMatchTypeSpecifiedDataProvider(): array
     {
         return [
             [
@@ -1616,9 +1615,7 @@ QUERY;
         $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
     }
 
-    /**
-     * @dataProvider sortByPositionWithMultipleCategoriesDataProvider
-     */
+    #[DataProvider('sortByPositionWithMultipleCategoriesDataProvider')]
     #[
         DataFixture(ProductFixture::class, as: 'prod1'),
         DataFixture(ProductFixture::class, as: 'prod2'),
@@ -2071,8 +2068,8 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
-     * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
+    #[DataProvider('filterProductsBySingleCategoryIdDataProvider')]
     public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId): void
     {
         CacheCleaner::clean(['config']);

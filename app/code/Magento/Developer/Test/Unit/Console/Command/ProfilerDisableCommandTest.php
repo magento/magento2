@@ -8,6 +8,7 @@ namespace Magento\Developer\Test\Unit\Console\Command;
 
 use Magento\Developer\Console\Command\ProfilerDisableCommand;
 use Magento\Framework\Filesystem\Io\File;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -29,8 +30,8 @@ class ProfilerDisableCommandTest extends TestCase
      *
      * @param bool $fileExists
      * @param string $expectedOutput
-     * @dataProvider commandDataProvider
      */
+    #[DataProvider('commandDataProvider')]
     public function testCommand(bool $fileExists, string $expectedOutput)
     {
         $this->filesystemMock

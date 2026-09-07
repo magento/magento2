@@ -36,5 +36,5 @@ More information about email templates are at articles:
 
 - [Marketing/Email](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/communications/email-templates)
 - [Email templates list](https://experienceleague.adobe.com/en/docs/commerce-admin/systems/communications/email-templates#email-template-list)
-- [Customize email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email/)
-- [Migrating custom email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email-migration/#nested-arrays)
+- [Customize email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email)
+- [Migrating custom email templates](https://developer.adobe.com/commerce/frontend-core/guide/templates/email-migration#nested-arrays)

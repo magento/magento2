@@ -56,7 +56,7 @@ class DbStatusCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         /** @var ObjectManagerInterface|Mock $objectManager */
-        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $objectManager = $this->createMock(ObjectManagerInterface::class);
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();

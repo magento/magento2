@@ -17,6 +17,7 @@ use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -162,12 +163,12 @@ class RandomTest extends TestCase
     /**
      * Test getLoadedProductCollection with different numProducts values
      *
-     * @dataProvider numProductsDataProvider
      * @covers \Magento\Catalog\Block\Product\ProductList\Random::_getProductCollection
      * @param int|null $numProducts
      * @param int $expectedPageSize
      * @return void
      */
+    #[DataProvider('numProductsDataProvider')]
     public function testGetLoadedProductCollectionWithNumProducts(
         ?int $numProducts,
         int $expectedPageSize

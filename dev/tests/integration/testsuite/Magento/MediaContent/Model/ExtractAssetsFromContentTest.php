@@ -10,6 +10,7 @@ namespace Magento\MediaContent\Model;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for ExtractAssetsFromContent
@@ -34,11 +35,10 @@ class ExtractAssetsFromContentTest extends TestCase
      * Assing assets to content, retrieve the data, then unassign assets from content
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     *
-     * @dataProvider contentProvider
      * @param string $content
      * @param array $assetIds
      */
+    #[DataProvider('contentProvider')]
     public function testExecute(string $content, array $assetIds): void
     {
         $assets = $this->extractAssetsFromContent->execute($content);

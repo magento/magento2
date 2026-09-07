@@ -10,6 +10,7 @@ namespace Magento\Paypal\Controller\Adminhtml\System;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -20,12 +21,11 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      *
-     * @dataProvider saveMerchantCountryDataProvider
-     *
      * @param string $section
      * @param array $groups
      * @return void
      */
+    #[DataProvider('saveMerchantCountryDataProvider')]
     public function testSaveMerchantCountry(string $section, array $groups): void
     {
         /** @var ScopeConfigInterface $scopeConfig */

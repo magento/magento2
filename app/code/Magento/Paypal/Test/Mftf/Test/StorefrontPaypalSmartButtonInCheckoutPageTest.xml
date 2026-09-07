@@ -17,10 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-37236"/>
-            </skip>
-            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Login -->
@@ -85,7 +81,7 @@
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="clickPayPalBtn" stepKey="LoginToPayPal">
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" after="clickPayPalBtn" stepKey="LoginToPayPal">
             <argument name="payerName" value="{{Payer.firstName}}"/>
         </actionGroup>
 

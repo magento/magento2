@@ -16,6 +16,7 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -88,8 +89,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $loadId
      * @param $expectedId
-     * @dataProvider loadDataProvider
      */
+    #[DataProvider('loadDataProvider')]
     public function testLoad($loadId, $expectedId)
     {
         $this->model->load($loadId);
@@ -133,9 +134,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @param bool $useRewrites
      * @param bool $useStoreCode
      * @param string $expected
-     * @dataProvider getBaseUrlDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getBaseUrlDataProvider')]
     public function testGetBaseUrl($type, $useRewrites, $useStoreCode, $expected)
     {
         /* config operations require store to be loaded */
@@ -208,9 +209,9 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @param bool $useCustomEntryPoint
      * @param bool $useStoreCode
      * @param string $expected
-     * @dataProvider getBaseUrlForCustomEntryPointDataProvider
      * @magentoAppIsolation enabled
      */
+    #[DataProvider('getBaseUrlForCustomEntryPointDataProvider')]
     public function testGetBaseUrlForCustomEntryPoint($type, $useCustomEntryPoint, $useStoreCode, $expected)
     {
         /* config operations require store to be loaded */
@@ -409,11 +410,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $badStoreData
      *
-     * @dataProvider saveValidationDataProvider
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      */
+    #[DataProvider('saveValidationDataProvider')]
     public function testSaveValidation($badStoreData)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -448,8 +449,8 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @param $disableStoreInUrl
      * @param $singleStoreModeEnabled
      * @param $expectedResult
-     * @dataProvider isUseStoreInUrlDataProvider
      */
+    #[DataProvider('isUseStoreInUrlDataProvider')]
     public function testIsUseStoreInUrl($storeInUrl, $disableStoreInUrl, $singleStoreModeEnabled, $expectedResult)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -495,13 +496,12 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @dataProvider isCurrentlySecureDataProvider
-     *
      * @param bool $expected
      * @param array $serverValues
      * @magentoConfigFixture current_store web/secure/offloader_header X_FORWARDED_PROTO
      * @magentoConfigFixture current_store web/secure/base_url https://example.com:80
      */
+    #[DataProvider('isCurrentlySecureDataProvider')]
     public function testIsCurrentlySecure($expected, $serverValues)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

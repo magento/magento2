@@ -33,8 +33,7 @@ class CronRemoveCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->crontabManagerMock = $this->getMockBuilder(CrontabManagerInterface::class)
-            ->getMockForAbstractClass();
+        $this->crontabManagerMock = $this->createMock(CrontabManagerInterface::class);
 
         $this->commandTester = new CommandTester(
             new CronRemoveCommand($this->crontabManagerMock)

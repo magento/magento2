@@ -22,12 +22,10 @@ class AbstractTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_model = $this->getMockForAbstractClass(
-            AbstractBackend::class,
-            [],
-            '',
-            false
-        );
+        $this->_model = $this->getMockBuilder(AbstractBackend::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([]) // Don't mock any methods, use real implementations
+            ->getMock();
     }
 
     public function testGetAffectedFields()

@@ -205,6 +205,7 @@ class CurlClient
         $curlOpts = [
             CURLOPT_RETURNTRANSFER => true, // return result instead of echoing
             CURLOPT_SSL_VERIFYPEER => false, // stop cURL from verifying the peer's certificate
+            CURLOPT_SSL_VERIFYHOST => false, // stop cURL from verifying the peer's hostname
             CURLOPT_FOLLOWLOCATION => false, // follow redirects, Location: headers
             CURLOPT_MAXREDIRS => 10, // but don't redirect more than 10 times
             CURLOPT_HTTPHEADER => [],

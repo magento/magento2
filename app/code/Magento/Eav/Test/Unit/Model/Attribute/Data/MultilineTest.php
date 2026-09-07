@@ -19,10 +19,14 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class MultilineTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Multiline
      */
@@ -39,11 +43,11 @@ class MultilineTest extends TestCase
     protected function setUp(): void
     {
         /** @var TimezoneInterface $timezoneMock */
-        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $timezoneMock = $this->createMock(TimezoneInterface::class);
         /** @var LoggerInterface $loggerMock */
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $localeResolverMock = $this->createMock(ResolverInterface::class);
         $this->stringMock = $this->createMock(StringUtils::class);
 
         $this->model = new Multiline(
@@ -59,12 +63,12 @@ class MultilineTest extends TestCase
      *
      * @param mixed $param
      * @param mixed $expectedResult
-     * @dataProvider extractValueDataProvider
      */
+    #[DataProvider('extractValueDataProvider')]
     public function testExtractValue($param, $expectedResult)
     {
         /** @var MockObject|RequestInterface $requestMock */
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $requestMock = $this->createMock(RequestInterface::class);
         /** @var MockObject|Attribute $attributeMock */
         $attributeMock = $this->createMock(Attribute::class);
 
@@ -99,8 +103,8 @@ class MultilineTest extends TestCase
      *
      * @param string $format
      * @param mixed $expectedResult
-     * @dataProvider outputValueDataProvider
      */
+    #[DataProvider('outputValueDataProvider')]
     public function testOutputValue($format, $expectedResult)
     {
         /** @var MockObject|AbstractModel $entityMock */
@@ -150,16 +154,15 @@ class MultilineTest extends TestCase
      * @param bool $skipRequiredValidation
      * @param array $rules
      * @param array $expectedResult
-     * @dataProvider validateValueDataProvider
      */
+    #[DataProvider('validateValueDataProvider')]
     public function testValidateValue($value, $isAttributeRequired, $skipRequiredValidation, $rules, $expectedResult)
     {
         /** @var MockObject|AbstractModel $entityMock */
-        $entityMock = $this->getMockBuilder(AbstractModel::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getData', 'getDataUsingMethod'])
-            ->addMethods(['getSkipRequiredValidation'])
-            ->getMock();
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData', 'getDataUsingMethod']
+        );
         if ($skipRequiredValidation === true) {
             $entityMock->expects($this->any())
                 ->method('getDataUsingMethod')

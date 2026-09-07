@@ -5,7 +5,10 @@
  */
 namespace Magento\Weee\Block\Item\Price;
 
+use Magento\Bundle\Model\Product\Type as BundleProductType;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\Render as PricingRender;
+use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
@@ -15,6 +18,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * Item price render block
  *
  * @api
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
@@ -101,7 +105,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         }
 
         if ($this->getIncludeWeeeFlag()) {
-            return $priceInclTax + $this->weeeHelper->getWeeeTaxInclTax($this->getItem());
+            $qty = $this->getItemQtyForUnitPriceCalculation();
+            return $qty > 0 ? $this->getRowDisplayPriceInclTax() / $qty
+                : $priceInclTax + $this->weeeHelper->getWeeeTaxInclTax($this->getItem());
         }
 
         return $priceInclTax;
@@ -123,7 +129,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         }
 
         if ($this->getIncludeWeeeFlag()) {
-            return $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
+            $qty = $this->getItemQtyForUnitPriceCalculation();
+            return $qty > 0 ? $this->getBaseRowDisplayPriceInclTax() / $qty
+                : $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
         }
 
         return $basePriceInclTax;
@@ -138,14 +146,27 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getRowDisplayPriceInclTax()
     {
-        $rowTotalInclTax = $this->getItem()->getRowTotalInclTax();
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->getIncludeWeeeFlag()
+                    ? $child->getRowTotalInclTax() + $this->weeeHelper->getRowWeeeTaxInclTax($child)
+                    : $child->getRowTotalInclTax();
+            }
+            return $this->reconcileCartRowInclTaxWithQuoteTotal($sum);
+        }
 
+        $item = $this->getItem();
+        $rowTotalInclTax = (float)$item->getRowTotalInclTax();
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalInclTax;
         }
 
         if ($this->getIncludeWeeeFlag()) {
-            return $rowTotalInclTax + $this->weeeHelper->getRowWeeeTaxInclTax($this->getItem());
+            return $this->reconcileCartRowInclTaxWithQuoteTotal(
+                $rowTotalInclTax + $this->weeeHelper->getRowWeeeTaxInclTax($this->getItem())
+            );
         }
 
         return $rowTotalInclTax;
@@ -160,6 +181,17 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseRowDisplayPriceInclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->getIncludeWeeeFlag()
+                    ? $child->getBaseRowTotalInclTax() + $this->weeeHelper->getBaseRowWeeeTaxInclTax($child)
+                    : $child->getBaseRowTotalInclTax();
+            }
+            return $sum;
+        }
+
         $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
@@ -189,7 +221,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         }
 
         if ($this->getIncludeWeeeFlag()) {
-            return $priceExclTax + $this->weeeHelper->getWeeeTaxAppliedAmount($this->getItem());
+            $qty = $this->getItemQtyForUnitPriceCalculation();
+            return $qty > 0 ? $this->getRowDisplayPriceExclTax() / $qty
+                : $priceExclTax + $this->weeeHelper->getWeeeTaxAppliedAmount($this->getItem());
         }
 
         return $priceExclTax;
@@ -217,7 +251,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         }
 
         if ($this->getIncludeWeeeFlag()) {
-            return $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
+            $qtyForUnit = $this->getItemQtyForUnitPriceCalculation();
+            return $qtyForUnit > 0 ? $this->getBaseRowDisplayPriceExclTax() / $qtyForUnit
+                : $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
         }
 
         return $basePriceExclTax;
@@ -229,10 +265,30 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      * The Weee amount will be added to row total depending on Weee display setting.
      *
      * @return float
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getRowDisplayPriceExclTax()
     {
-        $rowTotalExclTax = $this->getItem()->getRowTotal();
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->getIncludeWeeeFlag()
+                    ? $child->getRowTotal() + $this->weeeHelper->getWeeeTaxAppliedRowAmount($child)
+                    : $child->getRowTotal();
+            }
+            return $sum;
+        }
+
+        $item = $this->getItem();
+        $rowTotalExclTax = (float)$item->getRowTotal();
+        if ($rowTotalExclTax <= 0) {
+            $qty = method_exists($item, 'getTotalQty') ? (float)$item->getTotalQty() : (float)$item->getQty();
+            $calculationPrice = (float)$item->getCalculationPrice();
+            if ($calculationPrice > 0 && $qty > 0) {
+                $rowTotalExclTax = $calculationPrice * $qty;
+            }
+        }
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalExclTax;
@@ -254,6 +310,17 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseRowDisplayPriceExclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->getIncludeWeeeFlag()
+                    ? $child->getBaseRowTotal() + $child->getBaseWeeeTaxAppliedRowAmnt()
+                    : $child->getBaseRowTotal();
+            }
+            return $sum;
+        }
+
         $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
@@ -282,7 +349,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $priceInclTax;
         }
 
-        return $priceInclTax + $this->weeeHelper->getWeeeTaxInclTax($this->getItem());
+        $qty = $this->getItemQtyForUnitPriceCalculation();
+        return $qty > 0 ? $this->getFinalRowDisplayPriceInclTax() / $qty
+            : $priceInclTax + $this->weeeHelper->getWeeeTaxInclTax($this->getItem());
     }
 
     /**
@@ -300,7 +369,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $basePriceInclTax;
         }
 
-        return $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
+        $qty = $this->getItemQtyForUnitPriceCalculation();
+        return $qty > 0 ? $this->getBaseFinalRowDisplayPriceInclTax() / $qty
+            : $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
     }
 
     /**
@@ -312,13 +383,26 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getFinalRowDisplayPriceInclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->weeeHelper->isEnabled($this->getStoreId())
+                    ? $child->getRowTotalInclTax() + $this->weeeHelper->getRowWeeeTaxInclTax($child)
+                    : $child->getRowTotalInclTax();
+            }
+            return $this->reconcileCartRowInclTaxWithQuoteTotal($sum);
+        }
+
         $rowTotalInclTax = $this->getItem()->getRowTotalInclTax();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalInclTax;
         }
 
-        return $rowTotalInclTax + $this->weeeHelper->getRowWeeeTaxInclTax($this->getItem());
+        return $this->reconcileCartRowInclTaxWithQuoteTotal(
+            $rowTotalInclTax + $this->weeeHelper->getRowWeeeTaxInclTax($this->getItem())
+        );
     }
 
     /**
@@ -330,6 +414,17 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseFinalRowDisplayPriceInclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->weeeHelper->isEnabled($this->getStoreId())
+                    ? $child->getBaseRowTotalInclTax() + $this->weeeHelper->getBaseRowWeeeTaxInclTax($child)
+                    : $child->getBaseRowTotalInclTax();
+            }
+            return $sum;
+        }
+
         $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
@@ -352,7 +447,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $priceExclTax;
         }
 
-        return $priceExclTax + $this->weeeHelper->getWeeeTaxAppliedAmount($this->getItem());
+        $qty = $this->getItemQtyForUnitPriceCalculation();
+        return $qty > 0 ? $this->getFinalRowDisplayPriceExclTax() / $qty
+            : $priceExclTax + $this->weeeHelper->getWeeeTaxAppliedAmount($this->getItem());
     }
 
     /**
@@ -374,7 +471,9 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $basePriceExclTax;
         }
 
-        return $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
+        $qtyForUnit = $this->getItemQtyForUnitPriceCalculation();
+        return $qtyForUnit > 0 ? $this->getBaseFinalRowDisplayPriceExclTax() / $qtyForUnit
+            : $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
     }
 
     /**
@@ -386,6 +485,17 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getFinalRowDisplayPriceExclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->weeeHelper->isEnabled($this->getStoreId())
+                    ? $child->getRowTotal() + $this->weeeHelper->getWeeeTaxAppliedRowAmount($child)
+                    : $child->getRowTotal();
+            }
+            return $sum;
+        }
+
         $rowTotalExclTax = $this->getItem()->getRowTotal();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
@@ -404,6 +514,17 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getBaseFinalRowDisplayPriceExclTax()
     {
+        $children = $this->getDynamicBundleChildren();
+        if ($children !== []) {
+            $sum = 0.0;
+            foreach ($children as $child) {
+                $sum += $this->weeeHelper->isEnabled($this->getStoreId())
+                    ? $child->getBaseRowTotal() + $child->getBaseWeeeTaxAppliedRowAmnt()
+                    : $child->getBaseRowTotal();
+            }
+            return $sum;
+        }
+
         $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
 
         if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
@@ -468,5 +589,103 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             + $this->weeeHelper->getBaseRowWeeeTaxInclTax($item);
 
         return $totalAmount;
+    }
+
+    /**
+     * Quantity used to compute unit from row (row ÷ qty) for Weee-inclusive display.
+     *
+     * @return float
+     */
+    private function getItemQtyForUnitPriceCalculation()
+    {
+        $item = $this->getItem();
+        if ($item instanceof QuoteAbstractItem) {
+            $qty = (float) $item->getQty();
+        } elseif ($item instanceof OrderItem) {
+            $qty = (float) $item->getQtyOrdered();
+        } elseif ($item instanceof InvoiceItem || $item instanceof CreditMemoItem) {
+            $qty = (float) $item->getQty();
+        } else {
+            $qty = 1.0;
+        }
+        return $qty > 0 ? $qty : 1.0;
+    }
+
+    /**
+     * Dynamic bundle children only (fixed bundle keeps row totals on parent).
+     *
+     * @return \Magento\Quote\Model\Quote\Item\AbstractItem[]|\Magento\Sales\Model\Order\Item[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function getDynamicBundleChildren(): array
+    {
+        $item = $this->getItem();
+        if ($item instanceof InvoiceItem || $item instanceof CreditMemoItem) {
+            $item = $item->getOrderItem();
+        }
+        if ($item instanceof QuoteAbstractItem) {
+            if ($item->getProductType() !== BundleProductType::TYPE_CODE
+                || !$item->getHasChildren()
+                || !$item->isChildrenCalculated()) {
+                return [];
+            }
+            $ch = $item->getChildren();
+            return $ch ? iterator_to_array($ch) : [];
+        }
+        if ($item instanceof OrderItem
+            && $item->getProductType() === BundleProductType::TYPE_CODE
+            && $item->isChildrenCalculated()) {
+            $ch = $item->getChildrenItems();
+            return $ch ?: [];
+        }
+        return [];
+    }
+
+    /**
+     * Single visible cart line: align incl. tax row with grand total minus shipping when off by ≤ 2¢.
+     *
+     * @param float $amount
+     * @return float
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    private function reconcileCartRowInclTaxWithQuoteTotal($amount)
+    {
+        $item = $this->getItem();
+        if (!$item instanceof QuoteAbstractItem
+            || $this->getZone() !== PricingRender::ZONE_CART
+            || !$this->weeeHelper->isEnabled($this->getStoreId())
+            || !$this->getIncludeWeeeFlag()) {
+            return $amount;
+        }
+        $quote = $item->getQuote();
+        if (!$quote) {
+            return $amount;
+        }
+        $visible = $quote->getAllVisibleItems();
+        if (count($visible) !== 1 || (int) reset($visible)->getId() !== (int) $item->getId()) {
+            return $amount;
+        }
+        if ($quote->getIsVirtual()) {
+            $shipping = 0.0;
+        } else {
+            $addr = $quote->getShippingAddress();
+            if (!$addr) {
+                return $amount;
+            }
+            $shipping = (float) $addr->getShippingInclTax();
+            if ($shipping <= 0.0001) {
+                $shipping = (float) $addr->getShippingAmount() + (float) $addr->getShippingTaxAmount();
+            }
+        }
+        $expected = (float) $quote->getGrandTotal() - $shipping;
+        if ($expected <= 0) {
+            return $amount;
+        }
+        $diff = abs($expected - $amount);
+        if ($diff > 0.0001 && $diff <= 0.02) {
+            return $expected;
+        }
+        return $amount;
     }
 }

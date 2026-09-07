@@ -10,6 +10,7 @@ namespace Magento\Framework\Indexer\Test\Unit;
 
 use Magento\Framework\Indexer\CacheContext;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CacheContextTest extends TestCase
 {
@@ -25,9 +26,8 @@ class CacheContextTest extends TestCase
 
     /**
      * @param array $tagsData
-     * @param array $expected
-     * @dataProvider getTagsDataProvider
-     */
+     * @param array $expected     */
+    #[DataProvider('getTagsDataProvider')]
     public function testUniqueTags($tagsData, $expected)
     {
         foreach ($tagsData as $tagSet) {

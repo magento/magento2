@@ -32,7 +32,7 @@ class UrlTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_urlResolver = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->_urlResolver = $this->createMock(UrlInterface::class);
         $this->_interpreter = $this->createMock(NamedParams::class);
         $this->_model = new Url($this->_urlResolver, $this->_interpreter);
     }

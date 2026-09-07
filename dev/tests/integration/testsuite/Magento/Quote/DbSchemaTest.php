@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Monolog\Test\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DbSchemaTest extends TestCase
 {
@@ -20,8 +21,8 @@ class DbSchemaTest extends TestCase
      * @param array $columns
      * @param string $indexType
      * @return void
-     * @dataProvider indexDataProvider
      */
+    #[DataProvider('indexDataProvider')]
     public function testIndex(
         string $tableName,
         string $indexName,

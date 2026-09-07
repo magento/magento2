@@ -13,6 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Stomp;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
@@ -63,14 +64,18 @@ class TopologyTest extends TestCase
     }
 
     /**
-     * @dataProvider queueDataProvider
      * @param array $expectedConfig
      */
+    #[DataProvider('queueDataProvider')]
     public function testTopologyInstallation(array $expectedConfig): void
     {
         if ($this->connectionType === 'amqp') {
-            $this->markTestSkipped('STOMP test skipped because AMQP connection is available.
-            This test is STOMP-specific.');
+            $this->assertSame(
+                'amqp',
+                $this->connectionType,
+                'This test is STOMP-only.'
+            );
+            return;
         }
 
         $name = $expectedConfig['name'];

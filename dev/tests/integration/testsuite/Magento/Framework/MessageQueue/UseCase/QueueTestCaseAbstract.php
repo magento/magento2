@@ -81,7 +81,9 @@ class QueueTestCaseAbstract extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        $this->publisherConsumerController->stopConsumers();
+        if ($this->publisherConsumerController !== null) {
+            $this->publisherConsumerController->stopConsumers();
+        }
     }
 
     /**

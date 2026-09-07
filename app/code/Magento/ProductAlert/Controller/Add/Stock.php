@@ -6,7 +6,9 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -15,6 +17,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Controller for notifying about stock.
@@ -22,7 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class Stock extends AddController implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
@@ -32,9 +35,9 @@ class Stock extends AddController implements HttpGetActionInterface
     private $storeManager;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param ProductRepositoryInterface $productRepository
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
@@ -46,19 +49,36 @@ class Stock extends AddController implements HttpGetActionInterface
         $this->productRepository = $productRepository;
         parent::__construct($context, $customerSession);
         $this->storeManager = $storeManager ?: $this->_objectManager
-            ->get(\Magento\Store\Model\StoreManagerInterface::class);
+            ->get(StoreManagerInterface::class);
+    }
+
+    /**
+     * Check if URL is internal
+     *
+     * @param string $url
+     * @return bool
+     * @throws NoSuchEntityException
+     */
+    private function isInternal($url): bool
+    {
+        if ($url === null || strpos($url, 'http') === false) {
+            return false;
+        }
+        $currentStore = $this->storeManager->getStore();
+        return strpos($url, (string) $currentStore->getBaseUrl()) === 0
+            || strpos($url, (string) $currentStore->getBaseUrl(UrlInterface::URL_TYPE_LINK, true)) === 0;
     }
 
     /**
      * Method for adding info about product alert stock.
      *
-     * @return \Magento\Framework\Controller\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $backUrl = $this->getRequest()->getParam(Action::PARAM_NAME_URL_ENCODED);
         $productId = (int)$this->getRequest()->getParam('product_id');
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$backUrl || !$productId) {
             $resultRedirect->setPath('/');
@@ -66,7 +86,7 @@ class Stock extends AddController implements HttpGetActionInterface
         }
 
         try {
-            /* @var $product \Magento\Catalog\Model\Product */
+            /* @var $product Product */
             $product = $this->productRepository->getById($productId);
             $store = $this->storeManager->getStore();
             /** @var \Magento\ProductAlert\Model\Stock $model */
@@ -79,7 +99,9 @@ class Stock extends AddController implements HttpGetActionInterface
             $this->messageManager->addSuccessMessage(__('Alert subscription has been saved.'));
         } catch (NoSuchEntityException $noEntityException) {
             $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
-            $resultRedirect->setUrl($backUrl);
+            $this->isInternal($backUrl)
+                ? $resultRedirect->setUrl($backUrl)
+                : $resultRedirect->setPath('/');
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(

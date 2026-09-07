@@ -51,7 +51,7 @@ class AdminAccountTest extends TestCase
             });
 
         $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)
-            ->getMockForAbstractClass();
+            ->getMock();
 
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',

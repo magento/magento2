@@ -14,6 +14,7 @@ use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sitemap\Model\Config\Source\GenerationMethod;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -65,9 +66,8 @@ class SitemapPluginTest extends TestCase
 
     /**
      * Test that sitemap cron configuration uses standard observer when generation method is standard
-     *
-     * @dataProvider frequencyDataProvider
      */
+    #[DataProvider('frequencyDataProvider')]
     public function testSitemapCronConfigurationWithStandardMethod(string $frequency, string $expectedCronExpr): void
     {
         $this->setConfig('sitemap/generate/generation_method', GenerationMethod::STANDARD);
@@ -95,9 +95,8 @@ class SitemapPluginTest extends TestCase
 
     /**
      * Test that sitemap cron configuration uses batch observer when generation method is batch
-     *
-     * @dataProvider frequencyDataProvider
      */
+    #[DataProvider('frequencyDataProvider')]
     public function testSitemapCronConfigurationWithBatchMethod(string $frequency, string $expectedCronExpr): void
     {
         $this->setConfig('sitemap/generate/generation_method', GenerationMethod::BATCH);

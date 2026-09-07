@@ -223,6 +223,9 @@ class Multiselect extends AbstractElement
         if (in_array((string)$option['value'], $selected)) {
             $html .= ' selected="selected"';
         }
+        if ($option['disabled'] ?? false) {
+            $html .= ' disabled="disabled"';
+        }
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
         if (!empty($option['style'])) {
             $html .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$optionId");

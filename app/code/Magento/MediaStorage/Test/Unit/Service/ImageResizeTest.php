@@ -555,4 +555,136 @@ class ImageResizeTest extends TestCase
 
         $this->service->resizeFromImageName($this->testfilename);
     }
+
+    public function testResizeFromImageNameSkipsNonMatchingCacheFileName(): void
+    {
+        $this->databaseMock->expects($this->atLeastOnce())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('isFile')
+            ->with($this->testfilepath)
+            ->willReturn(true);
+        $this->themeCollectionMock->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn(
+                [new DataObject(['id' => '0'])]
+            );
+        $this->themeCustomizationConfigMock->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn(
+                ['0' => []]
+            );
+        $this->imageFactoryMock->expects($this->never())
+            ->method('create');
+
+        $this->service->resizeFromImageName(
+            $this->testfilename,
+            false,
+            'catalog/product/cache/otherhash/w/t/image.jpg'
+        );
+    }
+
+    public function testResizeFromImageNameResizesMatchingCacheFileName(): void
+    {
+        $this->databaseMock->expects($this->atLeastOnce())
+            ->method('checkDbUsage')
+            ->willReturn(false);
+        $this->mediaDirectoryMock->expects($this->exactly(2))
+            ->method('isFile')
+            ->with($this->testfilepath)
+            ->willReturnOnConsecutiveCalls(true, false);
+        $this->themeCollectionMock->expects($this->once())
+            ->method('loadRegisteredThemes')
+            ->willReturn(
+                [new DataObject(['id' => '0'])]
+            );
+        $this->themeCustomizationConfigMock->expects($this->once())
+            ->method('getStoresByThemes')
+            ->willReturn(
+                ['0' => []]
+            );
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->service->resizeFromImageName(
+            $this->testfilename,
+            false,
+            'image.jpg'
+        );
+    }
+
+    public function testResizeFromImageNameWithMultipleViewImagesOnlyResizesMatchingCacheFileName(): void
+    {
+        $smallImagePath = '/pub/media/catalog/product/cache/smallhash/w/t/image.jpg';
+        $largeImagePath = '/pub/media/catalog/product/cache/largehash/w/t/image.jpg';
+        $onlyCacheFileName = 'catalog/product/cache/smallhash/w/t/image.jpg';
+
+        $smallAssetMock = $this->createMock(AssetImage::class);
+        $smallAssetMock->method('getPath')->willReturn($smallImagePath);
+        $largeAssetMock = $this->createMock(AssetImage::class);
+        $largeAssetMock->method('getPath')->willReturn($largeImagePath);
+
+        $viewMock = $this->createMock(View::class);
+        $viewMock->method('getMediaEntities')->willReturn([
+            'product_small_image' => ['type' => 'small_image', 'width' => 75, 'height' => 75],
+            'product_base_image' => ['type' => 'image', 'width' => 265, 'height' => 265],
+        ]);
+        $viewConfigMock = $this->createMock(ViewConfig::class);
+        $viewConfigMock->method('getViewConfig')->willReturn($viewMock);
+
+        $imageParams = [
+            'keep_aspect_ratio' => null,
+            'keep_frame' => null,
+            'keep_transparency' => null,
+            'constrain_only' => null,
+            'background' => null,
+            'quality' => null,
+        ];
+        $paramsBuilderMock = $this->createMock(ParamsBuilder::class);
+        $paramsBuilderMock->method('build')->willReturnOnConsecutiveCalls(
+            array_merge($imageParams, ['image_width' => 75, 'image_height' => 75]),
+            array_merge($imageParams, ['image_width' => 265, 'image_height' => 265])
+        );
+
+        $assetImageFactoryMock = $this->createMock(AssetImageFactory::class);
+        $assetImageFactoryMock->method('create')->willReturnOnConsecutiveCalls(
+            $smallAssetMock,
+            $largeAssetMock
+        );
+
+        $this->databaseMock->method('checkDbUsage')->willReturn(false);
+        $this->mediaDirectoryMock->method('isFile')->willReturnCallback(
+            fn (string $path): bool => $path !== $smallImagePath
+        );
+        $this->mediaDirectoryMock->method('getRelativePath')->willReturn($onlyCacheFileName);
+        $this->themeCollectionMock->method('loadRegisteredThemes')->willReturn(
+            [new DataObject(['id' => '0'])]
+        );
+        $this->themeCustomizationConfigMock->method('getStoresByThemes')->willReturn(['0' => []]);
+
+        $imageMock = $this->createMock(Image::class);
+        $this->imageFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $service = new ImageResize(
+            $this->appStateMock,
+            $this->imageConfigMock,
+            $this->productImageMock,
+            $this->imageFactoryMock,
+            $paramsBuilderMock,
+            $viewConfigMock,
+            $assetImageFactoryMock,
+            $this->themeCustomizationConfigMock,
+            $this->themeCollectionMock,
+            $this->filesystemMock,
+            $this->databaseMock,
+            $this->storeManager
+        );
+
+        $service->resizeFromImageName($this->testfilename, false, $onlyCacheFileName);
+    }
 }

@@ -1378,10 +1378,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function getAllowedMethods()
     {
-        $allowed = explode(',', $this->getConfigData('allowed_methods') ?? '');
         $arr = [];
-        foreach ($allowed as $k) {
-            $arr[$k] = $this->getCode('method', $k);
+        if ($this->isXmlRequest()) {
+            $allowed = explode(',', $this->getConfigData('allowed_methods') ?? '');
+
+            foreach ($allowed as $k) {
+                $arr[$k] = $this->getCode('method', $k);
+            }
+        } else {
+            $allowed = explode(',', $this->getConfigData('rest_allowed_methods') ?? '');
+
+            foreach ($allowed as $k) {
+                $arr[$k] = $this->getCode('rest_method', $k);
+            }
         }
 
         return $arr;
@@ -2374,14 +2383,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (empty($packages)) {
             $dividedWeight = $this->getTotalNumOfBoxes($totalWeight);
             for ($i=0; $i < $this->_numBoxes; $i++) {
+                $packages[$i]['weight'] = $dividedWeight;
                 $packages[$i]['weight_pounds'] = floor($dividedWeight);
                 $ounces = ($dividedWeight - floor($dividedWeight)) * self::OUNCES_POUND;
                 $packages[$i]['weight_ounces'] = sprintf('%.' . self::$weightPrecision . 'f', $ounces);
             }
         } else {
             foreach ($packages as $key => $package) {
-                $packages[$key]['weight_pounds'] = floor($package['weight']);
-                $ounces = ($package['weight'] - floor($package['weight'])) * self::OUNCES_POUND;
+                $weightInPounds = (float) ($package['weight'] ?? 0);
+                $packages[$key]['weight'] = $weightInPounds;
+                $packages[$key]['weight_pounds'] = floor($weightInPounds);
+                $ounces = ($weightInPounds - floor($weightInPounds)) * self::OUNCES_POUND;
                 $packages[$key]['weight_ounces'] = sprintf('%.' . self::$weightPrecision . 'f', $ounces);
             }
         }

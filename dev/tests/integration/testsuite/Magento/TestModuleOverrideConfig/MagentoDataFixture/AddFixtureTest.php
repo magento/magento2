@@ -9,6 +9,7 @@ namespace Magento\TestModuleOverrideConfig\MagentoDataFixture;
 
 use Magento\TestModuleOverrideConfig\AbstractOverridesTest;
 use Magento\TestModuleOverrideConfig\Model\FixtureCallStorage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class checks that magentoDataFixtures can be added using override config
@@ -33,11 +34,10 @@ class AddFixtureTest extends AbstractOverridesTest
     /**
      * Checks that fixtures added in all nodes successfully applied
      *
-     * @dataProvider addedFixturesProvider
-     *
      * @param array $fixtures
      * @return void
      */
+    #[DataProvider('addedFixturesProvider')]
     public function testAddFixtures(array $fixtures): void
     {
         foreach ($fixtures as $scope => $fixture) {

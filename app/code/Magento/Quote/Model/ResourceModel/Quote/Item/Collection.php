@@ -393,12 +393,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
         $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
         $existingProductsIds = $productCollection->getAllIds();
         $absentProductsIds = array_unique(array_diff($this->_productIds, $existingProductsIds));
-        // Remove not existing products from items collection
         if (!empty($absentProductsIds)) {
-            foreach ($absentProductsIds as $productIdToExclude) {
-                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
-                $quoteItem = $this->getItemByColumnValue('product_id', $productIdToExclude);
-                $this->removeItemByKey($quoteItem->getId());
+            $absentProductsLookup = array_flip($absentProductsIds);
+            $quoteItems = $this->getItems();
+            foreach ($quoteItems as $quoteItem) {
+                if (isset($absentProductsLookup[(int)$quoteItem->getProductId()])) {
+                    $this->removeItemByKey($quoteItem->getId());
+                }
             }
         }
     }

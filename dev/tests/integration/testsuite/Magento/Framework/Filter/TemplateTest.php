@@ -8,6 +8,7 @@ namespace Magento\Framework\Filter;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,8 +25,8 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $results
      * @param array $value
-     * @dataProvider getFilterForDataProvider
      */
+    #[DataProvider('getFilterForDataProvider')]
     public function testFilterFor($results, $value)
     {
         $this->templateFilter->setVariables(['order' => $this->getOrder(), 'things' => $this->getThings()]);

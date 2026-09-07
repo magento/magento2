@@ -29,7 +29,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated 102.0.0
+     * @deprecated 102.0.0 Not used; constructor argument retained for backward compatibility
+     * @see \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
@@ -112,7 +113,8 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      * Return wishlist widget options
      *
      * @return array
-     * @deprecated 101.0.1
+     * @deprecated 101.0.1 Use Wishlist module AddTo block for wishlist-specific options
+     * @see \Magento\Wishlist\Block\Catalog\Product\View\AddTo\Wishlist::getWishlistOptions()
      */
     public function getWishlistOptions()
     {
@@ -270,24 +272,25 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
     }
 
     /**
-     * Get default qty - either as preconfigured, or as 1.
-     *
-     * Also restricts it by minimal qty.
+     * Get default qty — preconfigured value if higher, else positive minimum sale qty, else 1.
      *
      * @param null|\Magento\Catalog\Model\Product $product
      * @return int|float
      */
     public function getProductDefaultQty($product = null)
     {
-        if (!$product) {
-            $product = $this->getProduct();
+        $product = $product ?: $this->getProduct();
+
+        $minSaleQty = $this->getMinimalQty($product);
+        if ($minSaleQty !== null && (float) $minSaleQty > 0) {
+            $qty = (float) $minSaleQty;
+        } else {
+            $qty = 1.0;
         }
 
-        $qty = $this->getMinimalQty($product);
-        $config = $product->getPreconfiguredValues();
-        $configQty = $config->getQty();
-        if ($configQty > $qty) {
-            $qty = $configQty;
+        $configQty = $product->getPreconfiguredValues()->getQty();
+        if (is_numeric($configQty)) {
+            $qty = max($qty, (float) $configQty);
         }
 
         return $qty;

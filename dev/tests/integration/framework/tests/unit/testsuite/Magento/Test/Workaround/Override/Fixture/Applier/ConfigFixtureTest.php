@@ -9,6 +9,7 @@ namespace Magento\Test\Workaround\Override\Fixture\Applier;
 
 use Magento\TestFramework\Workaround\Override\Fixture\Applier\ConfigFixture;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Provide tests for \Magento\TestFramework\Workaround\Override\Fixture\Applier\ConfigFixture
@@ -29,12 +30,11 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider annotationsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return  void
      */
+    #[DataProvider('annotationsProvider')]
     public function testIsFixtureMatch(string $fixture, array $attributes): void
     {
         $this->assertTrue($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -140,12 +140,11 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider wrongRecordsProvider
-     *
      * @param string $fixture
      * @param array $attributes
      * @return void
      */
+    #[DataProvider('wrongRecordsProvider')]
     public function testFixtureDoesNotMatch(string $fixture, array $attributes): void
     {
         $this->assertFalse($this->invokeIsFixtureMatchMethod($attributes, $fixture));
@@ -224,12 +223,11 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider initFixtureProvider
-     *
      * @param array $attributes
      * @param string $expectedValue
      * @return void
      */
+    #[DataProvider('initFixtureProvider')]
     public function testInitConfigFixture(array $attributes, string $expectedValue): void
     {
         $reflectionMethod = new \ReflectionMethod(ConfigFixture::class, 'initConfigFixture');
@@ -292,13 +290,12 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider replaceFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('replaceFixturesProvider')]
     public function testReplaceFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -333,13 +330,12 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider addFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('addFixturesProvider')]
     public function testAddFixture(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);
@@ -397,13 +393,12 @@ class ConfigFixtureTest extends TestCase
     }
 
     /**
-     * @dataProvider removeFixturesProvider
-     *
      * @param array $existingFixtures
      * @param array $config
      * @param array $expectedOrder
      * @return void
      */
+    #[DataProvider('removeFixturesProvider')]
     public function testRemoveFixtures(array $existingFixtures, array $config, array $expectedOrder): void
     {
         $fixtures = $this->processApply($existingFixtures, $config);

@@ -27,9 +27,7 @@ class ActionPoolTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManager = new ObjectManager($this);
 
         $entityType = 'Entity_Test';

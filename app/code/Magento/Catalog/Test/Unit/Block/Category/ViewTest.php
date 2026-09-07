@@ -22,9 +22,10 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Title;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 /**
  * Unit test for Category View Block
@@ -155,10 +156,10 @@ class ViewTest extends TestCase
         $breadCrumbs = $this->createMock(Breadcrumbs::class);
         $title = $this->createMock(Title::class);
         $abstractBlockMock = $this->createMock(AbstractBlock::class);
-        $category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getMetaTitle', 'getMetaDescription', 'getMetaKeywords'])
-            ->getMock();
+        $category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getMetaTitle', 'getMetaDescription', 'getMetaKeywords']
+        );
 
         $layoutMock->expects($this->once())
             ->method('createBlock')
@@ -230,15 +231,14 @@ class ViewTest extends TestCase
         $expectedHtml = '<div>cms block</div>';
         $layoutMock = $this->createMock(LayoutInterface::class);
         $title = $this->createMock(Title::class);
-        $abstractBlockMock = $this->getMockBuilder(AbstractBlock::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['toHtml'])
-            ->addMethods(['setBlockId'])
-            ->getMockForAbstractClass();
-        $category = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getLandingPage', 'getMetaTitle'])
-            ->getMock();
+        $abstractBlockMock = $this->createPartialMockWithReflection(
+            AbstractBlock::class,
+            ['toHtml', 'setBlockId']
+        );
+        $category = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getLandingPage', 'getMetaTitle']
+        );
 
         $category->expects($this->once())
             ->method('getMetaTitle')
@@ -286,11 +286,11 @@ class ViewTest extends TestCase
      * Unit test for isProductMode()
      *
      * @covers \Magento\Catalog\Block\Category\View::isProductMode()
-     * @dataProvider isProductModeDataProvider
      * @param string $mode
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('isProductModeDataProvider')]
     public function testIsProductMode(string $mode, bool $expectedResult): void
     {
         $currentCategoryMock = $this->createMock(Category::class);
@@ -303,11 +303,11 @@ class ViewTest extends TestCase
      * Unit test for isMixedMode()
      *
      * @covers \Magento\Catalog\Block\Category\View::isMixedMode()
-     * @dataProvider isMixedModeDataProvider
      * @param string $mode
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('isMixedModeDataProvider')]
     public function testIsMixedMode(string $mode, bool $expectedResult): void
     {
         $currentCategoryMock = $this->createMock(Category::class);
@@ -404,11 +404,11 @@ class ViewTest extends TestCase
      * Test isContentMode() returns expected result, when category display mode is set to different values
      *
      * @covers \Magento\Catalog\Block\Category\View::isContentMode()
-     * @dataProvider displayModeDataProvider
      * @param string $mode
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('displayModeDataProvider')]
     public function testIsContentModeForAllDisplayModes($mode, $expectedResult): void
     {
         $categoryMock = $this->getMockBuilder(Category::class)
@@ -441,24 +441,23 @@ class ViewTest extends TestCase
      * anchor/non-anchor category with/without applied filters
      *
      * @covers \Magento\Catalog\Block\Category\View::isContentMode()
-     * @dataProvider pageAnchorDataProvider
      * @param bool $isAnchor
      * @param bool $hasFilter
      * @param bool $hasState
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('pageAnchorDataProvider')]
     public function testIsContentModeForDisplayModePageCombinations(
         bool $isAnchor,
         bool $hasFilter,
         bool $hasState,
         bool $expectedResult
     ): void {
-        $categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getDisplayMode'])
-            ->addMethods(['getIsAnchor'])
-            ->getMock();
+        $categoryMock = $this->createPartialMockWithReflection(
+            Category::class,
+            ['getDisplayMode', 'getIsAnchor']
+        );
         $catalogLayerMock = $this->getMockBuilder(Layer::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getState'])

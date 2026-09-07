@@ -15,6 +15,7 @@ use Magento\Framework\Cache\Frontend\Decorator\Bare;
 use Magento\Framework\Cache\Frontend\Decorator\TagScope;
 use Magento\Framework\Cache\FrontendInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class CacheTest extends TestCase
@@ -38,18 +39,15 @@ class CacheTest extends TestCase
     {
         $this->_initCacheTypeMocks();
 
-        $this->_cacheFrontendMock = $this->getMockForAbstractClass(
-            FrontendInterface::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            ['clean']
-        );
+        $this->_cacheFrontendMock = $this->createMock(FrontendInterface::class);
+        $this->_cacheFrontendMock->expects($this->any())->method('clean')->willReturn(true);
 
         $frontendPoolMock = $this->createMock(Pool::class);
-        $frontendPoolMock->expects($this->any())->method('valid')->will($this->onConsecutiveCalls(true, false));
+        $callCount = 0;
+        $frontendPoolMock->expects($this->any())->method('valid')->willReturnCallback(function () use (&$callCount) {
+            $callCount++;
+            return $callCount === 1;
+        });
 
         $frontendPoolMock->expects(
             $this->any()
@@ -85,7 +83,7 @@ class CacheTest extends TestCase
                 ->onlyMethods(['clean'])
                 ->setConstructorArgs(
                     [
-                        $this->getMockForAbstractClass(FrontendInterface::class), '
+                        $this->createMock(FrontendInterface::class), '
                         FIXTURE_TAG'
                     ]
                 )
@@ -137,7 +135,6 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @dataProvider saveDataProvider
      * @param string|mixed $inputData
      * @param string $inputId
      * @param array $inputTags
@@ -145,6 +142,7 @@ class CacheTest extends TestCase
      * @param string $expectedId
      * @param array $expectedTags
      */
+    #[DataProvider('saveDataProvider')]
     public function testSave($inputData, $inputId, $inputTags, $expectedData, $expectedId, $expectedTags)
     {
         $this->_cacheFrontendMock->expects(
@@ -188,9 +186,9 @@ class CacheTest extends TestCase
     }
 
     /**
-     * @dataProvider successFailureDataProvider
      * @param bool $result
      */
+    #[DataProvider('successFailureDataProvider')]
     public function testRemove($result)
     {
         $this->_cacheFrontendMock->expects(

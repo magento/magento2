@@ -8,6 +8,7 @@ namespace Magento\Store\App\Request;
 use Magento\Framework\App\RequestInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PathInfoProcessorTest extends TestCase
 {
@@ -24,9 +25,9 @@ class PathInfoProcessorTest extends TestCase
     /**
      * @covers \Magento\Store\App\Request\PathInfoProcessor::process
      * @magentoConfigFixture web/url/use_store 1
-     * @dataProvider notValidStoreCodeDataProvider
      * @param string $pathInfo
      */
+    #[DataProvider('notValidStoreCodeDataProvider')]
     public function testProcessNotValidStoreCode(string $pathInfo)
     {
         $request = Bootstrap::getObjectManager()->create(RequestInterface::class);

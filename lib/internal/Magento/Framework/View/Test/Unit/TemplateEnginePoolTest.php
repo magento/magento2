@@ -32,7 +32,7 @@ class TemplateEnginePoolTest extends TestCase
 
     public function testGet()
     {
-        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
+        $engine = $this->createMock(TemplateEngineInterface::class);
         $this->_factory->expects($this->once())->method('create')->with('test')->willReturn($engine);
         $this->assertSame($engine, $this->_model->get('test'));
         // Make sure factory is invoked only once and the same instance is returned afterwards

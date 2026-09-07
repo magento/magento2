@@ -9,6 +9,7 @@ namespace Magento\Framework\Filesystem\Test\Unit\Driver;
 
 use Magento\Framework\Filesystem\Driver\File;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class FileTest extends TestCase
 {
@@ -29,12 +30,11 @@ class FileTest extends TestCase
 
     /**
      * Test for getAbsolutePath method.
-     *
-     * @dataProvider dataProviderForTestGetAbsolutePath
-     * @param string $basePath
+     *     * @param string $basePath
      * @param string $path
      * @param string $expected
      */
+    #[DataProvider('dataProviderForTestGetAbsolutePath')]
     public function testGetAbsolutePath(string $basePath, string $path, string $expected)
     {
         $file = new File();
@@ -60,12 +60,11 @@ class FileTest extends TestCase
 
     /**
      * Test for getRelativePath method.
-     *
-     * @dataProvider dataProviderForTestGetRelativePath
-     * @param string $basePath
+     *     * @param string $basePath
      * @param string $path
      * @param string $expected
      */
+    #[DataProvider('dataProviderForTestGetRelativePath')]
     public function testGetRelativePath(string $basePath, string $path, string $expected)
     {
         $file = new File();
@@ -91,11 +90,10 @@ class FileTest extends TestCase
 
     /**
      * Test for getRealPathSafety method.
-     *
-     * @dataProvider dataProviderForTestGetRealPathSafety
-     * @param string $path
+     *     * @param string $path
      * @param string $expected
      */
+    #[DataProvider('dataProviderForTestGetRealPathSafety')]
     public function testGetRealPathSafety(string $path, string $expected)
     {
         $file = new File();

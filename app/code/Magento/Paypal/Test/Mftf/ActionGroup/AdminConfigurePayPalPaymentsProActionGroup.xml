@@ -20,7 +20,8 @@
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
         <waitForElementClickable selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForConfigureButtonToBeClicked"/>
         <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
-        <scrollTo selector="{{PayPalPaymentsProConfigSection.paymentsAdvanced(countryCode)}}" stepKey="scrollToConfigure"/>
+        <scrollTo selector="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="scrollToConfigure"/>
+        <moveMouseOver selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="moveMouseAwayFromToolbar"/>
         <waitForElementClickable selector="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="waitForPayPalPaymentsProConfigureBtn"/>
         <click selector ="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
         <scrollTo selector="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>

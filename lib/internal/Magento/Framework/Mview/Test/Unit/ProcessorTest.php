@@ -41,7 +41,7 @@ class ProcessorTest extends TestCase
      */
     protected function getViews($method)
     {
-        $viewMock = $this->getMockForAbstractClass(ViewInterface::class);
+        $viewMock = $this->createMock(ViewInterface::class);
         $viewMock->expects($this->exactly(2))->method($method);
         return [$viewMock, $viewMock];
     }

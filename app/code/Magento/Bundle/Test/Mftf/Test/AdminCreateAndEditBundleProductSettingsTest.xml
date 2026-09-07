@@ -44,6 +44,9 @@
                 <argument name="indices" value=""/>
             </actionGroup>
 
+            <!-- Clear filters on products grid -->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
+
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

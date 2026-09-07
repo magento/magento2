@@ -16,6 +16,7 @@ use Magento\Catalog\Model\ProductLink\Link;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -90,7 +91,6 @@ class LinksTest extends TestCase
     /**
      * Test edit and remove simple related, up-sells, cross-sells products in an existing product
      *
-     * @dataProvider editDeleteRelatedUpSellCrossSellProductsProvider
      * @magentoDataFixture Magento/Catalog/_files/products.php
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
@@ -98,6 +98,7 @@ class LinksTest extends TestCase
      * @param array $data
      * @return void
      */
+    #[DataProvider('editDeleteRelatedUpSellCrossSellProductsProvider')]
     public function testEditRemoveRelatedUpSellCrossSellProducts(array $data): void
     {
         /** @var ProductInterface|Product $product */

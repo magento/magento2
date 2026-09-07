@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
@@ -53,27 +53,20 @@ class GetDirectoryTree
     }
 
     /**
-     * Return directory folder structure in array
+     * Return the directory folder structure in an array
      *
+     * @param string|null $path
+     * @param bool $loadWholeTree
      * @return array
      * @throws ValidatorException
      */
-    public function execute(): array
+    public function execute(?string $path = null, bool $loadWholeTree = true): array
     {
-        $tree = [
-            'name' => 'root',
-            'path' => '/',
-            'children' => []
-        ];
-        $directories = $this->getDirectories();
-        foreach ($directories as $idx => &$node) {
-            $node['children'] = [];
-            $result = $this->findParent($node, $tree);
-            $parent = &$result['treeNode'];
-
-            $parent['children'][] = &$directories[$idx];
+        if ($loadWholeTree) {
+            return $this->getDirectories();
         }
-        return $tree['children'];
+
+        return $this->getDirectoryNodesForPath($path);
     }
 
     /**
@@ -86,34 +79,107 @@ class GetDirectoryTree
     {
         $directories = [];
 
-        /** @var Read $mediaDirectory */
+        /** @var ReadInterface $mediaDirectory */
         $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
         if ($mediaDirectory->isDirectory()) {
-            $imageFolderPaths = $this->coreConfig->getValue(
-                self::XML_PATH_MEDIA_GALLERY_IMAGE_FOLDERS,
-                ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-            );
-            sort($imageFolderPaths);
-
-            foreach ($imageFolderPaths as $imageFolderPath) {
-                $imageDirectory = $this->filesystem->getDirectoryReadByPath(
-                    $mediaDirectory->getAbsolutePath($imageFolderPath)
-                );
-                if ($imageDirectory->isDirectory()) {
-                    $directories[] = $this->getDirectoryData($imageFolderPath);
-                    foreach ($imageDirectory->readRecursively() as $path) {
-                        if ($imageDirectory->isDirectory($path)) {
-                            $directories[] = $this->getDirectoryData(
-                                $mediaDirectory->getRelativePath($imageDirectory->getAbsolutePath($path))
-                            );
-                        }
-                    }
-                }
+            foreach ($this->getAllowedDirectoryPaths($mediaDirectory) as $imageFolderPath) {
+                $directories[] = $this->buildDirectoryNode($mediaDirectory, $imageFolderPath);
             }
         }
 
         return $directories;
+    }
+
+    /**
+     * Return directory nodes for a specific path (or roots when path is empty).
+     *
+     * @param string|null $path
+     * @return array
+     * @throws ValidatorException
+     */
+    private function getDirectoryNodesForPath(?string $path): array
+    {
+        $nodes = [];
+
+        /** @var ReadInterface $mediaDirectory */
+        $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        if (!$mediaDirectory->isDirectory()) {
+            return $nodes;
+        }
+
+        if ($path === null || $path === '') {
+            foreach ($this->getAllowedDirectoryPaths($mediaDirectory) as $rootPath) {
+                $nodes[] = $this->getDirectoryDataForLazyLoad($mediaDirectory, $rootPath);
+            }
+
+            return $nodes;
+        }
+
+        $normalizedPath = trim($path, '/');
+        if (!$this->isPathWithinAllowedRoots($normalizedPath, $mediaDirectory)) {
+            return $nodes;
+        }
+
+        if (!$mediaDirectory->isDirectory($normalizedPath)) {
+            return $nodes;
+        }
+
+        foreach ($this->getSubdirectoryPaths($mediaDirectory, $normalizedPath) as $subdirectoryPath) {
+            $nodes[] = $this->getDirectoryDataForLazyLoad($mediaDirectory, $subdirectoryPath);
+        }
+
+        return $nodes;
+    }
+    /**
+     * Check whether a path is inside the configured allowed roots.
+     *
+     * @param string $path
+     * @param ReadInterface $mediaDirectory
+     * @return bool
+     */
+    private function isPathWithinAllowedRoots(string $path, ReadInterface $mediaDirectory): bool
+    {
+        foreach ($this->getAllowedDirectoryPaths($mediaDirectory) as $allowedRoot) {
+            if ($path === $allowedRoot || strpos($path, $allowedRoot . '/') === 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return sorted and existing top-level media gallery paths.
+     *
+     * @param ReadInterface $mediaDirectory
+     * @return string[]
+     */
+    private function getAllowedDirectoryPaths(ReadInterface $mediaDirectory): array
+    {
+        $imageFolderPaths = $this->coreConfig->getValue(
+            self::XML_PATH_MEDIA_GALLERY_IMAGE_FOLDERS,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+        );
+
+        if (!is_array($imageFolderPaths)) {
+            return [];
+        }
+
+        sort($imageFolderPaths);
+
+        $allowedDirectoryPaths = [];
+        foreach ($imageFolderPaths as $imageFolderPath) {
+            if (is_string($imageFolderPath)
+                && $imageFolderPath !== ''
+                && !$this->isPathExcluded->execute($imageFolderPath)
+                && $mediaDirectory->isDirectory($imageFolderPath)
+            ) {
+                $allowedDirectoryPaths[] = $imageFolderPath;
+            }
+        }
+
+        return $allowedDirectoryPaths;
     }
 
     /**
@@ -135,39 +201,78 @@ class GetDirectoryTree
     }
 
     /**
-     * Find parent directory
+     * Build directory tree recursively for a root folder.
      *
-     * @param array $node
-     * @param array $treeNode
-     * @param int $level
+     * @param ReadInterface $mediaDirectory
+     * @param string $path
      * @return array
      */
-    private function findParent(array &$node, array &$treeNode, int $level = 0): array
+    private function buildDirectoryNode(ReadInterface $mediaDirectory, string $path): array
     {
-        $nodePathLength = count($node['path_array']);
-        $treeNodeParentLevel = $nodePathLength - 1;
+        $node = $this->getDirectoryData($path);
+        $node['children'] = [];
 
-        $result = ['treeNode' => &$treeNode];
-
-        if ($nodePathLength <= 1 || $level > $treeNodeParentLevel) {
-            return $result;
+        foreach ($this->getSubdirectoryPaths($mediaDirectory, $path) as $subdirectoryPath) {
+            $node['children'][] = $this->buildDirectoryNode($mediaDirectory, $subdirectoryPath);
         }
 
-        foreach ($treeNode['children'] as &$tnode) {
-            $tNodePathLength = count($tnode['path_array']);
-            $found = false;
-            while ($level < $tNodePathLength) {
-                $found = $node['path_array'][$level] === $tnode['path_array'][$level];
-                if ($found) {
-                    $level ++;
-                } else {
-                    break;
-                }
-            }
-            if ($found) {
-                return $this->findParent($node, $tnode, $level);
+        return $node;
+    }
+
+    /**
+     * Build jstree node for on-demand loading.
+     *
+     * @param ReadInterface $mediaDirectory
+     * @param string $path
+     * @return array
+     */
+    private function getDirectoryDataForLazyLoad(ReadInterface $mediaDirectory, string $path): array
+    {
+        $node = $this->getDirectoryData($path);
+        $node['children'] = $this->hasSubdirectories($mediaDirectory, $path);
+
+        return $node;
+    }
+
+    /**
+     * Return sorted subdirectories for a given folder.
+     *
+     * @param ReadInterface $mediaDirectory
+     * @param string $path
+     * @return string[]
+     * @throws ValidatorException
+     */
+    private function getSubdirectoryPaths(ReadInterface $mediaDirectory, string $path): array
+    {
+        $subdirectories = [];
+
+        foreach ($mediaDirectory->read($path) as $entryPath) {
+            if ($mediaDirectory->isDirectory($entryPath) && !$this->isPathExcluded->execute($entryPath)) {
+                $subdirectories[] = $entryPath;
             }
         }
-        return $result;
+
+        sort($subdirectories);
+
+        return $subdirectories;
+    }
+
+    /**
+     * Check whether path has at least one visible subdirectory.
+     *
+     * @param ReadInterface $mediaDirectory
+     * @param string $path
+     * @return bool
+     * @throws ValidatorException
+     */
+    private function hasSubdirectories(ReadInterface $mediaDirectory, string $path): bool
+    {
+        foreach ($mediaDirectory->read($path) as $entryPath) {
+            if ($mediaDirectory->isDirectory($entryPath) && !$this->isPathExcluded->execute($entryPath)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

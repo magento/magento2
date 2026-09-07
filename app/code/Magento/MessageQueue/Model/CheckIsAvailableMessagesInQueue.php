@@ -44,18 +44,10 @@ class CheckIsAvailableMessagesInQueue
         if ($queue instanceof CountableQueueInterface) {
             return $queue->count() > 0;
         }
-        if ($connectionName === 'stomp') {
-            $queue->subscribeQueue();
-            $message = $queue->readMessage();
-            if ($message) {
-                return true;
-            }
-        } else {
-            $message = $queue->dequeue();
-            if ($message) {
-                $queue->reject($message);
-                return true;
-            }
+        $message = $queue->dequeue();
+        if ($message) {
+            $queue->reject($message);
+            return true;
         }
         return false;
     }

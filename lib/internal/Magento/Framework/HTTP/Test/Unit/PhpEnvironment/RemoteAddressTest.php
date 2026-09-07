@@ -11,6 +11,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @see RemoteAddress
@@ -40,9 +41,8 @@ class RemoteAddressTest extends TestCase
      * @param bool $ipToLong
      * @param string[]|null $trustedProxies
      *
-     * @return void
-     * @dataProvider getRemoteAddressProvider
-     */
+     * @return void     */
+    #[DataProvider('getRemoteAddressProvider')]
     public function testGetRemoteAddress(
         array $alternativeHeaders,
         array $serverValueMap,

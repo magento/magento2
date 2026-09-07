@@ -31,5 +31,8 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Delete')}}" stepKey="clickDeleteAction"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmProductDelete"/>
+        <waitForPageLoad stepKey="waitForProductDelete"/>
+        <click selector="{{AdminProductFiltersSection.filtersClear}}" stepKey="clearFilters"/>
+        <waitForPageLoad stepKey="waitForFiltersClear"/>
     </actionGroup>
 </actionGroups>

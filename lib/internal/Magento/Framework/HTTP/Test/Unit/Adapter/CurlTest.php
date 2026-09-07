@@ -10,9 +10,13 @@ namespace Magento\Framework\HTTP\Test\Unit\Adapter;
 use Magento\Framework\HTTP\Adapter\Curl;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class CurlTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Curl
      */
@@ -25,9 +29,10 @@ class CurlTest extends TestCase
 
     protected function setUp(): void
     {
-        self::$curlMock = $this->getMockBuilder(\StdClass::class)
-            ->addMethods(['setopt', 'exec'])
-            ->getMock();
+        self::$curlMock = $this->createPartialMockWithReflection(
+            \StdClass::class,
+            ['setopt', 'exec']
+        );
         require_once __DIR__ . '/_files/curl_exec_mock.php';
         $this->model = new Curl();
     }
@@ -38,9 +43,8 @@ class CurlTest extends TestCase
     }
 
     /**
-     * @param string $response
-     * @dataProvider readDataProvider
-     */
+     * @param string $response     */
+    #[DataProvider('readDataProvider')]
     public function testRead($response)
     {
         self::$curlMock->expects($this->once())
@@ -64,9 +68,8 @@ class CurlTest extends TestCase
      * @param array $headers
      * @param string $body
      * @param array $setopt
-     * @return void
-     * @dataProvider writeDataProvider
-     */
+     * @return void     */
+    #[DataProvider('writeDataProvider')]
     public function testWrite(
         string $method,
         string $url,

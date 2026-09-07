@@ -25,6 +25,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\Constraint\Constraint;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 
 /**
@@ -65,7 +66,7 @@ class ControllerAbstractTest extends AbstractController
         $testObjectManager = new ObjectManager($this);
 
         $this->messageManager = $this->createMock(Manager::class);
-        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -80,7 +81,7 @@ class ControllerAbstractTest extends AbstractController
                 return json_decode($serializedData, true);
             }
         );
-        $this->interpretationStrategyMock = $this->getMockForAbstractClass(InterpretationStrategyInterface::class);
+        $this->interpretationStrategyMock = $this->createMock(InterpretationStrategyInterface::class);
         $this->interpretationStrategyMock->expects($this->any())
             ->method('interpret')
             ->willReturnCallback(
@@ -205,8 +206,8 @@ class ControllerAbstractTest extends AbstractController
      * @param string|null $messageTypeFilter
      *
      * @return void
-     * @dataProvider assertSessionMessagesDataProvider
      */
+    #[DataProvider('assertSessionMessagesDataProvider')]
     public function testAssertSessionMessagesSuccess(array $expectedMessages, ?string $messageTypeFilter): void
     {
         $this->addSessionMessages();

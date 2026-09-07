@@ -1,4 +1,4 @@
-# Copyright 2025 Adobe
+# Copyright 2018 Adobe
 # All Rights Reserved.
 
 type Query {
@@ -93,7 +93,7 @@ interface ProductLinksInterface @typeResolver(class: "Magento\\CatalogGraphQl\\M
 interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "Contains fields that are common to all types of products.") {
     id: Int @deprecated(reason: "Use the `uid` field instead.") @doc(description: "The ID number assigned to the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToId")
     uid: ID! @doc(description: "The unique ID for a `ProductInterface` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\EntityIdToUid")
-    name: String @doc(description: "The product name. Customers use this name to identify the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductName")
+    name: String @doc(description: "The product name. Customers use this name to identify the product.")
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: ComplexTextValue @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
     short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")

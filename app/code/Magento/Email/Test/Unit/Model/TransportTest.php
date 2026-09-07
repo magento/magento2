@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Mail\EmailMessage;
 use Magento\Framework\Mail\EmailMessageInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -167,10 +168,10 @@ class TransportTest extends TestCase
      * @param string|null $fromEmail
      * @param string|null $expectedSender
      * @return void
-     * @dataProvider setReturnPathDataProvider
      * @covers ::__construct
      * @covers ::setReturnPath
      */
+    #[DataProvider('setReturnPathDataProvider')]
     public function testSetReturnPath(
         string $isSetReturnPath,
         ?string $returnPathEmail,
@@ -233,11 +234,11 @@ class TransportTest extends TestCase
      * @param string|null $transportType
      * @param string $expectedClass
      * @return void
-     * @dataProvider transportTypeDataProvider
      * @covers ::getTransport
      * @covers ::createSmtpTransport
      * @covers ::createSendmailTransport
      */
+    #[DataProvider('transportTypeDataProvider')]
     public function testGetTransportReturnsCorrectType(?string $transportType, string $expectedClass): void
     {
         $this->assertInstanceOf($expectedClass, $this->createTransport([
@@ -321,10 +322,10 @@ class TransportTest extends TestCase
      * @param string|null $ssl
      * @param string $auth
      * @return void
-     * @dataProvider smtpConfigDataProvider
      * @covers ::getTransport
      * @covers ::createSmtpTransport
      */
+    #[DataProvider('smtpConfigDataProvider')]
     public function testCreateSmtpTransport(
         string $host,
         ?string $port,
@@ -382,10 +383,10 @@ class TransportTest extends TestCase
      * @param string $expectedException
      * @param string|null $expectedMessage
      * @return void
-     * @dataProvider smtpExceptionDataProvider
      * @covers ::getTransport
      * @covers ::createSmtpTransport
      */
+    #[DataProvider('smtpExceptionDataProvider')]
     public function testCreateSmtpTransportThrowsException(
         array $config,
         string $expectedException,

@@ -6,6 +6,7 @@
 namespace Magento\BundleImportExport\Model;
 
 use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BundleTest extends AbstractProductExportImportTestCase
 {
@@ -59,8 +60,8 @@ class BundleTest extends AbstractProductExportImportTestCase
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @return void
-     * @dataProvider exportImportDataProvider
      */
+    #[DataProvider('exportImportDataProvider')]
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
         $rollbacks = [];

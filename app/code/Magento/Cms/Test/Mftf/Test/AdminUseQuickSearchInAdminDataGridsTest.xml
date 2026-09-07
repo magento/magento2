@@ -36,9 +36,11 @@
             <deleteData createDataKey="createSecondCmsBlock" stepKey="deleteSecondCmsBlock" />
             <deleteData createDataKey="createThirdCmsBlock" stepKey="deleteThirdCmsBlock" />
             <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsPagesGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCmsPagesGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCmsPagesGridToDefaultView"/>
             <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCmsBlockGrid"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsBlockGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCmsBlockGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCmsBlockGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Go to "Cms Pages Grid" page and filter by title-->

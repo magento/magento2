@@ -27,9 +27,12 @@ use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for updating/removing shopping cart items
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateCartItemsTest extends GraphQlAbstract
 {
@@ -222,9 +225,9 @@ class UpdateCartItemsTest extends GraphQlAbstract
      * @param string $input
      * @param string $message
      * @param string $errorCode
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      */
+    #[DataProvider('dataProviderUpdateWithMissedRequiredParameters')]
     public function testUpdateWithMissedItemRequiredParameters(string $input, string $message, string $errorCode)
     {
         $quote = $this->quoteFactory->create();

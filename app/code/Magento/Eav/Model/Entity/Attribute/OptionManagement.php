@@ -75,7 +75,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
 
-        if ($attribute->getSource()->getOptionId($label) !== null) {
+        if ($this->getOptionIdByLabel($attribute, $label) !== null) {
             throw new InputException(
                 __(
                     'Admin store attribute option label "%1" already exists.',
@@ -116,7 +116,7 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
                 )
             );
         }
-        $optionIdByLabel = $attribute->getSource()->getOptionId($label);
+        $optionIdByLabel = $this->getOptionIdByLabel($attribute, $label);
         if (!empty($optionIdByLabel) && (int)$optionIdByLabel !== (int)$optionId) {
             throw new InputException(
                 __(
@@ -173,6 +173,30 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         }
 
         return $option;
+    }
+
+    /**
+     * Find an existing option id whose label matches the given value.
+     *
+     * Unlike the source model's getOptionId(), this compares against option labels only and
+     * intentionally ignores option values (ids), so a label that merely coincides with another
+     * option's numeric id is not treated as a duplicate.
+     *
+     * @param EavAttributeInterface $attribute
+     * @param string $label
+     * @return string|null
+     */
+    private function getOptionIdByLabel(EavAttributeInterface $attribute, string $label): ?string
+    {
+        $encoding = mb_internal_encoding();
+        $normalizedLabel = mb_strtoupper($label, $encoding);
+        foreach ($attribute->getSource()->getAllOptions() as $option) {
+            if (strcmp(mb_strtoupper((string)$option['label'], $encoding), $normalizedLabel) === 0) {
+                return (string)$option['value'];
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -293,12 +317,12 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
         AttributeOptionInterface $option
     ) : string {
         $label = $option->getLabel() !== null ? trim($option->getLabel()) : '';
-        $optionId = $attribute->getSource()->getOptionId($label);
+        $optionId = $this->getOptionIdByLabel($attribute, $label);
         if ($optionId) {
             $option->setValue($optionId);
         } elseif (is_array($option->getStoreLabels())) {
             foreach ($option->getStoreLabels() as $label) {
-                $optionId = $attribute->getSource()->getOptionId($label->getLabel());
+                $optionId = $this->getOptionIdByLabel($attribute, (string)$label->getLabel());
                 if ($optionId) {
                     break;
                 }

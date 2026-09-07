@@ -20,6 +20,7 @@ use Magento\Framework\Mview\View\SubscriptionFactory;
 use Magento\Indexer\Model\Mview\View\State;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test Mview functionality
@@ -68,7 +69,7 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configMock = $this->getMockForAbstractClass(
+        $this->configMock = $this->createMock(
             ConfigInterface::class,
             [],
             '',
@@ -77,14 +78,11 @@ class ViewTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->getMockBuilder(ChangelogBatchWalkerInterface::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['walk'])
-            ->getMockForAbstractClass();
+        $this->iteratorMock = $this->createMock(ChangelogBatchWalkerInterface::class);
         $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangelogBatchWalkerFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $changeLogBatchWalkerFactory->method('create')->willReturn($this->iteratorMock);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(
@@ -234,7 +232,7 @@ class ViewTest extends TestCase
             $listId
         );
 
-        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $actionMock = $this->createMock(ActionInterface::class);
         $this->iteratorMock->expects($this->once())->method('walk')->willReturn([$listId]);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnSelf();
         $this->actionFactoryMock->expects(
@@ -294,7 +292,7 @@ class ViewTest extends TestCase
                 ]
             );
 
-        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $actionMock = $this->createMock(ActionInterface::class);
         $actionMock->expects($this->any())
             ->method('execute')
             ->with($this->generateChangeLog(150, 1, 150))
@@ -370,7 +368,7 @@ class ViewTest extends TestCase
             ->method('walk')
             ->willReturn([[2, 3]]);
 
-        $actionMock = $this->createPartialMock(ActionInterface::class, ['execute']);
+        $actionMock = $this->createMock(ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
             function () {
                 throw new \Exception('Test exception');
@@ -493,9 +491,8 @@ class ViewTest extends TestCase
     /**
      * Test to Resume view updates
      *
-     * @param string $status
-     * @dataProvider dataProviderResumeNotSuspended
-     */
+     * @param string $status     */
+    #[DataProvider('dataProviderResumeNotSuspended')]
     public function testResumeNotSuspended($status)
     {
         $this->stateMock->expects($this->once())
@@ -569,9 +566,8 @@ class ViewTest extends TestCase
      * Test to Check whether view is enabled
      *
      * @param string $mode
-     * @param bool $result
-     * @dataProvider dataProviderIsEnabled
-     */
+     * @param bool $result     */
+    #[DataProvider('dataProviderIsEnabled')]
     public function testIsEnabled($mode, $result)
     {
         $this->stateMock->expects($this->once())
@@ -595,9 +591,8 @@ class ViewTest extends TestCase
      * Test to Check whether view is idle
      *
      * @param string $status
-     * @param bool $result
-     * @dataProvider dataProviderIsIdle
-     */
+     * @param bool $result     */
+    #[DataProvider('dataProviderIsIdle')]
     public function testIsIdle($status, $result)
     {
         $this->stateMock->expects($this->once())
@@ -622,9 +617,8 @@ class ViewTest extends TestCase
      * Test to Check whether view is working
      *
      * @param string $status
-     * @param bool $result
-     * @dataProvider dataProviderIsWorking
-     */
+     * @param bool $result     */
+    #[DataProvider('dataProviderIsWorking')]
     public function testIsWorking($status, $result)
     {
         $this->stateMock->expects($this->once())
@@ -649,9 +643,8 @@ class ViewTest extends TestCase
      * Test to Check whether view is suspended
      *
      * @param string $status
-     * @param bool $result
-     * @dataProvider dataProviderIsSuspended
-     */
+     * @param bool $result     */
+    #[DataProvider('dataProviderIsSuspended')]
     public function testIsSuspended($status, $result)
     {
         $this->stateMock->expects($this->once())

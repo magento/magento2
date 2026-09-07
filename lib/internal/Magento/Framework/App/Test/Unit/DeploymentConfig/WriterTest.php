@@ -83,15 +83,15 @@ class WriterTest extends TestCase
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->formatter = $this->getMockForAbstractClass(FormatterInterface::class);
+        $this->formatter = $this->createMock(FormatterInterface::class);
         $this->configFilePool = $this->getMockBuilder(ConfigFilePool::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dirWrite = $this->getMockForAbstractClass(WriteInterface::class);
-        $this->dirRead = $this->getMockForAbstractClass(ReadInterface::class);
+        $this->dirWrite = $this->createMock(WriteInterface::class);
+        $this->dirRead = $this->createMock(ReadInterface::class);
 
         $this->object = new Writer(
             $this->reader,

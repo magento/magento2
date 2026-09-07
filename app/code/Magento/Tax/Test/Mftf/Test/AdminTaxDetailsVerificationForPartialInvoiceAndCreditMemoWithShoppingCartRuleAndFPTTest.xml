@@ -107,6 +107,7 @@
             <actionGroup ref="AdminResetSalesTaxSettingsActionGroup" stepKey="resetSalesTaxSettings"/>
             <actionGroup ref="AdminResetFixedProductTaxesActionGroup" stepKey="resetFPTSettings"/>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <waitForElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderNumber"/>

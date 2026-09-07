@@ -13,6 +13,7 @@ use Magento\Csp\Model\Collector\DynamicCollectorMock;
 use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -74,7 +75,6 @@ class InlineUtilTest extends TestCase
      * @param PolicyInterface[] $policiesExpected
      * @return void
      *
-     * @dataProvider getTags
      * @magentoConfigFixture default_store csp/policies/storefront/scripts/policy_id script-src
      * @magentoConfigFixture default_store csp/policies/storefront/scripts/none 0
      * @magentoConfigFixture default_store csp/policies/storefront/scripts/self 1
@@ -86,6 +86,7 @@ class InlineUtilTest extends TestCase
      * @magentoConfigFixture default_store csp/policies/storefront/styles/self 1
      * @magentoConfigFixture default_store csp/policies/storefront/styles/inline 0
      */
+    #[DataProvider('getTags')]
     public function testRenderTag(
         string $tagName,
         array $attributes,
@@ -107,11 +108,11 @@ class InlineUtilTest extends TestCase
     {
         return [
             'remote-script' => [
-                'script',
-                ['src' => 'http://magento.com/static/some-script.js'],
-                null,
-                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"></script>',
-                [new FetchPolicy('script-src', false, ['http://magento.com'])]
+                'script',  // $tagName
+                ['src' => 'http://magento.com/static/some-script.js'],  // $attributes
+                null,  // $content
+                '<script src="http&#x3A;&#x2F;&#x2F;magento.com&#x2F;static&#x2F;some-script.js"></script>',  // $result
+                [new FetchPolicy('script-src', false, ['http://magento.com'])]  // $policiesExpected
             ],
             'inline-script' => [
                 'script',

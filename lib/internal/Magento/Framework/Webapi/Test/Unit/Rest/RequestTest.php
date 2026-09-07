@@ -18,9 +18,13 @@ use Magento\Framework\Webapi\Rest\Request;
 use Magento\Framework\Webapi\Rest\Request\Deserializer\Json;
 use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
 class RequestTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * Request mock.
      *
@@ -39,18 +43,16 @@ class RequestTest extends TestCase
     protected function setUp(): void
     {
         /** Prepare mocks for request constructor arguments. */
-        $this->_deserializerFactory = $this->getMockBuilder(
-            DeserializerFactory::class
-        )->onlyMethods(['get'])->addMethods(
-            ['deserialize']
-        )->disableOriginalConstructor()
+        $this->_deserializerFactory = $this->getMockBuilder(DeserializerFactory::class)
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
             ->getMock();
         $areaListMock = $this->createMock(AreaList::class);
-        $configScopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $configScopeMock = $this->createMock(ScopeInterface::class);
         $areaListMock->expects($this->once())->method('getFrontName')->willReturn('rest');
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
-        $this->_cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
+        $this->_cookieManagerMock = $this->createMock(CookieManagerInterface::class);
         $converterMock = $this->getMockBuilder(StringUtils::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['cleanString'])
@@ -80,11 +82,10 @@ class RequestTest extends TestCase
 
     /**
      * Test for getAcceptTypes() method.
-     *
-     * @dataProvider providerAcceptType
      * @param string $acceptHeader Value of Accept HTTP header
      * @param array $expectedResult Method call result
      */
+    #[DataProvider('providerAcceptType')]
     public function testGetAcceptTypes($acceptHeader, $expectedResult)
     {
         $this->_request->expects(
@@ -156,12 +157,11 @@ class RequestTest extends TestCase
 
     /**
      * Test for getContentType() method.
-     *
-     * @dataProvider providerContentType
      * @param string $contentTypeHeader 'Content-Type' header value
      * @param string $contentType Appropriate content type for header value
      * @param string|boolean $exceptionMessage \Exception message (boolean FALSE if exception is not expected)
      */
+    #[DataProvider('providerContentType')]
     public function testGetContentType($contentTypeHeader, $contentType, $exceptionMessage = false)
     {
         $this->_request->expects(

@@ -39,10 +39,8 @@ class CliTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)
-            ->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)
-            ->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
         $this->cli = new Cli();
     }
 
@@ -55,7 +53,7 @@ class CliTest extends TestCase
         $this->expectExceptionMessage('Test message');
         $e = new \Exception('Test message');
         $this->inputMock->expects($this->once())->method('getFirstArgument')->willThrowException($e);
-        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
         $loggerMock->expects($this->once())
             ->method('error')
             ->with($e->getMessage() . PHP_EOL . $e->getTraceAsString());

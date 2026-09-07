@@ -32,7 +32,7 @@ class RendererFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(
             Request::class
         )->disableOriginalConstructor()

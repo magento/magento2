@@ -294,7 +294,7 @@ class Client
         $cookiesArray = [];
         $headers = preg_split('/((\r?\n)|(\r\n?))/', $headers);
         foreach ($headers as $header) {
-            if (strpos($header, 'Set-Cookie:') === 0) {
+            if (stripos($header, 'Set-Cookie:') === 0) {
                 $cookie = preg_split('/: /', $header, 2);
                 if (isset($cookie[1]) && !empty($cookie[1])) {
                     $cookiesArray[] = $cookie[1];

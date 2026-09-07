@@ -6,6 +6,7 @@
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 
 use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoAppArea adminhtml
@@ -62,8 +63,8 @@ class ActivateTest extends \PHPUnit\Framework\TestCase
      * @param string $endpoint
      * @param string $identityLinkUrl
      * @param int $expectedResult
-     * @dataProvider renderTokenExchangeProvider
      */
+    #[DataProvider('renderTokenExchangeProvider')]
     public function testRenderTokenExchange($endpoint, $identityLinkUrl, $expectedResult)
     {
         $integration = $this->getFixtureIntegration();

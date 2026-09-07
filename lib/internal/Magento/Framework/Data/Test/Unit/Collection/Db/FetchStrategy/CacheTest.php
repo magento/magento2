@@ -49,9 +49,9 @@ class CacheTest extends TestCase
         $this->selectMock->expects($this->once())
             ->method('assemble')
             ->willReturn('SELECT * FROM fixture_table');
-        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
-        $this->fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
-        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->cacheMock = $this->createMock(FrontendInterface::class);
+        $this->fetchStrategyMock = $this->createMock(FetchStrategyInterface::class);
+        $this->serializerMock = $this->createMock(SerializerInterface::class);
         $this->fetchStrategyCache = (new ObjectManager($this))->getObject(
             Cache::class,
             [

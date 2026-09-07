@@ -9,6 +9,7 @@ namespace Magento\Store\Test\Unit\Model\Config;
 
 use Magento\Store\Model\Config\Validator;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,8 +22,8 @@ class ValidatorTest extends TestCase
     /**
      * @param array $data
      * @param array $result
-     * @dataProvider validateDataProvider
      */
+    #[DataProvider('validateDataProvider')]
     public function testValidate(array $data, array $result)
     {
         $model = new Validator();

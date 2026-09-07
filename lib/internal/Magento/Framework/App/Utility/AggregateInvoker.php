@@ -93,7 +93,7 @@ class AggregateInvoker
             $dataSetName = '';
         }
         return $dataSetName . $exception->getMessage() . PHP_EOL
-        . \PHPUnit\Util\Filter::getFilteredStacktrace($exception);
+        . $exception->getTraceAsString();
     }
 
     /**

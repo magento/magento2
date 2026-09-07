@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
@@ -75,7 +75,6 @@ class PreviewTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
-
         $storeId = 1;
         $designConfigData = [];
 
@@ -93,20 +92,16 @@ class PreviewTest extends TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
 
         $this->request = $this->createMock(Http::class);
-
         $this->maliciousCode = $this->createPartialMock(
             MaliciousCode::class,
             ['filter']
         );
-
         $this->template->expects($this->once())
             ->method('getProcessedTemplate')
             ->with([])
             ->willReturn(self::MALICIOUS_TEXT);
-
         $this->template->method('getDesignConfig')
             ->willReturn(new DataObject($designConfigData));
-
         $emailFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
             ->method('create')
@@ -116,7 +111,6 @@ class PreviewTest extends TestCase
         $scopeConfig = $this->createMock(ScopeConfigInterface::class);
         $design = $this->createMock(DesignInterface::class);
         $store = $this->createPartialMock(Store::class, ['getId']);
-
         $store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
@@ -192,7 +186,7 @@ class PreviewTest extends TestCase
             ->method('getDesignConfig');
         $this->storeManager->expects($this->atLeastOnce())
             ->method('getDefaultStoreView');
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->with($requestParamMap[1][2])
             ->willReturn(self::MALICIOUS_TEXT);

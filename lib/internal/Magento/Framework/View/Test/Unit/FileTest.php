@@ -26,7 +26,7 @@ class FileTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_theme = $this->getMockForAbstractClass(ThemeInterface::class);
+        $this->_theme = $this->createMock(ThemeInterface::class);
         $this->_model = new File(__FILE__, 'Fixture_TestModule', $this->_theme, true);
     }
 

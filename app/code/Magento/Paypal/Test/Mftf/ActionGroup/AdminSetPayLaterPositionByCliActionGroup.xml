@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetPayLaterPositionByCliActionGroup">
+        <annotations>
+            <description>Set PayPal pay Later display and position for a given page via cli.</description>
+        </annotations>
+        <arguments>
+            <argument name="page" type="string" defaultValue="cartpage"/>
+            <argument name="display" type="string" defaultValue="1"/>
+            <argument name="position" type="string" defaultValue="header"/>
+        </arguments>
+        <magentoCLI command="config:set payment/paypal_paylater/{{page}}_display {{display}}" stepKey="setDisplay"/>
+        <magentoCLI command="config:set payment/paypal_paylater/{{page}}_position {{position}}" stepKey="setPosition"/>
+    </actionGroup>
+</actionGroups>
+

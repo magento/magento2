@@ -14,6 +14,7 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -127,48 +128,48 @@ class SerializerTest extends TestCase
     {
         return [
             'single product without entity id flag' => [
-                'isEntityId' => false,
-                'products' => [
+                false,
+                [
                     ['id' => 1, 'entityId' => 101, 'qty' => 5, 'position' => 1]
                 ],
-                'expectedResult' => [
+                [
                     1 => ['qty' => 5, 'position' => 1]
                 ],
-                'serializedOutput' => '{"1":{"qty":5,"position":1}}'
+                '{"1":{"qty":5,"position":1}}'
             ],
             'single product with entity id flag' => [
-                'isEntityId' => true,
-                'products' => [
+                true,
+                [
                     ['id' => 1, 'entityId' => 101, 'qty' => 10, 'position' => 2]
                 ],
-                'expectedResult' => [
+                [
                     101 => ['qty' => 10, 'position' => 2]
                 ],
-                'serializedOutput' => '{"101":{"qty":10,"position":2}}'
+                '{"101":{"qty":10,"position":2}}'
             ],
             'multiple products without entity id flag' => [
-                'isEntityId' => false,
-                'products' => [
+                false,
+                [
                     ['id' => 1, 'entityId' => 101, 'qty' => 5, 'position' => 1],
                     ['id' => 2, 'entityId' => 102, 'qty' => 3, 'position' => 2]
                 ],
-                'expectedResult' => [
+                [
                     1 => ['qty' => 5, 'position' => 1],
                     2 => ['qty' => 3, 'position' => 2]
                 ],
-                'serializedOutput' => '{"1":{"qty":5,"position":1},"2":{"qty":3,"position":2}}'
+                '{"1":{"qty":5,"position":1},"2":{"qty":3,"position":2}}'
             ],
             'multiple products with entity id flag' => [
-                'isEntityId' => true,
-                'products' => [
+                true,
+                [
                     ['id' => 1, 'entityId' => 101, 'qty' => 5, 'position' => 1],
                     ['id' => 2, 'entityId' => 102, 'qty' => 3, 'position' => 2]
                 ],
-                'expectedResult' => [
+                [
                     101 => ['qty' => 5, 'position' => 1],
                     102 => ['qty' => 3, 'position' => 2]
                 ],
-                'serializedOutput' => '{"101":{"qty":5,"position":1},"102":{"qty":3,"position":2}}'
+                '{"101":{"qty":5,"position":1},"102":{"qty":3,"position":2}}'
             ]
         ];
     }
@@ -176,13 +177,13 @@ class SerializerTest extends TestCase
     /**
      * Test getProductsJSON returns serialized products data
      *
-     * @dataProvider getProductsJsonDataProvider
      * @param bool $isEntityId
      * @param array $productsData
      * @param array $expectedResult
      * @param string $serializedOutput
      * @return void
      */
+    #[DataProvider('getProductsJsonDataProvider')]
     public function testGetProductsJsonReturnsSerializedProductsData(
         bool $isEntityId,
         array $productsData,

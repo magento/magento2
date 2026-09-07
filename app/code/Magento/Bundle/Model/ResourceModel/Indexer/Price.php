@@ -115,6 +115,11 @@ class Price implements DimensionalIndexerInterface
     private StockStatusQueryProcessorInterface $stockStatusQueryProcessor;
 
     /**
+     * @var SelectionPriceModifierInterface
+     */
+    private SelectionPriceModifierInterface $selectionPriceIndexer;
+
+    /**
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
@@ -126,6 +131,7 @@ class Price implements DimensionalIndexerInterface
      * @param StockStatusQueryProcessorInterface|null $stockStatusQueryProcessor
      * @param bool $fullReindexAction
      * @param string $connectionName
+     * @param SelectionPriceModifierInterface|null $selectionPriceIndexer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -140,7 +146,8 @@ class Price implements DimensionalIndexerInterface
         \Magento\Framework\Module\Manager $moduleManager,
         ?StockStatusQueryProcessorInterface $stockStatusQueryProcessor = null,
         $fullReindexAction = false,
-        $connectionName = 'indexer'
+        $connectionName = 'indexer',
+        ?SelectionPriceModifierInterface $selectionPriceIndexer = null
     ) {
         $this->indexTableStructureFactory = $indexTableStructureFactory;
         $this->tableMaintainer = $tableMaintainer;
@@ -155,6 +162,9 @@ class Price implements DimensionalIndexerInterface
         $this->stockStatusQueryProcessor = $stockStatusQueryProcessor ??
             \Magento\Framework\App\ObjectManager::getInstance()
                 ->get(StockStatusQueryProcessorInterface::class);
+        $this->selectionPriceIndexer = $selectionPriceIndexer ??
+            \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(SelectionPriceModifierInterface::class);
     }
 
     /**
@@ -459,6 +469,7 @@ class Price implements DimensionalIndexerInterface
         $this->prepareBundleSelectionTable();
         $this->calculateFixedBundleSelectionPrice();
         $this->calculateDynamicBundleSelectionPrice($dimensions);
+        $this->selectionPriceIndexer->modify($this->getBundleSelectionTable(), $dimensions);
 
         $this->prepareBundleOptionTable();
 

@@ -22,10 +22,12 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -38,6 +40,8 @@ use ReflectionClass;
  */
 class EditTest extends TestCase
 {
+    use MockCreationTrait;
+
     /**
      * @var Edit
      */
@@ -119,15 +123,15 @@ class EditTest extends TestCase
         $this->objectManager->prepareObjectManager($objects);
 
         $this->contextMock = $this->createMock(Context::class);
-        $this->jsonEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
         $this->attributeSetFactoryMock = $this->createMock(SetFactory::class);
         $this->registryMock = $this->createMock(Registry::class);
         $this->productHelperMock = $this->createMock(ProductHelper::class);
         $this->escaperMock = $this->createMock(Escaper::class);
         $this->productMock = $this->createMock(Product::class);
-        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
-        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
 
         $this->contextMock->method('getRequest')
             ->willReturn($this->requestMock);
@@ -295,13 +299,13 @@ class EditTest extends TestCase
     /**
      * Test getProductSetId returns correct attribute set ID
      *
-     * @dataProvider productSetIdDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getProductSetId
      * @param int|null $attributeSetId
      * @param int|null $requestSetParam
      * @param int|null $expectedSetId
      * @return void
      */
+    #[DataProvider('productSetIdDataProvider')]
     public function testGetProductSetIdReturnsAttributeSetId(
         ?int $attributeSetId,
         ?int $requestSetParam,
@@ -365,7 +369,6 @@ class EditTest extends TestCase
      * - Product with empty name
      * - Product name with special characters requiring escaping
      *
-     * @dataProvider headerDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getHeader
      * @param int|null $productId
      * @param string|null $productName
@@ -373,6 +376,7 @@ class EditTest extends TestCase
      * @param string $expectedHeader
      * @return void
      */
+    #[DataProvider('headerDataProvider')]
     public function testGetHeaderReturnsCorrectHeader(
         ?int $productId,
         ?string $productName,
@@ -437,13 +441,13 @@ class EditTest extends TestCase
      * - Invalid/non-existent attribute set ID
      * - Empty attribute set name
      *
-     * @dataProvider attributeSetNameDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getAttributeSetName
      * @param int|null $setId
      * @param string|null $setName
      * @param string|null $expectedName
      * @return void
      */
+    #[DataProvider('attributeSetNameDataProvider')]
     public function testGetAttributeSetNameReturnsCorrectName(
         ?int $setId,
         ?string $setName,
@@ -617,7 +621,6 @@ class EditTest extends TestCase
     /**
      * Test button HTML methods return child HTML
      *
-     * @dataProvider buttonHtmlDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getBackButtonHtml
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getCancelButtonHtml
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::getSaveButtonHtml
@@ -630,6 +633,7 @@ class EditTest extends TestCase
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    #[DataProvider('buttonHtmlDataProvider')]
     public function testButtonHtmlReturnsChildHtml(string $method, string $alias, string $expectedHtml): void
     {
         $blockName = str_replace('-', '_', $alias) . '_block';
@@ -668,12 +672,12 @@ class EditTest extends TestCase
     /**
      * Test _isProductNew returns correct value based on product state
      *
-     * @dataProvider isProductNewDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::_isProductNew
      * @param int|null $productId
      * @param bool $expectedResult
      * @return void
      */
+    #[DataProvider('isProductNewDataProvider')]
     public function testIsProductNewReturnsCorrectValue(?int $productId, bool $expectedResult): void
     {
         $this->productMock->expects($this->once())
@@ -775,7 +779,6 @@ class EditTest extends TestCase
     /**
      * Test _getSaveSplitButtonOptions returns correct options based on context
      *
-     * @dataProvider saveSplitButtonOptionsDataProvider
      * @covers \Magento\Catalog\Block\Adminhtml\Product\Edit::_getSaveSplitButtonOptions
      * @param bool $isPopup
      * @param bool $isDuplicable
@@ -783,6 +786,7 @@ class EditTest extends TestCase
      * @param array $expectedOptionIds
      * @return void
      */
+    #[DataProvider('saveSplitButtonOptionsDataProvider')]
     public function testGetSaveSplitButtonOptionsReturnsCorrectOptions(
         bool $isPopup,
         bool $isDuplicable,
@@ -891,9 +895,10 @@ class EditTest extends TestCase
      */
     public function testPrepareLayoutAddsBackButtonInNonPopupModeWithToolbar(): void
     {
-        $toolbarMock = $this->getMockBuilder(ContainerInterface::class)
-            ->addMethods(['addChild'])
-            ->getMockForAbstractClass();
+        $toolbarMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['addChild']
+        );
 
         $this->requestMock->method('getParam')
             ->willReturnCallback(function ($param, $default = null) {
@@ -998,9 +1003,10 @@ class EditTest extends TestCase
      */
     public function testPrepareLayoutAddsSaveSplitButtonWhenProductNotReadonlyWithToolbar(): void
     {
-        $toolbarMock = $this->getMockBuilder(ContainerInterface::class)
-            ->addMethods(['addChild'])
-            ->getMockForAbstractClass();
+        $toolbarMock = $this->createPartialMockWithReflection(
+            \stdClass::class,
+            ['addChild']
+        );
 
         $this->requestMock->method('getParam')
             ->willReturnCallback(function ($param, $default = null) {

@@ -411,7 +411,7 @@ define([
 
             this.error(message);
             this.error.valueHasMutated();
-            this.bubble('error', message);
+            this.bubble('error', message, this);
 
             //TODO: Implement proper result propagation for form
             if (this.source && !isValid) {

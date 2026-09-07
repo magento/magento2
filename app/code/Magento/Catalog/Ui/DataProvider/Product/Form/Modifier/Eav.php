@@ -412,7 +412,7 @@ class Eav extends AbstractModifier
             return $this->resolvePersistentData($data);
         }
 
-        $productId = $this->locator->getProduct()->getId();
+        $productId = $this->locator->getProduct()->getId() ?? '';
 
         /** @var string $groupCode */
         foreach (array_keys($this->getGroups()) as $groupCode) {
@@ -468,7 +468,7 @@ class Eav extends AbstractModifier
     {
         $persistentData = (array)$this->dataPersistor->get('catalog_product');
         $this->dataPersistor->clear('catalog_product');
-        $productId = $this->locator->getProduct()->getId();
+        $productId = $this->locator->getProduct()->getId() ?? '';
 
         if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
             $data[$productId][self::DATA_SOURCE_DEFAULT] = [];

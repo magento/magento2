@@ -34,12 +34,7 @@ class ThemeDependencyCheckerFactoryTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManagerProvider = $this->createMock(ObjectManagerProvider::class);
-        $this->objectManager = $this->getMockForAbstractClass(
-            ObjectManagerInterface::class,
-            [],
-            '',
-            false
-        );
+        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
     }
 
     public function testCreate()

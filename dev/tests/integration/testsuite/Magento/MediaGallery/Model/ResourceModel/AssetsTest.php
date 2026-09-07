@@ -16,6 +16,7 @@ use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for assets operations
@@ -71,9 +72,8 @@ class AssetsTest extends TestCase
      * @param array $assetsData
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
-     *
-     * @dataProvider assetsDataProvider
      */
+    #[DataProvider('assetsDataProvider')]
     public function testExecute(array $assetsData): void
     {
         $this->saveAssets->execute($this->getAssets($assetsData));

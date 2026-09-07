@@ -23,6 +23,7 @@ use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
 use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 use Magento\Store\Model\Store;
 use Magento\Shipping\Model\ShipmentNotifier;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  */
 class EmailTest extends TestCase
 {
+    use MockCreationTrait;
     /**
      * @var Email
      */
@@ -97,11 +99,10 @@ class EmailTest extends TestCase
     protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->getMockBuilder(ShipmentLoader::class)
-            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
-            ->onlyMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->shipmentLoader = $this->createPartialMockWithReflection(
+            ShipmentLoader::class,
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
+        );
         $this->context = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
             [
@@ -116,22 +117,8 @@ class EmailTest extends TestCase
                 'getResultFactory'
             ]
         );
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
-            ->addMethods(['setRedirect'])
-            ->onlyMethods(['sendResponse'])
-            ->getMockForAbstractClass();
-        $this->request = $this->getMockBuilder(RequestInterface::class)
-            ->onlyMethods(
-                [
-                    'getModuleName',
-                    'setModuleName',
-                    'getActionName',
-                    'setActionName',
-                    'getParam',
-                    'getCookie',
-                ]
-            )->addMethods(['isPost'])
-            ->getMockForAbstractClass();
+        $this->response = $this->createMock(ResponseInterface::class);
+        $this->request = $this->createMock(RequestInterface::class);
         $this->objectManager = $this->createPartialMock(
             ObjectManager::class,
             ['create']
@@ -140,10 +127,10 @@ class EmailTest extends TestCase
             MessageManager::class,
             ['addSuccess', 'addError', 'addWarningMessage']
         );
-        $this->session = $this->getMockBuilder(BackendSession::class)
-            ->addMethods(['setIsUrlNotice'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->session = $this->createPartialMockWithReflection(
+            BackendSession::class,
+            ['setIsUrlNotice']
+        );
         $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
         $this->helper = $this->createPartialMock(BackendHelper::class, ['getUrl']);
         $this->resultRedirect = $this->createMock(RedirectResult::class);

@@ -13,6 +13,7 @@ use Magento\Framework\Jwt\Jwk;
 use Magento\Framework\Jwt\JwkSet;
 use Magento\Framework\Jwt\Jws\JwsSignatureJwks;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class JwsSignatureJwksTest extends TestCase
 {
@@ -37,9 +38,8 @@ class JwsSignatureJwksTest extends TestCase
      *
      * @param Jwk|JwkSet $jwks
      * @param bool $valid
-     * @return void
-     * @dataProvider getConstructorCases
-     */
+     * @return void     */
+    #[DataProvider('getConstructorCases')]
     public function testConstruct($jwks, $valid): void
     {
         if (is_array($jwks)) {
@@ -80,9 +80,8 @@ class JwsSignatureJwksTest extends TestCase
      *
      * @param array $jwksData
      * @param string $expectedName
-     * @return void
-     * @dataProvider getAlgorithmCases
-     */
+     * @return void     */
+    #[DataProvider('getAlgorithmCases')]
     public function testGetAlgorithmName(array $jwkData, string $expectedName): void
     {
         if (is_array($jwkData[0])) {

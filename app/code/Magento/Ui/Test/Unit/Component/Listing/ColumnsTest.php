@@ -33,7 +33,7 @@ class ColumnsTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockForAbstractClass(
+        $this->contextMock = $this->createMock(
             ContextInterface::class,
             [],
             '',
@@ -42,9 +42,7 @@ class ColumnsTest extends TestCase
             true,
             []
         );
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
     }
 

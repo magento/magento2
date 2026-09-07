@@ -6,6 +6,7 @@
 namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\App\ResourceConnection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Processes any type of messages except messages implementing MergedMessageInterface.
@@ -15,7 +16,7 @@ class MessageProcessor implements MessageProcessorInterface
     /**
      * Maximum number of transaction retries
      */
-    const MAX_TRANSACTION_RETRIES = 10;
+    public const MAX_TRANSACTION_RETRIES = 10;
 
     /**
      * @var \Magento\Framework\MessageQueue\MessageStatusProcessor
@@ -35,10 +36,12 @@ class MessageProcessor implements MessageProcessorInterface
     /**
      * @param MessageStatusProcessor $messageStatusProcessor
      * @param ResourceConnection $resource
+     * @param LoggerInterface $logger
      */
     public function __construct(
         MessageStatusProcessor $messageStatusProcessor,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        private readonly LoggerInterface $logger,
     ) {
         $this->messageStatusProcessor = $messageStatusProcessor;
         $this->resource = $resource;
@@ -55,11 +58,21 @@ class MessageProcessor implements MessageProcessorInterface
         array $mergedMessages
     ) {
         try {
-            $this->resource->getConnection()->beginTransaction();
             $this->messageStatusProcessor->acknowledgeMessages($queue, $messagesToAcknowledge);
+        } catch (\Exception $e) {
+            $this->logger->critical('Error during acknowledging previously processed messages.', ['exception' => $e]);
+        }
+
+        try {
+            $this->resource->getConnection()->beginTransaction();
             $this->dispatchMessages($configuration, $mergedMessages);
             $this->resource->getConnection()->commit();
-            $this->messageStatusProcessor->acknowledgeMessages($queue, $messages);
+
+            try {
+                $this->messageStatusProcessor->acknowledgeMessages($queue, $messages);
+            } catch (\Exception $e) {
+                $this->logger->critical('Error during acknowledging processed messages.', ['exception' => $e]);
+            }
         } catch (ConnectionLostException $e) {
             $this->resource->getConnection()->rollBack();
         } catch (\Exception $e) {

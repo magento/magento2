@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Utility;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LayoutTest extends \PHPUnit\Framework\TestCase
 {
@@ -45,9 +46,8 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|array $inputFiles
      * @param string $expectedFile
-     *
-     * @dataProvider getLayoutFromFixtureDataProvider
      */
+    #[DataProvider('getLayoutFromFixtureDataProvider')]
     public function testGetLayoutUpdateFromFixture($inputFiles, $expectedFile)
     {
         $layoutUpdate = $this->_utility->getLayoutUpdateFromFixture($inputFiles);
@@ -57,9 +57,8 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|array $inputFiles
      * @param string $expectedFile
-     *
-     * @dataProvider getLayoutFromFixtureDataProvider
      */
+    #[DataProvider('getLayoutFromFixtureDataProvider')]
     public function testGetLayoutFromFixture($inputFiles, $expectedFile)
     {
         $layout = $this->_utility->getLayoutFromFixture($inputFiles, $this->_utility->getLayoutDependencies());

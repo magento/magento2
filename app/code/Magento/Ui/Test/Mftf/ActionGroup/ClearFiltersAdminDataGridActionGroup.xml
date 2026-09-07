@@ -14,5 +14,6 @@
         </annotations>
 
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoadAfterClearingFilters"/>
     </actionGroup>
 </actionGroups>

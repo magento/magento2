@@ -129,17 +129,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
         $attributeCode = $attribute->getAttributeCode();
         if ($attributeCode !== 'price' || !$collection->getLimitationFilters()->isUsingPriceIndex()) {
             if ($collection->isEnabledFlat()) {
-                if ($attribute->isEnabledInFlat()) {
-                    $alias = array_keys($collection->getSelect()->getPart('from'))[0];
-                    $this->joinedAttributes[$attributeCode] = $alias . '.' . $attributeCode;
-                } else {
-                    $alias = 'at_' . $attributeCode;
-                    if (!in_array($alias, array_keys($collection->getSelect()->getPart('from')))) {
-                        $collection->joinAttribute($attributeCode, "catalog_product/$attributeCode", 'entity_id');
-                    }
-
-                    $this->joinedAttributes[$attributeCode] = $alias . '.value';
-                }
+                $this->addFlatAttributeToCollection($attribute, $attributeCode, $collection);
+            } elseif ($attributeCode === 'category_ids' && in_array($this->getOperator(), ['()', '{}'])) {
+                $this->joinCategoryIdsToCollection($collection);
             } elseif ($attributeCode !== 'category_ids' && !$attribute->isStatic()) {
                 $this->addAttributeToCollection($attribute, $collection);
                 $attributes = $this->getRule()->getCollectedAttributes();
@@ -270,8 +262,10 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
     public function getMappedSqlField()
     {
         $result = '';
-        if (in_array($this->getAttribute(), ['category_ids', 'sku', 'attribute_set_id'])) {
+        if (in_array($this->getAttribute(), ['sku', 'attribute_set_id'])) {
             $result = parent::getMappedSqlField();
+        } elseif ($this->getAttribute() === 'category_ids') {
+            $result = $this->joinedAttributes['category_ids'] ?? parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];
         } elseif ($this->getAttributeObject()->isStatic()) {
@@ -295,6 +289,48 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
     }
 
     /**
+     * Add the attribute to the collection, using the flat table if enabled
+     *
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
+     * @param string $attributeCode
+     * @param Collection $collection
+     * @return void
+     */
+    private function addFlatAttributeToCollection($attribute, string $attributeCode, Collection $collection): void
+    {
+        if ($attribute->isEnabledInFlat()) {
+            $alias = array_keys($collection->getSelect()->getPart('from'))[0];
+            $this->joinedAttributes[$attributeCode] = $alias . '.' . $attributeCode;
+        } else {
+            $alias = 'at_' . $attributeCode;
+            if (!in_array($alias, array_keys($collection->getSelect()->getPart('from')))) {
+                $collection->joinAttribute($attributeCode, "catalog_product/$attributeCode", 'entity_id');
+            }
+            $this->joinedAttributes[$attributeCode] = $alias . '.value';
+        }
+    }
+
+    /**
+     * Join the category ids to the collection, if not already joined
+     *
+     * @param Collection $collection
+     * @return void
+     */
+    private function joinCategoryIdsToCollection(Collection $collection): void
+    {
+        $alias = 'catalog_category_product_widget';
+        if (!array_key_exists($alias, $collection->getSelect()->getPart(Select::FROM))) {
+            $collection->getSelect()->joinInner(
+                [$alias => $collection->getTable('catalog_category_product')],
+                "{$alias}.product_id = e.entity_id",
+                []
+            );
+            $collection->distinct(true);
+        }
+        $this->joinedAttributes['category_ids'] = "{$alias}.category_id";
+    }
+
+    /**
      * Add attribute to collection based on scope
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
@@ -315,6 +351,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct impl
      */
     public function getBindArgumentValue()
     {
+        if ($this->getAttribute() === 'category_ids' && isset($this->joinedAttributes['category_ids'])) {
+            return $this->getValueParsed();
+        }
         $value = parent::getBindArgumentValue();
         return is_array($value) && $this->getMappedSqlField() === 'e.entity_id'
             ? new \Zend_Db_Expr(

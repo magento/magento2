@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -55,21 +56,19 @@ class DateTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->contextMock = $this->getMockForAbstractClass(ContextInterface::class);
-        $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
-            ->onlyMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filterBuilderMock = $this->getMockBuilder(FilterBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(ContextInterface::class);
+        $this->uiComponentFactory = $this->createPartialMock(
+            UiComponentFactory::class,
+            ['create']
+        );
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
 
-        $this->filterModifierMock = $this->getMockBuilder(FilterModifier::class)
-            ->onlyMethods(['applyFilterModifier'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filterModifierMock = $this->createPartialMock(
+            FilterModifier::class,
+            ['applyFilterModifier']
+        );
 
-        $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+        $this->dataProviderMock = $this->createMock(DataProviderInterface::class);
     }
 
     /**
@@ -100,18 +99,14 @@ class DateTest extends TestCase
      * @param array|null $expectedCondition
      *
      * @return void
-     * @dataProvider getPrepareDataProvider
      */
+    #[DataProvider('getPrepareDataProvider')]
     public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $processor = $this->createMock(Processor::class);
         $this->contextMock->expects(static::atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var FormDate|MockObject $uiComponent */
-        $uiComponent = $this->getMockBuilder(FormDate::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uiComponent = $this->createMock(FormDate::class);
 
         $uiComponent->expects($this->any())
             ->method('getContext')

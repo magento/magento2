@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\MutableScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,9 +36,7 @@ class OrderPrefixSuffixVisibilityTest extends TestCase
         $this->om = Bootstrap::getObjectManager();
     }
 
-    /**
-     * @dataProvider visibilityCases
-     */
+    #[DataProvider('visibilityCases')]
     public function testPrefixVisibility(?string $value, bool $setValue, bool $expectedVisible): void
     {
         // Ensure suffix never interferes in this test
@@ -54,9 +53,7 @@ class OrderPrefixSuffixVisibilityTest extends TestCase
         $this->assertSame($expected, $order->getCustomerName());
     }
 
-    /**
-     * @dataProvider visibilityCases
-     */
+    #[DataProvider('visibilityCases')]
     public function testSuffixVisibility(?string $value, bool $setValue, bool $expectedVisible): void
     {
         // Ensure prefix never interferes in this test

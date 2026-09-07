@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\SetupInfo;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SetupInfoTest extends TestCase
@@ -19,11 +20,9 @@ class SetupInfoTest extends TestCase
      */
     private static $fixture = ['DOCUMENT_ROOT' => '/doc/root', 'SCRIPT_FILENAME' => '/doc/root/dir/file.php'];
 
-    /**
-     * @param array $server
-     * @param string $expectedError
-     * @dataProvider constructorExceptionsDataProvider
+    /**     * @param string $expectedError
      */
+    #[DataProvider('constructorExceptionsDataProvider')]
     public function testConstructorExceptions($server, $expectedError)
     {
         $this->expectException('\InvalidArgumentException');
@@ -46,11 +45,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $expected
-     * @dataProvider getUrlDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getUrlDataProvider')]
     public function testGetUrl($server, $expected)
     {
         $info = new SetupInfo($server);
@@ -78,11 +75,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $expected
-     * @dataProvider getProjectUrlDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getProjectUrlDataProvider')]
     public function testGetProjectUrl($server, $expected)
     {
         $info = new SetupInfo($server);
@@ -109,12 +104,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param string $projectRoot
-     * @param string $expected
-     * @dataProvider getDirDataProvider
+    /**     * @param string $expected
      */
+    #[DataProvider('getDirDataProvider')]
     public function testGetDir($server, $projectRoot, $expected)
     {
         $info = new SetupInfo($server);
@@ -145,11 +137,9 @@ class SetupInfoTest extends TestCase
         ];
     }
 
-    /**
-     * @param array $server
-     * @param bool $expected
-     * @dataProvider isAvailableDataProvider
+    /**     * @param bool $expected
      */
+    #[DataProvider('isAvailableDataProvider')]
     public function testIsAvailable($server, $expected)
     {
         $info = new SetupInfo($server);

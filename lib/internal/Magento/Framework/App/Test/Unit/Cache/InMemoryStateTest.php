@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Test\Unit\Cache;
 
 use Magento\Framework\App\Cache\InMemoryState;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +23,7 @@ class InMemoryStateTest extends TestCase
         $this->state = new InMemoryState();
     }
 
-    /** @test */
+    #[Test]
     public function allCachesAreDisabledByDefault()
     {
         $this->assertSame(
@@ -31,7 +32,7 @@ class InMemoryStateTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function enablesOnlySpecificCacheType()
     {
         $this->state->setEnabled('cache_type_two', true);
@@ -50,7 +51,7 @@ class InMemoryStateTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function allowsToSpecifyCacheTypeConfiguration()
     {
         $state = $this->state->withPersistedState(
@@ -74,7 +75,7 @@ class InMemoryStateTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function mergesPersistentStateInTheFinalObject()
     {
         $state = $this->state
@@ -104,7 +105,7 @@ class InMemoryStateTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function runtimeValuesAreAreNotPreservedWhenPersistedStateIsModified()
     {
         $state = $this->state
@@ -128,7 +129,7 @@ class InMemoryStateTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function persistingStoresRuntimeValuesPersistedState()
     {
         $state = $this->state

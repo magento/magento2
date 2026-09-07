@@ -43,6 +43,7 @@
         </before>
         <after>
             <!--Roll back configuration-->
+            <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnable"/>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <!--Delete customer created during test execution-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

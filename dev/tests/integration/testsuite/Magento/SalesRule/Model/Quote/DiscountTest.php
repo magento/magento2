@@ -748,15 +748,19 @@ class DiscountTest extends TestCase
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p1.id$', 'qty' => 3]),
         DataFixture(GuestCartFixture::class, as: 'cart3'),
         DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$p1.id$', 'qty' => 9]),
+        DataFixture(GuestCartFixture::class, as: 'cart4'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart4.id$', 'product_id' => '$p1.id$', 'qty' => 5]),
     ]
     public function testDiscountOnSimpleProductWhenFurtherRulesHaveDiscountQtyStepSpecified(): void
     {
         $cart1Id = (int)$this->fixtures->get('cart1')->getId();
         $cart2Id = (int)$this->fixtures->get('cart2')->getId();
         $cart3Id = (int)$this->fixtures->get('cart3')->getId();
+        $cart4Id = (int)$this->fixtures->get('cart4')->getId();
         $quote1 = $this->quote->get($cart1Id);
         $quote2 = $this->quote->get($cart2Id);
         $quote3 = $this->quote->get($cart3Id);
+        $quote4 = $this->quote->get($cart4Id);
         $rule1Id = (int)$this->fixtures->get('rule1')->getId();
         $rule2Id = (int)$this->fixtures->get('rule2')->getId();
         $rule3Id = (int)$this->fixtures->get('rule3')->getId();
@@ -796,6 +800,19 @@ class DiscountTest extends TestCase
 
         $this->assertEquals(-564.6, $this->total->getDiscountAmount());
         $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $quote3->getAppliedRuleIds()));
+
+        $quote4->setStoreId(1)->setIsActive(true);
+        $address = $quote4->getShippingAddress();
+        $this->shipping->setAddress($address);
+        $this->shippingAssignment->setShipping($this->shipping);
+        $this->shippingAssignment->setItems($address->getAllItems());
+
+        $this->subtotalCollector->collect($quote4, $this->shippingAssignment, $this->total);
+        $this->discountCollector->collect($quote4, $this->shippingAssignment, $this->total);
+
+        // Fixed: 10 * 5 = 50; Percent on 3 items: (123 - 10) * 0.2 * 3 = 67.8; Total = 117.8
+        $this->assertEquals(-117.8, $this->total->getDiscountAmount());
+        $this->assertEqualsCanonicalizing([$rule1Id, $rule2Id], explode(',', $quote4->getAppliedRuleIds()));
     }
 
     /**
@@ -1159,5 +1176,75 @@ class DiscountTest extends TestCase
 
         $this->assertEmpty($items[$p3Id]->getAppliedRuleIds());
         $this->assertEquals(0, $items[$p3Id]->getBaseDiscountAmount());
+    }
+
+    /**
+     * Fixed-amount cart rule with a category condition must discount only the bundle children that belong to the
+     * targeted category; children outside the category must receive zero discount.
+     */
+    #[
+        AppIsolation(true),
+        DataFixture(CategoryFixture::class, as: 'target_cat'),
+        DataFixture(
+            ProductFixture::class,
+            ['price' => 858, 'category_ids' => ['$target_cat.id$']],
+            as: 'operator'
+        ),
+        DataFixture(ProductFixture::class, ['price' => 167], as: 'cover'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$operator$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['required' => false, 'product_links' => ['$cover$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['_options' => ['$opt1$', '$opt2$'], 'category_ids' => ['$target_cat.id$']],
+            'bundle'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'category_ids', 'value' => '$target_cat.id$', 'operator' => '=='],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::BY_FIXED_ACTION, 'discount_amount' => 93, 'actions' => ['$cond1$']],
+            'rule'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bundle.id$',
+                'selections' => [['$operator.id$'], ['$cover.id$']],
+                'qty' => 5,
+            ],
+        ),
+    ]
+    public function testFixedDiscountWithCategoryConditionOnBundleAppliesToMatchingChildOnly(): void
+    {
+        $quote = $this->quoteRepository->get($this->fixtures->get('cart')->getId());
+        $quote->collectTotals();
+        $this->quoteRepository->save($quote);
+
+        $operatorId = (int)$this->fixtures->get('operator')->getId();
+        $coverId    = (int)$this->fixtures->get('cover')->getId();
+        $bundleId   = (int)$this->fixtures->get('bundle')->getId();
+
+        $discounts = [];
+        foreach ($quote->getAllItems() as $item) {
+            $pid = (int)$item->getProductId();
+            if ($pid === $operatorId) {
+                $discounts['operator'] = (float)$item->getDiscountAmount();
+            } elseif ($pid === $coverId) {
+                $discounts['cover'] = (float)$item->getDiscountAmount();
+            } elseif ($pid === $bundleId) {
+                $discounts['bundle'] = (float)$item->getDiscountAmount();
+            }
+        }
+
+        // $93 fixed discount × qty 5 = $465 total; must land entirely on the matching child (operator).
+        // The cover child is in no category, so it must receive zero discount.
+        $this->assertEquals(0.0, $discounts['bundle']);
+        $this->assertEquals(465.0, $discounts['operator']);
+        $this->assertEquals(0.0, $discounts['cover']);
     }
 }

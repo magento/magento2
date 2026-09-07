@@ -28,10 +28,9 @@ class AbstractBackendTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->backend = $this->getMockForAbstractClass(
-            AbstractBackend::class,
-            [['option1' => 'value1', 'option2' => 'value2']]
-        );
+        $this->backend = $this->getMockBuilder(AbstractBackend::class)
+            ->setConstructorArgs([['option1' => 'value1', 'option2' => 'value2']])
+            ->getMock();
     }
 
     /**
@@ -43,10 +42,9 @@ class AbstractBackendTest extends TestCase
     {
         $options = ['test_option' => 'test_value', 'another_option' => 123];
 
-        $backend = $this->getMockForAbstractClass(
-            AbstractBackend::class,
-            [$options]
-        );
+        $backend = $this->getMockBuilder(AbstractBackend::class)
+            ->setConstructorArgs([$options])
+            ->getMock();
 
         $this->assertInstanceOf(AbstractBackend::class, $backend);
     }
@@ -111,10 +109,9 @@ class AbstractBackendTest extends TestCase
             'option4' => ['nested' => 'array']
         ];
 
-        $backend = $this->getMockForAbstractClass(
-            AbstractBackend::class,
-            [$options]
-        );
+        $backend = $this->getMockBuilder(AbstractBackend::class)
+            ->setConstructorArgs([$options])
+            ->getMock();
 
         $this->assertInstanceOf(AbstractBackend::class, $backend);
     }
@@ -142,10 +139,9 @@ class AbstractBackendTest extends TestCase
      */
     public function testBackendCanBeInstantiatedWithEmptyOptions(): void
     {
-        $backend = $this->getMockForAbstractClass(
-            AbstractBackend::class,
-            [[]]
-        );
+        $backend = $this->getMockBuilder(AbstractBackend::class)
+            ->setConstructorArgs([[]])
+            ->getMock();
 
         $this->assertInstanceOf(AbstractBackend::class, $backend);
     }

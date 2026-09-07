@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test configurable product queries work correctly with multiple websites
@@ -38,11 +39,11 @@ class ConfigurableProductMultipleStoreViewTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_children_on_different_websites.php
-     * @dataProvider childrenAssignedToDifferentWebsitesDataProvider
      * @param string $store
      * @param string $childSku
      * @param string $attributeLabel
      */
+    #[DataProvider('childrenAssignedToDifferentWebsitesDataProvider')]
     public function testConfigurableProductWithChildrenAssignedToDifferentWebsites(
         string $store,
         string $childSku,

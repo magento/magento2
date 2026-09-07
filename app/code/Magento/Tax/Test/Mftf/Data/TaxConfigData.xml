@@ -121,6 +121,10 @@
         <data key="path">tax/display/shipping</data>
         <data key="value">3</data>
     </entity>
+    <entity name="DisplayShippingPricesInCatalogIncludingTax">
+        <data key="path">tax/display/shipping</data>
+        <data key="value">2</data>
+    </entity>
     <entity name="CustomCartDisplayPrice">
         <data key="path">tax/cart_display/price</data>
         <data key="value">3</data>
@@ -144,5 +148,89 @@
     <entity name="DefaultCartDisplaySubtotal">
         <data key="path">tax/cart_display/subtotal</data>
         <data key="value">1</data>
+    </entity>
+    <entity name="EnableCrossBorderTrade">
+        <data key="path">tax/calculation/cross_border_trade_enabled</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCrossBorderTrade">
+        <data key="path">tax/calculation/cross_border_trade_enabled</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CartDisplayPriceIncludingTax">
+        <data key="path">tax/cart_display/price</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="CartDisplaySubtotalIncludingTax">
+        <data key="path">tax/cart_display/subtotal</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="CartDisplayShippingIncludingTax">
+        <data key="path">tax/cart_display/shipping</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="SalesDisplayPriceIncludingTax">
+        <data key="path">tax/sales_display/price</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="TaxCalculationUnitBaseAlgorithm">
+        <data key="path">tax/calculation/algorithm</data>
+        <data key="value">UNIT_BASE_CALCULATION</data>
+    </entity>
+    <entity name="DefaultTaxCalculationTotalBaseAlgorithm">
+        <data key="path">tax/calculation/algorithm</data>
+        <data key="value">TOTAL_BASE_CALCULATION</data>
+    </entity>
+    <entity name="TaxCalculationBasedOnOrigin">
+        <data key="path">tax/calculation/based_on</data>
+        <data key="value">origin</data>
+    </entity>
+    <entity name="DefaultTaxCalculationBasedOnShipping">
+        <data key="path">tax/calculation/based_on</data>
+        <data key="value">shipping</data>
+    </entity>
+    <entity name="ApplyCustomerTaxBeforeDiscount">
+        <data key="path">tax/calculation/apply_after_discount</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultApplyCustomerTaxAfterDiscount">
+        <data key="path">tax/calculation/apply_after_discount</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="ApplyDiscountOnPricesIncludingTax">
+        <data key="path">tax/calculation/discount_tax</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DefaultApplyDiscountOnPricesExcludingTax">
+        <data key="path">tax/calculation/discount_tax</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="UkTaxDefaultCountry">
+        <data key="path">tax/defaults/country</data>
+        <data key="value">GB</data>
+    </entity>
+    <entity name="ShippingTaxClassTaxableGoods">
+        <data key="path">tax/classes/shipping_tax_class</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="DefaultShippingTaxClass">
+        <data key="path">tax/classes/shipping_tax_class</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CustomDisplaySalesPrice">
+        <data key="path">tax/sales_display/price</data>
+        <data key="value">3</data>
+    </entity>
+    <entity name="DefaultDisplaySalesPrice">
+        <data key="path">tax/sales_display/price</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SalesDisplaySubtotalIncludingTax">
+        <data key="path">tax/sales_display/subtotal</data>
+        <data key="value">2</data>
+    </entity>
+    <entity name="SalesDisplayShippingIncludingTax">
+        <data key="path">tax/sales_display/shipping</data>
+        <data key="value">2</data>
     </entity>
 </entities>

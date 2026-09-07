@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\Framework\MessageQueue\MessageDeliveryMode;
 use Magento\Framework\MessageQueue\MessageValidator;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\Publisher\ConfigInterface as PublisherConfig;
@@ -92,7 +93,7 @@ class MassPublisher implements PublisherInterface
                     'body' => $message,
                     'properties' => [
                         'topic_name' => $topicName,
-                        'delivery_mode' => 2,
+                        'delivery_mode' => MessageDeliveryMode::PERSISTENT->value,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]
                 ]

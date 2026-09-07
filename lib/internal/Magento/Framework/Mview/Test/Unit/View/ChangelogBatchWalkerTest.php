@@ -85,10 +85,8 @@ class ChangelogBatchWalkerTest extends TestCase
         $this->generator = $this->getMockBuilder(Generator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->idsTableBuilder = $this->getMockBuilder(IdsTableBuilderInterface::class)
-            ->getMockForAbstractClass();
-        $this->idsSelectBuilder = $this->getMockBuilder(IdsSelectBuilderInterface::class)
-            ->getMockForAbstractClass();
+        $this->idsTableBuilder = $this->createMock(IdsTableBuilderInterface::class);
+        $this->idsSelectBuilder = $this->createMock(IdsSelectBuilderInterface::class);
         $this->idsContext = $this->getMockBuilder(IdsContext::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,10 +98,8 @@ class ChangelogBatchWalkerTest extends TestCase
             ->method('getTableBuilder')
             ->willReturn($this->idsTableBuilder);
 
-        $this->changeLog = $this->getMockBuilder(ChangelogInterface::class)
-            ->getMockForAbstractClass();
-        $this->connection = $this->getMockBuilder(AdapterInterface::class)
-            ->getMockForAbstractClass();
+        $this->changeLog = $this->createMock(ChangelogInterface::class);
+        $this->connection = $this->createMock(AdapterInterface::class);
         $this->table = $this->getMockBuilder(Table::class)
             ->disableOriginalConstructor()
             ->getMock();

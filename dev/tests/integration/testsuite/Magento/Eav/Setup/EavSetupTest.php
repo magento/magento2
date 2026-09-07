@@ -6,6 +6,8 @@
 
 namespace Magento\Eav\Setup;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+
 /**
  * Test class for Magento\Eav\Setup\EavSetup.
  * @magentoDbIsolation enabled
@@ -33,8 +35,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $attributeCode
      *
-     * @dataProvider addAttributeDataProvider
+     * 
      */
+    #[DataProvider('addAttributeDataProvider')]
     public function testAddAttribute($attributeCode)
     {
         $attributeData = $this->getAttributeData();
@@ -64,8 +67,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string|null $attributeCode
      *
-     * @dataProvider addAttributeThrowExceptionDataProvider
+     * 
      */
+    #[DataProvider('addAttributeThrowExceptionDataProvider')]
     public function testAddAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
@@ -96,8 +100,9 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      *
      * @param string|null $attributeCode
      *
-     * @dataProvider addInvalidAttributeThrowExceptionDataProvider
+     * 
      */
+    #[DataProvider('addInvalidAttributeThrowExceptionDataProvider')]
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);

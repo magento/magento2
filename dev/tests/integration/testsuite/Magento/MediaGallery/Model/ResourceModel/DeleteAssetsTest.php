@@ -11,6 +11,7 @@ use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Testing delete assets operation
@@ -45,9 +46,8 @@ class DeleteAssetsTest extends TestCase
      * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
-     *
-     * @dataProvider matchingPathsProvider
      */
+    #[DataProvider('matchingPathsProvider')]
     public function testAssetsAreDeleted(array $paths): void
     {
         $this->deleteAssetsByPaths->execute($paths);
@@ -62,9 +62,8 @@ class DeleteAssetsTest extends TestCase
      * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\LocalizedException
-     *
-     * @dataProvider notMatchingPathsProvider
      */
+    #[DataProvider('notMatchingPathsProvider')]
     public function testAssetsAreNotDeleted(array $paths): void
     {
         $this->deleteAssetsByPaths->execute($paths);

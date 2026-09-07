@@ -31,7 +31,7 @@ class GroupTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
 
         $this->model = new Group($this->storeManagerMock);
     }
@@ -43,7 +43,7 @@ class GroupTest extends TestCase
 
     public function testGetScope()
     {
-        $scopeMock = $this->getMockForAbstractClass(ScopeInterface::class);
+        $scopeMock = $this->createMock(ScopeInterface::class);
         $this->storeManagerMock
             ->expects($this->once())
             ->method('getGroup')

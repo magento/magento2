@@ -17,11 +17,13 @@ class ValidateCoupon
      * @param CouponFactory $couponFactory
      * @param DataObjectFactory $objectFactory
      * @param UsageFactory $usageFactory
+     * @param OrderEditUsageOffset $orderEditUsageOffset
      */
     public function __construct(
         private readonly CouponFactory $couponFactory,
         private readonly DataObjectFactory $objectFactory,
-        private readonly UsageFactory $usageFactory
+        private readonly UsageFactory $usageFactory,
+        private readonly OrderEditUsageOffset $orderEditUsageOffset
     ) {
     }
 
@@ -50,8 +52,12 @@ class ValidateCoupon
             return false;
         }
 
+        $orderEditOffset = $this->orderEditUsageOffset->getOffset($address, (int)$rule->getId());
+
         // check entire usage limit
-        if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
+        if ($coupon->getUsageLimit()
+            && $coupon->getTimesUsed() - $orderEditOffset >= $coupon->getUsageLimit()
+        ) {
             $rule->setIsValidForAddress($address, false);
             return false;
         }
@@ -67,8 +73,8 @@ class ValidateCoupon
             $customerId,
             $coupon->getId()
         );
-        if ($couponUsage->getCouponId() &&
-            $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
+        if ($couponUsage->getCouponId()
+            && $couponUsage->getTimesUsed() - $orderEditOffset >= $coupon->getUsagePerCustomer()
         ) {
             $rule->setIsValidForAddress($address, false);
             return false;

@@ -6,6 +6,7 @@
 namespace Magento\Paypal\Block\Bml;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class BannersTest extends \PHPUnit\Framework\TestCase
 {
@@ -17,10 +18,10 @@ class BannersTest extends \PHPUnit\Framework\TestCase
      * @param bool $isEmptyHtml
      * @param string $methodWppBml
      * @param string $methodWppPeBml
-     * @dataProvider toHtmlDataProvider
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      */
+    #[DataProvider('toHtmlDataProvider')]
     public function testToHtml(
         $publisherId,
         $display,

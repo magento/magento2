@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Catalog;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test is categories enabled for specific storeView
@@ -58,8 +59,8 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param array $category
      * @return void
      * @throws \Exception
-     * @dataProvider categoryEnabledDataProvider
      */
+    #[DataProvider('categoryEnabledDataProvider')]
     public function testCategoryEnabledForSpecificStoreView(string $query, string $storeCode, array $category): void
     {
         $response = $this->graphQlQuery($query, [], '', ['store' => $storeCode]);
@@ -79,8 +80,8 @@ class CategoryEnabledTest extends GraphQlAbstract
      * @param array $category
      * @return void
      * @throws \Exception
-     * @dataProvider categoryDisabledDataProvider
      */
+    #[DataProvider('categoryDisabledDataProvider')]
     public function testCategoryDisabledForSpecificStoreView(string $query, string $storeCode, array $category): void
     {
         $this->markTestSkipped(

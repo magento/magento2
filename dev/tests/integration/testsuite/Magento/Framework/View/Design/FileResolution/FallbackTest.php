@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Design\FileResolution;
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @magentoComponentsDir Magento/Framework/View/_files/fallback
@@ -58,9 +59,8 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      * @param string $themePath
      * @param string|null $module
      * @param string|null $expectedFilename
-     *
-     * @dataProvider getTemplateFileDataProvider
      */
+    #[DataProvider('getTemplateFileDataProvider')]
     public function testGetTemplateFile($file, $themePath, $module, $expectedFilename)
     {
         $this->reinitializeEnvironment();
@@ -120,9 +120,8 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      * @param string $themePath
      * @param string $locale
      * @param string|null $expectedFilename
-     *
-     * @dataProvider getLocaleFileDataProvider
      */
+    #[DataProvider('getLocaleFileDataProvider')]
     public function testGetI18nCsvFile($themePath, $locale, $expectedFilename)
     {
         $this->reinitializeEnvironment();
@@ -169,9 +168,8 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      * @param string $locale
      * @param string $module
      * @param string|null $expectedFilename
-     *
-     * @dataProvider getViewFileDataProvider
      */
+    #[DataProvider('getViewFileDataProvider')]
     public function testGetViewFile($file, $themePath, $locale, $module, $expectedFilename)
     {
         $this->reinitializeEnvironment();
@@ -266,9 +264,8 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      * @param string $themePath
      * @param string $module
      * @param string|null $expectedFilename
-     *
-     * @dataProvider getEmailTemplateFileDataProvider
      */
+    #[DataProvider('getEmailTemplateFileDataProvider')]
     public function testGetEmailTemplateFile($file, $themePath, $module, $expectedFilename)
     {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;

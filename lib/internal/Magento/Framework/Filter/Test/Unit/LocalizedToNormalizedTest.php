@@ -9,6 +9,7 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 use Magento\Framework\Filter\LocalizedToNormalized;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use NumberFormatter;
 
 class LocalizedToNormalizedTest extends TestCase
@@ -18,9 +19,8 @@ class LocalizedToNormalizedTest extends TestCase
      * @param string $value
      * @param array $options
      * @param string|array $expectedValues
-     *
-     * @dataProvider localizedToNormalizedDataProvider
-     */
+     *     */
+    #[DataProvider('localizedToNormalizedDataProvider')]
     public function testLocalizedToNormalized(string $value, array $options, string|array $expectedValue)
     {
         $filter = new LocalizedToNormalized($options);

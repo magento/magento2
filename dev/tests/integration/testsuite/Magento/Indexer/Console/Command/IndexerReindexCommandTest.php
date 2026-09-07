@@ -50,8 +50,8 @@ class IndexerReindexCommandTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
-        $this->inputMock = $this->getMockBuilder(InputInterface::class)->getMockForAbstractClass();
-        $this->outputMock = $this->getMockBuilder(OutputInterface::class)->getMockForAbstractClass();
+        $this->inputMock = $this->createMock(InputInterface::class);
+        $this->outputMock = $this->createMock(OutputInterface::class);
 
         $this->command = $this->objectManager->get(IndexerReindexCommand::class);
     }

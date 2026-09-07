@@ -23,7 +23,7 @@ class IndexTest extends ThemeTestCase
     public function testIndexAction()
     {
         $menuModel = $this->getMockBuilder(Menu::class)
-            ->setConstructorArgs([$this->getMockForAbstractClass(LoggerInterface::class)])
+            ->setConstructorArgs([$this->createMock(LoggerInterface::class)])
             ->getMock();
         $menuModel->expects($this->once())
             ->method('getParentItems')
@@ -38,7 +38,7 @@ class IndexTest extends ThemeTestCase
         $titleBlock = $this->createMock(Title::class);
         $titleBlock->expects($this->once())->method('setPageTitle');
 
-        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
+        $layout = $this->createMock(LayoutInterface::class);
         $layout->expects($this->any())
             ->method('getBlock')
             ->willReturnMap([

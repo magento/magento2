@@ -11,10 +11,13 @@ use Magento\Framework\App\Config\Value;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\ValueProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use PHPUnit\Framework\TestCase;
 
 class ValueProcessorTest extends TestCase
 {
+    use MockCreationTrait;
+
     /** @var BackendModelFactory|MockObject */
     protected $backendModelFactory;
 
@@ -26,14 +29,11 @@ class ValueProcessorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->backendModelFactory = $this->getMockBuilder(BackendModelFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->backendModel = $this->getMockBuilder(Value::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['getValue'])
-            ->onlyMethods(['afterLoad'])
-            ->getMock();
+        $this->backendModelFactory = $this->createMock(BackendModelFactory::class);
+        $this->backendModel = $this->createPartialMockWithReflection(
+            Value::class,
+            ['getValue', 'afterLoad']
+        );
 
         $this->valueProcessor = new ValueProcessor($this->backendModelFactory);
     }

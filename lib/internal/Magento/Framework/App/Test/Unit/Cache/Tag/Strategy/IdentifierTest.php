@@ -37,7 +37,7 @@ class IdentifierTest extends TestCase
 
     public function testGetTagsWithIdentityInterface()
     {
-        $object = $this->getMockForAbstractClass(IdentityInterface::class);
+        $object = $this->createMock(IdentityInterface::class);
 
         $identities = ['id1', 'id2'];
 

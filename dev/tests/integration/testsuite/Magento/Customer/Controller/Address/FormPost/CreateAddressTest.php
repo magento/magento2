@@ -17,6 +17,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\TestCase\AbstractController;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test cases related to check that customer address correctly created from
@@ -99,13 +100,12 @@ class CreateAddressTest extends AbstractController
     /**
      * Assert that default or non-default customer address successfully created via controller on frontend.
      *
-     * @dataProvider postDataForSuccessCreateDefaultAddressDataProvider
-     *
      * @param array $postData
      * @param bool $isShippingDefault
      * @param bool $isBillingDefault
      * @return void
      */
+    #[DataProvider('postDataForSuccessCreateDefaultAddressDataProvider')]
     public function testAddressSuccessfullyCreatedAsDefaultForCustomer(
         array $postData,
         bool $isShippingDefault,
@@ -174,12 +174,11 @@ class CreateAddressTest extends AbstractController
     /**
      * Assert that customer address successfully created via controller on frontend.
      *
-     * @dataProvider postDataForSuccessCreateAddressDataProvider
-     *
      * @param array $postData
      * @param array $expectedData
      * @return void
      */
+    #[DataProvider('postDataForSuccessCreateAddressDataProvider')]
     public function testAddressSuccessfullyCreatedForCustomer(array $postData, array $expectedData): void
     {
         if (isset($expectedData['custom_region_name'])) {
@@ -267,12 +266,11 @@ class CreateAddressTest extends AbstractController
      * Assert that customer address wasn't created via controller on frontend
      * when POST data broken.
      *
-     * @dataProvider postDataForCreateAddressWithErrorDataProvider
-     *
      * @param array $postData
      * @param array $expectedSessionMessages
      * @return void
      */
+    #[DataProvider('postDataForCreateAddressWithErrorDataProvider')]
     public function testAddressWasntCreatedForCustomer(array $postData, array $expectedSessionMessages): void
     {
         $this->performRequestWithData($postData);

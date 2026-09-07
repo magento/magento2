@@ -12,14 +12,15 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class StatusTest extends TestCase
 {
     /**
      * @param array $indexValues
      * @param string $expectedResult
-     * @dataProvider renderDataProvider
      */
+    #[DataProvider('renderDataProvider')]
     public function testRender($indexValues, $expectedResult)
     {
         $context = $this->getMockBuilder(Context::class)

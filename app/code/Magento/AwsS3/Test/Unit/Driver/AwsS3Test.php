@@ -512,6 +512,72 @@ class AwsS3Test extends TestCase
         self::assertFalse($this->driver->createDirectory(self::URL . 'test/test2/'));
     }
 
+    /**
+     * Verify that createDirectory resolves '.' path components when parent exists.
+     */
+    public function testCreateDirectoryStripsDotComponent(): void
+    {
+        $this->metadataProviderMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturnCallback(function ($param) {
+                if ($param === 'import_export') {
+                    return ['type' => AwsS3::TYPE_DIR];
+                }
+                throw new UnableToRetrieveMetadata('');
+            });
+        $this->adapterMock->expects($this->any())
+            ->method('listContents')
+            ->willReturn(new \EmptyIterator());
+        // The adapter must not be called with a path containing '.'
+        $this->adapterMock->expects(self::never())
+            ->method('createDirectory');
+
+        self::assertTrue($this->driver->createDirectory(self::URL . 'import_export/.'));
+    }
+
+    /**
+     * Verify that createDirectory with '.' creates the resolved path without literal '.'.
+     */
+    public function testCreateDirectoryStripsDotComponentAndCreatesResolved(): void
+    {
+        $createdDirs = [];
+        $this->metadataProviderMock->expects($this->any())
+            ->method('getMetadata')
+            ->willReturnCallback(function ($param) use (&$createdDirs) {
+                if (in_array($param, $createdDirs, true)) {
+                    return ['type' => AwsS3::TYPE_DIR];
+                }
+                throw new UnableToRetrieveMetadata('');
+            });
+        $this->adapterMock->expects($this->any())
+            ->method('listContents')
+            ->willReturn(new \EmptyIterator());
+        $this->adapterMock->expects(self::atLeastOnce())
+            ->method('createDirectory')
+            ->willReturnCallback(function (string $path) use (&$createdDirs): void {
+                self::assertStringNotContainsString('/.', $path, 'Adapter must not receive path with "."');
+                self::assertNotEquals('.', $path, 'Adapter must not receive bare "."');
+                $createdDirs[] = $path;
+            });
+
+        self::assertTrue($this->driver->createDirectory(self::URL . 'import_export/.'));
+    }
+
+    /**
+     * Verify that filePutContents strips '.' from paths before passing to the adapter.
+     */
+    public function testFilePutContentsStripsDotComponent(): void
+    {
+        $this->adapterMock->expects(self::once())
+            ->method('write')
+            ->with('import_export/test.txt');
+        $this->adapterMock->expects(self::once())
+            ->method('fileSize')
+            ->willReturn(new \League\Flysystem\FileAttributes('import_export/test.txt', 5));
+
+        $this->driver->filePutContents(self::URL . 'import_export/./test.txt', 'hello');
+    }
+
     public function testRename(): void
     {
         $this->adapterMock->expects(self::once())

@@ -17,18 +17,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-33951"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
-            <!--Set price scope global-->
-            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
-            <!--Remove Currency options for Website-->
-            <remove keyForRemoval="setCurrencyBaseEURWebsites"/>
-            <remove keyForRemoval="setAllowedCurrencyWebsitesForEURandUSD"/>
-            <remove keyForRemoval="setCurrencyDefaultEURWebsites"/>
             <!--Set merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedKingdom.path}} {{MerchantUnitedKingdom.value}}" stepKey="setMerchantCountryUK"/>
             <!--Enable Advanced Setting-->
@@ -44,7 +35,7 @@
 
         <!-- click on PayPal payment radio button -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="guestCheckoutFillingShippingSection" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="guestSelectCheckMoneyOrderPayment"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" after="waitForPlaceOrderButton" stepKey="guestSelectCheckMoneyOrderPayment"/>
 
         <!--Click Paypal button-->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" after="guestSelectCheckMoneyOrderPayment" stepKey="guestPlaceOrder">
@@ -52,7 +43,7 @@
         </actionGroup>
 
         <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
             <argument name="payerName" value="{{Payer.firstName}}"/>
         </actionGroup>
 
