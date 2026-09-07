@@ -105,6 +105,12 @@ sub vcl_recv {
         return (pass);
     }
 
+    # Pass authenticated non-GraphQL requests (reproduces built-in VCL safety rule
+    # bypassed by the unconditional return(hash) below)
+    if (req.url !~ "/graphql" && req.http.Authorization) {
+        return (pass);
+    }
+
     return (hash);
 }
 
