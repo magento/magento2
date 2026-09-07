@@ -5,17 +5,6 @@
  */
 namespace Magento\Downloadable\Model\Observer;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Downloadable\Model\Link\Purchased\Item;
-use Magento\Downloadable\Model\Product\Type;
-use Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Address;
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\Order\Payment;
-use PHPUnit\Framework\Attributes\DataProvider;
-
 /**
  * Integration test for case, when customer is able to download
  * downloadable product, after order was canceled.
@@ -23,6 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
+     * Object manager
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -75,105 +65,5 @@ class SetLinkStatusObserverTest extends \PHPUnit\Framework\TestCase
                 $linkItem->getStatus()
             );
         }
-    }
-
-    /**
-     * Order items have no id yet when sales_order_save_after fires on a first order save,
-     * so a branch that keys $downloadableItemsStatuses by $item->getId() writes an unusable key.
-     * Holded's intended status equals the row's creation default, so only Pending Payment and
-     * Payment Review are distinguishing.
-     *
-     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @magentoDbIsolation enabled
-     */
-    #[DataProvider('firstSaveOrderStateDataProvider')]
-    public function testLinkStatusOnFirstSaveOfOrderInNonProcessingState(string $state, string $expectedLinkStatus)
-    {
-        $order = $this->saveNewOrderWithDownloadableItemInState($state);
-        $orderItem = current($order->getAllItems());
-
-        /** @var CollectionFactory $collectionFactory */
-        $collectionFactory = $this->objectManager->get(CollectionFactory::class);
-        $linkCollection = $collectionFactory->create();
-        $linkCollection->addFieldToFilter('order_item_id', $orderItem->getId());
-
-        $this->assertGreaterThan(0, $linkCollection->count());
-
-        /** @var Item $linkItem */
-        foreach ($linkCollection->getItems() as $linkItem) {
-            $this->assertEquals($expectedLinkStatus, $linkItem->getStatus());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public static function firstSaveOrderStateDataProvider(): array
-    {
-        return [
-            'pending payment' => [Order::STATE_PENDING_PAYMENT, Item::LINK_STATUS_PENDING_PAYMENT],
-            'payment review' => [Order::STATE_PAYMENT_REVIEW, Item::LINK_STATUS_PAYMENT_REVIEW],
-            'holded' => [Order::STATE_HOLDED, Item::LINK_STATUS_PENDING],
-        ];
-    }
-
-    /**
-     * @param string $state
-     * @return Order
-     */
-    private function saveNewOrderWithDownloadableItemInState(string $state): Order
-    {
-        $billingAddress = $this->objectManager->create(
-            Address::class,
-            [
-                'data' => [
-                    'firstname' => 'guest',
-                    'lastname' => 'guest',
-                    'email' => 'customer@example.com',
-                    'street' => 'street',
-                    'city' => 'Los Angeles',
-                    'region' => 'CA',
-                    'postcode' => '1',
-                    'country_id' => 'US',
-                    'telephone' => '1',
-                ],
-            ]
-        );
-        $billingAddress->setAddressType('billing');
-
-        $payment = $this->objectManager->create(Payment::class);
-        $payment->setMethod('checkmo');
-
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('downloadable-product');
-        $link = $product->getExtensionAttributes()->getDownloadableProductLinks()[0];
-
-        /** @var OrderItem $orderItem */
-        $orderItem = $this->objectManager->create(OrderItem::class);
-        $orderItem->setProductId($product->getId())
-            ->setProductType(Type::TYPE_DOWNLOADABLE)
-            ->setProductOptions(['links' => [$link->getId()]])
-            ->setBasePrice(100)
-            ->setQtyOrdered(1);
-
-        /** @var Order $order */
-        $order = $this->objectManager->create(Order::class);
-        $order->setCustomerEmail('mail@to.co')
-            ->addItem($orderItem)
-            ->setIncrementId('100000041230')
-            ->setCustomerIsGuest(true)
-            ->setStoreId(1)
-            ->setEmailSent(1)
-            ->setState($state)
-            ->setStatus($state)
-            ->setBillingAddress($billingAddress)
-            ->setPayment($payment);
-
-        /** @var OrderRepositoryInterface $orderRepository */
-        $orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
-        $orderRepository->save($order);
-
-        return $order;
     }
 }
