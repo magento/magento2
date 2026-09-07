@@ -1,3 +1,7 @@
+############################################
+## Copyright 2026 Adobe
+## All Rights Reserved.
+
 <IfModule mod_php7.c>
     php_flag engine 0
 </IfModule>
@@ -22,11 +26,6 @@ Options -MultiViews
     RewriteCond %{REQUEST_FILENAME} !-l
 
     RewriteRule .* ../static.php?resource=$0 [L]
-    # Detects if moxieplayer request with uri params and redirects to uri without params
-    <Files moxieplayer.swf>
-     	RewriteCond %{QUERY_STRING} !^$
-     	RewriteRule ^(.*)$ %{REQUEST_URI}? [R=301,L]
-     </Files>
 </IfModule>
 
 ############################################
@@ -57,10 +56,10 @@ AddType image/svg+xml svg svgz
 
 # Fonts
 AddType application/vnd.ms-fontobject eot
-AddType application/x-font-ttf ttf
-AddType application/x-font-otf otf
-AddType application/x-font-woff woff
-AddType application/font-woff2 woff2
+AddType font/ttf ttf
+AddType font/otf otf
+AddType font/woff woff
+AddType font/woff2 woff2
 
 # Manifest
 AddType application/manifest+json webmanifest
@@ -136,10 +135,10 @@ AddType application/xml xml
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
     ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
-    ExpiresByType application/x-font-ttf "access plus 1 year"
-    ExpiresByType application/x-font-otf "access plus 1 year"
-    ExpiresByType application/x-font-woff "access plus 1 year"
-    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
     ExpiresByType font/opentype "access plus 1 year"
     ExpiresByType font/truetype "access plus 1 year"
 
