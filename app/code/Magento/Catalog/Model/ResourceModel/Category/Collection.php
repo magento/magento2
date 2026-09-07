@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2011 Adobe
  * All Rights Reserved.
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
@@ -111,11 +111,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param Config $eavConfig
      * @param ResourceConnection $resource
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param Helper $resourceHelper
-     * @param UniversalFactory $universalFactory
-     * @param StoreManagerInterface $storeManager
-     * @param AdapterInterface|null $connection
-     * @param ScopeConfigInterface|null $scopeConfig
+     * @param \Magento\Eav\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Visibility|null $catalogProductVisibility
      * @param int|null $readBatchSize
      * @param int|null $writeBatchSize
@@ -369,25 +369,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($countAnchor) {
             // Retrieve Anchor categories product counts
             $categoryIds = array_keys($anchor);
-            $countSelect = $this->getProductsCountQuery($categoryIds, (bool)$websiteId);
-            $categoryProductsCount = $this->_conn->fetchPairs($countSelect);
             $countFromCategoryTable = [];
             if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, (int)$websiteId);
+                $countFromCategoryTable = $this->getCountFromCategoryTableBulk($categoryIds, $websiteId);
             }
 
             foreach ($anchor as $item) {
                 $productsCount = 0;
                 if (count($categoryIds) > self::BULK_PROCESSING_LIMIT) {
-                    if (isset($categoryProductsCount[$item->getId()])) {
-                        $productsCount = (int)$categoryProductsCount[$item->getId()];
-                    } elseif (isset($countFromCategoryTable[$item->getId()])) {
+                    if (isset($countFromCategoryTable[$item->getId()])) {
                         $productsCount = (int)$countFromCategoryTable[$item->getId()];
                     }
                 } else {
-                    $productsCount = isset($categoryProductsCount[$item->getId()])
-                        ? (int)$categoryProductsCount[$item->getId()]
-                        : $this->getProductsCountFromCategoryTable($item, $websiteId);
+                    $productsCount = $this->getProductsCountFromCategoryTable($item, $websiteId);
                 }
                 $item->setProductCount($productsCount);
             }
@@ -399,13 +393,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products number for each category with bulk query
      *
      * @param array $categoryIds
-     * @param int $websiteId
+     * @param string|int|null $websiteId
      * @return array
      * @throws \Zend_Db_Exception
      */
     private function getCountFromCategoryTableBulk(
         array $categoryIds,
-        int $websiteId
+        string|int|null $websiteId
     ) : array {
         $connection = $this->_conn;
         $tempTableName = 'temp_category_descendants_' . uniqid();
@@ -497,10 +491,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get products count using catalog_category_entity table
      *
      * @param Category $item
-     * @param string $websiteId
+     * @param string|int|null $websiteId
      * @return int
      */
-    private function getProductsCountFromCategoryTable(Category $item, string $websiteId): int
+    private function getProductsCountFromCategoryTable(Category $item, string|int|null $websiteId): int
     {
         $productCount = 0;
 
@@ -702,31 +696,5 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->_productTable = $this->getTable('catalog_category_product');
         }
         return $this->_productTable;
-    }
-
-    /**
-     * Get query for retrieve count of products per category
-     *
-     * @param array $categoryIds
-     * @param bool $addVisibilityFilter
-     * @return Select
-     */
-    private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
-    {
-        $categoryTable = $this->_resource->getTableName('catalog_category_product_index');
-        $select = $this->_conn->select()
-            ->from(
-                ['cat_index' => $categoryTable],
-                ['category_id' => 'cat_index.category_id', 'count' => 'count(cat_index.product_id)']
-            )
-            ->where('cat_index.category_id in (?)', \array_map('\intval', $categoryIds));
-        if (true === $addVisibilityFilter) {
-            $select->where('cat_index.visibility in (?)', $this->catalogProductVisibility->getVisibleInSiteIds());
-        }
-        if (count($categoryIds) > 1) {
-            $select->group('cat_index.category_id');
-        }
-
-        return $select;
     }
 }
