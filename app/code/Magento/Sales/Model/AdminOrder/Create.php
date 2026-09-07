@@ -299,6 +299,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private $paymentMethodSpecifications;
 
     /**
+     * @var \Magento\Catalog\Helper\Product
+     */
+    private \Magento\Catalog\Helper\Product $catalogProductHelper;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -335,7 +340,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param HttpRequest|null $request
      * @param SpecificationFactory|null $paymentMethodSpecificationFactory
      * @param array $paymentMethodSpecifications
+     * @param \Magento\Catalog\Helper\Product|null $catalogProductHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -373,7 +380,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         ?OrderRepositoryInterface $orderRepositoryInterface = null,
         ?HttpRequest $request = null,
         ?SpecificationFactory $paymentMethodSpecificationFactory = null,
-        array $paymentMethodSpecifications = []
+        array $paymentMethodSpecifications = [],
+        ?\Magento\Catalog\Helper\Product $catalogProductHelper = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_eventManager = $eventManager;
@@ -417,6 +425,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->paymentMethodSpecificationFactory = $paymentMethodSpecificationFactory ?: ObjectManager::getInstance()
             ->get(SpecificationFactory::class);
         $this->paymentMethodSpecifications = $paymentMethodSpecifications;
+        $this->catalogProductHelper = $catalogProductHelper ?: ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Product::class);
     }
 
     /**
@@ -595,22 +605,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         /* Initialize catalog rule data with new session values */
         $this->initRuleData();
-        foreach ($order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true) as $orderItem) {
-            /* @var $orderItem \Magento\Sales\Model\Order\Item */
-            if (!$orderItem->getParentItem()) {
-                $qty = $orderItem->getQtyOrdered();
-                if (!$order->getReordered()) {
-                    $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
-                }
 
-                if ($qty > 0) {
-                    $item = $this->initFromOrderItem($orderItem, $qty);
-                    if (is_string($item)) {
-                        throw new \Magento\Framework\Exception\LocalizedException(__($item));
-                    }
-                }
-            }
-        }
+        $this->initFromOrderItems($order);
 
         $shippingAddress = $order->getShippingAddress();
         if ($shippingAddress) {
@@ -674,6 +670,49 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->quoteRepository->save($quote);
 
         return $this;
+    }
+
+    /**
+     * Add the original order items to the quote, bypassing salability checks.
+     *
+     * Out-of-stock products on the original order would otherwise be silently
+     * dropped in initFromOrderItem (Quote::addProduct -> Product::isSalable ->
+     * StockRegistry reports is_in_stock=false) on non-MSI stores with
+     * backorders disabled, leaving Admin "Reorder" with an empty quote and a
+     * confusing "This product is out of stock" message.
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function initFromOrderItems(\Magento\Sales\Model\Order $order): void
+    {
+        $previousSkipSaleableCheck = $this->catalogProductHelper->getSkipSaleableCheck();
+        $this->catalogProductHelper->setSkipSaleableCheck(true);
+
+        try {
+            $orderItems = $order->getItemsCollection($this->_salesConfig->getAvailableProductTypes(), true);
+            foreach ($orderItems as $orderItem) {
+                /* @var $orderItem \Magento\Sales\Model\Order\Item */
+                if ($orderItem->getParentItem()) {
+                    continue;
+                }
+
+                $qty = $orderItem->getQtyOrdered();
+                if (!$order->getReordered()) {
+                    $qty -= max($orderItem->getQtyShipped(), $orderItem->getQtyInvoiced());
+                }
+
+                if ($qty > 0) {
+                    $item = $this->initFromOrderItem($orderItem, $qty);
+                    if (is_string($item)) {
+                        throw new \Magento\Framework\Exception\LocalizedException(__($item));
+                    }
+                }
+            }
+        } finally {
+            $this->catalogProductHelper->setSkipSaleableCheck($previousSkipSaleableCheck);
+        }
     }
 
     /**
