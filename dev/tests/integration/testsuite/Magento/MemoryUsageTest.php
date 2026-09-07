@@ -48,7 +48,6 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
             $this->_deallocateUnusedMemory();
         }
         $actualMemoryUsage = $this->_helper->getRealMemoryUsage() - $actualMemoryUsage;
-        fwrite(STDERR, "DEBUG final actualMemoryUsage=$actualMemoryUsage\n");
         $this->assertLessThanOrEqual(
             $this->_getAllowedMemoryUsage(),
             $actualMemoryUsage,
