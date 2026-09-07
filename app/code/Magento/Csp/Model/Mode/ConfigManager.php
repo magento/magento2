@@ -15,6 +15,7 @@ use Magento\Csp\Model\Mode\Data\ModeConfiguredFactory;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 
@@ -49,18 +50,25 @@ class ConfigManager implements ModeConfigManagerInterface
     private $modeConfiguredFactory;
 
     /**
+     * @var UrlValidator
+     */
+    private UrlValidator $urlValidator;
+
+    /**
      * @param ScopeConfigInterface $config
      * @param Store $store
      * @param State $state
      * @param Http|null $request
      * @param ModeConfiguredFactory|null $modeConfiguredFactory
+     * @param UrlValidator|null $urlValidator
      */
     public function __construct(
         ScopeConfigInterface $config,
         Store $store,
         State $state,
         ?Http $request = null,
-        ?ModeConfiguredFactory $modeConfiguredFactory = null
+        ?ModeConfiguredFactory $modeConfiguredFactory = null,
+        ?UrlValidator $urlValidator = null
     ) {
         $this->config = $config;
         $this->storeModel = $store;
@@ -70,6 +78,8 @@ class ConfigManager implements ModeConfigManagerInterface
             ?? ObjectManager::getInstance()->get(Http::class);
         $this->modeConfiguredFactory = $modeConfiguredFactory
             ?? ObjectManager::getInstance()->get(ModeConfiguredFactory::class);
+        $this->urlValidator = $urlValidator
+            ?? ObjectManager::getInstance()->get(UrlValidator::class);
     }
 
     /**
@@ -125,6 +135,10 @@ class ConfigManager implements ModeConfigManagerInterface
                 ScopeInterface::SCOPE_STORE,
                 $this->storeModel->getStore()
             );
+        }
+
+        if (!empty($reportUri) && !$this->urlValidator->isValid((string)$reportUri, ['http', 'https'])) {
+            $reportUri = null;
         }
 
         return $this->modeConfiguredFactory->create([

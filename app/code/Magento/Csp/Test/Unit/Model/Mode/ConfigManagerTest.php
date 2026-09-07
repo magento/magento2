@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\Url as UrlValidator;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -62,6 +63,11 @@ class ConfigManagerTest extends TestCase
     private $modeConfiguredInterfaceMock;
 
     /**
+     * @var UrlValidator|MockObject
+     */
+    private $urlValidatorMock;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
@@ -74,6 +80,7 @@ class ConfigManagerTest extends TestCase
         $this->requestMock = $this->createMock(Http::class);
         $this->modeConfiguredFactoryMock = $this->createPartialMock(ModeConfiguredFactory::class, ['create']);
         $this->modeConfiguredInterfaceMock = $this->createMock(ModeConfiguredInterface::class);
+        $this->urlValidatorMock = $this->createMock(UrlValidator::class);
 
         $this->model = $objectManager->getObject(
             ConfigManager::class,
@@ -82,7 +89,8 @@ class ConfigManagerTest extends TestCase
                 'storeModel' => $this->storeMock,
                 'state' => $this->stateMock,
                 'request' => $this->requestMock,
-                'modeConfiguredFactory' => $this->modeConfiguredFactoryMock
+                'modeConfiguredFactory' => $this->modeConfiguredFactoryMock,
+                'urlValidator' => $this->urlValidatorMock
             ]
         );
     }
@@ -120,6 +128,9 @@ class ConfigManagerTest extends TestCase
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->willReturn('testReportUri');
+        $this->urlValidatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(true);
         $this->modeConfiguredFactoryMock->expects($this->once())
             ->method('create')
             ->with(['reportOnly' => true, 'reportUri' => 'testReportUri'])
@@ -156,6 +167,11 @@ class ConfigManagerTest extends TestCase
                 };
             })
             ->willReturnOnConsecutiveCalls(true, 'testReportUri');
+
+        $this->urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('testReportUri', ['http', 'https'])
+            ->willReturn(true);
 
         $this->modeConfiguredFactoryMock->expects($this->once())
             ->method('create')
@@ -195,9 +211,98 @@ class ConfigManagerTest extends TestCase
             })
             ->willReturnOnConsecutiveCalls(null, true, null, 'testPageReportUri');
 
+        $this->urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('testPageReportUri', ['http', 'https'])
+            ->willReturn(true);
+
         $this->modeConfiguredFactoryMock->expects($this->once())
             ->method('create')
             ->with(['reportOnly' => true, 'reportUri' => 'testPageReportUri'])
+            ->willReturn($this->modeConfiguredInterfaceMock);
+
+        $result = $this->model->getConfigured();
+
+        $this->assertInstanceOf(ModeConfiguredInterface::class, $result);
+    }
+
+    /**
+     * Test a valid configured report URI is returned unchanged.
+     *
+     * @return void
+     */
+    public function testValidReportUriIsReturnedUnchanged(): void
+    {
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getFullActionName')
+            ->willReturn('checkout_index_index');
+
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn(Area::AREA_FRONTEND);
+
+        $matcher = $this->exactly(2);
+        $this->scopeConfigMock->expects($matcher)
+            ->method('getValue')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->getInvocationCount()) {
+                    1 => ['csp/mode/checkout_index_index/report_only', ScopeInterface::SCOPE_STORE, null],
+                    2 => ['csp/mode/checkout_index_index/report_uri', ScopeInterface::SCOPE_STORE, null],
+                };
+            })
+            ->willReturnOnConsecutiveCalls(true, 'https://example.com/csp-report');
+
+        $this->urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('https://example.com/csp-report', ['http', 'https'])
+            ->willReturn(true);
+
+        $this->modeConfiguredFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['reportOnly' => true, 'reportUri' => 'https://example.com/csp-report'])
+            ->willReturn($this->modeConfiguredInterfaceMock);
+
+        $result = $this->model->getConfigured();
+
+        $this->assertInstanceOf(ModeConfiguredInterface::class, $result);
+    }
+
+    /**
+     * Test a report URI containing CR/LF is treated as absent instead of reaching the header layer.
+     *
+     * @return void
+     */
+    public function testInvalidReportUriIsTreatedAsAbsent(): void
+    {
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getFullActionName')
+            ->willReturn('checkout_index_index');
+
+        $this->stateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn(Area::AREA_FRONTEND);
+
+        $maliciousReportUri = "https://example.com/report\r\nX-Injected: 1";
+
+        $matcher = $this->exactly(2);
+        $this->scopeConfigMock->expects($matcher)
+            ->method('getValue')
+            ->willReturnCallback(function () use ($matcher) {
+                return match ($matcher->getInvocationCount()) {
+                    1 => ['csp/mode/checkout_index_index/report_only', ScopeInterface::SCOPE_STORE, null],
+                    2 => ['csp/mode/checkout_index_index/report_uri', ScopeInterface::SCOPE_STORE, null],
+                };
+            })
+            ->willReturnOnConsecutiveCalls(true, $maliciousReportUri);
+
+        $this->urlValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($maliciousReportUri, ['http', 'https'])
+            ->willReturn(false);
+
+        $this->modeConfiguredFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['reportOnly' => true, 'reportUri' => null])
             ->willReturn($this->modeConfiguredInterfaceMock);
 
         $result = $this->model->getConfigured();
