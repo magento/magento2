@@ -27,6 +27,14 @@ sub vcl_recv {
         set req.hash_always_miss = true;
     }
 
+    # Remove empty query strings (e.g. /index.html?)
+    if (req.url ~ "\?$") {
+        set req.url = regsub(req.url, "\?$", "");
+    }
+
+    # Remove port number from host header for consistent cache keys
+    set req.http.Host = regsub(req.http.Host, ":[0-9]+", "");
+
     # Sorting query string parameters
     if (req.url ~ "\?.+&.+") {
         set req.url = std.querysort(req.url);
