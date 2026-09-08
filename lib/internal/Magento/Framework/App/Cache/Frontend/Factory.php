@@ -490,6 +490,8 @@ class Factory
      * Resolve a cache_dir value to an absolute path.
      *
      * Absolute paths (e.g. /dev/shm/magento_l1) are required for L2 cache configuration and returned as-is.
+     * The directory itself is not created here: only the backend that actually stores data on the filesystem
+     * (Symfony FilesystemAdapter) creates it on first use, so non-file backends such as Redis leave var/ untouched.
      *
      * @param string $path
      * @return string
@@ -499,9 +501,7 @@ class Factory
         if (str_starts_with($path, DIRECTORY_SEPARATOR)) {
             return $path;
         }
-        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $directory->create($path);
-        return $directory->getAbsolutePath($path);
+        return $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath($path);
     }
 
     /**

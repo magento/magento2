@@ -293,18 +293,19 @@ class FactoryTest extends TestCase
     }
 
     /**
-     * Test that relative cache_dir paths are resolved under VAR_DIR.
+     * Test that relative cache_dir paths are resolved under VAR_DIR without being created.
      *
      * Relative paths must go through the Magento filesystem abstraction:
-     * getDirectoryWrite(VAR_DIR) → create(path) → resolve to absolute path.
+     * getDirectoryWrite(VAR_DIR) → resolve to absolute path. The directory itself is created by the backend
+     * that actually uses it, so the factory must not create it.
      */
-    public function testResolveCacheDirRelativePathResolvedUnderVarDir(): void
+    public function testResolveCacheDirRelativePathResolvedUnderVarDirWithoutCreatingIt(): void
     {
         $relativePath = 'custom/cache/dir';
         $resolved     = '/var/www/html/var/' . $relativePath;
 
         $writeDirMock = $this->createMock(WriteInterface::class);
-        $writeDirMock->expects($this->once())->method('create')->with($relativePath)->willReturn(true);
+        $writeDirMock->expects($this->never())->method('create');
         $writeDirMock->expects($this->once())->method('getAbsolutePath')->with($relativePath)->willReturn($resolved);
 
         $filesystem = $this->createMock(Filesystem::class);
@@ -317,6 +318,39 @@ class FactoryTest extends TestCase
         $model->create([
             'backend'         => NullAdapter::class,
             'backend_options' => ['cache_dir' => $relativePath],
+            'id_prefix'       => 'test_',
+        ]);
+    }
+
+    /**
+     * Test that a non-filesystem backend does not create the configured cache_dir under var.
+     *
+     * With every cache frontend pointed at Redis, the hardcoded page_cache cache_dir coming from di.xml
+     * must not result in an empty var/page_cache directory being created.
+     */
+    public function testCreateWithNonFilesystemBackendDoesNotCreateCacheDir(): void
+    {
+        $varDirMock = $this->createMock(WriteInterface::class);
+        $varDirMock->expects($this->never())->method('create');
+        $varDirMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->with('page_cache')
+            ->willReturn('/var/www/html/var/page_cache');
+
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('/var/www/html/var/cache');
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturnCallback(
+                fn ($directoryCode) => $directoryCode === DirectoryList::VAR_DIR ? $varDirMock : $cacheDirMock
+            );
+
+        $model = $this->buildModelWithFilesystem($filesystem);
+        $model->create([
+            'backend'         => 'redis',
+            'backend_options' => ['cache_dir' => 'page_cache', 'server' => '127.0.0.1'],
             'id_prefix'       => 'test_',
         ]);
     }
