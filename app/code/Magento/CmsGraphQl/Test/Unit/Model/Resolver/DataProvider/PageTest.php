@@ -11,8 +11,10 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetPageByIdentifierInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Widget\Model\Template\FilterEmulate;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +37,11 @@ class PageTest extends TestCase
     private FilterEmulate $widgetFilterMock;
 
     /**
+     * @var LayoutInterface|MockObject
+     */
+    private LayoutInterface $layoutMock;
+
+    /**
      * @var Page
      */
     private Page $page;
@@ -44,11 +51,14 @@ class PageTest extends TestCase
         $this->pageRepositoryMock = $this->createMock(PageRepositoryInterface::class);
         $this->widgetFilterMock = $this->createMock(FilterEmulate::class);
         $this->pageByIdentifierMock = $this->createMock(GetPageByIdentifierInterface::class);
+        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock->method('getAllBlocks')->willReturn([]);
 
         $this->page = new Page(
             $this->pageRepositoryMock,
             $this->widgetFilterMock,
-            $this->pageByIdentifierMock
+            $this->pageByIdentifierMock,
+            $this->layoutMock
         );
     }
 
@@ -312,6 +322,7 @@ class PageTest extends TestCase
             PageInterface::META_KEYWORDS => 'Meta Keywords',
             PageInterface::PAGE_ID => 1,
             PageInterface::IDENTIFIER => 'page-identifier',
+            Page::WIDGET_IDENTITIES => [],
         ];
 
         if ($content !== null) {
@@ -319,5 +330,34 @@ class PageTest extends TestCase
         }
 
         return $data;
+    }
+
+    /**
+     * Content rendered by a widget contributes that widget's cache tags to the resolved data,
+     * so the cached CMS page is invalidated when the embedded entity changes.
+     *
+     * @return void
+     */
+    public function testWidgetIdentitiesAreCollectedFromRenderedContent(): void
+    {
+        $this->pageRepositoryMock->method('getById')->with(1)->willReturn($this->getActivePageMock());
+        $this->widgetFilterMock->method('filter')->with('page content')->willReturn('filtered page content');
+
+        $widgetBlock = $this->createMock(IdentityInterface::class);
+        $widgetBlock->method('getIdentities')->willReturn(['cat_p_42', 'cat_p']);
+
+        // No blocks before rendering; the widget block appears afterwards.
+        $layoutMock = $this->createMock(LayoutInterface::class);
+        $layoutMock->method('getAllBlocks')->willReturnOnConsecutiveCalls([], ['products_widget' => $widgetBlock]);
+        $page = new Page(
+            $this->pageRepositoryMock,
+            $this->widgetFilterMock,
+            $this->pageByIdentifierMock,
+            $layoutMock
+        );
+
+        $result = $page->getDataByPageId(1);
+
+        self::assertSame(['cat_p_42', 'cat_p'], $result[Page::WIDGET_IDENTITIES]);
     }
 }
