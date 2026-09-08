@@ -293,18 +293,138 @@ class BulkStatusTest extends TestCase
     /**
      * @return void
      */
-    public function testGetBulksStatus(): void
-    {
+    /**
+     * @param int $scheduledQty
+     * @param int $persistedQty
+     * @param int $openQty
+     * @param int $completeQty
+     * @param int $expectedStatus
+     * @return void
+     */
+    #[DataProvider('getBulkStatusDataProvider')]
+    public function testGetBulkStatus(
+        int $scheduledQty,
+        int $persistedQty,
+        int $openQty,
+        int $completeQty,
+        int $expectedStatus
+    ): void {
         $bulkUuid = 'bulk-1';
-        $allProcessedOperationCollection = $this->createMock(OperationCollection::class);
-        $completeOperationCollection = $this->createMock(OperationCollection::class);
+        $persistedCollection = $this->createMock(OperationCollection::class);
+        $openCollection = $this->createMock(OperationCollection::class);
+        $completeCollection = $this->createMock(OperationCollection::class);
 
+        $this->stubOperationCount($bulkUuid, $scheduledQty);
+
+        $this->operationCollectionFactory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($persistedCollection, $openCollection, $completeCollection);
+
+        $persistedCollection
+            ->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('bulk_uuid', $bulkUuid)
+            ->willReturnSelf();
+        $persistedCollection->expects($this->once())->method('getSize')->willReturn($persistedQty);
+
+        $openCollection
+            ->method('addFieldToFilter')
+            ->willReturnCallback(function ($arg1, $arg2) use ($bulkUuid, $openCollection) {
+                if ($arg1 === 'bulk_uuid' && $arg2 === $bulkUuid) {
+                    return $openCollection;
+                }
+                if ($arg1 === 'status' && $arg2 === OperationInterface::STATUS_TYPE_OPEN) {
+                    return $openCollection;
+                }
+                return $openCollection;
+            });
+        $openCollection->expects($this->once())->method('getSize')->willReturn($openQty);
+
+        if ($persistedQty - $openQty === 0) {
+            $completeCollection->expects($this->never())->method('addFieldToFilter');
+        } else {
+            $completeCollection
+                ->method('addFieldToFilter')
+                ->willReturnCallback(function ($arg1, $arg2) use ($bulkUuid, $completeCollection) {
+                    if ($arg1 === 'bulk_uuid' && $arg2 === $bulkUuid) {
+                        return $completeCollection;
+                    }
+                    if ($arg1 === 'status' && $arg2 === OperationInterface::STATUS_TYPE_COMPLETE) {
+                        return $completeCollection;
+                    }
+                    return $completeCollection;
+                });
+            $completeCollection->method('getSize')->willReturn($completeQty);
+        }
+
+        $this->assertEquals($expectedStatus, $this->model->getBulkStatus($bulkUuid));
+    }
+
+    /**
+     * @return array
+     */
+    public static function getBulkStatusDataProvider(): array
+    {
+        return [
+            'not_started_legacy_no_rows' => [
+                2,
+                0,
+                0,
+                0,
+                BulkSummaryInterface::NOT_STARTED,
+            ],
+            'not_started_all_open' => [
+                2,
+                2,
+                2,
+                0,
+                BulkSummaryInterface::NOT_STARTED,
+            ],
+            'in_progress_mixed_complete_and_open' => [
+                2,
+                2,
+                1,
+                1,
+                BulkSummaryInterface::IN_PROGRESS,
+            ],
+            'in_progress_legacy_partial_processed' => [
+                10,
+                5,
+                0,
+                5,
+                BulkSummaryInterface::IN_PROGRESS,
+            ],
+            'finished_successfully' => [
+                2,
+                2,
+                0,
+                2,
+                BulkSummaryInterface::FINISHED_SUCCESSFULLY,
+            ],
+            'finished_with_failure' => [
+                2,
+                2,
+                0,
+                1,
+                BulkSummaryInterface::FINISHED_WITH_FAILURE,
+            ],
+        ];
+    }
+
+    /**
+     * Stub magento_bulk.operation_count lookup used by getBulkStatus().
+     *
+     * @param string $bulkUuid
+     * @param int $scheduledQty
+     * @return void
+     */
+    private function stubOperationCount(string $bulkUuid, int $scheduledQty): void
+    {
         $connectionName = 'connection_name';
-        $entityType = BulkSummaryInterface::class;
         $this->metadataPoolMock
             ->expects($this->once())
             ->method('getMetadata')
-            ->with($entityType)
+            ->with(BulkSummaryInterface::class)
             ->willReturn($this->entityMetadataMock);
         $this->entityMetadataMock
             ->expects($this->once())
@@ -320,28 +440,6 @@ class BulkStatusTest extends TestCase
         $selectMock->expects($this->once())->method('from')->willReturnSelf();
         $selectMock->expects($this->once())->method('where')->with('uuid = ?', $bulkUuid)->willReturnSelf();
         $this->connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
-        $this->connectionMock->expects($this->once())->method('fetchOne')->with($selectMock)->willReturn(10);
-
-        $this->operationCollectionFactory
-            ->method('create')
-            ->willReturnOnConsecutiveCalls($allProcessedOperationCollection, $completeOperationCollection);
-        $allProcessedOperationCollection
-            ->expects($this->once())
-            ->method('addFieldToFilter')
-            ->with('bulk_uuid', $bulkUuid)
-            ->willReturnSelf();
-        $allProcessedOperationCollection->expects($this->once())->method('getSize')->willReturn(5);
-
-        $completeOperationCollection
-            ->method('addFieldToFilter')
-            ->willReturnCallback(function ($arg1, $arg2) use ($bulkUuid, $completeOperationCollection) {
-                if ($arg1 == 'bulk_uuid' && $arg2 == $bulkUuid) {
-                    return $completeOperationCollection;
-                } elseif ($arg1 == 'status' && $arg2 == OperationInterface::STATUS_TYPE_COMPLETE) {
-                    return $completeOperationCollection;
-                }
-            });
-        $completeOperationCollection->method('getSize')->willReturn(5);
-        $this->assertEquals(BulkSummaryInterface::IN_PROGRESS, $this->model->getBulkStatus($bulkUuid));
+        $this->connectionMock->expects($this->once())->method('fetchOne')->with($selectMock)->willReturn($scheduledQty);
     }
 }
