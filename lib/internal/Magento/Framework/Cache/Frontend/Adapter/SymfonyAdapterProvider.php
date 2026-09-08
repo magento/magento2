@@ -81,19 +81,24 @@ class SymfonyAdapterProvider implements ResetAfterRequestInterface
     private array $adapterTypeMap = [
         // Redis backends
         'redis' => 'redis',
+        'magento\framework\cache\backend\redis' => 'redis',
+        'cm_cache_backend_redis' => 'redis',
 
         // Valkey backends
         'valkey' => 'redis',
+        'magento\framework\cache\backend\valkey' => 'redis',
 
         // Memcached backends
         'memcached' => 'memcached',
         'libmemcached' => 'memcached',
+        'magento\framework\cache\backend\memcached' => 'memcached',
 
         // File backends
         'file' => 'filesystem',
 
         // Database backend
         'database' => 'database',
+        'magento\framework\cache\backend\database' => 'database',
 
         // APCu backends
         'apc' => 'apcu',
