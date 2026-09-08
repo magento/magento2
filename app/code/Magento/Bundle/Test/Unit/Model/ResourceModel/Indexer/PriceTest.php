@@ -154,40 +154,6 @@ class PriceTest extends TestCase
                         `is_required`       = VALUES(`is_required`),
                         `price`             = VALUES(`price`),
                         `tier_price`        = VALUES(`tier_price`)";
-        $processedQuery = "INSERT INTO `catalog_product_index_price_bundle_sel_temp` (,,,,,,,,) SELECT `i`.`entity_id`,
-       `i`.`customer_group_id`,
-       `i`.`website_id`,
-       `bo`.`option_id`,
-       `bs`.`selection_id`,
-       IF(bo.type = 'select' OR bo.type = 'radio', 0, 1) AS `group_type`,
-       `bo`.`required`                                   AS `is_required`,
-       LEAST(IF(i.special_price > 0 AND i.special_price < 100,
-            ROUND(idx.min_price * bs.selection_qty * (i.special_price / 100), 4), idx.min_price * bs.selection_qty),
-            IFNULL((IF(i.tier_percent IS NOT NULL,
-            ROUND((1 - i.tier_percent / 100) * idx.min_price * bs.selection_qty, 4), NULL)), idx.min_price *
-                                                                                    bs.selection_qty)) AS `price`,
-       IF(i.tier_percent IS NOT NULL, ROUND((1 - i.tier_percent / 100) * idx.min_price * bs.selection_qty, 4),
-          NULL)  AS `tier_price`
-        FROM `catalog_product_index_price_bundle_temp` AS `i`
-         INNER JOIN `catalog_product_entity` AS `parent_product` ON parent_product.entity_id = i.entity_id AND
-                                                (parent_product.created_in <= 1 AND parent_product.updated_in > 1)
-         INNER JOIN `catalog_product_bundle_option` AS `bo` ON bo.parent_id = parent_product.row_id
-         INNER JOIN `catalog_product_bundle_selection` AS `bs` ON bs.option_id = bo.option_id
-         INNER JOIN `catalog_product_index_price_replica` AS `idx` USE INDEX (PRIMARY)
-                    ON bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id AND
-                       i.website_id = idx.website_id
-         INNER JOIN `cataloginventory_stock_status` AS `si` ON si.product_id = bs.product_id
-        WHERE (i.price_type = 0)
-            AND (si.stock_status = 1)
-        ON DUPLICATE KEY UPDATE `entity_id`         = VALUES(`entity_id`),
-                        `customer_group_id` = VALUES(`customer_group_id`),
-                        `website_id`        = VALUES(`website_id`),
-                        `option_id`         = VALUES(`option_id`),
-                        `selection_id`      = VALUES(`selection_id`),
-                        `group_type`        = VALUES(`group_type`),
-                        `is_required`       = VALUES(`is_required`),
-                        `price`             = VALUES(`price`),
-                        `tier_price`        = VALUES(`tier_price`) ON DUPLICATE KEY UPDATE  = VALUES(), = VALUES(), = VALUES(), = VALUES(), = VALUES(), = VALUES(), = VALUES(), = VALUES(), = VALUES()";
         //@codingStandardsIgnoreEnd
         $this->connectionMock->expects($this->exactly(3))
             ->method('getCheckSql')
@@ -232,8 +198,17 @@ class PriceTest extends TestCase
         $this->connectionMock->expects($this->once())->method('getIfNullSql');
         $this->connectionMock->expects($this->once())->method('getLeastSql');
         $this->connectionMock->method('select')->willReturn($select);
-        $this->connectionMock->expects($this->exactly(9))->method('quoteIdentifier');
-        $this->connectionMock->expects($this->once())->method('query')->with($processedQuery);
+        $insertSql = 'INSERT INTO catalog_product_index_price_bundle_sel_temp ... ON DUPLICATE KEY UPDATE';
+        $this->connectionMock->expects($this->once())
+            ->method('insertFromSelect')
+            ->with(
+                $select,
+                $this->isType('string'),
+                $this->isType('array'),
+                AdapterInterface::INSERT_ON_DUPLICATE
+            )
+            ->willReturn($insertSql);
+        $this->connectionMock->expects($this->once())->method('query')->with($insertSql);
 
         $pool = $this->createMock(EntityMetadataInterface::class);
         $pool->expects($this->once())->method('getLinkField')->willReturn($entity);

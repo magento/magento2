@@ -144,9 +144,13 @@ class ScopeOverriddenValue
                 $storeIds[] = $storeId;
             }
             $selects = [];
+            // Eav\Model\ResourceModel\ReadHandler::execute(), ReadSnapshotPlugin).
             foreach ($attributeTables as $attributeTable => $attributeCodes) {
                 $select = $metadata->getEntityConnection()->select()
-                    ->from(['t' => $attributeTable], ['value' => 't.value', 'store_id' => 't.store_id'])
+                    ->from(
+                        ['t' => $attributeTable],
+                        ['value' => $metadata->getEntityConnection()->castToText('t.value'), 'store_id' => 't.store_id']
+                    )
                     ->join(
                         ['a' => $this->resourceConnection->getTableName('eav_attribute')],
                         'a.attribute_id = t.attribute_id',

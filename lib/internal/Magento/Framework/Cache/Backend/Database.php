@@ -230,17 +230,17 @@ class Database extends AbstractBackend implements ExtendedBackendInterface
                 $time = time();
                 $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
 
-                $idCol = $connection->quoteIdentifier('id');
-                $dataCol = $connection->quoteIdentifier('data');
-                $createCol = $connection->quoteIdentifier('create_time');
-                $updateCol = $connection->quoteIdentifier('update_time');
-                $expireCol = $connection->quoteIdentifier('expire_time');
-
-                $query = "INSERT INTO {$dataTable} ({$idCol}, {$dataCol}, {$createCol}, {$updateCol}, {$expireCol}) " .
-                    "VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE {$dataCol}=VALUES({$dataCol}), " .
-                    "{$updateCol}=VALUES({$updateCol}), {$expireCol}=VALUES({$expireCol})";
-
-                $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
+                $result = $connection->insertOnDuplicate(
+                    $dataTable,
+                    [
+                        'id' => $id,
+                        'data' => $data,
+                        'create_time' => $time,
+                        'update_time' => $time,
+                        'expire_time' => $expire,
+                    ],
+                    ['data', 'update_time', 'expire_time']
+                );
             }
             if ($result) {
                 $result = $this->_saveTags($id, $tags);

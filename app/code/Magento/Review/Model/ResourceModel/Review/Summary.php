@@ -106,8 +106,8 @@ class Summary extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     ['review_summary' => $this->getMainTable()],
                     $joinCond,
                     [
-                        'reviews_count' => new \Zend_Db_Expr("IFNULL(review_summary.reviews_count, 0)"),
-                        'rating_summary' => new \Zend_Db_Expr("IFNULL(review_summary.rating_summary, 0)")
+                        'reviews_count' => $this->getConnection()->getIfNullSql('review_summary.reviews_count', 0),
+                        'rating_summary' => $this->getConnection()->getIfNullSql('review_summary.rating_summary', 0)
                     ]
                 );
         }

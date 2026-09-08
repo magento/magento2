@@ -70,7 +70,9 @@ class JoinMinimalPosition
                     []
                 );
             }
-            $positions[] = $connection->getIfNullSql($table . '.position', '~0');
+            // -1). Postgres' own bigint max serves the same "sort missing positions
+            // last" sentinel purpose.
+            $positions[] = $connection->getIfNullSql($table . '.position', '9223372036854775807');
         }
 
         // Ensures that position attribute is registered in _joinFields

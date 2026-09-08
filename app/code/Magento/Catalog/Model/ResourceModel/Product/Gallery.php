@@ -224,9 +224,9 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ),
             []
         )->columns([
-            'label' => $this->getConnection()->getIfNullSql('`value`.`label`', '`default_value`.`label`'),
-            'position' => $this->getConnection()->getIfNullSql('`value`.`position`', '`default_value`.`position`'),
-            'disabled' => $this->getConnection()->getIfNullSql('`value`.`disabled`', '`default_value`.`disabled`'),
+            'label' => $this->getConnection()->getIfNullSql('value.label', 'default_value.label'),
+            'position' => $this->getConnection()->getIfNullSql('value.position', 'default_value.position'),
+            'disabled' => $this->getConnection()->getIfNullSql('value.disabled', 'default_value.disabled'),
             'label_default' => 'default_value.label',
             'position_default' => 'default_value.position',
             'disabled_default' => 'default_value.disabled'

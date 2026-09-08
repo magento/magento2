@@ -94,7 +94,8 @@ class AreBundleOptionsSalable
         );
         $isOptionSalableExpr = new \Zend_Db_Expr(
             sprintf(
-                'MAX(IFNULL(child_status_store.value, child_status_global.value) != %s)',
+                'MAX(CASE WHEN %s != %s THEN 1 ELSE 0 END)',
+                $connection->getIfNullSql('child_status_store.value', 'child_status_global.value'),
                 ProductStatus::STATUS_DISABLED
             )
         );

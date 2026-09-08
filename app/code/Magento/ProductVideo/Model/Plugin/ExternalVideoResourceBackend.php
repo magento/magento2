@@ -81,15 +81,15 @@ class ExternalVideoResourceBackend
             []
         )->columns([
             'video_provider' => $originalResourceModel->getConnection()
-                ->getIfNullSql('`value_video`.`provider`', '`default_value_video`.`provider`'),
+                ->getIfNullSql('value_video.provider', 'default_value_video.provider'),
             'video_url' => $originalResourceModel->getConnection()
-                ->getIfNullSql('`value_video`.`url`', '`default_value_video`.`url`'),
+                ->getIfNullSql('value_video.url', 'default_value_video.url'),
             'video_title' => $originalResourceModel->getConnection()
-                ->getIfNullSql('`value_video`.`title`', '`default_value_video`.`title`'),
+                ->getIfNullSql('value_video.title', 'default_value_video.title'),
             'video_description' => $originalResourceModel->getConnection()
-                ->getIfNullSql('`value_video`.`description`', '`default_value_video`.`description`'),
+                ->getIfNullSql('value_video.description', 'default_value_video.description'),
             'video_metadata' => $originalResourceModel->getConnection()
-                ->getIfNullSql('`value_video`.`metadata`', '`default_value_video`.`metadata`'),
+                ->getIfNullSql('value_video.metadata', 'default_value_video.metadata'),
             'video_provider_default' => 'default_value_video.provider',
             'video_url_default' => 'default_value_video.url',
             'video_title_default' => 'default_value_video.title',

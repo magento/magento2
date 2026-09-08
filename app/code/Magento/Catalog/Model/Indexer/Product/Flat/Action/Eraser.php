@@ -109,7 +109,10 @@ class Eraser
             . 'product_table.' . $metadata->getLinkField(),
             []
         );
-        $select->where('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_DISABLED);
+        $select->where(
+            $this->connection->getIfNullSql('status_attr.value', 'status_global_attr.value') . ' = ?',
+            Status::STATUS_DISABLED
+        );
 
         $result = $this->connection->query($select);
 

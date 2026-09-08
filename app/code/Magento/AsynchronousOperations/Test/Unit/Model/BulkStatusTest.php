@@ -284,6 +284,10 @@ class BulkStatusTest extends TestCase
         $bulkCollection->expects($this->once())->method('getSelect')->willReturn($selectMock);
         $selectMock->expects($this->once())->method('columns')->willReturnSelf();
         $selectMock->expects($this->once())->method('order')->willReturnSelf();
+        $this->resourceConnectionMock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->expects($this->once())->method('getFieldSql')->willReturn('FIELD(status, 1, 2)');
         $this->bulkCollectionFactory->expects($this->once())->method('create')->willReturn($bulkCollection);
         $bulkCollection->expects($this->once())->method('addFieldToFilter')->with('user_id', $userId)->willReturnSelf();
         $bulkCollection->expects($this->once())->method('getItems')->willReturn([$this->bulkMock]);

@@ -45,7 +45,7 @@ class AddMediaGalleryPermissions implements
 
         $select = $connection->select()
             ->from($tableName, ['role_id'])
-            ->where('resource_id = "Magento_Cms::media_gallery"');
+            ->where("resource_id = 'Magento_Cms::media_gallery'");
 
         $insertData = $this->getInsertData($connection->fetchCol($select));
 

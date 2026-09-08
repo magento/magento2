@@ -91,7 +91,7 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
 
         $this->moduleDataSetup->getConnection()->update(
             $configTable,
-            ['value' => new \Zend_Db_Expr('value*24')],
+            ['value' => new \Zend_Db_Expr($this->moduleDataSetup->getConnection()->castToNumeric('value') . '*24')],
             ['path = ?' => Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD]
         );
 

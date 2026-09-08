@@ -76,7 +76,10 @@ class StatusBaseSelectProcessor implements BaseSelectProcessorInterface
             []
         );
 
-        $select->where('IFNULL(status_attr.value, status_global_attr.value) = ?', Status::STATUS_ENABLED);
+        $select->where(
+            $select->getConnection()->getIfNullSql('status_attr.value', 'status_global_attr.value') . ' = ?',
+            Status::STATUS_ENABLED
+        );
 
         return $select;
     }

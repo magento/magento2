@@ -70,11 +70,10 @@ class SearchResultApplier implements SearchResultApplierInterface
         foreach ($items as $item) {
             $ids[] = (int)$item->getId();
         }
-        $orderList = implode(',', $ids);
         $this->collection->getSelect()
             ->where('e.entity_id IN (?)', $ids)
             ->reset(\Magento\Framework\DB\Select::ORDER)
-            ->order(new \Zend_Db_Expr("FIELD(e.entity_id,$orderList)"));
+            ->order($this->collection->getSelect()->getAdapter()->getFieldSql('e.entity_id', $ids));
     }
 
     /**

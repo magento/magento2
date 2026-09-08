@@ -66,9 +66,8 @@ class SessionIDColumnCleanUp implements DataPatchInterface
     private function cleanCustomerVisitorTable()
     {
         $tableName = $this->moduleDataSetup->getTable('customer_visitor');
-        // phpcs:ignore Magento2.SQL.RawQuery
         $rawQuery = sprintf(
-            'UPDATE %s SET session_id = NULL WHERE session_id IS NOT NULL LIMIT 1000',
+            'UPDATE %s SET session_id = NULL WHERE session_id IS NOT NULL',
             $tableName
         );
 

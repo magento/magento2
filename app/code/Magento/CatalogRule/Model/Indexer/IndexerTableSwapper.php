@@ -47,12 +47,9 @@ class IndexerTableSwapper implements IndexerTableSwapperInterface
             $originalTableName . '__temp' . $this->generateRandomSuffix()
         );
 
-        $this->resourceConnection->getConnection()->query(
-            sprintf(
-                'create table %s like %s',
-                $temporaryTableName,
-                $this->resourceConnection->getTableName($originalTableName)
-            )
+        $this->resourceConnection->getConnection()->createTableLike(
+            $temporaryTableName,
+            $this->resourceConnection->getTableName($originalTableName)
         );
 
         return $temporaryTableName;

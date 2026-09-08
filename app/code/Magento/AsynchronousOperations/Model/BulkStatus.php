@@ -126,8 +126,11 @@ class BulkStatus implements BulkStatusInterface
             OperationInterface::STATUS_TYPE_COMPLETE
         ];
         $select = $collection->getSelect();
-        $select->columns(['status' => $this->calculatedStatusSql->get($operationTableName)])
-            ->order(new \Zend_Db_Expr('FIELD(status, ' . implode(',', $statusesArray) . ')'));
+        $statusExpr = $this->calculatedStatusSql->get($operationTableName);
+        $select->columns(['status' => $statusExpr])
+            ->order(
+                $this->resourceConnection->getConnection()->getFieldSql((string) $statusExpr, $statusesArray)
+            );
         $collection->addFieldToFilter('user_id', $userId)
             ->addOrder('start_time');
 

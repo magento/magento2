@@ -386,19 +386,19 @@ class GalleryTest extends TestCase
         $this->connection->expects($this->any())->method('getIfNullSql')->willReturnMap(
             [
                 [
-                    '`value`.`label`',
-                    '`default_value`.`label`',
-                    'IFNULL(`value`.`label`, `default_value`.`label`)'
+                    'value.label',
+                    'default_value.label',
+                    'IFNULL(value.label, default_value.label)'
                 ],
                 [
-                    '`value`.`position`',
-                    '`default_value`.`position`',
-                    'IFNULL(`value`.`position`, `default_value`.`position`)'
+                    'value.position',
+                    'default_value.position',
+                    'IFNULL(value.position, default_value.position)'
                 ],
                 [
-                    '`value`.`disabled`',
-                    '`default_value`.`disabled`',
-                    'IFNULL(`value`.`disabled`, `default_value`.`disabled`)'
+                    'value.disabled',
+                    'default_value.disabled',
+                    'IFNULL(value.disabled, default_value.disabled)'
                 ]
             ]
         );
@@ -432,9 +432,9 @@ class GalleryTest extends TestCase
             ->method('columns')
             ->with(
                 [
-                    'label' => 'IFNULL(`value`.`label`, `default_value`.`label`)',
-                    'position' => 'IFNULL(`value`.`position`, `default_value`.`position`)',
-                    'disabled' => 'IFNULL(`value`.`disabled`, `default_value`.`disabled`)',
+                    'label' => 'IFNULL(value.label, default_value.label)',
+                    'position' => 'IFNULL(value.position, default_value.position)',
+                    'disabled' => 'IFNULL(value.disabled, default_value.disabled)',
                     'label_default' => 'default_value.label',
                     'position_default' => 'default_value.position',
                     'disabled_default' => 'default_value.disabled'
@@ -466,7 +466,7 @@ class GalleryTest extends TestCase
             ->with(['entity' => $getTableReturnValue], 'main.value_id = entity.value_id', ['entity_id'])
             ->willReturn($this->select);
         $this->select->expects($this->once())->method('order')
-            ->with($positionCheckSql . ' ' . Select::SQL_ASC)
+            ->with(new \Zend_Db_Expr($positionCheckSql . ' ' . Select::SQL_ASC))
             ->willReturnSelf();
         $this->connection->expects($this->once())->method('fetchAll')
             ->with($this->select)

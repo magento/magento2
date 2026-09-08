@@ -300,7 +300,11 @@ class Collection extends AbstractCollection
      */
     public function addAttributeGrouping()
     {
-        $this->getSelect()->group('main_table.attribute_id');
+        $select = $this->getSelect();
+        $select->group('main_table.attribute_id');
+        if (array_key_exists('additional_table', $select->getPart(Select::FROM))) {
+            $select->group('additional_table.attribute_id');
+        }
         return $this;
     }
 
@@ -343,15 +347,20 @@ class Collection extends AbstractCollection
             ]
         );
 
+        // FilterAttributeReader, CatalogSearch\Model\Advanced) reads option_id off the
+        // loaded attributes - the join exists only for the ao.option_id > 0 filter below.
+        // Selecting it anyway (MySQL tolerates a non-aggregated, non-grouped column; not
+        // functionally dependent on the GROUP BY key since eav_attribute_option is a
+        // one-to-many join) makes every call to this method fail outright on Postgres.
+        // Selecting no columns from "ao" removes the violation with no behavior change.
         $this->getSelect()->joinLeft(
             ['ao' => $this->getTable('eav_attribute_option')],
             'ao.attribute_id = main_table.attribute_id',
-            'option_id'
-        )->group(
-            'main_table.attribute_id'
+            []
         )->where(
             $orWhere
         );
+        $this->addAttributeGrouping();
         return $this;
     }
 

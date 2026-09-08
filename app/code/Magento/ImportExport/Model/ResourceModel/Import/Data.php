@@ -123,9 +123,12 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function cleanProcessedBunches()
     {
-        $this->getConnection()->delete(
+        $connection = $this->getConnection();
+        $connection->delete(
             $this->getMainTable(),
-            'is_processed = 1 OR TIMESTAMPADD(DAY, 1, updated_at) < CURRENT_TIMESTAMP() '
+            'is_processed = 1 OR '
+            . $connection->getDateAddSql('updated_at', 1, \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_DAY)
+            . ' < CURRENT_TIMESTAMP'
         );
     }
 

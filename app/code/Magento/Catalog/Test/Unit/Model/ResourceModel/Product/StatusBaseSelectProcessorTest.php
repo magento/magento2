@@ -65,6 +65,12 @@ class StatusBaseSelectProcessorTest extends TestCase
         $this->storeManager = $this->createMock(StoreManagerInterface::class);
         $this->select = $this->createMock(Select::class);
 
+        $connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $connection->method('getIfNullSql')
+            ->with('status_attr.value', 'status_global_attr.value')
+            ->willReturn('IFNULL(status_attr.value, status_global_attr.value)');
+        $this->select->method('getConnection')->willReturn($connection);
+
         $this->statusBaseSelectProcessor =  (new ObjectManager($this))->getObject(StatusBaseSelectProcessor::class, [
             'eavConfig' => $this->eavConfig,
             'metadataPool' => $this->metadataPool,

@@ -41,6 +41,8 @@ class ReadSnapshotPlugin
     }
 
     /**
+     * Merge global-scope catalog attribute values into the current-store snapshot.
+     *
      * @param ReadSnapshot $subject
      * @param array $entityData
      * @param string $entityType
@@ -73,10 +75,11 @@ class ReadSnapshotPlugin
         if ($globalAttributes) {
             $selects = [];
             foreach ($globalAttributes as $table => $attributeIds) {
+                // Eav\Model\ResourceModel\ReadHandler::execute()).
                 $select = $connection->select()
                     ->from(
                         ['t' => $table],
-                        ['value' => 't.value', 'attribute_id' => 't.attribute_id']
+                        ['value' => $connection->castToText('t.value'), 'attribute_id' => 't.attribute_id']
                     )
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
                     ->where('attribute_id' . ' in (?)', $attributeIds)

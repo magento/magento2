@@ -324,7 +324,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $minimalPriceExpression = self::INDEX_TABLE_ALIAS . '.price';
             } else {
                 $this->getCatalogRuleProcessor()->addPriceData($this, 'selection.product_id');
-                $minimalPriceExpression = 'LEAST(minimal_price, IFNULL(catalog_rule_price, minimal_price))';
+                $minimalPriceExpression = 'LEAST(minimal_price, '
+                    . $this->getConnection()->getIfNullSql('catalog_rule_price', 'minimal_price')
+                    . ')';
             }
             $orderByValue = new \Zend_Db_Expr(
                 '(' .

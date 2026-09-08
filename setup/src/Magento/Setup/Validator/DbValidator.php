@@ -74,7 +74,8 @@ class DbValidator
      * @param string $dbPass
      * @return bool
      * @throws \Magento\Setup\Exception
-     * @deprecated
+     * @deprecated Use checkDatabaseConnectionWithDriverOptions() to pass PDO driver options.
+     * @see checkDatabaseConnectionWithDriverOptions()
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
@@ -89,6 +90,7 @@ class DbValidator
      * @param string $dbUser
      * @param string $dbPass
      * @param array $driverOptions
+     * @param string|null $engine Database engine (mysql, postgresql)
      * @return bool
      * @throws \Magento\Setup\Exception
      */
@@ -97,38 +99,47 @@ class DbValidator
         $dbHost,
         $dbUser,
         $dbPass = '',
-        $driverOptions = []
+        $driverOptions = [],
+        $engine = null
     ) {
         // establish connection to information_schema view to retrieve information about user and table privileges
-        $connection = $this->connectionFactory->create(
-            [
-                ConfigOptionsListConstants::KEY_NAME => 'information_schema',
-                ConfigOptionsListConstants::KEY_HOST => $dbHost,
-                ConfigOptionsListConstants::KEY_USER => $dbUser,
-                ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
-                ConfigOptionsListConstants::KEY_ACTIVE => true,
-                ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
-            ]
-        );
+        $connectionConfig = [
+            ConfigOptionsListConstants::KEY_NAME => 'information_schema',
+            ConfigOptionsListConstants::KEY_HOST => $dbHost,
+            ConfigOptionsListConstants::KEY_USER => $dbUser,
+            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+            ConfigOptionsListConstants::KEY_ACTIVE => true,
+            ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
+        ];
+        if ($engine !== null && $engine !== '') {
+            $connectionConfig[ConfigOptionsListConstants::KEY_ENGINE] = $engine;
+        }
+        $connection = $this->connectionFactory->create($connectionConfig);
 
         if (!$connection) {
             throw new \Magento\Setup\Exception('Database connection failure.');
         }
 
-        $mysqlVersion = $connection->fetchOne('SELECT version()');
-        if ($mysqlVersion) {
-            if (preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
-                if (isset($matches[1]) && !empty($matches[1])) {
-                    if (version_compare($matches[1], Installer::MYSQL_VERSION_REQUIRED) < 0) {
-                        throw new \Magento\Setup\Exception(
-                            'Sorry, but we support MySQL version ' . Installer::MYSQL_VERSION_REQUIRED . ' or later.'
-                        );
-                    }
-                }
-            }
-        }
+        $this->assertSupportedMysqlVersion((string) $connection->fetchOne('SELECT version()'));
 
         return $this->checkDatabaseName($connection, $dbName) && $this->checkDatabasePrivileges($connection, $dbName);
+    }
+
+    /**
+     * Reject MySQL servers older than Magento's minimum version.
+     *
+     * @throws \Magento\Setup\Exception
+     */
+    private function assertSupportedMysqlVersion(string $mysqlVersion): void
+    {
+        if ($mysqlVersion === '' || !preg_match('/^([0-9\.]+)/', $mysqlVersion, $matches)) {
+            return;
+        }
+        if (version_compare($matches[1], Installer::MYSQL_VERSION_REQUIRED) < 0) {
+            throw new \Magento\Setup\Exception(
+                'Sorry, but we support MySQL version ' . Installer::MYSQL_VERSION_REQUIRED . ' or later.'
+            );
+        }
     }
 
     /**

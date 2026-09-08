@@ -54,10 +54,9 @@ class SearchResultApplier implements SearchResultApplierInterface
             $ids[] = (int)$item->getId();
         }
 
-        $orderList = implode(',', $ids);
-        $this->collection->getSelect()
-            ->where('e.entity_id IN (?)', $ids)
+        $select = $this->collection->getSelect();
+        $select->where('e.entity_id IN (?)', $ids)
             ->reset(\Magento\Framework\DB\Select::ORDER)
-            ->order(new \Magento\Framework\DB\Sql\Expression("FIELD(e.entity_id, $orderList)"));
+            ->order($select->getAdapter()->getFieldSql('e.entity_id', $ids));
     }
 }

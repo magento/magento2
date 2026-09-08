@@ -1063,7 +1063,15 @@ abstract class AbstractEntity extends AbstractResource implements
             $attribute = current($this->_attributesByTable[$table]);
             $eavType = $attribute->getBackendType();
             $select = $this->_getLoadAttributesSelect($object, $table);
-            $selects[$eavType][] = $select->columns('*');
+            // _setAttributeValue() below), so an explicit column list - casting just
+            // value to text - replaces the wildcard instead of trying to keep every
+            // table's full, non-identical column set (e.g. Catalog's *_int/*_varchar
+            // etc. have store_id, Customer's don't) unioned as-is.
+            $selects[$eavType][] = $select->columns([
+                'attribute_id' => 'attribute_id',
+                'value_id' => 'value_id',
+                'value' => $this->getConnection()->castToText($this->getConnection()->quoteIdentifier('value')),
+            ]);
         }
         $selectGroups = $this->_resourceHelper->getLoadAttributesSelectGroups($selects);
         foreach ($selectGroups as $selects) {

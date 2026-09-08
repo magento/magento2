@@ -173,6 +173,21 @@ class BatchIteratorTest extends TestCase
     }
 
     /**
+     * MAX() over zero rows is SQL NULL. Keep the previous minValue so the next
+     * WHERE rangeField > ? bind stays an integer (0), not null/''.
+     */
+    public function testEmptyBatchDoesNotBindNullMinValue(): void
+    {
+        $filed = $this->correlationName . '.' . $this->rangeField;
+        $this->connectionMock->method('fetchRow')->willReturn(['max' => null, 'cnt' => 0]);
+        $this->selectMock->expects($this->exactly(2))->method('where')->with($filed . ' > ?', 0);
+
+        $this->model->current();
+        $this->assertFalse($this->model->valid());
+        $this->model->next();
+    }
+
+    /**
      * Test steps:
      * 1. $iterator->next();
      * 2. $iterator->key()
