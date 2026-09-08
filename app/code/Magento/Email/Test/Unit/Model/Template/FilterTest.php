@@ -441,9 +441,8 @@ class FilterTest extends TestCase
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
-        $this->storeInformation->expects($this->once())
-            ->method('getStoreInformationObject')
-            ->willReturn(new DataObject([]));
+        $this->storeInformation->expects($this->never())
+            ->method('getStoreInformationObject');
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
@@ -467,9 +466,8 @@ class FilterTest extends TestCase
             ->method('getValue')
             ->willReturn($scopeConfigValue);
 
-        $this->storeInformation->expects($this->once())
-            ->method('getStoreInformationObject')
-            ->willReturn(new DataObject([]));
+        $this->storeInformation->expects($this->never())
+            ->method('getStoreInformationObject');
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
     }
@@ -524,6 +522,41 @@ class FilterTest extends TestCase
             ->willReturn(new DataObject(['region_id' => '57', 'region' => 'Texas']));
 
         $this->assertEquals($expectedRegion, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * Store information must be resolved only once, no matter how many store information directives are rendered.
+     *
+     * @throws NoSuchEntityException
+     */
+    public function testConfigDirectiveResolvesStoreInformationOnce()
+    {
+        $countryPath = 'general/store_information/country_id';
+        $regionPath = 'general/store_information/region_id';
+
+        $this->storeManager->expects($this->any())
+            ->method('getStore')
+            ->willReturn($this->store);
+        $this->store->expects($this->any())->method('getId')->willReturn(1);
+
+        $this->configVariables->expects($this->any())
+            ->method('getAvailableVars')
+            ->willReturn(['country' => $countryPath, 'region' => $regionPath]);
+
+        $this->storeInformation->expects($this->once())
+            ->method('getStoreInformationObject')
+            ->willReturn(new DataObject(['country' => 'United States', 'region' => 'Texas']));
+
+        $filter = $this->getModel();
+
+        $this->assertEquals(
+            'United States',
+            $filter->configDirective(["{{config path={$countryPath}}}", 'config', " path={$countryPath}"])
+        );
+        $this->assertEquals(
+            'Texas',
+            $filter->configDirective(["{{config path={$regionPath}}}", 'config', " path={$regionPath}"])
+        );
     }
 
     /**
