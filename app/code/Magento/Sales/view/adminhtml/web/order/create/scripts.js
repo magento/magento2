@@ -1278,7 +1278,9 @@
             for (var i = 0; i < this.loadingAreas.length; i++) {
                 var id = this.loadingAreas[i];
                 if ($(this.getAreaId(id))) {
-                    if ((id in response) && id !== 'message' || response[id]) {
+                    if (((id in response) && id !== 'message' || response[id]) &&
+                        this.shouldUpdateArea(id, response[id])
+                    ) {
                         $(this.getAreaId(id)).update(response[id]);
                     }
                     if ($(this.getAreaId(id)).callback) {
@@ -1286,6 +1288,43 @@
                     }
                 }
             }
+        },
+
+        /**
+         * Checks if the received content for an area should replace the current one.
+         * The payment methods form is kept as-is when the set of available methods
+         * has not changed, so that client-side initialized payment forms (hosted
+         * fields, iframes) and data entered into them survive unrelated reloads.
+         *
+         * @param {String} id
+         * @param {String} html
+         * @return {Boolean}
+         */
+        shouldUpdateArea: function (id, html) {
+            if (id !== 'billing_method' || !this.paymentMethod) {
+                return true;
+            }
+
+            return this.getPaymentMethodCodes(html) !== this.getPaymentMethodCodes($(this.getAreaId(id)).innerHTML);
+        },
+
+        /**
+         * Extracts the list of available payment method codes from payment form HTML.
+         *
+         * @param {String} html
+         * @return {String}
+         */
+        getPaymentMethodCodes: function (html) {
+            var container = document.createElement('div');
+
+            container.innerHTML = html;
+
+            return Array.prototype.map.call(
+                container.querySelectorAll('input[name="payment[method]"]'),
+                function (input) {
+                    return input.value;
+                }
+            ).sort().join(',');
         },
 
         prepareArea: function (area) {

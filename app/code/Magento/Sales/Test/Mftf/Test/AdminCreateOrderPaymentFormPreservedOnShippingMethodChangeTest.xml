@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderPaymentFormPreservedOnShippingMethodChangeTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin order create payment form is preserved when available payment methods are unchanged"/>
+            <title value="Payment form DOM survives a shipping method change during admin order create"/>
+            <description value="When the set of available payment methods does not change, changing the shipping method during admin order create must not destroy and re-render the payment form DOM. Client-side initialized payment forms and data entered into them would otherwise be lost. The invariant asserted here is DOM identity: a client-set attribute placed on the selected payment method input survives the reload only when the DOM node is preserved. The user-visible symptom (retained Purchase Order number) is asserted as a secondary check."/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set payment/purchaseorder/active 1" stepKey="enablePurchaseOrder"/>
+            <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set payment/purchaseorder/active 0" stepKey="disablePurchaseOrder"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!-- Start a new order for the existing customer and add a product. -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Select the Purchase Order payment method and enter a PO number. -->
+        <actionGroup ref="SelectPurchaseOrderPaymentMethodActionGroup" stepKey="selectPurchaseOrderPayment">
+            <argument name="purchaseOrderNumber" value="PreservedPONumber42"/>
+        </actionGroup>
+
+        <!-- Leave the Purchase Order number field so its pending change-event request
+             completes before the shipping method interaction starts. -->
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocusPaymentForm"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForPaymentDataSaved"/>
+
+        <!-- Mark the selected payment method input on the client side. The marker exists
+             only in the browser DOM and is NOT persisted server-side, so it survives a
+             reload only if the DOM node itself is preserved (i.e. not replaced by re-render). -->
+        <executeJS function="document.getElementById('p_method_purchaseorder').setAttribute('data-client-state', 'preserved')" stepKey="markPaymentInput"/>
+
+        <!-- Change the shipping method with a real click (selectOption would toggle the radio
+             without firing its click handler). setShippingMethod always reloads the
+             billing_method area, which on unfixed code destroys and replaces the payment
+             form DOM. -->
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="openShippingMethods"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
+        <click selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="selectFlatRateShipping"/>
+
+        <!-- The Shipping &amp; Handling totals row renders from the same loadBlock response
+             that reloads the billing_method area — its appearance proves the reload completed. -->
+        <waitForElementVisible selector="{{AdminOrderFormTotalSection.total('Shipping &amp; Handling')}}" stepKey="waitForBillingMethodReload"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForReloadedAreasToSettle"/>
+
+        <!-- Primary assertion (DOM identity): the client-set marker is present only if the
+             payment form DOM node survived the billing_method reload. Fails without the fix. -->
+        <seeElement selector="input#p_method_purchaseorder[data-client-state='preserved']" stepKey="assertPaymentDomPreserved"/>
+
+        <!-- Secondary assertion (user-visible symptom): the entered PO number is still shown. -->
+        <seeInField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="PreservedPONumber42" stepKey="assertPurchaseOrderNumberRetained"/>
+    </test>
+</tests>
