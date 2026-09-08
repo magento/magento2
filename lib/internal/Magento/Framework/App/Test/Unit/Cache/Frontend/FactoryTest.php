@@ -322,6 +322,71 @@ class FactoryTest extends TestCase
     }
 
     /**
+     * Test that a non file-based backend resolves cache_dir but never creates the directory.
+     *
+     * Reproduces the empty var/page_cache directory created for Redis-backed frontends.
+     */
+    public function testCreateWithNonFilesystemBackendDoesNotCreateCacheDir(): void
+    {
+        $varDirMock = $this->createMock(WriteInterface::class);
+        $varDirMock->expects($this->never())->method('create');
+        $varDirMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('page_cache')
+            ->willReturn('/var/www/html/var/page_cache');
+
+        $model = $this->buildModelWithFilesystem($this->createFilesystemMockWithVarDir($varDirMock));
+        $model->create([
+            'backend'         => 'redis',
+            'backend_options' => ['cache_dir' => 'page_cache', 'server' => '127.0.0.1'],
+            'id_prefix'       => 'test_',
+        ]);
+    }
+
+    /**
+     * Test that a file-based backend still creates the resolved cache directory.
+     */
+    public function testCreateWithFilesystemBackendCreatesCacheDir(): void
+    {
+        $varDirMock = $this->createMock(WriteInterface::class);
+        $varDirMock->expects($this->once())->method('create')->with('page_cache')->willReturn(true);
+        $varDirMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('page_cache')
+            ->willReturn('/var/www/html/var/page_cache');
+
+        $model = $this->buildModelWithFilesystem($this->createFilesystemMockWithVarDir($varDirMock));
+        $model->create([
+            'backend'         => 'file',
+            'backend_options' => ['cache_dir' => 'page_cache'],
+            'id_prefix'       => 'test_',
+        ]);
+    }
+
+    /**
+     * Create a Filesystem mock returning the given VAR_DIR writer and a permissive writer for var/cache.
+     *
+     * @param WriteInterface $varDirMock
+     * @return Filesystem|MockObject
+     */
+    private function createFilesystemMockWithVarDir(WriteInterface $varDirMock)
+    {
+        $cacheDirMock = $this->createMock(WriteInterface::class);
+        $cacheDirMock->expects($this->any())->method('getAbsolutePath')->willReturn('/var/www/html/var/cache');
+
+        $filesystem = $this->createMock(Filesystem::class);
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturnCallback(
+                static fn (string $code): WriteInterface => $code === DirectoryList::VAR_DIR
+                    ? $varDirMock
+                    : $cacheDirMock
+            );
+
+        return $filesystem;
+    }
+
+    /**
      * Build Factory with a specific filesystem mock; all other deps use defaults.
      *
      * @param Filesystem $filesystem
@@ -349,6 +414,14 @@ class FactoryTest extends TestCase
 
         $adapterProviderMock = $this->createMock(SymfonyAdapterProvider::class);
         $adapterProviderMock->expects($this->any())->method('createTagAdapter')->willReturn($adapterMock);
+        // Mirror the real adapter type map: unknown backend types fall back to the filesystem adapter.
+        $adapterProviderMock->expects($this->any())
+            ->method('isFilesystemBackend')
+            ->willReturnCallback(static fn (string $type): bool => !in_array(
+                strtolower($type),
+                ['redis', 'valkey', 'memcached', 'libmemcached', 'database', 'apc', 'apcu', 'two_levels', 'twolevel'],
+                true
+            ));
 
         return new Factory($objectManager, $filesystem, $resource, $adapterProviderMock);
     }
