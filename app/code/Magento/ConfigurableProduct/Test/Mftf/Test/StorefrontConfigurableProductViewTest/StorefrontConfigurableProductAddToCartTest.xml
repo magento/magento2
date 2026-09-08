@@ -72,9 +72,8 @@
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
         <waitForPageLoad stepKey="wait2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCart"/>
-        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertChooseOptionsErrorMessage">
-            <argument name="message" value="You need to choose options for your item."/>
-        </actionGroup>
+        <!-- Listing AJAX injects the error into [data-placeholder="messages"], not the Knockout page messages block -->
+        <waitForText selector="//div[@data-placeholder='messages']" time="30" userInput="You need to choose options for your item." stepKey="assertChooseOptionsErrorMessage"/>
         <grabFromCurrentUrl stepKey="grabUrl"/>
         <assertStringContainsString stepKey="assertUrl">
             <expectedResult type="string">$$createCategory.custom_attributes[url_key]$$</expectedResult>

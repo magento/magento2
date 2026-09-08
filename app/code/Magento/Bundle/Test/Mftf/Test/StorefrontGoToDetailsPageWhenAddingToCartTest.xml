@@ -92,10 +92,8 @@
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addProductToCart"/>
 
-        <!--Options need to be specified, so the error message is shown and the customer stays on the category page-->
-        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertSpecifyOptionsErrorMessage">
-            <argument name="message" value="Please specify product option(s)."/>
-        </actionGroup>
+        <!--Options need to be specified, so the inline AJAX error is shown and the customer stays on the category page-->
+        <waitForText selector="//div[@data-placeholder='messages']" time="30" userInput="Please specify product option(s)." stepKey="assertSpecifyOptionsErrorMessage"/>
         <dontSeeInCurrentUrl url="{{BundleProduct.sku}}" stepKey="seeBundleProductDetailsPage"/>
     </test>
 </tests>
