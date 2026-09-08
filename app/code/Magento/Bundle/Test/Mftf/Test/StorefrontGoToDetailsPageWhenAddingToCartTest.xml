@@ -12,8 +12,8 @@
         <annotations>
             <features value="Bundle"/>
             <stories value="Bundle products list on Storefront"/>
-            <title value="Customer should be taken to bundle product details page when clicking “Add to Cart” button"/>
-            <description value="Customer should be taken to bundle product details page when clicking “Add to Cart” button"/>
+            <title value="Customer should see an error message on the category page when clicking “Add to Cart” button"/>
+            <description value="Customer should see an error message asking to specify bundle options and stay on the category page when clicking “Add to Cart” button"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-229"/>
             <group value="Bundle"/>
@@ -92,7 +92,10 @@
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addProductToCart"/>
 
-        <!--Check for details page-->
-        <seeInCurrentUrl url="{{BundleProduct.sku}}" stepKey="seeBundleProductDetailsPage"/>
+        <!--Options need to be specified, so the error message is shown and the customer stays on the category page-->
+        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertSpecifyOptionsErrorMessage">
+            <argument name="message" value="Please specify product option(s)."/>
+        </actionGroup>
+        <dontSeeInCurrentUrl url="{{BundleProduct.sku}}" stepKey="seeBundleProductDetailsPage"/>
     </test>
 </tests>

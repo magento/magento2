@@ -11,8 +11,8 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="View configurable product in a category in storefront"/>
-            <title value="customer should be taken to the product details page when clicking add to cart"/>
-            <description value="customer should be taken to the product details page when clicking add to cart"/>
+            <title value="customer should see an error message on the category page when clicking add to cart"/>
+            <description value="customer should see an error message asking to choose options and stay on the category page when clicking add to cart"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-89"/>
             <group value="ConfigurableProduct"/>
@@ -66,16 +66,23 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <!-- Should be taken to product details page when adding to cart because an option needs to be selected -->
+        <!-- An option needs to be selected, so the item is not added and the error message is shown on the category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryPage1"/>
         <waitForPageLoad stepKey="wait1"/>
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
         <waitForPageLoad stepKey="wait2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCart"/>
+        <actionGroup ref="StorefrontAssertProductAddToCartErrorMessageActionGroup" stepKey="assertChooseOptionsErrorMessage">
+            <argument name="message" value="You need to choose options for your item."/>
+        </actionGroup>
         <grabFromCurrentUrl stepKey="grabUrl"/>
         <assertStringContainsString stepKey="assertUrl">
-            <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
+            <expectedResult type="string">$$createCategory.custom_attributes[url_key]$$</expectedResult>
             <actualResult type="string">{$grabUrl}</actualResult>
         </assertStringContainsString>
+        <assertStringNotContainsString stepKey="assertNotRedirectedToProductPage">
+            <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
+            <actualResult type="string">{$grabUrl}</actualResult>
+        </assertStringNotContainsString>
     </test>
 </tests>
