@@ -44,11 +44,11 @@ class CurrencyValidator implements HttpRequestValidatorInterface
         try {
             $headerValue = $request->getHeader('Content-Currency');
             if (!empty($headerValue)) {
-                $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
+                $headerCurrency = strtoupper(trim($headerValue));
                 $storeCode = $request->getHeader('Store');
                 /** @var \Magento\Store\Model\Store $currentStore */
                 $currentStore = !empty($storeCode)
-                    ? $this->storeManager->getStore(ltrim(rtrim($storeCode)))
+                    ? $this->storeManager->getStore(trim($storeCode))
                     : $this->storeManager->getStore();
                 if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     throw new GraphQlInputException(
