@@ -486,8 +486,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         if ($quote->getCheckoutMethod() === self::METHOD_GUEST || !$customerId) {
             $quote->setCustomerId(null);
             $billingAddress = $quote->getBillingAddress();
-            if (!$quote->getCustomerEmail()) {
-                $quote->setCustomerEmail($billingAddress ? $billingAddress->getEmail() : null);
+            $billingAddressEmail = $billingAddress?->getEmail();
+            if (!$quote->getCustomerEmail()
+                || ($billingAddressEmail && $quote->getCustomerEmail() !== $billingAddressEmail)
+            ) {
+                $quote->setCustomerEmail($billingAddressEmail);
             }
             if ($quote->getCustomerFirstname() === null
                 && $quote->getCustomerLastname() === null
