@@ -15,6 +15,8 @@ use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
 use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\DirectiveProcessor\VarDirective;
+use Magento\Framework\Filter\Template\ResultPlaceholderFactory;
+use Magento\Framework\Filter\Template\SignatureMarker;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\Filter\Template\SignatureProvider;
 use Magento\Framework\Filter\Template\FilteringDepthMeter;
@@ -111,12 +113,24 @@ class Template implements FilterInterface
     private $filteringDepthMeter;
 
     /**
+     * @var SignatureMarker|null
+     */
+    private $signatureMarker;
+
+    /**
+     * @var ResultPlaceholderFactory|null
+     */
+    private $resultPlaceholderFactory;
+
+    /**
      * @param StringUtils $string
      * @param array $variables
      * @param DirectiveProcessorInterface[] $directiveProcessors
      * @param VariableResolverInterface|null $variableResolver
      * @param SignatureProvider|null $signatureProvider
      * @param FilteringDepthMeter|null $filteringDepthMeter
+     * @param SignatureMarker|null $signatureMarker
+     * @param ResultPlaceholderFactory|null $resultPlaceholderFactory
      */
     public function __construct(
         StringUtils $string,
@@ -124,7 +138,9 @@ class Template implements FilterInterface
         $directiveProcessors = [],
         ?VariableResolverInterface $variableResolver = null,
         ?SignatureProvider $signatureProvider = null,
-        ?FilteringDepthMeter $filteringDepthMeter = null
+        ?FilteringDepthMeter $filteringDepthMeter = null,
+        ?SignatureMarker $signatureMarker = null,
+        ?ResultPlaceholderFactory $resultPlaceholderFactory = null
     ) {
         $this->string = $string;
         $this->setVariables($variables);
@@ -137,6 +153,12 @@ class Template implements FilterInterface
 
         $this->filteringDepthMeter = $filteringDepthMeter ?? ObjectManager::getInstance()
                 ->get(FilteringDepthMeter::class);
+
+        $this->signatureMarker = $signatureMarker ?? ObjectManager::getInstance()
+            ->get(SignatureMarker::class);
+
+        $this->resultPlaceholderFactory = $resultPlaceholderFactory ?? ObjectManager::getInstance()
+            ->get(ResultPlaceholderFactory::class);
 
         if (empty($directiveProcessors)) {
             $this->directiveProcessors = [
@@ -220,26 +242,60 @@ class Template implements FilterInterface
 
         $value = $this->applyDirectivesResults($value, $deferredDirectivesResults);
 
-        if ($this->filteringDepthMeter->showMark() > 1) {
-            // Signing own deferred directives (if any).
-            $signature = $this->signatureProvider->get();
+        $hasParentTemplate = $this->filteringDepthMeter->showMark() > 1;
 
-            foreach ($templateDirectivesResults as $result) {
-                if ($result['directive'] === $result['output']) {
-                    $value = str_replace(
-                        $result['output'],
-                        $signature . $result['output'] . $signature,
-                        $value
-                    );
-                }
-            }
+        if ($hasParentTemplate) {
+            // Signing own deferred directives (if any).
+            $value = $this->signDeferredDirectives($value, $templateDirectivesResults);
         }
 
         $value = $this->afterFilter($value);
 
         $this->filteringDepthMeter->ascend();
 
+        $isRootTemplateFinished = $this->filteringDepthMeter->showMark() === 0;
+
+        if ($isRootTemplateFinished) {
+            // No parent is left to process deferred directives, so any marker still
+            // present belongs to a directive that was never claimed. Drop them all
+            // rather than let the runtime signature reach the rendered output.
+            $value = $this->signatureMarker->stripMarkers($value);
+        }
+
         return $value;
+    }
+
+    /**
+     * Wraps directives that were left unresolved in signature markers.
+     *
+     * A directive whose output equals its own source was not processed in this scope and is
+     * therefore deferred to the parent template. Marking it lets the parent recognize it as
+     * a directive this template produced instead of one injected through template data.
+     *
+     * @param string $value
+     * @param array $directiveResults
+     *
+     * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function signDeferredDirectives(string $value, array $directiveResults): string
+    {
+        $replacements = [];
+
+        foreach ($directiveResults as $result) {
+            if ($result['directive'] !== $result['output']) {
+                continue;
+            }
+
+            if ($this->signatureMarker->containsSignature($result['output'])) {
+                continue;
+            }
+
+            $replacements[$result['output']] = $this->signatureMarker->wrap($result['output']);
+        }
+
+        return $replacements ? strtr($value, $replacements) : $value;
     }
 
     /**
@@ -267,11 +323,17 @@ class Template implements FilterInterface
             $pattern = $directiveProcessor->getRegularExpression();
 
             if ($isSigned) {
-                $pattern = $this->embedSignatureIntoPattern($pattern);
+                $pattern = $this->signatureMarker->embedIntoPattern($pattern);
             }
 
             if (preg_match_all($pattern, $value, $constructions, PREG_SET_ORDER)) {
                 foreach ($constructions as $construction) {
+                    // Skip a construction that carries the signature inside its body: it was
+                    // either forged or nested, so this template never deferred it.
+                    if ($isSigned && !$this->signatureMarker->hasSingleMarkerPair($construction[0])) {
+                        continue;
+                    }
+
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
 
                     $result = [
@@ -296,25 +358,36 @@ class Template implements FilterInterface
     /**
      * Applies results produced by directives.
      *
+     * Each result takes a placeholder first and every placeholder is resolved in a single pass,
+     * so that the output of one directive can never be re-scanned as part of another one.
+     *
      * @param string $value
-     * @param array $results
+     * @param array $directiveResults
      *
      * @return string
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function applyDirectivesResults(string $value, array $results): string
+    private function applyDirectivesResults(string $value, array $directiveResults): string
     {
         $processedResults = [];
+        $replacements = [];
+        $slot = 0;
 
-        foreach ($results as $result) {
+        foreach ($directiveResults as $result) {
             foreach ($processedResults as $processedResult) {
                 $result['directive'] = str_replace(
                     $processedResult['directive'],
-                    $processedResult['output'],
+                    $processedResult['placeholder'],
                     $result['directive']
                 );
             }
 
-            $value = str_replace($result['directive'], $result['output'], $value);
+            $result['placeholder'] = $this->resultPlaceholderFactory->create($slot);
+            $slot++;
+
+            $value = str_replace($result['directive'], $result['placeholder'], $value);
+            $replacements[$result['placeholder']] = $result['output'];
 
             if (isset($result['callbacks'])) {
                 foreach ($result['callbacks'] as $callback) {
@@ -325,39 +398,7 @@ class Template implements FilterInterface
             $processedResults[] = $result;
         }
 
-        return $value;
-    }
-
-    /**
-     * Modifies given regular expression pattern to be able to recognize signed directives.
-     *
-     * @param string $pattern
-     *
-     * @return string
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function embedSignatureIntoPattern(string $pattern): string
-    {
-        $signature = $this->signatureProvider->get();
-
-        $closingDelimiters = [
-            '(' => ')',
-            '{' => '}',
-            '[' => ']',
-            '<' => '>'
-        ];
-
-        $closingDelimiter = $openingDelimiter = substr(trim($pattern), 0, 1);
-
-        if (array_key_exists($openingDelimiter, $closingDelimiters)) {
-            $closingDelimiter = $closingDelimiters[$openingDelimiter];
-        }
-
-        $pattern = substr_replace($pattern, $signature, strpos($pattern, $openingDelimiter) + 1, 0);
-        $pattern = substr_replace($pattern, $signature, strrpos($pattern, $closingDelimiter), 0);
-
-        return $pattern;
+        return $replacements ? strtr($value, $replacements) : $value;
     }
 
     /**
