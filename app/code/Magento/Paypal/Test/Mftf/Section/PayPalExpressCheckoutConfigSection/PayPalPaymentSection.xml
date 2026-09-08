@@ -32,8 +32,8 @@
         <element name="total" type="text" selector="//span[text()='Total']/following-sibling::span[contains(text(),'{{total}}')]" parameterized="true"/>
         <element name="shippingAddress" type="text" selector="//button[@data-dd-action-name='Ship to Tab']//div[contains(@class, 'items-end')]//span[contains(@class, 'text-caption')]"/>
         <element name="close" type="button" selector="//button[@aria-label='Close']"/>
-        <element name="paypalPopupButton1" type="button" selector="//button[span[text()='Pay with Debit or Credit Card']]"/>
-        <element name="paypalPopupButton2" type="button" selector="//button[span[text()='Create an Account']]"/>
+        <element name="paypalPopupButton1" type="button" selector="//button[normalize-space(.)='Pay with Debit or Credit Card']"/>
+        <element name="paypalPopupButton2" type="button" selector="//button[normalize-space(.)='Create an Account']"/>
         <element name="changeShippingAddressButton" type="button" selector="//button[@data-dd-action-name='Ship to Tab']"/>
         <element name="shippingAddressDropdown" type="select" selector="(//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]])" parameterized="true"/>
         <element name="shippingAddressRadioButton" type="button" selector="//div[@data-dd-action-name='Shipping Address'][.//span[contains(normalize-space(.), '{{ShippingAddress}}')]]//button[@role='radio']" parameterized="true"/>
