@@ -174,4 +174,58 @@ class MultiselectTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * @covers \Magento\Eav\Model\Attribute\Data\Multiselect::validateValue
+     *
+     * @param mixed $optionText
+     * @param array|bool $expectedResult
+     */
+    #[DataProvider('validateValueWithSourceDataProvider')]
+    public function testValidateValueWithSource($optionText, $expectedResult)
+    {
+        $entityMock = $this->createPartialMockWithReflection(
+            AbstractModel::class,
+            ['getSkipRequiredValidation', 'getData']
+        );
+
+        $sourceMock = $this->createMock(AbstractSource::class);
+        $sourceMock->expects($this->any())->method('getOptionText')->willReturn($optionText);
+
+        $attributeMock = $this->createMock(Attribute::class);
+        $attributeMock->expects($this->any())->method('getStoreLabel')->willReturn('Test');
+        $attributeMock->expects($this->any())->method('getIsRequired')->willReturn(false);
+        $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('attrCode');
+        $attributeMock->expects($this->any())->method('getSourceModel')->willReturn('Some_Source');
+        $attributeMock->expects($this->any())->method('getSource')->willReturn($sourceMock);
+
+        $this->model->setEntity($entityMock);
+        $this->model->setAttribute($attributeMock);
+        $this->assertEquals($expectedResult, $this->model->validateValue('464'));
+    }
+
+    /**
+     * @return array
+     */
+    public static function validateValueWithSourceDataProvider()
+    {
+        return [
+            'option label "0" is valid' => [
+                'optionText' => '0',
+                'expectedResult' => true,
+            ],
+            'non-existent option' => [
+                'optionText' => false,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
+            'non-existent option, source returns null' => [
+                'optionText' => null,
+                'expectedResult' => ['Attribute attrCode does not contain option with Id 464'],
+            ],
+            'valid label' => [
+                'optionText' => 'Label',
+                'expectedResult' => true,
+            ],
+        ];
+    }
 }

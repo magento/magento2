@@ -557,28 +557,44 @@ class Factory
                 $adapterProvider,
                 $originalBackendType,
                 $backendOptions,
-                $idPrefix,
-                $defaultLifetime
+                $idPrefix
             ) {
+                // Build the PSR-6 pool with default lifetime 0 (no hidden TTL). The Symfony frontend
+                // adapter applies every lifetime explicitly via expiresAfter(), so a null lifetime must
+                // mean "no expiration" (legacy Zend/Cm parity) — if the pool imposed its own default,
+                // null-lifetime entries (config/layout caches) would wrongly expire after 2h.
                 return $adapterProvider->createAdapter(
                     $originalBackendType,
                     $backendOptions,
                     $idPrefix,
-                    $defaultLifetime
+                    0
                 );
             };
 
             // Create initial cache pool
             $cachePool = $cacheFactory();
 
-            // Create tag adapter for backend-specific operations
-            $adapter = $adapterProvider->createTagAdapter(
+            // Factory that (re)builds the tag adapter for a given pool. Passed to the Symfony adapter so
+            // that, after a fork, the tag adapter is rebuilt against the child's fresh pool/connection
+            // (otherwise it keeps the parent's extracted Redis socket and corrupts tag ops).
+            $adapterFactory = function ($pool) use (
+                $adapterProvider,
                 $originalBackendType,
-                $cachePool,
                 $idPrefix,
                 $isPageCache,
                 $backendOptions
-            );
+            ) {
+                return $adapterProvider->createTagAdapter(
+                    $originalBackendType,
+                    $pool,
+                    $idPrefix,
+                    $isPageCache,
+                    $backendOptions
+                );
+            };
+
+            // Create tag adapter for backend-specific operations
+            $adapter = $adapterFactory($cachePool);
 
             // Create Symfony adapter with fork detection support and tag adapter
             $result = $this->_objectManager->create(
@@ -588,6 +604,7 @@ class Factory
                     'adapter' => $adapter,
                     'defaultLifetime' => $defaultLifetime,
                     'idPrefix' => $idPrefix,
+                    'adapterFactory' => $adapterFactory,
                 ]
             );
 
@@ -606,6 +623,7 @@ class Factory
                     [
                         'adapter' => $result,
                         'preloadKeys' => $backendOptions['preload_keys'],
+                        'idPrefix' => $idPrefix,
                     ]
                 );
             }
@@ -634,9 +652,15 @@ class Factory
      */
     private function isCompressionEnabled(array $backendOptions): bool
     {
-        // Check if compress_data is explicitly enabled (value '1' or true)
-        return isset($backendOptions['compress_data'])
-            && ($backendOptions['compress_data'] === '1' || $backendOptions['compress_data'] === 1);
+        // Opt-in: default OFF when compress_data is not configured (preserves write latency for
+        // installs that never set it, matching the legacy backend). When it IS set, treat any value
+        // other than an explicit falsey ('0', 0, false, 'false', '') as enabled — so 1, '1' and the
+        // boolean true all turn compression on.
+        if (!isset($backendOptions['compress_data'])) {
+            return false;
+        }
+
+        return !in_array($backendOptions['compress_data'], ['0', 0, false, 'false', ''], true);
     }
 
     /**
@@ -701,6 +725,7 @@ class Factory
      * @param array $options
      * @return FrontendInterface
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function createSymfonyL2Cache(array $options): FrontendInterface
     {
@@ -710,9 +735,39 @@ class Factory
         $remoteBackend = $backendOptions['remote_backend'] ?? 'redis';
         $remoteBackendOptions = $backendOptions['remote_backend_options'] ?? [];
 
+        // Mirror legacy RemoteSynchronizedCache: top-level ("universal") backend_options that are not
+        // L2 structural keys flow into the remote tier, so preload_keys works in either backend_options
+        // or remote_backend_options (remote_backend_options wins on conflict, matching legacy merge order).
+        $l2StructuralKeys = [
+            'remote_backend', 'remote_backend_custom_naming', 'remote_backend_autoload', 'remote_backend_options',
+            'local_backend', 'local_backend_options', 'local_backend_custom_naming', 'local_backend_autoload',
+            'use_stale_cache', 'cleanup_percentage',
+        ];
+        $universalOptions = array_diff_key($backendOptions, array_flip($l2StructuralKeys));
+        $remoteBackendOptions = array_merge($universalOptions, $remoteBackendOptions);
+
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
+        // Never maintain an on-disk L1 tag index (tags/ + idtags/). The L2 remote (Redis) is the
+        // source of truth for tags and the :hash marker, and the L1 self-heals on read when its
+        // hash no longer matches the remote. This keeps the L1 from accumulating hundreds of
+        // thousands of tiny index files on the node (the post-deploy warmup degradation / tmpfs
+        // ENOSPC); cache data itself is still written normally to the L1 cache_dir, and
+        // clean-by-tag continues to work through the remote.
+        $localBackendOptions['index_tags'] = false;
+
+        // Resolve the L1 file cache directory up front so both the local backend and the L2 wrapper
+        // agree on it. SymfonyL2Cache uses it to gauge disk fill for size-based L1 eviction (the
+        // legacy disk-full safety valve). Only meaningful for the default file L1.
+        if (($localBackend === 'file') && empty($localBackendOptions['cache_dir'])) {
+            if (!isset($this->cachedDirectories['cache'])) {
+                $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
+                $this->cachedDirectories['cache'] = $cacheDir->getAbsolutePath();
+                $cacheDir->create();
+            }
+            $localBackendOptions['cache_dir'] = $this->cachedDirectories['cache'];
+        }
 
         // Get common options
         $frontend = $this->_getFrontendOptions($options);
@@ -749,6 +804,7 @@ class Factory
                     'options' => [
                         'cleanup_percentage' => $backendOptions['cleanup_percentage'] ?? 90,
                         'use_stale_cache' => $backendOptions['use_stale_cache'] ?? false,
+                        'local_cache_dir' => $localBackendOptions['cache_dir'] ?? null,
                     ],
                 ]
             );
