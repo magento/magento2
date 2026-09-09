@@ -9,13 +9,15 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
-use Exception;
+use Cm_Cache_Backend_File;
 use LogicException;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Cache\Backend\Database;
 use Magento\Framework\Cache\Backend\Eaccelerator;
 use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
+use Magento\Framework\Cache\Core;
+use Magento\Framework\Cache\Frontend\Adapter\Zend;
 use Magento\Framework\Cache\Frontend\Adapter\PreloadingSymfonyAdapter;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapterProvider;
@@ -25,6 +27,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Profiler;
 use UnexpectedValueException;
+use Zend_Cache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -74,7 +77,7 @@ class Factory
      *
      * @var string
      */
-    protected $_defaultBackend = 'file';
+    protected $_defaultBackend = 'Cm_Cache_Backend_File';
 
     /**
      * Options for default backend
@@ -177,9 +180,13 @@ class Factory
         if ($this->isSymfonyL2Cache($backendType)) {
             // SymfonyL2Cache backend for L2 cache with Symfony
             $result = $this->createSymfonyL2Cache($options);
-        } else {
-            // Use Symfony cache - fully backward compatible, no Zend cache needed
+        } elseif ($this->isSymfonyBackend($backendType)) {
+            // Single-tier Symfony cache for the modern short identifiers 'file' / 'redis' / 'valkey'.
             $result = $this->createSymfonyCache($options);
+        } else {
+            // No backend configured, OR a fully-qualified legacy backend class (e.g.
+            // \Magento\Framework\Cache\Backend\Redis, written by setup:install).
+            $result = $this->createLegacyCache($options);
         }
 
         $result = $this->_applyDecorators($result);
@@ -187,6 +194,84 @@ class Factory
         // stop profiling
         Profiler::stop('cache_frontend_create');
         return $result;
+    }
+
+    /**
+     * Build a legacy (Zend/Cm) cache frontend — the default path for any non-symfony_l2 backend.
+     *
+     * Mirrors the historical Factory: wrap a Zend_Cache_Core-based frontend (Magento\Framework\
+     * Cache\Core) around the resolved legacy backend via Zend_Cache::factory(). Falls back to
+     * default options if the configured backend cannot be instantiated.
+     *
+     * @param array $options
+     * @return FrontendInterface
+     */
+    private function createLegacyCache(array $options): FrontendInterface
+    {
+        $backend = $this->_getBackendOptions($options);
+        $frontend = $this->_getFrontendOptions($options);
+        // The legacy frontend is a Zend_Cache_Core (Magento\Framework\Cache\Core), not the Symfony
+        // adapter that _getFrontendOptions defaults to.
+        if ($frontend['type'] === Symfony::class) {
+            $frontend['type'] = Core::class;
+        }
+
+        try {
+            return $this->_objectManager->create(
+                Zend::class,
+                [
+                    'frontendFactory' => function () use ($frontend, $backend) {
+                        return Zend_Cache::factory(
+                            $frontend['type'],
+                            $backend['type'],
+                            $frontend,
+                            $backend['options'],
+                            true,
+                            true,
+                            true
+                        );
+                    },
+                ]
+            );
+        } catch (\Throwable $e) {
+            // Catches \Error too (e.g. a misconfigured/unresolvable backend class name), not just
+            // \Exception, so a bad legacy backend config degrades to the default file cache instead
+            // of fataling the whole request during cache bootstrap.
+            return $this->createCacheWithDefaultOptions($options);
+        }
+    }
+
+    /**
+     * Fallback legacy frontend using default backend options (used when the configured backend cannot be created).
+     *
+     * @param array $options
+     * @return FrontendInterface
+     */
+    private function createCacheWithDefaultOptions(array $options): FrontendInterface
+    {
+        unset($options['backend'], $options['frontend']);
+        $backend = $this->_getBackendOptions($options);
+        $frontend = $this->_getFrontendOptions($options);
+        if ($frontend['type'] === Symfony::class) {
+            $frontend['type'] = Core::class;
+        }
+
+        return $this->_objectManager->create(
+            Zend::class,
+            [
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                },
+            ]
+        );
     }
 
     /**
@@ -276,6 +361,7 @@ class Factory
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getBackendOptions(array $cacheOptions) //phpcs:ignore Generic.Metrics.NestingLevel
     {
@@ -336,7 +422,7 @@ class Factory
                 $backendType = RemoteSynchronizedCache::class;
                 $options['remote_backend'] = Database::class;
                 $options['remote_backend_options'] = $this->_getDbAdapterOptions();
-                $options['local_backend'] = 'file';
+                $options['local_backend'] = Cm_Cache_Backend_File::class;
                 // Use cached directory operation
                 if (!isset($this->cachedDirectories['cache'])) {
                     $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
@@ -346,8 +432,11 @@ class Factory
                 $options['local_backend_options']['cache_dir'] = $this->cachedDirectories['cache'];
                 break;
             default:
-                // For custom backend types, use the type as-is if it's a valid class
-                if ($type != $this->_defaultBackend && class_exists($type, true)) {
+                // Accept custom legacy backend classes only when they implement the Zend cache interface.
+                // Symfony adapters are routed to the Symfony stack before this method is called.
+                if ($type != $this->_defaultBackend
+                    && is_a($type, \Zend_Cache_Backend_Interface::class, true)
+                ) {
                     $backendType = $type;
                 }
         }
@@ -559,10 +648,6 @@ class Factory
                 $backendOptions,
                 $idPrefix
             ) {
-                // Build the PSR-6 pool with default lifetime 0 (no hidden TTL). The Symfony frontend
-                // adapter applies every lifetime explicitly via expiresAfter(), so a null lifetime must
-                // mean "no expiration" (legacy Zend/Cm parity) — if the pool imposed its own default,
-                // null-lifetime entries (config/layout caches) would wrongly expire after 2h.
                 return $adapterProvider->createAdapter(
                     $originalBackendType,
                     $backendOptions,
@@ -574,9 +659,8 @@ class Factory
             // Create initial cache pool
             $cachePool = $cacheFactory();
 
-            // Factory that (re)builds the tag adapter for a given pool. Passed to the Symfony adapter so
-            // that, after a fork, the tag adapter is rebuilt against the child's fresh pool/connection
-            // (otherwise it keeps the parent's extracted Redis socket and corrupts tag ops).
+            // Rebuild the tag adapter after a fork using the child's fresh pool and connection,
+            // preventing reuse of the parent's Redis socket and corrupted tag operations.
             $adapterFactory = function ($pool) use (
                 $adapterProvider,
                 $originalBackendType,
@@ -604,7 +688,7 @@ class Factory
                     'adapter' => $adapter,
                     'defaultLifetime' => $defaultLifetime,
                     'idPrefix' => $idPrefix,
-                    'adapterFactory' => $adapterFactory,
+                    'adapterFactory' => $adapterFactory
                 ]
             );
 
@@ -613,9 +697,6 @@ class Factory
                 $result = $this->applyCompressionDecorator($result, $backendOptions);
             }
 
-            // Apply other decorators
-            $result = $this->_applyDecorators($result);
-
             // Apply preloading wrapper if preload_keys configured
             if (!empty($backendOptions['preload_keys']) && is_array($backendOptions['preload_keys'])) {
                 $result = $this->_objectManager->create(
@@ -623,7 +704,7 @@ class Factory
                     [
                         'adapter' => $result,
                         'preloadKeys' => $backendOptions['preload_keys'],
-                        'idPrefix' => $idPrefix,
+                        'idPrefix' => $idPrefix
                     ]
                 );
             }
@@ -720,6 +801,19 @@ class Factory
     }
 
     /**
+     * Whether the backend selects single-tier Symfony caching.
+     *
+     * Only 'file', 'redis', and 'valkey' use Symfony; class names and other values use legacy caching.
+     *
+     * @param string $backendType
+     * @return bool
+     */
+    private function isSymfonyBackend(string $backendType): bool
+    {
+        return in_array(strtolower($backendType), ['file', 'redis', 'valkey'], true);
+    }
+
+    /**
      * Create SymfonyL2Cache (Clean L2 cache for Symfony)
      *
      * @param array $options
@@ -735,9 +829,8 @@ class Factory
         $remoteBackend = $backendOptions['remote_backend'] ?? 'redis';
         $remoteBackendOptions = $backendOptions['remote_backend_options'] ?? [];
 
-        // Mirror legacy RemoteSynchronizedCache: top-level ("universal") backend_options that are not
-        // L2 structural keys flow into the remote tier, so preload_keys works in either backend_options
-        // or remote_backend_options (remote_backend_options wins on conflict, matching legacy merge order).
+        // Pass non-structural top-level options to the remote tier, matching legacy L2 behavior.
+        // Explicit remote_backend_options override them, including preload_keys.
         $l2StructuralKeys = [
             'remote_backend', 'remote_backend_custom_naming', 'remote_backend_autoload', 'remote_backend_options',
             'local_backend', 'local_backend_options', 'local_backend_custom_naming', 'local_backend_autoload',
@@ -749,17 +842,11 @@ class Factory
         // Get local backend configuration (L1 - fast, local)
         $localBackend = $backendOptions['local_backend'] ?? 'file';
         $localBackendOptions = $backendOptions['local_backend_options'] ?? [];
-        // Never maintain an on-disk L1 tag index (tags/ + idtags/). The L2 remote (Redis) is the
-        // source of truth for tags and the :hash marker, and the L1 self-heals on read when its
-        // hash no longer matches the remote. This keeps the L1 from accumulating hundreds of
-        // thousands of tiny index files on the node (the post-deploy warmup degradation / tmpfs
-        // ENOSPC); cache data itself is still written normally to the L1 cache_dir, and
-        // clean-by-tag continues to work through the remote.
-        $localBackendOptions['index_tags'] = false;
+        // L1 stores data only: SymfonyL2Cache saves it tag-less, so no on-disk tag index is written
+        // (avoids tiny-file/ENOSPC churn). L2 stays authoritative for tags; tag cleaning stays remote.
 
-        // Resolve the L1 file cache directory up front so both the local backend and the L2 wrapper
-        // agree on it. SymfonyL2Cache uses it to gauge disk fill for size-based L1 eviction (the
-        // legacy disk-full safety valve). Only meaningful for the default file L1.
+        // Resolve the default L1 file directory for both tiers; SymfonyL2Cache uses it to measure
+        // disk usage and trigger size-based L1 eviction.
         if (($localBackend === 'file') && empty($localBackendOptions['cache_dir'])) {
             if (!isset($this->cachedDirectories['cache'])) {
                 $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);

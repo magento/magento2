@@ -9,7 +9,7 @@ namespace Magento\Framework\Currency\Data;
 
 use Locale;
 use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 use Magento\Framework\Currency\Exception\CurrencyException;
 use Magento\Framework\CurrencyInterface;
 use Magento\Framework\NumberFormatter;
@@ -30,7 +30,7 @@ class Currency
     public const LEFT = 32;
 
     /**
-     * @var FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
+     * @var LowLevelFrontendInterface|null
      */
     private static $cache = null;
 
@@ -408,7 +408,7 @@ class Currency
     /**
      * Returns the set cache.
      *
-     * @return FrontendInterface|\Psr\Cache\CacheItemPoolInterface|null
+     * @return LowLevelFrontendInterface|null
      */
     public static function getCache()
     {
@@ -418,11 +418,12 @@ class Currency
     /**
      * Sets a cache for Currency
      *
-     * @param FrontendInterface|\Psr\Cache\CacheItemPoolInterface $cache
+     * @param LowLevelFrontendInterface $cache
      * @return void
      */
-    public static function setCache($cache)
-    {
+    public static function setCache(
+        LowLevelFrontendInterface $cache
+    ): void {
         self::$cache = $cache;
     }
 
@@ -455,7 +456,7 @@ class Currency
     public static function clearCache($tag = null): void
     {
         if ($tag) {
-            self::$cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, $tag);
+            self::$cache->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, [$tag]);
         } else {
             self::$cache->clean(CacheConstants::CLEANING_MODE_ALL);
         }
