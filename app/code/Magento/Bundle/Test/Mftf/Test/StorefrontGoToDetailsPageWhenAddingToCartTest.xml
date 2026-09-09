@@ -12,8 +12,8 @@
         <annotations>
             <features value="Bundle"/>
             <stories value="Bundle products list on Storefront"/>
-            <title value="Customer should see an error message on the category page when clicking “Add to Cart” button"/>
-            <description value="Customer should see an error message asking to specify bundle options and stay on the category page when clicking “Add to Cart” button"/>
+            <title value="Customer should be taken to bundle product details page when clicking “Add to Cart” button"/>
+            <description value="Customer should be taken to bundle product details page when clicking “Add to Cart” button"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-229"/>
             <group value="Bundle"/>
@@ -92,8 +92,7 @@
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addProductToCart"/>
 
-        <!--Options need to be specified, so the inline AJAX error is shown and the customer stays on the category page-->
-        <waitForText selector="//div[@data-placeholder='messages']" time="30" userInput="Please specify product option(s)." stepKey="assertSpecifyOptionsErrorMessage"/>
-        <dontSeeInCurrentUrl url="{{BundleProduct.sku}}" stepKey="seeBundleProductDetailsPage"/>
+        <!--Check for details page-->
+        <seeInCurrentUrl url="{{BundleProduct.sku}}" stepKey="seeBundleProductDetailsPage"/>
     </test>
 </tests>
