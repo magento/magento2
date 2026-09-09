@@ -80,7 +80,7 @@
         <!--Click PayPal button and go back to Magento site-->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
         <actionGroup ref="StorefrontSelectShippingMethodOnOrderReviewPageActionGroup" stepKey="selectShippingMethod">
-            <argument name="shippingMethod" value="Fixed - US$5.00"/>
+            <argument name="shippingMethod" value="flatrate_flatrate"/>
         </actionGroup>
 
         <!--SubmitOrder-->
