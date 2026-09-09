@@ -11,16 +11,26 @@
         <plugin
             name="catalogRulePriceForConfigurableProduct"
             type="Magento\CatalogRuleConfigurable\Plugin\ConfigurableProduct\Model\ResourceModel\AddCatalogRulePrice"
+            sortOrder="10"
         />
     </type>
     <type name="Magento\CatalogRule\Model\Rule">
-        <plugin name="addVariationsToProductRule"
-                type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler"/>
-        <plugin name="configurableChildValidation"
-                type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation"/>
+        <plugin
+            name="addVariationsToProductRule"
+            type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler"
+            sortOrder="10"
+        />
+        <plugin
+            name="configurableChildValidation"
+            type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule\Validation"
+            sortOrder="10"
+        />
     </type>
     <type name="Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer">
-        <plugin name="productRuleReindex"
-                type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Indexer\ProductRuleReindex"/>
+        <plugin
+            name="productRuleReindex"
+            type="Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Indexer\ProductRuleReindex"
+            sortOrder="10"
+        />
     </type>
 </config>
