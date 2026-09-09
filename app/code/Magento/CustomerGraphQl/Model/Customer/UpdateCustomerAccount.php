@@ -114,7 +114,14 @@ class UpdateCustomerAccount
             throw new GraphQlNoSuchEntityException(__($exception->getMessage()), $exception);
         }
 
+        // The customer update mutation cannot modify the address book, so detach the loaded addresses to prevent
+        // the customer repository save from re-validating and re-saving every address (performance scales with count).
+        $addresses = $customer->getAddresses();
+        $customer->setAddresses(null);
         $this->saveCustomer->execute($customer);
+        // Restore the addresses on the same object: the resolver reuses this instance to build the mutation
+        // response (ExtractCustomerData reads getAddresses()), and it keeps the argument's observable state intact.
+        $customer->setAddresses($addresses);
 
         if (isset($data['is_subscribed'])) {
             if ((bool)$data['is_subscribed']) {

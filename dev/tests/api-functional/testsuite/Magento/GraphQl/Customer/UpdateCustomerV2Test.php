@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Exception;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Fixture\CustomerWithAddresses;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -277,6 +279,66 @@ QUERY;
             '',
             $this->getCustomerAuthHeaders($this->customer->getEmail(), 'password')
         );
+    }
+
+    /**
+     * Updating an account-only field must not drop or alter the customer's address book.
+     *
+     * The mutation input cannot carry addresses, so the resolver detaches them before save (to avoid re-saving
+     * every address) and restores them afterwards. This verifies the addresses survive both in the response
+     * payload (the restore step) and in storage (no re-save/delete side effects).
+     */
+    #[
+        DataFixture(
+            CustomerWithAddresses::class,
+            ['email' => 'addressbook@example.com', 'password' => 'password'],
+            'customerWithAddresses'
+        )
+    ]
+    public function testUpdateCustomerV2PreservesAddresses(): void
+    {
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customerWithAddresses');
+        $newLastname = 'Rowe';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomerV2(
+        input: {
+            lastname: "{$newLastname}"
+        }
+    ) {
+        customer {
+            lastname
+            addresses {
+                city
+                postcode
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($customer->getEmail(), 'password')
+        );
+
+        $responseCustomer = $response['updateCustomerV2']['customer'];
+        $this->assertEquals($newLastname, $responseCustomer['lastname']);
+
+        // Restore step: the detached address collection must be present in the response.
+        $this->assertCount(3, $responseCustomer['addresses']);
+        $this->assertEqualsCanonicalizing(
+            ['Boston', 'Los Angeles', 'New York City'],
+            array_column($responseCustomer['addresses'], 'city')
+        );
+
+        // No side effects: the address book is unchanged in storage.
+        $customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $persistedAddresses = $customerRepository->get($customer->getEmail())->getAddresses();
+        $this->assertCount(3, $persistedAddresses);
     }
 
     /**
