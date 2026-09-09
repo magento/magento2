@@ -35,8 +35,10 @@ class CleanCache
     {
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($this->cacheFrontendPool as $cacheFrontend) {
-            // Clean old/expired cache entries - Symfony cache handles this automatically
-            $cacheFrontend->clean(CacheConstants::CLEANING_MODE_OLD);
+            // The cache frontend does not support the 'old' cleaning mode, so the backend is used
+            // directly (legacy parity). For symfony_l2 this prunes expired L1 files + sweeps the L2
+            // tag index; Redis data keys auto-expire via native TTL.
+            $cacheFrontend->getBackend()->clean(CacheConstants::CLEANING_MODE_OLD);
         }
     }
 }

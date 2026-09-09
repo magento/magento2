@@ -8,12 +8,20 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters;
 
 use InvalidArgumentException;
+use Magento\Framework\Cache\Frontend\Adapter\OptimizedPredisClient;
+use Predis\Client as PredisClient;
 
 /**
  * Redis Lua script helper for advanced atomic operations
  *
  * Provides Lua script functionality for operations that benefit from
  * server-side execution and true atomicity beyond what pipelines offer.
+ *
+ * Works with both the phpredis extension (\Redis / \RedisCluster) and Predis. The two drivers expose
+ * different EVAL signatures — phpredis takes eval($script, $keysAndArgs, $numKeys) while Predis takes
+ * eval($script, $numKeys, ...$keysAndArgs) — so all script execution is funneled through rawEval()/
+ * rawEvalSha(), which normalize that difference. This lets a Predis deployment get the same atomic
+ * tag-index prune (use_lua=1) as phpredis instead of silently falling back to the non-atomic path.
  */
 class RedisLuaHelper
 {
@@ -239,14 +247,81 @@ LUA;
      */
     public function __construct($redis, bool $enabled = true)
     {
-        // Runtime type check using get_class to avoid referencing Redis class directly
-        // This prevents DI compilation errors with PHP extension classes
-        if (!is_object($redis) || get_class($redis) !== 'Redis') {
-            throw new InvalidArgumentException('Redis connection must be an instance of Redis');
+        // Accept either a phpredis handle (\Redis / \RedisCluster — checked without referencing the
+        // class directly so DI compilation works when the extension is absent) or a Predis client.
+        $isPhpRedis = is_object($redis)
+            && class_exists('\Redis', false)
+            && ($redis instanceof \Redis || $redis instanceof \RedisCluster);
+        $isPredis = $redis instanceof PredisClient || $redis instanceof OptimizedPredisClient;
+        if (!$isPhpRedis && !$isPredis) {
+            throw new InvalidArgumentException(
+                'Redis connection must be a phpredis (\Redis/\RedisCluster) or Predis client'
+            );
         }
 
         $this->redis = $redis;
         $this->enabled = $enabled;
+    }
+
+    /**
+     * Whether the underlying connection is a Predis client (vs the phpredis extension).
+     *
+     * @return bool
+     */
+    private function isPredis(): bool
+    {
+        return $this->redis instanceof PredisClient || $this->redis instanceof OptimizedPredisClient;
+    }
+
+    /**
+     * Execute a Lua script, normalizing the phpredis vs Predis EVAL argument order.
+     *
+     * Argument order: phpredis uses eval($script, $keysAndArgs, $numKeys); Predis uses
+     * eval($script, $numKeys, ...$keysAndArgs).
+     *
+     * @param string $script
+     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
+     * @param int $numKeys
+     * @return mixed
+     */
+    private function rawEval(string $script, array $keysAndArgs, int $numKeys)
+    {
+        if ($this->isPredis()) {
+            return $this->unwrapPredis($this->redis->eval($script, $numKeys, ...$keysAndArgs));
+        }
+        return $this->redis->eval($script, $keysAndArgs, $numKeys);
+    }
+
+    /**
+     * Execute a cached Lua script by SHA, normalizing the phpredis vs Predis EVALSHA argument order.
+     *
+     * @param string $sha
+     * @param array $keysAndArgs Flat list: the $numKeys KEYS first, then the ARGV values
+     * @param int $numKeys
+     * @return mixed
+     */
+    private function rawEvalSha(string $sha, array $keysAndArgs, int $numKeys)
+    {
+        if ($this->isPredis()) {
+            return $this->unwrapPredis($this->redis->evalsha($sha, $numKeys, ...$keysAndArgs));
+        }
+        return $this->redis->evalSha($sha, $keysAndArgs, $numKeys);
+    }
+
+    /**
+     * Normalize a Predis reply to phpredis-like semantics: turn a server error response (e.g. NOSCRIPT
+     * when the client was built with exceptions=false) into a thrown exception so the callers' existing
+     * evalSha->eval fallback and try/catch handling fire the same way on both drivers.
+     *
+     * @param mixed $result
+     * @return mixed
+     */
+    private function unwrapPredis($result)
+    {
+        if ($result instanceof \Predis\Response\ErrorInterface) {
+            throw new \RuntimeException((string)$result->getMessage());
+        }
+        return $result;
     }
 
     /**
@@ -262,9 +337,9 @@ LUA;
 
         try {
             // Test if Lua is supported
-            $this->redis->eval('return 1', [], 0);
+            $this->rawEval('return 1', [], 0);
             return true;
-        } catch (\RedisException $e) {
+        } catch (\Throwable $e) {
             return false;
         }
     }
@@ -289,16 +364,16 @@ LUA;
         $sha = $this->loadScript(self::SCRIPT_CLEAN_BY_TAG_CONDITIONAL);
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->rawEvalSha(
                 $sha,
                 [$tagKey, $prefix, time(), $condition],
                 2  // Number of KEYS
             );
 
             return (int)$result;
-        } catch (\RedisException $e) {
-            // Fallback: script not loaded, try eval
-            return (int)$this->redis->eval(
+        } catch (\Throwable $e) {
+            // Fallback: script not loaded (NOSCRIPT), run the full script
+            return (int)$this->rawEval(
                 self::SCRIPT_CLEAN_BY_TAG_CONDITIONAL,
                 [$tagKey, $prefix, time(), $condition],
                 2
@@ -334,16 +409,16 @@ LUA;
         $argv = array_merge([$value, $ttl], $newTagKeys);
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->rawEvalSha(
                 $sha,
                 array_merge([$cacheKey, $reverseIndexKey], $argv),
                 2  // Number of KEYS
             );
 
             return (bool)$result;
-        } catch (\RedisException $e) {
-            // Fallback: script not loaded
-            return (bool)$this->redis->eval(
+        } catch (\Throwable $e) {
+            // Fallback: script not loaded (NOSCRIPT), run the full script
+            return (bool)$this->rawEval(
                 self::SCRIPT_ATOMIC_SAVE_WITH_TAGS,
                 array_merge([$cacheKey, $reverseIndexKey], $argv),
                 2
@@ -376,7 +451,7 @@ LUA;
 
         do {
             try {
-                $result = $this->redis->evalSha(
+                $result = $this->rawEvalSha(
                     $sha,
                     [$pattern, $tagPrefix, $batchSize, $cursor],
                     2  // Number of KEYS
@@ -391,7 +466,7 @@ LUA;
                 if ($iterations >= 100) {
                     break;
                 }
-            } catch (\RedisException $e) {
+            } catch (\Throwable $e) {
                 // Fallback or break on error
                 break;
             }
@@ -424,23 +499,23 @@ LUA;
         $allIdsKey = 'cache:all_ids';
 
         try {
-            $result = $this->redis->evalSha(
+            $result = $this->rawEvalSha(
                 $sha,
                 [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
                 3  // Number of KEYS
             );
 
             return (int)$result;
-        } catch (\RedisException $e) {
+        } catch (\Throwable $e) {
             // Fallback: run script directly
             try {
-                $result = $this->redis->eval(
+                $result = $this->rawEval(
                     self::SCRIPT_CLEAR_ALL_INDICES,
                     [$tagPattern, $reversePattern, $allIdsKey, $batchSize],
                     3
                 );
                 return (int)$result;
-            } catch (\RedisException $e) {
+            } catch (\Throwable $e) {
                 // Script execution failed
                 return 0;
             }
@@ -462,10 +537,12 @@ LUA;
         }
 
         try {
-            $sha = $this->redis->script('load', $script);
+            $sha = $this->isPredis()
+                ? $this->unwrapPredis($this->redis->script('load', $script))
+                : $this->redis->script('load', $script);
             $this->scriptShas[$hash] = $sha;
             return $sha;
-        } catch (\RedisException $e) {
+        } catch (\Throwable $e) {
             throw new \RuntimeException('Failed to load Lua script: ' . $e->getMessage(), 0, $e);
         }
     }
