@@ -152,4 +152,18 @@ class TagScopeTest extends TestCase
             'success, success' => [true, true, true]
         ];
     }
+
+    /**
+     * NOT_MATCHING_TAG has no safe implementation within a tag scope: forwarding it unmodified
+     * would delete entries belonging to other cache types sharing the same backend, so it must
+     * be refused rather than silently bypass scope isolation.
+     *
+     * @return void
+     */
+    public function testCleanModeNotMatchingTagThrows(): void
+    {
+        $this->_frontend->expects($this->never())->method('clean');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->_object->clean(CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['some_tag']);
+    }
 }

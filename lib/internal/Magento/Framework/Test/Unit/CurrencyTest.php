@@ -12,7 +12,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Currency;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\CacheItemPoolInterface;
+use Magento\Framework\Cache\LowLevelFrontendInterface;
 
 /**
  * Test for Magento\Framework\Currency
@@ -22,7 +22,7 @@ class CurrencyTest extends TestCase
     public function testConstruct()
     {
         $frontendCache = $this->createMock(FrontendInterface::class);
-        $cachePoolMock = $this->createMock(CacheItemPoolInterface::class);
+        $cachePoolMock = $this->createMock(LowLevelFrontendInterface::class);
         /** @var CacheInterface|MockObject $appCache */
         $appCache = $this->createMock(CacheInterface::class);
         $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($cachePoolMock);
