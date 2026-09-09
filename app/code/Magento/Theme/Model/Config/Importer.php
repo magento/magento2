@@ -10,7 +10,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
 use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDbCollection;
 use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
-use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
+use Magento\Theme\Model\Theme\Data\Collection as ThemeFilesystemCollection;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\Registration;
 
@@ -110,8 +110,7 @@ class Importer implements ImporterInterface
     }
 
     /**
-     * Returns array of warning messages which contain information about which changes (removing, registration)
-     * will be applied to themes.
+     * Returns array of warning messages about theme changes (removing, registration) to be applied.
      *
      * @param array $data The data that should be imported, used for creating warning messages
      * @return array
