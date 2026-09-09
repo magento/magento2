@@ -45,4 +45,7 @@
         <plugin name="reindex_customer_grid_after_website_remove" type="Magento\Customer\Model\Plugin\CustomerGridIndexAfterWebsiteDelete" />
         <plugin name="deleteCustomerGroupExcludedWebsiteAfterWebsiteDelete" type="Magento\Customer\Model\Plugin\Website\DeleteCustomerGroupExcludedWebsite"/>
     </type>
+    <type name="Magento\Ui\Component\Form\Element\Select">
+        <plugin name="customer_disable_store_view_website_filter_global_scope" type="Magento\Customer\Plugin\Ui\Component\Form\Element\DisableStoreViewWebsiteFilter"/>
+    </type>
 </config>

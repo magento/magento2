@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2547264ed5c4e551f61c8db7de7811a7",
+    "content-hash": "38daf2b6efd2c9602b9b1cd081d1d802",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -11957,16 +11957,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "6.0.1",
+            "version": "7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "efbabcd2a5351e36c6770177880e15afc76a350a"
+                "reference": "93a053b281ff10aafe5f28061923892076c670b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/efbabcd2a5351e36c6770177880e15afc76a350a",
-                "reference": "efbabcd2a5351e36c6770177880e15afc76a350a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/93a053b281ff10aafe5f28061923892076c670b4",
+                "reference": "93a053b281ff10aafe5f28061923892076c670b4",
                 "shasum": ""
             },
             "require": {
@@ -12006,7 +12006,7 @@
                 "php-coveralls/php-coveralls": "^1.0||^2.2",
                 "phpmd/phpmd": "^2.8.0",
                 "phpunit/phpunit": "^12.0",
-                "squizlabs/php_codesniffer": "~3.11.0"
+                "squizlabs/php_codesniffer": "^3.11"
             },
             "suggest": {
                 "hoa/console": "Enables <pause /> action and interactive console functionality"
@@ -12043,9 +12043,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/6.0.1"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/7.0.0"
             },
-            "time": "2026-04-07T11:28:58+00:00"
+            "time": "2026-08-14T06:59:19+00:00"
         },
         {
             "name": "magento/php-compatibility-fork",
