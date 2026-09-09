@@ -22,6 +22,7 @@
         <waitForPageLoad stepKey="waitForNextPageLoad" time="30"/>
         <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForNextPageLoadAgain" time="30"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.passwordOrUsePasswordButton}}" stepKey="waitForPasswordOrUsePasswordButtonToSettle" before="clickUsePasswordInsteadIfPasswordFieldNotVisible"/>
         <conditionalClick selector="{{PayPalPaymentSection.usePasswordInsteadButton}}" dependentSelector="{{PayPalPaymentSection.password}}" visible="false" stepKey="clickUsePasswordInsteadIfPasswordFieldNotVisible"/>
         <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordFieldToBeVisible" />
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/PAYPAL_PWD}}" stepKey="fillPassword"/>
