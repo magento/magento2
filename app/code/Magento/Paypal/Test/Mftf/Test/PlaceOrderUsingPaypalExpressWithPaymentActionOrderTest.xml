@@ -62,8 +62,10 @@
         <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalSettings"/>
         <!--Click PayPal button and go back to Magento site-->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
-        <!--Place order on Order Review page after returning from PayPal-->
-        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
+        <!--PayPal's redirect after returning to Magento is non-deterministic: it can land on the
+        classic Order Review page (needs an explicit Place Order click) or complete straight to
+        checkout-success. Click only if the review page's button is actually present.-->
+        <conditionalClick selector="{{StorefrontPayPalOrderReviewSection.placeOrderBtn}}" dependentSelector="{{StorefrontPayPalOrderReviewSection.placeOrderBtn}}" visible="true" stepKey="clickPlaceOrderBtnIfOnReviewPage"/>
         <!-- See order successful Page instead of Order Review Page -->
         <waitForElement selector="{{CheckoutSuccessMainSection.successTitle}}" stepKey="waitForLoadSuccessPageTitle"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="waitForLoadSuccessPage"/>
