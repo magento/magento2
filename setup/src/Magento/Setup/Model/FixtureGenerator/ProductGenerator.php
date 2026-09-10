@@ -10,11 +10,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory as StoreCollectionFactory;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 
@@ -106,6 +108,11 @@ class ProductGenerator
     private $customTableMap;
 
     /**
+     * @var CategoryLink
+     */
+    private $categoryLink;
+
+    /**
      * @param ProductFactory $productFactory
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param UrlRewriteFactory $urlRewriteFactory
@@ -115,6 +122,8 @@ class ProductGenerator
      * @param ProductTemplateGeneratorFactory $productTemplateGeneratorFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param array $customTableMap
+     * @param CategoryLink|null $categoryLink
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -125,7 +134,8 @@ class ProductGenerator
         StoreManagerInterface $storeManager,
         ProductTemplateGeneratorFactory $productTemplateGeneratorFactory,
         ScopeConfigInterface $scopeConfig,
-        $customTableMap = []
+        $customTableMap = [],
+        ?CategoryLink $categoryLink = null
     ) {
         $this->productFactory = $productFactory;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -136,6 +146,8 @@ class ProductGenerator
         $this->productTemplateGeneratorFactory = $productTemplateGeneratorFactory;
         $this->scopeConfig = $scopeConfig;
         $this->customTableMap = $customTableMap;
+        $this->categoryLink = $categoryLink ?? ObjectManager::getInstance()
+            ->get(CategoryLink::class);
     }
 
     /**
@@ -193,12 +205,14 @@ class ProductGenerator
             ]
         );
         foreach ($attributeSets as $attributeSetId => $productsAmount) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $fixtureMap = array_merge($fixtureMap, ['attribute_set_id' => $attributeSetId]);
             $generator->generate(
                 $this->productTemplateGeneratorFactory->create($fixtureMap),
                 $productsAmount,
                 function ($productNumber, $entityNumber) use ($attributeSetId, $fixtureMap) {
                     // add additional attributes to fixture for fulfill it during product generation
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     return array_merge(
                         $fixtureMap,
                         $fixtureMap['additional_attributes']($attributeSetId, $productNumber, $entityNumber)
@@ -206,6 +220,7 @@ class ProductGenerator
                 }
             );
         }
+        $this->categoryLink->resetCategoryLinksCache();
     }
 
     /**
