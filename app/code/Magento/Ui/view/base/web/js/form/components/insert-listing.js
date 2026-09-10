@@ -276,7 +276,14 @@ define([
             _.extend(selectionsData, this.params || {}, selections.params);
 
             if (selections[itemsType] && selections[itemsType].length) {
-                selectionsData.filters = {};
+                /**
+                 * In exclude mode the request is constrained by 'nin' on the excluded ids only,
+                 * so the applied grid filters must be preserved - otherwise the whole
+                 * unfiltered collection (minus excluded ids) would be requested.
+                 */
+                if (!selections.excludeMode) {
+                    selectionsData.filters = {};
+                }
                 selectionsData['filters_modifier'] = {};
                 selectionsData['filters_modifier'][this.indexField] = {
                     'condition_type': filterType,
