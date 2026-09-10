@@ -62,11 +62,6 @@ class AjaxMessageResponseTest extends TestCase
     }
 
     /**
-     * A notice-type message (e.g. configurable product "choose options" message) must
-     * survive in session so it can still be displayed on the page the customer is
-     * redirected back to, instead of being wiped out here: getMessages() must only be
-     * called once, to peek, and never again to clear.
-     *
      * @return void
      */
     public function testGetInlineErrorMessagesReturnsNullWhenNoErrors(): void
@@ -93,11 +88,6 @@ class AjaxMessageResponseTest extends TestCase
     }
 
     /**
-     * When an error message is found, the session must be peeked first (false) and only
-     * then cleared (true), so the clear doesn't happen before we know there's something
-     * to consume. The rendered HTML must also carry role="alert"/aria-atomic so screen
-     * readers announce it (the AC-18036 accessibility fix).
-     *
      * @return void
      */
     public function testGetInlineErrorMessagesRendersErrors(): void
