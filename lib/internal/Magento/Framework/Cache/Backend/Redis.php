@@ -108,6 +108,50 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
+     * Remove cache entries by id, also removing them from each of their tags' id index.
+     *
+     * Upstream only unlinks the data keys here and leaves the ids behind in every zc:ti:<tag>
+     * set, unlike its own single-id remove() which cleans both (AC-18197).
+     *
+     * @param array $ids
+     */
+    protected function _removeByIds($ids)
+    {
+        if ($ids) {
+            $ids = array_chunk($ids, $this->_removeChunkSize);
+            foreach ($ids as $idsChunk) {
+                $this->_redis->pipeline();
+                foreach ($idsChunk as $id) {
+                    $this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
+                }
+                $tagsPerId = $this->_redis->exec();
+
+                $this->_redis->pipeline()->multi();
+
+                // Remove data
+                $this->_redis->unlink($this->_preprocessIds($idsChunk));
+
+                // Remove ids from list of all ids
+                if ($this->_notMatchingTags) {
+                    $this->_redis->sRem(self::SET_IDS, $idsChunk);
+                }
+
+                // Remove ids from each of their tags' id index
+                foreach ($idsChunk as $index => $id) {
+                    $tags = explode(',', $this->_decodeData($tagsPerId[$index] ?? false));
+                    foreach ($tags as $tag) {
+                        if ($tag !== '') {
+                            $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $id);
+                        }
+                    }
+                }
+
+                $this->_redis->exec();
+            }
+        }
+    }
+
+    /**
      * @inheritDoc
      */
     protected function _collectGarbage()
