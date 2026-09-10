@@ -157,7 +157,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if ($isStoreScopedRevert) {
             $this->removeStoreScopedAttributeOverride($category, $linkField, 'url_key');
         }
-        $this->updateUrlKey($category, $defaultUrlKey);
+        $this->updateUrlKey($category, $defaultUrlKey, $isStoreScopedRevert);
         if ($isStoreScopedRevert) {
             $category->setUrlKey(null);
         }
@@ -196,11 +196,12 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      *
      * @param Category $category
      * @param string|null $urlKey
+     * @param bool $isStoreScopedRevert Whether this call is cascading a store-scoped "Use Default Value" revert
      * @return void
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    private function updateUrlKey(Category $category, ?string $urlKey): void
+    private function updateUrlKey(Category $category, ?string $urlKey, bool $isStoreScopedRevert = false): void
     {
         $this->validateUrlKey($category, $urlKey);
         $category->setUrlKey($urlKey)
@@ -208,7 +209,7 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
         if (!$category->isObjectNew()) {
             $category->getResource()->saveAttribute($category, 'url_path');
             if ($category->dataHasChangedFor('url_path')) {
-                $this->updateUrlPathForChildren($category);
+                $this->updateUrlPathForChildren($category, $isStoreScopedRevert);
             }
         }
     }
@@ -258,10 +259,11 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
      * Update url path for children category.
      *
      * @param Category $category
+     * @param bool $isStoreScopedRevert Whether this cascade is caused by a store-scoped "Use Default Value" revert
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function updateUrlPathForChildren(Category $category)
+    protected function updateUrlPathForChildren(Category $category, bool $isStoreScopedRevert = false)
     {
         if ($this->isGlobalScope($category->getStoreId())) {
             $childrenIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
@@ -280,12 +282,80 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $childrenById,
                 static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
             );
-            foreach ($childrenById as $child) {
+
+            $storeId = (int)$category->getStoreId();
+            // A revert only orphans children that never had their own url_key override; those with one
+            // still need a recomputed url_path reflecting the new parent segment, not a deletion.
+            $idsWithOwnUrlKeyOverride = [];
+            $linkField = null;
+            if ($isStoreScopedRevert && $childrenById) {
+                $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+                $idsWithOwnUrlKeyOverride = $this->getIdsWithOwnUrlKeyOverride(
+                    $category,
+                    array_keys($childrenById),
+                    $storeId
+                );
+            }
+
+            $orphanedLinkIds = [];
+            foreach ($childrenById as $childId => $child) {
                 $parentId = (int)$child->getParentId();
                 $parent = $parentId === (int)$category->getId() ? $category : ($childrenById[$parentId] ?? null);
-                $this->updateUrlPathForCategory($child, $parent);
+                $isOrphanedOverride = $isStoreScopedRevert && !isset($idsWithOwnUrlKeyOverride[$childId]);
+                $this->updateUrlPathForCategory($child, $parent, !$isOrphanedOverride);
+                if ($isOrphanedOverride) {
+                    $orphanedLinkIds[] = $child->getData($linkField);
+                }
+            }
+            if ($orphanedLinkIds) {
+                $this->deleteUrlPathOverridesForStore($category, $orphanedLinkIds, $storeId);
             }
         }
+    }
+
+    /**
+     * Get, from the given category ids, those that carry their own store-scoped url_key override.
+     *
+     * @param Category $category
+     * @param int[] $categoryIds
+     * @param int $storeId
+     * @return array<int, bool> Map of category id to true, for fast isset() lookups
+     */
+    private function getIdsWithOwnUrlKeyOverride(Category $category, array $categoryIds, int $storeId): array
+    {
+        $resource = $category->getResource();
+        $attribute = $resource->getAttribute('url_key');
+        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+        $select = $resource->getConnection()->select()
+            ->from($attribute->getBackendTable(), [$linkField])
+            ->where('attribute_id = ?', $attribute->getAttributeId())
+            ->where('store_id = ?', $storeId)
+            ->where($linkField . ' IN (?)', $categoryIds);
+
+        return array_flip($resource->getConnection()->fetchCol($select));
+    }
+
+    /**
+     * Delete leftover store-scoped url_path overrides for children that no longer need one.
+     *
+     * @param Category $category
+     * @param array $linkIds
+     * @param int $storeId
+     * @return void
+     */
+    private function deleteUrlPathOverridesForStore(Category $category, array $linkIds, int $storeId): void
+    {
+        $resource = $category->getResource();
+        $attribute = $resource->getAttribute('url_path');
+        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+        $resource->getConnection()->delete(
+            $attribute->getBackendTable(),
+            [
+                'attribute_id = ?' => $attribute->getAttributeId(),
+                'store_id = ?' => $storeId,
+                $linkField . ' IN (?)' => $linkIds,
+            ]
+        );
     }
 
     /**
@@ -401,15 +471,24 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
     /**
      * Update url path for category.
      *
+     * The recomputed path is still needed even when not persisted, so a descendant further down the
+     * cascade that does have its own override can still thread an accurate parent path through.
+     *
      * @param Category $category
      * @param Category|null $parentCategory
+     * @param bool $shouldPersist
      * @return void
      * @throws NoSuchEntityException
      */
-    protected function updateUrlPathForCategory(Category $category, ?Category $parentCategory = null)
-    {
+    protected function updateUrlPathForCategory(
+        Category $category,
+        ?Category $parentCategory = null,
+        bool $shouldPersist = true
+    ) {
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category, $parentCategory));
-        $category->getResource()->saveAttribute($category, 'url_path');
+        if ($shouldPersist) {
+            $category->getResource()->saveAttribute($category, 'url_path');
+        }
     }
 }
