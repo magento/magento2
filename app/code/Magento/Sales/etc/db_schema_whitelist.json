@@ -149,7 +149,8 @@
             "SALES_ORDER_QUOTE_ID": true,
             "SALES_ORDER_UPDATED_AT": true,
             "SALES_ORDER_SEND_EMAIL": true,
-            "SALES_ORDER_EMAIL_SENT": true
+            "SALES_ORDER_EMAIL_SENT": true,
+            "SALES_ORDER_CUSTOMER_EMAIL_CUSTOMER_IS_GUEST_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
