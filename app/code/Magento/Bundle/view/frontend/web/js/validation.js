@@ -16,6 +16,11 @@ define([
                 // logic for date-picker error placement
                 if (element.hasClass('_has-datepicker')) {
                     errorPlacement = element.siblings('button');
+
+                    //fallback if datepicker has no calendar button sibling
+                    if (!errorPlacement.length) {
+                        errorPlacement = element;
+                    }
                 }
                 // logic for field wrapper
                 fieldWrapper = element.closest('.addon');

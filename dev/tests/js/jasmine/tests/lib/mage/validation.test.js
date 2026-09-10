@@ -1314,4 +1314,31 @@ define([
                 .call($.validator.prototype, 'html,php', el1, null)).toEqual(false);
         });
     });
+
+    describe('Testing errorPlacement for datepicker field', function () {
+        it('places the error next to the calendar button when one is present', function () {
+            var wrapper = $('<div/>'),
+                element = $('<input type="text" class="_has-datepicker"/>'),
+                button = $('<button type="button"/>'),
+                error = $('<div class="mage-error"/>');
+
+            wrapper.append(element).append(button);
+
+            $.mage.validation.prototype.options.errorPlacement.call({}, error, element);
+
+            expect(button.next().is(error)).toEqual(true);
+        });
+
+        it('falls back to placing the error next to the field itself when there is no calendar button', function () {
+            var wrapper = $('<div/>'),
+                element = $('<input type="text" class="_has-datepicker"/>'),
+                error = $('<div class="mage-error"/>');
+
+            wrapper.append(element);
+
+            $.mage.validation.prototype.options.errorPlacement.call({}, error, element);
+
+            expect(element.next().is(error)).toEqual(true);
+        });
+    });
 });
