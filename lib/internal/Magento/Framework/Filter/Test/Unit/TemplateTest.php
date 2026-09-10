@@ -13,6 +13,8 @@ use Magento\Framework\Filter\DirectiveProcessor\IfDirective;
 use Magento\Framework\Filter\DirectiveProcessor\LegacyDirective;
 use Magento\Framework\Filter\DirectiveProcessor\TemplateDirective;
 use Magento\Framework\Filter\Template;
+use Magento\Framework\Filter\Template\ResultPlaceholderFactory;
+use Magento\Framework\Filter\Template\SignatureMarker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +26,11 @@ use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 class TemplateTest extends TestCase
 {
     use MockCreationTrait;
+
+    /**
+     * Signature the stubbed SignatureProvider hands out during these tests.
+     */
+    private const string SIGNATURE = 'Z0FFbeCU2R8bsVGJuTdkXyiiZBzsaceV';
 
     /**
      * @var Template
@@ -44,6 +51,16 @@ class TemplateTest extends TestCase
      * @var \Magento\Framework\Filter\Template\FilteringDepthMeter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filteringDepthMeter;
+
+    /**
+     * @var \Magento\Framework\Filter\Template\SignatureMarker|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $signatureMarker;
+
+    /**
+     * @var \Magento\Framework\Filter\Template\ResultPlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $resultPlaceholderFactory;
 
     /**
      * @var array
@@ -84,11 +101,23 @@ class TemplateTest extends TestCase
             ['showMark']
         );
 
+        $this->signatureMarker = $objectManager->getObject(
+            SignatureMarker::class,
+            ['signatureProvider' => $this->signatureProvider]
+        );
+
+        $this->resultPlaceholderFactory = $objectManager->getObject(
+            ResultPlaceholderFactory::class,
+            ['signatureProvider' => $this->signatureProvider]
+        );
+
         $this->templateFilter = $objectManager->getObject(
             \Magento\Framework\Filter\Template::class,
             [
                 'signatureProvider' => $this->signatureProvider,
-                'filteringDepthMeter' => $this->filteringDepthMeter
+                'filteringDepthMeter' => $this->filteringDepthMeter,
+                'signatureMarker' => $this->signatureMarker,
+                'resultPlaceholderFactory' => $this->resultPlaceholderFactory
             ]
         );
     }
