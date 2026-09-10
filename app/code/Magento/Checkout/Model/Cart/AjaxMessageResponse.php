@@ -39,10 +39,14 @@ class AjaxMessageResponse
      */
     public function getInlineErrorMessages(bool $clearMessages): ?array
     {
-        $messages = $this->messageManager->getMessages($clearMessages);
+        $messages = $this->messageManager->getMessages(false);
         $errorMessages = $this->getErrorMessages($messages);
         if (!$errorMessages->getCount()) {
             return null;
+        }
+
+        if ($clearMessages) {
+            $this->messageManager->getMessages(true);
         }
 
         $block = $this->layoutFactory->create()->createBlock(Messages::class);

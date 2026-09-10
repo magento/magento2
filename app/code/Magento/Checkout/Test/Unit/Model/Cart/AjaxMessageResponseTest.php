@@ -62,6 +62,11 @@ class AjaxMessageResponseTest extends TestCase
     }
 
     /**
+     * A notice-type message (e.g. configurable product "choose options" message) must
+     * survive in session so it can still be displayed on the page the customer is
+     * redirected back to, instead of being wiped out here: getMessages() must only be
+     * called once, to peek, and never again to clear.
+     *
      * @return void
      */
     public function testGetInlineErrorMessagesReturnsNullWhenNoErrors(): void
@@ -74,7 +79,7 @@ class AjaxMessageResponseTest extends TestCase
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
-            ->with(true)
+            ->with(false)
             ->willReturn($messages);
         $this->messageCollectionFactory->expects($this->once())
             ->method('create')
@@ -84,6 +89,10 @@ class AjaxMessageResponseTest extends TestCase
     }
 
     /**
+     * When an error message is found, the session must be peeked first (false) and only
+     * then cleared (true), so the clear doesn't happen before we know there's something
+     * to consume.
+     *
      * @return void
      */
     public function testGetInlineErrorMessagesRendersErrors(): void
@@ -111,10 +120,13 @@ class AjaxMessageResponseTest extends TestCase
             ->with(Messages::class)
             ->willReturn($messagesBlock);
 
-        $this->messageManager->expects($this->once())
+        $getMessagesCalls = [];
+        $this->messageManager->expects($this->exactly(2))
             ->method('getMessages')
-            ->with(true)
-            ->willReturn($messages);
+            ->willReturnCallback(function (bool $clear) use (&$getMessagesCalls, $messages) {
+                $getMessagesCalls[] = $clear;
+                return $messages;
+            });
         $this->messageCollectionFactory->expects($this->once())
             ->method('create')
             ->willReturn($errorMessages);
@@ -124,5 +136,6 @@ class AjaxMessageResponseTest extends TestCase
             ['html' => '<div>error</div>'],
             $this->model->getInlineErrorMessages(true)
         );
+        $this->assertSame([false, true], $getMessagesCalls);
     }
 }
