@@ -10,6 +10,11 @@ declare(strict_types=1);
 use Magento\Framework\Autoload\AutoloaderRegistry;
 use Magento\Framework\Autoload\ClassLoaderWrapper;
 
+// phpcs:disable PSR1.Files.SideEffects
+// phpcs:disable Magento2.Functions.DiscouragedFunction
+// phpcs:disable Magento2.Security.IncludeFile
+// phpcs:disable Magento2.Exceptions.DirectThrow
+
 /**
  * Shortcut constant for the root directory
  */
@@ -17,16 +22,18 @@ use Magento\Framework\Autoload\ClassLoaderWrapper;
 
 \define('VENDOR_PATH', BP . '/app/etc/vendor_path.php');
 
-if (!\is_readable(VENDOR_PATH)) {
-    throw new \Exception(
-        'We can\'t read some files that are required to run the Magento application. '
-         . 'This usually means file permissions are set incorrectly.'
-    );
-}
-
 $vendorAutoload = (
     static function (): ?string {
-        $vendorDir = require VENDOR_PATH;
+        if (\is_readable(VENDOR_PATH)) {
+            $vendorDir = require VENDOR_PATH;
+        } elseif (\file_exists(VENDOR_PATH) || !\is_readable(\dirname(VENDOR_PATH))) {
+            throw new \Exception(
+                'We can\'t read some files that are required to run the Magento application. '
+                . 'This usually means file permissions are set incorrectly.'
+            );
+        } else {
+            $vendorDir = 'vendor';
+        }
 
         $vendorAutoload = BP . "/{$vendorDir}/autoload.php";
         if (\is_readable($vendorAutoload)) {
