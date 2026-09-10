@@ -57,6 +57,20 @@ $bulks = [
         'description' => 'Bulk Description',
         'operation_count' => 2,
     ],
+    'not_started_all_open' => [
+        'uuid' => 'bulk-uuid-6',
+        'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
+        'description' => 'Bulk Description',
+        'operation_count' => 2,
+    ],
+    'in_progress_open_and_complete' => [
+        'uuid' => 'bulk-uuid-7',
+        'user_id' => 1,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN,
+        'description' => 'Bulk Description',
+        'operation_count' => 2,
+    ],
 ];
 // Only processed operations are saved into database (i.e. operations that are not in 'open' state)
 $operations = [
@@ -103,6 +117,42 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
+        'operation_key' => 1
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-6',
+        'topic_name' => 'topic-6',
+        'serialized_data' => json_encode(['entity_id' => 6]),
+        'status' => OperationInterface::STATUS_TYPE_OPEN,
+        'error_code' => null,
+        'result_message' => null,
+        'operation_key' => 0
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-6',
+        'topic_name' => 'topic-6',
+        'serialized_data' => json_encode(['entity_id' => 7]),
+        'status' => OperationInterface::STATUS_TYPE_OPEN,
+        'error_code' => null,
+        'result_message' => null,
+        'operation_key' => 1
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-7',
+        'topic_name' => 'topic-7',
+        'serialized_data' => json_encode(['entity_id' => 8]),
+        'status' => OperationInterface::STATUS_TYPE_COMPLETE,
+        'error_code' => null,
+        'result_message' => null,
+        'operation_key' => 0
+    ],
+    [
+        'bulk_uuid' => 'bulk-uuid-7',
+        'topic_name' => 'topic-7',
+        'serialized_data' => json_encode(['entity_id' => 9]),
+        'status' => OperationInterface::STATUS_TYPE_OPEN,
+        'error_code' => null,
+        'result_message' => null,
         'operation_key' => 1
     ],
 ];
