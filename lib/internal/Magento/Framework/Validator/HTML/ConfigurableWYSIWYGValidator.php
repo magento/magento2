@@ -262,6 +262,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
             }
         );
         $matches = [];
+
         preg_match_all(self::$contentFiltrationPattern, $content, $matches);
         $bodyMatchCount = count(array_filter($matches['body'] ?? []));
         $otherMatchCount = count($matches[0]) - $bodyMatchCount;

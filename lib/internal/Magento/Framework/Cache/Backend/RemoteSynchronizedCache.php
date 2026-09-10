@@ -3,36 +3,36 @@
  * Copyright 2018 Adobe
  * All Rights Reserved.
  */
-declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Backend;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Cache\CompositeStaleCacheNotifier;
-use Magento\Framework\Cache\Exception\CacheException;
 use Magento\Framework\Cache\StaleCacheNotifierInterface;
 
 /**
  * Remote synchronized cache
  *
- * This class created for correct work with local caches and multiple web nodes,
+ * This class created for correct work witch local caches and multiple web nodes,
  * in order to be sure that we always have up to date local version of cache.
- * This class will check cache version from remote cache and in case it's newer
- * than local one, it will update local one from remote cache (two-level cache).
+ * This class will be check cache version from remote cache and in case it newer
+ * than local one, it will update local one from remote cache a.k.a two level cache.
  */
-class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackendInterface
+class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {
+    use LockSignTrait;
+
     /**
      * Local backend cache adapter
      *
-     * @var ExtendedBackendInterface
+     * @var \Zend_Cache_Backend_ExtendedInterface
      */
     private $local;
 
     /**
      * Remote backend cache adapter
      *
-     * @var ExtendedBackendInterface
+     * @var \Zend_Cache_Backend_ExtendedInterface
      */
     private $remote;
 
@@ -84,46 +84,56 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
     private $notifier;
 
     /**
-     * Constructor
-     *
      * @param array $options
-     * @throws CacheException
+     * @throws \Zend_Cache_Exception
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
-        // Validate and set remote backend
-        if ($this->_options['remote_backend'] === null) {
-            throw new CacheException(__('remote_backend option must be set'));
-        }
-        
-        if (!($this->_options['remote_backend'] instanceof ExtendedBackendInterface)) {
-            throw new CacheException(
-                __('remote_backend must implement ExtendedBackendInterface')
-            );
-        }
-        
-        $this->remote = $this->_options['remote_backend'];
+        $universalOptions = array_diff_key($options, $this->_options);
 
-        // Validate and set local backend
-        if ($this->_options['local_backend'] === null) {
-            throw new CacheException(__('local_backend option must be set'));
-        }
-        
-        if (!($this->_options['local_backend'] instanceof ExtendedBackendInterface)) {
-            throw new CacheException(
-                __('local_backend must implement ExtendedBackendInterface')
+        if ($this->_options['remote_backend'] === null) {
+            \Zend_Cache::throwException('remote_backend option must be set');
+        } elseif ($this->_options['remote_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
+            $this->remote = $this->_options['remote_backend'];
+        } else {
+            $this->remote = \Zend_Cache::_makeBackend(
+                $this->_options['remote_backend'],
+                array_merge($universalOptions, $this->_options['remote_backend_options']),
+                $this->_options['remote_backend_custom_naming'],
+                $this->_options['remote_backend_autoload']
             );
+            if (!($this->remote instanceof \Zend_Cache_Backend_ExtendedInterface)) {
+                \Zend_Cache::throwException(
+                    'remote_backend must implement the Zend_Cache_Backend_ExtendedInterface interface'
+                );
+            }
         }
-        
-        $this->local = $this->_options['local_backend'];
+
+        if ($this->_options['local_backend'] === null) {
+            \Zend_Cache::throwException('local_backend option must be set');
+        } elseif ($this->_options['local_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
+            $this->local = $this->_options['local_backend'];
+        } else {
+            $this->local = \Zend_Cache::_makeBackend(
+                $this->_options['local_backend'],
+                array_merge($universalOptions, $this->_options['local_backend_options']),
+                $this->_options['local_backend_custom_naming'],
+                $this->_options['local_backend_autoload']
+            );
+            if (!($this->local instanceof \Zend_Cache_Backend_ExtendedInterface)) {
+                \Zend_Cache::throwException(
+                    'local_backend must implement the Zend_Cache_Backend_ExtendedInterface interface'
+                );
+            }
+        }
 
         $this->lockSign = $this->generateLockSign();
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function setDirectives($directives)
     {
@@ -222,13 +232,18 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function save($data, $id, $tags = [], $specificLifetime = null)
+    public function save($data, $id, $tags = [], $specificLifetime = false)
     {
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
         $isRemoteUpToDate = false;
-        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
+        $sameRemoteData = $remHash !== false && $this->getDataVersion($data) === $remHash;
+        // Tagged saves must reach the remote backend so a changed tag set is re-indexed even when
+        // the payload is identical. Keep the redundant-write optimization for tagless saves.
+        if (empty($tags) && $sameRemoteData) {
             $remoteData = $this->remote->load($id);
             if ($remoteData !== false && $this->getDataVersion($data) === $this->getDataVersion($remoteData)) {
                 $isRemoteUpToDate = true;
@@ -236,6 +251,10 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
             }
         }
         if (!$isRemoteUpToDate) {
+            if (!empty($tags) && $sameRemoteData) {
+                // Remove first so Redis backends drop the previous tag memberships before re-save.
+                $this->remote->remove($id);
+            }
             $this->remote->save($data, $id, $tags, $specificLifetime);
             $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
         }
@@ -280,7 +299,7 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
     /**
      * @inheritdoc
      */
-    public function clean($mode = 'all', $tags = [])
+    public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
         return $this->remote->clean($mode, $tags) &&
             $this->local->clean($mode);
@@ -388,12 +407,11 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
     /**
      * Release a lock.
      *
-     * @param string|int $id
+     * @param string $id
      * @return bool
      */
-    private function unlock(string|int $id): bool
+    private function unlock(string $id): bool
     {
-        $id = (string)$id;
         if (isset($this->lockList[$id])) {
             unset($this->lockList[$id]);
         }
@@ -428,7 +446,7 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
      *
      * @return void
      */
-    private function unlockAll(): void
+    private function unlockAll()
     {
         foreach (array_keys($this->lockList) as $id) {
             $this->unlock($id);
@@ -443,29 +461,6 @@ class RemoteSynchronizedCache extends AbstractBackend implements ExtendedBackend
     public function __destruct()
     {
         $this->unlockAll();
-    }
-
-    /**
-     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
-     *
-     * @return string
-     */
-    private function generateLockSign()
-    {
-        $sign = \implode(
-            '-',
-            [
-                \getmypid(), \crc32(\gethostname())
-            ]
-        );
-
-        try {
-            $sign .= '-' . \bin2hex(\random_bytes(4));
-        } catch (\Exception $e) {
-            $sign .= '-' . \uniqid('-uniqid-');
-        }
-
-        return $sign;
     }
 
     /**

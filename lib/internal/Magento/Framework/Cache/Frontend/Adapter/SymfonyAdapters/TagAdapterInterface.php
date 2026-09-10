@@ -83,4 +83,21 @@ interface TagAdapterInterface
      * @return void
      */
     public function clearAllIndices(): void;
+
+    /**
+     * Sweeps expired cache entries from the tag index to remove orphaned members
+     * , mirroring legacy Cm Redis garbage collection.
+     *
+     * @param int $batchSize Number of ids to process per iteration
+     * @return int Number of orphaned index entries removed
+     */
+    public function garbageCollect(int $batchSize = 1000): int;
+
+    /**
+     * Returns the underlying storage server’s memory usage percentage when supported
+     * , otherwise 0, mirroring legacy Redis behavior.
+     *
+     * @return int Integer between 0 and 100
+     */
+    public function getFillingPercentage(): int;
 }

@@ -773,6 +773,32 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     }
 
     /**
+     * Set template text
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateText($value)
+    {
+        return $this->setData('template_text', is_string($value) ? $value : '');
+    }
+
+    /**
+     * Set template styles
+     *
+     * Rejects non-string input
+     *
+     * @param mixed $value
+     * @return $this
+     */
+    public function setTemplateStyles($value)
+    {
+        return $this->setData('template_styles', is_string($value) ? $value : '');
+    }
+
+    /**
      * Validate template code
      *
      * @throws ValidationException
