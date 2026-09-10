@@ -9,7 +9,6 @@ namespace Magento\Framework\Cache\Test\Unit\Backend;
 
 use Magento\Framework\Cache\Backend\MongoDb;
 use Magento\Framework\Cache\CacheConstants;
-use Magento\Framework\Cache\Exception\CacheException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -426,7 +425,7 @@ class MongoDbTest extends TestCase
 
     public function testCleanInvalidMode()
     {
-        $this->expectException(CacheException::class);
+        $this->expectException(\Zend_Cache_Exception::class);
         $this->expectExceptionMessage('Unsupported cleaning mode: invalid_mode');
         $this->_model->clean('invalid_mode');
     }
