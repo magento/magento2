@@ -188,8 +188,9 @@ class Form extends \Magento\Framework\Data\Form\AbstractForm
         $elementId = $element->getId();
         if ($elementId !== null) {
             $this->_elementsIndex[$elementId] = $element;
+            $this->_allElements->add($element);
         }
-        $this->_allElements->add($element);
+
         return $this;
     }
 
