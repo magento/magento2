@@ -216,8 +216,30 @@ class DeployPackage
                 || $file->getTheme() !== $package->getTheme()
                 || $file->getLocale() !== $package->getLocale()
             )
-            && $file->getOrigPackage() === $parentPackage
+            && $this->checkIfInheritedFromSameSource($file, $parentPackage)
             && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+    }
+
+    /**
+     * Check if parent package holds the very same file, inherited from the same package and not overridden there
+     *
+     * @param PackageFile $file
+     * @param Package $parentPackage
+     * @return bool
+     */
+    private function checkIfInheritedFromSameSource(PackageFile $file, Package $parentPackage)
+    {
+        if ($file->getOrigPackage() === $parentPackage) {
+            return true;
+        }
+
+        $parentFile = $parentPackage->getFile($file->getFileId());
+
+        return $parentFile instanceof PackageFile
+            && $parentFile->getOrigPackage() === $file->getOrigPackage()
+            && $parentFile->getArea() === $file->getArea()
+            && $parentFile->getTheme() === $file->getTheme()
+            && $parentFile->getLocale() === $file->getLocale();
     }
 
     /**
