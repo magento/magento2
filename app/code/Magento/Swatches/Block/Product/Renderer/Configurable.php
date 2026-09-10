@@ -36,27 +36,28 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Path to template file with Swatch renderer.
      */
-    const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
+    public const SWATCH_RENDERER_TEMPLATE = 'Magento_Swatches::product/view/renderer.phtml';
 
     /**
      * Path to default template file with standard Configurable renderer.
      */
-    const CONFIGURABLE_RENDERER_TEMPLATE = 'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
+    public const CONFIGURABLE_RENDERER_TEMPLATE =
+        'Magento_ConfigurableProduct::product/view/type/options/configurable.phtml';
 
     /**
      * Action name for ajax request
      */
-    const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
+    public const MEDIA_CALLBACK_ACTION = 'swatches/ajax/media';
 
     /**
      * Name of swatch image for json config
      */
-    const SWATCH_IMAGE_NAME = 'swatchImage';
+    public const SWATCH_IMAGE_NAME = 'swatchImage';
 
     /**
      * Name of swatch thumbnail for json config
      */
-    const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
+    public const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
 
     /**
      * Config path which contains number of swatches per product
@@ -79,9 +80,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     protected $swatchMediaHelper;
 
     /**
-     * Indicate if product has one or more Swatch attributes
-     *
      * @deprecated 100.1.0 unused
+     * @see \Magento\Swatches\Block\Product\Renderer\Configurable::isProductHasSwatchAttribute()
      *
      * @var boolean
      */
@@ -251,6 +251,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Init isProductHasSwatchAttribute.
      *
      * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
+     * @see isProductHasSwatchAttribute()
      *
      * @codeCoverageIgnore
      * @return void
@@ -382,7 +383,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      *
      * @param Product $childProduct
      * @param string $imageType
-     * @return string
+     * @return string|null
      */
     protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
@@ -397,6 +398,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         if (!empty($swatchImageId) && !empty($imageAttributes['type'])) {
             return $this->imageUrlBuilder->getUrl($childProduct->getData($imageAttributes['type']), $swatchImageId);
         }
+
+        return null;
     }
 
     /**
@@ -420,17 +423,21 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getConfigurableOptionsIds(array $attributeData)
     {
+        $attributeCodes = [];
+        /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
+        foreach ($this->helper->getAllowAttributes($this->getProduct()) as $attribute) {
+            $productAttribute = $attribute->getProductAttribute();
+            if (isset($attributeData[$productAttribute->getId()])) {
+                $attributeCodes[] = $productAttribute->getAttributeCode();
+            }
+        }
+
         $ids = [];
         foreach ($this->getAllowProducts() as $product) {
-            /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-            foreach ($this->helper->getAllowAttributes($this->getProduct()) as $attribute) {
-                $productAttribute = $attribute->getProductAttribute();
-                $productAttributeId = $productAttribute->getId();
-                if (isset($attributeData[$productAttributeId])) {
-                    $attributeValue = $product->getData($productAttribute->getAttributeCode());
-                    if ($attributeValue !== null) {
-                        $ids[$attributeValue] = 1;
-                    }
+            foreach ($attributeCodes as $attributeCode) {
+                $attributeValue = $product->getData($attributeCode);
+                if ($attributeValue !== null) {
+                    $ids[$attributeValue] = 1;
                 }
             }
         }
@@ -478,6 +485,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * @inheritDoc
      * @deprecated 100.1.5 Now is used _toHtml() directly
+     * @see _toHtml()
      */
     protected function getHtmlOutput()
     {
