@@ -5,8 +5,6 @@
  */
 namespace Magento\Backend\Cron;
 
-use Magento\Framework\Cache\CacheConstants;
-
 /**
  * Backend event observer
  */
@@ -35,10 +33,8 @@ class CleanCache
     {
         /** @var $cacheFrontend \Magento\Framework\Cache\FrontendInterface */
         foreach ($this->cacheFrontendPool as $cacheFrontend) {
-            // The cache frontend does not support the 'old' cleaning mode, so the backend is used
-            // directly (legacy parity). For symfony_l2 this prunes expired L1 files + sweeps the L2
-            // tag index; Redis data keys auto-expire via native TTL.
-            $cacheFrontend->getBackend()->clean(CacheConstants::CLEANING_MODE_OLD);
+            // Magento cache frontend does not support the 'old' cleaning mode, that's why backend is used directly
+            $cacheFrontend->getBackend()->clean(\Zend_Cache::CLEANING_MODE_OLD);
         }
     }
 }
