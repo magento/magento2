@@ -13,8 +13,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Gallery\UpdateHandler;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -136,6 +138,37 @@ class ContentTest extends \PHPUnit\Framework\TestCase
                 'isProductNew' => false,
             ],
         ];
+    }
+
+    /**
+     * Media URLs in the admin gallery must be built from the admin scope.
+     *
+     * Selecting a store view in the store switcher must not make the admin load images from that
+     * store view base URL: the file is the same on disk, and a cross-origin URL is rejected by the
+     * admin Content Security Policy.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture fixture_second_store_store web/unsecure/base_url http://sample-second.com/
+     * @magentoConfigFixture fixture_second_store_store web/secure/base_url http://sample-second.com/
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testGetImagesJsonUsesAdminScopeMediaUrl(): void
+    {
+        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $storeId = (int)$this->storeRepository->get('fixture_second_store')->getId();
+        // Repeats what Magento\Catalog\Controller\Adminhtml\Product\Edit does on a store switch.
+        $storeManager->setCurrentStore('fixture_second_store');
+        $this->registry->register('current_product', $this->getProduct($storeId));
+
+        $images = json_decode($this->block->getImagesJson());
+        $image = array_shift($images);
+
+        $adminMediaUrl = $storeManager->getStore(Store::DEFAULT_STORE_ID)
+            ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA);
+        $this->assertStringStartsWith($adminMediaUrl, $image->url);
+        $this->assertStringNotContainsString('sample-second.com', $image->url);
     }
 
     /**
