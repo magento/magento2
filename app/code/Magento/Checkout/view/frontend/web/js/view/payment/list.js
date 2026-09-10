@@ -108,7 +108,8 @@ define([
                 parent: '${ $.$data.parentName }',
                 name: '${ $.$data.name }',
                 displayArea: payment.displayArea,
-                component: payment.component
+                component: payment.component,
+                sortOrder: payment.sortOrder
             };
             rendererComponent = utils.template(rendererTemplate, templateData);
             utils.extend(rendererComponent, {
@@ -152,7 +153,8 @@ define([
                                     name: renderer.type,
                                     method: paymentMethodData.method,
                                     item: paymentMethodData,
-                                    displayArea: currentGroup.displayArea
+                                    displayArea: currentGroup.displayArea,
+                                    sortOrder: _.pluck(paymentMethods(), 'method').indexOf(paymentMethodData.method)
                                 }
                             )]);
                     }
