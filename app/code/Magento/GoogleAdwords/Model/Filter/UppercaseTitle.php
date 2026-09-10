@@ -21,11 +21,7 @@ class UppercaseTitle implements FilterInterface
      */
     public function filter($value)
     {
-        if (function_exists('mb_convert_case')) {
-            $value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
-        } else {
-            $value = ucwords($value);
-        }
+        $value = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
         return $value;
     }
 }
