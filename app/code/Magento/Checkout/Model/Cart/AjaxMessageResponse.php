@@ -39,7 +39,10 @@ class AjaxMessageResponse
      */
     public function getInlineErrorMessages(bool $clearMessages): ?array
     {
-        $messages = $this->messageManager->getMessages($clearMessages);
+        // Peek without clearing first: notice-type messages (e.g. the configurable product
+        // "choose options" message) are not shown inline and must survive in session so they
+        // still render on the page the customer is redirected back to.
+        $messages = $this->messageManager->getMessages(false);
         $errorMessages = $this->getRelevantMessages($messages);
         if (!$errorMessages->getCount()) {
             return null;
@@ -90,7 +93,11 @@ class AjaxMessageResponse
     }
 
     /**
-     * Extract error/notice messages from the message collection.
+     * Extract error messages from the message collection.
+     *
+     * Notice-type messages (e.g. the configurable product "choose options" message) are
+     * deliberately excluded: they must redirect back to their originating page instead of
+     * being shown inline here.
      *
      * @param Collection $messages
      * @return Collection
@@ -99,9 +106,6 @@ class AjaxMessageResponse
     {
         $relevantMessages = $this->messageCollectionFactory->create();
         foreach ($messages->getItemsByType(MessageInterface::TYPE_ERROR) as $message) {
-            $relevantMessages->addMessage($message);
-        }
-        foreach ($messages->getItemsByType(MessageInterface::TYPE_NOTICE) as $message) {
             $relevantMessages->addMessage($message);
         }
 

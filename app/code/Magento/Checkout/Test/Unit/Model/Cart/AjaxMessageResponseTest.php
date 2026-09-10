@@ -13,7 +13,6 @@ use Magento\Framework\Message\CollectionFactory;
 use Magento\Framework\Message\Error;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Message\Notice;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Messages;
 use Magento\Framework\View\Layout;
@@ -73,12 +72,10 @@ class AjaxMessageResponseTest extends TestCase
     public function testGetInlineErrorMessagesReturnsNullWhenNoErrors(): void
     {
         $messages = $this->createMock(Collection::class);
-        $messages->expects($this->exactly(2))
+        $messages->expects($this->once())
             ->method('getItemsByType')
-            ->willReturnMap([
-                [MessageInterface::TYPE_ERROR, []],
-                [MessageInterface::TYPE_NOTICE, []],
-            ]);
+            ->with(MessageInterface::TYPE_ERROR)
+            ->willReturn([]);
 
         $errorMessages = $this->createMock(Collection::class);
         $errorMessages->expects($this->once())->method('getCount')->willReturn(0);
@@ -98,7 +95,8 @@ class AjaxMessageResponseTest extends TestCase
     /**
      * When an error message is found, the session must be peeked first (false) and only
      * then cleared (true), so the clear doesn't happen before we know there's something
-     * to consume.
+     * to consume. The rendered HTML must also carry role="alert"/aria-atomic so screen
+     * readers announce it (the AC-18036 accessibility fix).
      *
      * @return void
      */
@@ -108,12 +106,10 @@ class AjaxMessageResponseTest extends TestCase
         $error->setText('Product that you are trying to add is not available.');
 
         $messages = $this->createMock(Collection::class);
-        $messages->expects($this->exactly(2))
+        $messages->expects($this->once())
             ->method('getItemsByType')
-            ->willReturnMap([
-                [MessageInterface::TYPE_ERROR, [$error]],
-                [MessageInterface::TYPE_NOTICE, []],
-            ]);
+            ->with(MessageInterface::TYPE_ERROR)
+            ->willReturn([$error]);
 
         $errorMessages = $this->createMock(Collection::class);
         $errorMessages->expects($this->once())->method('addMessage')->with($error)->willReturnSelf();
@@ -152,54 +148,9 @@ class AjaxMessageResponseTest extends TestCase
     }
 
     /**
-     * @return void
-     */
-    public function testGetInlineErrorMessagesRendersNotices(): void
-    {
-        $notice = new Notice();
-        $notice->setText('Some options for this product were not found.');
-
-        $messages = $this->createMock(Collection::class);
-        $messages->expects($this->exactly(2))
-            ->method('getItemsByType')
-            ->willReturnMap([
-                [MessageInterface::TYPE_ERROR, []],
-                [MessageInterface::TYPE_NOTICE, [$notice]],
-            ]);
-
-        $relevantMessages = $this->createMock(Collection::class);
-        $relevantMessages->expects($this->once())->method('addMessage')->with($notice)->willReturnSelf();
-        $relevantMessages->expects($this->once())->method('getCount')->willReturn(1);
-
-        $messagesBlock = $this->createMock(Messages::class);
-        $messagesBlock->expects($this->once())->method('setMessages')->with($relevantMessages)->willReturnSelf();
-        $messagesBlock->expects($this->once())
-            ->method('getGroupedHtml')
-            ->willReturn('<div class="messages"><div class="message notice">notice</div></div>');
-
-        $layout = $this->createMock(Layout::class);
-        $layout->expects($this->once())
-            ->method('createBlock')
-            ->with(Messages::class)
-            ->willReturn($messagesBlock);
-
-        $this->messageManager->expects($this->once())
-            ->method('getMessages')
-            ->with(true)
-            ->willReturn($messages);
-        $this->messageCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($relevantMessages);
-        $this->layoutFactory->expects($this->once())->method('create')->willReturn($layout);
-
-        $this->assertSame(
-            ['html' => '<div class="messages" role="alert" aria-atomic="true">'
-                . '<div class="message notice">notice</div></div>'],
-            $this->model->getInlineErrorMessages(true)
-        );
-    }
-
-    /**
+     * The role="alert"/aria-atomic wrapper must not clobber any pre-existing attributes
+     * or classes on the messages block's root element.
+     *
      * @return void
      */
     public function testGetInlineErrorMessagesPreservesExtraAttributesAndClasses(): void
@@ -208,12 +159,10 @@ class AjaxMessageResponseTest extends TestCase
         $error->setText('Product that you are trying to add is not available.');
 
         $messages = $this->createMock(Collection::class);
-        $messages->expects($this->exactly(2))
+        $messages->expects($this->once())
             ->method('getItemsByType')
-            ->willReturnMap([
-                [MessageInterface::TYPE_ERROR, [$error]],
-                [MessageInterface::TYPE_NOTICE, []],
-            ]);
+            ->with(MessageInterface::TYPE_ERROR)
+            ->willReturn([$error]);
 
         $errorMessages = $this->createMock(Collection::class);
         $errorMessages->expects($this->once())->method('addMessage')->with($error)->willReturnSelf();
@@ -234,9 +183,8 @@ class AjaxMessageResponseTest extends TestCase
             ->with(Messages::class)
             ->willReturn($messagesBlock);
 
-        $this->messageManager->expects($this->once())
+        $this->messageManager->expects($this->exactly(2))
             ->method('getMessages')
-            ->with(true)
             ->willReturn($messages);
         $this->messageCollectionFactory->expects($this->once())
             ->method('create')
