@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Catalog\Model\Attribute\Source\ApplyTo;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
@@ -25,8 +26,6 @@ use Magento\Framework\Stdlib\DateTime;
 class Advanced extends Generic
 {
     /**
-     * Eav data
-     *
      * @var Data
      */
     protected $_eavData = null;
@@ -47,6 +46,11 @@ class Advanced extends Generic
     private $propertyLocker;
 
     /**
+     * @var ApplyTo
+     */
+    private $applyTo;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -54,6 +58,7 @@ class Advanced extends Generic
      * @param Data $eavData
      * @param array $disableScopeChangeList
      * @param array $data
+     * @param ApplyTo|null $applyTo
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -62,11 +67,13 @@ class Advanced extends Generic
         Yesno $yesNo,
         Data $eavData,
         array $disableScopeChangeList = [],
-        array $data = []
+        array $data = [],
+        ?ApplyTo $applyTo = null
     ) {
         $this->_yesNo = $yesNo;
         $this->_eavData = $eavData;
         $this->disableScopeChangeList = $disableScopeChangeList;
+        $this->applyTo = $applyTo ?? ObjectManager::getInstance()->get(ApplyTo::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -230,10 +237,23 @@ class Advanced extends Generic
             ]
         );
 
+        $fieldset->addField(
+            'apply_to',
+            'multiselect',
+            [
+                'name' => 'apply_to',
+                'label' => __('Apply To'),
+                'title' => __('Apply To'),
+                'values' => $this->applyTo->toOptionArray(),
+                'value' => $attributeObject->getApplyTo()
+            ]
+        );
+
         if ($attributeObject->getId()) {
             $form->getElement('attribute_code')->setDisabled(1);
             if (!$attributeObject->getIsUserDefined()) {
                 $form->getElement('is_unique')->setDisabled(1);
+                $form->getElement('apply_to')->setDisabled(1);
             }
         }
 
