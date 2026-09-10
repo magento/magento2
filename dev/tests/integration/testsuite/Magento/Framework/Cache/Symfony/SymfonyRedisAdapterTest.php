@@ -5,10 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Symfony;
 
 use Magento\Framework\App\Cache\Frontend\Factory;
-use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Cache\CacheConstants;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -54,15 +56,8 @@ class SymfonyRedisAdapterTest extends TestCase
     {
         try {
             // Get DeploymentConfig from ObjectManager (uses sandbox env.php)
-            /** @var DeploymentConfig $deploymentConfig */
-            $deploymentConfig = Bootstrap::getObjectManager()->get(DeploymentConfig::class);
-
-            // Read cache backend server configuration from sandbox env.php
-            $server = $deploymentConfig->get('cache/frontend/default/backend_options/server');
-
-            if ($server !== null) {
-                return $server;
-            }
+            $configuration = CacheConfigurationProvider::provide()['symfony-redis'][1];
+            return (string)$configuration['backend_options']['server'];
         } catch (\Exception $e) {
             // Fall through to default
         }
@@ -114,19 +109,11 @@ class SymfonyRedisAdapterTest extends TestCase
 
         $this->cacheFactory = Bootstrap::getObjectManager()->get(Factory::class);
 
-        // Create Symfony cache adapter with Redis backend
-        $this->cache = $this->cacheFactory->create([
-            'frontend' => [
-                'backend' => 'redis',
-                'backend_options' => [
-                    'server' => self::$redisServer,
-                    'port' => '6379',
-                    'database' => '2', // Use database 2 for tests to avoid conflicts
-                    'persistent' => '1',
-                    'serializer' => 'igbinary',
-                ]
-            ]
-        ]);
+        $configuration = CacheConfigurationProvider::provide()['symfony-redis'][1];
+        $configuration['backend_options']['database'] = 2;
+        $configuration['backend_options']['persistent'] = '1';
+        $configuration['backend_options']['serializer'] = 'igbinary';
+        $this->cache = $this->cacheFactory->create($configuration);
 
         // Clean test database before each test
         if (self::$redis) {
@@ -305,18 +292,11 @@ class SymfonyRedisAdapterTest extends TestCase
     public function testRedisPersistentConnection(): void
     {
         // Create a second cache instance
-        $cache2 = $this->cacheFactory->create([
-            'frontend' => [
-                'backend' => 'redis',
-                'backend_options' => [
-                    'server' => self::$redisServer,
-                    'port' => '6379',
-                    'database' => '2',
-                    'persistent' => '1',
-                    'persistent_id' => 'magento_test',
-                ]
-            ]
-        ]);
+        $configuration = CacheConfigurationProvider::provide()['symfony-redis'][1];
+        $configuration['backend_options']['database'] = 2;
+        $configuration['backend_options']['persistent'] = '1';
+        $configuration['backend_options']['persistent_id'] = 'magento_test';
+        $cache2 = $this->cacheFactory->create($configuration);
 
         $id = 'redis_persistent_' . uniqid();
         $data = 'persistent_data';
@@ -343,7 +323,7 @@ class SymfonyRedisAdapterTest extends TestCase
                 'backend_options' => [
                     'server' => self::$redisServer,
                     'port' => '6379',
-                    'database' => '2',
+                    'database' => '4',
                     'persistent' => '1',
                     'persistent_id' => $uniqueId,
                 ]
@@ -366,7 +346,7 @@ class SymfonyRedisAdapterTest extends TestCase
                 'backend_options' => [
                     'server' => self::$redisServer,
                     'port' => '6379',
-                    'database' => '2',
+                    'database' => '4',
                     'persistent' => '1',
                     'persistent_id' => $uniqueId2,
                 ]
@@ -396,7 +376,7 @@ class SymfonyRedisAdapterTest extends TestCase
                 'backend_options' => [
                     'server' => self::$redisServer,
                     'port' => '6379',
-                    'database' => '3',
+                    'database' => '4',
                     'persistent' => '1',
                     'persistent_id' => 'test_tuned',
                     'timeout' => '2.5',           // Connection timeout
@@ -623,7 +603,15 @@ class SymfonyRedisAdapterTest extends TestCase
         $this->cache->save('data3', $id3, ['tagZ']);
 
         // Clean items NOT matching BOTH tagX AND tagY
-        $cleanResult = $this->cache->clean(CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tagX', 'tagY']);
+        //
+        // Exercised via getLowLevelFrontend() to bypass the TagScope decorator that wraps
+        // $this->cache in real Magento usage (see app/etc/di.xml): TagScope refuses this mode
+        // because it has no safe scope-aware implementation. This test targets the underlying
+        // Redis adapter's SDIFF-based capability, not TagScope.
+        $cleanResult = $this->cache->getLowLevelFrontend()->clean(
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            ['tagX', 'tagY']
+        );
         $this->assertTrue($cleanResult, 'Clean not matching tag should succeed');
 
         // id1 should remain (has both tags)
@@ -650,16 +638,9 @@ class SymfonyRedisAdapterTest extends TestCase
         $this->assertEquals('data1', $this->cache->load($id1), 'Data should exist in first instance');
 
         // Create second cache instance
-        $cache2 = $this->cacheFactory->create([
-            'frontend' => [
-                'backend' => 'redis',
-                'backend_options' => [
-                    'server' => self::$redisServer,
-                    'port' => '6379',
-                    'database' => '2',
-                ]
-            ]
-        ]);
+        $configuration = CacheConfigurationProvider::provide()['symfony-redis'][1];
+        $configuration['backend_options']['database'] = 2;
+        $cache2 = $this->cacheFactory->create($configuration);
 
         // Second instance should see same data (same database)
         $this->assertEquals('data1', $cache2->load($id1), 'Second instance should see same data');
@@ -1095,7 +1076,7 @@ class SymfonyRedisAdapterTest extends TestCase
                 'backend_options' => [
                     'remote_backend' => 'redis',
                     'remote_backend_options' => [
-                        'server' => 'redis',
+                        'server' => self::$redisServer,
                         'database' => '10',
                         'port' => '6379',
                     ],
@@ -1125,7 +1106,7 @@ class SymfonyRedisAdapterTest extends TestCase
                 'backend_options' => [
                     'remote_backend' => 'redis',
                     'remote_backend_options' => [
-                        'server' => 'redis',
+                        'server' => self::$redisServer,
                         'database' => '11',  // Different DB (simulates unavailable remote)
                         'port' => '6379',
                     ],

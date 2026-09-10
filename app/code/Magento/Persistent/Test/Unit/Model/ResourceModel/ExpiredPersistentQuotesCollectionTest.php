@@ -86,7 +86,7 @@ class ExpiredPersistentQuotesCollectionTest extends TestCase
             ->willReturnSelf();
 
         $quoteCollectionMock->method('setPageSize')
-            ->with($this->isType('integer'))
+            ->with($this->isInt())
             ->willReturnSelf();
 
         $dbSelectMock1 = $this->createMock(Select::class);
