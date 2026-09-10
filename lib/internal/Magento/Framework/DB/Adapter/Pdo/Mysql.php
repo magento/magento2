@@ -523,7 +523,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
 
         if (strpos($this->_config['host'], '/') !== false) {
             $this->_config['unix_socket'] = $this->_config['host'];
-            unset($this->_config['host']);
+            // Keep a host in the config: mysqlnd routes "localhost" through
+            // unix_socket, and unsetting the key made every reconnect on the
+            // same adapter throw "No host configured to connect".
+            $this->_config['host'] = 'localhost';
         } elseif (strpos($this->_config['host'], ':') !== false) {
             list($this->_config['host'], $this->_config['port']) = explode(':', $this->_config['host']);
         }

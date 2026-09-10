@@ -70,6 +70,13 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     private $_port;
 
     /**
+     * Unix socket path for connection, when the configured host is a path
+     *
+     * @var string
+     */
+    private $_socket = '';
+
+    /**
      * @var bool
      */
     private $isMysqldumpVersion8;
@@ -98,7 +105,12 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         parent::__construct($host, $user, $password, $schema, $varPath, $shell);
         $this->_port = self::DEFAULT_PORT;
-        if (strpos($this->_host, ':') !== false) {
+        if (strpos($this->_host, '/') !== false) {
+            // A path means a Unix socket, mirroring the db-host convention
+            // of \Magento\Framework\DB\Adapter\Pdo\Mysql.
+            $this->_socket = $this->_host;
+            $this->_host = 'localhost';
+        } elseif (strpos($this->_host, ':') !== false) {
             list($host, $port) = explode(':', $this->_host);
             $this->_host = $host;
             $this->_port = (int) $port;
@@ -116,14 +128,15 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s -e %s",
-            [
-                $this->_defaultsExtraFile,
-                $this->_host,
-                $this->_port,
-                $this->_schema,
-                "DROP DATABASE `{$this->_schema}`; CREATE DATABASE `{$this->_schema}`"
-            ]
+            "{$dbCommand} --defaults-file=%s {$this->getEndpointFormat()} %s -e %s",
+            array_merge(
+                [$this->_defaultsExtraFile],
+                $this->getEndpointArguments(),
+                [
+                    $this->_schema,
+                    "DROP DATABASE `{$this->_schema}`; CREATE DATABASE `{$this->_schema}`"
+                ]
+            )
         );
     }
 
@@ -166,7 +179,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $format = sprintf(
             '%s %s %s %s',
-            "{$dumpCommand} --defaults-file=%s --host=%s --port=%s",
+            "{$dumpCommand} --defaults-file=%s {$this->getEndpointFormat()}",
             '--no-tablespaces',
             implode(' ', $additionalArguments),
             '%s > %s'
@@ -174,13 +187,14 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
 
         $this->_shell->execute(
             $format,
-            [
-                $this->_defaultsExtraFile,
-                $this->_host,
-                $this->_port,
-                $this->_schema,
-                $this->getSetupDbDumpFilename()
-            ]
+            array_merge(
+                [$this->_defaultsExtraFile],
+                $this->getEndpointArguments(),
+                [
+                    $this->_schema,
+                    $this->getSetupDbDumpFilename()
+                ]
+            )
         );
     }
 
@@ -199,9 +213,12 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         $dbCommand = $this->getDbCommand();
 
         $this->_shell->execute(
-            "{$dbCommand} --defaults-file=%s --host=%s --port=%s %s < %s",
-            [$this->_defaultsExtraFile, $this->_host, $this->_port,
-                $this->_schema, $this->getSetupDbDumpFilename()]
+            "{$dbCommand} --defaults-file=%s {$this->getEndpointFormat()} %s < %s",
+            array_merge(
+                [$this->_defaultsExtraFile],
+                $this->getEndpointArguments(),
+                [$this->_schema, $this->getSetupDbDumpFilename()]
+            )
         );
     }
 
@@ -211,6 +228,28 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     public function getVendorName()
     {
         return 'mysql';
+    }
+
+    /**
+     * Endpoint format fragment for the mysql/mariadb CLI tools
+     *
+     * Yields --socket=%s for a Unix socket path, --host=%s --port=%s otherwise.
+     *
+     * @return string
+     */
+    private function getEndpointFormat()
+    {
+        return $this->_socket !== '' ? '--socket=%s' : '--host=%s --port=%s';
+    }
+
+    /**
+     * Endpoint arguments matching getEndpointFormat()
+     *
+     * @return array
+     */
+    private function getEndpointArguments()
+    {
+        return $this->_socket !== '' ? [$this->_socket] : [$this->_host, $this->_port];
     }
 
     /**
@@ -261,13 +300,13 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         if (!isset($this->isUsingAuroraDb)) {
             try {
                 $this->_shell->execute(
-                    'mysql --defaults-file=%s --host=%s --port=%s %s --execute="SELECT AURORA_VERSION()"',
-                    [
-                        $this->_defaultsExtraFile,
-                        $this->_host,
-                        $this->_port,
-                        $this->_schema
-                    ]
+                    'mysql --defaults-file=%s ' . $this->getEndpointFormat()
+                        . ' %s --execute="SELECT AURORA_VERSION()"',
+                    array_merge(
+                        [$this->_defaultsExtraFile],
+                        $this->getEndpointArguments(),
+                        [$this->_schema]
+                    )
                 );
 
                 $this->isUsingAuroraDb = true;
