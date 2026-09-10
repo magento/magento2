@@ -187,6 +187,12 @@ class StockItemRepository implements StockItemRepositoryInterface
                 }
             } else {
                 $stockItem->setQty(0);
+                if ($stockItem->isObjectNew() && !$stockItem->hasStockStatusChangedAuto()) {
+                    // A composite product's stock status is derived from its children. An implicitly
+                    // created stock item records no merchant decision, so it must start under automatic
+                    // control, otherwise ChangeParentStockStatus can never move the parent back in stock.
+                    $stockItem->setStockStatusChangedAuto(1);
+                }
             }
 
             $stockItem->setWebsiteId($stockItem->getWebsiteId());
