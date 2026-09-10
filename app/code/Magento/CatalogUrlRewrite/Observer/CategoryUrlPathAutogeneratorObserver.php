@@ -290,18 +290,22 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             $linkField = null;
             if ($isStoreScopedRevert && $childrenById) {
                 $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
+                $stagedIds = array_map(function ($child) use ($linkField) {
+                    return $child->getData($linkField);
+                }, $childrenById);
                 $idsWithOwnUrlKeyOverride = $this->getIdsWithOwnUrlKeyOverride(
                     $category,
-                    array_keys($childrenById),
+                    $stagedIds,
                     $storeId
                 );
             }
 
             $orphanedLinkIds = [];
-            foreach ($childrenById as $childId => $child) {
+            foreach ($childrenById as $child) {
                 $parentId = (int)$child->getParentId();
                 $parent = $parentId === (int)$category->getId() ? $category : ($childrenById[$parentId] ?? null);
-                $isOrphanedOverride = $isStoreScopedRevert && !isset($idsWithOwnUrlKeyOverride[$childId]);
+                $isOrphanedOverride = $isStoreScopedRevert &&
+                    !isset($idsWithOwnUrlKeyOverride[$child->getData($linkField)]);
                 $this->updateUrlPathForCategory($child, $parent, !$isOrphanedOverride);
                 if ($isOrphanedOverride) {
                     $orphanedLinkIds[] = $child->getData($linkField);
