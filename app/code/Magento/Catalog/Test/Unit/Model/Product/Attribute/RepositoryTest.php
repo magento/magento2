@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Product\Attribute\FilterableAllowedInputTypes;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\AttributeRepositoryInterface;
@@ -133,7 +134,8 @@ class RepositoryTest extends TestCase
             $this->eavConfigMock,
             $this->validatorFactoryMock,
             $this->searchCriteriaBuilderMock,
-            $this->attributeCodeValidatorMock
+            $this->attributeCodeValidatorMock,
+            new FilterableAllowedInputTypes(['boolean', 'select', 'multiselect', 'price'])
         );
     }
 
@@ -328,6 +330,23 @@ class RepositoryTest extends TestCase
             [ProductAttributeInterface::IS_FILTERABLE, 'getIsFilterable', true],
             [ProductAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'getIsFilterableInSearch', true]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testSaveInputExceptionInvalidIsFilterableForMediaImage(): void
+    {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Invalid value of "1" provided for the is_filterable field.');
+        $attributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['getFrontendInput', 'getIsFilterable']
+        );
+        $attributeMock->expects($this->atLeastOnce())->method('getFrontendInput')->willReturn('media_image');
+        $attributeMock->expects($this->atLeastOnce())->method('getIsFilterable')->willReturn(1);
+
+        $this->model->save($attributeMock);
     }
 
     public function testSaveInputExceptionInvalidFieldValue()
