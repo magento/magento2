@@ -9,6 +9,9 @@ namespace Magento\Framework\Logger\Test\Unit\Handler;
 
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Base;
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Level;
+use Monolog\LogRecord;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,6 +59,44 @@ class BaseTest extends TestCase
         $this->assertEquals(
             'var/hack/custom.log',
             $this->sanitizeMethod->invokeArgs($this->model, ['../../../var/hack/custom.log'])
+        );
+    }
+
+    /**
+     * A Throwable reported through the PSR-3 reserved context key must keep its stack trace.
+     */
+    public function testDefaultFormatterIncludesStackTraces(): void
+    {
+        $formatted = $this->model->getFormatter()->format($this->createRecordWithException());
+
+        $this->assertStringContainsString('[stacktrace]', $formatted);
+        $this->assertStringContainsString(__FUNCTION__, $formatted);
+    }
+
+    public function testDefaultFormatterKeepsMessageAndContext(): void
+    {
+        $formatted = $this->model->getFormatter()->format($this->createRecordWithException());
+
+        $this->assertStringContainsString('Something failed while processing {orderId}', $formatted);
+        $this->assertStringContainsString('"orderId":1234', $formatted);
+    }
+
+    public function testInjectedFormatterIsUsed(): void
+    {
+        $formatter = $this->createMock(FormatterInterface::class);
+        $handler = new Base($this->createMock(DriverInterface::class), null, null, $formatter);
+
+        $this->assertSame($formatter, $handler->getFormatter());
+    }
+
+    private function createRecordWithException(): LogRecord
+    {
+        return new LogRecord(
+            new \DateTimeImmutable('2026-01-01 00:00:00'),
+            'main',
+            Level::Critical,
+            'Something failed while processing {orderId}',
+            ['orderId' => 1234, 'exception' => new \RuntimeException('Something failed')]
         );
     }
 }
