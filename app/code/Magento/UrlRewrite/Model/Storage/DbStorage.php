@@ -220,7 +220,7 @@ class DbStorage extends AbstractStorage
         foreach ($uniqueEntities as $storeId => $entityTypes) {
             foreach ($entityTypes as $entityType => $entities) {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $requestPaths = array_merge(...$entities);
+                $requestPaths = array_merge([], ...$entities);
                 $requestPathFilter = '';
                 if (!empty($requestPaths)) {
                     $requestPathFilter = ' AND ' . $this->connection->quoteIdentifier(UrlRewrite::REQUEST_PATH)
@@ -273,7 +273,7 @@ class DbStorage extends AbstractStorage
             $newRequestPaths = [];
             foreach ($entityTypes as $entityType => $entities) {
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $requestPaths = array_merge(...$entities);
+                $requestPaths = array_merge([], ...$entities);
                 if (empty($requestPaths)) {
                     continue;
                 }
