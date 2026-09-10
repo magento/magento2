@@ -15,9 +15,7 @@ use Psr\Cache\CacheItemPoolInterface;
 class FilesystemTagAdapter implements TagAdapterInterface
 {
     /**
-     * Bound on reopen retries in mutateFileLocked() when the file is unlink()ed from under an
-     * acquired lock by a concurrent worker. High enough to absorb realistic contention, finite so a
-     * pathological churn can never spin forever.
+     * Limits reopen retries after concurrent unlink() to handle contention without risking an infinite loop.
      */
     private const MUTATE_MAX_ATTEMPTS = 50;
 
@@ -32,37 +30,23 @@ class FilesystemTagAdapter implements TagAdapterInterface
     private string $tagDirectory;
 
     /**
-     * Directory holding the id -> tags reverse index (one file per tagged id). Lets onRemove and
-     * deleteByIds touch only the tag files a given id actually belongs to, instead of scanning the
-     * whole tag directory. Mirrors the reverse index the Redis tier already keeps.
+     * Stores an id-to-tags reverse index, allowing targeted tag cleanup without scanning the entire tag directory.
      *
      * @var string
      */
     private string $reverseDirectory;
 
     /**
-     * Whether to maintain the on-disk tag index. Disabled for an L1 tier that sits behind a
-     * Redis L2 (tags + :hash live in the remote, local self-heals on read); kept true for a
-     * file-only cache where the file tag index is the sole invalidation source.
-     *
-     * @var bool
-     */
-    private bool $indexTags;
-
-    /**
      * @param CacheItemPoolInterface $cachePool
      * @param string $tagDirectory Directory to store tag index files
-     * @param bool $indexTags Whether to write/maintain the on-disk tag index
      */
-    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory, bool $indexTags = true)
+    public function __construct(CacheItemPoolInterface $cachePool, string $tagDirectory)
     {
         $this->cachePool = $cachePool;
         $base = rtrim($tagDirectory, '/');
         $this->tagDirectory = $base . '/tags/';
         $this->reverseDirectory = $base . '/idtags/';
-        $this->indexTags = $indexTags;
-        // Directories are created lazily on the first real write, so a tier that never indexes tags
-        // leaves no empty var/cache/symfony/{tags,idtags} directories behind.
+        // Index written only when a save carries tags; dirs created lazily on first write.
     }
 
     /**
@@ -173,12 +157,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Read-modify-write a tag file while holding an exclusive lock for the whole cycle.
-     *
-     * Holding flock(LOCK_EX) across the whole cycle means concurrent PHP-FPM workers on the same
-     * host can no longer lose an update (the previous getTagIds/setTagIds pair only locked the
-     * write, leaving the read-modify-write racy). $transform receives the current ids and returns
-     * the new ids, or null to signal "no change" (skips the rewrite).
+     * Performs tag file read-modify-write under one exclusive lock to prevent concurrent update loss.
+     * $transform updates IDs or returns null to skip rewriting when no change is needed.
      *
      * @param string $tag
      * @param callable $transform fn(array $ids): ?array
@@ -190,12 +170,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
     }
 
     /**
-     * Read-modify-write a line-per-entry index file while holding an exclusive lock for the whole cycle.
-     *
-     * Used for both tag files (tag -> ids) and reverse-index files (id -> tags). Holding
-     * flock(LOCK_EX) across the whole cycle means concurrent workers on the same host cannot lose
-     * an update. $transform receives the current entries and returns the new entries, or null to
-     * signal "no change" (skips the rewrite). An empty result deletes the file.
+     * Safely updates tag and reverse-index files under one exclusive lock to prevent concurrent update loss.
+     * $transform returns updated entries, null skips changes, and an empty result deletes the file.
      *
      * @param string $file
      * @param string $dir Directory that must exist before writing
@@ -210,12 +186,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
             @mkdir($dir, 0770, true);
         }
 
-        // Retry loop guarding the open()->flock() window. fopen() resolves $file to an inode before
-        // we hold the lock; a concurrent worker that empties and unlink()s the file in that window
-        // leaves our handle bound to an orphaned inode with no directory entry, so any write we make
-        // is silently lost. After locking we confirm the handle still refers to the file on disk and,
-        // if not, reopen and retry. The unlink of an emptied file therefore also stays inside the
-        // lock, so it can never delete another worker's freshly written membership.
+        // Retries if a concurrent unlink() occurs between fopen() and flock(), preventing writes to an orphaned inode.
+        // Verifies the locked handle still points to the on-disk file and reopens when necessary.
         for ($attempt = 0; $attempt < self::MUTATE_MAX_ATTEMPTS; $attempt++) {
             $fp = @fopen($file, 'c+');
             if ($fp === false) {
@@ -227,9 +199,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
                 return;
             }
 
-            // Our handle must still be the file currently linked at $file. If it was unlink()ed (and
-            // possibly recreated) between fopen() and the lock, dev/ino diverge (or the path is gone);
-            // drop the stale handle and retry with a fresh open under a fresh lock.
+            // Verifies the locked handle still matches the file on disk; if stale or unlinked, reopens and retries.
             clearstatcache(true, $file);
             $held = @fstat($fp);
             $onDisk = @stat($file);
@@ -416,12 +386,8 @@ class FilesystemTagAdapter implements TagAdapterInterface
             $this->cachePool->commit();
         }
 
-        // Prune the deleted ids from the on-disk tag index so it does not outlive its data. Uses
-        // the id -> tags reverse index to touch only the affected tag files (grouped so each tag
-        // file is rewritten once), instead of scanning the whole tag directory.
-        if ($this->indexTags) {
-            $this->pruneIdsFromIndex($ids);
-        }
+        // Prune deleted ids from the index via the reverse index (no-op when nothing was indexed).
+        $this->pruneIdsFromIndex($ids);
 
         return $success;
     }
@@ -467,14 +433,12 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function onSave(string $id, array $tags): void
     {
-        if (!$this->indexTags || empty($tags)) {
+        if (empty($tags)) {
             return;
         }
 
-        // Retag cleanup: drop the id from the forward file of any tag it no longer carries, so a
-        // re-save with a different tag set (e.g. [A,B] then [C]) does not leave the old A/B
-        // memberships dangling once the reverse index is replaced below. Mirrors the legacy
-        // Cm_Cache_Backend_Redis save() which array_diffs the previous tags and removes them.
+        // Removes the ID from tags it no longer carries, preventing stale memberships after retagging.
+        // Mirrors legacy Cm_Cache_Backend_Redis behavior by removing previous tag associations.
         foreach (array_diff($this->getIdTags($id), $tags) as $removedTag) {
             $this->removeIdFromTag($removedTag, $id);
         }
@@ -495,12 +459,7 @@ class FilesystemTagAdapter implements TagAdapterInterface
      */
     public function onRemove(string $id): void
     {
-        if (!$this->indexTags) {
-            return;
-        }
-
-        // No reverse entry => the id was saved without tags (e.g. an L2 invalid marker) or is not
-        // indexed. Either way there is nothing to prune, so this is O(1) rather than a full scan.
+        // No reverse entry => saved without tags; nothing to prune (O(1), not a full scan).
         $tags = $this->getIdTags($id);
         if (empty($tags)) {
             return;
