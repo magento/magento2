@@ -12,7 +12,11 @@
     },
     "queue_poison_pill": {
         "column": {
+            "id": true,
             "version": true
+        },
+        "constraint": {
+            "PRIMARY": true
         }
     }
 }
