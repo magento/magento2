@@ -10,6 +10,7 @@ namespace Magento\DirectoryGraphQl\Controller\HttpRequestValidator;
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Controller\HttpRequestValidatorInterface;
+use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -43,16 +44,19 @@ class CurrencyValidator implements HttpRequestValidatorInterface
         try {
             $headerValue = $request->getHeader('Content-Currency');
             if (!empty($headerValue)) {
-                $headerCurrency = strtoupper(ltrim(rtrim($headerValue)));
+                $headerCurrency = strtoupper(trim($headerValue));
+                $storeCode = $request->getHeader('Store');
                 /** @var \Magento\Store\Model\Store $currentStore */
-                $currentStore = $this->storeManager->getStore();
+                $currentStore = !empty($storeCode)
+                    ? $this->storeManager->getStore(trim($storeCode))
+                    : $this->storeManager->getStore();
                 if (!in_array($headerCurrency, $currentStore->getAvailableCurrencyCodes(true))) {
                     throw new GraphQlInputException(
                         __('Please correct the target currency')
                     );
                 }
             }
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (\Magento\Framework\Exception\NoSuchEntityException | StoreIsInactiveException $e) {
             $this->storeManager->setCurrentStore(null);
             throw new GraphQlInputException(
                 __("Requested store is not found")
