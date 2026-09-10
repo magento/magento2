@@ -5,10 +5,12 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\Cache;
+namespace Magento\Framework\Cache\Symfony;
 
 use Magento\Framework\App\Cache\Frontend\Factory;
+use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\TestFramework\Cache\CacheConfigurationProvider;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -39,15 +41,8 @@ class SymfonyFileAdapterTest extends TestCase
 
         $this->cacheFactory = Bootstrap::getObjectManager()->get(Factory::class);
 
-        // Create Symfony cache adapter using Factory
-        $this->cache = $this->cacheFactory->create([
-            'frontend' => [
-                'backend' => 'file',
-                'backend_options' => [
-                    'cache_dir' => BP . '/var/cache/test_symfony'
-                ]
-            ]
-        ]);
+        $configuration = CacheConfigurationProvider::provide()['symfony-file'][1];
+        $this->cache = $this->cacheFactory->create($configuration);
     }
 
     /**
@@ -297,7 +292,17 @@ class SymfonyFileAdapterTest extends TestCase
 
         // Clean items NOT matching ALL of [tagA, tagB]
         // This means: remove items that don't have BOTH tagA AND tagB
-        $cleanResult = $this->cache->clean(CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tagA', 'tagB']);
+        //
+        // NOT_MATCHING_TAG is exercised via getLowLevelFrontend(), which bypasses the TagScope
+        // decorator that wraps $this->cache in real Magento usage (see app/etc/di.xml). TagScope
+        // refuses this mode because it has no safe scope-aware implementation: forwarding tags
+        // unmodified would ignore scope isolation, and adding the scope tag to the exclusion list
+        // would match nothing. This test targets the underlying Symfony adapter's raw capability,
+        // not TagScope, so it talks to the adapter directly.
+        $cleanResult = $this->cache->getLowLevelFrontend()->clean(
+            CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG,
+            ['tagA', 'tagB']
+        );
         $this->assertTrue($cleanResult, 'Clean not matching tag should succeed');
 
         // id1 should still exist (has both tagA and tagB)
