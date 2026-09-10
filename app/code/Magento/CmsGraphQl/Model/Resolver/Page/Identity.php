@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CmsGraphQl\Model\Resolver\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
+use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
@@ -26,7 +27,12 @@ class Identity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData[PageInterface::PAGE_ID]) ?
-            [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData[PageInterface::PAGE_ID])];
+        if (empty($resolvedData[PageInterface::PAGE_ID])) {
+            return [];
+        }
+        return array_merge(
+            [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData[PageInterface::PAGE_ID])],
+            $resolvedData[PageDataProvider::WIDGET_IDENTITIES] ?? []
+        );
     }
 }
