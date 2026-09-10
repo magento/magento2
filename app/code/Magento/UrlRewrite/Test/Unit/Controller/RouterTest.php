@@ -303,6 +303,51 @@ class RouterTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testMatchWithCustomRedirectToBaseUrl()
+    {
+        $queryParams = [];
+        $redirectType = 301;
+        $requestPath = 'some-test1';
+        $targetPath = '/';
+        $redirectUrl = 'redirect-url';
+        $this->storeManager->method('getStore')
+            ->willReturn($this->store);
+        $this->request->method('getPathInfo')
+            ->willReturn($requestPath);
+        $this->request->method('getRequestString')
+            ->willReturn($requestPath);
+        $urlRewrite = $this->createMock(UrlRewrite::class);
+        $urlRewrite->method('getEntityType')->willReturn('custom');
+        $urlRewrite->method('getRedirectType')->willReturn($redirectType);
+        $urlRewrite->method('getRequestPath')->willReturn($requestPath);
+        $urlRewrite->method('getTargetPath')->willReturn($targetPath);
+        $this->urlFinder->method('findOneByData')->willReturn($urlRewrite);
+        $this->response->expects($this->once())
+            ->method('setRedirect')
+            ->with($redirectUrl, $redirectType);
+        $this->request->expects($this->once())
+            ->method('getParams')
+            ->willReturn($queryParams);
+        $this->url->expects($this->once())
+            ->method('getUrl')
+            ->with(
+                '',
+                ['_direct' => '', '_query' => $queryParams]
+            )
+            ->willReturn($redirectUrl);
+        $this->request->expects($this->once())
+            ->method('setDispatched')
+            ->with(true);
+        $this->actionFactory->expects($this->once())
+            ->method('create')
+            ->with(Redirect::class);
+
+        $this->router->match($this->request);
+    }
+
+    /**
      * @param string $requestPath
      * @param string $targetPath
      * @param bool $shouldRedirect
