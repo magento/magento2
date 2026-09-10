@@ -1667,7 +1667,11 @@ class Installer
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
                 '/' . ConfigOptionsListConstants::KEY_PASSWORD
             ),
-            $driverOptions
+            $driverOptions,
+            $this->deploymentConfig->get(
+                ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+                '/' . ConfigOptionsListConstants::KEY_ENGINE
+            )
         );
         $prefix = $this->deploymentConfig->get(
             ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
