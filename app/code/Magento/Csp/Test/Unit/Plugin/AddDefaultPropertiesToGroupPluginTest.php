@@ -151,6 +151,8 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
 
         $this->assertArrayNotHasKey('attributes', $result[1]);
+        $this->assertArrayHasKey('_sri_fallback_group', $result[1]);
+        $this->assertNotEmpty($result[1]['_sri_fallback_group']);
     }
 
     /**
@@ -253,5 +255,7 @@ class AddDefaultPropertiesToGroupPluginTest extends TestCase
         $result = $this->plugin->beforeGetFilteredProperties($subjectMock, $assetMock, []);
 
         $this->assertArrayNotHasKey('attributes', $result[1]);
+        $this->assertArrayHasKey('_sri_fallback_group', $result[1]);
+        $this->assertNotEmpty($result[1]['_sri_fallback_group']);
     }
 }

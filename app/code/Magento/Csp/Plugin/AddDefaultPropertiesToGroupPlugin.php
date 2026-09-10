@@ -111,10 +111,13 @@ class AddDefaultPropertiesToGroupPlugin
                 if ($hash) {
                     $properties['attributes']['integrity'] = $hash;
                     $properties['attributes']['crossorigin'] = 'anonymous';
+                } else {
+                    $properties['_sri_fallback_group'] = spl_object_id($asset);
                 }
             }
         } catch (\Exception $e) {
             // Skip adding SRI attributes on failure - assets still load normally
+            $properties['_sri_fallback_group'] = spl_object_id($asset);
             $this->logger->warning(
                 'SRI: Failed to get integrity hash for asset',
                 [
