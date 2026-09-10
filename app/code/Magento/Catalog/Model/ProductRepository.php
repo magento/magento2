@@ -31,6 +31,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
@@ -46,6 +47,16 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {
+    /**
+     * Seconds a save waits for the per-SKU lock before giving up.
+     */
+    private const DEFAULT_SKU_LOCK_TIMEOUT = 10;
+
+    /**
+     * Namespace for the per-SKU lock name.
+     */
+    private const SKU_LOCK_PREFIX = 'catalog_product_sku_';
+
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
      */
@@ -188,6 +199,27 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $scopeOverriddenValue;
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
+     * @var int
+     */
+    private $skuLockTimeout;
+
+    /**
+     * Lock names this instance already holds, keyed by lock name.
+     *
+     * Not every lock provider counts re-entrant acquisitions the way MySQL's
+     * GET_LOCK does, so a nested save of the same SKU must not take - and above
+     * all must not release - a lock its own caller is still relying on.
+     *
+     * @var array<string, bool>
+     */
+    private $heldSkuLocks = [];
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -214,6 +246,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param ReadExtensions $readExtensions
      * @param CategoryLinkManagementInterface $linkManagement
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
+     * @param LockManagerInterface|null $lockManager
+     * @param int $skuLockTimeout [optional]
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -242,7 +276,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $cacheLimit = 1000,
         ?ReadExtensions $readExtensions = null,
         ?CategoryLinkManagementInterface $linkManagement = null,
-        ?ScopeOverriddenValue $scopeOverriddenValue = null
+        ?ScopeOverriddenValue $scopeOverriddenValue = null,
+        ?LockManagerInterface $lockManager = null,
+        int $skuLockTimeout = self::DEFAULT_SKU_LOCK_TIMEOUT
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -270,6 +306,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             ->get(CategoryLinkManagementInterface::class);
         $this->scopeOverriddenValue = $scopeOverriddenValue ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(ScopeOverriddenValue::class);
+        $this->lockManager = $lockManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(LockManagerInterface::class);
+        $this->skuLockTimeout = max(1, $skuLockTimeout);
     }
 
     /**
@@ -521,11 +560,87 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @inheritdoc
+     *
+     * Serialised per SKU. save() decides "create or update" from an unlocked
+     * `SELECT entity_id FROM catalog_product_entity WHERE sku = ?` and only then
+     * inserts, so two calls that overlap inside that window both see no row and
+     * both create a product - `catalog_product_entity.sku` carries a non-unique
+     * index and does not stop them. The lock closes that window, so the second
+     * call becomes the update it was meant to be.
+     *
+     * Contention is per SKU: concurrent saves of different SKUs never wait on
+     * each other.
+     *
+     * @see \Magento\Catalog\Model\ProductRepository::getSkuLockName()
+     */
+    public function save(ProductInterface $product, $saveOptions = false)
+    {
+        $sku = trim((string)$product->getSku());
+        if ($sku === '') {
+            // An empty SKU is rejected by executeSave() itself; there is nothing to lock on.
+            return $this->executeSave($product, $saveOptions);
+        }
+
+        $lockName = $this->getSkuLockName($sku);
+        if (isset($this->heldSkuLocks[$lockName])) {
+            return $this->executeSave($product, $saveOptions);
+        }
+
+        if (!$this->lockManager->lock($lockName, $this->skuLockTimeout)) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not acquire the write lock for SKU "%1" within %2 seconds. '
+                    . 'Another process is saving the same SKU. Please try again.',
+                    $sku,
+                    $this->skuLockTimeout
+                )
+            );
+        }
+
+        $this->heldSkuLocks[$lockName] = true;
+        try {
+            return $this->executeSave($product, $saveOptions);
+        } finally {
+            unset($this->heldSkuLocks[$lockName]);
+            $this->lockManager->unlock($lockName);
+        }
+    }
+
+    /**
+     * Build the lock name that identifies a SKU.
+     *
+     * The SKU is lower-cased and trimmed first, so that every spelling a storage
+     * layer might resolve to one row takes one lock. `catalog_product_entity.sku`
+     * is case-insensitive under the default collation, and getIdBySku() compares
+     * with `=`, so "ABC" and "abc" are the same product and must not be saved
+     * concurrently. Trimming follows prepareSku() and only ever widens the lock,
+     * which costs a little contention and can never miss a collision.
+     *
+     * Hashed because a lock name is identifier-length bound and a SKU is not.
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getSkuLockName(string $sku): string
+    {
+        return self::SKU_LOCK_PREFIX . substr(hash('sha256', mb_strtolower($sku)), 0, 32);
+    }
+
+    /**
+     * Save a product, without the per-SKU lock that save() holds around it.
+     *
+     * @param ProductInterface $product
+     * @param bool $saveOptions
+     * @return ProductInterface
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function save(ProductInterface $product, $saveOptions = false)
+    private function executeSave(ProductInterface $product, $saveOptions = false)
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
@@ -983,5 +1098,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $this->instances = [];
         $this->instancesById = [];
+        $this->heldSkuLocks = [];
     }
 }
