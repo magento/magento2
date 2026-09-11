@@ -369,6 +369,9 @@
                     <item name="allowedExtensions" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/allowedExtensions
                     </item>
+                    <item name="isMultipleFiles" type="string" xsi:type="xpath">
+                        formElements/*[name(.)=../../@formElement]/settings/isMultipleFiles
+                    </item>
                     <item name="openDialogTitle" type="string" xsi:type="xpath">
                         formElements/*[name(.)=../../@formElement]/settings/openDialogTitle
                     </item>
