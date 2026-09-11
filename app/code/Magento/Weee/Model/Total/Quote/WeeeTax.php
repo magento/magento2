@@ -23,6 +23,7 @@ class WeeeTax extends Weee
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function collect(
         Quote $quote,
