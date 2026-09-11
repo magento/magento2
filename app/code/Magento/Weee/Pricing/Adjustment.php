@@ -135,7 +135,6 @@ class Adjustment implements AdjustmentInterface
             return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
         }
         return $amount + $this->getAmount($saleableItem);
-        
     }
 
     /**
