@@ -117,37 +117,55 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     protected function _removeByIds($ids)
     {
-        if ($ids) {
-            $ids = array_chunk($ids, $this->_removeChunkSize);
-            foreach ($ids as $idsChunk) {
-                $this->_redis->pipeline();
-                foreach ($idsChunk as $id) {
-                    $this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
-                }
-                $tagsPerId = $this->_redis->exec();
+        if (!$ids) {
+            return;
+        }
 
-                $this->_redis->pipeline()->multi();
+        foreach (array_chunk($ids, $this->_removeChunkSize) as $idsChunk) {
+            // Fetch tags for all IDs in a single pipeline.
+            $this->_redis->pipeline();
 
-                // Remove data
-                $this->_redis->unlink($this->_preprocessIds($idsChunk));
+            foreach ($idsChunk as $id) {
+                $this->_redis->hGet(
+                    self::PREFIX_KEY . $id,
+                    self::FIELD_TAGS
+                );
+            }
 
-                // Remove ids from list of all ids
-                if ($this->_notMatchingTags) {
-                    $this->_redis->sRem(self::SET_IDS, $idsChunk);
-                }
+            $tagsPerId = $this->_redis->exec();
 
-                // Remove ids from each of their tags' id index
-                foreach ($idsChunk as $index => $id) {
-                    $tags = explode(',', $this->_decodeData($tagsPerId[$index] ?? false));
-                    foreach ($tags as $tag) {
-                        if ($tag !== '') {
-                            $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $id);
-                        }
+            // Group IDs by tag so that we can use one SREM per tag.
+            $idsPerTag = [];
+
+            foreach ($idsChunk as $index => $id) {
+                $tags = explode(',', $this->_decodeData($tagsPerId[$index] ?? false));
+
+                foreach ($tags as $tag) {
+                    if ($tag !== '') {
+                        $idsPerTag[$tag][] = $id;
                     }
                 }
-
-                $this->_redis->exec();
             }
+
+            $this->_redis->pipeline()->multi();
+
+            // Remove data.
+            $this->_redis->unlink($this->_preprocessIds($idsChunk));
+
+            // Remove IDs from the list of all IDs.
+            if ($this->_notMatchingTags) {
+                $this->_redis->sRem(self::SET_IDS, $idsChunk);
+            }
+
+            // Remove all IDs belonging to each tag in one command.
+            foreach ($idsPerTag as $tag => $tagIds) {
+                $this->_redis->sRem(
+                    self::PREFIX_TAG_IDS . $tag,
+                    $tagIds
+                );
+            }
+
+            $this->_redis->exec();
         }
     }
 
