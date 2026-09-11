@@ -134,6 +134,7 @@ class Adjustment implements AdjustmentInterface
         if ($isCatalogPriceInclOrBoth && $isFptExclDescrFinalPrice) {
             return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
         }
+        return $amount + $this->getAmount($saleableItem);
         
     }
 
