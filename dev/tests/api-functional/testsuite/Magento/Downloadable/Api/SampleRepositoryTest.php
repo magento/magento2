@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product;
 use Magento\Downloadable\Model\Sample;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomainLock;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -46,7 +47,9 @@ class SampleRepositoryTest extends WebapiAbstract
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->domainManager = $objectManager->get(DomainManagerInterface::class);
-        $this->domainManager->addDomains(['example.com']);
+        DownloadableDomainLock::synchronize(function () {
+            $this->domainManager->addDomains(['example.com']);
+        });
 
         $this->createServiceInfo = [
             'rest' => [
@@ -91,7 +94,9 @@ class SampleRepositoryTest extends WebapiAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->domainManager->removeDomains(['example.com']);
+        DownloadableDomainLock::synchronize(function () {
+            $this->domainManager->removeDomains(['example.com']);
+        });
     }
 
     /**
