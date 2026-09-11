@@ -109,8 +109,28 @@ class WeeeTax extends Weee
 
                     $totalValueInclTax += $valueInclTax;
                     $baseTotalValueInclTax += $baseValueInclTax;
-                    $totalRowValueInclTax += $rowValueInclTax;
-                    $baseTotalRowValueInclTax += $baseRowValueInclTax;
+
+                    $isCatalogPriceInclOrBoth = in_array(
+                        $this->weeeData->getTaxDisplayConfig(),
+                        [
+                            \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX,
+                            \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH,
+                        ],
+                        true
+                    );
+
+                    $isFptExclDescrFinalPrice = $this->weeeData->getListPriceDisplayType()
+                        == \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL;
+
+                    if (!($isCatalogPriceInclOrBoth && $isFptExclDescrFinalPrice)) {
+                        $totalRowValueInclTax +=
+                            $rowValueExclTax + $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_ROW_TAX];
+                        $baseTotalRowValueInclTax += $baseRowValueExclTax
+                            + $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_BASE_ROW_TAX];
+                    } else {
+                        $totalRowValueInclTax += $rowValueInclTax;
+                        $baseTotalRowValueInclTax += $baseRowValueInclTax;
+                    }
 
                     $totalValueExclTax += $valueExclTax;
                     $baseTotalValueExclTax += $baseValueExclTax;

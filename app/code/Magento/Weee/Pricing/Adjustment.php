@@ -119,8 +119,22 @@ class Adjustment implements AdjustmentInterface
         if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
             return $amount;
         }
+
+        $isCatalogPriceInclOrBoth = in_array(
+            $this->weeeHelper->getTaxDisplayConfig(),
+            [
+                \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX,
+                \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH,
+            ],
+            true
+        );
+        $isFptExclDescrFinalPrice = $this->weeeHelper->getListPriceDisplayType()
+            == \Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL;
+
+        if ($isCatalogPriceInclOrBoth && $isFptExclDescrFinalPrice) {
+            return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
+        }
         
-        return $this->priceCurrency->round($amount) + $this->getAmount($saleableItem);
     }
 
     /**
