@@ -139,7 +139,10 @@ class ConfigOptionsListConstants
     public const KEY_MYSQL_SSL_KEY = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_KEY : \PDO::MYSQL_ATTR_SSL_KEY;
     public const KEY_MYSQL_SSL_CERT = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_CERT : \PDO::MYSQL_ATTR_SSL_CERT;
     public const KEY_MYSQL_SSL_CA = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_CA : \PDO::MYSQL_ATTR_SSL_CA;
-    public const KEY_MYSQL_SSL_VERIFY = \PHP_VERSION_ID >= 80400 ? \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT;
+    public const KEY_MYSQL_SSL_VERIFY = \PHP_VERSION_ID >= 80400
+        ? \Pdo\Mysql::ATTR_SSL_VERIFY_SERVER_CERT
+        : \PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT;
+    /**#@-*/
 
     /**
      * Db config key
