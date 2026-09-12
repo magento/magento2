@@ -39,6 +39,7 @@ use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\DownloadableDomainLock;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -118,7 +119,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->urlRewriteCollectionFactory = $objectManager->get(UrlRewriteCollectionFactory::class);
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->addDomains(['example.com']);
+        DownloadableDomainLock::synchronize(function () use ($domainManager) {
+            $domainManager->addDomains(['example.com']);
+        });
     }
 
     /**
@@ -132,7 +135,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $objectManager = Bootstrap::getObjectManager();
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        $domainManager->removeDomains(['example.com']);
+        DownloadableDomainLock::synchronize(function () use ($domainManager) {
+            $domainManager->removeDomains(['example.com']);
+        });
     }
 
     /**
@@ -2229,14 +2234,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->_markTestAsRestOnly(
             'Test skipped due to known issue with SOAP. NULL value is cast to corresponding attribute type.'
         );
-        
+
         $fixtures = DataFixtureStorageManager::getStorage();
         $defaultValueProcessor = Bootstrap::getObjectManager()->get(DefaultValueProcessor::class);
         $sku = $fixtures->get('p1')->getSku();
         $store2 = $fixtures->get('store_view_2');
-        
+
         $productData = $this->getProduct($sku, $store2->getCode());
-        
+
         // Update1: Update product in store view 2 without media_gallery_entries
         $update1 = $productData;
         unset($update1['media_gallery_entries']);
@@ -2279,7 +2284,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(1, $image['disabled_use_default']);
         $this->assertEquals(1, $image['position_use_default']);
     }
-    
+
     /**
      * @return string
      */
