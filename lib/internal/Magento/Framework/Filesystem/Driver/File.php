@@ -344,7 +344,8 @@ class File implements DriverInterface
                 clearstatcache(true, $this->getScheme() . $oldPath);
                 clearstatcache(true, $newPath);
             }
-            $this->changePermissions($newPath, 0777 & ~umask());
+            $permissions = $this->isFile($newPath) ? 0666 : 0777;
+            $this->changePermissions($newPath, $permissions & ~umask());
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
