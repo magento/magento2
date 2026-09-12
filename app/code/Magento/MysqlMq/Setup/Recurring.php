@@ -3,13 +3,14 @@
  * Copyright 2018 Adobe
  * All Rights Reserved.
  */
+declare(strict_types=1);
 
 namespace Magento\MysqlMq\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
+use Magento\MysqlMq\Model\Queue\QueueConfigSynchronizer;
 
 /**
  * Class Recurring
@@ -17,16 +18,11 @@ use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfi
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var MessageQueueConfig
+     * @param QueueConfigSynchronizer $queueConfigSynchronizer
      */
-    private $messageQueueConfig;
-
-    /**
-     * @param MessageQueueConfig $messageQueueConfig
-     */
-    public function __construct(MessageQueueConfig $messageQueueConfig)
-    {
-        $this->messageQueueConfig = $messageQueueConfig;
+    public function __construct(
+        private readonly QueueConfigSynchronizer $queueConfigSynchronizer
+    ) {
     }
 
     /**
@@ -36,16 +32,10 @@ class Recurring implements InstallSchemaInterface
     {
         $setup->startSetup();
 
-        $queues = [];
-        foreach ($this->messageQueueConfig->getQueues() as $queue) {
-            $queues[] = $queue->getName();
-        }
-
-        $connection = $setup->getConnection();
-        $existingQueues = $connection->fetchCol($connection->select()->from($setup->getTable('queue'), 'name'));
-        $queues = array_unique(array_diff($queues, $existingQueues));
+        $queues = $this->queueConfigSynchronizer->getMissingNames();
         /** Populate 'queue' table */
         if (!empty($queues)) {
+            $connection = $setup->getConnection();
             $connection->insertArray($setup->getTable('queue'), ['name'], $queues);
         }
 
