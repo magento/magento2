@@ -24,6 +24,7 @@ use Magento\Sales\Model\Order\Pdf\ItemsFactory;
 use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
 use Magento\Sales\Model\Order\Pdf\Total\Factory;
 use Magento\Tax\Helper\Data as TaxHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 
@@ -298,8 +299,8 @@ class AbstractTest extends TestCase
      * @param int $expectedNewPages
      * @return void
      * @throws \ReflectionException
-     * @dataProvider blockHeightDataProvider
      */
+    #[DataProvider('blockHeightDataProvider')]
     public function testDrawLineBlocksBreaksPageOnlyForABlockThatFits(
         int $blockHeight,
         int $expectedNewPages
@@ -381,7 +382,7 @@ class AbstractTest extends TestCase
      *
      * @return array[]
      */
-    public function blockHeightDataProvider(): array
+    public static function blockHeightDataProvider(): array
     {
         return [
             'block that fits on an empty page is moved to one' => [500, 1],
