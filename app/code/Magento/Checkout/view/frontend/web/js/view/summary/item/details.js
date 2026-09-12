@@ -22,7 +22,7 @@ define([
         getNameUnsanitizedHtml: function (quoteItem) {
             var txt = document.createElement('textarea');
 
-            txt.innerHTML = quoteItem.name;
+            txt.textContent = quoteItem.name;
 
             return escaper.escapeHtml(txt.value, this.allowedTags);
         },
