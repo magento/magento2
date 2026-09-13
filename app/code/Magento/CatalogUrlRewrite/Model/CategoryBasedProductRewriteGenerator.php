@@ -11,8 +11,9 @@ use Magento\Catalog\Model\Product\Visibility;
 
 /**
  * Class ProductUrlRewriteGenerator
- * @package Magento\CatalogUrlRewrite\Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @deprecated 101.0.0 please use \Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator instead.
+ * @see https://github.com/magento/magento2/commit/c7d6324fe84766ddd9ab9710f19b5923fcbac09a
  */
 class CategoryBasedProductRewriteGenerator
 {
