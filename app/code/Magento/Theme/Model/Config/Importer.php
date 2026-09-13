@@ -10,7 +10,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Theme\Model\ResourceModel\Theme as ThemeResourceModel;
 use Magento\Theme\Model\ResourceModel\Theme\Data\Collection as ThemeDbCollection;
 use Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory;
-use Magento\Theme\Model\Theme\Data\Collection as ThemeFilesystemCollection;
+use Magento\Theme\Model\Theme\Collection as ThemeFilesystemCollection;
 use Magento\Theme\Model\Theme\Data;
 use Magento\Theme\Model\Theme\Registration;
 
