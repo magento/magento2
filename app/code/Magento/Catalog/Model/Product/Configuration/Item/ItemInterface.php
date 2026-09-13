@@ -6,8 +6,12 @@
 
 namespace Magento\Catalog\Model\Product\Configuration\Item;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
+use Magento\Framework\DataObject;
+
 /**
- * Product configurational item interface
+ * Product configuration item interface
  *
  * @api
  * @since 100.0.2
@@ -17,7 +21,7 @@ interface ItemInterface
     /**
      * Retrieve associated product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct();
 
@@ -25,7 +29,7 @@ interface ItemInterface
      * Get item option by code
      *
      * @param   string $code
-     * @return  \Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface
+     * @return  OptionInterface|null
      */
     public function getOptionByCode($code);
 
@@ -36,7 +40,7 @@ interface ItemInterface
      *  - 'url' - url of controller to give the file
      *  - 'urlParams' - additional parameters for url (custom option id, or item id, for example)
      *
-     * @return null|\Magento\Framework\DataObject
+     * @return null|DataObject
      */
     public function getFileDownloadParams();
 }
