@@ -472,6 +472,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Address\CompositeSanitizer">
+        <arguments>
+            <argument name="sanitizers" xsi:type="array">
+                <item name="templateVars" xsi:type="object">Magento\Customer\Model\Address\Sanitizer\TemplateVars</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\ResourceModel\Group\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">customer_group</argument>
