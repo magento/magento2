@@ -19,5 +19,6 @@
         <element name="actions" type="text" selector=".admin__data-grid-header-row .action-select"/>
         <element name="setActive" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Set Active']" timeout="30"/>
         <element name="setInactive" type="button" selector="//*[contains(@class, 'admin__data-grid-header')]//span[contains(@class,'action-menu-item') and text()='Set Inactive']" timeout="30"/>
+        <element name="edit" type="button" selector=".data-grid-actions-cell .action-menu-item"/>
     </section>
 </sections>

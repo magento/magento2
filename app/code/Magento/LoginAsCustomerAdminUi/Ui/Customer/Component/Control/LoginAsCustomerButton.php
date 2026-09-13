@@ -22,6 +22,11 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 class LoginAsCustomerButton extends GenericButton implements ButtonProviderInterface
 {
     /**
+     * Translatable element name
+     */
+    private const LABEL_KEY = 'label';
+
+    /**
      * @var AuthorizationInterface
      */
     private $authorization;
@@ -60,11 +65,16 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
     public function getButtonData(): array
     {
         $customerId = (int)$this->getCustomerId();
-        $data = [];
         $isAllowed = $customerId && $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
         $isEnabled = $this->config->isEnabled();
-        if ($isAllowed && $isEnabled) {
-            $data = $this->dataProvider->getData($customerId);
+
+        if (!$isAllowed || !$isEnabled) {
+            return [];
+        }
+
+        $data = $this->dataProvider->getData($customerId);
+        if (isset($data[self::LABEL_KEY]) && is_string($data[self::LABEL_KEY])) {
+            $data[self::LABEL_KEY] = __($data[self::LABEL_KEY]);
         }
 
         return $data;
