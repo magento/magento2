@@ -121,7 +121,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Website default group
      *
-     * @var \Magento\Store\Model\Store
+     * @var \Magento\Store\Model\Group
      */
     protected $_defaultGroup;
 
@@ -387,7 +387,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     /**
      * Retrieve default group model
      *
-     * @return \Magento\Store\Model\Store
+     * @return \Magento\Store\Model\Group|bool
      */
     public function getDefaultGroup()
     {
