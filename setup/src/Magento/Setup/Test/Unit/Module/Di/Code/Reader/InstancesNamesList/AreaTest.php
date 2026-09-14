@@ -10,7 +10,7 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Reader\InstancesNamesList;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 use Magento\Setup\Module\Di\Code\Reader\ClassReaderDecorator;
 use Magento\Setup\Module\Di\Code\Reader\Decorator\Area;
-use Magento\Framework\Interception\PluginListGenerator;
+use Magento\Setup\Module\Di\Code\Reader\OrphanedPluginList;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,9 +27,9 @@ class AreaTest extends TestCase
     private $classReaderDecoratorMock;
 
     /**
-     * @var PluginListGenerator|MockObject
+     * @var OrphanedPluginList|MockObject
      */
-    private $pluginListGeneratorMock;
+    private $orphanedPluginListMock;
 
     /**
      * @var Area
@@ -50,7 +50,7 @@ class AreaTest extends TestCase
             ->onlyMethods(['getConstructor'])
             ->getMock();
 
-        $this->pluginListGeneratorMock = $this->getMockBuilder(PluginListGenerator::class)
+        $this->orphanedPluginListMock = $this->getMockBuilder(OrphanedPluginList::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['isOrphanedPlugin'])
             ->getMock();
@@ -58,7 +58,7 @@ class AreaTest extends TestCase
         $this->model = new Area(
             $this->classesScannerMock,
             $this->classReaderDecoratorMock,
-            $this->pluginListGeneratorMock
+            $this->orphanedPluginListMock
         );
     }
 
@@ -110,7 +110,7 @@ class AreaTest extends TestCase
             ->with($normalClass)
             ->willReturn(['arg1' => 'NameSpace1\class5']);
 
-        $this->pluginListGeneratorMock->method('isOrphanedPlugin')
+        $this->orphanedPluginListMock->method('isOrphanedPlugin')
             ->willReturnMap([
                 [$normalClass, false],
                 [$orphanedPluginClass, true],
