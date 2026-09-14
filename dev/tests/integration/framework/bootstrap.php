@@ -102,6 +102,13 @@ try {
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
+    //if (getenv('MAGENTO_TEST_SHOW_CACHE_BACKEND') === '1') {
+        $deploymentConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\App\DeploymentConfig::class);
+        $cacheBackend = $deploymentConfig->get('cache/frontend/default/backend', 'not configured');
+        fwrite(STDOUT, "Integration cache backend: {$cacheBackend}" . PHP_EOL);
+    //}
+
     $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
         ->create(\Magento\Framework\Component\DirSearch::class);
     $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
