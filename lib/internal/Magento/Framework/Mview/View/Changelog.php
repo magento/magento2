@@ -300,6 +300,32 @@ class Changelog implements ChangelogInterface
     }
 
     /**
+     * Get count of distinct pending entity ids in changelog between two version ids
+     *
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @return int
+     * @throws ChangelogTableNotExistsException
+     */
+    public function getPendingCount(int $fromVersionId, int $toVersionId): int
+    {
+        $changelogTableName = $this->resource->getTableName($this->getName());
+        if (!$this->connection->isTableExists($changelogTableName)) {
+            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
+        }
+
+        $select = $this->connection->select()
+            ->from(
+                $changelogTableName,
+                [new \Zend_Db_Expr('COUNT(DISTINCT ' . $this->getColumnName() . ')')]
+            )
+            ->where('version_id > ?', (int)$fromVersionId)
+            ->where('version_id <= ?', (int)$toVersionId);
+
+        return (int)$this->connection->fetchOne($select);
+    }
+
+    /**
      * Get maximum version_id from changelog
      *
      * @return int
