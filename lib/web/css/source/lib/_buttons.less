@@ -77,7 +77,7 @@
     box-sizing: border-box;
     vertical-align: middle;
 
-    ._lib-button-icon (
+    ._lib-button-icon(
         @_button-icon-use: @_button-icon-use,
         @_icon-font-content: @_button-font-content,
         @_icon-font: @_button-icon-font,
@@ -383,7 +383,7 @@
 //  Inner buttons mixins
 //  ---------------------------------------------
 
-._lib-button-icon (
+._lib-button-icon(
     @_button-icon-use: @button-icon__use,
     @_icon-font-content: @button-icon__content,
     @_icon-font: @button-icon__font,
@@ -397,7 +397,7 @@
     @_icon-font-position: @button-icon__position,
     @_icon-font-text-hide: @button-icon__text-hide
 ) when (@_button-icon-use = true) {
-    .lib-button-icon (
+    .lib-button-icon(
         @_icon-font-content: @_icon-font-content,
         @_icon-font: @_icon-font,
         @_icon-font-size: @_icon-font-size,
@@ -412,7 +412,7 @@
     );
 }
 
-.lib-button-icon (
+.lib-button-icon(
     @_icon-font-content,
     @_icon-font: @button-icon__font,
     @_icon-font-size: @button-icon__font-size,
