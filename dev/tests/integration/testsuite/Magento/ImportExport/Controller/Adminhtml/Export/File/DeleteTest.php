@@ -81,6 +81,26 @@ class DeleteTest extends AbstractBackendController
     }
 
     /**
+     * Verify a traversal filename cannot delete files outside the export directory.
+     *
+     * @magentoConfigFixture default_store admin/security/use_form_key 1
+     */
+    public function testExecuteDoesNotDeleteFileOutsideExportDirectory(): void
+    {
+        $targetPath = 'traversal_test/' . $this->fileName;
+        $this->copyFile($targetPath);
+
+        $request = $this->getRequest();
+        $request->setParam('filename', '../' . $targetPath);
+        $request->setMethod(Http::METHOD_POST);
+
+        $this->dispatch('backend/admin/export_file/delete');
+
+        $this->assertTrue($this->varDirectory->isExist($targetPath));
+        $this->varDirectory->delete($targetPath);
+    }
+
+    /**
      * Copy csv file from sourceFilePath to destinationFilePath
      *
      * @param $destinationFilePath
