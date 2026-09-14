@@ -10,6 +10,7 @@ namespace Magento\Checkout\Test\Unit\Block\Cart;
 use Magento\Catalog\Helper\Image;
 use Magento\Checkout\Block\Cart\Sidebar;
 use Magento\Checkout\Block\Shipping\Price;
+use Magento\Framework\App\CacheInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
@@ -114,6 +115,11 @@ class SidebarTest extends TestCase
         $contextMock->method('getRequest')->willReturn($this->requestMock);
 
         $this->serializer = $this->createMock(Json::class);
+
+        $cacheMock = $this->createMock(CacheInterface::class);
+        $this->_objectManager->prepareObjectManager([
+            [CacheInterface::class, $cacheMock]
+        ]);
 
         $this->model = $this->_objectManager->getObject(
             Sidebar::class,
@@ -236,5 +242,137 @@ class SidebarTest extends TestCase
         $quoteMock->expects($this->once())->method('getTotals')->willReturn($totalsMock);
 
         $this->assertEquals($totalsMock, $this->model->getTotalsCache());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetJsLayoutWithNoSecondaryMinicart(): void
+    {
+        $jsLayout = [
+            'components' => [
+                'minicart_content' => [
+                    'component' => 'Magento_Checkout/js/view/minicart',
+                    'config' => [
+                        'itemRenderer' => ['default' => 'defaultRenderer']
+                    ],
+                    'children' => [
+                        'item.renderer' => ['component' => 'uiComponent']
+                    ]
+                ]
+            ]
+        ];
+
+        $reflection = new \ReflectionProperty($this->model, 'jsLayout');
+        $reflection->setValue($this->model, $jsLayout);
+
+        $this->serializer->method('serialize')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
+
+        $result = json_decode($this->model->getJsLayout(), true);
+
+        $this->assertArrayHasKey('minicart_content', $result['components']);
+        $this->assertEquals(
+            ['default' => 'defaultRenderer'],
+            $result['components']['minicart_content']['config']['itemRenderer']
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetJsLayoutCopiesRenderersToSecondaryMinicart(): void
+    {
+        $jsLayout = [
+            'components' => [
+                'minicart_content' => [
+                    'component' => 'Magento_Checkout/js/view/minicart',
+                    'config' => [
+                        'itemRenderer' => ['default' => 'defaultRenderer']
+                    ],
+                    'children' => [
+                        'item.renderer' => ['component' => 'uiComponent'],
+                        'subtotal.container' => ['component' => 'uiComponent']
+                    ]
+                ],
+                'minicart_content_footer' => [
+                    'component' => 'Magento_Checkout/js/view/minicart',
+                    'config' => [
+                        'template' => 'Magento_Checkout/minicart/content'
+                    ],
+                    'children' => []
+                ]
+            ]
+        ];
+
+        $reflection = new \ReflectionProperty($this->model, 'jsLayout');
+        $reflection->setValue($this->model, $jsLayout);
+
+        $this->serializer->method('serialize')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
+
+        $result = json_decode($this->model->getJsLayout(), true);
+
+        $this->assertArrayHasKey('minicart_content_footer', $result['components']);
+        $footer = $result['components']['minicart_content_footer'];
+        $this->assertEquals(
+            ['default' => 'defaultRenderer'],
+            $footer['config']['itemRenderer']
+        );
+        $this->assertArrayHasKey('item.renderer', $footer['children']);
+        $this->assertArrayHasKey('subtotal.container', $footer['children']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetJsLayoutDoesNotOverrideExistingConfig(): void
+    {
+        $jsLayout = [
+            'components' => [
+                'minicart_content' => [
+                    'component' => 'Magento_Checkout/js/view/minicart',
+                    'config' => [
+                        'itemRenderer' => ['default' => 'defaultRenderer']
+                    ],
+                    'children' => [
+                        'item.renderer' => ['component' => 'uiComponent']
+                    ]
+                ],
+                'minicart_content_footer' => [
+                    'component' => 'Magento_Checkout/js/view/minicart',
+                    'config' => [
+                        'itemRenderer' => ['default' => 'customRenderer']
+                    ],
+                    'children' => [
+                        'item.renderer' => ['component' => 'customComponent']
+                    ]
+                ]
+            ]
+        ];
+
+        $reflection = new \ReflectionProperty($this->model, 'jsLayout');
+        $reflection->setValue($this->model, $jsLayout);
+
+        $this->serializer->method('serialize')
+            ->willReturnCallback(function ($data) {
+                return json_encode($data);
+            });
+
+        $result = json_decode($this->model->getJsLayout(), true);
+
+        $footer = $result['components']['minicart_content_footer'];
+        $this->assertEquals(
+            ['default' => 'customRenderer'],
+            $footer['config']['itemRenderer']
+        );
+        $this->assertEquals(
+            ['component' => 'customComponent'],
+            $footer['children']['item.renderer']
+        );
     }
 }

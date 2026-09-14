@@ -10,6 +10,7 @@ namespace Magento\Framework\Cache\Frontend\Adapter;
 use Magento\Framework\Cache\Backend\ExtendedBackendInterface;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Cache\MultiLoadInterface;
 
 /**
  * Frontend adapter for RemoteSynchronizedCache with Symfony backends
@@ -17,7 +18,9 @@ use Magento\Framework\Cache\FrontendInterface;
  * This adapter implements FrontendInterface and wraps a RemoteSynchronizedCache backend,
  * allowing L2 cache to work seamlessly with Symfony cache backends.
  */
-class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
+class RemoteSynchronizedSymfonyAdapter implements
+    FrontendInterface,
+    MultiLoadInterface
 {
     /**
      * @var ExtendedBackendInterface
@@ -25,22 +28,33 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     private ExtendedBackendInterface $backend;
 
     /**
-     * @var int
+     * @var RemoteSynchronizedLowLevelFrontendFactory
      */
-    private int $defaultLifetime;
+    private RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory;
 
     /**
-     * Constructor
+     * @var RemoteSynchronizedLowLevelFrontend|null
+     */
+    private ?RemoteSynchronizedLowLevelFrontend $lowLevelFrontend = null;
+
+    /**
+     * Keeps $defaultLifetime only for backward-compatible DI wiring;
+     *
+     * Actual TTL handling is delegated to the underlying Symfony adapter.
+     * save() forwards the lifetime unchanged, including null for no expiry, matching legacy behavior.
      *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
-     * @param int $defaultLifetime Default cache lifetime
+     * @param RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory Factory for the low-level view
+     * @param int $defaultLifetime Kept for DI wiring; applied by the underlying Symfony adapter, not here
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExtendedBackendInterface $backend,
+        RemoteSynchronizedLowLevelFrontendFactory $lowLevelFrontendFactory,
         int $defaultLifetime = 7200
     ) {
         $this->backend = $backend;
-        $this->defaultLifetime = $defaultLifetime;
+        $this->lowLevelFrontendFactory = $lowLevelFrontendFactory;
     }
 
     /**
@@ -60,12 +74,26 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     }
 
     /**
+     * Batched multi-load; delegates to the backend's MultiLoadInterface, else returns [] (no per-key emulation).
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        return $this->backend instanceof MultiLoadInterface
+            ? $this->backend->loadMultiple($identifiers)
+            : [];
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
-        $lifetime = $lifeTime ?? $this->defaultLifetime;
-        return $this->backend->save($data, $identifier, $tags, $lifetime);
+        // Passes the lifetime unchanged so the Symfony adapter alone applies legacy
+        // expiration semantics, including `null` for no expiry.
+        return $this->backend->save($data, $identifier, $tags, $lifeTime);
     }
 
     /**
@@ -77,9 +105,20 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     }
 
     /**
+     * Get cache entry metadata (Zend compatibility)
+     *
+     * @param string $id
+     * @return array|false
+     */
+    public function getMetadatas($id)
+    {
+        return $this->backend->getMetadatas($id);
+    }
+
+    /**
      * @inheritDoc
      */
-    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = [])
+    public function clean($mode = CacheConstants::CLEANING_MODE_ALL, $tags = []): bool
     {
         return $this->backend->clean($mode, $tags);
     }
@@ -101,7 +140,6 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
      */
     public function getLowLevelFrontend()
     {
-        // Return self as we are the frontend
-        return $this;
+        return $this->lowLevelFrontend ??= $this->lowLevelFrontendFactory->create(['backend' => $this->backend]);
     }
 }

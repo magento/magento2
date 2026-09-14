@@ -21,15 +21,20 @@ class CleanCacheTest extends TestCase
     {
         $cacheFrontendMock = $this->createMock(FrontendInterface::class);
         $frontendPoolMock = $this->createMock(Pool::class);
+        $backendMock = $this->createMock(Zend_Cache_Backend_Interface::class);
 
-        // Expect clean to be called on the frontend with CLEANING_MODE_OLD
-        $cacheFrontendMock->expects(
+        // The frontend does not support the 'old' cleaning mode, so CleanCache goes through the
+        // backend directly. Expect clean() to be called on the backend with CLEANING_MODE_OLD.
+        $cacheFrontendMock->expects($this->once())
+            ->method('getBackend')
+            ->willReturn($backendMock);
+
+        $backendMock->expects(
             $this->once()
         )->method(
             'clean'
         )->with(
-            CacheConstants::CLEANING_MODE_OLD,
-            []
+            CacheConstants::CLEANING_MODE_OLD
         )->willReturn(true);
 
         $callCount = 0;

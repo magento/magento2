@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Query;
 
+use GraphQL\Error\Error;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\AggregateExceptionInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -51,7 +53,7 @@ class ErrorHandler implements ErrorHandlerInterface
         }
 
         foreach ($errors as $error) {
-            $this->logger->error($error);
+            $this->log($error);
             $previousError = $error->getPrevious();
             if ($previousError instanceof AggregateExceptionInterface && !empty($previousError->getErrors())) {
                 $aggregatedErrors = $previousError->getErrors();
@@ -64,5 +66,22 @@ class ErrorHandler implements ErrorHandlerInterface
             }
         }
         return $formattedErrors;
+    }
+
+    /**
+     * Log error.
+     *
+     * @param Error $error
+     * @return void
+     */
+    private function log(Error $error): void
+    {
+        $extensions = $error->getExtensions();
+        $category = $extensions['category'] ?? null;
+        if (GraphQlInputException::EXCEPTION_CATEGORY === $category) {
+            return;
+        }
+
+        $this->logger->error($error);
     }
 }

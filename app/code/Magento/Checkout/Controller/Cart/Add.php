@@ -11,6 +11,7 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Checkout\Model\Cart\AjaxMessageResponse;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -39,9 +40,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     private AddProductToCart $addProductToCart;
 
     /**
-     * @var AjaxMessageResponse|null
+     * @var AjaxMessageResponse
      */
-    private ?AjaxMessageResponse $ajaxMessageResponse = null;
+    private AjaxMessageResponse $ajaxMessageResponse;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -53,7 +54,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * @param ProductRepositoryInterface $productRepository
      * @param RequestQuantityProcessor|null $quantityProcessor
      * @param AddProductToCart|null $addProductToCart
+     * @param AjaxMessageResponse|null $ajaxMessageResponse
      * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -64,7 +67,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
         ?RequestQuantityProcessor $quantityProcessor = null,
-        ?AddProductToCart $addProductToCart = null
+        ?AddProductToCart $addProductToCart = null,
+        ?AjaxMessageResponse $ajaxMessageResponse = null
     ) {
         parent::__construct(
             $context,
@@ -76,23 +80,11 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         );
         $this->productRepository = $productRepository;
         $this->quantityProcessor = $quantityProcessor
-            ?? $this->_objectManager->get(RequestQuantityProcessor::class);
+            ?? ObjectManager::getInstance()->get(RequestQuantityProcessor::class);
         $this->addProductToCart = $addProductToCart
-            ?? $this->_objectManager->get(AddProductToCart::class);
-    }
-
-    /**
-     * Provides AJAX message response service.
-     *
-     * @return AjaxMessageResponse
-     */
-    private function getAjaxMessageResponse(): AjaxMessageResponse
-    {
-        if ($this->ajaxMessageResponse === null) {
-            $this->ajaxMessageResponse = $this->_objectManager->get(AjaxMessageResponse::class);
-        }
-
-        return $this->ajaxMessageResponse;
+            ?? ObjectManager::getInstance()->get(AddProductToCart::class);
+        $this->ajaxMessageResponse = $ajaxMessageResponse
+            ?? ObjectManager::getInstance()->get(AjaxMessageResponse::class);
     }
 
     /**
@@ -206,14 +198,14 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
 
-            return $this->goBack($url, $product);
+            return $this->goBack($url, $product, true);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t add this item to your shopping cart right now.')
             );
             $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
-            return $this->goBack(null, $product);
+            return $this->goBack(null, $product, true);
         }
 
         return $this->getResponse();
@@ -224,9 +216,10 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      *
      * @param string|null $backUrl
      * @param \Magento\Catalog\Model\Product|null $product
+     * @param bool $displayInlineErrors
      * @return ResponseInterface|ResultInterface
      */
-    protected function goBack($backUrl = null, $product = null)
+    protected function goBack($backUrl = null, $product = null, bool $displayInlineErrors = false)
     {
         if (!$this->getRequest()->isAjax()) {
             return parent::_goBack($backUrl);
@@ -235,23 +228,23 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         $resolvedBackUrl = $backUrl ?: $this->getBackUrl();
         $result = [];
 
-        if ($resolvedBackUrl) {
+        if ($displayInlineErrors) {
+            $inlineMessages = $this->ajaxMessageResponse->getInlineErrorMessages(true);
+            if ($inlineMessages) {
+                $result['messages'] = $inlineMessages['html'];
+                $result['displayMessages'] = true;
+            }
+        }
+
+        if (!$result && $resolvedBackUrl) {
             $result['backUrl'] = $resolvedBackUrl;
         }
 
+        //If the product is no longer salable after the add-to-cart request, display the "Out of stock" message.
         if ($product && !$product->getIsSalable()) {
             $result['product'] = [
                 'statusText' => __('Out of stock')
             ];
-        }
-
-        $inlineResponse = $this->getAjaxMessageResponse()->resolve(
-            $resolvedBackUrl,
-            $this->_redirect->getRefererUrl()
-        );
-        if ($inlineResponse) {
-            $result['messages'] = $inlineResponse['html'];
-            $result['displayMessages'] = $inlineResponse['displayMessages'];
         }
 
         $this->getResponse()->representJson(
