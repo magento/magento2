@@ -330,9 +330,10 @@ class TableBuilder
                         []
                     );
 
-                    $columnValue = $this->_connection->getIfNullSql(
-                        's' . $countTableName . '.value',
-                        $countTableName . '.value'
+                    $columnValue = $this->_connection->getCheckSql(
+                        's' . $countTableName . '.value_id IS NULL',
+                        $countTableName . '.value',
+                        's' . $countTableName . '.value'
                     );
                     $select->columns([$columnName => $columnValue]);
 
