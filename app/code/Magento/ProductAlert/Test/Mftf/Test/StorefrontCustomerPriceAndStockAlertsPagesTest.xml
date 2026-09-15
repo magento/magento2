@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerPriceAndStockAlertsPagesTest">
+        <annotations>
+            <features value="ProductAlert"/>
+            <stories value="Customer product alerts account page"/>
+            <title value="Combined My Product Alerts page shows price and stock sections when both enabled"/>
+            <description value="With both alert types enabled, customer page shows both Price Alerts and Stock Alerts sections"/>
+            <severity value="MAJOR"/>
+            <group value="product_alert"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set catalog/productalert/allow_price 1" stepKey="enablePrice"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 1" stepKey="enableStock"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set catalog/productalert/allow_price 0" stepKey="restorePrice"/>
+            <magentoCLI command="config:set catalog/productalert/allow_stock 0" stepKey="restoreStock"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCustomerProductAlertsPageActionGroup" stepKey="openProductAlertsPage"/>
+        <see selector="{{StorefrontCustomerProductAlertsSection.pageTitle}}" userInput="My Product Alerts" stepKey="seeTitle"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.priceSection}}" stepKey="seePriceSection"/>
+        <seeElement selector="{{StorefrontCustomerProductAlertsSection.stockSection}}" stepKey="seeStockSection"/>
+    </test>
+</tests>
