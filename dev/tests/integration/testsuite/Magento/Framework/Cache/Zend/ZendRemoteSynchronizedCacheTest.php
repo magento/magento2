@@ -50,26 +50,30 @@ class ZendRemoteSynchronizedCacheTest extends CacheFrontendTestCase
             $redisOptions['password'] ?: null
         );
 
+        // The Zend frontend adapter uppercases every id (Adapter\Zend::_unifyId()) before it
+        // reaches the backend, so the raw Redis key uses strtoupper($id), not $id as-is.
+        $backendId = strtoupper($id);
+
         try {
             $this->assertTrue($frontend->save('atomic-value', $id, ['ZEND_ATOMIC_PAIR'], 3600));
 
             $this->assertNotEmpty(
-                (array) $raw->keys('zc:k:*' . $id),
+                (array) $raw->keys('zc:k:*' . $backendId),
                 'data key must exist after save()'
             );
             $this->assertNotEmpty(
-                (array) $raw->keys('zc:k:*' . $id . ':hash'),
+                (array) $raw->keys('zc:k:*' . $backendId . ':hash'),
                 'paired hash key must exist after save()'
             );
 
             $this->assertTrue($frontend->remove($id));
 
             $this->assertEmpty(
-                (array) $raw->keys('zc:k:*' . $id),
+                (array) $raw->keys('zc:k:*' . $backendId),
                 'data key must be gone after remove()'
             );
             $this->assertEmpty(
-                (array) $raw->keys('zc:k:*' . $id . ':hash'),
+                (array) $raw->keys('zc:k:*' . $backendId . ':hash'),
                 'paired hash key must be gone after remove()'
             );
         } finally {
