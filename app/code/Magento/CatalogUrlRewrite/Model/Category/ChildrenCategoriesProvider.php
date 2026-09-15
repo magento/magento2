@@ -20,10 +20,10 @@ class ChildrenCategoriesProvider implements ResetAfterRequestInterface
      *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
-     * @param int|null $storeId Scope returned categories' attribute values to this store; null keeps ambient scope.
+     * @param int|null $storeId
      * @return \Magento\Catalog\Model\Category[]
      */
-    public function getChildren(Category $category, $recursive = false, $storeId = null)
+    public function getChildren(Category $category, $recursive = false, ?int $storeId = null)
     {
         if ($category->isObjectNew()) {
             return [];
