@@ -109,8 +109,9 @@ class Move
      */
     private function updateUrlPathForChildren(Category $category): void
     {
-        foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
-            $childCategory->setStoreId($category->getStoreId());
+        $storeId = $category->getStoreId();
+        foreach ($this->childrenCategoriesProvider->getChildren($category, true, $storeId) as $childCategory) {
+            $childCategory->setStoreId($storeId);
             $childCategory->unsUrlPath();
             $childCategory->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($childCategory));
             $childCategory->getResource()->saveAttribute($childCategory, 'url_path');
@@ -132,13 +133,18 @@ class Move
         $origPath = $category->getOrigData('path');
         $path = $category->getData('path');
         if ($origPath != null && $path != null && $origPath != $path) {
+            $processingStoreId = $category->getStoreId();
             $category->unsUrlPath();
-            if ($category->getStoreId() !== $categoryStoreId) {
+            if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($categoryStoreId);
                 $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             }
             $category->getResource()->saveAttribute($category, 'url_path');
-            foreach ($this->childrenCategoriesProvider->getChildren($category, true) as $childCategory) {
+            if ($processingStoreId !== $categoryStoreId) {
+                $category->setStoreId($processingStoreId);
+            }
+            $children = $this->childrenCategoriesProvider->getChildren($category, true, $processingStoreId);
+            foreach ($children as $childCategory) {
                 $childCategory->unsUrlPath();
                 $childCategory->getResource()->saveAttribute($childCategory, 'url_path');
             }
