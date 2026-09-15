@@ -161,8 +161,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Invert an id => tags relationship into tag => ids, so each tag's index can be cleaned
-     * with a single SREM per tag instead of one SREM per (id, tag) pair.
+     * Invert id→tags to tag→ids, allowing a single SREM per tag instead of one SREM per (id, tag) pair.
      *
      * @param array $idsChunk
      * @param array $tagsPerId Raw hGet results, keyed by the same index as $idsChunk.
