@@ -29,4 +29,51 @@ class ZendRemoteSynchronizedCacheTest extends CacheFrontendTestCase
             $frontend->remove($id);
         }
     }
+
+    /**
+     * With a Redis remote, save()/remove() must write/remove the data key and its paired
+     * ':hash' version-marker key together, never one without the other (AC-18194).
+     */
+    public function testSaveAndRemoveKeepDataAndVersionKeysInSync(): void
+    {
+        $configuration = CacheConfigurationProvider::provide()['zend-l1-l2'][1];
+        $frontend = $this->createFrontend($configuration, 'zend-l1-l2', 'ZEND_ATOMIC_PAIR');
+        $id = $this->cacheId('zend-l1-l2', 'atomic_pair');
+
+        $redisOptions = $configuration['backend_options']['remote_backend_options'];
+        $raw = new \Credis_Client(
+            $redisOptions['server'],
+            $redisOptions['port'],
+            null,
+            '',
+            $redisOptions['database'],
+            $redisOptions['password'] ?: null
+        );
+
+        try {
+            $this->assertTrue($frontend->save('atomic-value', $id, ['ZEND_ATOMIC_PAIR'], 3600));
+
+            $this->assertNotEmpty(
+                (array) $raw->keys('zc:k:*' . $id),
+                'data key must exist after save()'
+            );
+            $this->assertNotEmpty(
+                (array) $raw->keys('zc:k:*' . $id . ':hash'),
+                'paired hash key must exist after save()'
+            );
+
+            $this->assertTrue($frontend->remove($id));
+
+            $this->assertEmpty(
+                (array) $raw->keys('zc:k:*' . $id),
+                'data key must be gone after remove()'
+            );
+            $this->assertEmpty(
+                (array) $raw->keys('zc:k:*' . $id . ':hash'),
+                'paired hash key must be gone after remove()'
+            );
+        } finally {
+            $frontend->remove($id);
+        }
+    }
 }

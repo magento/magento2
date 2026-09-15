@@ -191,6 +191,49 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     }
 
     /**
+     * Save the data key and its paired hash key on the remote backend.
+     *
+     * When the remote backend is Redis/Valkey, both keys are written in a single atomic
+     * transaction so a concurrent remove() can never observe one updated and not the other.
+     * Other backend types keep the previous two-step save, which remains racy (AC-18194).
+     *
+     * @param string $data
+     * @param string $id
+     * @param array $tags
+     * @param mixed $specificLifetime
+     * @param bool $sameRemoteData
+     * @return void
+     */
+    private function saveRemoteDataAndVersion(
+        string $data,
+        string $id,
+        array $tags,
+        $specificLifetime,
+        bool $sameRemoteData
+    ): void {
+        if ($this->remote instanceof \Magento\Framework\Cache\Backend\Redis) {
+            $this->remote->saveAtomicPair(
+                $data,
+                $id,
+                $tags,
+                $specificLifetime,
+                $this->getDataVersion($data),
+                $id . self::HASH_SUFFIX,
+                $tags,
+                $specificLifetime
+            );
+            return;
+        }
+
+        if (!empty($tags) && $sameRemoteData) {
+            // Remove first so Redis backends drop the previous tag memberships before re-save.
+            $this->remote->remove($id);
+        }
+        $this->remote->save($data, $id, $tags, $specificLifetime);
+        $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
+    }
+
+    /**
      * @inheritdoc
      */
     public function load($id, $doNotTestCacheValidity = false)
@@ -251,12 +294,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             }
         }
         if (!$isRemoteUpToDate) {
-            if (!empty($tags) && $sameRemoteData) {
-                // Remove first so Redis backends drop the previous tag memberships before re-save.
-                $this->remote->remove($id);
-            }
-            $this->remote->save($data, $id, $tags, $specificLifetime);
-            $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
+            $this->saveRemoteDataAndVersion($data, $id, $tags, $specificLifetime, $sameRemoteData);
         }
 
         if ($this->_options['use_stale_cache']) {
@@ -289,7 +327,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-        $result = $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+        $result = $this->remote instanceof \Magento\Framework\Cache\Backend\Redis
+            ? $this->remote->removeAtomicPair($id, $id . self::HASH_SUFFIX)
+            : $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
+
         if ($result && !$this->_options['use_stale_cache']) {
             $result = $this->local->remove($id);
         }
