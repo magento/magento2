@@ -22,6 +22,7 @@ class UspsAuth extends AbstractCarrier
     public const OAUTH_REQUEST_END_POINT = 'oauth2/v3/token';
     private const CONTENT_TYPE_FORM_URLENCODED = 'application/x-www-form-urlencoded';
     private const ERROR_LOG_MESSAGE = '---Exception from auth api---';
+    private const OAUTH_SCOPE = 'prices shipments tracking labels payments international-labels';
 
     /**
      * @var AsyncClientInterface
@@ -65,7 +66,7 @@ class UspsAuth extends AbstractCarrier
      */
     public function getAccessToken(string $clientId, string $clientSecret, string $clientUrl): string|false|null
     {
-        $cacheKey = self::CACHE_KEY_PREFIX;
+        $cacheKey = $this->getCacheKey($clientId, $clientUrl);
         $accessToken = $this->cache->load($cacheKey);
         if (!$accessToken) {
             $headers = [
@@ -76,7 +77,7 @@ class UspsAuth extends AbstractCarrier
                 'grant_type' => 'client_credentials',
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret,
-                'scope' => 'prices shipments tracking labels payments international-labels'
+                'scope' => self::OAUTH_SCOPE
             ]);
             try {
                 $asyncResponse = $this->httpClient->request(new Request(
@@ -104,6 +105,22 @@ class UspsAuth extends AbstractCarrier
             }
         }
         return $accessToken;
+    }
+
+    /**
+     * Build a cache key scoped to the OAuth endpoint and client identity.
+     *
+     * @param string $clientId
+     * @param string $clientUrl
+     * @return string
+     */
+    private function getCacheKey(string $clientId, string $clientUrl): string
+    {
+        return self::CACHE_KEY_PREFIX . hash('sha256', implode('|', [
+            $clientUrl,
+            $clientId,
+            self::OAUTH_SCOPE
+        ]));
     }
 
     /**
