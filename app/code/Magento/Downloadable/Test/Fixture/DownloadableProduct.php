@@ -20,6 +20,7 @@ use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
+use Magento\TestFramework\Helper\DownloadableDomainLock;
 
 class DownloadableProduct extends Product
 {
@@ -78,14 +79,18 @@ class DownloadableProduct extends Product
      */
     public function apply(array $data = []): ?DataObject
     {
-        $this->domainManager->addDomains(self::DOMAINS);
+        DownloadableDomainLock::synchronize(function () {
+            $this->domainManager->addDomains(self::DOMAINS);
+        });
 
         return parent::apply($this->prepareData($data));
     }
 
     public function revert(DataObject $data): void
     {
-        $this->domainManager->removeDomains(self::DOMAINS);
+        DownloadableDomainLock::synchronize(function () {
+            $this->domainManager->removeDomains(self::DOMAINS);
+        });
         parent::revert($data);
     }
 
