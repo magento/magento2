@@ -10,8 +10,8 @@ namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\DownloadableDomainLock;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -26,6 +26,12 @@ class ProductRepositoryTest extends WebapiAbstract
 
     private const PRODUCT_SAMPLES = 'downloadable_product_samples';
     private const PRODUCT_LINKS = 'downloadable_product_links';
+
+    /**
+     * Name of the lock guarding concurrent read-modify-write access to the downloadable domains
+     * whitelist in env.php (see Magento\Downloadable\Model\DomainManager).
+     */
+    private const DOMAIN_LOCK_NAME = 'downloadable_domains';
 
     /**
      * @var string
@@ -43,9 +49,14 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        DownloadableDomainLock::synchronize(function () use ($domainManager) {
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
             $domainManager->addDomains(['www.example.com']);
-        });
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     /**
@@ -60,9 +71,14 @@ class ProductRepositoryTest extends WebapiAbstract
 
         /** @var DomainManagerInterface $domainManager */
         $domainManager = $objectManager->get(DomainManagerInterface::class);
-        DownloadableDomainLock::synchronize(function () use ($domainManager) {
+        /** @var LockManagerInterface $lockManager */
+        $lockManager = $objectManager->get(LockManagerInterface::class);
+        $lockManager->lock(self::DOMAIN_LOCK_NAME, 60);
+        try {
             $domainManager->removeDomains(['www.example.com']);
-        });
+        } finally {
+            $lockManager->unlock(self::DOMAIN_LOCK_NAME);
+        }
     }
 
     protected function getLinkData()
