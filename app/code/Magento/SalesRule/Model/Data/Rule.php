@@ -350,6 +350,8 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      * Return product ids
      *
      * @return int[]|null
+     * @deprecated Not populated for sales rules and not consumed anywhere.
+     * @see \Magento\SalesRule\Api\Data\RuleInterface::getProductIds()
      */
     public function getProductIds()
     {
@@ -361,6 +363,8 @@ class Rule extends AbstractExtensibleObject implements RuleInterface
      *
      * @param int[]|null $productIds
      * @return $this
+     * @deprecated The value has no effect on sales rule evaluation.
+     * @see \Magento\SalesRule\Api\Data\RuleInterface::getProductIds()
      */
     public function setProductIds(?array $productIds = null)
     {
