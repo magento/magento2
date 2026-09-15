@@ -149,11 +149,19 @@ define([
             });
 
             it('should return true for value within negative range', function () {
-                expect(rules['validate-number-range'].handler('-5', '-10--1')).toBe(false);
+                expect(rules['validate-number-range'].handler('-5', '-10--1')).toBe(true);
             });
 
             it('should return false for value outside negative range', function () {
                 expect(rules['validate-number-range'].handler('0', '-10--1')).toBe(false);
+            });
+
+            it('should return true for negative value within mixed range', function () {
+                expect(rules['validate-number-range'].handler('-5', '-99-10000')).toBe(true);
+            });
+
+            it('should return false for value below mixed-sign range minimum', function () {
+                expect(rules['validate-number-range'].handler('-100', '-99-10000')).toBe(false);
             });
 
             it('should return false for invalid range param', function () {
