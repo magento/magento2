@@ -122,30 +122,7 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         foreach (array_chunk($ids, $this->_removeChunkSize) as $idsChunk) {
-            // Fetch tags for all IDs in a single pipeline.
-            $this->_redis->pipeline();
-
-            foreach ($idsChunk as $id) {
-                $this->_redis->hGet(
-                    self::PREFIX_KEY . $id,
-                    self::FIELD_TAGS
-                );
-            }
-
-            $tagsPerId = $this->_redis->exec();
-
-            // Group IDs by tag so that we can use one SREM per tag.
-            $idsPerTag = [];
-
-            foreach ($idsChunk as $index => $id) {
-                $tags = explode(',', $this->_decodeData($tagsPerId[$index] ?? false));
-
-                foreach ($tags as $tag) {
-                    if ($tag !== '') {
-                        $idsPerTag[$tag][] = $id;
-                    }
-                }
-            }
+            $idsPerTag = $this->_groupIdsByTag($idsChunk, $this->_fetchTagsPerId($idsChunk));
 
             $this->_redis->pipeline()->multi();
 
@@ -159,14 +136,51 @@ class Redis extends \Cm_Cache_Backend_Redis
 
             // Remove all IDs belonging to each tag in one command.
             foreach ($idsPerTag as $tag => $tagIds) {
-                $this->_redis->sRem(
-                    self::PREFIX_TAG_IDS . $tag,
-                    $tagIds
-                );
+                $this->_redis->sRem(self::PREFIX_TAG_IDS . $tag, $tagIds);
             }
 
             $this->_redis->exec();
         }
+    }
+
+    /**
+     * Fetch each id's stored tag list (raw, encoded) in a single pipelined round trip.
+     *
+     * @param array $idsChunk
+     * @return array
+     */
+    private function _fetchTagsPerId(array $idsChunk): array
+    {
+        $this->_redis->pipeline();
+
+        foreach ($idsChunk as $id) {
+            $this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
+        }
+
+        return (array) $this->_redis->exec();
+    }
+
+    /**
+     * Invert an id => tags relationship into tag => ids, so each tag's index can be cleaned
+     * with a single SREM per tag instead of one SREM per (id, tag) pair.
+     *
+     * @param array $idsChunk
+     * @param array $tagsPerId Raw hGet results, keyed by the same index as $idsChunk.
+     * @return array
+     */
+    private function _groupIdsByTag(array $idsChunk, array $tagsPerId): array
+    {
+        $idsPerTag = [];
+
+        foreach ($idsChunk as $index => $id) {
+            foreach (explode(',', $this->_decodeData($tagsPerId[$index] ?? false)) as $tag) {
+                if ($tag !== '') {
+                    $idsPerTag[$tag][] = $id;
+                }
+            }
+        }
+
+        return $idsPerTag;
     }
 
     /**
