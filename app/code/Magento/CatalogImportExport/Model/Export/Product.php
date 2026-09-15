@@ -1325,9 +1325,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 break;
             }
             $this->resetSourceAttributeOptionCache();
-            if (function_exists('gc_collect_cycles')) {
-                gc_collect_cycles();
-            }
+            gc_collect_cycles();
 
             if ($this->lastProcessedLinkFieldValue <= $lastProcessedLinkFieldValue) {
                 $this->_logger->critical(
