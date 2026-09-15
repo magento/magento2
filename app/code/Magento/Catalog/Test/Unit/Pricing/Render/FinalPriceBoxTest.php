@@ -399,6 +399,59 @@ class FinalPriceBoxTest extends TestCase
     /**
      * @return void
      */
+    public function testHasSpecialPriceReturnsFalseWhenSpecialPriceMapIsNotSet(): void
+    {
+        $this->object->setData('is_product_list', true);
+        $this->product->expects($this->never())->method('getId');
+        $this->priceInfo->expects($this->never())->method('getPrice');
+
+        $this->assertFalse($this->object->hasSpecialPrice());
+    }
+
+    /**
+     * @return void
+     */
+    public function testHasSpecialPriceFallsBackWhenProductIsMissingFromSpecialPriceMap(): void
+    {
+        $this->product->method('getId')->willReturn(42);
+        $this->object->setData('is_product_list', true);
+        $this->object->setData('special_price_map', [7 => false]);
+
+        $regularPriceType = $this->createMock(RegularPrice::class);
+        $finalPriceType = $this->createMock(FinalPrice::class);
+        $regularPriceAmount = $this->createMock(AmountInterface::class);
+        $finalPriceAmount = $this->createMock(AmountInterface::class);
+
+        $regularPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->willReturn(20.0);
+        $finalPriceAmount->expects($this->once())
+            ->method('getValue')
+            ->willReturn(10.0);
+
+        $regularPriceType->expects($this->once())
+            ->method('getAmount')
+            ->willReturn($regularPriceAmount);
+        $finalPriceType->expects($this->once())
+            ->method('getAmount')
+            ->willReturn($finalPriceAmount);
+
+        $this->priceInfo
+            ->method('getPrice')
+            ->willReturnCallback(function ($arg) use ($regularPriceType, $finalPriceType) {
+                if ($arg == RegularPrice::PRICE_CODE) {
+                    return $regularPriceType;
+                } elseif ($arg == FinalPrice::PRICE_CODE) {
+                    return $finalPriceType;
+                }
+            });
+
+        $this->assertTrue($this->object->hasSpecialPrice());
+    }
+
+    /**
+     * @return void
+     */
     public function testShowMinimalPrice(): void
     {
         $minimalPrice = 5.0;
