@@ -8,21 +8,34 @@ declare(strict_types=1);
 namespace Magento\CatalogUrlRewrite\Model\Category\Plugin\Category;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
+use Magento\CatalogUrlRewrite\Model\Category\ChildrenCategoriesProvider;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store as StoreModel;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Verifies that moving a category recalculates store-view-scoped url_path values
  * for the moved category and its descendants instead of losing them.
+ *
+ * DB isolation is disabled because moving a category triggers a synchronous
+ * category-product flat-index reindex, which cannot run nested inside the
+ * transaction DB isolation wraps tests in; app isolation is enabled instead so
+ * the extra store view created here doesn't leak into other tests.
  */
+#[
+    DbIsolation(false),
+    AppIsolation(true),
+]
 class MoveTest extends TestCase
 {
     /**
@@ -85,6 +98,15 @@ class MoveTest extends TestCase
             $this->categoryRepository->save($scopedCategory);
         }
         $this->storeManager->setCurrentStore(StoreModel::DEFAULT_STORE_ID);
+
+        // In production, creating/editing categories and later moving one happen as
+        // separate admin requests, so services implementing ResetAfterRequestInterface
+        // start with an empty cache by the time a move happens. Reset them here too,
+        // otherwise the repository's and children-provider's caches - populated above
+        // while this category tree had no descendants/overrides yet - would still be
+        // holding stale data for the move that follows.
+        $this->objectManager->get(CategoryRepository::class)->_resetState();
+        $this->objectManager->get(ChildrenCategoriesProvider::class)->_resetState();
 
         $movedCategory = $this->categoryRepository->get($category1Id);
         $movedCategory->move($category4Id, null);
