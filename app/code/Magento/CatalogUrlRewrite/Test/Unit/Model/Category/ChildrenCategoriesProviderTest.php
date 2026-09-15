@@ -43,7 +43,7 @@ class ChildrenCategoriesProviderTest extends TestCase
     protected $childrenCategoriesProvider;
 
     /**
-     * @var MockObject
+     * @var MockObject|AbstractCollection
      */
     protected $categoryCollection;
 
