@@ -21,6 +21,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 {
     public const TYPE_CODE = 'grouped';
 
+    /** @var string Data key for the original link qty. */
+    public const GROUPED_LINK_QTY = 'grouped_link_qty';
+
     /**
      * Cache key for Associated Products
      *
@@ -228,6 +231,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             );
 
             foreach ($collection as $item) {
+                $item->setData(self::GROUPED_LINK_QTY, $item->getData('qty'));
                 $associatedProducts[] = $item;
             }
 
