@@ -81,9 +81,16 @@ class CategoryUrlPathGenerator
 
         $path = $category->getUrlKey();
         if ($this->isNeedToGenerateUrlPathForParent($category)) {
-            $parentCategory = $parentCategory === null ?
-                $this->categoryRepository->get($category->getParentId(), $category->getStoreId()) : $parentCategory;
-            $parentPath = $this->getUrlPath($parentCategory);
+            $parentExplicitlyProvided = $parentCategory !== null;
+            $parentCategory = $parentExplicitlyProvided
+                ? $parentCategory
+                : $this->categoryRepository->get($category->getParentId(), $category->getStoreId());
+            // A parent explicitly handed in by the caller is trusted as-is, its own url_path may
+            // already reflect a change not yet flushed to the database in the current request.
+            // Re-deriving it from scratch here would read stale data instead.
+            $parentPath = $parentExplicitlyProvided
+                ? (string)$parentCategory->getUrlPath()
+                : $this->getUrlPath($parentCategory);
             $path = $parentPath === '' ? $path : $parentPath . '/' . $path;
         }
         return $path;
