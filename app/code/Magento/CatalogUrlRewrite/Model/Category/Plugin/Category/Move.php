@@ -137,17 +137,24 @@ class Move
             $category->unsUrlPath();
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($categoryStoreId);
+                // Reload url_key for $categoryStoreId's own scope - otherwise, once a second
+                // (or later) non-default store is processed, this would recompute and persist
+                // $categoryStoreId's url_path using the url_key left over in memory from
+                // whichever store was processed in the previous loop iteration.
+                $this->updateCategoryUrlKeyForStore($category);
                 $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             }
             $category->getResource()->saveAttribute($category, 'url_path');
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($processingStoreId);
             }
-            $children = $this->childrenCategoriesProvider->getChildren($category, true, $processingStoreId);
-            foreach ($children as $childCategory) {
-                $childCategory->unsUrlPath();
-                $childCategory->getResource()->saveAttribute($childCategory, 'url_path');
-            }
+            // Descendants are NOT cleared here: Category's resource model does not scope
+            // saveAttribute() by store for a cleared (null) value the way it does for a real
+            // one, so calling it here for every descendant on every store iteration would
+            // delete their url_path in every OTHER store too, leaving only the last-processed
+            // store's value in place. updateUrlPathForChildren(), called right after this
+            // method returns, already recomputes and saves each descendant's url_path for the
+            // current store with a real value, which is all that's needed.
         }
     }
 }

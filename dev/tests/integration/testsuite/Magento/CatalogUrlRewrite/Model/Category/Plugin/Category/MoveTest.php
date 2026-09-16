@@ -25,12 +25,13 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Verifies that moving a category recalculates store-view-scoped url_path values
- * for the moved category and its descendants instead of losing them.
+ * for the moved category and its descendants instead of losing them - for every
+ * store view that has an override, not just one of them.
  *
  * DB isolation is disabled because moving a category triggers a synchronous
  * category-product flat-index reindex, which cannot run nested inside the
  * transaction DB isolation wraps tests in; app isolation is enabled instead so
- * the extra store view created here doesn't leak into other tests.
+ * the extra store views created here don't leak into other tests.
  */
 #[
     DbIsolation(false),
@@ -69,6 +70,7 @@ class MoveTest extends TestCase
 
     #[
         DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(StoreFixture::class, as: 'store3'),
         DataFixture(CategoryFixture::class, ['url_key' => 'category-1'], as: 'category1'),
         DataFixture(
             CategoryFixture::class,
@@ -84,18 +86,25 @@ class MoveTest extends TestCase
     ]
     public function testMoveRecalculatesStoreScopedUrlPathForDescendants(): void
     {
-        $secondStore = $this->fixtures->get('store2');
-        $secondStoreId = (int)$secondStore->getId();
         $category1Id = (int)$this->fixtures->get('category1')->getId();
         $category2Id = (int)$this->fixtures->get('category2')->getId();
         $category3Id = (int)$this->fixtures->get('category3')->getId();
         $category4Id = (int)$this->fixtures->get('category4')->getId();
 
-        $this->storeManager->setCurrentStore($secondStore);
-        foreach ([$category1Id, $category2Id, $category3Id] as $categoryId) {
-            $scopedCategory = $this->categoryRepository->get($categoryId, $secondStoreId);
-            $scopedCategory->setUrlKey($scopedCategory->getUrlKey() . '-tt');
-            $this->categoryRepository->save($scopedCategory);
+        // Two non-default store views, each with their own url_key override, so a
+        // regression that only recalculates the first (or the last) one processed
+        // is caught, not just a regression that drops every non-default store.
+        $stores = [
+            (int)$this->fixtures->get('store2')->getId() => '-tt',
+            (int)$this->fixtures->get('store3')->getId() => '-uu',
+        ];
+        foreach ($stores as $storeId => $suffix) {
+            $this->storeManager->setCurrentStore($storeId);
+            foreach ([$category1Id, $category2Id, $category3Id] as $categoryId) {
+                $scopedCategory = $this->categoryRepository->get($categoryId, $storeId);
+                $scopedCategory->setUrlKey($scopedCategory->getUrlKey() . $suffix);
+                $this->categoryRepository->save($scopedCategory);
+            }
         }
         $this->storeManager->setCurrentStore(StoreModel::DEFAULT_STORE_ID);
 
@@ -115,17 +124,22 @@ class MoveTest extends TestCase
         // aren't served from the shared repository's pre-move instance cache.
         $categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
 
-        $this->assertSame(
-            'category-4/category-1-tt',
-            $categoryRepository->get($category1Id, $secondStoreId)->getUrlPath()
-        );
-        $this->assertSame(
-            'category-4/category-1-tt/category-2-tt',
-            $categoryRepository->get($category2Id, $secondStoreId)->getUrlPath()
-        );
-        $this->assertSame(
-            'category-4/category-1-tt/category-2-tt/category-3-tt',
-            $categoryRepository->get($category3Id, $secondStoreId)->getUrlPath()
-        );
+        foreach ($stores as $storeId => $suffix) {
+            $this->assertSame(
+                "category-4/category-1{$suffix}",
+                $categoryRepository->get($category1Id, $storeId)->getUrlPath(),
+                "category1's url_path was not recalculated for store {$storeId}"
+            );
+            $this->assertSame(
+                "category-4/category-1{$suffix}/category-2{$suffix}",
+                $categoryRepository->get($category2Id, $storeId)->getUrlPath(),
+                "category2's url_path was not recalculated for store {$storeId}"
+            );
+            $this->assertSame(
+                "category-4/category-1{$suffix}/category-2{$suffix}/category-3{$suffix}",
+                $categoryRepository->get($category3Id, $storeId)->getUrlPath(),
+                "category3's url_path was not recalculated for store {$storeId}"
+            );
+        }
     }
 }
