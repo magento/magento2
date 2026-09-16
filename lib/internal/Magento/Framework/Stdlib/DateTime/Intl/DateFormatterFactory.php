@@ -39,13 +39,13 @@ class DateFormatterFactory
         int $dateStyle,
         int $timeStyle,
         ?string $timeZone = null,
-        bool $useFourDigitsForYear = true
+        bool $useFourDigitsForYear = true,
     ): \IntlDateFormatter {
         $formatter = new \IntlDateFormatter(
             $locale,
             $dateStyle,
             $timeStyle,
-            $timeZone
+            $timeZone,
         );
         /**
          * Process custom date formats
