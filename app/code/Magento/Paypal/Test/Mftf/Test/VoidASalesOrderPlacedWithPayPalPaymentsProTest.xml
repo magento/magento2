@@ -40,7 +40,7 @@
             <actionGroup ref="StorefrontPaypalFillCardDataActionGroup" stepKey="fillCardDataPaypal">
                 <argument name="cardData" value="VisaDefaultCard"/>
             </actionGroup>
-            <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+            <actionGroup ref="StorefrontClickPlaceOrderButtonActionGroup" stepKey="placeOrder"/>
             <waitForText selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="waitForLoadSuccessPage"/>
             <waitForText selector="{{CheckoutSuccessMainSection.success}}" userInput="We'll email you an order confirmation with details and tracking info." stepKey="seeSuccessMessage"/>
             <waitForElementVisible selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>

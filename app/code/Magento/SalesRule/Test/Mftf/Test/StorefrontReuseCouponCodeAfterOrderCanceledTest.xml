@@ -108,7 +108,8 @@
         </actionGroup>
 
         <!-- Navigate to admin order detail page -->
-        <amOnPage url="{{AdminOrderPage.url({$grabOrderNumber})}}" stepKey="navigateToOrderPage1"/>
+        <click selector="{{AdminOrdersGridSection.viewLink('$grabOrderNumber')}}" stepKey="navigateToOrderPage1"/>
+        <waitForPageLoad stepKey="waitForOrderPage1"/>
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage" after="navigateToOrderPage1"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeViewOrderPage"/>
         <!-- Cancel order -->
