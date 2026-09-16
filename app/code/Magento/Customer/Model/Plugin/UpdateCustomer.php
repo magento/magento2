@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Plugin;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -46,6 +48,8 @@ class UpdateCustomer
      * @param CustomerInterface $customer
      * @param string|null $passwordHash
      * @return array
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function beforeSave(
         CustomerRepositoryInterface $customerRepository,
@@ -86,7 +90,7 @@ class UpdateCustomer
         $newCustomer = clone $originCustomer;
         foreach ($customer->__toArray() as $name => $value) {
             if ($name === CustomerInterface::CUSTOM_ATTRIBUTES) {
-                $value = $customer->getCustomAttributes();
+                $value = array_replace($newCustomer->getCustomAttributes(), $customer->getCustomAttributes());
             } elseif ($name === CustomerInterface::EXTENSION_ATTRIBUTES_KEY) {
                 $value = $customer->getExtensionAttributes();
             } elseif ($name === CustomerInterface::KEY_ADDRESSES) {
