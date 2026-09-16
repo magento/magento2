@@ -108,8 +108,7 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Save two cache entries (e.g. a value and a paired version marker) as a single Redis
-     * transaction, so a concurrent read can never observe one written and not the other.
+     * Save both cache entries in one Redis transaction, preventing reads from seeing only one entry.
      *
      * Mirrors the non-Lua branch of the parent's own save() for each entry, but queues both
      * inside one MULTI/EXEC block instead of issuing two independent save() calls (AC-18194).
