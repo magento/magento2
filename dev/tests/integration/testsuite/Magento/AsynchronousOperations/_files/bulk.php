@@ -72,7 +72,7 @@ $bulks = [
         'operation_count' => 2,
     ],
 ];
-// Only processed operations are saved into database (i.e. operations that are not in 'open' state)
+// Operations in any status, including 'open', are saved into database
 $operations = [
     [
         'bulk_uuid' => 'bulk-uuid-2',

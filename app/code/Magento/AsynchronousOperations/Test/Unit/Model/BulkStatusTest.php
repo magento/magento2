@@ -328,14 +328,13 @@ class BulkStatusTest extends TestCase
         $persistedCollection->expects($this->once())->method('getSize')->willReturn($persistedQty);
 
         $openCollection
+            ->expects($this->exactly(2))
             ->method('addFieldToFilter')
-            ->willReturnCallback(function ($arg1, $arg2) use ($bulkUuid, $openCollection) {
-                if ($arg1 === 'bulk_uuid' && $arg2 === $bulkUuid) {
-                    return $openCollection;
-                }
-                if ($arg1 === 'status' && $arg2 === OperationInterface::STATUS_TYPE_OPEN) {
-                    return $openCollection;
-                }
+            ->willReturnCallback(function ($field, $value) use ($bulkUuid, $openCollection) {
+                $this->assertContains(
+                    [$field, $value],
+                    [['bulk_uuid', $bulkUuid], ['status', OperationInterface::STATUS_TYPE_OPEN]]
+                );
                 return $openCollection;
             });
         $openCollection->expects($this->once())->method('getSize')->willReturn($openQty);
@@ -344,14 +343,13 @@ class BulkStatusTest extends TestCase
             $completeCollection->expects($this->never())->method('addFieldToFilter');
         } else {
             $completeCollection
+                ->expects($this->exactly(2))
                 ->method('addFieldToFilter')
-                ->willReturnCallback(function ($arg1, $arg2) use ($bulkUuid, $completeCollection) {
-                    if ($arg1 === 'bulk_uuid' && $arg2 === $bulkUuid) {
-                        return $completeCollection;
-                    }
-                    if ($arg1 === 'status' && $arg2 === OperationInterface::STATUS_TYPE_COMPLETE) {
-                        return $completeCollection;
-                    }
+                ->willReturnCallback(function ($field, $value) use ($bulkUuid, $completeCollection) {
+                    $this->assertContains(
+                        [$field, $value],
+                        [['bulk_uuid', $bulkUuid], ['status', OperationInterface::STATUS_TYPE_COMPLETE]]
+                    );
                     return $completeCollection;
                 });
             $completeCollection->method('getSize')->willReturn($completeQty);
