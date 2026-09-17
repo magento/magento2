@@ -7,8 +7,6 @@ namespace Magento\Framework\Backup;
 
 /**
  * Class to work media folder and database backups
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Media extends Snapshot
 {

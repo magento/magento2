@@ -14,8 +14,6 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
  * Abstract class for form, column and fieldset
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class AbstractForm extends \Magento\Framework\DataObject
 {
