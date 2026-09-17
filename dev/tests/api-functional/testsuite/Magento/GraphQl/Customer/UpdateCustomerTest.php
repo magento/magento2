@@ -285,7 +285,7 @@ QUERY;
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'A customer with the same email address already exists in an associated website.'
+            'A customer with the same email address (customer_two@example.com) already exists in an associated website.'
         );
 
         $currentPassword = 'password';
