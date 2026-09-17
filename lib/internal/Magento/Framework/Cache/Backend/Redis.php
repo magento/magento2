@@ -26,6 +26,14 @@ class Redis extends \Cm_Cache_Backend_Redis
     private $preloadKeys = [];
 
     /**
+     * Whether the preload pipeline has already run. Cannot be inferred from $preloadedData: a batch
+     * in which every key missed leaves it empty, so the pipeline would re-fire on every load().
+     *
+     * @var bool
+     */
+    private bool $preloaded = false;
+
+    /**
      * Whether to use lua on garbage collection
      *
      * @var bool
@@ -51,7 +59,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        if (!empty($this->preloadKeys) && empty($this->preloadedData)) {
+        if (!empty($this->preloadKeys) && !$this->preloaded) {
             $redis =  $this->_slave ?? $this->_redis;
             $redis = $redis->pipeline();
 
@@ -60,6 +68,7 @@ class Redis extends \Cm_Cache_Backend_Redis
             }
 
             $redisResponse = $redis->exec();
+            $this->preloaded = true;
             $this->preloadedData = is_array($redisResponse) ?
                 array_filter(array_combine($this->preloadKeys, $redisResponse)) :
                 [];
@@ -83,6 +92,10 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     public function save($data, $id, $tags = [], $specificLifetime = 86_400_000)
     {
+        // The preloaded copy is a snapshot from the first load(), so a write makes it stale. Dropped
+        // unconditionally, including when the write below fails, so the next load() re-reads Redis.
+        unset($this->preloadedData[$id]);
+
         // @todo add special handling of MAGE tag, save clenup
         try {
             $result = parent::save($data, $id, $tags, $specificLifetime);
@@ -98,6 +111,9 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     public function remove($id)
     {
+        // Same as save(): drop the snapshot so the next load() reports the removal.
+        unset($this->preloadedData[$id]);
+
         try {
             $result = parent::remove($id);
         } catch (\Throwable $exception) {
