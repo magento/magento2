@@ -140,28 +140,41 @@ class BulkStatus implements BulkStatusInterface
     public function getBulkStatus($bulkUuid)
     {
         /**
-         * Number of operations that has been processed (i.e. operations with any status but 'open')
-         */
-        $allProcessedOperationsQty = (int)$this->operationCollectionFactory->create()
-            ->addFieldToFilter('bulk_uuid', $bulkUuid)
-            ->getSize();
-
-        if ($allProcessedOperationsQty == 0) {
-            return BulkSummaryInterface::NOT_STARTED;
-        }
-
-        /**
-         * Total number of operations that has been scheduled within the given bulk
+         * Total number of operations scheduled for this bulk.
          */
         $allOperationsQty = $this->getOperationCount($bulkUuid);
 
         /**
-         * Number of operations that has not been started yet (i.e. operations with status 'open')
+         * Number of operation rows persisted for this bulk (includes OPEN operations).
          */
-        $allOpenOperationsQty = $allOperationsQty - $allProcessedOperationsQty;
+        $persistedOperationsQty = (int)$this->operationCollectionFactory->create()
+            ->addFieldToFilter('bulk_uuid', $bulkUuid)
+            ->getSize();
 
         /**
-         * Number of operations that has been completed successfully
+         * Number of operations still in OPEN status.
+         */
+        $openOperationsQty = (int)$this->operationCollectionFactory->create()
+            ->addFieldToFilter('bulk_uuid', $bulkUuid)
+            ->addFieldToFilter('status', OperationInterface::STATUS_TYPE_OPEN)
+            ->getSize();
+
+        /**
+         * Operations that have left the OPEN state.
+         */
+        $processedOperationsQty = $persistedOperationsQty - $openOperationsQty;
+
+        /**
+         * Pending operations: OPEN rows plus scheduled operations that are not persisted yet.
+         */
+        $pendingOperationsQty = $openOperationsQty + max(0, $allOperationsQty - $persistedOperationsQty);
+
+        if ($processedOperationsQty === 0) {
+            return BulkSummaryInterface::NOT_STARTED;
+        }
+
+        /**
+         * Number of operations that have been completed successfully
          */
         $allCompleteOperationsQty = $this->operationCollectionFactory->create()
             ->addFieldToFilter('bulk_uuid', $bulkUuid)->addFieldToFilter(
@@ -173,7 +186,7 @@ class BulkStatus implements BulkStatusInterface
             return BulkSummaryInterface::FINISHED_SUCCESSFULLY;
         }
 
-        if ($allOpenOperationsQty > 0 && $allOpenOperationsQty !== $allOperationsQty) {
+        if ($pendingOperationsQty > 0) {
             return BulkSummaryInterface::IN_PROGRESS;
         }
 
