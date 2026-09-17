@@ -115,42 +115,72 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
                 $resultUrlKey = $category->formatUrlKey($category->getOrigData('name'));
                 $this->updateUrlKey($category, $resultUrlKey);
             }
-            if ($category->hasChildren()) {
-                $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
-                $linkField = $metadata->getLinkField();
-                $id = $category->getData($linkField);
-                if ($id) {
-                    $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
-                    if ($defaultUrlKey) {
-                        $isStoreScopedRevert = !$category->isObjectNew()
-                            && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
-                        if ($isStoreScopedRevert) {
-                            $this->removeStoreScopedUrlKeyOverride($category, $linkField);
-                        }
-                        $this->updateUrlKey($category, $defaultUrlKey);
-                        if ($isStoreScopedRevert) {
-                            $category->setUrlKey(null);
-                        }
-                    }
-                }
-            }
+            $this->restoreDefaultUrlKeyIfNeeded($category);
         }
     }
 
     /**
-     * Remove a store-scoped url_key override row directly, without disturbing other stores.
+     * Restore url_key/url_path from the default-scope value.
+     *
+     * Runs for categories with children (to cascade the default to descendants) and for
+     * categories reverted to the default url_key at a specific store view, including leaf
+     * categories without children, which the default-store-scope branch above never handles.
+     *
+     * @param Category $category
+     * @return void
+     * @throws LocalizedException
+     */
+    private function restoreDefaultUrlKeyIfNeeded(Category $category): void
+    {
+        $isStoreScopedRevert = !$category->isObjectNew() && $category->getStoreId() !== Store::DEFAULT_STORE_ID;
+        if (!$category->hasChildren()) {
+            $hasStoreScopedOverride = $isStoreScopedRevert
+                && $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
+                    $category->getStoreId(),
+                    $category->getId(),
+                    Category::ENTITY
+                );
+            if (!$hasStoreScopedOverride) {
+                return;
+            }
+        }
+        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $linkField = $metadata->getLinkField();
+        $id = $category->getData($linkField);
+        if (!$id) {
+            return;
+        }
+        $defaultUrlKey = $this->getDefaultUrlKey->execute((int)$id);
+        if (!$defaultUrlKey) {
+            return;
+        }
+        if ($isStoreScopedRevert) {
+            $this->removeStoreScopedAttributeOverride($category, $linkField, 'url_key');
+        }
+        $this->updateUrlKey($category, $defaultUrlKey);
+        if ($isStoreScopedRevert) {
+            $category->setUrlKey(null);
+        }
+    }
+
+    /**
+     * Remove a store-scoped attribute override row directly, without disturbing other stores.
      *
      * Category's resource model (unlike Product's) does not scope saveAttribute()/getAttributeRow()
      * by store, so a store-scoped removal must be done explicitly here rather than through it.
      *
      * @param Category $category
      * @param string $linkField
+     * @param string $attributeCode
      * @return void
      */
-    private function removeStoreScopedUrlKeyOverride(Category $category, string $linkField): void
-    {
+    private function removeStoreScopedAttributeOverride(
+        Category $category,
+        string $linkField,
+        string $attributeCode
+    ): void {
         $resource = $category->getResource();
-        $attribute = $resource->getAttribute('url_key');
+        $attribute = $resource->getAttribute($attributeCode);
         $resource->getConnection()->delete(
             $attribute->getBackendTable(),
             [
@@ -297,12 +327,22 @@ class CategoryUrlPathAutogeneratorObserver implements ObserverInterface
             static fn (Category $first, Category $second) => $first->getLevel() <=> $second->getLevel()
         );
 
+        // Indexed by id so a descendant that is not a direct child can still be given its actual,
+        // already-refreshed parent from this same pass, instead of falling through to a parentless
+        // recompute that relies on a repository lookup which can return a stale cached instance.
+        $overriddenChildrenById = [];
         foreach ($overriddenChildren as $child) {
-            if ((int)$child->getParentId() === (int)$category->getId()) {
-                $this->updateUrlPathForCategory($child, $storeScopedCategory);
+            $overriddenChildrenById[(int)$child->getId()] = $child;
+        }
+
+        foreach ($overriddenChildren as $child) {
+            $parentId = (int)$child->getParentId();
+            if ($parentId === (int)$category->getId()) {
+                $parent = $storeScopedCategory;
             } else {
-                $this->updateUrlPathForCategory($child);
+                $parent = $overriddenChildrenById[$parentId] ?? null;
             }
+            $this->updateUrlPathForCategory($child, $parent);
         }
     }
 
