@@ -19,14 +19,14 @@ use Magento\Framework\App\ObjectManager;
 class Theme implements RuleInterface
 {
     /**
-     * Rule
+     * Underlying fallback rule
      *
      * @var RuleInterface
      */
     protected $rule;
 
     /**
-     * Component registrar
+     * Locates registered component paths
      *
      * @var ComponentRegistrarInterface
      */
@@ -73,6 +73,18 @@ class Theme implements RuleInterface
                     ComponentRegistrar::THEME,
                     $theme->getFullPath()
                 );
+                if (empty($params['theme_dir'])
+                    && $theme instanceof \Magento\Framework\DataObject
+                    && $theme->getData('area')
+                    && $theme->getThemePath()
+                ) {
+                    // Area-emulated processes must locate physical themes registered under their own area
+                    // (GitHub #17673).
+                    $params['theme_dir'] = $this->componentRegistrar->getPath(
+                        ComponentRegistrar::THEME,
+                        $theme->getData('area') . ThemeInterface::PATH_SEPARATOR . $theme->getThemePath()
+                    );
+                }
 
                 $params = $this->getThemePubStaticDir($theme, $params);
                 $result = array_merge($result, $this->rule->getPatternDirs($params));
@@ -106,9 +118,13 @@ class Theme implements RuleInterface
 
     /**
      * Get DirectoryList instance
+     *
+     * Kept for backward compatibility.
+     *
      * @return DirectoryList
      *
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 unused DI-bypassing accessor kept for BC
+     * @see \Magento\Framework\App\Filesystem\DirectoryList
      */
     private function getDirectoryList()
     {
