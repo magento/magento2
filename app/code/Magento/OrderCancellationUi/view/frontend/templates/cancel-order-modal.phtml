@@ -17,7 +17,7 @@
             <select id="cancel-order-reason-<?=/* @noEscape */ $block->getOrder()->getId() ?>"
                     class="cancel-order-reason" name="reason">
                 <?php foreach ($block->getReasons() as $key => $description): ?>
-                    <option value="<?= $escaper->escapeHtml(__($description)) ?>">
+                    <option value="<?= $escaper->escapeHtml($description) ?>">
                         <?= $escaper->escapeHtml(__($description)) ?>
                     </option>
                 <?php endforeach; ?>
