@@ -117,12 +117,23 @@ class MoveTest extends TestCase
         $this->objectManager->get(CategoryRepository::class)->_resetState();
         $this->objectManager->get(ChildrenCategoriesProvider::class)->_resetState();
 
-        $movedCategory = $this->categoryRepository->get($category1Id);
+        // Load the category in the LAST-processed non-default store's scope, simulating
+        // an admin performing the move while that store view is selected - this is the
+        // scenario that catches a regression where refreshing $categoryStoreId's own
+        // entry deletes stores processed earlier in the loop instead of refreshing them.
+        $lastStoreId = array_key_last($stores);
+        $movedCategory = $this->categoryRepository->get($category1Id, $lastStoreId);
         $movedCategory->move($category4Id, null);
 
         // Fetch through a fresh repository instance so store-scoped reads
         // aren't served from the shared repository's pre-move instance cache.
         $categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
+
+        $this->assertSame(
+            'category-4/category-1',
+            $categoryRepository->get($category1Id, StoreModel::DEFAULT_STORE_ID)->getUrlPath(),
+            "category1's default-scope url_path must be refreshed, not deleted, by the move"
+        );
 
         foreach ($stores as $storeId => $suffix) {
             $this->assertSame(

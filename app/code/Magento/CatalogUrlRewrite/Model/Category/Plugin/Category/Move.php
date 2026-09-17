@@ -137,13 +137,16 @@ class Move
             $category->unsUrlPath();
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($categoryStoreId);
-                // Reload url_key for $categoryStoreId's own scope - otherwise, once a second
-                // (or later) non-default store is processed, this would recompute and persist
-                // $categoryStoreId's url_path using the url_key left over in memory from
-                // whichever store was processed in the previous loop iteration.
-                $this->updateCategoryUrlKeyForStore($category);
-                $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             }
+            // Always reload url_key and recompute before saving - never save a null/unset
+            // url_path here. $categoryStoreId isn't necessarily the first store this loop
+            // processes (e.g. the move was performed while a non-default store view was
+            // selected in the admin), so if this ran unconditionally with a null value it
+            // would delete $categoryStoreId's url_path outright instead of refreshing it -
+            // and Category's resource model doesn't scope that delete by store, so it would
+            // wipe every store already processed earlier in this same loop, not just this one.
+            $this->updateCategoryUrlKeyForStore($category);
+            $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             $category->getResource()->saveAttribute($category, 'url_path');
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($processingStoreId);

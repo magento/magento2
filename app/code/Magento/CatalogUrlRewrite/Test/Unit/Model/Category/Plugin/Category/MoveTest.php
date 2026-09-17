@@ -114,7 +114,10 @@ class MoveTest extends TestCase
      * each recompute - including the "refresh the default scope" pass that runs
      * while a non-default store is being processed - so a second (or later)
      * non-default store never gets its url_path computed from a url_key left over
-     * from whichever store was processed previously.
+     * from whichever store was processed previously, and the default scope's own
+     * refresh never saves a null/unset url_path (which - since Category's resource
+     * model doesn't scope a null save by store - would delete every store's value,
+     * not just the default scope's).
      */
     public function testAfterChangeParentRecalculatesUrlPathForEveryStore(): void
     {
@@ -133,9 +136,9 @@ class MoveTest extends TestCase
             ->with('path')->willReturn('1/2/5');
         $this->categoryMock->expects($this->exactly(3))->method('getData')
             ->with('path')->willReturn('1/3/6/5');
-        $this->categoryMock->expects($this->exactly(5))->method('getId')->willReturnSelf();
+        $this->categoryMock->expects($this->exactly(6))->method('getId')->willReturnSelf();
         $this->categoryMock->expects($this->exactly(6))->method('unsUrlPath')->willReturnSelf();
-        $this->categoryMock->expects($this->exactly(5))->method('setUrlPath');
+        $this->categoryMock->expects($this->exactly(6))->method('setUrlPath');
         $this->categoryMock->expects($this->exactly(6))->method('getResource')->willReturn($this->subjectMock);
 
         // A child category only exists in the tree fetched for store 1, so its
@@ -144,7 +147,7 @@ class MoveTest extends TestCase
         $this->mockChildrenProvider($childMock, $requestedChildStoreIds);
         $this->mockSaveAttributeRecording($storeIdState, $categoryUrlKeyState, $savedAtStoreScope);
         $this->mockUrlKeyReload($urlKeyReloadStoreIds);
-        $this->categoryUrlPathGeneratorMock->expects($this->exactly(6))->method('getUrlPath')
+        $this->categoryUrlPathGeneratorMock->expects($this->exactly(7))->method('getUrlPath')
             ->willReturnCallback(
                 function ($category) use (&$categoryUrlKeyState, $urlPath, $childMock) {
                     return $category === $childMock ? $urlPath : 'path:' . $categoryUrlKeyState;
@@ -163,14 +166,15 @@ class MoveTest extends TestCase
         );
 
         // The category's own url_path must be recalculated and saved at each
-        // store's own scope, using THAT store's own url_key - not repeatedly at
-        // store 0, and never using a url_key left over from a store processed
-        // earlier in the loop (store 0's re-save while processing store 2 must
-        // still use store 0's own key, not store 1's, which was processed just
-        // before it).
+        // store's own scope, using THAT store's own url_key - never null (a null
+        // save here would delete every store's value, not just the current one),
+        // never repeatedly at store 0 alone, and never using a url_key left over
+        // from a store processed earlier in the loop (store 0's re-save while
+        // processing store 2 must still use store 0's own key, not store 1's,
+        // which was processed just before it).
         $this->assertSame(
             [
-                [0, null],
+                [0, 'key-for-store-0'],
                 [0, 'key-for-store-0'],
                 [0, 'key-for-store-0'],
                 [1, 'key-for-store-1'],
@@ -182,8 +186,8 @@ class MoveTest extends TestCase
         // The store-specific url_key must be reloaded for the actual store being
         // processed, not the original (default) scope the move started from -
         // including the extra reload while refreshing the default scope's entry
-        // during a non-default store's iteration.
-        $this->assertSame([0, 0, 1, 0, 2], $urlKeyReloadStoreIds);
+        // during every other store's iteration (including the default store's own).
+        $this->assertSame([0, 0, 0, 1, 0, 2], $urlKeyReloadStoreIds);
         // Descendants must be fetched scoped to the store currently being processed.
         $this->assertSame([0, 1, 2], $requestedChildStoreIds);
     }
@@ -197,7 +201,7 @@ class MoveTest extends TestCase
      */
     private function mockCategoryStoreScopeTracking(int &$storeIdState): void
     {
-        $this->categoryMock->expects($this->exactly(12))->method('getStoreId')->willReturnCallback(
+        $this->categoryMock->expects($this->exactly(13))->method('getStoreId')->willReturnCallback(
             function () use (&$storeIdState) {
                 return $storeIdState;
             }
@@ -219,7 +223,7 @@ class MoveTest extends TestCase
      */
     private function mockCategoryUrlKeyTracking(?string &$categoryUrlKeyState): void
     {
-        $this->categoryMock->expects($this->exactly(5))->method('setUrlKey')->willReturnCallback(
+        $this->categoryMock->expects($this->exactly(6))->method('setUrlKey')->willReturnCallback(
             function ($urlKey) use (&$categoryUrlKeyState) {
                 $categoryUrlKeyState = $urlKey;
                 return $this->categoryMock;
@@ -307,7 +311,7 @@ class MoveTest extends TestCase
                 return 'key-for-store-' . $originalCategoryStoreId;
             }
         );
-        $originalCategory->expects($this->exactly(5))->method('setStoreId')
+        $originalCategory->expects($this->exactly(6))->method('setStoreId')
             ->willReturnCallback(
                 function ($storeId) use ($originalCategory, &$urlKeyReloadStoreIds, &$originalCategoryStoreId) {
                     $urlKeyReloadStoreIds[] = $storeId;
@@ -315,7 +319,7 @@ class MoveTest extends TestCase
                     return $originalCategory;
                 }
             );
-        $this->categoryFactory->expects($this->exactly(5))->method('create')
+        $this->categoryFactory->expects($this->exactly(6))->method('create')
             ->willReturn($originalCategory);
     }
 }
