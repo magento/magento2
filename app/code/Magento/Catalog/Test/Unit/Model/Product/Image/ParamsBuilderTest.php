@@ -167,7 +167,7 @@ class ParamsBuilderTest extends TestCase
      */
     public static function buildDataProvider()
     {
-        return [
+        return array_merge(self::watermarkOpacityDataProvider(), [
             'watermark config' => [
                 1,
                 '1',
@@ -226,6 +226,56 @@ class ParamsBuilderTest extends TestCase
                     'watermark_width' => null,
                     'watermark_height' => null,
                     'keep_frame' => false
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Provides watermark opacity edge cases for testBuild()
+     *
+     * @return array
+     */
+    private static function watermarkOpacityDataProvider(): array
+    {
+        return [
+            'watermark config with empty string opacity and position' => [
+                1,
+                '1',
+                true,
+                [
+                    'design/watermark/small_image_image' => 'stores/1/magento-logo.png',
+                    'design/watermark/small_image_size' => '60x40',
+                    'design/watermark/small_image_imageOpacity' => '',
+                    'design/watermark/small_image_position' => '',
+                ],
+                [
+                    'type' => 'small_image'
+                ],
+                [
+                    'watermark_file' => 'stores/1/magento-logo.png',
+                    'watermark_image_opacity' => null,
+                    'watermark_position' => null,
+                    'watermark_width' => '60',
+                    'watermark_height' => '40',
+                    'keep_frame' => true
+                ]
+            ],
+            'watermark config with zero opacity' => [
+                1,
+                '1',
+                true,
+                [
+                    'design/watermark/small_image_image' => 'stores/1/magento-logo.png',
+                    'design/watermark/small_image_size' => '60x40',
+                    'design/watermark/small_image_imageOpacity' => '0',
+                    'design/watermark/small_image_position' => 'bottom-right',
+                ],
+                [
+                    'type' => 'small_image'
+                ],
+                [
+                    'keep_frame' => true
                 ]
             ]
         ];
