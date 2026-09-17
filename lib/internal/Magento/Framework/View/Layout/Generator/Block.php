@@ -278,7 +278,10 @@ class Block implements Layout\GeneratorInterface
             try {
                 $block = $this->blockFactory->createBlock($block, $arguments);
             } catch (\ReflectionException $e) {
-                $this->logger->critical($e->getMessage());
+                $this->logger->critical(
+                    'Unable to instantiate the {blockClass} block',
+                    ['blockClass' => $block, 'exception' => $e]
+                );
             }
         }
         if (!$block instanceof \Magento\Framework\View\Element\AbstractBlock) {

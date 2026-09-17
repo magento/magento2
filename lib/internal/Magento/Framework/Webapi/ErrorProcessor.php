@@ -306,10 +306,10 @@ class ErrorProcessor
     protected function _critical(\Exception $exception)
     {
         $reportId = uniqid("webapi-");
-        $message = "Report ID: {$reportId}; Message: {$exception->getMessage()}";
-        $code = $exception->getCode();
-        $exception = new \Exception($message, $code, $exception);
-        $this->_logger->critical($exception);
+        $this->_logger->critical(
+            'Web API request failed. Report ID: {reportId}',
+            ['reportId' => $reportId, 'exception' => $exception]
+        );
         return $reportId;
     }
 

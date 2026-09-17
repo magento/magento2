@@ -30,7 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 class AreaTest extends TestCase
 {
-    const SCOPE_ID = '1';
+    public const SCOPE_ID = '1';
 
     /**
      * @var ObjectManager
@@ -327,7 +327,10 @@ class AreaTest extends TestCase
             ->getMock();
         $this->loggerMock->expects($this->once())
             ->method('critical')
-            ->with($exception);
+            ->with(
+                'Unable to apply the user agent design exception for the {areaCode} area',
+                ['areaCode' => $this->areaCode, 'exception' => $exception]
+            );
         $this->object->detectDesign($requestMock);
     }
 }

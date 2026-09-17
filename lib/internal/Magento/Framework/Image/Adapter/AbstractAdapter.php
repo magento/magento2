@@ -699,7 +699,10 @@ abstract class AbstractAdapter implements AdapterInterface
             try {
                 $this->directoryWrite->create($this->directoryWrite->getRelativePath($destination));
             } catch (FileSystemException $e) {
-                $this->logger->critical($e);
+                $this->logger->critical(
+                    'Unable to create the {destination} image directory',
+                    ['destination' => $destination, 'exception' => $e]
+                );
                 //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \DomainException(
                     'Unable to write file into directory ' . $destination . '. Access forbidden.'

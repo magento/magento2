@@ -177,7 +177,10 @@ class Area implements \Magento\Framework\App\AreaInterface
                 return true;
             }
         } catch (\Exception $e) {
-            $this->_logger->critical($e);
+            $this->_logger->critical(
+                'Unable to apply the user agent design exception for the {areaCode} area',
+                ['areaCode' => $this->_code, 'exception' => $e]
+            );
         }
         return false;
     }
