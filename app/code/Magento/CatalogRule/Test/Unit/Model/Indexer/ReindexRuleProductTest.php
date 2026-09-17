@@ -472,6 +472,41 @@ class ReindexRuleProductTest extends TestCase
     /**
      * @return void
      */
+    public function testHandleAntecedentRulesScopesDeleteByWebsiteAndCustomerGroup(): void
+    {
+        $websiteId = 3;
+        $productIds = [
+            4 => [$websiteId => 1, 'has_antecedent_rule' => 1],
+        ];
+
+        $this->prepareResourceMock();
+        $this->prepareRuleMock([3], $productIds, [10, 20]);
+
+        $this->localeDateMock->method('getConfigTimezone')
+            ->willReturnMap([
+                [ScopeInterface::SCOPE_WEBSITE, self::ADMIN_WEBSITE_ID, $this->adminTimeZone],
+                [ScopeInterface::SCOPE_WEBSITE, $websiteId, $this->websiteTz]
+            ]);
+
+        $this->connectionMock->expects(self::once())
+            ->method('delete')
+            ->with(
+                'catalogrule_product_replica',
+                [
+                    'product_id = ?' => 4,
+                    'rule_id NOT IN (?)' => 100,
+                    'sort_order = ?' => 1,
+                    'website_id = ?' => $websiteId,
+                    'customer_group_id IN (?)' => [10, 20],
+                ]
+            );
+
+        self::assertTrue($this->model->execute($this->ruleMock, 100, true));
+    }
+
+    /**
+     * @return void
+     */
     private function prepareResourceMock(): void
     {
         $this->tableSwapperMock->expects(self::once())
