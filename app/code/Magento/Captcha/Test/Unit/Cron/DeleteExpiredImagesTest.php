@@ -11,6 +11,7 @@ use Magento\Captcha\Cron\DeleteExpiredImages;
 use Magento\Captcha\Helper\Adminhtml\Data as AdminhtmlData;
 use Magento\Captcha\Helper\Data;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Io\File;
@@ -68,6 +69,11 @@ class DeleteExpiredImagesTest extends TestCase
     protected $_fileInfo;
 
     /**
+     * @var TargetDirectory|MockObject
+     */
+    protected $targetDirectory;
+
+    /**
      * @var int
      */
     public static $currentTime;
@@ -83,9 +89,17 @@ class DeleteExpiredImagesTest extends TestCase
         $this->_directory = $this->createMock(Write::class);
         $this->_storeManager = $this->createMock(StoreManager::class);
         $this->_fileInfo = $this->createMock(File::class);
+        $this->targetDirectory = $this->createMock(TargetDirectory::class);
 
         $this->_filesystem->expects(
             $this->once()
+        )->method(
+            'getDirectoryWrite'
+        )->willReturn(
+            $this->_directory
+        );
+        $this->targetDirectory->expects(
+            $this->any()
         )->method(
             'getDirectoryWrite'
         )->willReturn(
@@ -97,7 +111,8 @@ class DeleteExpiredImagesTest extends TestCase
             $this->_adminHelper,
             $this->_filesystem,
             $this->_storeManager,
-            $this->_fileInfo
+            $this->_fileInfo,
+            $this->targetDirectory
         );
     }
 
