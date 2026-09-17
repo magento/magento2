@@ -143,6 +143,10 @@ class Router implements RouterInterface
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
             || ($prefix = substr((string)$target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
+            if (strpos('/', $target) === 0 && strlen($target) === 1) {
+                // If target is '/', then we make it an empty string to avoid double slashes in the URL
+                $target = '';
+            }
             $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }
         return $this->redirect($request, $target, $rewrite->getRedirectType());
