@@ -7,7 +7,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
 /**
  * Entity attribute option resource model
- *
  */
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
