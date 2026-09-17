@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Source;
 
 /**
  * Catalog category landing page attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
