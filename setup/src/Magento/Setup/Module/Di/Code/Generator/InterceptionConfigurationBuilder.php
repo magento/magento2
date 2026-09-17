@@ -14,6 +14,7 @@ use Magento\Framework\Interception\Config\Config as InterceptionConfig;
 use Magento\Framework\Interception\Definition\Runtime;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\InterceptableValidator;
+use Magento\Setup\Module\Di\Code\Reader\OrphanedPluginList;
 use Magento\Setup\Module\Di\Code\Reader\Type;
 
 class InterceptionConfigurationBuilder
@@ -26,34 +27,14 @@ class InterceptionConfigurationBuilder
     private $areaCodesList = [];
 
     /**
-     * @var InterceptionConfig
-     */
-    private $interceptionConfig;
-
-    /**
-     * @var PluginList
-     */
-    private $pluginList;
-
-    /**
-     * @var Type
-     */
-    private $typeReader;
-
-    /**
-     * @var Manager
-     */
-    private $cacheManager;
-
-    /**
-     * @var InterceptableValidator
-     */
-    private $interceptableValidator;
-
-    /**
      * @var ConfigInterface
      */
     private $omConfig;
+
+    /**
+     * @var OrphanedPluginList
+     */
+    private $orphanedPluginList;
 
     /**
      * @param InterceptionConfig $interceptionConfig
@@ -62,21 +43,19 @@ class InterceptionConfigurationBuilder
      * @param Manager $cacheManager
      * @param InterceptableValidator $interceptableValidator
      * @param ConfigInterface|null $omConfig
+     * @param OrphanedPluginList|null $orphanedPluginList
      */
     public function __construct(
-        InterceptionConfig $interceptionConfig,
-        PluginList $pluginList,
-        Type $typeReader,
-        Manager $cacheManager,
-        InterceptableValidator $interceptableValidator,
-        ?ConfigInterface $omConfig = null
+        readonly private InterceptionConfig $interceptionConfig,
+        readonly private PluginList $pluginList,
+        readonly private Type $typeReader,
+        readonly private Manager $cacheManager,
+        readonly private InterceptableValidator $interceptableValidator,
+        ?ConfigInterface $omConfig = null,
+        ?OrphanedPluginList $orphanedPluginList = null
     ) {
-        $this->interceptionConfig = $interceptionConfig;
-        $this->pluginList = $pluginList;
-        $this->typeReader = $typeReader;
-        $this->cacheManager = $cacheManager;
-        $this->interceptableValidator = $interceptableValidator;
         $this->omConfig = $omConfig ?? ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->orphanedPluginList = $orphanedPluginList ?: new OrphanedPluginList();
     }
 
     /**
@@ -149,6 +128,7 @@ class InterceptionConfigurationBuilder
             }
             $key = implode('', $scopePriority);
             $inheritedConfig[$key] = $this->filterNullInheritance($pluginListCloned->getPluginsConfig());
+            $this->orphanedPluginList->collectFromPluginData($pluginListCloned->getConfiguredPluginData());
         }
         return $inheritedConfig;
     }
