@@ -820,6 +820,61 @@ interface AdapterInterface
     public function getIfNullSql($expression, $value = 0);
 
     /**
+     * GROUP_CONCAT / string_agg equivalent
+     *
+     * @param string|\Zend_Db_Expr $expression
+     * @param string $separator
+     * @param string|\Zend_Db_Expr|null $orderBy
+     * @param bool $distinct
+     * @return \Zend_Db_Expr
+     */
+    public function getGroupConcatSql($expression, $separator = ',', $orderBy = null, $distinct = false);
+
+    /**
+     * FIELD() / CASE equivalent for ORDER BY a fixed list
+     *
+     * @param string|\Zend_Db_Expr $expression
+     * @param array $values
+     * @return \Zend_Db_Expr
+     */
+    public function getFieldSql($expression, array $values);
+
+    /**
+     * Cast an expression to text for UNION type alignment
+     *
+     * @param string|\Zend_Db_Expr $expression
+     * @return \Zend_Db_Expr
+     */
+    public function castToText($expression);
+
+    /**
+     * Cast an expression to a numeric type for arithmetic
+     *
+     * @param string|\Zend_Db_Expr $expression
+     * @return \Zend_Db_Expr
+     */
+    public function castToNumeric($expression);
+
+    /**
+     * CREATE TABLE new LIKE origin
+     *
+     * @param string $newTableName
+     * @param string $originTableName
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function createTableLike($newTableName, $originTableName);
+
+    /**
+     * CREATE TEMPORARY TABLE from a SELECT (and optional index definitions)
+     *
+     * @param string $name
+     * @param string[] $indexStatements
+     * @param \Magento\Framework\DB\Select $select
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function createTemporaryTableFromSelect($name, array $indexStatements, \Magento\Framework\DB\Select $select);
+
+    /**
      * Generate fragment of SQL, that combine together (concatenate) the results from data array
      *
      * All arguments in data must be quoted
