@@ -391,6 +391,35 @@ class RendererTest extends TestCase
     }
 
     /**
+     * getQtyOrdered() can return a numeric string like '0.0000', which is truthy in PHP,
+     * so a bare `$qty ?: 1` guard does not prevent division by zero; the guard must be numeric.
+     *
+     * @param int|string $qtyOrdered
+     */
+    #[DataProvider('zeroQtyOrderedDataProvider')]
+    public function testGetBaseUnitDisplayPriceExclTaxWithZeroQtyOrdered($qtyOrdered)
+    {
+        $baseRowTotal = 100;
+
+        $this->weeeHelper->expects($this->any())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $this->item->expects($this->any())
+            ->method('getBaseRowTotal')
+            ->willReturn($baseRowTotal);
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->willReturn($qtyOrdered);
+
+        $this->assertEquals(
+            (float)$baseRowTotal,
+            $this->renderer->getBaseUnitDisplayPriceExclTax()
+        );
+    }
+
+    /**
      * @param int $price
      * @param int $weeeTax
      * @param bool $weeeEnabled
@@ -722,6 +751,50 @@ class RendererTest extends TestCase
             ->willReturn(1);
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
+    }
+
+    /**
+     * getQtyOrdered() can return a numeric string like '0.0000', which is truthy in PHP,
+     * so a bare `$qty ?: 1` guard does not prevent division by zero; the guard must be numeric.
+     *
+     * @param int|string $qtyOrdered
+     */
+    #[DataProvider('zeroQtyOrderedDataProvider')]
+    public function testGetBaseFinalUnitDisplayPriceExclTaxWithZeroQtyOrdered($qtyOrdered)
+    {
+        $baseRowTotal = 100;
+
+        $this->weeeHelper->expects($this->any())
+            ->method('isEnabled')
+            ->willReturn(false);
+
+        $this->item->expects($this->any())
+            ->method('getBaseRowTotal')
+            ->willReturn($baseRowTotal);
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->willReturn($qtyOrdered);
+
+        $this->assertEquals(
+            (float)$baseRowTotal,
+            $this->renderer->getBaseFinalUnitDisplayPriceExclTax()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public static function zeroQtyOrderedDataProvider()
+    {
+        return [
+            'qty_ordered_zero_int' => [
+                'qtyOrdered' => 0,
+            ],
+            'qty_ordered_zero_numeric_string' => [
+                'qtyOrdered' => '0.0000',
+            ],
+        ];
     }
 
     /**
