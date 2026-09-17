@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout\AclCondition;
@@ -21,6 +22,7 @@ use Magento\Framework\View\Layout\Reader\Visibility\Condition;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
@@ -121,16 +123,16 @@ class BlockTest extends TestCase
         $aclValue
     ) {
         // Convert string expectations to matchers
-        $scheduleStructureCount = is_string($scheduleStructureCount) 
-            ? $this->createInvocationMatcher($scheduleStructureCount) 
+        $scheduleStructureCount = is_string($scheduleStructureCount)
+            ? $this->createInvocationMatcher($scheduleStructureCount)
             : $scheduleStructureCount;
-        $getCondition = is_string($getCondition) 
-            ? $this->createInvocationMatcher($getCondition) 
+        $getCondition = is_string($getCondition)
+            ? $this->createInvocationMatcher($getCondition)
             : $getCondition;
-        $setCondition = is_string($setCondition) 
-            ? $this->createInvocationMatcher($setCondition) 
+        $setCondition = is_string($setCondition)
+            ? $this->createInvocationMatcher($setCondition)
             : $setCondition;
-        
+
         $this->context->expects($this->once())->method('getScheduledStructure')
             ->willReturn($this->scheduledStructure);
         $this->scheduledStructure->expects($getCondition)
@@ -190,6 +192,40 @@ class BlockTest extends TestCase
     /**
      * @return array
      */
+    public function testReferenceBlockWithIfconfigDoesNotScheduleWhenConfigIsDisabled(): void
+    {
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with('config_path', ScopeInterface::SCOPE_STORE)
+            ->willReturn(false);
+
+        $this->context->expects($this->once())
+            ->method('getScheduledStructure')
+            ->willReturn($this->scheduledStructure);
+
+        $this->scheduledStructure->expects($this->never())
+            ->method('getStructureElementData');
+        $this->scheduledStructure->expects($this->never())
+            ->method('setStructureElementData');
+
+        $this->prepareReaderPool(
+            '<referenceBlock name="test_reference" ifconfig="config_path" />',
+            'referenceBlock'
+        );
+
+        $objectManager = new ObjectManager($this);
+        $condition = $objectManager->getObject(Condition::class);
+        $block = $this->getBlock([
+            'readerPool' => $this->readerPool,
+            'conditionReader' => $condition,
+            'scopeType' => 'scope',
+            'scopeConfig' => $scopeConfig,
+        ]);
+
+        $block->interpret($this->context, $this->currentElement);
+    }
+
     public static function processBlockDataProvider()
     {
         return [
@@ -274,16 +310,16 @@ class BlockTest extends TestCase
         $setRemoveCondition
     ) {
         // Convert string expectations to matchers
-        $getCondition = is_string($getCondition) 
-            ? $this->createInvocationMatcher($getCondition) 
+        $getCondition = is_string($getCondition)
+            ? $this->createInvocationMatcher($getCondition)
             : $getCondition;
-        $setCondition = is_string($setCondition) 
-            ? $this->createInvocationMatcher($setCondition) 
+        $setCondition = is_string($setCondition)
+            ? $this->createInvocationMatcher($setCondition)
             : $setCondition;
-        $setRemoveCondition = is_string($setRemoveCondition) 
-            ? $this->createInvocationMatcher($setRemoveCondition) 
+        $setRemoveCondition = is_string($setRemoveCondition)
+            ? $this->createInvocationMatcher($setRemoveCondition)
             : $setRemoveCondition;
-        
+
         if ($literal == 'referenceBlock' && $remove == 'false') {
             $this->scheduledStructure->expects($this->once())
                 ->method('unsetElementFromListToRemove')
