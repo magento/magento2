@@ -244,6 +244,57 @@ class FilePermissionsTest extends TestCase
     /**
      * @return void
      */
+    public function testGetMissingWritablePathsForDeploymentConfigWithWritableConfigDirectory(): void
+    {
+        $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
+        foreach ($directoryMethods as $method) {
+            $this->directoryWriteMock->expects($this->once())
+                ->method($method)
+                ->willReturn(true);
+        }
+        $this->directoryListMock->expects($this->never())->method('getPath');
+
+        $this->assertEmpty($this->filePermissions->getMissingWritablePathsForDeploymentConfig());
+    }
+
+    /**
+     * A read-only app/etc whose entries are all writable is accepted; pub/media and the other installation
+     * directories are never looked at.
+     *
+     * @return void
+     */
+    public function testGetMissingWritablePathsForDeploymentConfigWithReadOnlyConfigDirectory(): void
+    {
+        $configPath = sys_get_temp_dir() . '/' . uniqid('magento-app-etc-', true);
+        mkdir($configPath);
+        try {
+            $directoryMethods = ['isExist', 'isDirectory', 'isReadable'];
+            foreach ($directoryMethods as $method) {
+                $this->directoryWriteMock->expects($this->once())
+                    ->method($method)
+                    ->willReturn(true);
+            }
+            $this->directoryWriteMock->expects($this->once())
+                ->method('isWritable')
+                ->willReturn(false);
+            $this->directoryListMock
+                ->method('getPath')
+                ->willReturnMap([
+                    [DirectoryList::CONFIG, $configPath],
+                    [DirectoryList::GENERATED_CODE, BP . '/generated/code'],
+                    [DirectoryList::GENERATED_METADATA, BP . '/generated/metadata'],
+                    [DirectoryList::SESSION, BP . '/var/session'],
+                ]);
+
+            $this->assertEmpty($this->filePermissions->getMissingWritablePathsForDeploymentConfig());
+        } finally {
+            rmdir($configPath);
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function testGetMissingWritableDirectoriesForDbUpgrade(): void
     {
         $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
