@@ -6,8 +6,6 @@
 
 /**
  * Catalog Rule Product Aggregated Price per date Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\CatalogRule\Model\ResourceModel\Rule\Product;
 
@@ -32,7 +30,7 @@ class Price extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $entityId
      * @param string $customerGroupId
      * @param string $websiteId
-     * @param array $updateFields       the array of fields for compare with rule price and update
+     * @param array $updateFields the array of fields for compare with rule price and update
      * @param string $websiteDate
      * @return \Magento\CatalogRule\Model\ResourceModel\Rule\Product\Price
      */
