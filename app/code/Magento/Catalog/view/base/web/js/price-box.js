@@ -36,6 +36,7 @@ define([
 
             box.trigger('updatePrice');
             this.cache.displayPrices = utils.deepClone(this.options.prices);
+            this.updateProductTierPrice();
         },
 
         /**
@@ -224,16 +225,27 @@ define([
          */
         updateProductTierPrice: function updateProductTierPrice() {
             var originalPrice,
+                tierPrice,
                 prices = {'prices': {}};
+
+            if (!this.options.priceConfig || !this.options.priceConfig.tierPrices) {
+                return;
+            }
 
             if (this.options.prices.finalPrice) {
                 originalPrice = this.options.prices.finalPrice.amount;
-                prices.prices.finalPrice = {'amount': this.getPrice('price') - originalPrice};
+                tierPrice = this.getPrice('price');
+                prices.prices.finalPrice = {
+                    'amount': (tierPrice !== undefined ? tierPrice : originalPrice) - originalPrice
+                };
             }
 
             if (this.options.prices.basePrice) {
                 originalPrice = this.options.prices.basePrice.amount;
-                prices.prices.basePrice = {'amount': this.getPrice('basePrice') - originalPrice};
+                tierPrice = this.getPrice('basePrice');
+                prices.prices.basePrice = {
+                    'amount': (tierPrice !== undefined ? tierPrice : originalPrice) - originalPrice
+                };
             }
 
             this.updatePrice(prices);
@@ -250,6 +262,10 @@ define([
                 result,
                 tierPriceItem,
                 i;
+
+            if (!this.options.priceConfig || !this.options.priceConfig.tierPrices) {
+                return result;
+            }
 
             for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
                 tierPriceItem = this.options.priceConfig.tierPrices[i];
