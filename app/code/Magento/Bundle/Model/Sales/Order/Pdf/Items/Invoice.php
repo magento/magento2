@@ -250,7 +250,7 @@ class Invoice extends AbstractItems
                     $lines[][] = ['text' => $text, 'feed' => 40];
                 }
 
-                $draw[] = ['lines' => $lines, 'height' => 20, 'shift' => 5];
+                $draw[] = ['lines' => $lines, 'height' => 20];
             }
         }
 
