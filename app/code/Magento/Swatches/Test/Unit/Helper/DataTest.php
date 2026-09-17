@@ -334,6 +334,7 @@ class DataTest extends TestCase
 
         $this->prepareVariationCollection();
 
+        $this->productCollectionMock->expects($this->once())->method('setPageSize')->with(1);
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
         $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);

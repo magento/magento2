@@ -266,6 +266,7 @@ class Data
 
         $this->addFilterByAttributes($productCollection, $resultAttributesToFilter);
 
+        $productCollection->setPageSize(1);
         $variationProduct = $productCollection->getFirstItem();
         if ($variationProduct && $variationProduct->getId()) {
             return $this->productRepository->getById($variationProduct->getId());
