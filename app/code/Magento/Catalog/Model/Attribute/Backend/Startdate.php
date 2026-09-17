@@ -6,26 +6,19 @@
 namespace Magento\Catalog\Model\Attribute\Backend;
 
 /**
- *
  * Special Start Date attribute backend
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 {
     /**
-     * Date model
-     *
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $_date;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      */
@@ -53,6 +46,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 
     /**
      * Before save hook.
+     *
      * Prepare attribute value for save
      *
      * @param \Magento\Framework\DataObject $object
@@ -72,6 +66,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
 
     /**
      * Product from date attribute validate function.
+     *
      * In case invalid data throws exception.
      *
      * @param \Magento\Framework\DataObject $object
