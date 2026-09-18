@@ -101,7 +101,7 @@
         <!-- Open second product  -->
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($createSimpleProductSecond.name$)}}" stepKey="openSecondProduct"/>
         <waitForPageLoad time="30" stepKey="waitForSecondProduct"/>
-        <seeInCurrentUrl url="{$simpleProductSecondNameLower}.html" stepKey="checkSecondSimpleProductUrlKey"/>
+        <seeInCurrentUrl url="u2.html" stepKey="checkSecondSimpleProductUrlKey"/>
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
             <argument name="storeView" value="storeViewData"/>
