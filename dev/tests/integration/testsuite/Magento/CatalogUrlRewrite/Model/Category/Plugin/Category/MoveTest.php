@@ -34,6 +34,8 @@ use PHPUnit\Framework\TestCase;
  * category-product flat-index reindex, which cannot run nested inside the
  * transaction DB isolation wraps tests in; app isolation is enabled instead so
  * the extra store views created here don't leak into other tests.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 #[
     DbIsolation(false),
