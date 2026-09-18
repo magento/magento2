@@ -67,9 +67,9 @@ class CalculationTest extends TestCase
     private function verifyResults($resultsArr, $code1, $code2 = null)
     {
         // determine expected size of the results array
-        $expectedSize = strlen($code1) + 1; // array will also include the vanilla 'code1' value
+        $expectedSize = mb_strlen($code1) + 1; // array will also include the vanilla 'code1' value
         if ($code2) {
-            $expectedSize = strlen($code2) + 2; // array will include both 'code1' and 'code2'
+            $expectedSize = mb_strlen($code2) + 2; // array will include both 'code1' and 'code2'
         }
         $actualSize = count($resultsArr);
         $this->assertEquals(
