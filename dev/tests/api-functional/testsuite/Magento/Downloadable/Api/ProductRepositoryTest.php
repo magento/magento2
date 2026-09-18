@@ -34,6 +34,18 @@ class ProductRepositoryTest extends WebapiAbstract
     private const DOMAIN_LOCK_NAME = 'downloadable_domains';
 
     /**
+     * Number of attempts for requests that may transiently fail because the domain just
+     * whitelisted in env.php (see setUp()) has not yet been picked up by the web server
+     */
+    private const DOMAIN_RETRY_ATTEMPTS = 3;
+
+    /**
+     * Delay between retries, in seconds. Chosen to exceed a typical opcache.revalidate_freq
+     * window so a retry has a real chance of observing the freshly written env.php.
+     */
+    private const DOMAIN_RETRY_DELAY_SECONDS = 2;
+
+    /**
      * @var string
      */
     private $testImagePath;
@@ -656,8 +668,34 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->webApiCallWithDomainRetry($serviceInfo, $requestData);
         return $response;
+    }
+
+    /**
+     * Call the webapi, retrying if it transiently fails with the "domain not whitelisted"
+     * error caused by the web server not yet observing the env.php write from setUp().
+     *
+     * @param array $serviceInfo
+     * @param array $requestData
+     * @return array
+     */
+    private function webApiCallWithDomainRetry(array $serviceInfo, array $requestData)
+    {
+        $attempt = 0;
+        do {
+            try {
+                return $this->_webApiCall($serviceInfo, $requestData);
+            } catch (\Exception $e) {
+                $attempt++;
+                if ($attempt >= self::DOMAIN_RETRY_ATTEMPTS
+                    || strpos($e->getMessage(), self::DOMAIN_LOCK_NAME) === false
+                ) {
+                    throw $e;
+                }
+                sleep(self::DOMAIN_RETRY_DELAY_SECONDS);
+            }
+        } while (true);
     }
 
     /**
@@ -715,7 +753,7 @@ class ProductRepositoryTest extends WebapiAbstract
             ],
         ];
         $requestData = ['product' => $product];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $response = $this->webApiCallWithDomainRetry($serviceInfo, $requestData);
         return $response;
     }
 }
