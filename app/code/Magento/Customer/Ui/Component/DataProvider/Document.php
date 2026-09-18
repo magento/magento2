@@ -187,8 +187,11 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private function setWebsiteValue()
     {
         $value = $this->getData(self::$websiteAttributeCode);
-        $list = $this->storeManager->getWebsites();
-        $this->setCustomAttribute(self::$websiteAttributeCode, $list[$value]->getName());
+        $list = $this->storeManager->getWebsites(true);
+        $this->setCustomAttribute(
+            self::$websiteAttributeCode,
+            $value !== null && isset($list[$value]) ? $list[$value]->getName() : ''
+        );
         $this->setCustomAttribute(self::$websiteIdAttributeCode, $value);
     }
 
@@ -200,7 +203,8 @@ class Document extends \Magento\Framework\View\Element\UiComponent\DataProvider\
     private function setConfirmationValue()
     {
         $value = $this->getData(self::$confirmationAttributeCode);
-        $websiteId = $this->getData(self::$websiteIdAttributeCode) ?: $this->getData(self::$websiteAttributeCode);
+        $websiteId = $this->getData(self::$websiteIdAttributeCode)
+            ?? $this->getData(self::$websiteAttributeCode);
         $isConfirmRequired = $this->scopeConfig->isSetFlag(
             AccountManagement::XML_PATH_IS_CONFIRM,
             ScopeInterface::SCOPE_WEBSITES,
