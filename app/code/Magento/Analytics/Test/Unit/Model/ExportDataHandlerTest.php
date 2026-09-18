@@ -15,6 +15,7 @@ use Magento\Analytics\Model\ReportWriterInterface;
 use Magento\Framework\Archive;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\File\WriteInterface as FileWriteInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -183,23 +184,30 @@ class ExportDataHandlerTest extends TestCase
                 $isArchiveSourceDirectory
             );
 
-        $fileContent = 'Some text';
+        $archiveReadFileMock = $this->createMock(FileWriteInterface::class);
         $this->directoryMock
             ->expects($this->once())
-            ->method('readFile')
-            ->with($archiveRelativePath)
-            ->willReturn($fileContent);
+            ->method('openFile')
+            ->with($archiveRelativePath, 'r')
+            ->willReturn($archiveReadFileMock);
+        $archiveReadFileMock
+            ->expects($this->once())
+            ->method('close');
 
+        $destinationFileMock = $this->createMock(FileWriteInterface::class);
         $this->cryptographerMock
             ->expects($this->once())
-            ->method('encode')
-            ->with($fileContent)
+            ->method('encodeToFile')
+            ->with($archiveReadFileMock, $destinationFileMock)
             ->willReturn($this->encodedContextMock);
 
         $this->fileRecorderMock
             ->expects($this->once())
-            ->method('recordNewFile')
-            ->with($this->encodedContextMock);
+            ->method('recordNewFileStreamed')
+            ->willReturnCallback(function (callable $writer) use ($destinationFileMock) {
+                $this->assertSame($this->encodedContextMock, $writer($destinationFileMock));
+                return true;
+            });
 
         $this->assertTrue($this->exportDataHandler->prepareExportData());
     }
