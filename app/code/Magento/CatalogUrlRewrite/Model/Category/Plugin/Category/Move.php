@@ -83,6 +83,15 @@ class Move
             $this->updateUrlPathForChildren($category);
         }
         $category->setStoreId($categoryStoreId);
+        // Re-sync url_key/url_path in memory to $categoryStoreId's own scope: the loop above
+        // leaves them reflecting whichever store was processed last, and Category::move()
+        // dispatches catalog_category_move_after (regenerating storefront url_rewrites) right
+        // after this plugin returns, on this same object. If url_key were left mismatched with
+        // the just-restored store id, that event's listener would generate the rewrite for
+        // $categoryStoreId using another store's url_key instead of reloading it fresh.
+        $this->updateCategoryUrlKeyForStore($category);
+        $category->unsUrlPath();
+        $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
 
         return $result;
     }
