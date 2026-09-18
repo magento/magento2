@@ -5,6 +5,9 @@
  */
 namespace Magento\Backend\Model\Menu;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -12,9 +15,9 @@ namespace Magento\Backend\Model\Menu;
  */
 class Config
 {
-    const CACHE_ID = 'backend_menu_config';
+    public const CACHE_ID = 'backend_menu_config';
 
-    const CACHE_MENU_OBJECT = 'backend_menu_object';
+    public const CACHE_MENU_OBJECT = 'backend_menu_object';
 
     /**
      * @var \Magento\Framework\App\Cache\Type\Config
@@ -105,10 +108,7 @@ class Config
      * Build menu model from config
      *
      * @return \Magento\Backend\Model\Menu
-     * @throws \Exception|\InvalidArgumentException
-     * @throws \Exception
-     * @throws \BadMethodCallException|\Exception
-     * @throws \Exception|\OutOfRangeException
+     * @throws LocalizedException
      */
     public function getMenu()
     {
@@ -117,15 +117,47 @@ class Config
             return $this->_menu;
         } catch (\InvalidArgumentException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'Please check your menu.xml files for missing required attributes '
+                    . '(e.g. \'parent\' or \'action\'). Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\BadMethodCallException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'Please check your menu.xml files for missing required parameters. '
+                    . 'Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\OutOfRangeException $e) {
             $this->_logger->critical($e);
-            throw $e;
+            throw new LocalizedException(
+                new Phrase(
+                    'An error occurred while building the admin menu. '
+                    . 'A menu item references a non-existent parent item. '
+                    . 'Please check your menu.xml files. Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         } catch (\Exception $e) {
-            throw $e;
+            $this->_logger->critical($e);
+            throw new LocalizedException(
+                new Phrase(
+                    'An unexpected error occurred while building the admin menu. '
+                    . 'Original error: %1',
+                    [$e->getMessage()]
+                ),
+                $e
+            );
         }
     }
 

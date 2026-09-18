@@ -91,6 +91,11 @@
             </actionGroup>
         </after>
 
+        <!-- Reindex to ensure newly created configurable product and its children are reflected before the first stock check -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBeforeFirstStockCheck">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
         <!-- Check to make sure that the configurable product shows up as in stock --><!--<amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage"/>-->
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToConfigProductPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStoreFrontLoad"/>

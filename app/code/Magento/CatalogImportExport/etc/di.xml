@@ -92,4 +92,27 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Export\MandatoryAttributesProvider">
+        <arguments>
+            <argument name="mandatoryEavAttributes" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+                <item name="store_view_code" xsi:type="string">store_view_code</item>
+                <item name="attribute_set_code" xsi:type="string">attribute_set_code</item>
+                <item name="product_type" xsi:type="string">product_type</item>
+                <item name="categories" xsi:type="string">categories</item>
+                <item name="product_websites" xsi:type="string">product_websites</item>
+                <item name="swatch_image_label" xsi:type="string">swatch_image_label</item>
+                <item name="map_enabled" xsi:type="string">map_enabled</item>
+                <item name="product_options_container" xsi:type="string">product_options_container</item>
+                <item name="additional_attributes" xsi:type="string">additional_attributes</item>
+                <item name="additional_images" xsi:type="string">additional_images</item>
+                <item name="additional_image_labels" xsi:type="string">additional_image_labels</item>
+                <item name="hide_from_product_page" xsi:type="string">hide_from_product_page</item>
+                <item name="custom_options" xsi:type="string">custom_options</item>
+            </argument>
+            <argument name="systemColumnProviders" xsi:type="array">
+                <item name="catalog_row_customizer" xsi:type="object">Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

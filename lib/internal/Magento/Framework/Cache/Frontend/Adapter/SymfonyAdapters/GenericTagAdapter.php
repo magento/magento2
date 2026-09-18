@@ -171,6 +171,27 @@ class GenericTagAdapter implements TagAdapterInterface
     {
         // Intentional no-op: No separate indices exist
     }
+
+    /**
+     * @inheritDoc
+     *
+     * No-op: this adapter keeps no separate tag index that can accumulate orphaned members.
+     */
+    public function garbageCollect(int $batchSize = 1000): int
+    {
+        return 0;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * No-op: this fallback wraps backends (Memcached, APCu, Database, ...) with no uniform
+     * server-memory concept exposed through this adapter.
+     */
+    public function getFillingPercentage(): int
+    {
+        return 0;
+    }
     // phpcs:enable Magento2.CodeAnalysis.EmptyBlock
 
     /**

@@ -16,11 +16,13 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFacto
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Test for graphql resolver-level cache key calculator.
  */
+#[AllowMockObjectsWithoutExpectations]
 class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**

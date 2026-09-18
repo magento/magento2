@@ -6,16 +6,14 @@
 namespace Magento\Framework\Cache;
 
 use Magento\Framework\Cache\Backend\Redis;
+use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Zend_Cache;
 use Zend_Cache_Exception;
 
 /**
  * Extended Zend Cache Core with backend decorator support
- *
- * @deprecated No longer used in production. All cache operations now use Symfony cache adapter.
- * @see \Magento\Framework\Cache\Frontend\Adapter\Symfony
  */
-class Core extends \Zend_Cache_Core
+class Core extends \Zend_Cache_Core implements LowLevelFrontendInterface
 {
     /**
      * Available options
@@ -215,5 +213,15 @@ class Core extends \Zend_Cache_Core
     public function __debugInfo()
     {
         return [];
+    }
+
+    /**
+     * Legacy Zend cache core has no tag/index adapter.
+     *
+     * @return TagAdapterInterface|null
+     */
+    public function getTagAdapter(): ?TagAdapterInterface
+    {
+        return null;
     }
 }

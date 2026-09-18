@@ -8,15 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\ViewModel\Customer;
 
-use Magento\Customer\Model\Config\Share as ConfigShare;
 use Magento\Customer\ViewModel\Customer\Store as CustomerStore;
-use Magento\Framework\App\Request\DataPersistorInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store as SystemStore;
-use Magento\Store\Model\Website;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,9 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 class StoreTest extends TestCase
 {
-    /** @var ObjectManagerHelper */
-    private $objectManagerHelper;
-
     /**
      * @var CustomerStore
      */
@@ -37,78 +28,24 @@ class StoreTest extends TestCase
      */
     private $systemStore;
 
-    /**
-     * @var Store
-     */
-    private $store;
-
-    /**
-     * @var ConfigShare
-     */
-    protected $configShare;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var DataPersistorInterface
-     */
-    private $dataPersistor;
-
     protected function setUp(): void
     {
-        $this->systemStore = $this->createMock(SystemStore::class);
-        $this->store = $this->createMock(Store::class);
-        $this->configShare = $this->createMock(ConfigShare::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->dataPersistor = $this->createMock(DataPersistorInterface::class);
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->customerStore = $this->objectManagerHelper->getObject(
-            CustomerStore::class,
-            [
-                'systemStore' => $this->systemStore,
-                'configShare' => $this->configShare,
-                'storeManager' => $this->storeManager,
-                'dataPersistor' => $this->dataPersistor
-            ]
-        );
+        $this->systemStore = $this->createStub(SystemStore::class);
+        $this->customerStore = new CustomerStore($this->systemStore);
     }
 
     /**
-     * Test that method return correct array of options
+     * Each option (website header, group and nested store view) is stamped with its real
+     * website id in a single pass, regardless of the customer account sharing configuration.
      *
-     * @param array $options
-     * @param bool $isWebsiteScope
-     * @param bool $isCustomerDataInSession
      * @return void
      */
-    #[DataProvider('dataProviderOptionsArray')]
-    public function testToOptionArray(array $options, bool $isWebsiteScope, bool $isCustomerDataInSession): void
+    public function testToOptionArrayAddsRealWebsiteIdInSinglePass(): void
     {
-        $this->configShare->method('isWebsiteScope')
-            ->willReturn($isWebsiteScope);
-        $this->store->method('getWebsiteId')
-            ->willReturn(1);
-
-        $websiteMock = $this->createPartialMock(Website::class, ['getId']);
-        $websiteMock->method('getId')->willReturn(1);
-        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock]);
-
-        if ($isCustomerDataInSession) {
-            $this->dataPersistor->method('get')
-                ->with('customer')
-                ->willReturn([
-                    'account' => ['website_id' => '1']
-                ]);
-        } else {
-            $this->storeManager->method('getDefaultStoreView')
-                ->willReturn($this->store);
-        }
-
         $this->systemStore->method('getStoreData')
-            ->willReturn($this->store);
+            ->willReturnMap([
+                ['1', $this->createStore(1)],
+            ]);
         $this->systemStore->method('getStoreValuesForForm')
             ->willReturn([
                 [
@@ -120,97 +57,106 @@ class StoreTest extends TestCase
                     'label' => 'Main Website',
                     'value' => [
                         [
-                            'label' => '    Default Store View',
+                            'label' => '    Default Store View',
                             'value' => '1',
-                        ]
+                        ],
                     ],
                     '__disableTmpl' => true,
-                ]
+                ],
             ]);
 
-        $this->assertEquals($options, $this->customerStore->toOptionArray());
+        $expected = [
+            [
+                'label' => 'Main Website',
+                'value' => [],
+                '__disableTmpl' => true,
+                'website_id' => 1,
+            ],
+            [
+                'label' => 'Main Website',
+                'value' => [
+                    [
+                        'label' => '    Default Store View',
+                        'value' => '1',
+                        'website_id' => 1,
+                    ],
+                ],
+                '__disableTmpl' => true,
+                'website_id' => 1,
+            ],
+        ];
+
+        $this->assertEquals($expected, $this->customerStore->toOptionArray());
     }
 
     /**
-     * Data provider for testToOptionArray test
+     * The options must not be multiplied by the number of websites: with two websites the result
+     * contains one entry per source option (each tagged with its own website id), not
+     * websites x options. This guards against the O(websites x options) payload regression.
      *
-     * @return array
+     * @return void
      */
-    public static function dataProviderOptionsArray(): array
+    public function testToOptionArrayDoesNotDuplicateOptionsAcrossWebsites(): void
     {
-        return [
-            [
-                'options' => [
-                    [
-                        'label' => 'Main Website',
-                        'value' => [],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
+        $this->systemStore->method('getStoreData')
+            ->willReturnMap([
+                ['1', $this->createStore(1)],
+                ['2', $this->createStore(2)],
+            ]);
+        $this->systemStore->method('getStoreValuesForForm')
+            ->willReturn([
+                ['label' => 'Website One', 'value' => [], '__disableTmpl' => true],
+                [
+                    'label' => '    Group One',
+                    'value' => [
+                        ['label' => '        Store View One', 'value' => '1'],
                     ],
-                    [
-                        'label' => 'Main Website',
-                        'value' => [
-                            [
-                                'label' => '    Default Store View',
-                                'value' => '1',
-                                'website_id' => '1',
-                            ]
-                        ],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
-                    ]
+                    '__disableTmpl' => true,
                 ],
-                'isWebsiteScope' => true,
-                'isCustomerDataInSession' => false,
+                ['label' => 'Website Two', 'value' => [], '__disableTmpl' => true],
+                [
+                    'label' => '    Group Two',
+                    'value' => [
+                        ['label' => '        Store View Two', 'value' => '2'],
+                    ],
+                    '__disableTmpl' => true,
+                ],
+            ]);
+        $expected = [
+            ['label' => 'Website One', 'value' => [], '__disableTmpl' => true, 'website_id' => 1],
+            [
+                'label' => '    Group One',
+                'value' => [
+                    ['label' => '        Store View One', 'value' => '1', 'website_id' => 1],
+                ],
+                '__disableTmpl' => true,
+                'website_id' => 1,
             ],
+            ['label' => 'Website Two', 'value' => [], '__disableTmpl' => true, 'website_id' => 2],
             [
-                'options' => [
-                    [
-                        'label' => 'Main Website',
-                        'value' => [],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
-                    ],
-                    [
-                        'label' => 'Main Website',
-                        'value' => [
-                            [
-                                'label' => '    Default Store View',
-                                'value' => '1',
-                                'website_id' => '1',
-                            ]
-                        ],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
-                    ]
+                'label' => '    Group Two',
+                'value' => [
+                    ['label' => '        Store View Two', 'value' => '2', 'website_id' => 2],
                 ],
-                'isWebsiteScope' => false,
-                'isCustomerDataInSession' => false,
+                '__disableTmpl' => true,
+                'website_id' => 2,
             ],
-            [
-                'options' => [
-                    [
-                        'label' => 'Main Website',
-                        'value' => [],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
-                    ],
-                    [
-                        'label' => 'Main Website',
-                        'value' => [
-                            [
-                                'label' => '    Default Store View',
-                                'value' => '1',
-                                'website_id' => '1',
-                            ]
-                        ],
-                        '__disableTmpl' => true,
-                        'website_id' => '1',
-                    ]
-                ],
-                'isWebsiteScope' => false,
-                'isCustomerDataInSession' => true,
-            ]
         ];
+        $result = $this->customerStore->toOptionArray();
+        $this->assertCount(4, $result);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Create a store mock resolving to the given website id.
+     *
+     * @param int $websiteId
+     * @return Store
+     */
+    private function createStore(int $websiteId): Store
+    {
+        $store = $this->createStub(Store::class);
+        $store->method('getWebsiteId')->willReturn($websiteId);
+        return $store;
     }
 }

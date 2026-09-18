@@ -280,7 +280,17 @@ jobs:
           set -euo pipefail
 
           if [ "$HAS_PHP_OR_STATIC" = "true" ]; then
-            composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
+            # Pin to the exact commit magento/magento2's own composer.lock uses instead
+            # of the raw floating dev-develop branch, so this always installs the same
+            # build the source repo itself is tested against.
+            mcs_ref="${{ steps.php-version.outputs.mcs_locked_ref }}"
+            if [ -n "$mcs_ref" ]; then
+              echo "Pinning magento-coding-standard to locked reference: $mcs_ref"
+              composer create-project --no-interaction --no-progress --stability=dev --remove-vcs "magento/magento-coding-standard:dev-develop#${mcs_ref}" mcs
+            else
+              echo "::warning::No locked magento-coding-standard reference found — falling back to floating dev-develop."
+              composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
+            fi
             cd mcs && npm install && cd "${GITHUB_WORKSPACE}"
 
             echo "PHPCS installed standards:"
@@ -310,13 +320,26 @@ jobs:
             fi
             echo "Resolved phpmd/phpmd constraint: $phpmd_constraint"
 
+            # If the resolved constraint is a floating dev branch (e.g. ^3@dev), pin to
+            # the exact commit magento/magento2's own composer.lock uses instead of
+            # re-resolving the branch HEAD fresh on every run, which can silently drift
+            # ahead of or behind the commit the source repo is actually tested against.
+            phpmd_require="phpmd/phpmd:${phpmd_constraint}"
+            phpmd_locked_ref="${{ steps.php-version.outputs.phpmd_locked_ref }}"
+            if [[ "$phpmd_constraint" == *dev* ]] && [ -n "$phpmd_locked_ref" ]; then
+              echo "Pinning phpmd/phpmd to locked reference: $phpmd_locked_ref"
+              phpmd_require="phpmd/phpmd:3.x-dev#${phpmd_locked_ref}"
+            elif [[ "$phpmd_constraint" == *dev* ]]; then
+              echo "::warning::No locked phpmd/phpmd reference found — falling back to floating $phpmd_constraint."
+            fi
+
             mkdir -p qa-tools
             cd qa-tools
             composer init --name=local/qa-tools --no-interaction
             composer config minimum-stability dev
             composer config prefer-stable true
             composer require --dev --no-interaction --no-progress --with-all-dependencies \
-              "phpmd/phpmd:${phpmd_constraint}"
+              "$phpmd_require"
           elif [ "$HAS_JS" = "true" ]; then
             git clone --depth 1 --no-tags \
               https://github.com/magento/magento-coding-standard.git mcs

@@ -94,6 +94,29 @@ class Compression extends Bare
     }
 
     /**
+     * Batched multi-load — decompress each value just like load() does.
+     *
+     * Without this override the batched path (used by the preloading wrapper) would return the raw
+     * COMPRESSED payloads, which then fail to unserialize downstream. Mirrors load()'s decompression.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        $results = parent::loadMultiple($identifiers);
+        foreach ($results as $id => $data) {
+            if (is_string($data) && $this->isCompressed($data)) {
+                $decompressed = $this->decompressData($data);
+                if ($decompressed !== false) {
+                    $results[$id] = $decompressed;
+                }
+            }
+        }
+        return $results;
+    }
+
+    /**
      * Compress data using configured compression library
      *
      * @param string $data

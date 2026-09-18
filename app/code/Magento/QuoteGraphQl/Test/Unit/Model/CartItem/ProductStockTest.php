@@ -128,6 +128,7 @@ class ProductStockTest extends TestCase
      */
     public function testIsProductAvailableForSimpleProductWithStock(): void
     {
+        $websiteId = 333;
         $this->cartItemMock->expects($this->exactly(2))
             ->method('getProductType')
             ->willReturn('simple');
@@ -143,9 +144,8 @@ class ProductStockTest extends TestCase
         $this->cartItemMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->storeMock->method('getWebsiteId')
+            ->willReturn($websiteId);
         $this->productMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn(123);
@@ -160,7 +160,7 @@ class ProductStockTest extends TestCase
             ->willReturn(10);
         $this->stockStateMock->expects($this->once())
             ->method('checkQuoteItemQty')
-            ->with(123, 2.0, 3.0, 1.0, 1)
+            ->with(123, 2.0, 3.0, 1.0, $websiteId)
             ->willReturn($this->stockStatusMock);
         $this->stockRegistryMock->expects($this->exactly(2))
             ->method('getStockStatus')
@@ -175,6 +175,7 @@ class ProductStockTest extends TestCase
      */
     public function testIsProductAvailableForSimpleProductWithoutStock()
     {
+        $websiteId = 333;
         $this->cartItemMock->expects($this->exactly(2))
             ->method('getProductType')
             ->willReturn('simple');
@@ -190,9 +191,8 @@ class ProductStockTest extends TestCase
         $this->cartItemMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->storeMock->method('getWebsiteId')
+            ->willReturn($websiteId);
         $this->productMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn(123);
@@ -201,7 +201,7 @@ class ProductStockTest extends TestCase
             ->willReturn($this->storeMock);
         $this->stockStateMock->expects($this->once())
             ->method('checkQuoteItemQty')
-            ->with(123, 2.0, 3.0, 1.0, 1)
+            ->with(123, 2.0, 3.0, 1.0, $websiteId)
             ->willReturn($this->stockStatusMock);
         $this->stockStatusMock->expects($this->once())
             ->method('getStockStatus')
@@ -219,6 +219,7 @@ class ProductStockTest extends TestCase
      */
     public function testIsStockAvailableBundleStockAvailable()
     {
+        $websiteId = 333;
         $this->qtyOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(1.0);
@@ -231,9 +232,8 @@ class ProductStockTest extends TestCase
         $this->cartItemMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->storeMock->method('getWebsiteId')
+            ->willReturn($websiteId);
         $this->optionProductMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn(789);
@@ -242,7 +242,7 @@ class ProductStockTest extends TestCase
             ->willReturn($this->storeMock);
         $this->stockStateMock->expects($this->once())
             ->method('checkQuoteItemQty')
-            ->with(789, 2.0, 3.0, 1.0, 1)
+            ->with(789, 2.0, 3.0, 1.0, $websiteId)
             ->willReturn($this->stockStatusMock);
         $this->stockStatusMock->expects($this->once())
             ->method('getStockStatus')
@@ -262,6 +262,7 @@ class ProductStockTest extends TestCase
      */
     public function testIsStockAvailableBundleStockNotAvailable()
     {
+        $websiteId = 333;
         $this->qtyOptionMock->expects($this->once())
             ->method('getValue')
             ->willReturn(2.0);
@@ -274,9 +275,8 @@ class ProductStockTest extends TestCase
         $this->cartItemMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        $this->storeMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
+        $this->storeMock->method('getWebsiteId')
+            ->willReturn($websiteId);
         $this->optionProductMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn(789);
@@ -285,7 +285,7 @@ class ProductStockTest extends TestCase
             ->willReturn($this->storeMock);
         $this->stockStateMock->expects($this->once())
             ->method('checkQuoteItemQty')
-            ->with(789, 2.0, 6.0, 1.0, 1)
+            ->with(789, 2.0, 6.0, 1.0, $websiteId)
             ->willReturn($this->stockStatusMock);
         $this->stockStatusMock->expects($this->once())
             ->method('getStockStatus')
