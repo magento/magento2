@@ -83,12 +83,6 @@ class Move
             $this->updateUrlPathForChildren($category);
         }
         $category->setStoreId($categoryStoreId);
-        // Re-sync url_key/url_path in memory to $categoryStoreId's own scope: the loop above
-        // leaves them reflecting whichever store was processed last, and Category::move()
-        // dispatches catalog_category_move_after (regenerating storefront url_rewrites) right
-        // after this plugin returns, on this same object. If url_key were left mismatched with
-        // the just-restored store id, that event's listener would generate the rewrite for
-        // $categoryStoreId using another store's url_key instead of reloading it fresh.
         $this->updateCategoryUrlKeyForStore($category);
         $category->unsUrlPath();
         $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
@@ -147,26 +141,12 @@ class Move
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($categoryStoreId);
             }
-            // Always reload url_key and recompute before saving - never save a null/unset
-            // url_path here. $categoryStoreId isn't necessarily the first store this loop
-            // processes (e.g. the move was performed while a non-default store view was
-            // selected in the admin), so if this ran unconditionally with a null value it
-            // would delete $categoryStoreId's url_path outright instead of refreshing it -
-            // and Category's resource model doesn't scope that delete by store, so it would
-            // wipe every store already processed earlier in this same loop, not just this one.
             $this->updateCategoryUrlKeyForStore($category);
             $category->setUrlPath($this->categoryUrlPathGenerator->getUrlPath($category));
             $category->getResource()->saveAttribute($category, 'url_path');
             if ($processingStoreId !== $categoryStoreId) {
                 $category->setStoreId($processingStoreId);
             }
-            // Descendants are NOT cleared here: Category's resource model does not scope
-            // saveAttribute() by store for a cleared (null) value the way it does for a real
-            // one, so calling it here for every descendant on every store iteration would
-            // delete their url_path in every OTHER store too, leaving only the last-processed
-            // store's value in place. updateUrlPathForChildren(), called right after this
-            // method returns, already recomputes and saves each descendant's url_path for the
-            // current store with a real value, which is all that's needed.
         }
     }
 }
