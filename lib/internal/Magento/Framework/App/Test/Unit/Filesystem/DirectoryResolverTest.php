@@ -66,7 +66,7 @@ class DirectoryResolverTest extends TestCase
         $rootPath = '/path/root';
         $directoryConfig = 'directory_config';
         $directory = $this->createStub(WriteInterface::class);
-        $driver = $this->createStub(DriverInterface::class);
+        $driver = $this->createMock(DriverInterface::class);
         $directory->method('getDriver')->willReturn($driver);
         $driver->method('getRealPathSafety')->with($path)->willReturnArgument(0);
         $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->with($directoryConfig)

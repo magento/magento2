@@ -65,6 +65,15 @@ parameters:
         # class_alias().
         - message: '#Call to an undefined static method Magento\\Framework\\Cache\\Frontend\\Adapter\\Symfony\\RedisBase::(get|mget)\(\)#'
           path: ../../../../../../../../../lib/internal/Magento/Framework/Cache/Frontend/Adapter/Symfony/SlaveAwareRedis.php
+        # Database backend clean() only reaches `return $result;` after the switch assigns it; the
+        # infinite-loop-guard early path returns the (null) default at runtime, but PHPStan cannot
+        # prove the guard is never re-entered. Suppressed rather than changing the legacy control flow.
+        - message: '#Variable \$result might not be defined.#'
+          path: ../../../../../../../../../lib/internal/Magento/Framework/Cache/Backend/Database.php
+        # Memcached::_cleanTheMess() is documented @return null (legacy) but has no return statement;
+        # it is effectively void. Suppressed to avoid altering the legacy backend's public docblock.
+        - message: '#Method Magento\\Framework\\Cache\\Backend\\Memcached::_cleanTheMess\(\) should return null but return statement is missing.#'
+          path: ../../../../../../../../../lib/internal/Magento/Framework/Cache/Backend/Memcached.php
         # Test module classes in _files (excluded from scan) - loaded at runtime
         - '~FixtureCallStorage not found\.?~'
         - '~TestModule\\Controller\\Adminhtml\\Controller not found\.?~'
