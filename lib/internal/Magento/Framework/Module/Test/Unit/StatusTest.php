@@ -207,6 +207,33 @@ class StatusTest extends TestCase
         $this->object->setIsEnabled(true, ['Module_Baz']);
     }
 
+    /**
+     * @return void
+     */
+    public function testSetIsEnabledInEnv(): void
+    {
+        $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
+        $this->loader->expects($this->once())->method('load')->willReturn($modules);
+        $this->moduleList->expects($this->never())->method('has');
+        $expectedModules = ['Module_Foo' => 0, 'Module_Bar' => 0];
+        $this->writer->expects($this->once())->method('saveConfig')
+            ->with([ConfigFilePool::APP_ENV => ['modules' => $expectedModules]], false);
+        $this->object->setIsEnabledInEnv(false, ['Module_Foo', 'Module_Bar']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetIsEnabledInEnvUnknown(): void
+    {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessage('Unknown module(s): \'Module_Baz\'');
+        $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
+        $this->loader->expects($this->once())->method('load')->willReturn($modules);
+        $this->writer->expects($this->never())->method('saveConfig');
+        $this->object->setIsEnabledInEnv(true, ['Module_Baz']);
+    }
+
     /**     * @param bool $firstEnabled
      * @param bool $secondEnabled
      * @param bool $thirdEnabled

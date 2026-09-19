@@ -21,6 +21,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      */
     public const INPUT_KEY_ALL = 'all';
     public const INPUT_KEY_FORCE = 'force';
+    public const INPUT_KEY_LOCK_ENV = 'lock-env';
 
     /**
      * @var GeneratedFiles
@@ -48,6 +49,13 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
             null,
             InputOption::VALUE_NONE,
             ($this->isEnable() ? 'Enable' : 'Disable') . ' all modules'
+        );
+        $this->addOption(
+            self::INPUT_KEY_LOCK_ENV,
+            'e',
+            InputOption::VALUE_NONE,
+            ($this->isEnable() ? 'Enable' : 'Disable')
+            . ' modules in app/etc/env.php instead of app/etc/config.php'
         );
 
         parent::configure();
@@ -100,7 +108,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                     return Cli::RETURN_FAILURE;
                 }
             }
-            $this->setIsEnabled($isEnable, $modulesToChange, $output);
+            $this->setIsEnabled($isEnable, $modulesToChange, $input, $output);
             $this->cleanup($input, $output);
             $this->getGeneratedFiles()->requestRegeneration();
             if ($force) {
@@ -120,12 +128,17 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
      *
      * @param bool $isEnable
      * @param string[] $modulesToChange
+     * @param InputInterface $input
      * @param OutputInterface $output
      * @return void
      */
-    private function setIsEnabled($isEnable, $modulesToChange, $output)
+    private function setIsEnabled($isEnable, $modulesToChange, $input, $output)
     {
-        $this->getStatus()->setIsEnabled($isEnable, $modulesToChange);
+        if ($input->getOption(self::INPUT_KEY_LOCK_ENV)) {
+            $this->getStatus()->setIsEnabledInEnv($isEnable, $modulesToChange);
+        } else {
+            $this->getStatus()->setIsEnabled($isEnable, $modulesToChange);
+        }
         if ($isEnable) {
             $output->writeln('<info>The following modules have been enabled:</info>');
             $output->writeln('<info>- ' . implode("\n- ", $modulesToChange) . '</info>');

@@ -233,6 +233,69 @@ class ModuleEnableDisableCommandTest extends TestCase
 
     /**
      * @param bool $isEnable
+     * @param string $expectedMessage
+     *
+     */
+    #[DataProvider('executeAllDataProvider')]
+    public function testExecuteLockEnv($isEnable, $expectedMessage)
+    {
+        $this->statusMock->expects($this->once())
+            ->method('getModulesToChange')
+            ->with($isEnable, ['Magento_Module1'])
+            ->willReturn(['Magento_Module1']);
+        $this->statusMock->expects($this->any())
+            ->method('checkConstraints')
+            ->willReturn([]);
+        $this->statusMock->expects($this->never())
+            ->method('setIsEnabled');
+        $this->statusMock->expects($this->once())
+            ->method('setIsEnabledInEnv')
+            ->with($isEnable, ['Magento_Module1']);
+        $commandTester = $this->getCommandTester($isEnable);
+        $commandTester->execute(['module' => ['Magento_Module1'], '--lock-env' => true]);
+        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+    }
+
+    public function testExecuteLockEnvShortcut()
+    {
+        $this->statusMock->expects($this->once())
+            ->method('getModulesToChange')
+            ->with(false, ['Magento_Module1'])
+            ->willReturn(['Magento_Module1']);
+        $this->statusMock->expects($this->any())
+            ->method('checkConstraints')
+            ->willReturn([]);
+        $this->statusMock->expects($this->never())
+            ->method('setIsEnabled');
+        $this->statusMock->expects($this->once())
+            ->method('setIsEnabledInEnv')
+            ->with(false, ['Magento_Module1']);
+        $commandTester = $this->getCommandTester(false);
+        $commandTester->execute(['module' => ['Magento_Module1'], '-e' => true]);
+        $this->assertStringMatchesFormat('%amodules have been disabled%a', $commandTester->getDisplay());
+    }
+
+    public function testExecuteLockEnvWithConstraints()
+    {
+        $this->statusMock->expects($this->once())
+            ->method('getModulesToChange')
+            ->with(false, ['Magento_Module1'])
+            ->willReturn(['Magento_Module1']);
+        $this->statusMock->expects($this->any())
+            ->method('checkConstraints')
+            ->willReturn(['constraint1']);
+        $this->statusMock->expects($this->never())
+            ->method('setIsEnabledInEnv');
+        $commandTester = $this->getCommandTester(false);
+        $commandTester->execute(['module' => ['Magento_Module1'], '--lock-env' => true]);
+        $this->assertStringMatchesFormat(
+            'Unable to change status of modules%aconstraint1%a',
+            $commandTester->getDisplay()
+        );
+    }
+
+    /**
+     * @param bool $isEnable
      *
      */
     #[DataProvider('executeWithConstraintsDataProvider')]

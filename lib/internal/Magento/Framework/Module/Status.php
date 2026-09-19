@@ -155,6 +155,26 @@ class Status
     }
 
     /**
+     * Sets specified modules to enabled or disabled state in the environment configuration
+     *
+     * Leaves the application configuration and the state of every other module untouched
+     *
+     * @param bool $isEnabled
+     * @param string[] $modules
+     * @return void
+     */
+    public function setIsEnabledInEnv($isEnabled, $modules)
+    {
+        $result = [];
+        foreach ($this->getAllModules($modules) as $name) {
+            if (in_array($name, $modules)) {
+                $result[$name] = (int)$isEnabled;
+            }
+        }
+        $this->writer->saveConfig([ConfigFilePool::APP_ENV => ['modules' => $result]], false);
+    }
+
+    /**
      * Get a list of modules that will be changed
      *
      * @param bool $isEnabled
