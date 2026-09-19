@@ -6,7 +6,10 @@
 
 namespace Magento\Framework\Module;
 
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\File\ConfigFilePool;
 
 /**
@@ -52,6 +55,13 @@ class Status
     private $conflictChecker;
 
     /**
+     * Deployment config reader
+     *
+     * @var Reader
+     */
+    private $reader;
+
+    /**
      * Constructor
      *
      * @param ModuleList\Loader $loader
@@ -59,19 +69,22 @@ class Status
      * @param Writer $writer
      * @param ConflictChecker $conflictChecker
      * @param DependencyChecker $dependencyChecker
+     * @param Reader|null $reader
      */
     public function __construct(
         ModuleList\Loader $loader,
         ModuleList $list,
         Writer $writer,
         ConflictChecker $conflictChecker,
-        DependencyChecker $dependencyChecker
+        DependencyChecker $dependencyChecker,
+        ?Reader $reader = null
     ) {
         $this->loader = $loader;
         $this->list = $list;
         $this->writer = $writer;
         $this->conflictChecker = $conflictChecker;
         $this->dependencyChecker = $dependencyChecker;
+        $this->reader = $reader ?? ObjectManager::getInstance()->get(Reader::class);
     }
 
     /**
@@ -142,9 +155,13 @@ class Status
      */
     public function setIsEnabled($isEnabled, $modules)
     {
+        $appConfig = $this->reader->load(ConfigFilePool::APP_CONFIG);
+        $appConfigModules = $appConfig[ConfigOptionsListConstants::KEY_MODULES] ?? null;
         $result = [];
         foreach ($this->getAllModules($modules) as $name) {
-            $currentStatus = $this->list->has($name);
+            $currentStatus = $appConfigModules === null
+                ? $this->list->has($name)
+                : !empty($appConfigModules[$name]);
             if (in_array($name, $modules)) {
                 $result[$name] = (int)$isEnabled;
             } else {

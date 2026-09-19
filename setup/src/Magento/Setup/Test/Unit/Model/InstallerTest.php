@@ -1694,6 +1694,45 @@ use PHPUnit\Framework\Attributes\DataProvider;
             $installer->updateModulesSequence(true);
         }
 
+        public function testGetModulesConfigIgnoresEnvOverrides()
+        {
+            $this->moduleLoader->expects($this->once())->method('load')->willReturn(
+                ['Foo_One' => [], 'Bar_Two' => []]
+            );
+            $this->configReader->expects($this->once())->method('load')->willReturnCallback(
+                function ($fileKey = null) {
+                    return $fileKey === ConfigFilePool::APP_CONFIG
+                        ? ['modules' => ['Foo_One' => 1, 'Bar_Two' => 1]]
+                        : ['modules' => ['Foo_One' => 0, 'Bar_Two' => 1]];
+                }
+            );
+            $this->configWriter->expects($this->never())->method('saveConfig');
+
+            $this->assertSame(
+                ['Foo_One' => 1, 'Bar_Two' => 1],
+                $this->createObject()->getModulesConfig()
+            );
+        }
+
+        public function testGetModulesConfigFallsBackToMergedConfigWithoutModulesInAppConfig()
+        {
+            $this->moduleLoader->expects($this->once())->method('load')->willReturn(
+                ['Foo_One' => [], 'Bar_Two' => []]
+            );
+            $this->configReader->expects($this->exactly(2))->method('load')->willReturnCallback(
+                function ($fileKey = null) {
+                    return $fileKey === ConfigFilePool::APP_CONFIG
+                        ? []
+                        : ['modules' => ['Foo_One' => 0, 'Bar_Two' => 1]];
+                }
+            );
+
+            $this->assertSame(
+                ['Foo_One' => 0, 'Bar_Two' => 1],
+                $this->createObject()->getModulesConfig()
+            );
+        }
+
         /**
          * @return void
          * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit;
 
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\ConflictChecker;
@@ -46,6 +47,11 @@ class StatusTest extends TestCase
     private $dependencyChecker;
 
     /**
+     * @var MockObject
+     */
+    private $reader;
+
+    /**
      * @var Status
      */
     private $object;
@@ -60,12 +66,14 @@ class StatusTest extends TestCase
         $this->writer = $this->createMock(Writer::class);
         $this->conflictChecker = $this->createMock(ConflictChecker::class);
         $this->dependencyChecker = $this->createMock(DependencyChecker::class);
+        $this->reader = $this->createMock(Reader::class);
         $this->object = new Status(
             $this->loader,
             $this->moduleList,
             $this->writer,
             $this->conflictChecker,
-            $this->dependencyChecker
+            $this->dependencyChecker,
+            $this->reader
         );
     }
 
@@ -179,23 +187,52 @@ class StatusTest extends TestCase
     {
         $modules = ['Module_Foo' => '', 'Module_Bar' => '', 'Module_Baz' => ''];
         $this->loader->expects($this->once())->method('load')->willReturn($modules);
-        $this->moduleList
-            ->method('has')
-            ->willReturnCallback(
-                function ($arg1) {
-                    if ($arg1 == 'Module_Foo') {
-                        return false;
-                    } elseif ($arg1 == 'Module_Bar') {
-                        return false;
-                    } elseif ($arg1 == 'Module_Baz') {
-                        return false;
-                    }
-                }
-            );
+        $this->moduleList->expects($this->never())->method('has');
+        $this->reader->expects($this->once())->method('load')->with(ConfigFilePool::APP_CONFIG)->willReturn(
+            ['modules' => ['Module_Foo' => 0, 'Module_Bar' => 0, 'Module_Baz' => 0]]
+        );
         $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1, 'Module_Baz' => 0];
         $this->writer->expects($this->once())->method('saveConfig')
             ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
         $this->object->setIsEnabled(true, ['Module_Foo', 'Module_Bar']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetIsEnabledIgnoresEnvOverrides(): void
+    {
+        $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
+        $this->loader->expects($this->once())->method('load')->willReturn($modules);
+        $this->moduleList->expects($this->never())->method('has');
+        $this->reader->expects($this->once())->method('load')->with(ConfigFilePool::APP_CONFIG)->willReturn(
+            ['modules' => ['Module_Foo' => 0, 'Module_Bar' => 1]]
+        );
+        $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1];
+        $this->writer->expects($this->once())->method('saveConfig')
+            ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
+        $this->object->setIsEnabled(true, ['Module_Foo']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetIsEnabledFallsBackToModuleListWithoutModulesInAppConfig(): void
+    {
+        $modules = ['Module_Foo' => '', 'Module_Bar' => ''];
+        $this->loader->expects($this->once())->method('load')->willReturn($modules);
+        $this->reader->expects($this->once())->method('load')->with(ConfigFilePool::APP_CONFIG)->willReturn([]);
+        $this->moduleList
+            ->method('has')
+            ->willReturnCallback(
+                function ($arg1) {
+                    return $arg1 === 'Module_Bar';
+                }
+            );
+        $expectedModules = ['Module_Foo' => 1, 'Module_Bar' => 1];
+        $this->writer->expects($this->once())->method('saveConfig')
+            ->with([ConfigFilePool::APP_CONFIG => ['modules' => $expectedModules]]);
+        $this->object->setIsEnabled(true, ['Module_Foo']);
     }
 
     public function testSetIsEnabledUnknown(): void

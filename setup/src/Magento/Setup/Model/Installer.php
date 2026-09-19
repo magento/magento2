@@ -484,7 +484,10 @@ class Installer
     private function createModulesConfig($request, $dryRun = false)
     {
         $all = array_keys($this->moduleLoader->load());
-        $deploymentConfig = $this->deploymentConfigReader->load();
+        $deploymentConfig = $this->deploymentConfigReader->load(ConfigFilePool::APP_CONFIG);
+        if (!isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])) {
+            $deploymentConfig = $this->deploymentConfigReader->load();
+        }
         $currentModules = isset($deploymentConfig[ConfigOptionsListConstants::KEY_MODULES])
             ? $deploymentConfig[ConfigOptionsListConstants::KEY_MODULES] : [];
         $enable = $this->readListOfModules($all, $request, InstallCommand::INPUT_KEY_ENABLE_MODULES);
