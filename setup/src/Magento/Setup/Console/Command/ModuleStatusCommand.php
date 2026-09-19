@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
@@ -59,8 +62,9 @@ class ModuleStatusCommand extends AbstractSetupCommand
     {
         $moduleNames = $input->getArgument('module-names');
         if (!empty($moduleNames)) {
+            $overriddenModules = $this->getOverriddenModules();
             foreach ($moduleNames as $moduleName) {
-                $this->showSpecificModule($moduleName, $output);
+                $this->showSpecificModule($moduleName, $overriddenModules, $output);
             }
             return Cli::RETURN_SUCCESS;
         }
@@ -83,6 +87,8 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $this->showDisabledModules($output);
         $output->writeln('');
 
+        $this->showOverriddenModules($output);
+
         return Cli::RETURN_SUCCESS;
     }
 
@@ -90,10 +96,11 @@ class ModuleStatusCommand extends AbstractSetupCommand
      * Specific module show
      *
      * @param string $moduleName
+     * @param array $overriddenModules
      * @param OutputInterface $output
      * @return int
      */
-    private function showSpecificModule(string $moduleName, OutputInterface $output): int
+    private function showSpecificModule(string $moduleName, array $overriddenModules, OutputInterface $output): int
     {
         $allModules = $this->getAllModules();
         if (!in_array($moduleName, $allModules->getNames(), true)) {
@@ -101,13 +108,20 @@ class ModuleStatusCommand extends AbstractSetupCommand
             return Cli::RETURN_FAILURE;
         }
 
+        $note = isset($overriddenModules[$moduleName])
+            ? sprintf(
+                ' (overridden in app/etc/env.php; app/etc/config.php: %s)',
+                $overriddenModules[$moduleName] ? 'disabled' : 'enabled'
+            )
+            : '';
+
         $enabledModules = $this->getEnabledModules();
         if (in_array($moduleName, $enabledModules->getNames(), true)) {
-            $output->writeln($moduleName . ' : <info>Module is enabled</info>');
+            $output->writeln($moduleName . ' : <info>Module is enabled</info>' . $note);
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln($moduleName . ' : <info> Module is disabled</info>');
+        $output->writeln($moduleName . ' : <info> Module is disabled</info>' . $note);
         return Cli::RETURN_SUCCESS;
     }
 
@@ -148,6 +162,52 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $output->writeln(join("\n", $disabledModuleNames));
 
         return Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Modules overridden in env.php show
+     *
+     * @param OutputInterface $output
+     * @return void
+     */
+    private function showOverriddenModules(OutputInterface $output): void
+    {
+        $overriddenModules = $this->getOverriddenModules();
+        if (count($overriddenModules) === 0) {
+            return;
+        }
+
+        $output->writeln('<info>Modules overridden in app/etc/env.php:</info>');
+        foreach ($overriddenModules as $moduleName => $isEnabled) {
+            $output->writeln(sprintf(
+                '%s : %s in env.php, %s in app/etc/config.php',
+                $moduleName,
+                $isEnabled ? 'enabled' : 'disabled',
+                $isEnabled ? 'disabled' : 'enabled'
+            ));
+        }
+        $output->writeln('');
+    }
+
+    /**
+     * Returns modules whose env.php state differs from the state in config.php
+     *
+     * @return array
+     */
+    private function getOverriddenModules(): array
+    {
+        $reader = $this->objectManagerProvider->get()->get(Reader::class);
+        $appConfig = $reader->load(ConfigFilePool::APP_CONFIG)[ConfigOptionsListConstants::KEY_MODULES] ?? [];
+        $envConfig = $reader->load(ConfigFilePool::APP_ENV)[ConfigOptionsListConstants::KEY_MODULES] ?? [];
+
+        $overriddenModules = [];
+        foreach ($envConfig as $moduleName => $isEnabled) {
+            if ((bool)$isEnabled !== (bool)($appConfig[$moduleName] ?? false)) {
+                $overriddenModules[$moduleName] = (bool)$isEnabled;
+            }
+        }
+
+        return array_intersect_key($overriddenModules, array_flip($this->getAllModules()->getNames()));
     }
 
     /**
