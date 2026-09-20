@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Element;
 
+use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
@@ -74,6 +76,16 @@ class TemplateTest extends TestCase
      */
     protected $appState;
 
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $cache;
+
+    /**
+     * @var CacheStateInterface|MockObject
+     */
+    private $cacheState;
+
     protected function setUp(): void
     {
         $this->resolver = $this->createMock(Resolver::class);
@@ -113,10 +125,14 @@ class TemplateTest extends TestCase
         $urlBuilderMock->expects($this->any())
             ->method('getBaseUrl')
             ->willReturn('baseUrl');
+        $this->cache = $this->createMock(CacheInterface::class);
+        $this->cacheState = $this->createMock(CacheStateInterface::class);
         $helper = new ObjectManager($this);
         $this->block = $helper->getObject(
             Template::class,
             [
+                'cache' => $this->cache,
+                'cacheState' => $this->cacheState,
                 'filesystem' => $this->filesystem,
                 'enginePool' => $this->templateEngine,
                 'resolver' => $this->resolver,
@@ -196,6 +212,62 @@ class TemplateTest extends TestCase
         $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage($exception);
         $this->block->fetchView($template);
+    }
+
+    /**
+     * A render that failed validation returns an empty string, which is indistinguishable from a
+     * block that renders nothing by design. Caching it serves the failure for the cache lifetime.
+     */
+    public function testFailedRenderIsNotCached()
+    {
+        $this->block->setTemplate('wrong_template_path.phtml');
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->willReturn(false);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->loggerMock->expects($this->once())->method('critical');
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->never())->method('save');
+
+        $this->assertEquals('', $this->block->fetchView('wrong_template_path.phtml'));
+        $this->assertFalse($this->invokeSaveCache(''));
+    }
+
+    /**
+     * Positive control for the guard above: a render that succeeded is still cached.
+     */
+    public function testSuccessfulRenderIsCached()
+    {
+        $this->expectOutputString('');
+        $output = '<h1>Template Contents</h1>';
+        $template = 'themedir/template.phtml';
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(true);
+        $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with($output, Template::CUSTOM_CACHE_KEY_PREFIX . 'probe', $this->anything(), 3600);
+
+        $this->assertEquals($output, $this->block->fetchView($template));
+        $this->assertSame($this->block, $this->invokeSaveCache($output));
+    }
+
+    /**
+     * @param string $data
+     * @return Template|false
+     */
+    private function invokeSaveCache($data)
+    {
+        return (new \ReflectionMethod(Template::class, '_saveCache'))->invoke($this->block, $data);
     }
 
     public function testSetTemplateContext()
