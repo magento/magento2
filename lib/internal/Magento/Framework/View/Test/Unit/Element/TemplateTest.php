@@ -262,6 +262,56 @@ class TemplateTest extends TestCase
     }
 
     /**
+     * A block that renders nothing by design keeps its existing behavior and is still cached, so it
+     * is not re-rendered on every request. This is what separates the guard from refusing to cache
+     * empty output in general.
+     */
+    public function testRenderThatIsEmptyByDesignIsStillCached()
+    {
+        $this->expectOutputString('');
+        $template = 'themedir/empty.phtml';
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->expects($this->once())
+            ->method('isValid')
+            ->with($template)
+            ->willReturn(true);
+        $this->templateEngine->expects($this->once())->method('render')->willReturn('');
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->once())
+            ->method('save')
+            ->with('', Template::CUSTOM_CACHE_KEY_PREFIX . 'probe', $this->anything(), 3600);
+
+        $this->assertEquals('', $this->block->fetchView($template));
+        $this->assertSame($this->block, $this->invokeSaveCache(''));
+    }
+
+    /**
+     * A block may render several templates. Once one of them has failed the rendering is incomplete,
+     * so the output is not cached even though it is no longer empty.
+     */
+    public function testRenderIsNotCachedWhenAnEarlierTemplateFailed()
+    {
+        $this->expectOutputString('');
+        $output = '<p>Rendered</p>';
+        $this->block->setCacheLifetime(3600);
+        $this->block->setCacheKey('probe');
+        $this->validator->method('isValid')
+            ->willReturnMap([['missing.phtml', false], ['themedir/template.phtml', true]]);
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+        $this->loggerMock->expects($this->once())->method('critical');
+        $this->templateEngine->expects($this->once())->method('render')->willReturn($output);
+        $this->cacheState->expects($this->any())->method('isEnabled')->willReturn(true);
+        $this->cache->expects($this->never())->method('save');
+
+        $this->assertEquals('', $this->block->fetchView('missing.phtml'));
+        $this->assertEquals($output, $this->block->fetchView('themedir/template.phtml'));
+        $this->assertFalse($this->invokeSaveCache($output));
+    }
+
+    /**
      * @param string $data
      * @return Template|false
      */
