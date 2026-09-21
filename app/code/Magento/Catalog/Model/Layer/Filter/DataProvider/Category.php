@@ -5,9 +5,11 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\DataProvider;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory as CategoryModelFactory;
 use Magento\Catalog\Model\Layer;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 
 class Category
@@ -43,19 +45,26 @@ class Category
     private $categoryFactory;
 
     /**
+     * @var CategoryRepositoryInterface|null
+     */
+    private ?CategoryRepositoryInterface $categoryRepository;
+
+    /**
      * @param Registry $coreRegistry
      * @param CategoryModelFactory $categoryFactory
      * @param Layer $layer
-     * @internal param $data
+     * @param CategoryRepositoryInterface|null $categoryRepository
      */
     public function __construct(
         Registry $coreRegistry,
         CategoryModelFactory $categoryFactory,
-        Layer $layer
+        Layer $layer,
+        ?CategoryRepositoryInterface $categoryRepository
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->layer = $layer;
         $this->categoryFactory = $categoryFactory;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -106,19 +115,25 @@ class Category
      *
      * @return CategoryModel
      */
-    public function getCategory()
+    public function getCategory(): ?CategoryModel
     {
         if ($this->category === null) {
             /** @var CategoryModel|null $category */
             $category = null;
             if ($this->categoryId !== null) {
-                $category = $this->categoryFactory->create()
-                    ->setStoreId(
-                        $this->getLayer()
-                            ->getCurrentStore()
-                            ->getId()
-                    )
-                    ->load($this->categoryId);
+                $storeId = $this->getLayer()->getCurrentStore()->getId();
+                // Category Repository has a build in cache, so the data might be already loaded.
+                if ($this->categoryRepository !== null) {
+                    try {
+                        $category = $this->categoryRepository->get($this->categoryId, $storeId);
+                    } catch (NoSuchEntityException $e) {
+                        $category = null;
+                    }
+                } else {
+                    $category = $this->categoryFactory->create()
+                        ->setStoreId($storeId)
+                        ->load($this->categoryId);
+                }
             }
 
             if ($category === null || !$category->getId()) {
