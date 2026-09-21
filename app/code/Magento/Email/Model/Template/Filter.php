@@ -15,6 +15,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -106,6 +107,11 @@ class Filter extends Template
      * @var bool
      */
     private $plainTemplateMode = false;
+
+    /**
+     * @var null|DataObject
+     */
+    private $storeInformationObject = null;
 
     /**
      * @var Repository
@@ -857,25 +863,38 @@ class Filter extends Template
     {
         $configValue = '';
         $params = $this->getParameters($construction[2]);
-        $storeId = $this->getStoreId();
-        $store = $this->_storeManager->getStore($storeId);
-        $storeInformationObj = $this->storeInformation
-            ->getStoreInformationObject($store);
         if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
+            $storeId = $this->getStoreId();   
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
-                $configValue = $storeInformationObj->getData('country');
+                $configValue = $this->getStoreInformationObject($storeId)->getData('country');
             } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
-                $configValue = $storeInformationObj->getData('region') ?
-                    $storeInformationObj->getData('region') :
-                    $configValue;
+                $region = $this->getStoreInformationObject($storeId)->getData('region');
+                $configValue = $region ?: $configValue;
             }
         }
         return $configValue;
+    }
+
+    /**
+     * Get store information object
+     *
+     * @param int $storeId
+     * @return DataObject
+     */
+    private function getStoreInformationObject($storeId)
+    {
+        if ($this->storeInformationObject === null) {
+            $store = $this->_storeManager->getStore($storeId);            
+            $this->storeInformationObject = $this->storeInformation
+                ->getStoreInformationObject($store);
+        }
+
+        return $this->storeInformationObject;
     }
 
     /**
