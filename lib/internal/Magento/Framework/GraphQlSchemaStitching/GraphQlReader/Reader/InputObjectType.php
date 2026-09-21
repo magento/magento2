@@ -71,7 +71,7 @@ class InputObjectType implements TypeMetaReaderInterface
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
             }
 
-            if ($this->docReader->read($typeMeta->astNode->directives)) {
+            if ($this->cacheAnnotationReader->read($typeMeta->astNode->directives)) {
                 $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
             }
             return $result;
