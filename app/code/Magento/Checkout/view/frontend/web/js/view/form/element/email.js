@@ -189,7 +189,11 @@ define([
 
             if (this.isPasswordVisible() && $(loginForm).validation() && $(loginForm).validation('isValid')) {
                 fullScreenLoader.startLoader();
-                loginAction(loginData).always(function () {
+                loginAction(loginData).done(function (response) {
+                    if (!response.errors) {
+                        $('.action.login').attr('disabled', true);
+                    }
+                }).always(function () {
                     fullScreenLoader.stopLoader();
                 });
             }
