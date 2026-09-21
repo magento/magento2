@@ -10,13 +10,13 @@
 namespace Magento\Sales\Model\Config\Source\Order;
 
 /**
- * Class Status
+ * Provides a list of order statuses
  * @api
  * @since 100.0.2
  */
 class Status implements \Magento\Framework\Option\ArrayInterface
 {
-    const UNDEFINED_OPTION_LABEL = '-- Please Select --';
+    public const UNDEFINED_OPTION_LABEL = '-- Please Select --';
 
     /**
      * @var string[]
@@ -44,6 +44,8 @@ class Status implements \Magento\Framework\Option\ArrayInterface
     }
 
     /**
+     * Returns a list of order statuses
+     *
      * @return array
      */
     public function toOptionArray()
@@ -52,7 +54,8 @@ class Status implements \Magento\Framework\Option\ArrayInterface
             ? $this->_orderConfig->getStateStatuses($this->_stateStatuses)
             : $this->_orderConfig->getStatuses();
 
-        $options = [['value' => '', 'label' => __('-- Please Select --')]];
+        $undefinedOptionLabel = self::UNDEFINED_OPTION_LABEL;
+        $options = [['value' => '', 'label' => __($undefinedOptionLabel)]];
         foreach ($statuses as $code => $label) {
             $options[] = ['value' => $code, 'label' => $label];
         }
