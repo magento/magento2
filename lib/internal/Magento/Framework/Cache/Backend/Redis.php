@@ -9,7 +9,7 @@ namespace Magento\Framework\Cache\Backend;
 /**
  * Redis wrapper to extend current implementation behaviour.
  */
-class Redis extends \Cm_Cache_Backend_Redis
+class Redis extends \Cm_Cache_Backend_Redis implements AtomicPairBackendInterface
 {
     /**
      * Local state of preloaded keys.
@@ -111,7 +111,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      * Save both cache entries in one Redis transaction, preventing reads from seeing only one entry.
      *
      * Mirrors the non-Lua branch of the parent's own save() for each entry, but queues both
-     * inside one MULTI/EXEC block instead of issuing two independent save() calls (AC-18194).
+     * inside one MULTI/EXEC block instead of issuing two independent save() calls.
      *
      * @param string $data
      * @param string $id
@@ -141,8 +141,7 @@ class Redis extends \Cm_Cache_Backend_Redis
         $pairedLifetime = $this->_getAutoExpiringLifetime($this->getLifetime($pairedSpecificLifetime), $pairedId);
         $pairedLifetime = $pairedLifetime === null ? $pairedLifetime : (int) $pairedLifetime;
 
-        $oldTags = $this->_fetchOwnTags($id);
-        $oldPairedTags = $this->_fetchOwnTags($pairedId);
+        [$oldTags, $oldPairedTags] = $this->_fetchOwnTagsPair($id, $pairedId);
 
         $this->_redis->pipeline()->multi();
         $this->_queueSave($id, $data, $tags, $lifetime, $oldTags);
@@ -153,9 +152,13 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Remove two cache entries (e.g. a value and its paired version marker) as a single Redis
-     * transaction, so a concurrent read can never observe one removed and not the other
-     * (AC-18194).
+     * Remove two paired cache entries as a single Redis transaction.
+     *
+     * The pair (e.g. a value and its paired version marker) is removed atomically so a
+     * concurrent read can never observe one removed and not the other. The pair is considered
+     * removed if either key's own unlink actually deleted something, since one of the two (e.g.
+     * an already TTL-expired data key) may legitimately be gone before this call runs while the
+     * other still needs to be cleared.
      *
      * @param string $id
      * @param string $pairedId
@@ -163,30 +166,45 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     public function removeAtomicPair(string $id, string $pairedId): bool
     {
-        $tags = $this->_fetchOwnTags($id);
-        $pairedTags = $this->_fetchOwnTags($pairedId);
+        [$tags, $pairedTags] = $this->_fetchOwnTagsPair($id, $pairedId);
 
         $this->_redis->pipeline()->multi();
-        $this->_queueRemove($id, $tags);
-        $this->_queueRemove($pairedId, $pairedTags);
+        $this->_redis->unlink(self::PREFIX_KEY . $id);
+        $this->_redis->unlink(self::PREFIX_KEY . $pairedId);
+        $this->_queueRemoveTagCleanup($id, $tags);
+        $this->_queueRemoveTagCleanup($pairedId, $pairedTags);
         $result = $this->_redis->exec();
 
-        return isset($result[0]) && (bool) $result[0];
+        return (isset($result[0]) && (bool) $result[0]) || (isset($result[1]) && (bool) $result[1]);
     }
 
     /**
-     * Read the tags currently stored against an id's own hash, same as the parent's remove().
+     * Read the tags currently stored against both ids' own hashes.
+     *
+     * Same as the parent's remove(), but pipelined together as a single round-trip instead of
+     * two sequential ones.
      *
      * @param string $id
-     * @return array
+     * @param string $pairedId
+     * @return array{0: array, 1: array}
      */
-    private function _fetchOwnTags(string $id): array
+    private function _fetchOwnTagsPair(string $id, string $pairedId): array
     {
-        return explode(',', (string) $this->_decodeData($this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS)));
+        $pipe = $this->_redis->pipeline();
+        $pipe->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
+        $pipe->hGet(self::PREFIX_KEY . $pairedId, self::FIELD_TAGS);
+        [$rawTags, $rawPairedTags] = $pipe->exec();
+
+        return [
+            explode(',', (string) $this->_decodeData($rawTags)),
+            explode(',', (string) $this->_decodeData($rawPairedTags)),
+        ];
     }
 
     /**
-     * Queue the commands for one save(), identical to the parent's non-Lua save() body.
+     * Queue the commands for one save().
+     *
+     * Identical to the parent's non-Lua save() body.
      *
      * @param string $id
      * @param string $data
@@ -229,16 +247,17 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
-     * Queue the commands for one remove(), identical to the parent's own remove() body.
+     * Queue the tag-index cleanup for one remove().
+     *
+     * Identical to the parent's own remove() body, minus the key unlink itself (queued
+     * separately so its result stays at a predictable, per-id index within the transaction).
      *
      * @param string $id
      * @param array $tags
      * @return void
      */
-    private function _queueRemove(string $id, array $tags): void
+    private function _queueRemoveTagCleanup(string $id, array $tags): void
     {
-        $this->_redis->unlink(self::PREFIX_KEY . $id);
-
         if ($this->_notMatchingTags) {
             $this->_redis->sRem(self::SET_IDS, $id);
         }

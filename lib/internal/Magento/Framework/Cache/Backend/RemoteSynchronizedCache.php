@@ -193,9 +193,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
     /**
      * Save the data key and its paired hash key on the remote backend.
      *
-     * When the remote backend is Redis/Valkey, both keys are written in a single atomic
-     * transaction so a concurrent remove() can never observe one updated and not the other.
-     * Other backend types keep the previous two-step save, which remains racy (AC-18194).
+     * When the remote backend supports atomic pair operations, both keys are written in a
+     * single atomic transaction so a concurrent remove() can never observe one updated and not
+     * the other. Other backend types keep the previous two-step save, which remains racy.
      *
      * @param string $data
      * @param string $id
@@ -211,7 +211,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $specificLifetime,
         bool $sameRemoteData
     ): void {
-        if ($this->remote instanceof \Magento\Framework\Cache\Backend\Redis) {
+        if ($this->remote instanceof AtomicPairBackendInterface) {
             $this->remote->saveAtomicPair(
                 $data,
                 $id,
@@ -327,7 +327,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function remove($id)
     {
-        $result = $this->remote instanceof \Magento\Framework\Cache\Backend\Redis
+        $result = $this->remote instanceof AtomicPairBackendInterface
             ? $this->remote->removeAtomicPair($id, $id . self::HASH_SUFFIX)
             : $this->removeRemoteDataVersion($id) && $this->remote->remove($id);
 
