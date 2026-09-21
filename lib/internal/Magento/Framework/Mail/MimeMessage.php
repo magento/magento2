@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
+use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Symfony\Component\Mime\Message;
-use Symfony\Component\Mime\Part\TextPart;
+use Symfony\Component\Mime\Part\AbstractMultipartPart;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\Multipart\AlternativePart;
+use Symfony\Component\Mime\Part\Multipart\MixedPart;
+use Symfony\Component\Mime\Part\TextPart;
 
 /**
  * Magento Framework Mime message
@@ -25,19 +29,31 @@ class MimeMessage implements MimeMessageInterface
      * MimeMessage constructor
      *
      * @param array $parts
+     * @throws InvalidArgumentException
      */
     public function __construct(array $parts)
     {
         $headers = null;
         $body = null;
+        $attachments = [];
 
         foreach ($parts as $part) {
             $mimePart = $part->getMimePart();
-            if ($mimePart instanceof TextPart) {
+            if ($mimePart instanceof DataPart) {
+                $attachments[] = $mimePart;
+            } elseif ($mimePart instanceof TextPart && $body === null) {
                 $headers = $mimePart->getHeaders();
                 $body = $mimePart;
-                break;
             }
+        }
+
+        if ($attachments) {
+            try {
+                $body = $body !== null ? new MixedPart($body, ...$attachments) : new MixedPart(...$attachments);
+            } catch (\Exception $e) {
+                throw new InvalidArgumentException($e->getMessage());
+            }
+            $headers = null;
         }
 
         $this->mimeMessage = new Message($headers, $body);
@@ -51,7 +67,15 @@ class MimeMessage implements MimeMessageInterface
         $parts = [];
         $body = $this->mimeMessage->getBody();
 
-        if ($body instanceof AlternativePart) {
+        if ($body instanceof MixedPart) {
+            foreach ($body->getParts() as $part) {
+                if ($part instanceof AlternativePart) {
+                    array_push($parts, ...$part->getParts());
+                    continue;
+                }
+                $parts[] = $part;
+            }
+        } elseif ($body instanceof AlternativePart) {
             $parts = $body->getParts();
         } elseif ($body instanceof TextPart) {
             $parts[] = $body;
@@ -66,7 +90,7 @@ class MimeMessage implements MimeMessageInterface
     public function isMultiPart(): bool
     {
         $body = $this->mimeMessage->getBody();
-        return $body instanceof AlternativePart && $body->countParts() > 1;
+        return $body instanceof AbstractMultipartPart && count($body->getParts()) > 1;
     }
 
     /**
