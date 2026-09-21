@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 -->
@@ -64,6 +64,14 @@
             <settings>
                 <filter>text</filter>
                 <label translate="true">Email</label>
+            </settings>
+        </column>
+        <column name="website_id" component="Magento_Ui/js/grid/columns/select">
+            <settings>
+                <options class="Magento\Customer\Ui\Component\Listing\Column\Online\Website\Options"/>
+                <filter>select</filter>
+                <dataType>select</dataType>
+                <label translate="true">Website</label>
             </settings>
         </column>
         <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">
