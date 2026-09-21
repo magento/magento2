@@ -111,7 +111,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      * Remove cache entries by id, also removing them from each of their tags' id index.
      *
      * Upstream only unlinks the data keys here and leaves the ids behind in every zc:ti:<tag>
-     * set, unlike its own single-id remove() which cleans both (AC-18197).
+     * set, unlike its own single-id remove() which cleans both
      *
      * @param array $ids
      */
@@ -147,7 +147,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      * Remove cache entries matching any of the given tags, also cleaning up their full tag index.
      *
      * Upstream's non-Lua fallback only unlinks the id-lists of the tags passed in, leaving a
-     * removed id behind in the index of any *other* tag it also carries (AC-18197). Delegating
+     * removed id behind in the index of any *other* tag it also carries. Delegating
      * id removal to {@see _removeByIds()} fixes that, since it looks up and clears every tag
      * an id actually belongs to rather than only the ones supplied here.
      *
