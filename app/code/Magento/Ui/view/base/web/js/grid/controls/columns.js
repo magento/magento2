@@ -80,8 +80,8 @@ define([
 
         /**
          * Helper, checks
-         *  - if less than one item choosen
-         *  - if more then viewportMaxSize choosen
+         *  - if less than one item chosen
+         *  - if more than viewportMaxSize chosen
          *
          * @param {Object} elem
          * @returns {Boolean}
