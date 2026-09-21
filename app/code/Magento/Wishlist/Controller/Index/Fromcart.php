@@ -16,6 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
+use Magento\Wishlist\Helper\FromCartRemoveItem;
 
 /**
  * Add cart item to wishlist and remove from cart controller.
@@ -55,6 +56,11 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
     protected $formKeyValidator;
 
     /**
+     * @var FromCartRemoveItem
+     */
+    protected $fromCartRemoveItem;
+
+    /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param WishlistHelper $wishlistHelper
@@ -62,6 +68,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
      * @param Validator $formKeyValidator
+     * @param FromCartRemoveItem $fromCartRemoveItem
      */
     public function __construct(
         Action\Context $context,
@@ -70,7 +77,8 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
         CheckoutCart $cart,
         CartHelper $cartHelper,
         Escaper $escaper,
-        Validator $formKeyValidator
+        Validator $formKeyValidator,
+        FromCartRemoveItem $fromCartRemoveItem
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->wishlistHelper = $wishlistHelper;
@@ -78,6 +86,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
         $this->cartHelper = $cartHelper;
         $this->escaper = $escaper;
         $this->formKeyValidator = $formKeyValidator;
+        $this->fromCartRemoveItem = $fromCartRemoveItem;
         parent::__construct($context);
     }
 
@@ -114,8 +123,7 @@ class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex implements Act
             $buyRequest = $item->getBuyRequest();
             $wishlist->addNewItem($productId, $buyRequest);
 
-            $this->cart->getQuote()->removeItem($itemId);
-            $this->cart->save();
+            $this->fromCartRemoveItem->removeItemFromQuote($this->cart, $itemId);
 
             $this->wishlistHelper->calculate();
             $wishlist->save();
