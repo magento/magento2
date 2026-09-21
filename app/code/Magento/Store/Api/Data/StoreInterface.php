@@ -101,4 +101,12 @@ interface StoreInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
     );
+
+    /**
+     * Retrieve root category identifier
+     *
+     * @return int
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getRootCategoryId();
 }
