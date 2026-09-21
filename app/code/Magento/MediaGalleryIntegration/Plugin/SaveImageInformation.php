@@ -7,14 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryIntegration\Plugin;
 
+use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
-use Magento\MediaGalleryApi\Api\SaveAssetsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Psr\Log\LoggerInterface;
+use function implode;
+use function ltrim;
+use function preg_match;
+use function rtrim;
+use function strpos;
 
 /**
  * Save image information by SaveAssetsInterface.
@@ -82,22 +88,20 @@ class SaveImageInformation
      * @param array $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
+     * @throws LocalizedException
      */
     public function afterSave(Uploader $subject, array $result): array
     {
         $mediaFolder = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+        $uploadedFile = rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/');
 
-        if (!$this->config->isEnabled() || substr($result['path'] ?? '', 0, strlen($mediaFolder)) !== $mediaFolder) {
-            return $result;
+        if ($this->config->isEnabled() && strpos($uploadedFile, $mediaFolder) === 0) {
+            $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getRelativePath($uploadedFile);
+
+            if ($this->isApplicable($path)) {
+                $this->synchronizeFiles->execute([$path]);
+            }
         }
-
-        $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getRelativePath(rtrim($result['path'] ?? '', '/') . '/' . ltrim($result['file'] ?? '', '/'));
-
-        if (!$this->isApplicable($path)) {
-            return $result;
-        }
-        $this->synchronizeFiles->execute([$path]);
 
         return $result;
     }
@@ -113,8 +117,8 @@ class SaveImageInformation
         try {
             return $path
                 && !$this->isPathExcluded->execute($path)
-                && preg_match('#\.(' . implode("|", $this->imageExtensions) . ')$# i', $path);
-        } catch (\Exception $exception) {
+                && preg_match('#\.(' . implode('|', $this->imageExtensions) . ')$# i', $path);
+        } catch (Exception $exception) {
             $this->log->critical($exception);
             return false;
         }
