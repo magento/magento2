@@ -241,7 +241,7 @@ class Shipping implements RateCollectorInterface
             );
 
             foreach ($carriers as $carrierCode => $carrierConfig) {
-                $this->collectCarrierRates($carrierCode, $request);
+                $this->collectCarrierRates($carrierCode, clone $request);
             }
         } else {
             if (!is_array($limitCarrier)) {
@@ -256,7 +256,7 @@ class Shipping implements RateCollectorInterface
                 if (!$carrierConfig) {
                     continue;
                 }
-                $this->collectCarrierRates($carrierCode, $request);
+                $this->collectCarrierRates($carrierCode, clone $request);
             }
         }
 
