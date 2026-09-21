@@ -264,9 +264,7 @@ class Collection implements
     public function getLastPageNumber()
     {
         $collectionSize = (int)$this->getSize();
-        if (0 === $collectionSize) {
-            return 1;
-        } elseif ($this->_pageSize) {
+        if ($collectionSize > 0 && $this->_pageSize) {
             return (int)ceil($collectionSize / $this->_pageSize);
         }
 
