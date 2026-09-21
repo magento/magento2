@@ -35,6 +35,8 @@ class SetLoggedAsCustomerAdminId implements SetLoggedAsCustomerAdminIdInterface
      */
     public function execute(int $adminId): void
     {
+        $this->session->setLoggedAsCustomerAdminId($adminId);
+        // Backward compatibility for code reading the legacy typo-based session key.
         $this->session->setLoggedAsCustomerAdmindId($adminId);
     }
 }
