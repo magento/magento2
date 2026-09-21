@@ -92,6 +92,15 @@ class Queue
     private $start = 0;
 
     /**
+     * Tracks whether any forked child process exited with a non-zero status.
+     * PHP exceptions do not cross fork boundaries, so child failures are only
+     * detectable via pcntl_wexitstatus in the parent process.
+     *
+     * @var bool
+     */
+    private bool $hasErrors = false;
+
+    /**
      * @var int
      */
     private $lastJobStarted = 0;
@@ -195,6 +204,12 @@ class Queue
 
         if (!empty($packages)) {
             throw new TimeoutException('Not all packages are deployed.');
+        }
+
+        if ($this->hasErrors) {
+            throw new \RuntimeException(
+                'Static content deploy failed: one or more packages could not be deployed. Check the log for details.'
+            );
         }
 
         return $returnStatus;
@@ -360,7 +375,15 @@ class Queue
 
             // process child process
             $this->inProgress = [];
-            $this->deployPackageService->deploy($package, $this->options, true);
+            try {
+                $this->deployPackageService->deploy($package, $this->options, true);
+            } catch (\Throwable $e) {
+                // Log and exit cleanly so the parent receives a well-defined non-zero
+                // exit status via pcntl_wexitstatus instead of PHP's fatal-error code.
+                $this->logger->error($e->getMessage());
+                // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+                exit(1);
+            }
             // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
             exit(0);
         } else {
@@ -403,8 +426,10 @@ class Queue
                     );
 
                     unset($this->inProgress[$package->getPath()]);
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    return pcntl_wexitstatus($status) === 0;
+                    if ($exitStatus !== 0) {
+                        $this->hasErrors = true;
+                    }
+                    return $exitStatus === 0;
                 } elseif ($result === -1) {
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $errno = pcntl_errno();
