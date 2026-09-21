@@ -29,7 +29,7 @@ class ItemCreation implements InvoiceItemCreationInterface
     private $extensionAttributes;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getOrderItemId()
     {
@@ -37,15 +37,16 @@ class ItemCreation implements InvoiceItemCreationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderItemId($orderItemId)
     {
         $this->orderItemId = $orderItemId;
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQty()
     {
@@ -53,11 +54,12 @@ class ItemCreation implements InvoiceItemCreationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setQty($qty)
     {
         $this->qty = $qty;
+        return $this;
     }
 
     /**
