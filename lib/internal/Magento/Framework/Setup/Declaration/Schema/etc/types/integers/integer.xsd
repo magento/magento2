@@ -20,7 +20,7 @@
                 <xs:attribute name="default">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
-                            <xs:pattern value="\d+|null" />
+                            <xs:pattern value="-?\d+|null" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
