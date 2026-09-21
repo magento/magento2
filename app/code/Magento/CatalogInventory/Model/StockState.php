@@ -103,7 +103,7 @@ class StockState implements StockStateInterface
      * @param int $productId
      * @param float $qty
      * @param int $scopeId
-     * @return float
+     * @return int|float
      */
     public function suggestQty($productId, $qty, $scopeId = null)
     {
