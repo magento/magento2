@@ -47,6 +47,13 @@ class Collection implements
     protected $_itemObjectClass = DataObject::class;
 
     /**
+     * Instance of a new item used for faster creation of new items
+     *
+     * @var DataObject
+     */
+    private $newEmptyItem;
+
+    /**
      * Order configuration
      *
      * @var array
@@ -629,7 +636,15 @@ class Collection implements
      */
     public function getNewEmptyItem()
     {
-        return $this->_entityFactory->create($this->_itemObjectClass);
+        if ($this->newEmptyItem === null) {
+            $newEmptyItem = $this->_entityFactory->create($this->_itemObjectClass);
+            if (!($newEmptyItem instanceof \Magento\Framework\Model\AbstractModel)) {
+                return $newEmptyItem;
+            }
+            $this->newEmptyItem = $newEmptyItem;
+        }
+
+        return clone $this->newEmptyItem;
     }
 
     /**
