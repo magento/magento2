@@ -18,6 +18,8 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class ShowModeCommand extends Command
 {
+    public const AVAILABLE_MODES = ['developer', 'production', 'default'];
+
     /**
      * Object manager factory
      *
@@ -41,7 +43,8 @@ class ShowModeCommand extends Command
      */
     protected function configure()
     {
-        $description = 'Displays current application mode.';
+        $description = 'Displays current application mode. Available modes: '
+                     . implode(', ', self::AVAILABLE_MODES) . '.';
 
         $this->setName('deploy:mode:show')->setDescription($description);
         parent::configure();
