@@ -67,21 +67,24 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         if ($this->isProductList()) {
-            if (!$this->getData('special_price_map')) {
+            $specialPriceMap = $this->getData('special_price_map');
+            if (!$specialPriceMap || !is_array($specialPriceMap)) {
                 return false;
             }
-
-            return (bool)$this->getData('special_price_map')[$this->saleableItem->getId()];
-        } else {
-            $product = $this->getSaleableItem();
-            foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
-                $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
-                $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-                if ($finalPrice < $regularPrice) {
-                    return true;
-                }
+            $productId = $this->saleableItem->getId();
+            if (array_key_exists($productId, $specialPriceMap)) {
+                return (bool)$specialPriceMap[$productId];
             }
-            return false;
         }
+
+        $product = $this->getSaleableItem();
+        foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
+            $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
+            $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
+            if ($finalPrice < $regularPrice) {
+                return true;
+            }
+        }
+        return false;
     }
 }
