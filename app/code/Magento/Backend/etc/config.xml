@@ -22,6 +22,9 @@
             <js>
                 <defer_non_critical>0</defer_non_critical>
             </js>
+            <cache_warmup>
+                <timeout>30</timeout>
+            </cache_warmup>
         </dev>
         <system>
             <media_storage_configuration>
