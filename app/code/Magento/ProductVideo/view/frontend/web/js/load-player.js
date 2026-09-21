@@ -325,6 +325,7 @@ define([
 
             if (this._autoplay) {
                 additionalParams += '&autoplay=1';
+                additionalParams += '&muted=1';
             }
 
             if (this._loop) {
