@@ -7,6 +7,7 @@ namespace Magento\PageCache\Model\App\FrontController;
 
 use Magento\Framework\App\PageCache\NotCacheableInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\State;
 
 /**
  * Plugin for processing builtin cache
@@ -111,7 +112,7 @@ class BuiltinPlugin
      */
     protected function addDebugHeader(ResponseHttp $response, $name, $value, $replace = false)
     {
-        if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+        if ($name == 'X-Magento-Cache-Debug' || $this->state->getMode() == State::MODE_DEVELOPER) {
             $response->setHeader($name, $value, $replace);
         }
     }
