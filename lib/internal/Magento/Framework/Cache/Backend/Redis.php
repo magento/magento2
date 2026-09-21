@@ -144,6 +144,38 @@ class Redis extends \Cm_Cache_Backend_Redis
     }
 
     /**
+     * Remove cache entries matching any of the given tags, also cleaning up their full tag index.
+     *
+     * Upstream's non-Lua fallback only unlinks the id-lists of the tags passed in, leaving a
+     * removed id behind in the index of any *other* tag it also carries (AC-18197). Delegating
+     * id removal to {@see _removeByIds()} fixes that, since it looks up and clears every tag
+     * an id actually belongs to rather than only the ones supplied here.
+     *
+     * @param array $tags
+     */
+    protected function _removeByMatchingAnyTags($tags)
+    {
+        if ($this->_useLua) {
+            parent::_removeByMatchingAnyTags($tags);
+            return;
+        }
+
+        $ids = $this->getIdsMatchingAnyTags($tags);
+
+        $this->_removeByIds($ids);
+
+        $this->_redis->pipeline()->multi();
+
+        // Remove tag id lists.
+        $this->_redis->unlink($this->_preprocessTagIds($tags));
+
+        // Remove tags from list of tags.
+        $this->_redis->sRem(self::SET_TAGS, $tags);
+
+        $this->_redis->exec();
+    }
+
+    /**
      * Fetch each id's stored tag list (raw, encoded) in a single pipelined round trip.
      *
      * @param array $idsChunk
@@ -157,7 +189,22 @@ class Redis extends \Cm_Cache_Backend_Redis
             $this->_redis->hGet(self::PREFIX_KEY . $id, self::FIELD_TAGS);
         }
 
-        return (array) $this->_redis->exec();
+        $result = $this->_redis->exec();
+
+        if (!is_array($result) || count($result) !== count($idsChunk)) {
+            // Surface a failed/partial pipeline instead of silently skipping tag-index cleanup
+            // for the whole chunk (AC-18197).
+            trigger_error(
+                'Magento\Framework\Cache\Backend\Redis::_fetchTagsPerId(): tag lookup pipeline '
+                . 'failed or returned a partial result; tag index cleanup will be skipped for '
+                . 'this chunk of ' . count($idsChunk) . ' id(s).',
+                E_USER_WARNING
+            );
+
+            return [];
+        }
+
+        return $result;
     }
 
     /**
