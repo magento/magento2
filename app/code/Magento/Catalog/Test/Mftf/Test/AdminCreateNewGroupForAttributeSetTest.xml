@@ -38,8 +38,8 @@
         </after>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
 
         <!-- Search and open Attribute Set from preconditions -->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
