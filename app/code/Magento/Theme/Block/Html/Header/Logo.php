@@ -27,18 +27,22 @@ class Logo extends \Magento\Framework\View\Element\Template
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_fileStorageHelper;
+    protected $_themeProvider;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper
+     * @param \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageHelper,
+        \Magento\Framework\View\Design\Theme\ThemeProviderInterface $themeProvider,
         array $data = []
     ) {
         $this->_fileStorageHelper = $fileStorageHelper;
+        $this->_themeProvider = $themeProvider;
         parent::__construct($context, $data);
     }
 
@@ -158,5 +162,22 @@ class Logo extends \Magento\Framework\View\Element\Template
         }
 
         return $this->getMediaDirectory()->isFile($filename);
+    }
+
+    /**
+     * @return string|void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getThemeName()
+    {
+        $themeId = $this->_scopeConfig->getValue(
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeManager->getStore()->getId()
+        );
+        if (isset($themeId)) {
+            $theme = $this->_themeProvider->getThemeById($themeId);
+            return $theme->getThemeTitle();
+        }
     }
 }
