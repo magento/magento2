@@ -141,12 +141,13 @@ class Main extends \Magento\Backend\Block\Template
             );
         }
 
+        $message = __("Warning: removing an attribute from the set result in the loss of that attribute data in the set. This is without making a backup first not recoverable");
         $this->getToolbar()->addChild(
             'save_button',
             \Magento\Backend\Block\Widget\Button::class,
             [
                 'label' => __('Save'),
-                'onclick' => 'editSet.save();',
+                'onclick' => "if ( true == confirm('{$message}')) { editSet.save();}",
                 'class' => 'save primary save-attribute-set'
             ]
         );
