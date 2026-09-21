@@ -18,10 +18,10 @@ use PHPUnit\Framework\TestCase;
 class LiveCodeTest extends TestCase
 {
     private const FILE_EXTENSION = 'less';
-    /**
-     * @var string
-     */
-    private static $reportDir = '';
+
+    protected static string $reportDir = '';
+
+    protected string $rulesetDir = 'Magento';
 
     /**
      * Setup basics for all tests
@@ -44,7 +44,7 @@ class LiveCodeTest extends TestCase
     public function testCodeStyle()
     {
         $reportFile = self::$reportDir . '/csless_report.txt';
-        $codeSniffer = new CodeSniffer('Magento', $reportFile, new Wrapper());
+        $codeSniffer = new CodeSniffer($this->rulesetDir, $reportFile, new Wrapper());
         $codeSniffer->setExtensions([self::FILE_EXTENSION]);
         $fileList = PHPCodeTest::getWhitelist([self::FILE_EXTENSION], __DIR__, __DIR__);
         $result = $codeSniffer->run($this->filterFiles($fileList));
