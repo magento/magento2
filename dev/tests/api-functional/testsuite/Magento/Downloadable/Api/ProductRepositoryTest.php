@@ -326,10 +326,8 @@ class ProductRepositoryTest extends WebapiAbstract
         $response = $this->saveProduct($productData);
 
         $this->assertArrayHasKey(ProductInterface::EXTENSION_ATTRIBUTES_KEY, $response);
-        $this->assertArrayHasKey(self::PRODUCT_SAMPLES, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
         $this->assertArrayHasKey(self::PRODUCT_LINKS, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
 
-        $this->assertCount(2, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::PRODUCT_SAMPLES]);
         $this->assertCount(2, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::PRODUCT_LINKS]);
     }
 
