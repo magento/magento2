@@ -1257,8 +1257,9 @@ class ProductRepositoryTest extends TestCase
                 ->method('setProductLinks')
                 ->with($outputLinks);
         } else {
-            $this->initializedProduct->expects($this->never())
-                ->method('setProductLinks');
+            $this->initializedProduct->expects($this->once())
+                ->method('setProductLinks')
+                ->with(null);
         }
         $this->initializedProduct->expects($this->atLeastOnce())
             ->method('getSku')->willReturn($this->productData['sku']);
