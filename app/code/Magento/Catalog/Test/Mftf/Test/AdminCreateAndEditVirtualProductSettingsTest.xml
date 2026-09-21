@@ -71,8 +71,8 @@
         </actionGroup>
 
         <!-- Set Content to the product -->
-        <scrollTo selector="{{AdminProductContentSection.sectionHeader}}" x="0" y="-100" stepKey="scrollToContent"/>
-        <click selector="{{AdminProductContentSection.sectionHeader}}" stepKey="openContentDropDown"/>
+        <actionGroup ref="AdminOpenContentSectionOnProductPageActionGroup" stepKey="scrollToContent"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openContentDropDown"/>
         <fillField selector="{{AdminProductContentSection.descriptionTextArea}}" userInput="{{ApiProductDescription.value}}" stepKey="fillLongDescription"/>
         <fillField selector="{{AdminProductContentSection.shortDescriptionTextArea}}" userInput="{{ApiProductShortDescription.value}}" stepKey="fillShortDescription"/>
 
