@@ -41,10 +41,10 @@ class CategoryAttribute implements RevertibleDataFixtureInterface
         'entity_type_id' => '3',
         'is_required' => false,
         'is_user_defined' => true,
-        'default_frontend_label' => 'Category Attribute%uniqid%',
+        'frontend_label' => 'Category Attribute%uniqid%',
         'backend_type' => 'varchar',
         'is_unique' => '0',
-        'apply_to' => [],
+        'apply_to' => 'category',
     ];
 
     /**
