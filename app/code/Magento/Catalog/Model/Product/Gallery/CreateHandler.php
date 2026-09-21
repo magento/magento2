@@ -710,10 +710,11 @@ class CreateHandler implements ExtensionInterface
             $resetLabel = true;
         }
 
-        if (in_array($attrData, array_keys($newImages))) {
-            $newImages[$attrData] = $this->prepareImageData($newImages[$attrData], $storeId)
-                + $newImages[$attrData];
-            $product->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
+        $newImageKey = $this->resolveNewImageKey($newImages, (string) $attrData);
+        if ($newImageKey !== null) {
+            $newImages[$newImageKey] = $this->prepareImageData($newImages[$newImageKey], $storeId)
+                + $newImages[$newImageKey];
+            $product->setData($mediaAttrCode . '_label', $newImages[$newImageKey]['label']);
         }
 
         if (in_array($attrData, array_keys($existImages)) && isset($existImages[$attrData]['label'])) {
@@ -739,6 +740,29 @@ class CreateHandler implements ExtensionInterface
                 $storeId
             );
         }
+    }
+
+    /**
+     * Resolve new image key matching the current media attribute value
+     *
+     * The media attribute value may already have been remapped to the moved file name,
+     * while new images remain keyed by their original file name.
+     *
+     * @param array $newImages
+     * @param string $attrData
+     * @return string|null
+     */
+    private function resolveNewImageKey(array $newImages, string $attrData): ?string
+    {
+        if (isset($newImages[$attrData])) {
+            return $attrData;
+        }
+        foreach ($newImages as $originalFile => $newImage) {
+            if (isset($newImage['new_file']) && $newImage['new_file'] === $attrData) {
+                return (string) $originalFile;
+            }
+        }
+        return null;
     }
 
     /**
