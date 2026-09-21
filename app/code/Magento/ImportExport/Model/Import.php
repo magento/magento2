@@ -523,8 +523,6 @@ class Import extends AbstractModel
     {
         $ids = $this->getImportIds();
         $this->_getEntityAdapter()->setIds($ids);
-        $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
-        $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
 
         //Validating images temporary directory path if the constraint has been provided
         if ($this->hasData('images_base_directory')
