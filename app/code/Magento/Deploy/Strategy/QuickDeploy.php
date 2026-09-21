@@ -71,11 +71,29 @@ class QuickDeploy implements StrategyInterface
         $includeThemesMap = array_flip($options[Options::THEME] ?? []);
         $excludeThemesMap = array_flip($options[Options::EXCLUDE_THEME] ?? []);
 
+        // Pre-compute which packages will be queued so we can safely resolve parent dependencies.
+        // A parent is only a valid queue dependency if it will actually be queued — passing a
+        // dependency that is never queued causes Queue::process() to wait forever (deadlock).
+        $queuedPaths = [];
         foreach ($groupedPackages as $levelPackages) {
             foreach ($levelPackages as $package) {
                 if ($parentCompilationRequested
                     || $this->canDeployTheme($package->getTheme(), $includeThemesMap, $excludeThemesMap)) {
-                    $this->queue->add($package);
+                    $queuedPaths[$package->getPath()] = true;
+                }
+            }
+        }
+
+        foreach ($groupedPackages as $levelPackages) {
+            foreach ($levelPackages as $package) {
+                if ($parentCompilationRequested
+                    || $this->canDeployTheme($package->getTheme(), $includeThemesMap, $excludeThemesMap)) {
+                    $parentPackage = $package->getParent();
+                    $parentQueued = $parentPackage && isset($queuedPaths[$parentPackage->getPath()]);
+                    $this->queue->add(
+                        $package,
+                        $parentQueued ? [$parentPackage->getPath() => $parentPackage] : []
+                    );
                     $deployPackages[] = $package;
                 }
             }
