@@ -126,12 +126,15 @@ class ProductList
         if (!isset($availableViewModes[$viewMode])) {
             return $this->_defaultAvailableLimit;
         }
-
+        $scope=ScopeInterface::SCOPE_STORE;
+        if($this->scopeConfig->getValue('general/single_store_mode/enabled', ScopeConfigInterface::SCOPE_TYPE_DEFAULT)) {
+            $scope = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+        }
         $perPageConfigPath = 'catalog/frontend/' . $viewMode . '_per_page_values';
-        $perPageValues = (string)$this->scopeConfig->getValue($perPageConfigPath, ScopeInterface::SCOPE_STORE);
+        $perPageValues = (string)$this->scopeConfig->getValue($perPageConfigPath, $scope);
         $perPageValues = explode(',', $perPageValues);
         $perPageValues = array_combine($perPageValues, $perPageValues);
-        if ($this->scopeConfig->isSetFlag('catalog/frontend/list_allow_all', ScopeInterface::SCOPE_STORE)) {
+        if ($this->scopeConfig->isSetFlag('catalog/frontend/list_allow_all', $scope)) {
             return ($perPageValues + ['all' => __('All')]);
         } else {
             return $perPageValues;
