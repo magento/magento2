@@ -1,0 +1,177 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+
+/**
+ * @var \Magento\ProductAlert\Block\Customer\ListAlerts $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php if (!$block->isPriceAlertAllowed() && !$block->isStockAlertAllowed()): ?>
+    <div class="message info empty">
+        <span><?= $escaper->escapeHtml(__('Product alerts are currently unavailable.')) ?></span>
+    </div>
+<?php else: ?>
+
+    <?php if ($block->isPriceAlertAllowed()): ?>
+        <div class="block block-product-alert-price" id="product-alert-price-section">
+            <div class="block-title">
+                <strong><?= $escaper->escapeHtml(__('Price Alerts')) ?></strong>
+            </div>
+            <div class="block-content">
+                <?php if ($block->hasPriceAlerts()): ?>
+                    <div class="table-wrapper product-alerts-price">
+                        <table class="data table table-product-alerts-price" id="my-price-alerts-table">
+                            <caption class="table-caption"><?= $escaper->escapeHtml(__('Price Alerts')) ?></caption>
+                            <thead>
+                            <tr>
+                                <th scope="col" class="col date"><?= $escaper->escapeHtml(__('Created')) ?></th>
+                                <th scope="col" class="col item"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                                <th scope="col" class="col price"><?= $escaper->escapeHtml(__('Subscribed Price')) ?></th>
+                                <th scope="col" class="col actions"><?= $escaper->escapeHtml(__('Action')) ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($block->getPriceAlerts() as $alert): ?>
+                                <?php $product = $block->getProduct($alert); ?>
+                                <tr>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Created')) ?>"
+                                        class="col date"><?= $escaper->escapeHtml($block->formatAlertDate((string)$alert->getAddDate())) ?>
+                                    </td>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Product Name')) ?>" class="col item">
+                                        <?php if ($product): ?>
+                                            <strong class="product-name">
+                                                <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
+                                                    <?= $escaper->escapeHtml($product->getName()) ?>
+                                                </a>
+                                            </strong>
+                                        <?php else: ?>
+                                            <strong class="product-name">
+                                                <?= $escaper->escapeHtml(__('Product #%1', $alert->getProductId())) ?>
+                                            </strong>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Subscribed Price')) ?>" class="col price">
+                                        <?= /* @noEscape */ $block->formatAlertPrice($alert->getPrice()) ?>
+                                    </td>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Action')) ?>" class="col actions">
+                                        <a href="<?= $escaper->escapeUrl(
+                                            $block->getUnsubscribePriceUrl((int)$alert->getProductId())
+                                        ) ?>"
+                                           class="action delete"
+                                           title="<?= $escaper->escapeHtmlAttr(__('Unsubscribe')) ?>">
+                                            <span><?= $escaper->escapeHtml(__('Unsubscribe')) ?></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php if ($block->getPricePagerHtml()): ?>
+                        <div class="toolbar product-alerts-toolbar bottom">
+                            <?= /* @noEscape */ $block->getPricePagerHtml() ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="actions-toolbar">
+                        <div class="secondary">
+                            <a class="action unsubscribe-all"
+                               href="<?= $escaper->escapeUrl($block->getUnsubscribeAllPriceUrl()) ?>">
+                                <span><?= $escaper->escapeHtml(__('Unsubscribe from all price alerts')) ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="message info empty">
+                        <span><?= $escaper->escapeHtml(__('You have no price alert subscriptions.')) ?></span>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($block->isStockAlertAllowed()): ?>
+        <div class="block block-product-alert-stock" id="product-alert-stock-section">
+            <div class="block-title">
+                <strong><?= $escaper->escapeHtml(__('Stock Alerts')) ?></strong>
+            </div>
+            <div class="block-content">
+                <?php if ($block->hasStockAlerts()): ?>
+                    <div class="table-wrapper product-alerts-stock">
+                        <table class="data table table-product-alerts-stock" id="my-stock-alerts-table">
+                            <caption class="table-caption"><?= $escaper->escapeHtml(__('Stock Alerts')) ?></caption>
+                            <thead>
+                            <tr>
+                                <th scope="col" class="col date"><?= $escaper->escapeHtml(__('Created')) ?></th>
+                                <th scope="col" class="col item"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                                <th scope="col" class="col actions"><?= $escaper->escapeHtml(__('Action')) ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($block->getStockAlerts() as $alert): ?>
+                                <?php $product = $block->getProduct($alert); ?>
+                                <tr>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Created')) ?>"
+                                        class="col date"><?= $escaper->escapeHtml($block->formatAlertDate((string)$alert->getAddDate())) ?>
+                                    </td>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Product Name')) ?>" class="col item">
+                                        <?php if ($product): ?>
+                                            <strong class="product-name">
+                                                <a href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
+                                                    <?= $escaper->escapeHtml($product->getName()) ?>
+                                                </a>
+                                            </strong>
+                                        <?php else: ?>
+                                            <strong class="product-name">
+                                                <?= $escaper->escapeHtml(__('Product #%1', $alert->getProductId())) ?>
+                                            </strong>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td data-th="<?= $escaper->escapeHtmlAttr(__('Action')) ?>" class="col actions">
+                                        <a href="#"
+                                           class="action delete"
+                                           data-post="<?= $escaper->escapeHtmlAttr(
+                                               $block->getUnsubscribeStockPostData((int)$alert->getProductId())
+                                           ) ?>"
+                                           title="<?= $escaper->escapeHtmlAttr(__('Unsubscribe')) ?>">
+                                            <span><?= $escaper->escapeHtml(__('Unsubscribe')) ?></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <?php if ($block->getStockPagerHtml()): ?>
+                        <div class="toolbar product-alerts-toolbar bottom">
+                            <?= /* @noEscape */ $block->getStockPagerHtml() ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="actions-toolbar">
+                        <div class="secondary">
+                            <a class="action unsubscribe-all"
+                               href="<?= $escaper->escapeUrl($block->getUnsubscribeAllStockUrl()) ?>">
+                                <span><?= $escaper->escapeHtml(__('Unsubscribe from all stock alerts')) ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="message info empty">
+                        <span><?= $escaper->escapeHtml(__('You have no stock alert subscriptions.')) ?></span>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $escaper->escapeHtml(__('Back')) ?></span>
+            </a>
+        </div>
+    </div>
+
+<?php endif; ?>
