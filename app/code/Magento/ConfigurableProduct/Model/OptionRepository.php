@@ -291,7 +291,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         if (!$option->getAttributeId()) {
             $inputException->addError(__('Option attribute ID is not specified.'));
         }
-        if (!$option->getLabel()) {
+        if (!$option->getLabel() && !$option->getIsUseDefault()) {
             $inputException->addError(__('Option label is not specified.'));
         }
         if (!$option->getValues()) {
