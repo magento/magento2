@@ -47,6 +47,8 @@
             <waitForElementClickable selector="{{CheckoutPaymentSection.cntinuebtn}}" stepKey="waitToClickContinueButton"/>
             <click selector="{{CheckoutPaymentSection.cntinuebtn}}" stepKey="submitContinueButton"/>
             <actionGroup ref="StorefrontSwitchToPayPalPayflowActionGroup" stepKey="switchToPaypalPayflowIframe"/>
+            <comment userInput="Stagger the Payflow Link charge so it does not land in the same submission window as other Payflow tests running concurrently in the parallel CE/EE/B2B suites against the same shared sandbox account" stepKey="commentStaggerBeforePayflowSubmit"/>
+            <wait time="30" stepKey="staggerBeforePayflowSubmit"/>
             <actionGroup ref="StorefrontFillCreditCardDetailsActionGroup" stepKey="inputCreditCardNumberFillCreditCardDetails"/>
             <waitForPageLoad stepKey="waitForOrderData"/>
         </before>

@@ -89,9 +89,7 @@
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
         <!-- Login to PayPal in-context and verify order total on PayPal page-->
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
-        <waitForElementClickable selector="{{PayPalPaymentSection.orderTotalTabOnPaypalCheckout}}" stepKey="waitForOrderTabClickable"/>
-        <click selector="{{PayPalPaymentSection.orderTotalTabOnPaypalCheckout}}" stepKey="clickOrderTabToOpen"/>
-        <waitForElementVisible selector="{{PayPalPaymentSection.total('$127.01')}}" stepKey="verifyOrderTotalOnPaypalPage"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$127.01" stepKey="verifyOrderTotalOnPaypalPage"/>
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         <!-- I see order successful Page -->
