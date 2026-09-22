@@ -126,6 +126,13 @@ class InterceptionConfigurationBuilderTest extends TestCase
         $this->orphanedPluginList->expects($this->once())
             ->method('collectFromPluginData')
             ->with($configuredPluginData);
+        $virtualTypes = ['customCacheInstance' => 'stdClass'];
+        $this->omConfig->expects($this->once())
+            ->method('getVirtualTypes')
+            ->willReturn($virtualTypes);
+        $this->orphanedPluginList->expects($this->once())
+            ->method('collectVirtualTypes')
+            ->with($virtualTypes);
 
         $this->omConfig->expects($this->any())
             ->method('getOriginalInstanceType')

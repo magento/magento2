@@ -10,8 +10,6 @@ namespace Magento\Setup\Module\Di\Code\Reader;
 /**
  * Identifies plugins declared only against targets that do not exist.
  *
- * Populated from plugin config that Interception already loads during compile,
- * then used by area definition collection to skip constructor resolution.
  */
 class OrphanedPluginList
 {
@@ -21,6 +19,13 @@ class OrphanedPluginList
      * @var array<string, array<string, true>>
      */
     private array $pluginToTargets = [];
+
+    /**
+     * Normalized virtual type names.
+     *
+     * @var array<string, true>
+     */
+    private array $virtualTypeNames = [];
 
     /**
      * Collects plugin-to-target mappings from already-loaded plugin list data.
@@ -46,7 +51,22 @@ class OrphanedPluginList
     }
 
     /**
+     * Records virtual type names so they are treated as valid plugin targets.
+     *
+     * @param array $virtualTypes virtual type name => original type
+     * @return void
+     */
+    public function collectVirtualTypes(array $virtualTypes): void
+    {
+        foreach (array_keys($virtualTypes) as $virtualType) {
+            $this->virtualTypeNames[ltrim((string) $virtualType, '\\')] = true;
+        }
+    }
+
+    /**
      * Returns whether the given class is a plugin declared only against missing targets.
+     *
+     * Virtual types are valid targets even though they are not real PHP classes.
      *
      * @param string $pluginClass
      * @return bool
@@ -59,11 +79,24 @@ class OrphanedPluginList
         }
 
         foreach (array_keys($this->pluginToTargets[$pluginClass]) as $target) {
-            if (class_exists($target) || interface_exists($target)) {
+            if ($this->isDeclaredTarget($target)) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    /**
+     * Whether a plugin target exists as a class, interface, or virtual type.
+     *
+     * @param string $target
+     * @return bool
+     */
+    private function isDeclaredTarget(string $target): bool
+    {
+        return class_exists($target)
+            || interface_exists($target)
+            || isset($this->virtualTypeNames[$target]);
     }
 }

@@ -14,8 +14,10 @@ class OrphanedPluginListTest extends TestCase
 {
     private const EXISTING_TARGET = \DateTime::class;
     private const MISSING_TARGET = 'Acme\\DoesNotExist\\MissingTarget';
+    private const VIRTUAL_TYPE = 'customCacheInstance';
     private const ORPHANED_PLUGIN = 'Acme\\Demo\\Plugin\\OrphanedPlugin';
     private const ACTIVE_PLUGIN = 'Acme\\Demo\\Plugin\\ActivePlugin';
+    private const VIRTUAL_TYPE_PLUGIN = 'Acme\\Demo\\Plugin\\VirtualTypePlugin';
     private const UNKNOWN_CLASS = 'Acme\\Demo\\Service\\NotAPlugin';
 
     /**
@@ -52,6 +54,30 @@ class OrphanedPluginListTest extends TestCase
         $this->collectDefaultMap();
 
         $this->assertFalse($this->model->isOrphanedPlugin(self::ACTIVE_PLUGIN));
+    }
+
+    public function testIsOrphanedPluginReturnsFalseWhenTargetIsAVirtualType(): void
+    {
+        $this->model->collectVirtualTypes([self::VIRTUAL_TYPE => self::EXISTING_TARGET]);
+        $this->model->collectFromPluginData([
+            self::VIRTUAL_TYPE => [
+                'plugin' => ['instance' => self::VIRTUAL_TYPE_PLUGIN],
+            ],
+        ]);
+
+        $this->assertFalse($this->model->isOrphanedPlugin(self::VIRTUAL_TYPE_PLUGIN));
+    }
+
+    public function testIsOrphanedPluginStripsLeadingBackslashOnVirtualTypeName(): void
+    {
+        $this->model->collectVirtualTypes(['\\' . self::VIRTUAL_TYPE => self::EXISTING_TARGET]);
+        $this->model->collectFromPluginData([
+            self::VIRTUAL_TYPE => [
+                'plugin' => ['instance' => self::VIRTUAL_TYPE_PLUGIN],
+            ],
+        ]);
+
+        $this->assertFalse($this->model->isOrphanedPlugin(self::VIRTUAL_TYPE_PLUGIN));
     }
 
     public function testIsOrphanedPluginStripsLeadingBackslash(): void

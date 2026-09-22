@@ -46,16 +46,17 @@ class InterceptionConfigurationBuilder
      * @param OrphanedPluginList|null $orphanedPluginList
      */
     public function __construct(
-        readonly private InterceptionConfig $interceptionConfig,
-        readonly private PluginList $pluginList,
-        readonly private Type $typeReader,
-        readonly private Manager $cacheManager,
-        readonly private InterceptableValidator $interceptableValidator,
+        private readonly InterceptionConfig $interceptionConfig,
+        private readonly PluginList $pluginList,
+        private readonly Type $typeReader,
+        private readonly Manager $cacheManager,
+        private readonly InterceptableValidator $interceptableValidator,
         ?ConfigInterface $omConfig = null,
         ?OrphanedPluginList $orphanedPluginList = null
     ) {
         $this->omConfig = $omConfig ?? ObjectManager::getInstance()->get(ConfigInterface::class);
-        $this->orphanedPluginList = $orphanedPluginList ?: new OrphanedPluginList();
+        $this->orphanedPluginList = $orphanedPluginList
+            ?? ObjectManager::getInstance()->get(OrphanedPluginList::class);
     }
 
     /**
@@ -130,6 +131,7 @@ class InterceptionConfigurationBuilder
             $inheritedConfig[$key] = $this->filterNullInheritance($pluginListCloned->getPluginsConfig());
             $this->orphanedPluginList->collectFromPluginData($pluginListCloned->getConfiguredPluginData());
         }
+        $this->orphanedPluginList->collectVirtualTypes($this->omConfig->getVirtualTypes());
         return $inheritedConfig;
     }
 
