@@ -86,14 +86,27 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter">
-        <plugin name="ordergrid_fulltext_fallback"
-                type="Magento\Sales\Plugin\SearchCriteria\FulltextFilterPlugin"
-                sortOrder="10"/>
-    </type>
     <type name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection">
         <plugin name="custom_sales_grid_country_name_to_code_filter"
                 type="Magento\Sales\Plugin\OrderGrid\CountryNameToCodeFilter"
                 sortOrder="10"/>
     </type>
+    <virtualType name="SalesOrderGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Sales\Ui\Component\Listing\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderGridReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="filterPool" xsi:type="object">SalesOrderGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SalesOrderGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object" shared="false">SalesOrderGridReporting</argument>
+        </arguments>
+    </virtualType>
 </config>

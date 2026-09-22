@@ -30,7 +30,7 @@ jobs:
       github.event_name == 'pull_request' &&
       vars.PR_QA_ENABLED_JOBS != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: read
@@ -291,7 +291,16 @@ jobs:
               echo "::warning::No locked magento-coding-standard reference found — falling back to floating dev-develop."
               composer create-project --no-interaction --no-progress --stability=dev --remove-vcs magento/magento-coding-standard:dev-develop mcs
             fi
-            cd mcs && npm install && cd "${GITHUB_WORKSPACE}"
+            cd mcs
+            if [ "$HAS_JS" = "true" ]; then
+              # Only install MCS's own npm deps (its ESLint config and
+              # plugins) when this PR actually has JS files to lint. The ESLint step
+              # itself already skips when HAS_JS != true, so this npm install had
+              # nothing downstream ever reading it on a PHP-only PR — just ~4 minutes
+              # of wasted install time on every run.
+              npm install
+            fi
+            cd "${GITHUB_WORKSPACE}"
 
             echo "PHPCS installed standards:"
             mcs/vendor/bin/phpcs -i
