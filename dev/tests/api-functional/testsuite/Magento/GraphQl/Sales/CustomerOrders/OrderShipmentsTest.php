@@ -22,17 +22,23 @@ use Magento\GraphQl\Sales\Fixtures\CustomerPlaceOrder;
 use Magento\Quote\Test\Fixture\AddProductToCart;
 use Magento\Quote\Test\Fixture\CustomerCart;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Test\Fixture\Invoice as InvoiceFixture;
 use Magento\Sales\Test\Fixture\Shipment as ShipmentFixture;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests the Order Shipments query
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderShipmentsTest extends GraphQlAbstract
 {
     /**
@@ -159,6 +165,69 @@ class OrderShipmentsTest extends GraphQlAbstract
         $this->assertCount(1, $shipments[0]['items']);
         $this->assertEquals($shipment2->getIncrementId(), $shipments[1]['number']);
         $this->assertCount(1, $shipments[1]['items']);
+    }
+
+    #[
+        Config('general/locale/code', 'fr_FR'),
+        Config('general/locale/timezone', 'Europe/Paris'),
+        DataFixture(ProductFixture::class, as: 'product'),
+        DataFixture(Customer::class, as: 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], as: 'quote'),
+        DataFixture(AddProductToCart::class, ['cart_id' => '$quote.id$', 'product_id' => '$product.id$', 'qty' => 1]),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetDeliveryMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$quote.id$']),
+        DataFixture(PlaceOrderFixture::class, ['cart_id' => '$quote.id$'], 'order'),
+        DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
+        DataFixture(
+            ShipmentFixture::class,
+            [
+                'order_id' => '$order.id$',
+                'items' => [['product_id' => '$product.id$', 'qty' => 1]]
+            ],
+            'shipment'
+        ),
+    ]
+    public function testShipmentCommentTimestampCalendarValueIsCorrectUnderFrenchLocale()
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $order = DataFixtureStorageManager::getStorage()->get('order');
+        /** @var Shipment $shipment */
+        $shipment = DataFixtureStorageManager::getStorage()->get('shipment');
+
+        $shipment->addComment('visible_comment', false, true);
+        /** @var ShipmentRepositoryInterface $shipmentRepository */
+        $shipmentRepository = Bootstrap::getObjectManager()->get(ShipmentRepositoryInterface::class);
+        $shipmentRepository->save($shipment);
+        $shipmentComment = $shipment->getCommentsCollection()->getLastItem();
+
+        $authHeader = $this->getCustomerAuthHeader->execute($customer->getEmail(), 'password');
+        $result = $this->graphQlQuery($this->getQuery($order->getIncrementId()), [], '', $authHeader);
+        $this->assertArrayNotHasKey('errors', $result);
+
+        $comments = $result['customer']['orders']['items'][0]['shipments'][0]['comments'];
+        $this->assertCount(1, $comments);
+        $timestamp = $comments[0]['timestamp'];
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $timestamp);
+
+        // Independent computation - deliberately does NOT go through
+        // Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug (AC-18084).
+        $expectedTimestamp = (new \DateTime($shipmentComment->getCreatedAt(), new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('Europe/Paris'))
+            ->format('Y-m-d H:i:s');
+
+        $this->assertSame(
+            $expectedTimestamp,
+            $timestamp,
+            sprintf(
+                'Shipment comment timestamp should equal its created_at (%s, UTC) converted to the '
+                . 'Europe/Paris store timezone under the fr_FR locale.',
+                $shipmentComment->getCreatedAt()
+            )
+        );
     }
     
     /**

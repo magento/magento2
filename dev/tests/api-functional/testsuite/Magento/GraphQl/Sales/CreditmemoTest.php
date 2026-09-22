@@ -156,6 +156,73 @@ class CreditmemoTest extends GraphQlAbstract
     }
 
     /**
+     * Regression coverage for AC-18084: credit memo comment timestamp must reflect the
+     * correct calendar date/time under a non-en_US locale, not just re-derive the same
+     * (possibly buggy) value the production code produced.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/customer_creditmemo_with_two_items.php
+     * @magentoConfigFixture default_store general/locale/code fr_FR
+     * @magentoConfigFixture default_store general/locale/timezone Europe/Paris
+     */
+    public function testCreditMemoCommentTimestampCalendarValueIsCorrectUnderFrenchLocale(): void
+    {
+        $order = $this->order->loadByIncrementId('100000001');
+        $creditMemo = $order->getCreditmemosCollection()->getFirstItem();
+        $comment = $creditMemo->getCommentsCollection()->getFirstItem();
+
+        $query =
+            <<<QUERY
+query {
+  customer {
+    orders {
+      items {
+        credit_memos {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $firstOrderItem = current($response['customer']['orders']['items'] ?? []);
+        $comments = $firstOrderItem['credit_memos'][0]['comments'];
+        $visibleComment = current(array_filter($comments, fn ($c) => $c['message'] === 'some_comment'));
+        $this->assertNotEmpty($visibleComment, 'Visible credit memo comment should be present');
+        $timestamp = $visibleComment['timestamp'];
+
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $timestamp);
+
+        // Independent computation - deliberately does NOT go through
+        // Timezone::date()/IntlDateFormatter, so it can detect a wrong
+        // calendar value rather than re-deriving the same bug.
+        $expectedTimestamp = (new \DateTime($comment->getCreatedAt(), new \DateTimeZone('UTC')))
+            ->setTimezone(new \DateTimeZone('Europe/Paris'))
+            ->format('Y-m-d H:i:s');
+
+        $this->assertSame(
+            $expectedTimestamp,
+            $timestamp,
+            sprintf(
+                'Credit memo comment timestamp should equal its created_at (%s, UTC) converted to the '
+                . 'Europe/Paris store timezone under the fr_FR locale.',
+                $comment->getCreatedAt()
+            )
+        );
+    }
+
+    /**
      * Test customer refund details from order for bundle product with a partial refund
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
