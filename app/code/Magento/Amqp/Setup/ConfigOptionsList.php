@@ -11,6 +11,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\MessageQueue\Setup\ConfigOptionsList as MessageQueueConfigOptionsList;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -55,11 +57,20 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private $connectionValidator;
 
     /**
-     * @param ConnectionValidator $connectionValidator
+     * @var OutputInterface
      */
-    public function __construct(ConnectionValidator $connectionValidator)
-    {
+    private $output;
+
+    /**
+     * @param ConnectionValidator $connectionValidator
+     * @param OutputInterface|null $output
+     */
+    public function __construct(
+        ConnectionValidator $connectionValidator,
+        ?OutputInterface $output = null
+    ) {
         $this->connectionValidator = $connectionValidator;
+        $this->output = $output ?? new NullOutput();
     }
 
     /**
@@ -214,8 +225,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         // Validate RabbitMQ version if connection succeeded
         if ($result) {
             $versionError = $this->validateVersion($options, $isSslEnabled, $sslOptions);
-            if ($versionError !== null) {
-                $errors[] = $versionError;
+            if ($versionError !== null && PHP_SAPI === 'cli') {
+                $this->output->writeln('<comment>Warning: ' . $versionError . '</comment>');
             }
         }
 
@@ -273,7 +284,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ) {
             return sprintf(
                 'RabbitMQ version "%s" detected. Magento requires RabbitMQ version %s or later. '
-                . 'Please upgrade RabbitMQ and rerun setup.',
+                . 'Please upgrade RabbitMQ when a compatible version is available. Setup will continue.',
                 $serverVersion,
                 ConnectionValidator::MINIMUM_RABBITMQ_VERSION
             );
