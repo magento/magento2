@@ -21,8 +21,13 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- The admin "Interface Locale" dropdown only lists locales with deployed static content -->
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
         </before>
         <after>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="resetAdminInterfaceLocale">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -78,11 +83,11 @@
         />
 
         <assertNotEquals
-            message="The Login as Customer label is in not in Default Local (US)."
+            message="The Login as Customer label is not translated for the French interface locale."
             stepKey="assertNotEquals"
         >
-            <expectedResult type="string">grabDefaultLocaleButtonLabel</expectedResult>
-            <actualResult type="string">grabFranceLocaleButtonLabel</actualResult>
+            <expectedResult type="const">$grabDefaultLocaleButtonLabel</expectedResult>
+            <actualResult type="const">$grabFranceLocaleButtonLabel</actualResult>
         </assertNotEquals>
     </test>
 </tests>
