@@ -15,7 +15,10 @@ use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
@@ -51,21 +54,38 @@ class MediaGalleryProcessor
     private $deleteValidator;
 
     /**
+     * @var Config
+     */
+    private $mediaConfig;
+
+    /**
+     * @var WriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
      * @param Processor $processor
      * @param ImageContentInterfaceFactory $contentFactory
      * @param ImageProcessorInterface $imageProcessor
      * @param DeleteValidator|null $deleteValidator
+     * @param Config|null $mediaConfig
+     * @param Filesystem|null $filesystem
      */
     public function __construct(
         Processor $processor,
         ImageContentInterfaceFactory $contentFactory,
         ImageProcessorInterface $imageProcessor,
-        ?DeleteValidator $deleteValidator = null
+        ?DeleteValidator $deleteValidator = null,
+        ?Config $mediaConfig = null,
+        ?Filesystem $filesystem = null
     ) {
         $this->processor = $processor;
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->deleteValidator = $deleteValidator ?? ObjectManager::getInstance()->get(DeleteValidator::class);
+        $this->mediaConfig = $mediaConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(Filesystem::class);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -89,12 +109,21 @@ class MediaGalleryProcessor
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
         $entriesById = [];
+        $this->validateProvidedValueIds($mediaGalleryEntries, (array)$existingMediaGallery);
         if (!empty($existingMediaGallery)) {
+            $existingIdByHash = $this->getExistingValueIdsByContentHash($existingMediaGallery);
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
-                    $newEntries[] = $entry;
+                    $matchedValueId = $this->matchExistingImageByContent($entry, $existingIdByHash);
+                    if ($matchedValueId !== null) {
+                        // Update the existing image in place instead of creating a duplicate.
+                        $entry['value_id'] = $matchedValueId;
+                        $entriesById[$matchedValueId] = $entry;
+                    } else {
+                        $newEntries[] = $entry;
+                    }
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
@@ -135,6 +164,104 @@ class MediaGalleryProcessor
 
         $this->processMediaAttributes($product, $images);
         $this->processEntries($product, $newEntries, $entriesById);
+    }
+
+    /**
+     * Reject media gallery entries that reference a value_id absent from the product gallery.
+     *
+     * Prevents silently dropping the entry and deleting existing images when a stale or
+     * unknown image ID is provided (e.g. via the REST/bulk API).
+     *
+     * @param array $mediaGalleryEntries
+     * @param array $existingMediaGallery
+     * @return void
+     * @throws InputException
+     */
+    private function validateProvidedValueIds(array $mediaGalleryEntries, array $existingMediaGallery): void
+    {
+        $existingValueIds = [];
+        foreach ($existingMediaGallery as $existingEntry) {
+            if (isset($existingEntry['value_id'])) {
+                $existingValueIds[(string)$existingEntry['value_id']] = true;
+            }
+        }
+        foreach ($mediaGalleryEntries as $entry) {
+            if (isset($entry['value_id']) && !isset($existingValueIds[(string)$entry['value_id']])) {
+                throw new InputException(
+                    __('The image with the "%1" ID doesn\'t exist. Verify the ID and try again.', $entry['value_id'])
+                );
+            }
+        }
+    }
+
+    /**
+     * Build a map of existing image content hashes to their value_id.
+     *
+     * The stored file name cannot be used for matching because Magento disambiguates
+     * colliding names (image.png, image_1.png, ...), so the content hash is used instead.
+     *
+     * @param array $existingMediaGallery
+     * @return array
+     */
+    private function getExistingValueIdsByContentHash(array $existingMediaGallery): array
+    {
+        $map = [];
+        foreach ($existingMediaGallery as $existingEntry) {
+            if (!isset($existingEntry['file'], $existingEntry['value_id'])) {
+                continue;
+            }
+            $hash = $this->getStoredImageHash((string)$existingEntry['file']);
+            if ($hash !== null && !isset($map[$hash])) {
+                $map[$hash] = $existingEntry['value_id'];
+            }
+        }
+        return $map;
+    }
+
+    /**
+     * Calculate the content hash of an existing media gallery file.
+     *
+     * @param string $file
+     * @return string|null
+     */
+    private function getStoredImageHash(string $file): ?string
+    {
+        try {
+            $path = $this->mediaConfig->getMediaPath($file);
+            if (!$this->mediaDirectory->isExist($path)) {
+                return null;
+            }
+
+            return sha1((string)$this->mediaDirectory->readFile($path));
+        } catch (\Exception) {
+            return null;
+        }
+    }
+
+    /**
+     * Match a new base64 media entry to an existing image by its content hash.
+     *
+     * Returns the value_id of the existing image so the entry updates it in place
+     * instead of being added as a duplicate.
+     *
+     * @param array $entry
+     * @param array $existingIdByHash
+     * @return int|null
+     */
+    private function matchExistingImageByContent(array $entry, array $existingIdByHash): ?int
+    {
+        $encoded = $entry['content']['data'][ImageContentInterface::BASE64_ENCODED_DATA] ?? null;
+        if ($encoded === null) {
+            return null;
+        }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $decoded = base64_decode((string)$encoded, true);
+        if ($decoded === false) {
+            return null;
+        }
+        $hash = sha1($decoded);
+
+        return isset($existingIdByHash[$hash]) ? (int)$existingIdByHash[$hash] : null;
     }
 
     /**
