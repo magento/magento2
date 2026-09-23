@@ -17,6 +17,7 @@ use Magento\Persistent\Model\QuoteResourceWrapper;
 use Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
@@ -137,6 +138,74 @@ class CheckExpirePersistentQuoteObserverTest extends TestCase
         $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
         $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn($quoteId);
 
+        $this->quoteResourceWrapperMock->expects($this->once())
+            ->method('isActive')
+            ->with($quoteId)
+            ->willReturn(true);
+        $this->quoteResourceWrapperMock->expects($this->once())
+            ->method('isPersistent')
+            ->with($quoteId)
+            ->willReturn(true);
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $this->quoteManagerMock->expects($this->once())->method('expire');
+        $this->checkoutSessionMock->expects($this->once())->method('clearQuote');
+        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testExecuteUsesLoadedQuoteWhenAvailable()
+    {
+        $this->persistentHelperMock
+            ->expects($this->once())
+            ->method('canProcess')
+            ->with($this->observerMock)
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn(10);
+
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getIsActive'])
+            ->addMethods(['getIsPersistent'])
+            ->getMock();
+        $quoteMock->expects($this->once())->method('getIsActive')->willReturn(true);
+        $quoteMock->expects($this->once())->method('getIsPersistent')->willReturn(true);
+
+        $this->checkoutSessionMock->expects($this->any())->method('hasQuote')->willReturn(true);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
+
+        // Loaded quote is used, DB wrapper is never queried
+        $this->quoteResourceWrapperMock->expects($this->never())->method('isActive');
+        $this->quoteResourceWrapperMock->expects($this->never())->method('isPersistent');
+
+        $this->eventManagerMock->expects($this->once())->method('dispatch');
+        $this->quoteManagerMock->expects($this->once())->method('expire');
+        $this->checkoutSessionMock->expects($this->once())->method('clearQuote');
+        $this->customerSessionMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
+
+        $this->model->execute($this->observerMock);
+    }
+
+    public function testExecuteFallsBackToWrapperWhenLoadedQuoteFails()
+    {
+        $quoteId = 10;
+
+        $this->persistentHelperMock
+            ->expects($this->once())
+            ->method('canProcess')
+            ->with($this->observerMock)
+            ->willReturn(true);
+        $this->persistentHelperMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->checkoutSessionMock->expects($this->any())->method('getQuoteId')->willReturn($quoteId);
+
+        $this->checkoutSessionMock->expects($this->any())->method('hasQuote')->willReturn(true);
+        $this->checkoutSessionMock->expects($this->any())
+            ->method('getQuote')
+            ->willThrowException(new \Exception('Unable to load quote'));
+
+        // On failure to read the loaded quote, fall back to the DB wrapper
         $this->quoteResourceWrapperMock->expects($this->once())
             ->method('isActive')
             ->with($quoteId)

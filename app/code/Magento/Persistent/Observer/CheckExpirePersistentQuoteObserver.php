@@ -143,7 +143,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_checkoutSession->getQuoteId() &&
             // persistent session does not expire on onepage checkout page
             !$this->isRequestFromCheckoutPage($this->request) &&
-            (bool)$this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId())
+            $this->isQuotePersistent()
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
@@ -161,11 +161,47 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         if (!($this->_persistentData->isEnabled() && $this->_persistentData->isShoppingCartPersist())
             && !$this->_customerSession->isLoggedIn()
             && $this->_checkoutSession->getQuoteId()
-            && $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId())
+            && $this->isQuoteActive()
         ) {
-            return (bool)$this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
+            return $this->isQuotePersistent();
         }
         return false;
+    }
+
+    /**
+     * Check whether the current checkout quote is persistent, using the loaded quote when available.
+     *
+     * @return bool
+     */
+    private function isQuotePersistent(): bool
+    {
+        if ($this->_checkoutSession->hasQuote()) {
+            try {
+                return (bool)$this->_checkoutSession->getQuote()->getIsPersistent();
+            } catch (\Exception $e) {
+                return $this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
+            }
+        }
+
+        return $this->quoteResourceWrapper->isPersistent($this->_checkoutSession->getQuoteId());
+    }
+
+    /**
+     * Check whether the current checkout quote is active, using the loaded quote when available.
+     *
+     * @return bool
+     */
+    private function isQuoteActive(): bool
+    {
+        if ($this->_checkoutSession->hasQuote()) {
+            try {
+                return (bool)$this->_checkoutSession->getQuote()->getIsActive();
+            } catch (\Exception $e) {
+                return $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId());
+            }
+        }
+
+        return $this->quoteResourceWrapper->isActive($this->_checkoutSession->getQuoteId());
     }
 
     /**
