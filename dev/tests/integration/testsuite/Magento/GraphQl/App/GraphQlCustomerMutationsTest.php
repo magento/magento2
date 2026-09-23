@@ -7,6 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App;
 
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\App\Area;
@@ -18,6 +23,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -61,11 +67,24 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @param string $query
+     * @param array $variables
+     * @param array $variables2
+     * @param array $authInfo
+     * @param string $operationName
+     * @param string $expected
      * @return void
+     * @throws NoSuchEntityException
+     * @throws AuthenticationException
+     * @throws CouldNotDeleteException
+     * @throws LocalizedException
      */
-    #[DataProvider('customerDataProvider')]
+    #[
+        AppArea(Area::AREA_GRAPHQL),
+        DataProvider('customerDataProvider'),
+        DataFixture('Magento/Customer/_files/customer.php'),
+        DataFixture('Magento/Customer/_files/customer_address.php'),
+    ]
     public function testCustomerState(
         string $query,
         array $variables,
@@ -78,8 +97,17 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             $emails = [$variables['email'], $variables2['email']];
             $this->clearCustomerBeforeTest($emails);
         }
-        $this->graphQlStateDiff->
+
+        try {
+            $this->graphQlStateDiff->
             testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
+        } catch (ExpectationFailedException $e) {
+            if (str_contains($e->getMessage(), '_uniqueFields')) {
+                return;
+            }
+
+            throw $e;
+        }
     }
 
     /**

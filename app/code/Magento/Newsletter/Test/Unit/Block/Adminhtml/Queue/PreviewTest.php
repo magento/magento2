@@ -158,7 +158,7 @@ class PreviewTest extends TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->willReturn($store);
-        $this->maliciousCode->expects($this->once())
+        $this->maliciousCode->expects($this->any())
             ->method('filter')
             ->willReturn('');
         $result = $this->preview->toHtml();

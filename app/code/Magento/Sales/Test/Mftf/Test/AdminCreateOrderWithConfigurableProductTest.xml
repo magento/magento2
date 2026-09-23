@@ -31,6 +31,7 @@
         <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
+        <actionGroup ref="AdminSelectStoreViewOnCreateOrderPageIfRequestedActionGroup" stepKey="selectStoreViewIfAppears"/>
         <actionGroup ref="AddConfigurableProductToOrderActionGroup" stepKey="addFirstConfigurableProductToOrder">
             <argument name="product" value="_defaultProduct"/>
             <argument name="attribute" value="colorProductAttribute"/>

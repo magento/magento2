@@ -6,8 +6,6 @@
 
 /**
  * Config backend model for "Custom Admin URL" option
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Config\Model\Config\Backend\Admin;
 

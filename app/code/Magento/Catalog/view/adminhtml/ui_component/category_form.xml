@@ -197,6 +197,10 @@
                         <item name="add_images" xsi:type="boolean">true</item>
                         <item name="add_directives" xsi:type="boolean">true</item>
                     </item>
+                    <item name="utf8mb4Target" xsi:type="array">
+                        <item name="table" xsi:type="string">catalog_category_entity_text</item>
+                        <item name="column" xsi:type="string">value</item>
+                    </item>
                     <item name="source" xsi:type="string">category</item>
                 </item>
             </argument>

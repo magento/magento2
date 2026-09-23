@@ -166,6 +166,66 @@ class MysqlTest extends TestCase
     }
 
     /**
+     * Multiple statements must be detected, including when the statement separator follows a
+     * backslash-terminated string literal.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('stackedQueriesDataProvider')]
+    public function testStackedQueriesAreBlocked(string $sql): void
+    {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Multiple queries can\'t be executed. Run a single query and try again.');
+
+        $this->getMysqlPdoAdapterMockForDdlQueryTest()->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function stackedQueriesDataProvider(): array
+    {
+        return [
+            'plain multiple statements' => ["SELECT 1; SELECT 2;"],
+            'separator after backslash-terminated literal' => ["SELECT '\\\\'; SELECT 1"],
+        ];
+    }
+
+    /**
+     * A single statement must not be split when it contains a semicolon inside a string literal
+     * quoted with doubled backslashes.
+     *
+     * @param string $sql
+     * @return void
+     */
+    #[DataProvider('singleQueryWithSpecialCharactersDataProvider')]
+    public function testSingleQueryWithSpecialCharactersIsNotBlocked(string $sql): void
+    {
+        $adapter = $this->getMysqlPdoAdapterMock(['_query']);
+        $adapter->expects($this->once())
+            ->method('_query')
+            ->with($sql);
+
+        $adapter->query($sql);
+    }
+
+    /**
+     * @return array
+     */
+    public static function singleQueryWithSpecialCharactersDataProvider(): array
+    {
+        return [
+            'semicolon inside literal quoted with doubled backslashes' => [
+                "SELECT * FROM test WHERE path IN ('foo\\\\', 'a;b')",
+            ],
+            'backslash-terminated literal then semicolon in another literal' => [
+                "SELECT * FROM test WHERE path IN ('x\\\\', 'p;q')",
+            ],
+        ];
+    }
+
+    /**
      * Data Provider for testCheckDdlTransaction
      */
     public static function ddlSqlQueryProvider()

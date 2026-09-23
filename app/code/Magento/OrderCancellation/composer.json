@@ -9,7 +9,8 @@
         "magento/framework": "*",
         "magento/module-config": "*",
         "magento/module-store": "*",
-        "magento/module-sales": "*"
+        "magento/module-sales": "*",
+        "magento/module-payment": "*"
     },
     "type": "magento2-module",
     "license": [

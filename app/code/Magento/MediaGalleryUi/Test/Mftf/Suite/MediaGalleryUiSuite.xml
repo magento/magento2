@@ -18,8 +18,12 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromCategoryImage"/>
+            <conditionalClick selector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" dependentSelector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+            <waitForPageLoad stepKey="waitForPageToLoadAfterClearingFilters"/>
             <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
             <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+            <conditionalClick selector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" dependentSelector="{{AdminEnhancedMediaGalleryFiltersSection.clearFilters}}" visible="true" stepKey="clearExistingFilters2"/>
+            <waitForPageLoad stepKey="waitForPageToLoadAfterClearingFilters2"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </before>
         <after>

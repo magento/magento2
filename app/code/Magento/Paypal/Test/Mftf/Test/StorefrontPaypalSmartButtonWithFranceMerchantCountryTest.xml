@@ -17,9 +17,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-37236"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -33,7 +30,7 @@
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <comment userInput="BIC workaround" stepKey="disableSkipOrderReview"/>
             <!--Set default merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>

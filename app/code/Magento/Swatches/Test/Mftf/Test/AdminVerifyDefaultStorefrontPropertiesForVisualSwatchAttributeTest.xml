@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyDefaultStorefrontPropertiesForVisualSwatchAttributeTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Default storefront properties for visual swatch attribute"/>
+            <title value="Verify default storefront properties for visual swatch attribute"/>
+            <description value="Visual Swatch: storefront-related fields default to No on the new-attribute form and on Create New Attribute in the configurable wizard."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4151"/>
+            <group value="swatches"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!-- Step 1: Attribute create page defaults -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributeGrid"/>
+        <waitForElementClickable selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="waitCreateNewAttributeButton"/>
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.InputType}}" stepKey="waitInputTypeSelect"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Visual Swatch" stepKey="setVisualSwatchInputType"/>
+        <actionGroup ref="AdminAssertVisualSwatchStorefrontAndListingDefaultsActionGroup" stepKey="assertFormVisualSwatchStorefrontAndListingDefaults">
+            <argument name="storefrontOpenerSelector" value="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}"/>
+        </actionGroup>
+        <!-- Step 2: Configurable product create configurations -> Create New Attribute iframe defaults -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductGrid"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="openCreateConfigurableProductPage">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductRequiredFields">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <waitForElementClickable selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="waitCreateConfigurationsButton"/>
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurationsButton"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitCreateNewAttributeInWizard"/>
+        <waitForElementClickable selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="waitCreateNewAttributeInWizardClickable"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickCreateNewAttributeInWizard"/>
+        <waitForPageLoad stepKey="waitForWizardNewAttributeIFrameLoad"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <waitForElementVisible selector="{{AttributePropertiesSection.InputType}}" stepKey="waitIFrameInputTypeSelect"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Visual Swatch" stepKey="setIFrameVisualSwatchInputType"/>
+        <actionGroup ref="AdminAssertVisualSwatchStorefrontAndListingDefaultsActionGroup" stepKey="assertIframeVisualSwatchStorefrontAndListingDefaults">
+            <argument name="storefrontOpenerSelector" value="{{StorefrontPropertiesSection.StorefrontPropertiesSectionToggle}}"/>
+        </actionGroup>
+    </test>
+</tests>

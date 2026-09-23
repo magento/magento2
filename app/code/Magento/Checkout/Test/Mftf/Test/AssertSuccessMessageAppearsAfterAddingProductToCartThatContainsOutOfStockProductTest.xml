@@ -64,7 +64,7 @@
         <see selector="{{StorefrontProductPageSection.errorMsg}}" userInput="Some of the products are out of stock." stepKey="verifyErrorMessage"/>
 
         <!--Open product in storefront-->
-        <amOnPage url="{{StorefrontProductPage.url(createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront2"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad2"/>
 
         <!-- Add Simple Product to cart and verify success message-->

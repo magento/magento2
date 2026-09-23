@@ -9,21 +9,20 @@ declare(strict_types=1);
 namespace Magento\Framework\DB\Helper;
 
 /**
- * Helper class to remove deprecated 'SET NAMES utf8;' from database connection initStatements
- *
- * This helper provides methods to clean up deprecated 'SET NAMES utf8;' statements from
- * database connection configurations in env.php during setup/upgrade operations.
+ * Helper class to remove deprecated 'SET NAMES utf8;' or 'SET NAMES utf8 COLLATE ...;'
+ * from database connection initStatements in env.php during setup/upgrade operations.
  */
 class InitStatementsCleanup
 {
     /**
-     * Remove 'SET NAMES utf8;' from initStatements string
+     * Remove 'SET NAMES utf8;' or 'SET NAMES utf8 COLLATE utf8_general_ci;' from initStatements string
      *
      * Rules:
-     * - If initStatements contains only 'SET NAMES utf8;' or 'SET NAMES utf8', returns null
+     * - If initStatements contains only such a statement, returns null
      *   (indicating the entire initStatements key should be removed)
-     * - If initStatements contains 'SET NAMES utf8;' along with other statements,
-     *   removes only 'SET NAMES utf8;' and returns the cleaned string
+     * - If initStatements contains it along with other statements,
+     *   removes only that statement and returns the cleaned string
+     * - Does not remove 'SET NAMES utf8mb4' or similar
      *
      * @param string $initStatements The initStatements string from connection config
      * @return string|null Returns cleaned string, or null if nothing remains
@@ -40,9 +39,11 @@ class InitStatementsCleanup
             return $initStatements;
         }
 
-        // Remove 'SET NAMES utf8;' and 'SET NAMES utf8' (with or without semicolon)
+        // Remove deprecated 'SET NAMES utf8;' or 'SET NAMES utf8 COLLATE utf8_general_ci;'.
+        // (?!mb4) ensures we never match 'utf8' inside 'SET NAMES utf8mb4'
+        // (only the utf8mb3 form is removed).
         $cleaned = preg_replace(
-            '/\s*SET\s+NAMES\s+utf8\s*;?\s*/i',
+            '/\s*SET\s+NAMES\s+utf8(?!mb4)(?:\s*;|\s+COLLATE\s+[\w_]+\s*;?)\s*/i',
             '',
             $initStatements
         );
@@ -66,7 +67,7 @@ class InitStatementsCleanup
      * Process connection configuration array and remove deprecated SET NAMES utf8
      *
      * This method modifies the connection config array in-place.
-     * - Removes entire 'initStatements' key if it only contains 'SET NAMES utf8;'
+     * - Removes entire 'initStatements' key if it only contains 'SET NAMES utf8;' or 'SET NAMES utf8 COLLATE ...;'
      * - Updates 'initStatements' with cleaned value if it contains other statements
      *
      * @param array &$connectionConfig Database connection configuration array (passed by reference)
@@ -106,7 +107,7 @@ class InitStatementsCleanup
      * Process all database connections in env.php config array
      *
      * This method processes both regular connections (db/connection) and slave connections
-     * (db/slave_connection) to remove deprecated 'SET NAMES utf8;' statements.
+     * (db/slave_connection) to remove deprecated 'SET NAMES utf8;' or 'SET NAMES utf8 COLLATE ...;' statements.
      *
      * @param array &$envConfig The full env.php configuration array (passed by reference)
      * @return bool True if any configuration was modified

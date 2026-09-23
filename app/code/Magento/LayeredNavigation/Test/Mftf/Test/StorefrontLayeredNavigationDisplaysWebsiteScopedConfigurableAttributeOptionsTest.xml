@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLayeredNavigationDisplaysWebsiteScopedConfigurableAttributeOptionsTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Layered Navigation attribute options scoped to website"/>
+            <title value="Layered Navigation displays configurable attribute options assigned to current website only"/>
+            <description value="Verify Layered Navigation displays configurable attribute options assigned to current website only"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3876"/>
+            <group value="layeredNavigation"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Create a secondary website, store, and store view -->
+            <createData entity="secondCustomWebsite" stepKey="createSecondaryWebsite"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminStoreGroupCreateActionGroup" stepKey="createSecondaryStoreGroup">
+                <argument name="Website" value="secondCustomWebsite"/>
+                <argument name="storeGroup" value="customStoreGroup"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondaryStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Step 2: Create category and configurable product using a size attribute -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSizeAttribute"/>
+            <createData entity="productAttributeOption" stepKey="createSizeAttributeOption1">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createSizeAttributeOption2">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createSizeAttributeOption3">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getSizeAttributeOption1">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSizeAttributeOption2">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getSizeAttributeOption3">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </getData>
+            <createData entity="AddToDefaultSet" stepKey="addSizeAttributeToDefaultSet">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+            </createData>
+            <!-- Step 3: Assign the configurable product to the main website and a category -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeAttributeOption1"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeAttributeOption2"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeAttributeOption3"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createSizeAttribute"/>
+                <requiredEntity createDataKey="getSizeAttributeOption1"/>
+                <requiredEntity createDataKey="getSizeAttributeOption2"/>
+                <requiredEntity createDataKey="getSizeAttributeOption3"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="assignConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="assignConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="assignConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete products, size attribute, secondary website and logout from admin -->
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSizeAttribute" stepKey="deleteSizeAttribute"/>
+            <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteSecondaryWebsite">
+                <argument name="websiteName" value="$createSecondaryWebsite.website[name]$"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetFiltersOnStoresIndexPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 4,5: Navigate to category on main website and verify all size options are visible -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryOnMainWebsiteBeforeWebsiteChange">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertSizeOption1PresentBeforeWebsiteChange">
+            <argument name="attributeLabel" value="$createSizeAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSizeAttributeOption1.label$"/>
+            <argument name="attributeOptionPosition" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertSizeOption2PresentBeforeWebsiteChange">
+            <argument name="attributeLabel" value="$createSizeAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSizeAttributeOption2.label$"/>
+            <argument name="attributeOptionPosition" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertSizeOption3PresentBeforeWebsiteChange">
+            <argument name="attributeLabel" value="$createSizeAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSizeAttributeOption3.label$"/>
+            <argument name="attributeOptionPosition" value="3"/>
+        </actionGroup>
+        <!-- Step 6: Unassign two simple products from Main website and assign them to Secondary website -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openFirstChildProductEditPage">
+            <argument name="productId" value="$createConfigChildProduct1.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeWebSiteAssignedToProductActionGroup" stepKey="moveFirstChildProductToSecondaryWebsite">
+            <argument name="website" value="$createSecondaryWebsite.website[name]$"/>
+            <argument name="websiteToDeselect" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSecondChildProductEditPage">
+            <argument name="productId" value="$createConfigChildProduct2.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeWebSiteAssignedToProductActionGroup" stepKey="moveSecondChildProductToSecondaryWebsite">
+            <argument name="website" value="$createSecondaryWebsite.website[name]$"/>
+            <argument name="websiteToDeselect" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <!-- Step 7,8: Revisit category page and verify only main website product options are shown -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryOnMainWebsiteAfterWebsiteChange">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertOnlySizeOption3PresentAfterWebsiteChange">
+            <argument name="attributeLabel" value="$createSizeAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getSizeAttributeOption3.label$"/>
+            <argument name="attributeOptionPosition" value="1"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCategorySidebarSection.filterOption}}" userInput="$$getSizeAttributeOption1.label$$" stepKey="dontSeeSizeOption1AfterWebsiteChange"/>
+        <dontSee selector="{{StorefrontCategorySidebarSection.filterOption}}" userInput="$$getSizeAttributeOption2.label$$" stepKey="dontSeeSizeOption2AfterWebsiteChange"/>
+    </test>
+</tests>

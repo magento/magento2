@@ -50,6 +50,7 @@
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClearGalleryFiltersForCategoryActionGroup" stepKey="clearMediaGalleryFilters"/>
         </after>
 
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">

@@ -46,7 +46,7 @@ class ConfigTest extends TestCase
     }
 
     #[
-        RequiresPhpExtension('intl', '>= 76'),
+        RequiresPhpExtension('intl', '>= 76.0.0'),
     ]
     public function testCaribbeanGuilderExists()
     {

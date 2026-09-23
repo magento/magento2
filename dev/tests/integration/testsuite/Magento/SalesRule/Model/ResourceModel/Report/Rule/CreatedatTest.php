@@ -40,6 +40,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Createdat test for check report totals calculate
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatedatTest extends TestCase
 {
@@ -64,7 +66,7 @@ class CreatedatTest extends TestCase
     private $reportCollection;
 
     /**
-     * @inheirtDoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {

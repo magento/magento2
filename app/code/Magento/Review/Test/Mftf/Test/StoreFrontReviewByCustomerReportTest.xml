@@ -47,7 +47,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to frontend and make a user account and login with it -->
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+        <actionGroup ref="SignUpNewUserFromStorefrontWithCompanyHeaderActionGroup" stepKey="signUpNewUser">
             <argument name="Customer" value="CustomerEntityOne"/>
         </actionGroup>
         <!-- Go to the product view page -->

@@ -43,7 +43,7 @@ class OptionTest extends TestCase
         parent::setUp();
         $priceCurrency = $this->createMock(PriceCurrencyInterface::class);
 
-        $priceCurrency->method('convert')
+        $priceCurrency->method('convertAndRound')
             ->willReturnArgument(0);
 
         $this->model = new Option(

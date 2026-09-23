@@ -11,6 +11,7 @@ use Magento\Backend\Helper\Dashboard\Order as OrderHelper;
 use Magento\Backend\Model\Dashboard\Chart;
 use Magento\Backend\Model\Dashboard\Chart\Date as DateRetriever;
 use Magento\Backend\Model\Dashboard\Period;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Reports\Model\ResourceModel\Order\Collection;
@@ -60,7 +61,8 @@ class ChartTest extends TestCase
         $this->orderHelperMock->method('getCollection')
             ->willReturn($this->collectionMock);
 
-        $period = $this->objectManagerHelper->getObject(Period::class);
+        $scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $period = new Period($scopeConfigMock);
 
         $this->model = $this->objectManagerHelper->getObject(
             Chart::class,

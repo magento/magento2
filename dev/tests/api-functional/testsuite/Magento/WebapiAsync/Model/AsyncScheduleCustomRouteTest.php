@@ -114,6 +114,7 @@ class AsyncScheduleCustomRouteTest extends WebapiAbstract
         $this->clearProducts();
 
         $response = $this->saveProductByCustomRoute($product);
+        sleep(5);
         $this->assertArrayHasKey(self::BULK_UUID_KEY, $response);
         $this->assertNotNull($response[self::BULK_UUID_KEY]);
 

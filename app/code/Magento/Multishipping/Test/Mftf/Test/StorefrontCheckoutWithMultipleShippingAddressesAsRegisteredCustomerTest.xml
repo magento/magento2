@@ -26,6 +26,7 @@
             <createData stepKey="customer" entity="Simple_Customer_Multiple_Addresses"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <!-- Logout from Storefront (best-effort) -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefrontIfLoggedIn"/>
             <!-- Cleanup data -->

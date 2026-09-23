@@ -12,6 +12,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Downloadable\Model\Url\DomainValidator;
 
 /**
  * Tests for the \Magento\CatalogImportExport\Model\Import\Uploader class.
@@ -22,7 +23,8 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Random string appended to downloaded image name
      */
-    const RANDOM_STRING = 'BRV8TAuR2AT88OH0';
+    private const RANDOM_STRING = 'BRV8TAuR2AT88OH0';
+    
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -53,11 +55,14 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
         $fileReadFactory->method('create')->willReturn($this->fileReader);
         $random = $this->createMock(\Magento\Framework\Math\Random::class);
         $random->method('getRandomString')->willReturn(self::RANDOM_STRING);
+        $domainValidator = $this->createMock(DomainValidator::class);
+        $domainValidator->method('isValid')->willReturn(true);
         $this->uploader = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Uploader::class,
             [
                 'random' => $random,
-                'readFactory' => $fileReadFactory
+                'readFactory' => $fileReadFactory,
+                'domainValidator' => $domainValidator
             ]
         );
 

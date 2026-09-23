@@ -20,6 +20,10 @@
             <group value="cloud"/>
         </annotations>
 
+        <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="deleteSimpleProduct"/>
+        </after>
+
         <!-- Log in as admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 

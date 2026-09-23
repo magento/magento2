@@ -29,7 +29,7 @@ $appConfig->clean();
 /** @var Store $defaultStore */
 $defaultStore = $storeRepository->getActiveStoreByCode('default');
 
-for ($i = 0; $i < 1000; $i++) {
+for ($i = 0; $i < 6000; $i++) {
     /** @var Quote $quote */
     $quote = $quoteFactory->create();
     $quote->setStoreId($defaultStore->getId());

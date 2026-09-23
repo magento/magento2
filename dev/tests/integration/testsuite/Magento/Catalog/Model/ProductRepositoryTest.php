@@ -44,6 +44,8 @@ use PHPUnit\Framework\TestCase;
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.StaticAccess)
  */
 class ProductRepositoryTest extends TestCase
 {
@@ -68,7 +70,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchCriteriaBuilder;
+    private $criteriaBuilder;
 
     /**
      * @var ProductFactory
@@ -131,7 +133,7 @@ class ProductRepositoryTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->criteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
         $this->productFactory = $this->objectManager->get(ProductFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
         $this->layoutManager = $this->objectManager->get(ProductLayoutUpdateManager::class);
@@ -168,7 +170,7 @@ class ProductRepositoryTest extends TestCase
      */
     public function testFilterByStoreId(): void
     {
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $this->criteriaBuilder
             ->addFilter('store_id', '1', 'eq')
             ->create();
         $list = $this->productRepository->getList($searchCriteria);
@@ -320,25 +322,25 @@ class ProductRepositoryTest extends TestCase
      * @param int $storeId
      * @param int $checkStoreId
      * @param string $expectedNameStore
-     * @param string $expectedNameCheckedStore
+     * @param string $expNameChecked
      */
     #[DataProvider('productUpdateDataProvider')]
     public function testProductUpdate(
         int $storeId,
         int $checkStoreId,
         string $expectedNameStore,
-        string $expectedNameCheckedStore
+        string $expNameChecked
     ): void {
         $sku = self::STUB_PRODUCT_SKU;
 
         $product = $this->productRepository->get($sku, false, $storeId);
         $product->setName(self::STUB_UPDATED_PRODUCT_NAME);
         $this->productRepository->save($product);
-        $productNameStoreId = $this->productRepository->get($sku, false, $storeId)->getName();
-        $productNameCheckedStoreId = $this->productRepository->get($sku, false, $checkStoreId)->getName();
+        $nameAtStore = $this->productRepository->get($sku, false, $storeId)->getName();
+        $nameAtChecked = $this->productRepository->get($sku, false, $checkStoreId)->getName();
 
-        $this->assertEquals($expectedNameStore, $productNameStoreId);
-        $this->assertEquals($expectedNameCheckedStore, $productNameCheckedStoreId);
+        $this->assertEquals($expectedNameStore, $nameAtStore);
+        $this->assertEquals($expNameChecked, $nameAtChecked);
     }
 
     /**
@@ -516,6 +518,47 @@ class ProductRepositoryTest extends TestCase
                 'value' => $product2->getTierPrices()[0]->getValue()
             ]
         );
+    }
+
+    /**
+     * Verify that getById returns the correct product for a valid numeric ID
+     */
+    #[
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
+    public function testGetByIdWithValidId(): void
+    {
+        $product = $this->fixtures->get('product');
+        $result = $this->productRepository->getById((int)$product->getId());
+
+        $this->assertInstanceOf(ProductInterface::class, $result);
+        $this->assertSame((int)$product->getId(), (int)$result->getId());
+        $this->assertSame($product->getSku(), $result->getSku());
+    }
+
+    /**
+     * Verify that getById throws NoSuchEntityException for non-numeric product IDs
+     *
+     * @param string $invalidId
+     */
+    #[DataProvider('nonNumericProductIdDataProvider')]
+    public function testGetByIdWithNonNumericProductId(string $invalidId): void
+    {
+        $this->expectException(NoSuchEntityException::class);
+        $this->productRepository->getById($invalidId);
+    }
+
+    /**
+     * Data provider for completely non-numeric product ID values
+     *
+     * @return array
+     */
+    public static function nonNumericProductIdDataProvider(): array
+    {
+        return [
+            'Alphabetic string' => ['abc'],
+            'Special characters only' => ['!@#$%'],
+        ];
     }
 
     /**

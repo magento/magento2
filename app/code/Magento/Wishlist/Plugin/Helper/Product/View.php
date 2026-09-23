@@ -35,7 +35,7 @@ class View
         $params = null
     ) {
         $qty = $controller->getRequest()->getParam('qty');
-        if ($qty) {
+        if ($qty && is_numeric($qty)) {
             if (null === $params || !$params instanceof DataObject) {
                 $params = new DataObject((array) $params);
             }

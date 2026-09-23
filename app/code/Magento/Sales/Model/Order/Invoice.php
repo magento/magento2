@@ -29,22 +29,22 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**#@+
      * Invoice states
      */
-    const STATE_OPEN = 1;
+    public const STATE_OPEN = 1;
 
-    const STATE_PAID = 2;
+    public const STATE_PAID = 2;
 
-    const STATE_CANCELED = 3;
+    public const STATE_CANCELED = 3;
     /**#@-*/
 
-    const CAPTURE_ONLINE = 'online';
+    public const CAPTURE_ONLINE = 'online';
 
-    const CAPTURE_OFFLINE = 'offline';
+    public const CAPTURE_OFFLINE = 'offline';
 
-    const NOT_CAPTURE = 'not_capture';
+    public const NOT_CAPTURE = 'not_capture';
 
-    const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
+    public const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
-    const REPORT_DATE_TYPE_INVOICE_CREATED = 'invoice_created';
+    public const REPORT_DATE_TYPE_INVOICE_CREATED = 'invoice_created';
 
     /**
      * Identifier for history item
@@ -558,6 +558,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * Retrieve invoice states array
      *
      * @return array
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStates()
     {
@@ -574,7 +575,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Retrieve invoice state name by state identifier
      *
-     * @param   int|null $stateId
+     * @param int|null $stateId
      * @return \Magento\Framework\Phrase
      */
     public function getStateName($stateId = null)
@@ -713,7 +714,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         }
         $comment->setInvoice($this)->setStoreId($this->getStoreId())->setParentId($this->getId());
         if (!$comment->getId()) {
-            $this->getCommentsCollection()->addItem($comment);
+            $this->getCommentsCollection(true)->addItem($comment);
         }
         $this->_hasDataChanges = true;
         return $this;
@@ -727,24 +728,28 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getCommentsCollection($reload = false)
     {
-        if (!$this->hasData(InvoiceInterface::COMMENTS) || $reload) {
+        $data = $this->getData(InvoiceInterface::COMMENTS);
+
+        if (!$data instanceof \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection || $reload) {
             $comments = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId())
                 ->setCreatedAtOrder();
 
             $this->setComments($comments);
             /**
-             * When invoice created with adding comment, comments collection
+             * When invoice created with adding comment, a comments collection
              * must be loaded before we added this comment.
              */
-            $this->getComments()->load();
+            $comments->load();
 
             if ($this->getId()) {
-                foreach ($this->getComments() as $comment) {
+                foreach ($comments as $comment) {
                     $comment->setInvoice($this);
                 }
             }
+
+            return $comments;
         }
-        return $this->getComments();
+        return $data;
     }
 
     /**
@@ -771,7 +776,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     protected function _beforeSave()
     {
-        return parent::_beforeSave();
+        return $this;
     }
 
     /**
@@ -781,7 +786,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     protected function _afterSave()
     {
-        return parent::_afterSave();
+        return $this;
     }
 
     /**
@@ -808,13 +813,20 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getComments()
     {
-        if ($this->getData(InvoiceInterface::COMMENTS) === null && $this->getId()) {
+        $data = $this->getData(InvoiceInterface::COMMENTS);
+
+        if ($data instanceof \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection) {
+            return $data->getItems();
+        }
+
+        if ($data === null && $this->getId()) {
             $collection = $this->_commentCollectionFactory->create()->setInvoiceFilter($this->getId());
             foreach ($collection as $comment) {
                 $comment->setInvoice($this);
             }
             $this->setData(InvoiceInterface::COMMENTS, $collection->getItems());
         }
+
         return $this->getData(InvoiceInterface::COMMENTS);
     }
 

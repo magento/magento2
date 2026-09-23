@@ -320,12 +320,14 @@ class TierPriceValidator implements ResetAfterRequestInterface
     private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
         $sku = $price->getSku();
-        if (isset($this->productsCacheBySku[$sku])) {
-            $product = $this->productsCacheBySku[$sku];
-        } else {
-            $product = $this->productRepository->get($price->getSku());
-            $this->productsCacheBySku[$sku] = $product;
+        if (!isset($this->productsCacheBySku[$sku])) {
+            try {
+                $this->productsCacheBySku[$sku] = $this->productRepository->get($sku);
+            } catch (NoSuchEntityException $e) {
+                return;
+            }
         }
+        $product = $this->productsCacheBySku[$sku];
 
         $canUseQtyDecimals = $product->getTypeInstance()->canUseQtyDecimals();
         if ($price->getQuantity() <= 0 || $price->getQuantity() < 1 && !$canUseQtyDecimals) {

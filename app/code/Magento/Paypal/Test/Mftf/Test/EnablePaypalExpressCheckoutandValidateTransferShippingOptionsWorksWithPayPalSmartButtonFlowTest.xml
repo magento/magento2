@@ -42,6 +42,7 @@
 
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

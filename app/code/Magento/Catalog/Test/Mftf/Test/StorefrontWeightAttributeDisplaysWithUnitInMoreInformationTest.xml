@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontWeightAttributeDisplaysWithUnitInMoreInformationTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront product attribute display"/>
+            <title value="Weight attribute displays with configured unit in More Information section"/>
+            <description value="Verify weight displays with configured unit in More Information when visible on storefront."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4809"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create a simple product with weight set to 2 -->
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <field key="weight">2</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Reset weight attribute visibility to default state -->
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightAttributeForCleanup">
+                <argument name="productAttributeCode" value="weight"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectValueForVisibleOnStorefrontActionGroup" stepKey="disableWeightVisibleOnStorefront">
+                <argument name="catalogPagesValue" value="No"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveWeightAttributeCleanup"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilters"/>
+            <!-- Delete product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Enable weight attribute visibility on storefront -->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttribute">
+            <argument name="productAttributeCode" value="weight"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectValueForVisibleOnStorefrontActionGroup" stepKey="enableWeightVisibleOnStorefront"/>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveWeightAttribute"/>
+        <!-- Verify weight displays with configured unit in More Information section on storefront -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformationTab"/>
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="assertWeightWithUnitInMoreInformation">
+            <argument name="attributeLabel" value="{{ProductWeightMoreInformationAttribute.attributeLabel}}"/>
+            <argument name="attributeValue" value="{{ProductWeightMoreInformationAttribute.attributeValue}}"/>
+        </actionGroup>
+    </test>
+</tests>

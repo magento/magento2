@@ -27,6 +27,9 @@
             <helper class="Magento\Catalog\Test\Mftf\Helper\ProductApiHelper" method="deleteAllProductsApi" stepKey="deleteAllProductsViaApi"/>
             <deleteData createDataKey="createTextSwatchAttribute" stepKey="deleteTextSwatchAttribute"/>
             <deleteData createDataKey="createVisualSwatchAttribute" stepKey="deleteVisualSwatchAttribute"/>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!-- Create 2 Configurable products -->

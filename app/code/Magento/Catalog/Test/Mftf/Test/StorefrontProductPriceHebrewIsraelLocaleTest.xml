@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductPriceHebrewIsraelLocaleTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product price display with hebrew (israel) locale"/>
+            <title value="Product page shows non-zero price for product with he_IL locale"/>
+            <description value="Verify product page shows non-zero price for product with he_IL locale"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="ACP2E-3938"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Step 1: Configure locale options to hebrew (israel) -->
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForHebrewIsrael.scope}} --scope-code={{GeneralLocalCodeConfigsForHebrewIsrael.scope_code}} {{GeneralLocalCodeConfigsForHebrewIsrael.path}} {{GeneralLocalCodeConfigsForHebrewIsrael.value}}" stepKey="setWebsiteLocaleToHebrewIsrael"/>
+            <!-- Step 2: Create simple product -->
+            <createData entity="SimpleProduct_100" stepKey="createSimpleProductWithPrice100"/>
+        </before>
+        <after>
+            <!-- Delete simple product and reset locale option -->
+            <deleteData createDataKey="createSimpleProductWithPrice100" stepKey="deleteSimpleProductWithPrice100"/>
+            <magentoCLI command="config:set --scope={{GeneralLocalCodeConfigsForUS.scope}} --scope-code={{GeneralLocalCodeConfigsForUS.scope_code}} {{GeneralLocalCodeConfigsForUS.path}} {{GeneralLocalCodeConfigsForUS.value}}" stepKey="revertWebsiteLocaleToEnUs"/>
+        </after>
+        <!-- Step 3: View the product page in the frontend and verify price should not displayed as 0 -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductDetailPageForSimpleProductWithPrice100">
+            <argument name="productUrl" value="$$createSimpleProductWithPrice100.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.price}}" stepKey="waitForFinalPriceBlockVisibleOnProductPage"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.price}}" userInput="100" stepKey="assertFormattedPriceContains100NotDisplayedAsZero"/>
+    </test>
+</tests>

@@ -76,4 +76,16 @@ class DirectiveValidatorTest extends TestCase
         $html = '{{block id="good_id-123"}}';
         $this->assertTrue($this->validator->isValid($html));
     }
+
+    public function testAllowsBarePhtmlTemplateWithSubpath(): void
+    {
+        $html = '{{block class="A\\B" template="widget/lister.phtml"}}';
+        $this->assertTrue($this->validator->isValid($html));
+    }
+
+    public function testRejectsTemplateWhenNeitherModuleNorBarePhtml(): void
+    {
+        $html = '{{block class="A\\B" template="plain.txt"}}';
+        $this->assertFalse($this->validator->isValid($html));
+    }
 }

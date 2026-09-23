@@ -215,9 +215,9 @@ abstract class GraphQlAbstract extends WebapiAbstract
     protected function tearDown(): void
     {
         parent::tearDown();
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        $out = '';
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento cache:flush full_page", $out);
+        $objectManager = Bootstrap::getObjectManager();
+        $objectManager
+            ->get(\Magento\Framework\App\Cache\TypeListInterface::class)
+            ->cleanType(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
     }
 }

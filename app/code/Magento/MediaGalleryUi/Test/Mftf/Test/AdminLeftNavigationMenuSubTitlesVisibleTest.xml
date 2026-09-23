@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLeftNavigationMenuSubTitlesVisibleTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <stories value="Admin left navigation menu"/>
+            <title value="Admin left navigation menu subtitles above subcategories"/>
+            <description value="Verify backend admin menu subtitles."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3540"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Step 1: Expand marketing and verify subtitles (CE: promotions, communications, seo, user content) -->
+        <waitForElementClickable selector="{{AdminMenuSection.marketing}}" stepKey="waitForMarketingMenuClickable"/>
+        <click selector="{{AdminMenuSection.marketing}}" stepKey="expandMarketingMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForMarketingSubmenuLoaded"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-catalogrule-promo')}}" stepKey="waitForMarketingPromotionsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Promotions')}}" stepKey="waitForMarketingPromotionsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-marketing-communications')}}" stepKey="waitForMarketingCommunicationsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Communications')}}" stepKey="waitForMarketingCommunicationsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-marketing-seo')}}" stepKey="waitForMarketingSeoSubtitleVisible"/>
+        <waitForElementVisible selector="{{NewProduct.titleContainsText('SEO')}}" stepKey="waitForMarketingSeoSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-marketing-user-content')}}" stepKey="waitForMarketingUserContentSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('User Content')}}" stepKey="waitForMarketingUserContentSubtitle"/>
+        <!-- Step 2: Expand content and verify subtitles (elements, media, design) -->
+        <waitForElementClickable selector="{{AdminMenuSection.content}}" stepKey="waitForContentMenuClickable"/>
+        <click selector="{{AdminMenuSection.content}}" stepKey="expandContentMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForContentSubmenuLoaded"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-content-elements')}}" stepKey="waitForContentElementsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Elements')}}" stepKey="waitForContentElementsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-mediagalleryui-media')}}" stepKey="waitForContentMediaSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Media')}}" stepKey="waitForContentMediaSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-system-design')}}" stepKey="waitForContentDesignSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Design')}}" stepKey="waitForContentDesignSubtitle"/>
+        <!-- Step 3: Expand sales and verify subtitle not displayed -->
+        <waitForElementClickable selector="{{AdminMenuSection.sales}}" stepKey="waitForSalesMenuClickable"/>
+        <click selector="{{AdminMenuSection.sales}}" stepKey="expandSalesMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSalesSubmenuLoaded"/>
+        <waitForElementNotVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-sales-sales-operation')}}" stepKey="waitForSalesGroupTitleNotVisible"/>
+        <!-- Step 4: Expand catalog and verify subtitle not displayed -->
+        <waitForElementClickable selector="{{AdminMenuSection.catalog}}" stepKey="waitForCatalogMenuClickable"/>
+        <click selector="{{AdminMenuSection.catalog}}" stepKey="expandCatalogMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCatalogSubmenuLoaded"/>
+        <waitForElementNotVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-catalog-inventory')}}" stepKey="waitForCatalogGroupTitleNotVisible"/>
+        <!-- Step 5: Expand customer and verify subtitle not displayed -->
+        <waitForElementClickable selector="{{AdminMenuSection.customers}}" stepKey="waitForCustomersMenuClickable"/>
+        <click selector="{{AdminMenuSection.customers}}" stepKey="expandCustomersMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCustomersSubmenuLoaded"/>
+        <waitForElementNotVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-customer-customer')}}" stepKey="waitForCustomersGroupTitleNotVisible"/>
+        <!-- Step 6: Expand Stores and verify subtitles (settings, currency, attributes, other settings, taxes) -->
+        <waitForElementClickable selector="{{AdminMenuSection.stores}}" stepKey="waitForStoresMenuClickable"/>
+        <click selector="{{AdminMenuSection.stores}}" stepKey="expandStoresMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForStoresSubmenuLoaded"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-stores-settings')}}" stepKey="waitForStoresSettingsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Settings')}}" stepKey="waitForStoresSettingsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-currencysymbol-system-currency')}}" stepKey="waitForStoresCurrencySubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Currency')}}" stepKey="waitForStoresCurrencySubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-stores-attributes')}}" stepKey="waitForStoresAttributesSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Attributes')}}" stepKey="waitForStoresAttributesSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-tax-sales-tax')}}" stepKey="waitForStoresTaxesSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Taxes')}}" stepKey="waitForStoresTaxesSubtitle"/>
+        <!-- Step 7: Expand System and verify subtitles (tools, data transfer, permissions, other settings, extensions, action logs) -->
+        <waitForElementClickable selector="{{AdminMenuSection.system}}" stepKey="waitForSystemMenuClickable"/>
+        <click selector="{{AdminMenuSection.system}}" stepKey="expandSystemMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSystemSubmenuLoaded"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-system-tools')}}" stepKey="waitForSystemToolsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Tools')}}" stepKey="waitForSystemToolsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-system-convert')}}" stepKey="waitForSystemDataTransferSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Data Transfer')}}" stepKey="waitForSystemDataTransferSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-user-system-acl')}}" stepKey="waitForSystemPermissionsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Permissions')}}" stepKey="waitForSystemPermissionsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-backend-system-other-settings')}}" stepKey="waitForSystemOtherSettingsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.systemOtherSetting}}" stepKey="waitForSystemOtherSettingsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-integration-system-extensions')}}" stepKey="waitForSystemExtensionsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Extensions')}}" stepKey="waitForSystemExtensionsSubtitle"/>
+        <!-- Step 8: Expand Reports and verify subtitles (marketing, sales, products, customers, reviews, statistics) -->
+        <waitForElementClickable selector="{{AdminMenuSection.menuItem('magento-reports-report')}}" stepKey="waitForReportsMenuClickable"/>
+        <click selector="{{AdminMenuSection.menuItem('magento-reports-report')}}" stepKey="expandReportsMenu"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForReportsSubmenuLoaded"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-reports-report-marketing')}}" stepKey="waitForReportsMarketingSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Marketing')}}" stepKey="waitForReportsMarketingSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-review-report-review')}}" stepKey="waitForReportsReviewsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Reviews')}}" stepKey="waitForReportsReviewsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-reports-report-salesroot')}}" stepKey="waitForReportsSalesSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Sales')}}" stepKey="waitForReportsSalesSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-reports-report-products')}}" stepKey="waitForReportsProductsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Products')}}" stepKey="waitForReportsProductsSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-reports-report-customers')}}" stepKey="waitForReportsCustomersSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Customers')}}" stepKey="waitForReportsCustomersSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-analytics-business-intelligence')}}" stepKey="waitForReportsBusinessIntelligenceSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Business Intelligence')}}" stepKey="waitForReportsBusinessIntelligenceSubtitle"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuGroupTitle('magento-reports-report-statistics')}}" stepKey="waitForReportsStatisticsSubtitleVisible"/>
+        <waitForElementVisible selector="{{AdminMenuSection.submenuTitle('Statistics')}}" stepKey="waitForReportsStatisticsSubtitle"/>
+    </test>
+</tests>

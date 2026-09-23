@@ -20,6 +20,9 @@
         <before>
             <!--Login To Admin panel-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminSetStoreInformationConfigurationActionGroup" stepKey="ensureStoreInformationForConfigSave">
+                <argument name="storeName" value="{{_defaultStoreGroup.name}}"/>
+            </actionGroup>
             <!-- Go to *General > General > Locale Options* section -->
             <actionGroup ref="AdminNavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
             <!--Set needed Timezone-->

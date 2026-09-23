@@ -5,9 +5,12 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\InputException;
 use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
+use Magento\SalesRule\Model\Data\Validator;
 use Magento\SalesRule\Model\Rule;
 
 class ToModel
@@ -25,15 +28,23 @@ class ToModel
     protected $dataObjectProcessor;
 
     /**
+     * @var Validator
+     */
+    private Validator $validator;
+
+    /**
      * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param Validator|null $validator
      */
     public function __construct(
         \Magento\SalesRule\Model\RuleFactory $ruleFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        ?Validator $validator = null
     ) {
         $this->ruleFactory = $ruleFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->validator = $validator ?? ObjectManager::getInstance()->get(Validator::class);
     }
 
     /**
@@ -150,6 +161,9 @@ class ToModel
         $output['value'] = $condition->getValue();
         $output['attribute'] = $condition->getAttributeName();
         $output['operator'] = $condition->getOperator();
+        if ($condition->getExtensionAttributes()?->getAttributeScope()) {
+            $output['attribute_scope'] = $condition->getExtensionAttributes()->getAttributeScope();
+        }
 
         if ($condition->getAggregatorType()) {
             $output['aggregator'] = $condition->getAggregatorType();
@@ -170,7 +184,7 @@ class ToModel
      * @param RuleDataModel $dataModel
      * @return $this|Rule
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\InputException
+     * @throws InputException
      */
     public function toModel(RuleDataModel $dataModel)
     {
@@ -204,19 +218,21 @@ class ToModel
         $mergedData = array_merge($modelData, $data);
 
         $validateResult = $ruleModel->validateData(new \Magento\Framework\DataObject($mergedData));
-        if ($validateResult !== true) {
-            $text = '';
-            /** @var \Magento\Framework\Phrase $errorMessage */
-            foreach ($validateResult as $errorMessage) {
-                $text .= $errorMessage->getText();
-                $text .= '; ';
-            }
-            throw new \Magento\Framework\Exception\InputException(new \Magento\Framework\Phrase($text));
-        }
+        $validationErrors = is_array($validateResult) ? $validateResult : [];
 
         $ruleModel->setData($mergedData);
 
         $this->mapFields($ruleModel, $dataModel);
+
+        if (!$this->validator->isValid($dataModel)) {
+            $validationErrors = array_merge($validationErrors, $this->validator->getMessages());
+        }
+        
+        if ($validationErrors) {
+            $exception = new InputException();
+            array_walk($validationErrors, $exception->addError(...));
+            throw $exception;
+        }
 
         return $ruleModel;
     }

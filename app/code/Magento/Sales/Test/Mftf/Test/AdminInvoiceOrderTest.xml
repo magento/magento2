@@ -42,6 +42,7 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
+            <actionGroup ref="ClearInvoicesGridFiltersActionGroup" stepKey="clearInvoicesGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">

@@ -138,8 +138,10 @@ class TrackingService
         }
         foreach ($trackingResponses as $tracking => $response) {
             $httpResponse = $response->get();
-            $jsonResponse = $httpResponse->getStatusCode() >= 400 ? '' : $httpResponse->getBody();
+            $statusCode = $httpResponse->getStatusCode();
+            $jsonResponse = $httpResponse->getBody();
             $debugData[$tracking]['result'] = $jsonResponse;
+            $debugData[$tracking]['status_code'] = $statusCode;
             $this->carrierModel->_debug($debugData);
             $this->parseRestTrackingResponse((string)$tracking, $jsonResponse);
         }
@@ -228,7 +230,18 @@ class TrackingService
             $activityTag['eventCountry'] ?? null
         ]);
 
-        $eventTimestamp = (new \DateTime((string)$activityTag['eventTimestamp']));
+        $eventTimestampStr = (string)($activityTag['eventTimestamp'] ?? '');
+        $gmtOffset = (string)($activityTag['GMTOffset'] ?? '');
+
+        if ($eventTimestampStr && $gmtOffset) {
+            // Create DateTime with the correct timezone from GMTOffset
+            $timezone = new \DateTimeZone($gmtOffset);
+            $eventTimestamp = new \DateTime($eventTimestampStr, $timezone);
+        } else {
+            // Fallback to original behavior if GMTOffset not available
+            $eventTimestamp = new \DateTime($eventTimestampStr);
+        }
+
         $date = $eventTimestamp->format('Y-m-d');
         $time = $eventTimestamp->format('H:i:s');
 

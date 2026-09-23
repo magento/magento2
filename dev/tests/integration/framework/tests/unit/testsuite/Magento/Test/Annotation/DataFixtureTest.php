@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\DataObject;
 use Magento\Framework\ObjectManagerInterface;
@@ -29,6 +30,8 @@ use Magento\TestFramework\Fixture\ScopeFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ScopeSwitcherInterface;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Annotation\TestsIsolation;
@@ -102,7 +105,8 @@ class DataFixtureTest extends TestCase
         $dataFixtureSetup = new DataFixtureSetup(
             new Registry(),
             $dataFixtureFactory,
-            $this->createMock(ScopeSwitcherInterface::class)
+            $this->createMock(ScopeSwitcherInterface::class),
+            $this->createMock(ScopeResolverPool::class),
         );
         $sharedInstances = [
             TestsIsolation::class => $this->testsIsolationMock,
@@ -507,6 +511,76 @@ class DataFixtureTest extends TestCase
             ->method('revert')
             ->with($fixture2);
         $this->revertFixtures();
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.value$'], 'fixture1')]
+    public function testDatasetInjectionWithDataProvider(string $value): void
+    {
+        $fixture1Result = new DataObject();
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['param' => $value])
+            ->willReturn($fixture1Result);
+        $this->applyFixtures();
+        $this->assertSame($fixture1Result, $this->fixtureStorage->get('fixture1'));
+        $datasetFixture = $this->fixtureStorage->get('dataset');
+        $this->assertInstanceOf(DataObject::class, $datasetFixture);
+        $this->assertEquals($value, $datasetFixture->getData('value'));
+    }
+
+    #[TestWith(['dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.0$'], 'fixture1')]
+    public function testDatasetInjectionWithNumericalKey(string $value): void
+    {
+        $fixture1Result = new DataObject();
+        $this->fixture2->expects($this->once())
+            ->method('apply')
+            ->with(['param' => $value])
+            ->willReturn($fixture1Result);
+        $this->applyFixtures();
+        $datasetFixture = $this->fixtureStorage->get('dataset');
+        $this->assertInstanceOf(DataObject::class, $datasetFixture);
+        $this->assertEquals($value, $datasetFixture->getData('0'));
+    }
+
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, [], 'fixture1')]
+    public function testNoDatasetInjectionWithoutDataProvider(): void
+    {
+        $this->fixture2->method('apply')->willReturn(new DataObject());
+        $this->applyFixtures();
+        $this->assertNull($this->fixtureStorage->get('dataset'));
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'])]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.unknown$'], 'fixture1')]
+    public function testDatasetUnknownKeyThrowsException(string $value): void
+    {
+        $this->fixture2->expects($this->never())->method('apply');
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageMatches(
+            "/Key 'unknown' does not exist in the data set #0. Available keys: value/"
+        );
+        $this->applyFixtures();
+        $this->assertEquals($value, $this->fixtureStorage->get('dataset')->getData('value'));
+    }
+
+    #[TestWith(['value' => 'dataset-fixture-value'], 'dataset-1')]
+    #[DbIsolation(false)]
+    #[DataFixture(ImageFixture::class, ['param' => '$dataset.unknown$'], 'fixture1')]
+    public function testDatasetWithNameUnknownKeyThrowsException(string $value): void
+    {
+        $this->fixture2->expects($this->never())->method('apply');
+        $this->expectException(AssertionFailedError::class);
+        $this->expectExceptionMessageMatches(
+            "/Key 'unknown' does not exist in the data set 'dataset-1'. Available keys: value/"
+        );
+        $this->applyFixtures();
+        $this->assertEquals($value, $this->fixtureStorage->get('dataset')->getData('value'));
     }
 
     #[

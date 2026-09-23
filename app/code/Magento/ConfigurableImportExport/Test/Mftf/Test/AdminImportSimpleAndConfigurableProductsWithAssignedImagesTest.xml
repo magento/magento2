@@ -77,7 +77,6 @@
             </actionGroup>
             <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyProductsFilter2"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProducts2"/>
-            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetProductsGrid"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}" />
             </actionGroup>
@@ -91,6 +90,9 @@
             <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

@@ -17,7 +17,7 @@
             <severity value="MAJOR"/>
             <features value="Shipping"/>
             <group value="3rd_party_integration"/>
-            <group value="EnableUSPSShippingSuite"/>
+            <group value="EnableUSPSShippingForRestAPISuite"/>
             <group value="pr_exclude"/>
         </annotations>
         <before>

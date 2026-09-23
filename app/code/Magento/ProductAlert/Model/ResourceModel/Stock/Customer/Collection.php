@@ -22,7 +22,15 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
         $this->getSelect()->join(
             ['alert' => $this->getTable('product_alert_stock')],
             'alert.customer_id=e.entity_id',
-            ['alert_stock_id', 'add_date', 'send_date', 'send_count', 'status']
+            [
+                'alert_stock_id',
+                'add_date',
+                'send_date',
+                'send_count',
+                'status',
+                'website_id' => 'alert.website_id',
+                'store_id' => 'alert.store_id'
+            ]
         );
 
         $this->getSelect()->where('alert.product_id=?', $productId);

@@ -339,4 +339,44 @@ class IdentifierTest extends TestCase
             $this->model->getValue()
         );
     }
+
+    /**
+     * Test get identifier value with invalid URL.
+     *
+     * @return void
+     */
+    public function testGetValueWithInvalidUrl(): void
+    {
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->any())
+            ->method('getUriString')
+            ->willReturn('http://example.com:invalid_port/path1/?a=1');
+
+        $this->contextMock->expects($this->any())
+            ->method('getVaryString')
+            ->willReturn(self::VARY);
+
+        $uri = $this->createMock(HttpUri::class);
+        $uri->expects($this->any())->method('getQueryAsArray')->willReturn([]);
+        $this->requestMock->expects($this->any())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $this->assertEquals(
+            sha1(
+                json_encode(
+                    [
+                        true,
+                        'http://example.com:invalid_port/path1/',
+                        '',
+                        self::VARY
+                    ]
+                )
+            ),
+            $this->model->getValue()
+        );
+    }
 }

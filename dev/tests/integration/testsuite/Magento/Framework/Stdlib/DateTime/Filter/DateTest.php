@@ -52,9 +52,6 @@ class DateTest extends \PHPUnit\Framework\TestCase
     #[DataProvider('filterDataProvider')]
     public function testFilter($inputData, $expectedDate)
     {
-        $this->markTestSkipped(
-            'Input data not realistic with actual request payload from admin UI. See MAGETWO-59810'
-        );
         $this->assertEquals($expectedDate, $this->dateFilter->filter($inputData));
     }
 
@@ -64,9 +61,9 @@ class DateTest extends \PHPUnit\Framework\TestCase
     public static function filterDataProvider()
     {
         return [
-            ['2000-01-01', '2000-01-01'],
-            ['2014-03-30T02:30:00', '2014-03-30'],
-            ['12/31/2000', '2000-12-31']
+            ['1/1/2000', '2000-01-01'],
+            ['3/30/2014', '2014-03-30'],
+            ['12/31/2000', '2000-12-31'],
         ];
     }
 

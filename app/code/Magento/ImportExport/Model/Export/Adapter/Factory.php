@@ -12,7 +12,7 @@ namespace Magento\ImportExport\Model\Export\Adapter;
 class Factory
 {
     /**
-     * Object Manager
+     * Object manager instance.
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -27,16 +27,19 @@ class Factory
     }
 
     /**
+     * Create export adapter instance.
+     *
      * @param string $className
+     * @param array $arguments
      * @return \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter
      * @throws \InvalidArgumentException
      */
-    public function create($className)
+    public function create($className, array $arguments = [])
     {
         if (!$className) {
             throw new \InvalidArgumentException('Incorrect class name');
         }
 
-        return $this->_objectManager->create($className);
+        return $this->_objectManager->create($className, $arguments);
     }
 }

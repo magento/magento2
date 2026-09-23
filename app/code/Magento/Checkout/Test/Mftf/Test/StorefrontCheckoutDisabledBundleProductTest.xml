@@ -48,6 +48,10 @@
             <!-- Delete bundle product data -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createBundleDynamicProduct" stepKey="deleteBundleProduct"/>
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Add simple product to the cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">

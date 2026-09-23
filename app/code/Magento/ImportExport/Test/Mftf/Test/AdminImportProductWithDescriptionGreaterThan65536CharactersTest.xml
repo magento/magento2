@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportProductWithDescriptionGreaterThan65536CharactersTest">
+        <annotations>
+            <features value="ImportExport"/>
+            <stories value="Import Products"/>
+            <title value="Product import with description greater than 65,536 characters"/>
+            <description value="Import product with description 65,536 chars Check Data and Import succeed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-4119"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteImportedProduct">
+                <argument name="product" value="ImportProductLongDescriptionSku"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Go to System -> Data Transfer -> Import -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="entityType" value="Products"/>
+            <argument name="importBehavior" value="Add/Update"/>
+            <argument name="importFile" value="import_product_long_description.csv"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <waitForElementVisible selector="{{AdminImportValidationMessagesSection.success}}" stepKey="waitForValidationSuccess"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeFileIsValidMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <waitForText selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportSuccessMessage"/>
+    </test>
+</tests>

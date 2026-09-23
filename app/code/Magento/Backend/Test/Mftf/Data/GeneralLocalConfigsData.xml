@@ -32,4 +32,10 @@
         <data key="scope_code">base</data>
         <data key="value">es_MX</data>
     </entity>
+    <entity name="GeneralLocalCodeConfigsForHebrewIsrael">
+        <data key="path">general/locale/code</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+        <data key="value">he_IL</data>
+    </entity>
 </entities>

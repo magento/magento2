@@ -298,4 +298,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Tax\Block\Item\Price\Renderer">
+        <plugin name="bundle_get_block_item_price"
+                type="Magento\Bundle\Plugin\Tax\BlockItemPriceRenderer"
+                sortOrder="10"/>
+    </type>
 </config>

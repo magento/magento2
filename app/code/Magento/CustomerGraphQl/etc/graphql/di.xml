@@ -205,6 +205,7 @@
             <argument name="factorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
                     <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId</item>
+                    <item name="current_website_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentWebsiteId</item>
                 </item>
             </argument>
         </arguments>

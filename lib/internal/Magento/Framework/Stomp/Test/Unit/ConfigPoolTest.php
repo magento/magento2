@@ -13,7 +13,6 @@ use Magento\Framework\Stomp\ConfigPool;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Stomp\Network\Connection;
 
 class ConfigPoolTest extends TestCase
 {
@@ -47,27 +46,5 @@ class ConfigPoolTest extends TestCase
         $this->assertEquals($config, $this->model->get('stomp'));
         //test that object is cached
         $this->assertEquals($config, $this->model->get('stomp'));
-    }
-
-    /**
-     * @return void
-     * @throws Exception
-     */
-    public function testCloseConnections(): void
-    {
-        $config = $this->createMock(Config::class);
-        $this->factory->method('create')
-            ->willReturn($config);
-        $this->model->get('stomp');
-
-        $connection = $this->createMock(Connection::class);
-        $config->expects($this->atLeastOnce())
-            ->method('getConnection')
-            ->willReturn($connection);
-
-        $connection->expects($this->once())
-            ->method('disconnect');
-
-        $this->model->closeConnections();
     }
 }

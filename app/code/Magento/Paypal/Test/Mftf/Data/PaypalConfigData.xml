@@ -342,7 +342,7 @@
         <data key="value">Authorization</data>
     </entity>
     <entity name="StorefrontPaypalStandardAuthorizationPaymentActionOptionConfigDataToDefaultValue">
-        <data key="path">payment/paypal_standard/payment_action</data>
+        <data key="path">payment/paypal_express/payment_action</data>
         <data key="scope_id">1</data>
         <data key="label">No</data>
         <data key="value">Order</data>

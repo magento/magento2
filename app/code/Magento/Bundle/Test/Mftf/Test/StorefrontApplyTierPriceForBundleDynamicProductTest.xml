@@ -80,6 +80,9 @@
             <!--Delete Bundle Product-->
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <!-- Log out -->
+            <!--Clear filter product listing grid-->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open created category in storefront and assert the price-->

@@ -194,4 +194,16 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetAllowedCurrenciesConfigForGBP">
+        <data key="path">currency/options/allow</data>
+        <data key="value">GBP</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDefaultCurrencyGBPConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">GBP</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
 </entities>

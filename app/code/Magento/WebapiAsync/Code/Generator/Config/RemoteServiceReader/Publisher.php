@@ -59,7 +59,6 @@ class Publisher implements \Magento\Framework\Config\ReaderInterface
                 [
                     'topic'       => $topicName,
                     'disabled'    => false,
-                    'queue'       => 'async.operations.all',
                     'connections' => [
                         $this->defaultValueProvider->getConnection() => [
                             'name'     => $this->defaultValueProvider->getConnection(),

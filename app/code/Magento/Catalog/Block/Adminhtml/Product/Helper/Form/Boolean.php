@@ -7,12 +7,12 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
 /**
  * Product form boolean field helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
+     * Initialise the block
+     *
      * @return void
      */
     protected function _construct()

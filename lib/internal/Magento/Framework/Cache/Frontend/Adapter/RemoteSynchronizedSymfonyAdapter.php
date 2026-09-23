@@ -25,22 +25,22 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     private ExtendedBackendInterface $backend;
 
     /**
-     * @var int
-     */
-    private int $defaultLifetime;
-
-    /**
      * Constructor
      *
+     * The default lifetime is NOT applied here: save() forwards the lifetime through untouched
+     * (including null => no expiry, matching legacy), and the actual default TTL is applied downstream
+     * by the underlying Symfony adapter. The $defaultLifetime parameter is kept only for backward-
+     * compatible DI wiring (the frontend Factory passes it) and is intentionally unused in this class.
+     *
      * @param ExtendedBackendInterface $backend RemoteSynchronizedCache backend
-     * @param int $defaultLifetime Default cache lifetime
+     * @param int $defaultLifetime Kept for DI wiring; applied by the underlying Symfony adapter, not here
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ExtendedBackendInterface $backend,
         int $defaultLifetime = 7200
     ) {
         $this->backend = $backend;
-        $this->defaultLifetime = $defaultLifetime;
     }
 
     /**
@@ -60,12 +60,39 @@ class RemoteSynchronizedSymfonyAdapter implements FrontendInterface
     }
 
     /**
+     * Batched multi-load (used by the preloading wrapper).
+     *
+     * Delegates to the L2 backend's loadMultiple() when available (one round-trip to the remote
+     * tier); otherwise falls back to per-key loads.
+     *
+     * @param string[] $identifiers
+     * @return array<string, mixed>
+     */
+    public function loadMultiple(array $identifiers): array
+    {
+        if (method_exists($this->backend, 'loadMultiple')) {
+            return $this->backend->loadMultiple($identifiers);
+        }
+        $out = [];
+        foreach ($identifiers as $id) {
+            $value = $this->backend->load($id);
+            if ($value !== false) {
+                $out[$id] = $value;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @inheritDoc
      */
     public function save($data, $identifier, $tags = [], $lifeTime = null)
     {
-        $lifetime = $lifeTime ?? $this->defaultLifetime;
-        return $this->backend->save($data, $identifier, $tags, $lifetime);
+        // Pass the lifetime through untouched (including null) so the underlying Symfony adapter's
+        // calculateActualLifetime() is the single place that applies legacy semantics: null => no
+        // expiration, false/0 => default lifetime. Coercing null to the default here forced a TTL on
+        // L2 entries that legacy stored permanently.
+        return $this->backend->save($data, $identifier, $tags, $lifeTime);
     }
 
     /**

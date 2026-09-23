@@ -91,4 +91,9 @@
                 type="Magento\Sales\Plugin\SearchCriteria\FulltextFilterPlugin"
                 sortOrder="10"/>
     </type>
+    <type name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection">
+        <plugin name="custom_sales_grid_country_name_to_code_filter"
+                type="Magento\Sales\Plugin\OrderGrid\CountryNameToCodeFilter"
+                sortOrder="10"/>
+    </type>
 </config>

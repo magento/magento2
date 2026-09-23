@@ -71,6 +71,6 @@ class BackOrderTest extends \PHPUnit\Framework\TestCase
         $order = $this->objectManager->get(OrderRepository::class)->get($orderId);
         $this->assertNotNull($order);
         $orderitem = $order->getAllItems()[0];
-        $this->assertEquals($orderitem->getQtyBackordered(), 10);
+        $this->assertEquals(10, $orderitem->getQtyBackordered());
     }
 }

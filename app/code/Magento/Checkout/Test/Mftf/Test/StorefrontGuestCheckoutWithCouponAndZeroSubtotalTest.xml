@@ -25,6 +25,7 @@
             <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
         </before>
         <after>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFiltersAfter" before="logout"/>
             <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStoreViewCodeChangePreservesDesignConfigurationTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Design configuration persists after store view code change"/>
+            <title value="Design configuration remains intact after changing store view code"/>
+            <description value="Verify design configuration persists after store view code change."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="ACP2E-3941"/>
+            <group value="theme"/>
+        </annotations>
+        <before>
+            <!--Step 1: Login to admin, create store view and apply theme to store view -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminChangeStorefrontThemeActionGroup" stepKey="assignMagentoBlankThemeToStoreView">
+                <argument name="theme" value="{{MagentoBlankTheme.name}}"/>
+                <argument name="scopeName" value="{{storeViewData.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete store view and logout from admin -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewAfterDesignConfigTest">
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Verify initial theme -->
+        <actionGroup ref="AdminAssertStoreViewDesignThemeActionGroup" stepKey="assertMagentoBlankThemeBeforeStoreViewCodeChange">
+            <argument name="theme" value="{{MagentoBlankTheme.name}}"/>
+            <argument name="scopeName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+        <!-- Step 2,3,4: Navigate to created store view, change the code field and save store view -->
+        <actionGroup ref="AdminUpdateStoreViewCodeActionGroup" stepKey="updateStoreViewCodeFromStoresGrid">
+            <argument name="storeViewName" value="{{storeViewData.name}}"/>
+            <argument name="storeViewCode" value="{{storeViewCode.code}}"/>
+        </actionGroup>
+        <!-- Step 5 Assertion: The design configuration remains intact after changing the store view code -->
+        <actionGroup ref="AdminAssertStoreViewDesignThemeActionGroup" stepKey="assertMagentoBlankThemeAfterStoreViewCodeChange">
+            <argument name="theme" value="{{MagentoBlankTheme.name}}"/>
+            <argument name="scopeName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

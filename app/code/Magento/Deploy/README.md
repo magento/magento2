@@ -17,4 +17,4 @@ This module is installed automatically (using the native install mechanism) with
 
 ## Additional information
 
-You can get more information about deployment in the [Adobe Developer documentation](https://developer.adobe.com/commerce/php/development/deployment/).
+You can get more information about deployment in the [Adobe Developer documentation](https://experienceleague.adobe.com/en/docs/commerce-operations/configuration-guide/deployment/overview).

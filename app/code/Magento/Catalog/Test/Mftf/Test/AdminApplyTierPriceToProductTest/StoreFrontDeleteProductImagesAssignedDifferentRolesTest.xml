@@ -91,6 +91,10 @@
             <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="simpleProductOne" stepKey="deleteCustomer"/>
+            <!-- Clear filter product listing grid -->
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPageBeforeClearFilters"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
         <!--Open Product On Admin Side-->

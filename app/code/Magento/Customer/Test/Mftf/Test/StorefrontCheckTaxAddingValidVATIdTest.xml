@@ -131,6 +131,7 @@
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
                 <argument name="customerGroupName" value="test_UK"/>
             </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomerGroupFilters"/>
 
             <createData entity="SetCustomerCreateNewAccountOptionsDefaultConfig" stepKey="setCustomerCreateNewAccountOptionsDefaultConfig"/>
             <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>

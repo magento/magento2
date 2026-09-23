@@ -82,7 +82,7 @@ class Preview extends Widget
         } else {
             $previewData = $this->getPreviewData();
             $template->setTemplateType($previewData['type']);
-            $template->setTemplateText($previewData['text']);
+            $template->setTemplateText($this->maliciousCode->filter($previewData['text']));
             $template->setTemplateStyles($previewData['styles']);
         }
 

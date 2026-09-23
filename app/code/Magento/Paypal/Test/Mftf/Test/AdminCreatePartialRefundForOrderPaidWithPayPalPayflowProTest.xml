@@ -58,7 +58,7 @@
         </before>
         <after>
             <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

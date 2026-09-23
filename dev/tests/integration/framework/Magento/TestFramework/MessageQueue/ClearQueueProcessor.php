@@ -10,7 +10,6 @@ namespace Magento\TestFramework\MessageQueue;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfig;
-use Magento\Framework\MessageQueue\ConsumerFactory;
 use Magento\Framework\MessageQueue\QueueRepository;
 
 /**
@@ -24,29 +23,19 @@ class ClearQueueProcessor
     private $consumerConfig;
 
     /**
-     * @var ConsumerFactory
-     */
-    private $consumerFactory;
-
-    /**
      * @var QueueRepository
      */
     private $queueRepository;
 
     /**
-     * ClearQueueProcessor constructor.
-     *
      * @param ConsumerConfig $consumerConfig
-     * @param ConsumerFactory $consumerFactory
      * @param QueueRepository $queueRepository
      */
     public function __construct(
         ConsumerConfig $consumerConfig,
-        ConsumerFactory $consumerFactory,
         QueueRepository $queueRepository
     ) {
         $this->consumerConfig = $consumerConfig;
-        $this->consumerFactory = $consumerFactory;
         $this->queueRepository = $queueRepository;
     }
 
@@ -62,14 +51,6 @@ class ClearQueueProcessor
         /** @var ConsumerConfigItemInterface $consumerConfig */
         $consumerConfig = $this->consumerConfig->getConsumer($consumerName);
         $queue = $this->queueRepository->get($consumerConfig->getConnection(), $consumerConfig->getQueue());
-
-        if ($consumerConfig->getConnection() === 'stomp') {
-            $queue->clearQueue();
-        } else {
-            // AMQP and other protocols use the standard approach
-            while ($message = $queue->dequeue()) {
-                $queue->acknowledge($message);
-            }
-        }
+        $queue->clearQueue();
     }
 }

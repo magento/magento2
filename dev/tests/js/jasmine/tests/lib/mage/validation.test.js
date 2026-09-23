@@ -8,6 +8,12 @@ define([
 ], function ($) {
     'use strict';
 
+    beforeEach(function () {
+        window.wysiwygValidationConfig = {
+            allowUtf8mb4: true
+        };
+    });
+
     describe('Testing credit card validation', function () {
         it('Card type matches credit card number', function () {
             expect($.validator.methods['validate-cc-type-select'].call(
@@ -1214,6 +1220,77 @@ define([
             )).toEqual(true);
             expect($.validator.methods['validate-no-utf8mb4-characters'].call(
                 $.validator.prototype, 'מִבְחָן', null
+            )).toEqual(true);
+        });
+    });
+
+    describe('Testing malformed Unicode policy', function () {
+        it('rejects data containing unpaired surrogate characters', function () {
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '\uD83Dtest', null
+            )).toEqual(false);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'test\uDD35', null
+            )).toEqual(false);
+        });
+
+        it('approves data containing valid utf8mb4 characters including emojis', function () {
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'emoji 😀 test', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'испытание', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'δοκιμή', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'اختبار', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'מִבְחָן', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'परीक्षण', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '测试', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, 'テスト', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-no-invalid-unicode-characters'].call(
+                $.validator.prototype, '테스트', null
+            )).toEqual(true);
+        });
+    });
+
+    describe('Testing WYSIWYG character validation policy', function () {
+        it('approves valid utf8mb4 characters when storage supports utf8mb4', function () {
+            window.wysiwygValidationConfig.allowUtf8mb4 = true;
+
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(true);
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, 'испытание', null
+            )).toEqual(true);
+        });
+
+        it('rejects utf8mb4 characters when storage does not support utf8mb4', function () {
+            window.wysiwygValidationConfig.allowUtf8mb4 = false;
+
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, '🔵⚪🔴', null
+            )).toEqual(false);
+            expect($.validator.methods['validate-wysiwyg-content-characters'].call(
+                $.validator.prototype, 'испытание', null
             )).toEqual(true);
         });
     });

@@ -6,8 +6,6 @@
 
 /**
  * Backend Model for Currency import options
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Cron\Model\Config\Backend;
 

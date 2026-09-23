@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Option\Type;
 
+use Magento\Catalog\Helper\Product\Validator\ProductOptionValidator;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\Product\Option\Type\File;
 use Magento\Catalog\Model\Product\Option\UrlBuilder;
@@ -72,6 +73,11 @@ class FileTest extends TestCase
      */
     private $itemOptionFactoryMock;
 
+    /**
+     * @var ProductOptionValidator|MockObject
+     */
+    private $productOptionValidator;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -97,6 +103,8 @@ class FileTest extends TestCase
             Database::class,
             ['copyFile', 'checkDbUsage']
         );
+
+        $this->productOptionValidator = $this->createMock(ProductOptionValidator::class);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -129,6 +137,7 @@ class FileTest extends TestCase
                 'urlBuilder' => $this->urlBuilder,
                 'escaper' => $this->escaper,
                 'itemOptionFactory' => $this->itemOptionFactoryMock,
+                'productOptionValidator' => $this->productOptionValidator,
             ]
         );
     }
@@ -211,6 +220,10 @@ class FileTest extends TestCase
             ->method('copyFile')
             ->willReturn('true');
 
+        $this->productOptionValidator->expects($this->once())
+            ->method('validateOptionsFilePath')
+            ->with([$quotePath, $orderPath]);
+
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);
 
@@ -261,6 +274,10 @@ class FileTest extends TestCase
             ->willReturn(false);
 
         $this->coreFileStorageDatabase->method('copyFile')->willReturn(false);
+
+        $this->productOptionValidator->expects($this->once())
+            ->method('validateOptionsFilePath')
+            ->with([$quotePath, $orderPath]);
 
         $fileObject = $this->getFileObject();
         $fileObject->setData('configuration_item_option', $optionMock);

@@ -13,4 +13,5 @@ return [
     \Magento\Framework\ObjectManager\DefinitionInterface::class,
     \Magento\Framework\Session\Config::class,
     \Magento\Framework\ObjectManager\Config\Mapper\Dom::class,
+    \Magento\Framework\Stomp\StompClientProvider::class,
 ];

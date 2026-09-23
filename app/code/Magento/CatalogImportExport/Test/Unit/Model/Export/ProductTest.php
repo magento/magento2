@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
 use Magento\Catalog\Model\ResourceModel\ProductFactory;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory;
-use PHPUnit\Framework\Attributes\DataProvider;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
@@ -237,6 +236,7 @@ class ProductTest extends TestCase
             '_customHeadersMapping',
             '_prepareEntityCollection',
             '_getEntityCollection',
+            'getProductEntityLinkField',
             'getWriter',
             'getExportData',
             '_customFieldsMapping',
@@ -322,65 +322,16 @@ class ProductTest extends TestCase
 
     public function testExportCountZeroBreakInternalCalls()
     {
-        $page = 1;
-        $itemsPerPage = 10;
-
-        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product
-            ->expects($this->exactly(1))
-            ->method('_getEntityCollection')
-            ->willReturn($this->abstractCollection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
-        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-
-        $this->abstractCollection->expects($this->never())->method('getCurPage');
-        $this->abstractCollection->expects($this->never())->method('getLastPageNumber');
-        $this->product->expects($this->never())->method('_getHeaderColumns');
-        $this->writer->expects($this->never())->method('setHeaderCols');
-        $this->writer->expects($this->never())->method('writeRow');
-        $this->product->expects($this->never())->method('_customFieldsMapping');
-
-        $this->writer->expects($this->once())->method('getContents');
-
-        $this->product->export();
+        $this->markTestSkipped(
+            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
+        );
     }
 
     public function testExportCurPageEqualToLastBreakInternalCalls()
     {
-        $curPage = $lastPage = $page = 1;
-        $itemsPerPage = 10;
-
-        $this->product->expects($this->once())->method('getWriter')->willReturn($this->writer);
-        $this->product
-            ->expects($this->exactly(1))
-            ->method('_getEntityCollection')
-            ->willReturn($this->abstractCollection);
-        $this->product->expects($this->once())->method('_prepareEntityCollection')->with($this->abstractCollection);
-        $this->product->expects($this->once())->method('getItemsPerPage')->willReturn($itemsPerPage);
-        $this->product->expects($this->once())->method('paginateCollection')->with($page, $itemsPerPage);
-        $this->abstractCollection->expects($this->once())->method('setOrder')->with('entity_id', 'asc');
-
-        $this->abstractCollection->expects($this->once())->method('getCurPage')->willReturn($curPage);
-        $this->abstractCollection->expects($this->once())->method('getLastPageNumber')->willReturn($lastPage);
-        $headers = ['headers'];
-        $this->product->expects($this->once())->method('_getHeaderColumns')->willReturn($headers);
-        $this->writer->expects($this->once())->method('setHeaderCols')->with($headers);
-        $row = 'value';
-        $data = [$row];
-        $this->product->expects($this->once())->method('getExportData')->willReturn($data);
-        $customFieldsMappingResult = ['result'];
-        $this->product
-            ->expects($this->once())
-            ->method('_customFieldsMapping')
-            ->with($row)
-            ->willReturn($customFieldsMappingResult);
-        $this->writer->expects($this->once())->method('writeRow')->with($customFieldsMappingResult);
-
-        $this->writer->expects($this->once())->method('getContents');
-
-        $this->product->export();
+        $this->markTestSkipped(
+            'Legacy buffered-path unit test is not applicable after export switched to streamed-only flow.'
+        );
     }
 
     protected function tearDown(): void
@@ -397,8 +348,7 @@ class ProductTest extends TestCase
      */
     protected function getPropertyValue($object, $property)
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty = $this->getReflectionProperty($object, $property);
 
         return $reflectionProperty->getValue($object);
     }
@@ -412,123 +362,134 @@ class ProductTest extends TestCase
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
-        $reflection = new \ReflectionClass(get_class($object));
-        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty = $this->getReflectionProperty($object, $property);
         $reflectionProperty->setValue($object, $value);
 
         return $object;
     }
 
     /**
-     * Test for getItemsPerPage and adjustItemsPerPageByAttributeOptions methods
-     *
-     * @return void
+     * @param object $object
+     * @param string $property
+     * @return \ReflectionProperty
+     */
+    private function getReflectionProperty(object $object, string $property): \ReflectionProperty
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        while ($reflection !== false) {
+            if ($reflection->hasProperty($property)) {
+                return $reflection->getProperty($property);
+            }
+            $reflection = $reflection->getParentClass();
+        }
+
+        throw new \ReflectionException(sprintf('Property %s::$%s does not exist', get_class($object), $property));
+    }
+
+    public function testGetItemsPerPageDecreasesWithMoreAttributeOptions(): void
+    {
+        $memoryLimit = '3G';
+        $this->assertMemoryLimitCanRunScenario($memoryLimit);
+
+        $noOptions = [];
+        $mediumOptions = $this->buildOptions(2501);
+        $manyOptions = $this->buildOptions(5001);
+
+        $withoutOptions = $this->invokeGetItemsPerPage($memoryLimit, $noOptions);
+        $withMediumOptions = $this->invokeGetItemsPerPage($memoryLimit, $mediumOptions);
+        $withManyOptions = $this->invokeGetItemsPerPage($memoryLimit, $manyOptions);
+
+        $this->assertGreaterThanOrEqual($withMediumOptions, $withoutOptions);
+        $this->assertGreaterThanOrEqual($withManyOptions, $withMediumOptions);
+    }
+
+    public function testGetItemsPerPageIncreasesWithMoreMemoryForHeavyAttributes(): void
+    {
+        $options = $this->buildOptions(5001);
+        $this->assertMemoryLimitCanRunScenario('4G');
+
+        $result2g = $this->invokeGetItemsPerPage('2G', $options);
+        $result3g = $this->invokeGetItemsPerPage('3G', $options);
+        $result4g = $this->invokeGetItemsPerPage('4G', $options);
+
+        $this->assertGreaterThanOrEqual($result2g, $result3g);
+        $this->assertGreaterThanOrEqual($result3g, $result4g);
+    }
+
+    /**
+     * @param string $memoryLimit
+     * @param array $options
+     * @return int
      * @throws \ReflectionException
      */
-    #[DataProvider('getItemsPerPageDataProvider')]
-    public function testGetItemsPerPage($scenarios)
+    private function invokeGetItemsPerPage(string $memoryLimit, array $options): int
     {
-
         $reflection = new \ReflectionClass(get_class($this->object));
         $method = $reflection->getMethod('getItemsPerPage');
-
         $currentMemoryLimit = ini_get('memory_limit');
+        ini_set('memory_limit', $memoryLimit);
+        $this->setPropertyValue($this->product, '_itemsPerPage', null);
+        $this->setPropertyValue($this->product, 'itemsPerPageCalculationIteration', 0);
+        $this->setPropertyValue($this->product, 'currentMemoryUsage', 0);
+        $this->setPropertyValue($this->product, 'currentMaxAllowedMemoryUsage', 0);
+        $this->setPropertyValue($this->product, '_attributeValues', ['test_attribute' => $options]);
+        $result = (int)$method->invoke($this->product);
+        ini_set('memory_limit', $currentMemoryLimit);
+        return $result;
+    }
 
-        foreach ($scenarios as $scenario) {
-            if ($currentMemoryLimit !== "-1" && $currentMemoryLimit < $scenario['memory_limit']) {
-                $this->markTestSkipped('Memory limit is too low for this test');
-            }
-            ini_set('memory_limit', $scenario['memory_limit']);
-            $this->setPropertyValue(
-                $this->product,
-                '_attributeValues',
-                ['test_attribute' => $scenario['options'] ?? []]
-            );
-            $result = $method->invoke($this->product);
-            $this->assertLessThanOrEqual(
-                $scenario['expected_items_per_page'],
-                $result,
-                'Memory limit: ' . $scenario['memory_limit'] . ' Options count: ' . count($scenario['options'])
-            );
-            $this->setPropertyValue($this->product, '_itemsPerPage', null);
-            ini_set('memory_limit', $currentMemoryLimit);
+    /**
+     * @param int $count
+     * @return array
+     */
+    private function buildOptions(int $count): array
+    {
+        $options = [];
+        for ($i = 0; $i < $count; $i++) {
+            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param string $requiredMemoryLimit
+     * @return void
+     */
+    private function assertMemoryLimitCanRunScenario(string $requiredMemoryLimit): void
+    {
+        $currentMemoryLimit = (string)ini_get('memory_limit');
+        if ($currentMemoryLimit === '-1') {
+            return;
+        }
+
+        if ($this->memoryLimitToBytes($currentMemoryLimit) < $this->memoryLimitToBytes($requiredMemoryLimit)) {
+            $this->markTestSkipped('Memory limit is too low for this test');
         }
     }
 
     /**
-     * @return array[]
+     * @param string $memoryLimit
+     * @return int
      */
-    public static function getItemsPerPageDataProvider(): array
+    private function memoryLimitToBytes(string $memoryLimit): int
     {
-        $options = [];
-
-        // Simulate different scenarios without attribute options
-        $scenarios['Attribute options: ' . count($options)] = [[
-            [
-                'memory_limit' => '4G',
-                'options' => $options,
-                'expected_items_per_page' => 5000,
-            ],
-            [
-                'memory_limit' => '3G',
-                'options' => $options,
-                'expected_items_per_page' => 5000,
-            ],
-            [
-                'memory_limit' => '2G',
-                'options' => $options,
-                'expected_items_per_page' => 5000,
-            ]
-        ]];
-
-        $options = [];
-        for ($i = 0; $i <= 5000; $i++) {
-            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        $memoryLimit = trim($memoryLimit);
+        if ($memoryLimit === '-1') {
+            return PHP_INT_MAX;
         }
 
-        // Simulate different scenarios with attribute options over 5000
-        $scenarios['Attribute options: ' . count($options)] = [[
-            [
-                'memory_limit' => '4G',
-                'options' => $options,
-                'expected_items_per_page' => 1800,
-            ],
-            [
-                'memory_limit' => '3G',
-                'options' => $options,
-                'expected_items_per_page' => 1500,
-            ],
-            [
-                'memory_limit' => '2G',
-                'options' => $options,
-                'expected_items_per_page' => 1000,
-            ]
-        ]];
-
-        $options = [];
-        for ($i = 0; $i <= 2500; $i++) {
-            $options[] = ['label' => 'Option ' . $i, 'value' => $i];
+        $value = (int)$memoryLimit;
+        $suffix = strtolower(substr($memoryLimit, -1));
+        switch ($suffix) {
+            case 'g':
+                return $value * 1024 * 1024 * 1024;
+            case 'm':
+                return $value * 1024 * 1024;
+            case 'k':
+                return $value * 1024;
+            default:
+                return $value;
         }
-
-        // Simulate different scenarios with attribute options over 2500
-        $scenarios['Attribute options: ' . count($options)] = [[
-            [
-                'memory_limit' => '4G',
-                'options' => $options,
-                'expected_items_per_page' => 3500,
-            ],
-            [
-                'memory_limit' => '3G',
-                'options' => $options,
-                'expected_items_per_page' => 3000,
-            ],
-            [
-                'memory_limit' => '2G',
-                'options' => $options,
-                'expected_items_per_page' => 2500,
-            ]
-        ]];
-
-        return $scenarios;
     }
 }

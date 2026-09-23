@@ -59,9 +59,19 @@ class GetTree extends Action implements HttpGetActionInterface
     public function execute()
     {
         try {
-            $responseContent =
-                $this->getDirectoryTree->execute()
-            ;
+            $path = $this->getRequest()->getParam('path');
+            $loadWholeTree = filter_var(
+                $this->getRequest()->getParam('loadWholeTree', true),
+                FILTER_VALIDATE_BOOLEAN
+            );
+            if ($path === '#' || $path === '') {
+                $path = null;
+            }
+
+            $responseContent = $this->getDirectoryTree->execute(
+                is_string($path) ? $path : null,
+                $loadWholeTree
+            );
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

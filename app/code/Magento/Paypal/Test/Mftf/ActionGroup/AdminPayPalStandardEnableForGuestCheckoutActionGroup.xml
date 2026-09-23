@@ -18,10 +18,14 @@
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <resizeWindow width="1920" height="1080" stepKey="resizeWindowForPayPalStandard"/>
+        <waitForElementVisible selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="waitForOtherPayPalPaymentsSection"/>
         <conditionalClick selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" dependentSelector="{{OtherPayPalPaymentsConfigSection.expandedTab(countryCode)}}" visible="false" stepKey="expandOtherPaypalConfigButton"/>
+        <waitForElementVisible selector="{{AdminPayPalStandardConfigGuestCheckoutSection.enablePaymentSolution(countryCode)}}" stepKey="waitForPaymentSolutionTab"/>
         <conditionalClick selector="{{AdminPayPalStandardConfigGuestCheckoutSection.enablePaymentSolution(countryCode)}}" dependentSelector="{{AdminPayPalStandardConfigGuestCheckoutSection.enablePaymentSolutionActive(countryCode)}}" visible="false" stepKey="expandPaymentSolutionContentTab"/>
-        <scrollTo selector="{{AdminPayPalStandardConfigGuestCheckoutSection.configureBtn(countryCode)}}"  x="0" y="-80"  stepKey="scrollToConfigure"/>
-        <waitForElementClickable selector="{{AdminPayPalStandardConfigGuestCheckoutSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn" />
+        <scrollTo selector="{{AdminPayPalStandardConfigGuestCheckoutSection.configureBtn(countryCode)}}" x="0" y="-150" stepKey="scrollToConfigure"/>
+        <moveMouseOver selector="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="moveMouseAwayFromToolbar"/>
+        <waitForElementClickable selector="{{AdminPayPalStandardConfigGuestCheckoutSection.configureBtn(countryCode)}}" stepKey="waitForPayPalStandardConfigureBtn"/>
         <click selector="{{AdminPayPalStandardConfigGuestCheckoutSection.configureBtn(countryCode)}}" stepKey="clickPayPalStandardConfigureBtn"/>
         <waitForElementVisible selector="{{AdminPayPalStandardConfigGuestCheckoutSection.email(countryCode)}}" stepKey="waitForEmailTab"/>
         <fillField selector ="{{AdminPayPalStandardConfigGuestCheckoutSection.email(countryCode)}}" userInput="{{credentials.paypal_express_email}}" stepKey="inputEmailAssociatedWithPayPalMerchantAccount"/>

@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="media.storage.catalog.image.resize" queue="media.storage.catalog.image.resize"/>
+    <publisher topic="media.storage.catalog.image.resize" />
 </config>

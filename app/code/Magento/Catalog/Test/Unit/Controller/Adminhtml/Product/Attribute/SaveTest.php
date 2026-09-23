@@ -157,7 +157,7 @@ class SaveTest extends AttributeTest
         $this->redirectMock = $this->createMock(ResultRedirect::class);
         $this->jsonResultMock = $this->createMock(ResultJson::class);
         $this->productAttributeMock = $this->createMock(Attribute::class);
-           
+
         $this->buildFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->builderMock);
@@ -1034,5 +1034,84 @@ class SaveTest extends AttributeTest
             'presentation' => $this->presentationMock,
             '_session' => $this->sessionMock
         ]);
+    }
+
+    public function testSynchronizeOptionsWithPresentationRowsRebuildsOptionFromSelectRows(): void
+    {
+        $controller = $this->getModel();
+
+        $data = [
+            'attribute_options_select' => [
+                [
+                    'record_id' => 0,
+                    'position' => 2,
+                    'value_option_0' => 'B',
+                    'value_option_1' => 'b'
+                ],
+                [
+                    'record_id' => 1,
+                    'position' => 1,
+                    'value_option_0' => 'A',
+                    'value_option_1' => 'a',
+                    'is_default' => '1'
+                ],
+            ],
+            'option' => [
+                'value' => [
+                    'option_0' => [0 => 'stale', 1 => 's'],
+                    'option_5' => [0 => 'ghost', 1 => 'g'],
+                ],
+                'delete' => ['option_0' => '1'],
+                'order' => ['option_5' => '9'],
+            ],
+            'default' => ['option_5'],
+        ];
+
+        $this->invokeSynchronizeOptionsWithPresentationRows($controller, $data);
+
+        $this->assertArrayNotHasKey('attribute_options_select', $data);
+        $this->assertCount(2, $data['option']['value']);
+        $this->assertSame('A', $data['option']['value']['option_0'][0]);
+        $this->assertSame('a', $data['option']['value']['option_0'][1]);
+        $this->assertSame('B', $data['option']['value']['option_1'][0]);
+        $this->assertSame('b', $data['option']['value']['option_1'][1]);
+        $this->assertSame('1', $data['option']['order']['option_0']);
+        $this->assertSame('2', $data['option']['order']['option_1']);
+        $this->assertSame('', $data['option']['delete']['option_0']);
+        $this->assertSame('', $data['option']['delete']['option_1']);
+        $this->assertSame(['option_0'], $data['default']);
+    }
+
+    public function testSynchronizeOptionsWithPresentationRowsDoesNothingWhenNoRowsKey(): void
+    {
+        $controller = $this->getModel();
+
+        $data = [
+            // no attribute_options_select or attribute_options_multiselect
+            'option' => [
+                'value' => [
+                    'option_0' => [0 => '1', 1 => '1'],
+                    'option_1' => [0 => '2', 1 => '2'],
+                ],
+                'delete' => [],
+            ],
+        ];
+
+        $this->invokeSynchronizeOptionsWithPresentationRows($controller, $data);
+
+        $this->assertSame([], $data['option']['delete']);
+    }
+
+    /**
+     * Helper to call the private method via reflection.
+     */
+    private function invokeSynchronizeOptionsWithPresentationRows(
+        \Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save $controller,
+        array &$data
+    ): void {
+        $method = new \ReflectionMethod($controller, 'synchronizeOptionsWithPresentationRows');
+
+        $args = [&$data];
+        $method->invokeArgs($controller, $args);
     }
 }

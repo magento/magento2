@@ -10,7 +10,11 @@ use Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Export;
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 
@@ -384,6 +388,118 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     private int $currentMemoryUsage = 0;
 
     /**
+     * Entity IDs selected for the current page.
+     *
+     * @var int[]
+     */
+    private array $currentPageEntityIds = [];
+
+    /**
+     * Iteration counter for memory-based page size recalculation.
+     *
+     * @var int
+     */
+    private int $itemsPerPageCalculationIteration = 0;
+
+    /**
+     * Estimated memory per product for adaptive page size calculation.
+     *
+     * @var float
+     */
+    private float $estimatedMemoryPerProduct;
+
+    /**
+     * Memory snapshot taken at the start of current export iteration.
+     *
+     * @var int
+     */
+    private int $memoryAtStartOfIteration = 0;
+
+    /**
+     * Last processed product link field value for keyset pagination (entity_id in CE, row_id in EE with staging).
+     *
+     * @var int
+     */
+    private int $lastProcessedLinkFieldValue = 0;
+
+    /**
+     * Items per page calculated for the current export iteration.
+     *
+     * @var int|null
+     */
+    private ?int $currentIterationItemsPerPage = null;
+
+    /**
+     * Cursor candidate from the currently loaded batch, committed only after the batch is fully processed.
+     *
+     * @var int|null
+     */
+    private ?int $pendingLastProcessedLinkFieldValue = null;
+
+    /**
+     * Link field values for the current batch, used to build row customizer collection without keyset filter.
+     *
+     * @var int[]
+     */
+    private array $currentBatchLinkIds = [];
+
+    /**
+     * Cached result of getMemoryLimitForPagination() for the current export run.
+     *
+     * @var array{0:int,1:bool}|null
+     */
+    private ?array $cachedMemoryLimitForPagination = null;
+
+    /**
+     * Product attributes indexed by code for lazy option-label loading.
+     *
+     * @var array
+     */
+    private array $attributesByCode = [];
+
+    /**
+     * Tracks if option labels are already loaded for a given attribute code.
+     *
+     * @var array
+     */
+    private array $attributeOptionsLoaded = [];
+
+    /**
+     * Tracks option IDs already loaded per attribute (for partial lazy loading).
+     *
+     * @var array
+     */
+    private array $loadedAttributeOptionIds = [];
+
+    /**
+     * Cached maximum option count across source attributes.
+     *
+     * @var int|null
+     */
+    private ?int $cachedMaxAttributeValues = null;
+
+    /**
+     * Cached number of selected export attributes for current run.
+     *
+     * @var int|null
+     */
+    private ?int $cachedExportAttributeCount = null;
+
+    /**
+     * Store ID currently used by entity collection preparation.
+     *
+     * @var int|null
+     */
+    private ?int $collectionPreparationStoreId = null;
+
+    /**
+     * Export attribute codes used for non-default store loads.
+     *
+     * @var array|null
+     */
+    private ?array $nonDefaultStoreExportAttrCodes = null;
+
+    /**
      * Product constructor.
      *
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -405,6 +521,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param array $dateAttrCodes
      * @param ProductFilterInterface|null $filter
      * @param StockConfigurationInterface|null $stockConfiguration
+     * @param float $estimatedMemoryPerProduct
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -426,7 +543,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
         array $dateAttrCodes = [],
         ?ProductFilterInterface $filter = null,
-        ?StockConfigurationInterface $stockConfiguration = null
+        ?StockConfigurationInterface $stockConfiguration = null,
+        float $estimatedMemoryPerProduct = 500000.0
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -445,6 +563,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->filter = $filter ?? ObjectManager::getInstance()->get(ProductFilterInterface::class);
         $this->stockConfiguration = $stockConfiguration ?? ObjectManager::getInstance()
                 ->get(StockConfigurationInterface::class);
+        $this->estimatedMemoryPerProduct = $estimatedMemoryPerProduct;
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
         $this->initTypeModels()
@@ -611,6 +730,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 '_media_store_id' => $mediaRow['store_id'],
             ];
         }
+        $stmt->closeCursor();
 
         return $rowMediaGallery;
     }
@@ -657,6 +777,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
             $stockItemRows[$productId] = $stockItemRow;
         }
+        $stmt->closeCursor();
         return $stockItemRows;
     }
 
@@ -723,6 +844,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'default_qty' => $linksRow['default_qty'],
             ];
         }
+        $stmt->closeCursor();
 
         return $linksRows;
     }
@@ -864,60 +986,83 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function getItemsPerPage()
     {
-        if ($this->_itemsPerPage === null ||
-            $this->currentMemoryUsage < memory_get_usage(true) ||
-            $this->currentMaxAllowedMemoryUsage < memory_get_usage(true)
-        ) {
-            $memoryLimitConfigValue = trim(ini_get('memory_limit'));
-            $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
-            $memoryLimit = (int) $memoryLimitConfigValue;
-            switch ($lastMemoryLimitLetter) {
-                case 'g':
-                    $memoryLimit *= 1024;
-                // fall-through intentional
-                // no break
-                case 'm':
-                    $memoryLimit *= 1024;
-                // fall-through intentional
-                // no break
-                case 'k':
-                    $memoryLimit *= 1024;
-                    break;
-                default:
-                    // minimum memory required by Magento
-                    $memoryLimit = 250000000;
-            }
+        $this->itemsPerPageCalculationIteration++;
 
-            // Tested one product to have up to such size
-            $memoryPerProduct = 500000;
-            // Decrease memory limit to have supply
-            $memoryUsagePercent = 0.8;
-            // Minimum Products limit
-            $minProductsLimit = 500;
-            // Maximal Products limit
-            $maxProductsLimit = 5000;
-
-            $this->currentMaxAllowedMemoryUsage = (int)($memoryLimit * $memoryUsagePercent);
-            $this->currentMemoryUsage = memory_get_usage(true);
-
-            $this->_itemsPerPage = (int)(
-            ($this->currentMaxAllowedMemoryUsage - $this->currentMemoryUsage)  / $memoryPerProduct
-            );
-
-            $this->_itemsPerPage = $this->adjustItemsPerPageByAttributeOptions(
-                $this->_itemsPerPage,
-                $this->currentMaxAllowedMemoryUsage,
-                $this->currentMemoryUsage
-            );
-
-            if ($this->_itemsPerPage < $minProductsLimit) {
-                $this->_itemsPerPage = $minProductsLimit;
-            }
-            if ($this->_itemsPerPage > $maxProductsLimit) {
-                $this->_itemsPerPage = $maxProductsLimit;
-            }
+        if ($this->_itemsPerPage !== null) {
+            return $this->_itemsPerPage;
         }
+
+        $memoryUsagePercent = 0.8;
+        $reservedMemoryPercent = 0.35;
+
+        [$memoryLimit, $isUnlimitedMemoryLimit] = $this->getMemoryLimitForPagination();
+        [
+            'min' => $minProductsLimit,
+            'critical_min' => $criticalMinProductsLimit,
+            'max' => $maxProductsLimit
+        ] = $this->getProductsLimitsByMemory($memoryLimit, $isUnlimitedMemoryLimit);
+        $this->currentMaxAllowedMemoryUsage = (int)($memoryLimit * $memoryUsagePercent);
+        $this->currentMemoryUsage = max(
+            (int)($memoryLimit * $reservedMemoryPercent),
+            memory_get_usage(true)
+        );
+        $memoryPerProduct = $this->getEstimatedMemoryPerProductBytes();
+        [$itemsPerPage, $availableMemory] = $this->calculateItemsPerPageFromMemory(
+            $memoryPerProduct,
+            $isUnlimitedMemoryLimit,
+            $maxProductsLimit
+        );
+
+        $isCriticalMemory = $availableMemory < ($memoryPerProduct * 300);
+        $effectiveMinProductsLimit = $isCriticalMemory ? $criticalMinProductsLimit : $minProductsLimit;
+
+        $itemsPerPage = $this->adjustItemsPerPageByAttributeOptions(
+            $itemsPerPage,
+            $this->currentMaxAllowedMemoryUsage,
+            $this->currentMemoryUsage,
+            $memoryPerProduct,
+            $effectiveMinProductsLimit,
+            $maxProductsLimit
+        );
+
+        $itemsPerPage = max($effectiveMinProductsLimit, min($maxProductsLimit, $itemsPerPage));
+        $itemsPerPage = $this->capItemsPerPageByAttributeCount(
+            $itemsPerPage,
+            $effectiveMinProductsLimit,
+            $isUnlimitedMemoryLimit
+        );
+
+        $this->_itemsPerPage = max($effectiveMinProductsLimit, min($maxProductsLimit, $itemsPerPage));
+
         return $this->_itemsPerPage;
+    }
+
+    /**
+     * Get pagination limits adjusted for current memory limit.
+     *
+     * @param int $memoryLimit
+     * @param bool $isUnlimitedMemoryLimit
+     * @return array{min:int,critical_min:int,max:int}
+     */
+    private function getProductsLimitsByMemory(int $memoryLimit, bool $isUnlimitedMemoryLimit): array
+    {
+        if ($isUnlimitedMemoryLimit) {
+            return ['min' => 500, 'critical_min' => 200, 'max' => 5000];
+        }
+
+        if ($memoryLimit <= 1024 * 1024 * 1024) {
+            return ['min' => 100, 'critical_min' => 50, 'max' => 2500];
+        }
+
+        if ($memoryLimit <= 2 * 1024 * 1024 * 1024) {
+            return ['min' => 200, 'critical_min' => 100, 'max' => 3500];
+        }
+
+        if ($memoryLimit <= 4 * 1024 * 1024 * 1024) {
+            return ['min' => 20, 'critical_min' => 10, 'max' => 50];
+        }
+
+        return ['min' => 500, 'critical_min' => 200, 'max' => 5000];
     }
 
     /**
@@ -926,24 +1071,27 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param int $initialItemsPerPage
      * @param int $memoryLimit
      * @param int $currentMemoryUsage
+     * @param int $memoryPerProduct
+     * @param int $minProductsLimit
+     * @param int $maxProductsLimit
      * @return int
      */
     private function adjustItemsPerPageByAttributeOptions(
         int $initialItemsPerPage,
         int $memoryLimit,
-        int $currentMemoryUsage
+        int $currentMemoryUsage,
+        int $memoryPerProduct,
+        int $minProductsLimit,
+        int $maxProductsLimit
     ): int {
         $maxAttributeOptions = $this->getMaxAttributeValues();
-        $minProductsLimit = 500;
-        $maxProductsLimit = 5000;
-        $memoryPerProduct = 500000;
 
         if ($maxAttributeOptions > 5000) {
-            $adjustedItemsPerPage = max(1000, (int)($initialItemsPerPage * 0.25));
+            $adjustedItemsPerPage = max($minProductsLimit, (int)($initialItemsPerPage * 0.25));
         } elseif ($maxAttributeOptions > 2500) {
-            $adjustedItemsPerPage = max(2500, (int)($initialItemsPerPage * 0.5));
+            $adjustedItemsPerPage = max($minProductsLimit, (int)($initialItemsPerPage * 0.5));
         } elseif ($maxAttributeOptions > 1000) {
-            $adjustedItemsPerPage = max(3500, (int)($initialItemsPerPage * 0.75));
+            $adjustedItemsPerPage = max($minProductsLimit, (int)($initialItemsPerPage * 0.75));
         } else {
             $adjustedItemsPerPage = $initialItemsPerPage;
         }
@@ -959,6 +1107,137 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     }
 
     /**
+     * Get estimated memory per product in bytes
+     *
+     * @return int
+     */
+    private function getEstimatedMemoryPerProductBytes(): int
+    {
+        return (int)max(100000, min(3000000, round($this->estimatedMemoryPerProduct)));
+    }
+
+    /**
+     * Calculate baseline items per page from available memory
+     *
+     * @param int $memoryPerProduct
+     * @param bool $isUnlimitedMemoryLimit
+     * @param int $maxProductsLimit
+     * @return array
+     */
+    private function calculateItemsPerPageFromMemory(
+        int $memoryPerProduct,
+        bool $isUnlimitedMemoryLimit,
+        int $maxProductsLimit
+    ): array {
+        $availableMemory = max(0, $this->currentMaxAllowedMemoryUsage - $this->currentMemoryUsage);
+        $itemsPerPage = (int)floor($availableMemory / $memoryPerProduct);
+        if ($isUnlimitedMemoryLimit && $this->_itemsPerPage === null) {
+            $itemsPerPage = $maxProductsLimit;
+        }
+        return [$itemsPerPage, $availableMemory];
+    }
+
+    /**
+     * Get memory limit in bytes for adaptive page size calculation
+     *
+     * @return array{0:int,1:bool}
+     */
+    private function getMemoryLimitForPagination(): array
+    {
+        if ($this->cachedMemoryLimitForPagination !== null) {
+            return $this->cachedMemoryLimitForPagination;
+        }
+
+        $memoryLimitConfigValue = trim((string)ini_get('memory_limit'));
+        if ($memoryLimitConfigValue === '-1') {
+            $this->cachedMemoryLimitForPagination = [16 * 1024 * 1024 * 1024, true];
+            return $this->cachedMemoryLimitForPagination;
+        }
+
+        $memoryLimit = (int)$memoryLimitConfigValue;
+        $lastMemoryLimitLetter = strtolower($memoryLimitConfigValue[strlen($memoryLimitConfigValue) - 1]);
+        switch ($lastMemoryLimitLetter) {
+            case 'g':
+                $memoryLimit *= 1024;
+            // fall-through intentional
+            case 'm':
+                $memoryLimit *= 1024;
+            // fall-through intentional
+            case 'k':
+                $memoryLimit *= 1024;
+                break;
+            default:
+                if ($memoryLimit <= 0) {
+                    $memoryLimit = 250000000;
+                }
+        }
+
+        $this->cachedMemoryLimitForPagination = [$memoryLimit, false];
+        return $this->cachedMemoryLimitForPagination;
+    }
+
+    /**
+     * Cap page size for large attribute sets to keep EAV load queries controllable
+     *
+     * @param int $itemsPerPage
+     * @param int $effectiveMinProductsLimit
+     * @param bool $isUnlimitedMemoryLimit
+     * @return int
+     */
+    private function capItemsPerPageByAttributeCount(
+        int $itemsPerPage,
+        int $effectiveMinProductsLimit,
+        bool $isUnlimitedMemoryLimit
+    ): int {
+        $attributeCount = $this->getSelectedExportAttributeCount();
+
+        if ($isUnlimitedMemoryLimit) {
+            if ($attributeCount >= 400) {
+                return max($effectiveMinProductsLimit, min($itemsPerPage, 1200));
+            }
+            if ($attributeCount >= 300) {
+                return max($effectiveMinProductsLimit, min($itemsPerPage, 1000));
+            }
+            if ($attributeCount >= 200) {
+                return max($effectiveMinProductsLimit, min($itemsPerPage, 1500));
+            }
+
+            return $itemsPerPage;
+        }
+
+        if ($attributeCount >= 400) {
+            return max($effectiveMinProductsLimit, min($itemsPerPage, 150));
+        }
+        if ($attributeCount >= 300) {
+            return max($effectiveMinProductsLimit, min($itemsPerPage, 200));
+        }
+        if ($attributeCount >= 200) {
+            return max($effectiveMinProductsLimit, min($itemsPerPage, 300));
+        }
+
+        return $itemsPerPage;
+    }
+
+    /**
+     * Get count of currently selected export attributes.
+     *
+     * @return int
+     */
+    private function getSelectedExportAttributeCount(): int
+    {
+        if ($this->cachedExportAttributeCount !== null) {
+            return $this->cachedExportAttributeCount;
+        }
+
+        try {
+            $this->cachedExportAttributeCount = count($this->_getExportAttrCodes());
+        } catch (\Throwable $exception) {
+            $this->cachedExportAttributeCount = 0;
+        }
+        return $this->cachedExportAttributeCount;
+    }
+
+    /**
      * Get max attribute values
      *
      * @return int
@@ -966,13 +1245,38 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
     private function getMaxAttributeValues(): int
     {
-        $maxCount = 0;
-
-        foreach ($this->_attributeValues as $attributeValues) {
-            $maxCount = max($maxCount, count($attributeValues));
+        if ($this->cachedMaxAttributeValues !== null) {
+            return $this->cachedMaxAttributeValues;
         }
 
-        return $maxCount;
+        $attributeIds = [];
+        foreach ($this->attributesByCode as $attribute) {
+            if ($attribute->usesSource()) {
+                $attributeIds[] = (int)$attribute->getAttributeId();
+            }
+        }
+        if (!$attributeIds) {
+            $this->cachedMaxAttributeValues = 0;
+            return $this->cachedMaxAttributeValues;
+        }
+
+        $select = $this->_connection->select()->from(
+            ['eao' => $this->_resourceModel->getTableName('eav_attribute_option')],
+            ['attribute_id', 'options_count' => 'COUNT(*)']
+        )->where(
+            'attribute_id IN (?)',
+            array_unique($attributeIds)
+        )->group(
+            'attribute_id'
+        );
+
+        $counts = $this->_connection->fetchPairs($select);
+        $maxCount = 0;
+        foreach ($counts as $count) {
+            $maxCount = max($maxCount, (int)$count);
+        }
+        $this->cachedMaxAttributeValues = $maxCount;
+        return $this->cachedMaxAttributeValues;
     }
 
     /**
@@ -999,46 +1303,149 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         set_time_limit(0);
 
         $writer = $this->getWriter();
+        $this->itemsPerPageCalculationIteration = 0;
+        $this->_itemsPerPage = null;
+        $this->cachedMemoryLimitForPagination = null;
+        $this->lastProcessedLinkFieldValue = 0;
+        $this->pendingLastProcessedLinkFieldValue = null;
+        $this->currentBatchLinkIds = [];
+        $this->collectedMultiselectsData = [];
+        $this->memoryAtStartOfIteration = 0;
+        $linkField = $this->getProductEntityLinkField();
+        $writeHeader = true;
         $page = 0;
         while (true) {
             ++$page;
-            $entityCollection = $this->_getEntityCollection(true);
-            $entityCollection->setOrder('entity_id', 'asc');
-            $this->_prepareEntityCollection($entityCollection);
-            $this->paginateCollection($page, $this->getItemsPerPage());
-
-            $exportData = $this->getExportData();
-            if ($exportData == null || count($exportData) == 0) {
+            $lastProcessedLinkFieldValue = $this->lastProcessedLinkFieldValue;
+            $this->currentIterationItemsPerPage = $this->getItemsPerPage();
+            $this->memoryAtStartOfIteration = 0;
+            $this->currentPageEntityIds = [];
+            $writtenRows = $this->writeCurrentPageData($writer, $writeHeader);
+            if ($writtenRows === 0) {
                 break;
             }
-            if ($page == 1) {
-                $writer->setHeaderCols($this->_getHeaderColumns());
+            $this->resetSourceAttributeOptionCache();
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
             }
-            foreach ($exportData as $dataRow) {
-                $writer->writeRow($this->_customFieldsMapping($dataRow));
-            }
-            if ($entityCollection->getCurPage() >= $entityCollection->getLastPageNumber()) {
+
+            if ($this->lastProcessedLinkFieldValue <= $lastProcessedLinkFieldValue) {
+                $this->_logger->critical(
+                    sprintf(
+                        'Product export pagination did not advance. Last processed %s: %d',
+                        $linkField,
+                        $this->lastProcessedLinkFieldValue
+                    )
+                );
                 break;
             }
         }
+        $this->currentIterationItemsPerPage = null;
+        $this->currentPageEntityIds = [];
+        $this->pendingLastProcessedLinkFieldValue = null;
+        $this->currentBatchLinkIds = [];
+        $this->collectedMultiselectsData = [];
+        $this->memoryAtStartOfIteration = 0;
         return $writer->getContents();
+    }
+
+    /**
+     * Write current page export rows using either buffered or streamed path
+     *
+     * @param AbstractAdapter $writer
+     * @param bool $writeHeader
+     * @return int
+     */
+    private function writeCurrentPageData(
+        AbstractAdapter $writer,
+        bool &$writeHeader
+    ): int {
+        return $this->processExportData(
+            function (array $dataRow) use ($writer, &$writeHeader): void {
+                if ($writeHeader) {
+                    $writer->setHeaderCols($this->_getHeaderColumns());
+                    $writeHeader = false;
+                }
+                $writer->writeRow($this->_customFieldsMapping($dataRow));
+            }
+        );
     }
 
     /**
      * Apply filter to collection and add not skipped attributes to select.
      *
-     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @param AbstractCollection $collection
+     * @return AbstractCollection
      * @since 100.2.0
      */
-    protected function _prepareEntityCollection(\Magento\Eav\Model\Entity\Collection\AbstractCollection $collection)
+    protected function _prepareEntityCollection(AbstractCollection $collection)
     {
-        $exportFilter = !empty($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP]) ?
-            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP] : [];
+        $exportFilter = !empty($this->_parameters[Export::FILTER_ELEMENT_GROUP]) ?
+            $this->_parameters[Export::FILTER_ELEMENT_GROUP] : [];
 
         $collection = $this->filter->filter($collection, $exportFilter);
+        if ($this->lastProcessedLinkFieldValue > 0) {
+            $linkField = $this->getProductEntityLinkField();
+            $collection->getSelect()->where(
+                $collection->getConnection()->quoteIdentifier('e.' . $linkField) . ' > ?',
+                $this->lastProcessedLinkFieldValue
+            );
+        }
 
-        return parent::_prepareEntityCollection($collection);
+        $this->collectionPreparationStoreId = (int)$collection->getStoreId();
+        try {
+            return parent::_prepareEntityCollection($collection);
+        } finally {
+            $this->collectionPreparationStoreId = null;
+        }
+    }
+
+    /**
+     * Get export attribute codes, optionally reduced for non-default store collection loads.
+     *
+     * @return array
+     */
+    protected function _getExportAttrCodes()
+    {
+        $isNonDefaultStorePreparation = $this->collectionPreparationStoreId !== null
+            && $this->collectionPreparationStoreId !== Store::DEFAULT_STORE_ID;
+        if ($isNonDefaultStorePreparation) {
+            return $this->getNonDefaultStoreExportAttrCodes();
+        }
+
+        return parent::_getExportAttrCodes();
+    }
+
+    /**
+     * Build export attribute list for non-default stores static and non-global only
+     *
+     * @return array
+     */
+    private function getNonDefaultStoreExportAttrCodes(): array
+    {
+        if ($this->nonDefaultStoreExportAttrCodes !== null) {
+            return $this->nonDefaultStoreExportAttrCodes;
+        }
+
+        $allExportAttrCodes = parent::_getExportAttrCodes();
+        $nonDefaultStoreExportAttrCodes = [];
+        foreach ($allExportAttrCodes as $attributeCode) {
+            $attribute = $this->attributesByCode[$attributeCode] ?? null;
+            if ($attribute === null) {
+                $nonDefaultStoreExportAttrCodes[] = $attributeCode;
+                continue;
+            }
+
+            $isPriceAttribute = $attributeCode === 'price';
+            $isStoreScopedOrStatic = $attribute->getBackendType() === 'static'
+                || (int)$attribute->getIsGlobal() !== ScopedAttributeInterface::SCOPE_GLOBAL;
+            if ($isPriceAttribute || $isStoreScopedOrStatic) {
+                $nonDefaultStoreExportAttrCodes[] = $attributeCode;
+            }
+        }
+
+        $this->nonDefaultStoreExportAttrCodes = array_values(array_unique($nonDefaultStoreExportAttrCodes));
+        return $this->nonDefaultStoreExportAttrCodes;
     }
 
     /**
@@ -1053,15 +1460,37 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function getExportData()
     {
         $exportData = [];
+        $this->processExportData(
+            function (array $dataRow) use (&$exportData): void {
+                $exportData[] = $dataRow;
+            }
+        );
+
+        return $exportData;
+    }
+
+    /**
+     * Process export data for collection.
+     *
+     * @param callable $rowProcessor
+     * @return int
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function processExportData(callable $rowProcessor): int
+    {
+        $processedRows = 0;
         try {
             $rawData = $this->collectRawData();
+
             $multirawData = $this->collectMultirawData();
 
             $productIds = array_keys($rawData);
             $stockItemRows = $this->prepareCatalogInventory($productIds);
 
             $this->rowCustomizer->prepareData(
-                $this->_prepareEntityCollection($this->_entityCollectionFactory->create()),
+                $this->getCollectionForRowCustomizer(),
                 $productIds
             );
 
@@ -1076,14 +1505,17 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     $this->updateGalleryImageData($dataRow, $rawData);
                     $this->appendMultirowData($dataRow, $multirawData);
                     if ($dataRow) {
-                        $exportData[] = $dataRow;
+                        $rowProcessor($dataRow);
+                        ++$processedRows;
                     }
                 }
             }
+            $this->commitPendingLastProcessedLinkFieldValue();
         } catch (\Exception $e) {
             $this->_logger->critical($e);
         }
-        return $exportData;
+
+        return $processedRows;
     }
 
     /**
@@ -1096,12 +1528,30 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function loadCollection(): array
     {
         $data = [];
+        $linkField = $this->getProductEntityLinkField();
+        $itemsPerPage = $this->currentIterationItemsPerPage ?? $this->getItemsPerPage();
         foreach (array_keys($this->_storeIdToCode) as $storeId) {
             $collection = $this->_getEntityCollection(true);
-            $collection->setOrder('entity_id', 'asc');
+            $collection->setOrder($linkField, 'asc');
             $collection->setStoreId($storeId);
             $this->_prepareEntityCollection($collection);
+            if (empty($this->currentPageEntityIds)) {
+                $this->paginateCollection(1, $itemsPerPage);
+            } else {
+                $collection->getSelect()->where(
+                    $collection->getConnection()->quoteIdentifier('e.' . $linkField) . ' IN (?)',
+                    $this->currentPageEntityIds
+                );
+            }
             $collection->load();
+            if (empty($this->currentPageEntityIds)) {
+                $this->currentPageEntityIds = array_values(array_unique(array_map(
+                    static function ($item) use ($linkField) {
+                        return (int)$item->getData($linkField);
+                    },
+                    $collection->getItems()
+                )));
+            }
             foreach ($collection as $itemId => $item) {
                 $data[$itemId][$storeId] = $item;
             }
@@ -1117,12 +1567,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * phpcs:disable Generic.Metrics.NestingLevel
      */
     protected function collectRawData()
     {
         $data = [];
+        $this->collectedMultiselectsData = [];
         $items = $this->loadCollection();
+        $this->initializeBatchState($items);
 
         /**
          * @var int $itemId
@@ -1142,6 +1595,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         continue;
                     }
 
+                    $this->ensureAttributeOptionsLoaded($code);
                     if (isset($this->_attributeValues[$code][$attrValue]) && !empty($this->_attributeValues[$code])) {
                         $attrValue = $this->_attributeValues[$code][$attrValue];
                     }
@@ -1211,10 +1665,71 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
         }
-
         return $data;
     }
     //phpcs:enable Generic.Metrics.NestingLevel
+
+    /**
+     * Initialize keyset cursor candidate and link IDs for the current batch
+     *
+     * @param array $items
+     * @return void
+     */
+    private function initializeBatchState(array $items): void
+    {
+        $linkField = $this->getProductEntityLinkField();
+        $seen = [];
+        $maxLinkId = null;
+        foreach ($items as $itemByStore) {
+            foreach ($itemByStore as $item) {
+                $linkId = (int)$item->getData($linkField);
+                $seen[$linkId] = true;
+                if ($maxLinkId === null || $linkId > $maxLinkId) {
+                    $maxLinkId = $linkId;
+                }
+            }
+        }
+        $this->currentBatchLinkIds = array_keys($seen);
+        $this->pendingLastProcessedLinkFieldValue = $maxLinkId;
+    }
+
+    /**
+     * Commit pending cursor value after successful batch processing.
+     *
+     * @return void
+     */
+    private function commitPendingLastProcessedLinkFieldValue(): void
+    {
+        if ($this->pendingLastProcessedLinkFieldValue !== null) {
+            $this->lastProcessedLinkFieldValue = $this->pendingLastProcessedLinkFieldValue;
+        }
+        $this->pendingLastProcessedLinkFieldValue = null;
+        $this->currentBatchLinkIds = [];
+        $this->collectedMultiselectsData = [];
+    }
+
+    /**
+     * Build collection for row customizer scoped to current batch only
+     *
+     * @return AbstractCollection
+     */
+    private function getCollectionForRowCustomizer(): AbstractCollection
+    {
+        $collection = $this->_entityCollectionFactory->create();
+        $exportFilter = !empty($this->_parameters[Export::FILTER_ELEMENT_GROUP]) ?
+            $this->_parameters[Export::FILTER_ELEMENT_GROUP] : [];
+        $collection = $this->filter->filter($collection, $exportFilter);
+        if (!empty($this->currentBatchLinkIds)) {
+            $linkField = $this->getProductEntityLinkField();
+            $collection->getSelect()->where(
+                $collection->getConnection()->quoteIdentifier('e.' . $linkField) . ' IN (?)',
+                $this->currentBatchLinkIds
+            );
+        } else {
+            $collection->getSelect()->where('1 = 0');
+        }
+        return parent::_prepareEntityCollection($collection);
+    }
 
     /**
      * Wrap values with double quotes if "Fields Enclosure" option is enabled
@@ -1224,7 +1739,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     private function wrapValue($value)
     {
-        if (!empty($this->_parameters[\Magento\ImportExport\Model\Export::FIELDS_ENCLOSURE])) {
+        if (!empty($this->_parameters[Export::FIELDS_ENCLOSURE])) {
             $wrap = function ($value) {
                 return sprintf('"%s"', $value !== null ? str_replace('"', '""', $value) : '');
             };
@@ -1249,6 +1764,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         $collection = $this->_getEntityCollection();
         $collection->setStoreId(Store::DEFAULT_STORE_ID);
+        if (!empty($this->currentPageEntityIds)) {
+            $linkField = $this->getProductEntityLinkField();
+            $collection->getSelect()->where(
+                $collection->getConnection()->quoteIdentifier('e.' . $linkField) . ' IN (?)',
+                $this->currentPageEntityIds
+            );
+        }
         $collection->addCategoryIds()->addWebsiteNamesToResult();
         /** @var \Magento\Catalog\Model\Product $item */
         foreach ($collection as $item) {
@@ -1273,7 +1795,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $data['linksRows'] = $this->prepareLinks($productLinkIds);
 
         $data['customOptionsData'] = $this->getCustomOptionsData($productLinkIds);
-
         return $data;
     }
 
@@ -1302,12 +1823,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function collectMultiselectValues($item, $attrCode, $storeId)
     {
+        $this->ensureAttributeOptionsLoaded($attrCode);
         $attrValue = $item->getData($attrCode);
         $optionIds = $attrValue !== null ? explode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $attrValue) : [];
-        $options = array_intersect_key(
-            $this->_attributeValues[$attrCode],
-            array_flip($optionIds)
-        );
+        $options = [];
+        foreach ($optionIds as $optionId) {
+            if ($optionId !== '' && isset($this->_attributeValues[$attrCode][$optionId])) {
+                $options[$optionId] = $this->_attributeValues[$attrCode][$optionId];
+            }
+        }
         $linkId = $item->getData($this->getProductEntityLinkField());
         if (!(isset($this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$linkId][$attrCode])
             && $this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$linkId][$attrCode] == $options)
@@ -1443,12 +1967,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
 
-        if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
-            foreach (array_keys($this->collectedMultiselectsData[$storeId][$productId]) as $attrKey) {
-                if (!empty($this->collectedMultiselectsData[$storeId][$productId][$attrKey])) {
+        if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId])) {
+            foreach (array_keys($this->collectedMultiselectsData[$storeId][$productLinkId]) as $attrKey) {
+                if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId][$attrKey])) {
                     $dataRow[$attrKey] = implode(
                         Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                        $this->collectedMultiselectsData[$storeId][$productId][$attrKey]
+                        $this->collectedMultiselectsData[$storeId][$productLinkId][$attrKey]
                     );
                 }
             }
@@ -1741,15 +2265,57 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function initAttributes()
     {
         foreach ($this->getAttributeCollection() as $attribute) {
-            $this->_attributeValues[$attribute->getAttributeCode()] = $this->getAttributeOptions($attribute);
-            $this->_attributeTypes[$attribute->getAttributeCode()] =
-                \Magento\ImportExport\Model\Import::getAttributeType($attribute);
-            $this->attributeFrontendTypes[$attribute->getAttributeCode()] = $attribute->getFrontendInput();
+            $attributeCode = $attribute->getAttributeCode();
+            $this->attributesByCode[$attributeCode] = $attribute;
+            $this->_attributeValues[$attributeCode] = [];
+            $this->attributeOptionsLoaded[$attributeCode] = !$attribute->usesSource();
+            $this->loadedAttributeOptionIds[$attributeCode] = [];
+            $this->_attributeTypes[$attributeCode] = \Magento\ImportExport\Model\Import::getAttributeType($attribute);
+            $this->attributeFrontendTypes[$attributeCode] = $attribute->getFrontendInput();
             if ($attribute->getIsUserDefined()) {
-                $this->userDefinedAttributes[] = $attribute->getAttributeCode();
+                $this->userDefinedAttributes[] = $attributeCode;
             }
         }
         return $this;
+    }
+
+    /**
+     * Ensure option labels are loaded for attributes that use a source model.
+     *
+     * @param string $attributeCode
+     * @return void
+     */
+    private function ensureAttributeOptionsLoaded(string $attributeCode): void
+    {
+        if (($this->attributeOptionsLoaded[$attributeCode] ?? true) === true) {
+            return;
+        }
+
+        if (!isset($this->attributesByCode[$attributeCode])) {
+            $this->attributeOptionsLoaded[$attributeCode] = true;
+            return;
+        }
+
+        $attribute = $this->attributesByCode[$attributeCode];
+        $this->_attributeValues[$attributeCode] = $this->getAttributeOptions($attribute);
+        $this->attributeOptionsLoaded[$attributeCode] = true;
+    }
+
+    /**
+     * Reset cached source-attribute options after each page to avoid cumulative memory growth.
+     *
+     * @return void
+     */
+    private function resetSourceAttributeOptionCache(): void
+    {
+        foreach ($this->attributesByCode as $attributeCode => $attribute) {
+            if (!$attribute->usesSource()) {
+                continue;
+            }
+            $this->_attributeValues[$attributeCode] = [];
+            $this->loadedAttributeOptionIds[$attributeCode] = [];
+            $this->attributeOptionsLoaded[$attributeCode] = false;
+        }
     }
 
     /**

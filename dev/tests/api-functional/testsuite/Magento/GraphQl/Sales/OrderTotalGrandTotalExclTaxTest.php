@@ -35,6 +35,9 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OrderTotalGrandTotalExclTaxTest extends GraphQlAbstract
 {
     private const PRODUCT_PRICE = 100;
@@ -53,7 +56,7 @@ class OrderTotalGrandTotalExclTaxTest extends GraphQlAbstract
     private $fixtures;
 
     /**
-     * @inheridoc
+     * @inheritDoc
      */
     protected function setUp(): void
     {
