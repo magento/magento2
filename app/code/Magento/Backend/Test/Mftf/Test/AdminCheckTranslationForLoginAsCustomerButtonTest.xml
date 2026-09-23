@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckTranslationForLoginAsCustomerButton">
+    <test name="AdminCheckTranslationForLoginAsCustomerButtonTest">
         <annotations>
+            <features value="LoginAsCustomerAdminUi"/>
             <stories value="Allow translations for Login as Customer button"/>
             <title value="Allow translations for Login as Customer button"/>
             <description value="Login as Customer button should get translated if it is defined as translatable"/>
             <testCaseId value="MC-42250"/>
             <severity value="MAJOR"/>
+            <group value="customer"/>
         </annotations>
 
         <before>
@@ -43,10 +44,13 @@
             <argument name="text" value="$$createCustomer.email$$"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridMainActionsSection.edit}}" stepKey="clickKeywordSearch"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickKeywordSearch"/>
 
         <!--Step 4: See the button text for default locale (US) -->
-        <grabTextFrom selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="grabDefaultLocaleButtonLabel"/>
+        <grabTextFrom
+            selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}"
+            stepKey="grabDefaultLocaleButtonLabel"
+        />
 
         <!--Step 5: Set Admin "Interface Locale" to "Français (France) / français (France)"-->
         <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
@@ -65,12 +69,18 @@
             <argument name="text" value="$$createCustomer.email$$"/>
             <argument name="row" value="1"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridMainActionsSection.edit}}" stepKey="clickKeywordSearch2"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickKeywordSearch2"/>
 
         <!--Step 4: See the button text for French -->
-        <grabTextFrom selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="grabFranceLocaleButtonLabel"/>
+        <grabTextFrom
+            selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}"
+            stepKey="grabFranceLocaleButtonLabel"
+        />
 
-        <assertNotEquals message="The Login as Customer label is in not in Default Local (US)." stepKey="assertNotEquals">
+        <assertNotEquals
+            message="The Login as Customer label is in not in Default Local (US)."
+            stepKey="assertNotEquals"
+        >
             <expectedResult type="string">grabDefaultLocaleButtonLabel</expectedResult>
             <actualResult type="string">grabFranceLocaleButtonLabel</actualResult>
         </assertNotEquals>
