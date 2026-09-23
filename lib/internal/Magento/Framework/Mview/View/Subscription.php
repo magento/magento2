@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\DB\Ddl\TriggerFactory;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\ViewInterface;
 
@@ -98,6 +99,16 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
     private $triggers = [];
 
     /**
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
+     * Timeout in seconds to wait for a trigger rebuild lock before giving up
+     */
+    private const TRIGGER_LOCK_TIMEOUT = 60;
+
+    /**
      * @param ResourceConnection $resource
      * @param TriggerFactory $triggerFactory
      * @param CollectionInterface $viewCollection
@@ -108,6 +119,7 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
      * @param array $ignoredUpdateColumnsBySubscription
      * @param Config|null $mviewConfig
      * @param SubscriptionStatementPostprocessorInterface|null $statementPostprocessor
+     * @param LockManagerInterface|null $lockManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -120,7 +132,8 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
         $ignoredUpdateColumns = [],
         $ignoredUpdateColumnsBySubscription = [],
         ?Config $mviewConfig = null,
-        ?SubscriptionStatementPostprocessorInterface $statementPostprocessor = null
+        ?SubscriptionStatementPostprocessorInterface $statementPostprocessor = null,
+        ?LockManagerInterface $lockManager = null
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -134,6 +147,7 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
         $this->mviewConfig = $mviewConfig ?? ObjectManager::getInstance()->get(Config::class);
         $this->statementPostprocessor = $statementPostprocessor
             ?? ObjectManager::getInstance()->get(SubscriptionStatementPostprocessorInterface::class);
+        $this->lockManager = $lockManager ?? ObjectManager::getInstance()->get(LockManagerInterface::class);
     }
 
     /**
@@ -189,8 +203,33 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
      */
     public function saveTrigger(Trigger $trigger): void
     {
-        $this->connection->dropTrigger($trigger->getName());
-        $this->connection->createTrigger($trigger);
+        $this->rebuildTriggerWithLock($trigger->getName(), function () use ($trigger) {
+            $this->connection->dropTrigger($trigger->getName());
+            $this->connection->createTrigger($trigger);
+        });
+    }
+
+    /**
+     * Run a trigger drop/create pair while holding a named lock
+     *
+     * Multiple subscriptions can share the same physical trigger (one per table/event),
+     * so concurrent resubscribe operations from separate processes must not run the
+     * drop and create statements for that trigger name at the same time.
+     *
+     * @param string $lockName
+     * @param callable $rebuild
+     * @return void
+     */
+    private function rebuildTriggerWithLock(string $lockName, callable $rebuild): void
+    {
+        $lockAcquired = $this->lockManager->lock($lockName, self::TRIGGER_LOCK_TIMEOUT);
+        try {
+            $rebuild();
+        } finally {
+            if ($lockAcquired) {
+                $this->lockManager->unlock($lockName);
+            }
+        }
     }
 
     /**
@@ -215,12 +254,14 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
                 $trigger->addStatement($this->buildStatement($event, $view));
             }
 
-            $this->connection->dropTrigger($trigger->getName());
+            $this->rebuildTriggerWithLock($trigger->getName(), function () use ($trigger) {
+                $this->connection->dropTrigger($trigger->getName());
 
-            // Re-create trigger if trigger used by linked views
-            if ($trigger->getStatements()) {
-                $this->connection->createTrigger($trigger);
-            }
+                // Re-create trigger if trigger used by linked views
+                if ($trigger->getStatements()) {
+                    $this->connection->createTrigger($trigger);
+                }
+            });
         }
 
         return $this;
