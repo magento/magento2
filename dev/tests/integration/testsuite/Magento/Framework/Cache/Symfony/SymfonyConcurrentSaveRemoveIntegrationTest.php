@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Cache\Symfony;
 
 use Magento\Cms\Api\BlockRepositoryInterface;
-use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Cache\Backend\SymfonyL2Cache;
@@ -91,7 +90,7 @@ class SymfonyConcurrentSaveRemoveIntegrationTest extends TestCase
 
             if ($pidSave === 0) {
                 // Child A: Simulate concurrent block render cache save
-                $res = $this->cache->save($renderedHtml, $cacheKey, $tags, 3600);
+                $this->cache->save($renderedHtml, $cacheKey, $tags, 3600);
                 posix_kill(getmypid(), SIGKILL);
             }
 
@@ -102,7 +101,7 @@ class SymfonyConcurrentSaveRemoveIntegrationTest extends TestCase
 
             if ($pidRemove === 0) {
                 // Child B: Simulate concurrent admin block save / cache invalidation
-                $res = $this->cache->remove($cacheKey);
+                $this->cache->remove($cacheKey);
                 posix_kill(getmypid(), SIGKILL);
             }
 
