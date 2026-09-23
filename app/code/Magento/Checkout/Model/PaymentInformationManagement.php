@@ -18,6 +18,7 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\AddressInterface as QuoteAddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\QuoteAddressValidator;
 use Magento\Quote\Model\QuoteAddressValidationService;
 use Psr\Log\LoggerInterface;
@@ -282,7 +283,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             !$shippingAddress->getCustomerAddressId()
         ) {
             $shippingAddressData = $shippingAddress->exportCustomerAddress();
-            $this->saveAddressesAsDefault($quote, $shippingAddressData);
+            $this->saveAddressesAsDefault($quote, $shippingAddressData, $billingAddress);
             $shippingAddressData->setCustomerId($quote->getCustomerId());
             $this->addressRepository->save($shippingAddressData);
             $quote->addCustomerAddress($shippingAddressData);
@@ -318,11 +319,14 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      *
      * @param Quote $quote
      * @param AddressInterface $shippingAddressData
+     * @param Address $billingAddress
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function saveAddressesAsDefault(
         Quote $quote,
-        AddressInterface $shippingAddressData
+        AddressInterface $shippingAddressData,
+        Address $billingAddress
     ): void {
         $customer = $quote->getCustomer();
         $hasDefaultBilling = (bool)$customer->getDefaultBilling();
