@@ -57,6 +57,13 @@ class AdjustmentTest extends TestCase
                     return $arg * 0.5;
                 }
             );
+        $this->priceCurrencyMock->expects($this->any())
+            ->method('round')
+            ->willReturnCallback(
+                function ($arg) {
+                    return round($arg, 2);
+                }
+            );
 
         $this->adjustment = new Adjustment($this->weeeHelper, $this->priceCurrencyMock, self::$sortOrder);
     }
