@@ -1,7 +1,7 @@
 <?php
 /**
  * Copyright 2014 Adobe
- * All rights reserved.
+ * All Rights Reserved.
  */
 
 namespace Magento\Framework\Mview\View;
