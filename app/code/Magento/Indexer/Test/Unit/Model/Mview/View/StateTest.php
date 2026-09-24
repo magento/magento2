@@ -89,6 +89,16 @@ class StateTest extends TestCase
         $this->assertNotNull($this->model->getUpdated());
     }
 
+    public function testBeforeSaveStoresParsableDateTime()
+    {
+        $this->model->beforeSave();
+        $updated = $this->model->getUpdated();
+
+        $this->assertIsString($updated);
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $updated);
+        $this->assertInstanceOf(\DateTime::class, new \DateTime($updated));
+    }
+
     public function testSetterAndGetterWithoutApplicationLock()
     {
         $this->configReaderMock->expects($this->any())->method('get')->willReturn(false);
