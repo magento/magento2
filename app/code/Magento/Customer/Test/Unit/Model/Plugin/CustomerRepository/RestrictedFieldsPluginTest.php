@@ -150,7 +150,41 @@ class RestrictedFieldsPluginTest extends TestCase
     }
 
     /**
-     * list of customer fields.
+     * Verifies that a filter with no field set (getField() returns null) does not throw and passes through.
+     */
+    public function testBeforeGetListPassesThroughForNullFilterField(): void
+    {
+        $filterMock = $this->buildFilterMock(null);
+        $filterGroupMock = $this->buildFilterGroupMock([$filterMock]);
+
+        $this->searchCriteriaMock->expects($this->once())
+            ->method('getFilterGroups')
+            ->willReturn([$filterGroupMock]);
+
+        $result = $this->plugin->beforeGetList($this->repositoryMock, $this->searchCriteriaMock);
+
+        $this->assertSame([$this->searchCriteriaMock], $result);
+    }
+
+    /**
+     * Verifies that a sort order with no field set (getField() returns null) does not throw and passes through.
+     */
+    public function testBeforeGetListPassesThroughForNullSortOrderField(): void
+    {
+        $sortOrderMock = $this->buildSortOrderMock(null);
+
+        $this->searchCriteriaMock->method('getFilterGroups')->willReturn([]);
+        $this->searchCriteriaMock->expects($this->once())
+            ->method('getSortOrders')
+            ->willReturn([$sortOrderMock]);
+
+        $result = $this->plugin->beforeGetList($this->repositoryMock, $this->searchCriteriaMock);
+
+        $this->assertSame([$this->searchCriteriaMock], $result);
+    }
+
+    /**
+     * list of customer fields, including case variants that must be blocked regardless of casing.
      *
      * @return array
      */
@@ -160,16 +194,19 @@ class RestrictedFieldsPluginTest extends TestCase
             'password_hash' => ['password_hash'],
             'rp_token'      => ['rp_token'],
             'confirmation'  => ['confirmation'],
+            'Password_Hash (mixed case)' => ['Password_Hash'],
+            'RP_TOKEN (upper case)'      => ['RP_TOKEN'],
+            'Confirmation (title case)'  => ['Confirmation'],
         ];
     }
 
     /**
      * Builds a Filter mock that returns the given field name.
      *
-     * @param string $field
+     * @param string|null $field
      * @return Filter|MockObject
      */
-    private function buildFilterMock(string $field): Filter|MockObject
+    private function buildFilterMock(?string $field): Filter|MockObject
     {
         $filterMock = $this->createMock(Filter::class);
         $filterMock->method('getField')->willReturn($field);
@@ -192,10 +229,10 @@ class RestrictedFieldsPluginTest extends TestCase
     /**
      * Builds a SortOrder mock that returns the given field name.
      *
-     * @param string $field
+     * @param string|null $field
      * @return SortOrder|MockObject
      */
-    private function buildSortOrderMock(string $field): SortOrder|MockObject
+    private function buildSortOrderMock(?string $field): SortOrder|MockObject
     {
         $sortOrderMock = $this->createMock(SortOrder::class);
         $sortOrderMock->method('getField')->willReturn($field);

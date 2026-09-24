@@ -39,7 +39,7 @@ class RestrictedFieldsPlugin
     ): array {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if (in_array($filter->getField(), $this->restrictedFields, true)) {
+                if ($this->isRestricted($filter->getField())) {
                     throw new InputException(
                         __('The search criteria filter field is invalid.')
                     );
@@ -47,12 +47,23 @@ class RestrictedFieldsPlugin
             }
         }
         foreach ($searchCriteria->getSortOrders() ?? [] as $sortOrder) {
-            if (in_array($sortOrder->getField(), $this->restrictedFields, true)) {
+            if ($this->isRestricted($sortOrder->getField())) {
                 throw new InputException(
                     __('The search criteria sort field is invalid.')
                 );
             }
         }
         return [$searchCriteria];
+    }
+
+    /**
+     * Check if the given field name matches a restricted field
+     *
+     * @param string|null $field
+     * @return bool
+     */
+    private function isRestricted(?string $field): bool
+    {
+        return $field !== null && in_array(strtolower($field), $this->restrictedFields, true);
     }
 }
