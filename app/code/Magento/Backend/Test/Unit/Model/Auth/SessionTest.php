@@ -264,7 +264,7 @@ class SessionTest extends TestCase
         }
         if ($isUserDefined) {
             $userMock = $this->createMock(User::class);
-            $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
+            $this->storage->expects($this->any())->method('getUser')->willReturn($userMock);
         }
         if ($isAclDefined && $isUserDefined) {
             // phpstan:ignore
@@ -283,10 +283,99 @@ class SessionTest extends TestCase
     {
         return [
             "Negative: User not defined" => [false, true, true, false],
-            "Negative: Acl not defined" => [true, false, true, false],
             "Negative: Permission denied" => [true, true, false, false],
-            "Positive: Permission granted" => [true, true, false, false],
+            "Positive: Permission granted" => [true, true, true, true],
         ];
+    }
+
+    /**
+     * Test that isAllowed() lazy-loads the ACL when it hasn't been set yet.
+     */
+    public function testIsAllowedLazyLoadsAclOnFirstCall(): void
+    {
+        $userAclRole = 'Administrators';
+        $aclMock = $this->createMock(Acl::class);
+        $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole, 'resource', null)->willReturn(true);
+
+        $this->aclBuilder->expects($this->once())->method('getAcl')->willReturn($aclMock);
+
+        $userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getAclRole', 'getReloadAclFlag']
+        );
+        $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+        $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(false);
+        $this->storage->expects($this->any())->method('getUser')->willReturn($userMock);
+
+        $this->assertTrue($this->session->isAllowed('resource'));
+    }
+
+    /**
+     * Test that isAllowed() does NOT rebuild ACL when it is already loaded.
+     */
+    public function testIsAllowedReusesLoadedAcl(): void
+    {
+        $userAclRole = 'Administrators';
+        $aclMock = $this->createMock(Acl::class);
+        $aclMock->expects($this->exactly(2))->method('isAllowed')->willReturn(true);
+
+        $this->session->setAcl($aclMock);
+        $this->aclBuilder->expects($this->never())->method('getAcl');
+
+        $userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getAclRole', 'getReloadAclFlag']
+        );
+        $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+        $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(false);
+        $this->storage->expects($this->any())->method('getUser')->willReturn($userMock);
+
+        $this->assertTrue($this->session->isAllowed('resource'));
+        $this->assertTrue($this->session->isAllowed('other_resource'));
+    }
+
+    /**
+     * Test that isAllowed() rebuilds ACL when reloadAclFlag is set.
+     */
+    public function testIsAllowedRebuildsAclWhenReloadFlagSet(): void
+    {
+        $userAclRole = 'Administrators';
+        $oldAcl = $this->createMock(Acl::class);
+        $newAcl = $this->createMock(Acl::class);
+        $newAcl->expects($this->once())->method('isAllowed')->willReturn(true);
+
+        $this->session->setAcl($oldAcl);
+        $this->aclBuilder->expects($this->once())->method('getAcl')->willReturn($newAcl);
+
+        $userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getAclRole', 'getReloadAclFlag', 'setReloadAclFlag', 'unsetData', 'save']
+        );
+        $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+        $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(true);
+        $userMock->expects($this->once())->method('setReloadAclFlag')->with('0')->willReturnSelf();
+        $userMock->expects($this->once())->method('save');
+        $this->storage->expects($this->any())->method('getUser')->willReturn($userMock);
+
+        $this->assertTrue($this->session->isAllowed('resource'));
+        $this->assertSame($newAcl, $this->session->getAcl());
+    }
+
+    /**
+     * Test that isAllowed() returns false when ACL builder returns null.
+     */
+    public function testIsAllowedReturnsFalseWhenAclBuilderReturnsNull(): void
+    {
+        $this->aclBuilder->expects($this->once())->method('getAcl')->willReturn(null);
+
+        $userMock = $this->createPartialMockWithReflection(
+            User::class,
+            ['getReloadAclFlag']
+        );
+        $userMock->expects($this->any())->method('getReloadAclFlag')->willReturn(false);
+        $this->storage->expects($this->any())->method('getUser')->willReturn($userMock);
+
+        $this->assertFalse($this->session->isAllowed('resource'));
     }
 
     /**
