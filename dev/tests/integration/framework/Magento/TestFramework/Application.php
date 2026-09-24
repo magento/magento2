@@ -309,7 +309,7 @@ class Application
      */
     private function getLocalConfig()
     {
-        return $this->_configDir . '/config.php';
+        return $this->_configDir . '/env.php';
     }
 
     /**
@@ -333,14 +333,23 @@ class Application
     }
 
     /**
-     * Weather the application is installed or not.
+     * Whether the application is installed or not.
+     *
+     * The check is based on the installation date in the deployment configuration (env.php) rather than
+     * the mere existence of a configuration file: config.php is copied from the application into
+     * the sandbox before installation and must not be mistaken for an installed application.
      *
      * @return bool
      */
     public function isInstalled()
     {
+        $localConfigFile = $this->getLocalConfig();
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return is_file($this->getLocalConfig());
+        if (!is_file($localConfigFile)) {
+            return false;
+        }
+        $localConfig = include $localConfigFile;
+        return isset($localConfig['install']['date']);
     }
 
     /**
@@ -664,7 +673,7 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = Glob::glob(
-            $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php,config.php}',
             Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {

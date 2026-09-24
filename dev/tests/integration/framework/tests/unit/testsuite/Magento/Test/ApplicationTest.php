@@ -317,6 +317,96 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that the application is not considered installed when the deployment configuration is absent.
+     *
+     * @return void
+     */
+    public function testIsInstalledReturnsFalseWhenEnvFileIsAbsent()
+    {
+        $installDir = $this->createSandboxDir();
+        $subject = $this->createApplicationWithInstallDir($installDir);
+
+        $this->assertFalse($subject->isInstalled());
+    }
+
+    /**
+     * Test that a copied config.php alone does not mark the application as installed.
+     *
+     * @return void
+     */
+    public function testIsInstalledReturnsFalseWhenOnlyConfigFileIsPresent()
+    {
+        $installDir = $this->createSandboxDir();
+        file_put_contents($installDir . '/etc/config.php', "<?php\nreturn ['modules' => []];\n");
+        $subject = $this->createApplicationWithInstallDir($installDir);
+
+        $this->assertFalse($subject->isInstalled());
+    }
+
+    /**
+     * Test that the application is not considered installed when env.php has no installation date.
+     *
+     * @return void
+     */
+    public function testIsInstalledReturnsFalseWhenInstallDateIsAbsent()
+    {
+        $installDir = $this->createSandboxDir();
+        file_put_contents($installDir . '/etc/env.php', "<?php\nreturn ['install' => []];\n");
+        $subject = $this->createApplicationWithInstallDir($installDir);
+
+        $this->assertFalse($subject->isInstalled());
+    }
+
+    /**
+     * Test that the application is considered installed when env.php contains the installation date.
+     *
+     * @return void
+     */
+    public function testIsInstalledReturnsTrueWhenInstallDateIsPresent()
+    {
+        $installDir = $this->createSandboxDir();
+        file_put_contents(
+            $installDir . '/etc/env.php',
+            "<?php\nreturn ['install' => ['date' => 'Mon, 01 Jan 2024 00:00:00 +0000']];\n"
+        );
+        $subject = $this->createApplicationWithInstallDir($installDir);
+
+        $this->assertTrue($subject->isInstalled());
+    }
+
+    /**
+     * Create a unique sandbox installation directory with an etc/ subdirectory.
+     *
+     * @return string
+     */
+    private function createSandboxDir(): string
+    {
+        $installDir = sys_get_temp_dir() . '/' . uniqid('m2-integration-sandbox-', true);
+        mkdir($installDir . '/etc', 0777, true);
+
+        return $installDir;
+    }
+
+    /**
+     * Create an Application instance bound to the given sandbox installation directory.
+     *
+     * @param string $installDir
+     * @return Application
+     */
+    private function createApplicationWithInstallDir(string $installDir): Application
+    {
+        return new Application(
+            $this->shell,
+            $installDir,
+            'config.php',
+            'global-config.php',
+            '',
+            $this->appMode,
+            $this->autoloadWrapper
+        );
+    }
+
+    /**
      * Test \Magento\TestFramework\Application will correctly load specified areas.
      * @param string $areaCode
      * @return void
