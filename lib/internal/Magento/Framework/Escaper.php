@@ -389,8 +389,9 @@ class Escaper
      */
     public function escapeXssInUrl($data)
     {
-        $data = $this->decodeHtmlEntitiesToFixedPoint((string)$data);
+        $data = (string)$data;
         $this->getTranslateInline()->processResponseBody($data);
+        $data = $this->decodeHtmlEntitiesToFixedPoint($data);
 
         return htmlspecialchars(
             $this->escapeScriptIdentifiers($data),
