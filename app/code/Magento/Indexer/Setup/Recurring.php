@@ -120,6 +120,7 @@ class Recurring implements InstallSchemaInterface
         }
 
         foreach ($this->config->getIndexers() as $indexerId => $indexerConfig) {
+            $indexerConfig = $this->sortConfig($indexerConfig);
             $expectedHashConfig = $this->encryptor->hash(
                 $this->encoder->encode($indexerConfig),
                 Encryptor::HASH_VERSION_MD5
@@ -152,5 +153,19 @@ class Recurring implements InstallSchemaInterface
         // instead of unconditionally dropping and recreating all triggers for every indexer.
         // This avoids acquiring exclusive table locks when no trigger changes are needed.
         $this->triggerCleaner->removeTriggers();
+    }
+
+    /**
+     * Sort config array recursively to ensure consistent hash generation
+     *
+     * @param array $array
+     * @return array
+     */
+    private function sortConfig(array $array): array
+    {
+        $array = array_map(fn ($item) => is_array($item) ? $this->sortConfig($item) : $item, $array);
+        array_is_list($array) ? sort($array) : ksort($array);
+
+        return $array;
     }
 }

@@ -8,11 +8,6 @@ namespace Magento\Framework\Cache\Backend\Decorator;
 
 /**
  * Abstract decorator class for \Zend_Cache_Backend class and its descendants
- *
- * @deprecated Not used in Symfony cache system. Use frontend decorators instead.
- * @see \Magento\Framework\Cache\Frontend\Decorator\Bare
- * @see \Magento\Framework\Cache\Frontend\Decorator\TagScope
- * @see \Magento\Framework\Cache\Frontend\Decorator\Profiler
  */
 abstract class AbstractDecorator extends \Zend_Cache_Backend implements \Zend_Cache_Backend_ExtendedInterface
 {

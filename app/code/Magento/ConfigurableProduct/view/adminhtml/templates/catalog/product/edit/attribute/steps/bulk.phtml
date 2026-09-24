@@ -303,7 +303,7 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
                                             <label class="admin__actions-switch-label" for="hide-from-product-page">
                                                 <span class="admin__actions-switch-text"
-                                                      data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>" 
+                                                      data-text-on="<?= $escaper->escapeHtmlAttr(__('Yes')) ?>"
                                                       data-text-off="<?= $escaper->escapeHtmlAttr(__('No')) ?>">
                                                 </span>
                                             </label>
@@ -816,9 +816,9 @@ $uploadUrl = $block->getUrl('catalog/product_gallery/upload');
                     "noImage": "<?= /* @noEscape */  $block->getNoImageUrl() ?>",
                     "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form')
                     ?>.configurableVariations",
-                    "isResizeEnabled": <?= /* @noEscape */  $viewModel->isResizeEnabled() ?>,
-                    "maxWidth": <?= /* @noEscape */  $viewModel->getMaxWidth() ?>,
-                    "maxHeight": <?= /* @noEscape */  $viewModel->getMaxHeight() ?>
+                    "isResizeEnabled": <?= /* @noEscape */  (int)$viewModel->isResizeEnabled() ?>,
+                    "maxWidth": <?= /* @noEscape */  (int)$viewModel->getMaxWidth() ?>,
+                    "maxHeight": <?= /* @noEscape */  (int)$viewModel->getMaxHeight() ?>
                 }
             }
         }
