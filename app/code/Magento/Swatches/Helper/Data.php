@@ -86,6 +86,11 @@ class Data
     private $swatchesCache = [];
 
     /**
+     * @var array
+     */
+    private $attributeOptionsCache = [];
+
+    /**
      * @var Json
      */
     private $serializer;
@@ -436,15 +441,40 @@ class Data
         $result = [];
         $swatchAttributes = $this->getSwatchAttributes($product);
         foreach ($swatchAttributes as $swatchAttribute) {
-            $swatchAttribute->setStoreId($this->storeManager->getStore()->getId());
+            $storeId = (int)$this->storeManager->getStore()->getId();
+            $swatchAttribute->setStoreId($storeId);
             $attributeData = $swatchAttribute->getData();
-            foreach ($swatchAttribute->getSource()->getAllOptions(false) as $option) {
+            $attributeOptions = $this->getAttributeOptions(
+                $swatchAttribute,
+                (int)$attributeData['attribute_id'],
+                $storeId
+            );
+            foreach ($attributeOptions as $option) {
                 $attributeData['options'][$option['value']] = $option['label'];
             }
             $result[$attributeData['attribute_id']] = $attributeData;
         }
 
         return $result;
+    }
+
+    /**
+     * Retrieve attribute options with per-instance memoization.
+     *
+     * @param Attribute $attribute
+     * @param int $attributeId
+     * @param int $storeId
+     * @return array
+     */
+    private function getAttributeOptions(Attribute $attribute, int $attributeId, int $storeId): array
+    {
+        $cacheKey = $attributeId . '_' . $storeId;
+
+        if (!isset($this->attributeOptionsCache[$cacheKey])) {
+            $this->attributeOptionsCache[$cacheKey] = $attribute->getSource()->getAllOptions(false);
+        }
+
+        return $this->attributeOptionsCache[$cacheKey];
     }
 
     /**
