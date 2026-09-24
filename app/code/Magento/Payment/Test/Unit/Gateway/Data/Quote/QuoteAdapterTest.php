@@ -14,7 +14,6 @@ use Magento\Payment\Gateway\Data\Quote\QuoteAdapter;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CurrencyInterface;
-use Magento\Quote\Model\Quote;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +34,17 @@ class QuoteAdapterTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->quoteMock = $this->createMock(Quote::class);
+        $this->quoteMock = $this->getMockBuilder(QuoteAdapterTestQuote::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([
+                'getBaseGrandTotal',
+                'getBillingAddress',
+                'getCurrency',
+                'getCustomer',
+                'getReservedOrderId',
+                'getShippingAddress',
+            ])
+            ->getMock();
 
         $this->addressAdapterFactoryMock =
             $this->getMockBuilder(AddressAdapterFactory::class)
@@ -63,6 +72,14 @@ class QuoteAdapterTest extends TestCase
         $expected = '1';
         $this->quoteMock->expects($this->once())->method('getReservedOrderId')->willReturn($expected);
         $this->assertEquals($expected, $this->model->getOrderIncrementId());
+    }
+
+    public function testGetGrandTotalAmount()
+    {
+        $expected = 100.50;
+        $this->quoteMock->expects($this->once())->method('getBaseGrandTotal')->willReturn($expected);
+
+        $this->assertEquals($expected, $this->model->getGrandTotalAmount());
     }
 
     public function testGetCustomerId()
