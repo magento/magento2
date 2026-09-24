@@ -54,6 +54,13 @@ define([
             expect(utils.convertToMomentFormat(format)).toBe(momentFormat);
         });
 
+        it('Check convertToMomentFormat function with lowercase month tokens', function () {
+            expect(utils.convertToMomentFormat('dd.m.yyyy')).toBe('DD.M.YYYY');
+            expect(utils.convertToMomentFormat('dd.mm.yyyy')).toBe('DD.MM.YYYY');
+            expect(utils.convertToMomentFormat('m/d/yy')).toBe('M/DD/YYYY');
+            expect(utils.convertToMomentFormat('MM/dd/yyyy')).toBe('MM/DD/YYYY');
+        });
+
         it('Check "filterFormData" method', function () {
             var suffix = 'prepared-for-send',
                 separator = '-',
@@ -685,12 +692,12 @@ define([
 
         it('Check ajaxSubmit method', function () {
             var options = {
-                data: {}
-            },
-            config = {
-                ajaxSaveType: 'default'
-            },
-            d = new $.Deferred();
+                    data: {}
+                },
+                config = {
+                    ajaxSaveType: 'default'
+                },
+                d = new $.Deferred();
 
             spyOn($, 'ajax').and.callFake(function () {
                 d.reject();
