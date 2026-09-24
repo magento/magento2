@@ -1,0 +1,57 @@
+<?php
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ *
+ * @var \Magento\CatalogImportExport\Block\Adminhtml\Export\MandatoryAttributesNotice $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<div id="mandatory-attributes-notice"
+     class="message message-notice notice mandatory-attributes-notice"
+     style="display: none;"
+     data-mage-init='{"Magento_CatalogImportExport/js/mandatory-notice-toggle": {"entitySelector": "#entity"}}'>
+    <div data-ui-id="messages-message-notice">
+        <strong><?= $escaper->escapeHtml(__('Note:')) ?></strong>
+        <?= $escaper->escapeHtml(
+            __('To ensure your file can be successfully re-imported, the following systemic data is ' .
+                'automatically included and cannot be excluded:')
+        ) ?>
+        <ul>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Core Identifiers:')) ?></strong>
+                <?= $escaper->escapeHtml(__('SKU, Store View, Attribute Set, and Product Type')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Catalog Structure:')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('Categories, Websites, Custom Options, and Additional Attributes')
+                ) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Media & Visuals:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Additional Images, Swatch Images, and Product Page Visibility')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Pricing & Display:')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('MAP (Manufacturer\'s Suggested Retail Price) and Product Options Display settings')
+                ) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Complex Product Data:')) ?></strong>
+                <?= $escaper->escapeHtml(
+                    __('Configurations for Bundle, Configurable, Gift Card, and Downloadable products')
+                ) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Inventory & Stock:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Quantity and Stock Status')) ?>
+            </li>
+            <li>
+                <strong><?= $escaper->escapeHtml(__('Product Relations:')) ?></strong>
+                <?= $escaper->escapeHtml(__('Related, Up-sell, and Cross-sell product links')) ?>
+            </li>
+        </ul>
+    </div>
+</div>
