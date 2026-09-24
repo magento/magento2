@@ -341,7 +341,9 @@ class Write extends Read implements WriteInterface
             throw new FileSystemException(new Phrase('Invalid file path: path cannot be null or empty'));
         }
         $folder = dirname($path);
-        $this->create($folder);
+        // dirname() returns '.' for bare filenames; create the directory root itself in that case
+        // instead of appending a '/.' segment, which remote storage drivers cannot handle
+        $this->create($folder === '.' || $folder === '' ? null : $folder);
         $this->assertWritable($this->isExist($path) ? $path : $folder);
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
 
