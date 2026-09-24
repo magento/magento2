@@ -75,10 +75,6 @@ class General implements ValidatorInterface
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'street']);
         }
 
-        if (!ValidatorChain::is($address->getCity(), NotEmpty::class)) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
-        }
-
         return $errors;
     }
 
@@ -88,15 +84,31 @@ class General implements ValidatorInterface
      * @param AbstractAddress $address
      * @return array
      * @throws LocalizedException|ValidateException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function checkOptionalFields(AbstractAddress $address)
     {
         $this->reloadAddressAttributes($address);
         $errors = [];
+
+        if ($this->isCityRequired()
+            && !ValidatorChain::is($address->getCity(), NotEmpty::class)
+        ) {
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'city']);
+        }
+
         if ($this->isTelephoneRequired()
             && !ValidatorChain::is($address->getTelephone(), NotEmpty::class)
         ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'telephone']);
+        }
+
+        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
+        if (!in_array($address->getCountryId(), $havingOptionalZip)
+            && !ValidatorChain::is($address->getPostcode(), NotEmpty::class)
+        ) {
+            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']);
         }
 
         if ($this->isFaxRequired()
@@ -109,13 +121,6 @@ class General implements ValidatorInterface
             && !ValidatorChain::is($address->getCompany(), NotEmpty::class)
         ) {
             $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'company']);
-        }
-
-        $havingOptionalZip = $this->directoryData->getCountriesWithOptionalZip();
-        if (!in_array($address->getCountryId(), $havingOptionalZip)
-            && !ValidatorChain::is($address->getPostcode(), NotEmpty::class)
-        ) {
-            $errors[] = __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode']);
         }
 
         return $errors;
@@ -152,6 +157,17 @@ class General implements ValidatorInterface
     private function isFaxRequired()
     {
         return $this->eavConfig->getAttribute('customer_address', 'fax')->getIsRequired();
+    }
+
+    /**
+     * Check if city field required in configuration.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isCityRequired(): bool
+    {
+        return $this->eavConfig->getAttribute('customer_address', 'city')->getIsRequired();
     }
 
     /**
