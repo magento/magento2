@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
  */
 class ErrorHandler implements ErrorHandlerInterface
 {
+    private const SERVER_ERROR_CATEGORY = 'graphql-server';
+
     /**
      * @var LoggerInterface
      */
@@ -46,19 +48,27 @@ class ErrorHandler implements ErrorHandlerInterface
     public function handle(array $errors, callable $formatter): array
     {
         $formattedErrors = [];
+        $loggableErrors = array_values(
+            array_filter($errors, fn (Error $error): bool => !$this->isClientError($error))
+        );
 
         // When not in developer mode, only log & report the first error for performance implications
         if ($this->appState->getMode() !== State::MODE_DEVELOPER) {
             $errors = array_splice($errors, 0, 1);
+            $loggableErrors = array_splice($loggableErrors, 0, 1);
+        }
+
+        foreach ($loggableErrors as $error) {
+            $this->logger->error($error);
+            foreach ($this->getAggregatedErrors($error) as $aggregatedError) {
+                $this->logger->error($aggregatedError);
+            }
         }
 
         foreach ($errors as $error) {
-            $this->log($error);
-            $previousError = $error->getPrevious();
-            if ($previousError instanceof AggregateExceptionInterface && !empty($previousError->getErrors())) {
-                $aggregatedErrors = $previousError->getErrors();
+            $aggregatedErrors = $this->getAggregatedErrors($error);
+            if (!empty($aggregatedErrors)) {
                 foreach ($aggregatedErrors as $aggregatedError) {
-                    $this->logger->error($aggregatedError);
                     $formattedErrors[] = $formatter($aggregatedError);
                 }
             } else {
@@ -69,19 +79,32 @@ class ErrorHandler implements ErrorHandlerInterface
     }
 
     /**
-     * Log error.
+     * Check whether the error was caused by the client request and therefore must not be logged.
      *
      * @param Error $error
-     * @return void
+     * @return bool
      */
-    private function log(Error $error): void
+    private function isClientError(Error $error): bool
     {
-        $extensions = $error->getExtensions();
-        $category = $extensions['category'] ?? null;
+        $category = $error->getExtensions()['category'] ?? null;
         if (GraphQlInputException::EXCEPTION_CATEGORY === $category) {
-            return;
+            return true;
         }
 
-        $this->logger->error($error);
+        // GraphQlServerException is client-safe so its message reaches the client, but it reports a server failure
+        return $error->isClientSafe() && self::SERVER_ERROR_CATEGORY !== $category;
+    }
+
+    /**
+     * Get the child errors of an aggregate exception wrapped by the error.
+     *
+     * @param Error $error
+     * @return array
+     */
+    private function getAggregatedErrors(Error $error): array
+    {
+        $previousError = $error->getPrevious();
+
+        return $previousError instanceof AggregateExceptionInterface ? $previousError->getErrors() : [];
     }
 }
