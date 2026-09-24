@@ -17,6 +17,7 @@
             <argument name="productQty" defaultValue="1" type="string"/>
         </arguments>
 
+        <waitForElementClickable selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductsButton"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
         <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="{{product.sku}}" stepKey="fillSkuFilter"/>
         <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
