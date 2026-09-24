@@ -19,15 +19,11 @@ use Magento\Quote\Model\Quote;
 class CheckExpirePersistentQuoteObserver implements ObserverInterface
 {
     /**
-     * Customer session
-     *
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -40,8 +36,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $_eventManager = null;
 
     /**
-     * Persistent session
-     *
      * @var \Magento\Persistent\Helper\Session
      */
     protected $_persistentSession = null;
@@ -52,22 +46,16 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     protected $quoteManager;
 
     /**
-     * Persistent data
-     *
      * @var \Magento\Persistent\Helper\Data
      */
     protected $_persistentData = null;
 
     /**
-     * Request
-     *
      * @var \Magento\Framework\App\RequestInterface
      */
     private $request;
 
     /**
-     * Checkout Page path
-     *
      * @var string
      */
     private $checkoutPagePath = 'checkout';
@@ -131,7 +119,7 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
             $this->_checkoutSession->clearQuote();
-            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            $this->resetCustomerSession();
             return;
         }
 
@@ -145,8 +133,26 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
         ) {
             $this->_eventManager->dispatch('persistent_session_expired');
             $this->quoteManager->expire();
-            $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
+            $this->resetCustomerSession();
         }
+    }
+
+    /**
+     * Reset emulated customer data on the customer session back to the guest state.
+     *
+     * Also clears the tax destination data left by persistent emulation
+     * (EmulateCustomerObserver) so guest price rendering is not calculated against
+     * the expired customer's tax address.
+     *
+     * @return void
+     */
+    private function resetCustomerSession(): void
+    {
+        $this->_customerSession->setCustomerId(null)
+            ->setCustomerGroupId(null)
+            ->setDefaultTaxBillingAddress(null)
+            ->setDefaultTaxShippingAddress(null)
+            ->setCustomerTaxClassId(null);
     }
 
     /**
