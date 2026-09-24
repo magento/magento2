@@ -158,6 +158,10 @@ class SearchClient implements ClientInterface
 
         $options['hosts'] = [$host];
 
+        if (!empty($options['timeout'])) {
+            $options['connectionParams']['client']['timeout'] ??= (int)$options['timeout'];
+        }
+
         return $options;
     }
 
