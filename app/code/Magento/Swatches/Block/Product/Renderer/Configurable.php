@@ -383,7 +383,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      *
      * @param Product $childProduct
      * @param string $imageType
-     * @return string|null
+     * @return string
      */
     protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
