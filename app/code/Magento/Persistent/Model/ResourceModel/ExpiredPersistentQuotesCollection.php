@@ -7,97 +7,211 @@ declare(strict_types=1);
 
 namespace Magento\Persistent\Model\ResourceModel;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
-use Magento\Persistent\Helper\Data;
+use Iterator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Persistent\Helper\Data;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Handles the collection of expired persistent quotes.
+ * Iterates, one quote at a time, over persistent quotes expired for a given store.
+ *
+ * Internally fetches quotes in batches (to bound memory and query size), tracking an
+ * entity_id cursor between batches, but exposes a flat, item-level Iterator so callers
+ * can foreach over quotes directly instead of managing batches themselves.
  */
-class ExpiredPersistentQuotesCollection
+class ExpiredPersistentQuotesCollection implements Iterator
 {
     /**
+     * @var Collection|null
+     */
+    private ?Collection $currentBatch = null;
+
+    /**
+     * @var Iterator|null
+     */
+    private ?Iterator $batchIterator = null;
+
+    /**
+     * @var Quote|null
+     */
+    private ?Quote $current = null;
+
+    /**
+     * @var int
+     */
+    private int $lastProcessedId = 0;
+
+    /**
+     * @var bool
+     */
+    private bool $initialized = false;
+
+    /**
+     * @var int|null
+     */
+    private ?int $lifetime = null;
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreInterface $store
      * @param CollectionFactory $quoteCollectionFactory
+     * @param int $batchSize
      */
     public function __construct(
         private readonly ScopeConfigInterface $scopeConfig,
-        private readonly CollectionFactory $quoteCollectionFactory
+        private readonly StoreInterface $store,
+        private readonly CollectionFactory $quoteCollectionFactory,
+        private readonly int $batchSize
     ) {
     }
 
     /**
-     * Retrieves the collection of expired persistent quotes.
-     *
-     * Filters and returns all quotes that have expired based on the persistent lifetime threshold.
-     *
-     * @param StoreInterface $store
-     * @param int $lastId
-     * @param int $batchSize
-     * @return AbstractCollection
+     * @inheritdoc
      */
-    public function getExpiredPersistentQuotes(StoreInterface $store, int $lastId, int $batchSize): AbstractCollection
+    #[\ReturnTypeWillChange]
+    public function current()
     {
-        $lifetime = $this->scopeConfig->getValue(
+        $this->ensureInitialized();
+        return $this->current;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    #[\ReturnTypeWillChange]
+    public function key()
+    {
+        $this->ensureInitialized();
+        return $this->current?->getId();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    #[\ReturnTypeWillChange]
+    public function valid()
+    {
+        $this->ensureInitialized();
+        return $this->current !== null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    #[\ReturnTypeWillChange]
+    public function rewind()
+    {
+        $this->initialized = false;
+        $this->lastProcessedId = 0;
+        $this->currentBatch = null;
+        $this->batchIterator = null;
+        $this->current = null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    #[\ReturnTypeWillChange]
+    public function next()
+    {
+        $this->ensureInitialized();
+        $this->advanceToNextItem();
+    }
+
+    /**
+     * Lazily rewind on first use, so current()/key()/valid()/next() behave correctly
+     * even if called before an explicit rewind() (matching a plain PHP array's
+     * internal pointer, which is already positioned at the first element).
+     *
+     * @return void
+     */
+    private function ensureInitialized(): void
+    {
+        if (!$this->initialized) {
+            $this->initialized = true;
+            $this->advanceToNextItem();
+        }
+    }
+
+    /**
+     * Advance to the next available quote, crossing batch boundaries as needed.
+     *
+     * @return void
+     */
+    private function advanceToNextItem(): void
+    {
+        while ($this->batchIterator === null || !$this->batchIterator->valid()) {
+            if (!$this->loadNextBatch()) {
+                $this->current = null;
+                return;
+            }
+        }
+
+        /** @var Quote $quote */
+        $quote = $this->batchIterator->current();
+        $this->batchIterator->next();
+        $this->current = $quote;
+        $this->lastProcessedId = (int)$quote->getId();
+    }
+
+    /**
+     * Fetch the next batch of expired quotes, releasing the previous batch's memory.
+     *
+     * @return bool Whether a non-empty batch was loaded.
+     */
+    private function loadNextBatch(): bool
+    {
+        if ($this->currentBatch !== null) {
+            $this->currentBatch->clear();
+        }
+        $this->currentBatch = $this->buildBatchQuery();
+        $this->batchIterator = $this->currentBatch->getIterator();
+
+        return $this->batchIterator->valid();
+    }
+
+    /**
+     * Build the collection selecting the next batch of expired persistent quotes.
+     *
+     * @return Collection
+     */
+    private function buildBatchQuery(): Collection
+    {
+        $this->lifetime ??= (int) $this->scopeConfig->getValue(
             Data::XML_PATH_LIFE_TIME,
             ScopeInterface::SCOPE_WEBSITE,
-            $store->getWebsiteId()
+            $this->store->getWebsiteId()
         );
 
-        $lastLoginCondition = gmdate("Y-m-d H:i:s", time() - $lifetime);
+        $lastLoginCondition = gmdate("Y-m-d H:i:s", time() - $this->lifetime);
 
         /** @var $quotes Collection */
         $quotes = $this->quoteCollectionFactory->create();
+        $quotes->addFieldToFilter('main_table.store_id', (int)$this->store->getId());
+        $quotes->addFieldToFilter('main_table.updated_at', ['lt' => $lastLoginCondition]);
+        $quotes->addFieldToFilter('main_table.is_persistent', 1);
+        $quotes->addFieldToFilter('main_table.entity_id', ['gt' => $this->lastProcessedId]);
+        $quotes->setOrder('entity_id', Collection::SORT_ORDER_ASC);
+        $quotes->setPageSize($this->batchSize);
 
-        $additionalQuotes = clone $quotes;
-        $additionalQuotes->addFieldToFilter('main_table.store_id', (int)$store->getId());
-        $additionalQuotes->addFieldToFilter('main_table.updated_at', ['lt' => $lastLoginCondition]);
-        $additionalQuotes->addFieldToFilter('main_table.is_persistent', 1);
-        $additionalQuotes->addFieldToFilter('main_table.entity_id', ['gt' => $lastId]);
-        $additionalQuotes->setOrder('entity_id', Collection::SORT_ORDER_ASC);
-        $additionalQuotes->setPageSize($batchSize);
-
-        $select1 = clone $additionalQuotes->getSelect();
-        $select2 = clone $additionalQuotes->getSelect();
-
-        //case 1 - customer logged in and logged out
-        $select1->reset(Select::COLUMNS)
-            ->columns('main_table.entity_id')
+        // A persistent quote is expired if the owning customer either:
+        //case 1 - logged in and explicitly logged out (regardless of how long ago), or
+        //case 2 - logged in and never logged out, but that session has since expired, or
+        //case 3 - logged in, logged out, logged in again, and that second session has since expired
+        $quotes->getSelect()
             ->joinLeft(
-                ['cl1' => $additionalQuotes->getTable('customer_log')],
-                'cl1.customer_id = main_table.customer_id',
+                ['cl' => $quotes->getTable('customer_log')],
+                'cl.customer_id = main_table.customer_id',
                 []
-            )->where('cl1.last_login_at < cl1.last_logout_at
-            AND cl1.last_logout_at IS NOT NULL');
-
-        //case 2 - customer logged in and not logged out but session expired
-        //case 3 - customer logged in, logged out, logged in and then session expired
-        $select2->reset(Select::COLUMNS)
-            ->columns('main_table.entity_id')
-            ->joinLeft(
-                ['cl2' => $additionalQuotes->getTable('customer_log')],
-                'cl2.customer_id = main_table.customer_id',
-                []
-            )->where('cl2.last_login_at < "' . $lastLoginCondition . '"
-        AND (cl2.last_logout_at IS NULL OR cl2.last_login_at > cl2.last_logout_at)');
-
-        $selectQuoteIds = $additionalQuotes
-            ->getConnection()
-            ->select()
-            ->union(
-                [
-                    $select1,
-                    $select2
-                ],
-                Select::SQL_UNION_ALL
+            )->where(
+                '(cl.last_logout_at IS NOT NULL AND cl.last_login_at < cl.last_logout_at)
+                OR (cl.last_login_at < "' . $lastLoginCondition . '"
+                    AND (cl.last_logout_at IS NULL OR cl.last_login_at > cl.last_logout_at))'
             );
-
-        $quotes->getSelect()->where('main_table.entity_id IN (' . $selectQuoteIds . ')');
 
         return $quotes;
     }
