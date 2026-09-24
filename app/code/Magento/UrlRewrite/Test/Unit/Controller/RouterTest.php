@@ -350,10 +350,11 @@ class RouterTest extends TestCase
     /**
      * @param string $requestPath
      * @param string $targetPath
+     * @param string $directPath
      * @param bool $shouldRedirect
      */
     #[DataProvider('customInternalRedirectDataProvider')]
-    public function testMatchWithCustomInternalRedirect($requestPath, $targetPath, $shouldRedirect)
+    public function testMatchWithCustomInternalRedirect($requestPath, $targetPath, $directPath, $shouldRedirect)
     {
         $queryParams = [];
         $redirectType = 'redirect-code';
@@ -379,7 +380,7 @@ class RouterTest extends TestCase
                 ->method('getUrl')
                 ->with(
                     '',
-                    ['_direct' => $targetPath, '_query' => $queryParams]
+                    ['_direct' => $directPath, '_query' => $queryParams]
                 )
                 ->willReturn('a');
             $this->request->expects($this->once())
@@ -403,8 +404,9 @@ class RouterTest extends TestCase
     public static function customInternalRedirectDataProvider()
     {
         return [
-            ['request-path', 'target-path', true],
-            ['/', '/', false],
+            'relative target' => ['request-path', 'target-path', 'target-path', true],
+            'target with leading slash' => ['request-path', '/customer/account/', 'customer/account/', true],
+            'same request and target' => ['/', '/', '', false],
         ];
     }
 
