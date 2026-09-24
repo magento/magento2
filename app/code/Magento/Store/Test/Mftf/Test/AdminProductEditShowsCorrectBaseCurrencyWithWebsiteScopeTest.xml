@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductEditShowsCorrectBaseCurrencyWithWebsiteScopeTest">
+        <annotations>
+            <features value="Store"/>
+            <stories value="Base currency resolution uses website scope when price scope is WEBSITE"/>
+            <title value="Admin product edit page displays correct currency symbol when base currency differs per website"/>
+            <description value="Verify that the admin product edit page shows the website-scoped base currency (EUR)
+                instead of the default base currency (USD) when catalog price scope is set to Website."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-16693"/>
+            <useCaseId value="40632"/>
+            <group value="store"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Set catalog price scope to Website -->
+            <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeToWebsite"/>
+            <!-- Set base currency to EUR for the main website -->
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/base EUR" stepKey="setBaseCurrencyToEUR"/>
+            <!-- Set currency rates for EUR -->
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/allow EUR,USD" stepKey="setAllowedCurrencies"/>
+            <!-- Create a simple product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <!-- Restore default configuration -->
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/base USD" stepKey="restoreBaseCurrency"/>
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/allow USD" stepKey="restoreAllowedCurrencies"/>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="restorePriceScopeToGlobal"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+
+        <!-- Assert that the price field displays EUR currency symbol -->
+        <see selector=".admin__field[data-index=price] .admin__addon-prefix span" userInput="€" stepKey="assertPriceCurrencyIsEUR"/>
+    </test>
+</tests>
