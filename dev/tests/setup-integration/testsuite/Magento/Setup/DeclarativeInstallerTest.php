@@ -439,6 +439,99 @@ class DeclarativeInstallerTest extends SetupTestCase
     }
 
     /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @moduleName Magento_TestSetupDeclarationModule8
+     * @throws \Exception
+     */
+    public function testUniqueConstraintReplacesExistingIndexWithSameName()
+    {
+        $this->cliCommand->install(
+            ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'index_to_disable',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->cliCommand->upgrade();
+        $this->assertMatchesRegularExpression(
+            '/(?<!UNIQUE )KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/',
+            $this->describeTable->describeShard('default')['test_table']
+        );
+
+        $this->updateRevisionWithUniqueOverExternalIndex();
+        $this->cliCommand->upgrade();
+
+        $this->assertOnlyUniqueKeyNamedTestTableVarchar();
+    }
+
+    /**
+     * @moduleName Magento_TestSetupDeclarationModule1
+     * @moduleName Magento_TestSetupDeclarationModule8
+     * @throws \Exception
+     */
+    public function testInstallationWithUniqueConstraintAndIndexWithSameName()
+    {
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule1',
+            'index_to_disable',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->updateRevisionWithUniqueOverExternalIndex();
+        $this->cliCommand->install(
+            ['Magento_TestSetupDeclarationModule1', 'Magento_TestSetupDeclarationModule8']
+        );
+
+        $this->assertOnlyUniqueKeyNamedTestTableVarchar();
+        $diff = $this->schemaDiff->diff(
+            $this->schemaConfig->getDeclarationConfig(),
+            $this->schemaConfig->getDbConfig()
+        );
+        self::assertNull($diff->getAll());
+    }
+
+    /**
+     * Declare in Module8 a unique constraint on the columns of the Module1 index TEST_TABLE_VARCHAR.
+     *
+     * @return void
+     */
+    private function updateRevisionWithUniqueOverExternalIndex(): void
+    {
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'unique_over_external_index',
+            'db_schema.xml',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'db_schema_whitelist.json',
+            'etc'
+        );
+        $this->moduleManager->updateRevision(
+            'Magento_TestSetupDeclarationModule8',
+            'disable_index_by_external_module',
+            'module.xml',
+            'etc'
+        );
+    }
+
+    /**
+     * Assert test_table has the unique key TEST_TABLE_VARCHAR and no plain key with that name.
+     *
+     * @return void
+     */
+    private function assertOnlyUniqueKeyNamedTestTableVarchar(): void
+    {
+        $tableSql = $this->describeTable->describeShard('default')['test_table'];
+        $this->assertMatchesRegularExpression('/UNIQUE KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/', $tableSql);
+        $this->assertDoesNotMatchRegularExpression('/(?<!UNIQUE )KEY\s+`TEST_TABLE_VARCHAR`\s/', $tableSql);
+    }
+
+    /**
      * @moduleName Magento_TestSetupDeclarationModule8
      * @moduleName Magento_TestSetupDeclarationModule9
      * @dataProviderFromFile Magento/TestSetupDeclarationModule9/fixture/declarative_installer/disabling_tables.php

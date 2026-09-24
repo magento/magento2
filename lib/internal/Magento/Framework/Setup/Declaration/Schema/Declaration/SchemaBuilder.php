@@ -12,6 +12,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Setup\Declaration\Schema\Declaration\TableElement\ElementNameResolver;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Column;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
+use Magento\Framework\Setup\Declaration\Schema\Dto\Constraints\Internal;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementFactory;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
@@ -243,10 +244,12 @@ class SchemaBuilder
             $table = $this->elementFactory->create('table', $tableData);
             $columns = $this->processColumns($tableData, $resource, $table);
             $table->addColumns($columns);
+            $indexes = $this->processIndexes($tableData, $resource, $table);
+            $constraints = $this->processConstraints($tableData, $resource, $schema, $table);
             //Add indexes to table
-            $table->addIndexes($this->processIndexes($tableData, $resource, $table));
+            $table->addIndexes($this->excludeIndexesCoveredByUniqueConstraints($table, $indexes, $constraints));
             //Add internal and reference constraints
-            $table->addConstraints($this->processConstraints($tableData, $resource, $schema, $table));
+            $table->addConstraints($constraints);
             $schema->addTable($table);
         }
 
@@ -324,6 +327,63 @@ class SchemaBuilder
         }
 
         return $indexes;
+    }
+
+    /**
+     * Drop btree indexes that resolve to the same database name as a unique constraint on the same columns.
+     *
+     * MySQL rejects an index and a unique key sharing one name, and a unique btree key already serves every lookup
+     * a btree index on the identical column list would serve. Any other name clash is reported as an error.
+     *
+     * @param Table $table
+     * @param Index[] $indexes
+     * @param Constraint[] $constraints
+     * @return Index[]
+     * @throws \LogicException
+     */
+    private function excludeIndexesCoveredByUniqueConstraints(Table $table, array $indexes, array $constraints): array
+    {
+        foreach ($constraints as $constraint) {
+            if (!$constraint instanceof Internal || !isset($indexes[$constraint->getName()])) {
+                continue;
+            }
+
+            $index = $indexes[$constraint->getName()];
+            $indexColumns = $this->getColumnNames($index->getColumns());
+            $constraintColumns = $this->getColumnNames($constraint->getColumns());
+
+            if ($constraint->getType() !== Constraint::UNIQUE_TYPE
+                || strtolower((string)$index->getIndexType()) !== 'btree'
+                || $indexColumns !== $constraintColumns
+            ) {
+                throw new \LogicException(
+                    sprintf(
+                        'Table "%s" declares an index (%s) and a %s constraint (%s) that resolve to the same '
+                        . 'database name "%s". Disable one of them with disabled="true".',
+                        $table->getName(),
+                        implode(', ', $indexColumns),
+                        $constraint->getType(),
+                        implode(', ', $constraintColumns),
+                        $constraint->getName()
+                    )
+                );
+            }
+
+            unset($indexes[$constraint->getName()]);
+        }
+
+        return $indexes;
+    }
+
+    /**
+     * Get names of the given columns.
+     *
+     * @param Column[] $columns
+     * @return string[]
+     */
+    private function getColumnNames(array $columns): array
+    {
+        return array_map(static fn (Column $column): string => $column->getName(), $columns);
     }
 
     /**
