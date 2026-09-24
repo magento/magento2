@@ -7,6 +7,7 @@
 namespace Magento\RemoteStorage\Test\Unit\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -93,31 +94,32 @@ class ImageTest extends TestCase
         ?string $newName,
         ?string $oldName
     ): void {
-        $tmpDestination = '/tmp/' . $destination;
+        $tmpFilePattern = '#^/tmp/[0-9a-f]{16}_save_[0-9a-f]{64}\.file$#';
         /** @var AbstractAdapter $subject */
         $subject = $this->createMock(AbstractAdapter::class);
-        $proceed = function () {
+        $savedTo = [];
+        $proceed = function (string $path, ?string $name) use (&$savedTo) {
+            $savedTo = [$path, $name];
         };
         $targetDriver = $this->createMock(DriverInterface::class);
-        $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getRelativePath')
-            ->willReturn($destination . $oldName);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getDriver')
             ->willReturn($targetDriver);
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')
-            ->willReturn($tmpDestination);
+            ->willReturn('/tmp/');
         $driver = $this->createMock(DriverInterface::class);
-        $actualName = $newName ?? $oldName;
-        $driver->expects(self::atLeastOnce())->method('rename')
-            ->with($tmpDestination . $actualName, $newDestination, $driver);
+        $driver->expects(self::once())->method('rename')
+            ->with(self::matchesRegularExpression($tmpFilePattern), $newDestination, $targetDriver);
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getDriver')->willReturn($driver);
         $this->ioFile->method('getPathInfo')
             ->willReturnMap(
                 [
-                    [$tmpDestination, ['dirname' => $tmpDestination, 'basename' => 'old_name.file']],
                     [$destination . $oldName, ['dirname' => $destination, 'basename' => 'old_name.file']]
                 ]
             );
         $this->plugin->aroundSave($subject, $proceed, $destination . $oldName, $newName);
+
+        self::assertMatchesRegularExpression($tmpFilePattern, $savedTo[0]);
+        self::assertNull($savedTo[1]);
     }
 
     /**
@@ -211,19 +213,7 @@ class ImageTest extends TestCase
         /** @var AbstractAdapter $subject */
         $subject = $this->createStub(AbstractAdapter::class);
         $this->mockRemoteCopy();
-        $filesystem = $this->createStub(Filesystem::class);
-        $filesystem->method('getDirectoryWrite')->willReturn($this->tmpDirectoryWrite);
-        $targetDirectory = $this->createStub(TargetDirectory::class);
-        $targetDirectory->method('getDirectoryWrite')->willReturn($this->targetDirectoryWrite);
-        $config = $this->createStub(Config::class);
-        $config->method('isEnabled')->willReturn(true);
-        $otherPlugin = new Image(
-            $filesystem,
-            $this->ioFile,
-            $targetDirectory,
-            $config,
-            $this->createStub(LoggerInterface::class)
-        );
+        $otherPlugin = $this->createOtherPlugin();
 
         [$first] = $this->plugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
         [$second] = $otherPlugin->beforeOpen($subject, 'catalog/product/a/b/image.jpg');
@@ -248,6 +238,106 @@ class ImageTest extends TestCase
 
         self::assertArrayHasKey($tmpFileAgain, $this->tmpFileContents);
         self::assertSame('content of ' . $filename, $this->tmpFileContents[$tmpFileAgain]);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testAroundSaveUsesDistinctTmpFilesPerInstanceAndRemovesThem(): void
+    {
+        /** @var AbstractAdapter $subject */
+        $subject = $this->createStub(AbstractAdapter::class);
+        $this->mockRemoteCopy();
+        $movedFrom = [];
+        $this->mockMoveToRemote($movedFrom);
+        $destination = '/remote/pub/media/catalog/product/cache/abc/a/b/image.jpg';
+        $savedTo = [];
+        $proceed = function (string $path) use (&$savedTo) {
+            $savedTo[] = $path;
+            $this->tmpFileContents[$path] = 'resized';
+        };
+
+        $this->plugin->aroundSave($subject, $proceed, dirname($destination), 'image.jpg');
+        $this->createOtherPlugin()->aroundSave($subject, $proceed, $destination);
+
+        self::assertCount(2, $savedTo);
+        self::assertNotSame($savedTo[0], $savedTo[1]);
+        self::assertStringStartsWith('/var/tmp/', $savedTo[0]);
+        self::assertStringEndsWith('.jpg', $savedTo[0]);
+        self::assertSame([$savedTo[0] => $destination, $savedTo[1] => $destination], $movedFrom);
+        self::assertSame([], $this->tmpFileContents);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function testAroundSaveRemovesTmpFileWhenMoveFails(): void
+    {
+        /** @var AbstractAdapter $subject */
+        $subject = $this->createStub(AbstractAdapter::class);
+        $this->mockRemoteCopy();
+        $this->tmpDirectoryWrite->getDriver()->method('rename')
+            ->willThrowException(new FileSystemException(__('Upload failed')));
+        $this->tmpDirectoryWrite->method('delete')
+            ->willReturnCallback(function (string $path): bool {
+                unset($this->tmpFileContents[$path]);
+                return true;
+            });
+        $proceed = function (string $path) {
+            $this->tmpFileContents[$path] = 'resized';
+        };
+
+        try {
+            $this->plugin->aroundSave($subject, $proceed, '/remote/pub/media', 'image.jpg');
+            self::fail('The move failure must not be swallowed');
+        } catch (FileSystemException $e) {
+            self::assertSame('Upload failed', $e->getMessage());
+        }
+        self::assertSame([], $this->tmpFileContents);
+    }
+
+    /**
+     * Wire the tmp driver to move a tmp file to remote storage and drop it, as the local driver does
+     *
+     * @param array $movedFrom
+     * @return void
+     */
+    private function mockMoveToRemote(array &$movedFrom): void
+    {
+        $this->ioFile->method('getPathInfo')
+            ->willReturnCallback(static fn (string $path): array => [
+                'dirname' => dirname($path),
+                'basename' => basename($path),
+            ]);
+        $this->tmpDirectoryWrite->getDriver()->method('rename')
+            ->willReturnCallback(function (string $from, string $to) use (&$movedFrom): bool {
+                $movedFrom[$from] = $to;
+                unset($this->tmpFileContents[$from]);
+                return true;
+            });
+    }
+
+    /**
+     * @return Image
+     */
+    private function createOtherPlugin(): Image
+    {
+        $filesystem = $this->createStub(Filesystem::class);
+        $filesystem->method('getDirectoryWrite')->willReturn($this->tmpDirectoryWrite);
+        $targetDirectory = $this->createStub(TargetDirectory::class);
+        $targetDirectory->method('getDirectoryWrite')->willReturn($this->targetDirectoryWrite);
+        $config = $this->createStub(Config::class);
+        $config->method('isEnabled')->willReturn(true);
+
+        return new Image(
+            $filesystem,
+            $this->ioFile,
+            $targetDirectory,
+            $config,
+            $this->createStub(LoggerInterface::class)
+        );
     }
 
     /**
