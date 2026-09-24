@@ -102,7 +102,11 @@ class DevTestsRunCommand extends Command
             $dirName = realpath(BP . '/dev/tests/' . $dir);
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             chdir($dirName);
-            $command = PHP_BINARY . ' ' . BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit ' . $options;
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $phpBinary = escapeshellarg(PHP_BINARY);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $phpunitPath = escapeshellarg(BP . '/' . $vendorDir . '/phpunit/phpunit/phpunit');
+            $command = $phpBinary . ' ' . $phpunitPath . ' ' . $options;
             if ($commandArguments = $input->getOption(self::INPUT_OPT_COMMAND_ARGUMENTS)) {
                 $command .= ' ' . $commandArguments;
             }
