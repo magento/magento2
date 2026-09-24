@@ -39,7 +39,7 @@ class RestrictedFieldsPlugin
     ): array {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                if (in_array($filter->getField(), $this->restrictedFields, true)) {
+                if (in_array(strtolower($filter->getField()), $this->restrictedFields, true)) {
                     throw new InputException(
                         __('The search criteria filter field is invalid.')
                     );
@@ -47,7 +47,7 @@ class RestrictedFieldsPlugin
             }
         }
         foreach ($searchCriteria->getSortOrders() ?? [] as $sortOrder) {
-            if (in_array($sortOrder->getField(), $this->restrictedFields, true)) {
+            if (in_array(strtolower($sortOrder->getField()), $this->restrictedFields, true)) {
                 throw new InputException(
                     __('The search criteria sort field is invalid.')
                 );
