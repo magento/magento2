@@ -901,9 +901,12 @@ class ProcessCronQueueObserver implements ObserverInterface
         // phpcs:ignore Magento2.Security.InsecureFunction
         $lockName = self::LOCK_PREFIX . md5($groupId . '_' . $schedule->getJobCode());
 
+        $isLocked = false;
         try {
             for ($retries = self::MAX_RETRIES; $retries > 0; $retries--) {
-                if ($this->lockManager->lock($lockName, 0) && $schedule->tryLockJob()) {
+                // The database lock backend is re-entrant: every successful lock() needs its own unlock()
+                $isLocked = $isLocked || $this->lockManager->lock($lockName, 0);
+                if ($isLocked && $schedule->tryLockJob()) {
                     $this->_runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId);
                     break;
                 }
@@ -912,7 +915,9 @@ class ProcessCronQueueObserver implements ObserverInterface
                 }
             }
         } finally {
-            $this->lockManager->unlock($lockName);
+            if ($isLocked) {
+                $this->lockManager->unlock($lockName);
+            }
         }
     }
 
