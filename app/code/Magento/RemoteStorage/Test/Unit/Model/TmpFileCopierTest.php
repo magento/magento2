@@ -34,11 +34,24 @@ class TmpFileCopierTest extends TestCase
      */
     private $written = [];
 
+    /**
+     * @var int
+     */
+    private $remoteReads = 0;
+
+    /**
+     * @var string[]
+     */
+    private $deleted = [];
+
     protected function setUp(): void
     {
         $remoteDriver = $this->createStub(DriverInterface::class);
         $remoteDriver->method('fileGetContents')
-            ->willReturnCallback(static fn (string $path): string => 'content of ' . $path);
+            ->willReturnCallback(function (string $path): string {
+                $this->remoteReads++;
+                return 'content of ' . $path;
+            });
         $tmpDriver = $this->createStub(DriverInterface::class);
         $tmpDriver->method('filePutContents')
             ->willReturnCallback(function (string $path, string $content): int {
@@ -53,6 +66,13 @@ class TmpFileCopierTest extends TestCase
         $this->tmpDirectoryWrite = $this->createStub(WriteInterface::class);
         $this->tmpDirectoryWrite->method('getAbsolutePath')->willReturn('/var/tmp/');
         $this->tmpDirectoryWrite->method('getDriver')->willReturn($tmpDriver);
+        $this->tmpDirectoryWrite->method('isFile')
+            ->willReturnCallback(fn (string $path): bool => isset($this->written[$path]));
+        $this->tmpDirectoryWrite->method('delete')
+            ->willReturnCallback(function (string $path): void {
+                $this->deleted[] = $path;
+                unset($this->written[$path]);
+            });
     }
 
     public function testCopyUsesDistinctTmpFilesForSameBasename(): void
@@ -74,6 +94,39 @@ class TmpFileCopierTest extends TestCase
         $second = $this->createCopier()->copy('catalog/product/a/b/image.jpg');
 
         self::assertNotSame($first, $second);
+    }
+
+    public function testSecondCopyOfSamePathReturnsCachedTmpFileAndReadsRemoteOnce(): void
+    {
+        $copier = $this->createCopier();
+
+        $first = $copier->copy('catalog/product/a/b/image.jpg');
+        $second = $copier->copy('catalog/product/a/b/image.jpg');
+
+        self::assertSame($first, $second);
+        self::assertSame(1, $this->remoteReads);
+    }
+
+    public function testCopyReCopiesWhenCachedTmpFileWasRemoved(): void
+    {
+        $copier = $this->createCopier();
+
+        $first = $copier->copy('catalog/product/a/b/image.jpg');
+        unset($this->written[$first]);
+        $second = $copier->copy('catalog/product/a/b/image.jpg');
+
+        self::assertSame($first, $second);
+        self::assertSame(2, $this->remoteReads);
+    }
+
+    public function testDestructorDeletesCreatedTmpFile(): void
+    {
+        $copier = $this->createCopier();
+
+        $tmpFile = $copier->copy('catalog/product/a/b/image.jpg');
+        unset($copier);
+
+        self::assertSame([$tmpFile], $this->deleted);
     }
 
     private function createCopier(): TmpFileCopier

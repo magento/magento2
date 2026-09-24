@@ -98,7 +98,7 @@ class TmpFileCopier
             return $filePath;
         }
 
-        if (isset($this->tmpFiles[$filePath])) {
+        if (isset($this->tmpFiles[$filePath]) && $this->tmpDirectoryWrite->isFile($this->tmpFiles[$filePath])) {
             return $this->tmpFiles[$filePath];
         }
 
@@ -111,8 +111,8 @@ class TmpFileCopier
                 . $this->tmpFilePrefix . '_' . hash('sha256', $filePath) . ($extension === false ? '' : $extension);
             $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
             if ($this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content) >= 0) {
+                $this->tmpFiles[$filePath] = $tmpPath;
                 $filePath = $tmpPath;
-                $this->tmpFiles[$tmpPath] = $tmpPath;
             }
         }
 
