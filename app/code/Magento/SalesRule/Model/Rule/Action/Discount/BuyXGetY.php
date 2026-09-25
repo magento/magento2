@@ -41,7 +41,7 @@ class BuyXGetY extends AbstractDiscount
 
         $x = $rule->getDiscountStep();
         $y = $rule->getDiscountAmount();
-        if (!$x || $y > $x) {
+        if (!$x) {
             return $discountData;
         }
         $buyAndDiscountQty = $x + $y;
