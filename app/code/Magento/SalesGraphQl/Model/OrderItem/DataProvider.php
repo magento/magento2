@@ -65,6 +65,13 @@ class DataProvider
     private $orderItemList = [];
 
     /**
+     * Orders already loaded upstream, keyed by entity id, so the item load does not reload them.
+     *
+     * @var OrderInterface[]
+     */
+    private $providedOrders = [];
+
+    /**
      * @param OrderItemRepositoryInterface $orderItemRepository
      * @param ProductRepositoryInterface $productRepository
      * @param OrderRepositoryInterface $orderRepository
@@ -99,6 +106,16 @@ class DataProvider
             $this->orderItemList = [];
             $this->orderItemIds[] = $orderItemId;
         }
+    }
+
+    /**
+     * Provide an already-loaded order so the item fetch can reuse it instead of reloading it from the DB
+     *
+     * @param OrderInterface $order
+     */
+    public function addOrder(OrderInterface $order): void
+    {
+        $this->providedOrders[(int)$order->getEntityId()] = $order;
     }
 
     /**
@@ -207,22 +224,27 @@ class DataProvider
      */
     private function fetchOrders(array $orderItems): array
     {
-        $orderIds = array_map(
-            function ($orderItem) {
-                return $orderItem->getOrderId();
-            },
-            $orderItems
-        );
-
-        $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter('entity_id', $orderIds, 'in')
-            ->create();
-        $orders = $this->orderRepository->getList($searchCriteria)->getItems();
-
-        $orderList = [];
-        foreach ($orders as $order) {
-            $orderList[$order->getEntityId()] = $order;
+        // Start from orders the caller already loaded (e.g. the customer's order list resolver) so they
+        // are not queried again, and only load the ids that were not provided.
+        $orderList = $this->providedOrders;
+        $missingOrderIds = [];
+        foreach ($orderItems as $orderItem) {
+            $orderId = (int)$orderItem->getOrderId();
+            if (!isset($orderList[$orderId])) {
+                $missingOrderIds[$orderId] = $orderId;
+            }
         }
+
+        if (!empty($missingOrderIds)) {
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->addFilter('entity_id', $missingOrderIds, 'in')
+                ->create();
+            $orders = $this->orderRepository->getList($searchCriteria)->getItems();
+            foreach ($orders as $order) {
+                $orderList[(int)$order->getEntityId()] = $order;
+            }
+        }
+
         return $orderList;
     }
 
