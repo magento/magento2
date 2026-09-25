@@ -8,6 +8,7 @@ namespace Magento\CatalogGraphQl\Model\Config;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ModelAttributeValue;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\CollectionFactory;
 use Magento\EavGraphQl\Model\Resolver\Query\Type;
@@ -95,6 +96,10 @@ class AttributeReader implements ReaderInterface
                         'arguments' => [],
                         'deprecated' => ['reason' => 'Use the `custom_attributes` field instead.'],
                     ];
+                    // Product source arrays hold the Product object under 'model', hiding this attribute's value
+                    if ($attributeCode === 'model') {
+                        $config[$typeName]['fields'][$attributeCode]['resolver'] = ModelAttributeValue::class;
+                    }
                 }
             }
         }
