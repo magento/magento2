@@ -19,6 +19,7 @@
                         <label>Report URI</label>
                         <comment>URI to report CSP violations on storefront. Used for all storefront pages that don't have own URI configured above.</comment>
                         <validate>validate-url</validate>
+                        <backend_model>Magento\Csp\Model\Config\Backend\ReportUri</backend_model>
                     </field>
                 </group>
                 <group id="admin" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -27,6 +28,7 @@
                         <label>Report URI</label>
                         <comment>URI to report CSP violations in admin area. Used for all admin pages that don't have own URI configured above.</comment>
                         <validate>validate-url</validate>
+                        <backend_model>Magento\Csp\Model\Config\Backend\ReportUri</backend_model>
                     </field>
                 </group>
             </group>
