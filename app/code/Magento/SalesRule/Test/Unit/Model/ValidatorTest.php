@@ -125,7 +125,10 @@ class ValidatorTest extends TestCase
                 'getCustomAttributesCodes',
                 'getShippingAmountForDiscount',
                 'getBaseShippingAmountForDiscount',
-                'setCartFixedRules'
+                'getShippingAmount',
+                'getBaseShippingAmount',
+                'getCartFixedRules',
+                'setCartFixedRules',
             ]
         );
 
@@ -161,7 +164,11 @@ class ValidatorTest extends TestCase
                 'getQuoteTotalsForMultiShipping',
                 'getQuoteTotalsForRegularShipping',
                 'getBaseRuleTotals',
-                'getAvailableDiscountAmount'])
+                'getAvailableDiscountAmount',
+                'getCartFixedShippingRuleBalance',
+                'calculateSingleShippingCartFixedDiscount',
+                'syncQuoteCartFixedRuleBalance',
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var Validator|MockObject $validator */
@@ -705,6 +712,7 @@ class ValidatorTest extends TestCase
      * @param float $quoteBaseSubTotal
      *
      * @return Address|MockObject
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setupAddressMock(
         float $shippingAmount = 0.0,
@@ -720,7 +728,10 @@ class ValidatorTest extends TestCase
                 'getExtensionAttributes',
                 'isVirtual',
                 'setAppliedRuleIds',
-                'getBaseSubtotal'
+                'getBaseSubtotal',
+                'getCartFixedRules',
+                'setCartFixedRules',
+                'getIsMultiShipping'
             ]
         );
         $cartExtensionMock = $this->createPartialMockWithReflection(
@@ -742,6 +753,15 @@ class ValidatorTest extends TestCase
         $quoteMock->method('getBaseSubtotal')
             ->willReturn($quoteBaseSubTotal);
 
+        $quoteMock->method('getCartFixedRules')
+            ->willReturn([]);
+
+        $quoteMock->method('setCartFixedRules')
+            ->willReturnSelf();
+
+        $quoteMock->method('getIsMultiShipping')
+            ->willReturn(false);
+
         $this->cartFixedDiscountHelper
             ->method('getQuoteTotalsForRegularShipping')
             ->willReturn($quoteBaseSubTotal);
@@ -749,6 +769,26 @@ class ValidatorTest extends TestCase
         $this->cartFixedDiscountHelper
             ->method('getShippingDiscountAmount')
             ->willReturn($shippingAmount);
+
+        // Single-ship path: dual gate is false when either flag is false.
+        $this->cartFixedDiscountHelper
+            ->method('checkMultiShippingQuote')
+            ->willReturn(false);
+
+        $this->cartFixedDiscountHelper
+            ->method('getCartFixedShippingRuleBalance')
+            ->willReturnCallback(static function (...$args) {
+                /** @var Rule $rule */
+                $rule = $args[1];
+                return (float) $rule->getDiscountAmount();
+            });
+
+        $this->cartFixedDiscountHelper
+            ->method('calculateSingleShippingCartFixedDiscount')
+            ->willReturn([$shippingAmount, $shippingAmount]);
+
+        $this->cartFixedDiscountHelper
+            ->method('syncQuoteCartFixedRuleBalance');
 
         $quoteMock->method('getExtensionAttributes')
             ->willReturn($cartExtensionMock);
@@ -758,6 +798,18 @@ class ValidatorTest extends TestCase
 
         $this->addressMock->method('getBaseShippingAmountForDiscount')
             ->willReturn($shippingAmount);
+
+        $this->addressMock->method('getShippingAmount')
+            ->willReturn($shippingAmount);
+
+        $this->addressMock->method('getBaseShippingAmount')
+            ->willReturn($shippingAmount);
+
+        $this->addressMock->method('getCartFixedRules')
+            ->willReturn([]);
+
+        $this->addressMock->method('setCartFixedRules')
+            ->willReturnSelf();
 
         $this->addressMock->method('getQuote')
             ->willReturn($quoteMock);
@@ -860,5 +912,222 @@ class ValidatorTest extends TestCase
             'stop processing ignored when rule is not applied to items' => [true, false, 10.0],
             'no stop processing allows subsequent rules' => [false, true, 10.0],
         ];
+    }
+
+    /**
+     * Cart-fixed single shipping: seed remaining, cap via helper, sync quote ledger.
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testProcessShippingAmountCartFixedSingleShippingUsesRemainingHelper(): void
+    {
+        $shippingAmount = 5.0;
+        $remainingBalance = 5.0;
+        $ruleId = 7;
+        $discountQuote = 5.0;
+        $discountBase = 5.0;
+
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction', 'getId', 'getRuleId']
+        );
+        $ruleMock->method('getApplyToShipping')->willReturn(true);
+        $ruleMock->method('getDiscountAmount')->willReturn(56.0);
+        $ruleMock->method('getSimpleAction')->willReturn(Rule::CART_FIXED_ACTION);
+        $ruleMock->method('getId')->willReturn($ruleId);
+        $ruleMock->method('getRuleId')->willReturn($ruleId);
+
+        $iterator = new \ArrayIterator([$ruleMock]);
+        $this->ruleCollection->method('getIterator')->willReturn($iterator);
+        $this->utility->method('canProcessRule')->willReturn(true);
+
+        $this->priceCurrency->method('convert')->willReturn(56.0);
+        $this->priceCurrency->method('roundPrice')
+            ->willReturnCallback(static function ($price) {
+                return round((float) $price, 2);
+            });
+
+        $storeMock = $this->createMock(Store::class);
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getStore',
+                'getExtensionAttributes',
+                'isVirtual',
+                'setAppliedRuleIds',
+                'getBaseSubtotal',
+                'getCartFixedRules',
+                'setCartFixedRules',
+                'getIsMultiShipping',
+            ]
+        );
+        $quoteMock->method('getStore')->willReturn($storeMock);
+        $quoteMock->method('setAppliedRuleIds')->willReturnSelf();
+        $quoteMock->method('isVirtual')->willReturn(false);
+        $quoteMock->method('getBaseSubtotal')->willReturn(51.0);
+        $quoteMock->method('getCartFixedRules')->willReturn([$ruleId => $remainingBalance]);
+        $quoteMock->method('setCartFixedRules')->willReturnSelf();
+        $quoteMock->method('getIsMultiShipping')->willReturn(false);
+        $quoteMock->method('getExtensionAttributes')->willReturn(null);
+
+        $this->addressMock->method('getQuote')->willReturn($quoteMock);
+        $this->addressMock->method('getCustomAttributesCodes')->willReturn([]);
+        $this->addressMock->method('getShippingAmountForDiscount')->willReturn($shippingAmount);
+        $this->addressMock->method('getBaseShippingAmountForDiscount')->willReturn($shippingAmount);
+        $this->addressMock->method('getShippingAmount')->willReturn($shippingAmount);
+        $this->addressMock->method('getBaseShippingAmount')->willReturn($shippingAmount);
+        $this->addressMock->method('getCartFixedRules')->willReturn([]);
+        $this->addressMock->method('setCartFixedRules')->willReturnSelf();
+
+        // Dual gate short-circuits when getIsMultiShipping() is false, so
+        // checkMultiShippingQuote may not be invoked; stub only if it is.
+        $this->cartFixedDiscountHelper
+            ->method('checkMultiShippingQuote')
+            ->willReturn(false);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('getCartFixedShippingRuleBalance')
+            ->with($quoteMock, $ruleMock, $ruleId, false)
+            ->willReturn($remainingBalance);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('calculateSingleShippingCartFixedDiscount')
+            ->with(
+                $quoteMock,
+                $remainingBalance,
+                $shippingAmount,
+                $shippingAmount,
+                0.0,
+                0.0
+            )
+            ->willReturn([$discountQuote, $discountBase]);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('syncQuoteCartFixedRuleBalance')
+            ->with($quoteMock, $ruleId, 0.0);
+
+        // Multi proportional helpers must not be used on the single-ship path.
+        $this->cartFixedDiscountHelper
+            ->expects($this->never())
+            ->method('getQuoteTotalsForMultiShipping');
+        $this->cartFixedDiscountHelper
+            ->expects($this->never())
+            ->method('getShippingDiscountAmount');
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $this->assertInstanceOf(Validator::class, $this->model->processShippingAmount($this->addressMock));
+    }
+
+    /**
+     * Cart-fixed multi shipping keeps HEAD proportional helpers (not single-ship calculator).
+     *
+     * @return void
+     */
+    public function testProcessShippingAmountCartFixedMultiShippingUsesLegacyProportional(): void
+    {
+        $shippingAmount = 5.0;
+        $ruleId = 9;
+        $ruleDiscount = 30.0;
+        $proportionalDiscount = 3.75;
+
+        $ruleMock = $this->createPartialMockWithReflection(
+            Rule::class,
+            ['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction', 'getId', 'getRuleId']
+        );
+        $ruleMock->method('getApplyToShipping')->willReturn(true);
+        $ruleMock->method('getDiscountAmount')->willReturn($ruleDiscount);
+        $ruleMock->method('getSimpleAction')->willReturn(Rule::CART_FIXED_ACTION);
+        $ruleMock->method('getId')->willReturn($ruleId);
+        $ruleMock->method('getRuleId')->willReturn($ruleId);
+
+        $iterator = new \ArrayIterator([$ruleMock]);
+        $this->ruleCollection->method('getIterator')->willReturn($iterator);
+        $this->utility->method('canProcessRule')->willReturn(true);
+
+        $this->priceCurrency->method('convert')->willReturn($ruleDiscount);
+        $this->priceCurrency->method('roundPrice')
+            ->willReturnCallback(static function ($price) {
+                return round((float) $price, 2);
+            });
+
+        $storeMock = $this->createMock(Store::class);
+        $quoteMock = $this->createPartialMockWithReflection(
+            Quote::class,
+            [
+                'getStore',
+                'getExtensionAttributes',
+                'isVirtual',
+                'setAppliedRuleIds',
+                'getBaseSubtotal',
+                'getCartFixedRules',
+                'setCartFixedRules',
+                'getIsMultiShipping',
+            ]
+        );
+        $quoteMock->method('getStore')->willReturn($storeMock);
+        $quoteMock->method('setAppliedRuleIds')->willReturnSelf();
+        $quoteMock->method('isVirtual')->willReturn(false);
+        $quoteMock->method('getBaseSubtotal')->willReturn(30.0);
+        $quoteMock->method('getCartFixedRules')->willReturn([]);
+        $quoteMock->method('setCartFixedRules')->willReturnSelf();
+        $quoteMock->method('getIsMultiShipping')->willReturn(true);
+        $quoteMock->method('getExtensionAttributes')->willReturn(null);
+
+        $this->addressMock->method('getQuote')->willReturn($quoteMock);
+        $this->addressMock->method('getCustomAttributesCodes')->willReturn([]);
+        $this->addressMock->method('getShippingAmountForDiscount')->willReturn($shippingAmount);
+        $this->addressMock->method('getBaseShippingAmountForDiscount')->willReturn($shippingAmount);
+        $this->addressMock->method('getShippingAmount')->willReturn($shippingAmount);
+        $this->addressMock->method('getBaseShippingAmount')->willReturn($shippingAmount);
+        $this->addressMock->method('getCartFixedRules')->willReturn([]);
+        $this->addressMock->method('setCartFixedRules')->willReturnSelf();
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->atLeastOnce())
+            ->method('checkMultiShippingQuote')
+            ->with($quoteMock)
+            ->willReturn(true);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('getCartFixedShippingRuleBalance')
+            ->with($quoteMock, $ruleMock, $ruleId, true)
+            ->willReturn($ruleDiscount);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('getQuoteTotalsForMultiShipping')
+            ->with($quoteMock)
+            ->willReturn(40.0);
+
+        $this->cartFixedDiscountHelper
+            ->expects($this->once())
+            ->method('getShippingDiscountAmount')
+            ->willReturn($proportionalDiscount);
+
+        // Single-ship calculator and quote sync must not run on multi path.
+        $this->cartFixedDiscountHelper
+            ->expects($this->never())
+            ->method('calculateSingleShippingCartFixedDiscount');
+        $this->cartFixedDiscountHelper
+            ->expects($this->never())
+            ->method('syncQuoteCartFixedRuleBalance');
+
+        $this->model->init(
+            $this->model->getWebsiteId(),
+            $this->model->getCustomerGroupId(),
+            $this->model->getCouponCode()
+        );
+
+        $this->assertInstanceOf(Validator::class, $this->model->processShippingAmount($this->addressMock));
     }
 }
