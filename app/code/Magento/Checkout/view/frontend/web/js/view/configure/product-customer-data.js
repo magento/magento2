@@ -27,7 +27,7 @@ require([
             productQtyInput = productQtyInput || $(selectors.qtySelector);
 
             if (productQtyInput && productQty.toString() !== productQtyInput.val()) {
-                productQtyInput.val(productQty);
+                productQtyInput.val(productQty).trigger('input');
             }
         }
     },
