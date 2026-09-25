@@ -57,16 +57,6 @@
             </actionGroup>
         </before>
         <after>
-            <!--Delete category-->
-            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteSubcategory">
-                <argument name="categoryEntity" value="CategoryB"/>
-            </actionGroup>
-
-            <!-- Delete product -->
-            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
-                <argument name="sku" value="{{ConfigurableProduct1.sku}}"/>
-            </actionGroup>
-
             <!-- Goto, Stores > Attributes > Product > Filter by attribute label 'Color' > Edit-->
             <actionGroup ref="AdminNavigateToProductAttributeEditPageActionGroup" stepKey="navigateToColorProductAttribute2">
                 <argument name="ProductAttributeLabel" value="{{ConfigurableProduct1.color_label}}"/>
@@ -84,6 +74,16 @@
             <!-- Unassign product attribute from Default attribute set -->
             <actionGroup ref="AdminUnassignAttributeFromDefaultSetActionGroup" stepKey="unassignColorAttributeFromDefaultAttributeSet">
                 <argument name="ProductAttributeCode" value="color"/>
+            </actionGroup>
+
+            <!--Delete category-->
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteSubcategory">
+                <argument name="categoryEntity" value="CategoryB"/>
+            </actionGroup>
+
+            <!-- Delete product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="sku" value="{{ConfigurableProduct1.sku}}"/>
             </actionGroup>
 
             <!-- Admin Logout -->

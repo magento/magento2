@@ -645,8 +645,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      */
     public function beforeSave($product)
     {
-        // OPTIMIZATION: Start batching BEFORE any cache operations
-        // This captures the cache clean operation that was previously outside batching
+        // OPTIMIZATION: Use beginBatch()/endBatch() when supported (Symfony cache only); legacy backends safely fall back to individual save() calls.
         if (!$this->isBatchingActive && $this->cache && method_exists($this->cache, 'beginBatch')) {
             $this->cache->beginBatch();
             $this->isBatchingActive = true;
@@ -701,9 +700,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType impl
      */
     public function save($product)
     {
-        // OPTIMIZATION: Batch cache operations for performance
-        // Note: Batching may have already started in beforeSave()
-        // Don't start it again to avoid nested batching
+        // OPTIMIZATION: Use beginBatch()/endBatch() when supported (Symfony cache only); legacy backends safely fall back to individual save() calls.
         if (!$this->isBatchingActive && $this->cache && method_exists($this->cache, 'beginBatch')) {
             $this->cache->beginBatch();
             $this->isBatchingActive = true;
