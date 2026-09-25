@@ -17,10 +17,12 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Config;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\CommentFactory;
+use Magento\Sales\Model\Order\Invoice\Item;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\OrderFactory as SalesOrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory as CommentCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection as ItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory;
 use Magento\Sales\Model\ResourceModel\OrderFactory;
 use Magento\Store\Model\Store;
@@ -454,6 +456,89 @@ class InvoiceTest extends TestCase
         $this->model->cancel();
 
         self::assertEquals(Invoice::STATE_CANCELED, $this->model->getState());
+    }
+
+    public function testGetItemsOfNewInvoiceIsEmptyArray(): void
+    {
+        $this->assertSame([], $this->model->getItems());
+        $this->assertSame([], $this->model->getAllItems());
+    }
+
+    public function testAddItemAppendsNewItemsToItemsArray(): void
+    {
+        $this->model->setStoreId(3);
+        $first = $this->createInvoiceItem();
+        $second = $this->createInvoiceItem();
+        $persisted = $this->createInvoiceItem(15);
+
+        $this->model->addItem($first)->addItem($second)->addItem($persisted);
+
+        $this->assertSame([$first, $second], $this->model->getItems());
+        $this->assertSame([$first, $second], $this->model->getAllItems());
+        $this->assertSame($this->model, $persisted->getInvoice());
+        $this->assertSame(3, $persisted->getStoreId());
+    }
+
+    public function testGetItemsConvertsCollectionToArray(): void
+    {
+        $item = $this->createInvoiceItem(7);
+        $collection = $this->createMock(ItemCollection::class);
+        $collection->method('getItems')->willReturn([7 => $item]);
+
+        $this->model->setItems($collection);
+
+        $this->assertSame([7 => $item], $this->model->getItems());
+        $this->assertSame($item, $this->model->getItemById(7));
+        $this->model->addItem($newItem = $this->createInvoiceItem());
+        $this->assertSame([$item, $newItem], $this->model->getItems());
+    }
+
+    public function testGetItemsCollectionKeepsItemsAnArrayForSavedInvoice(): void
+    {
+        $item = $this->createInvoiceItem(7);
+        $collection = $this->createMock(ItemCollection::class);
+        $collection->expects($this->once())->method('setInvoiceFilter')->with(5)->willReturnSelf();
+        $collection->method('getIterator')->willReturn(new \ArrayIterator([7 => $item]));
+        $collection->method('getItems')->willReturn([7 => $item]);
+        $invoice = $this->createInvoiceWithItemCollections($collection);
+        $invoice->setId(5);
+
+        $this->assertSame($collection, $invoice->getItemsCollection());
+        $this->assertSame([7 => $item], $invoice->getItems());
+        $this->assertSame($invoice, $item->getInvoice());
+    }
+
+    public function testGetItemsCollectionOfNewInvoiceContainsAddedItems(): void
+    {
+        $item = $this->createInvoiceItem();
+        $collection = $this->createMock(ItemCollection::class);
+        $collection->method('setInvoiceFilter')->with(null)->willReturnSelf();
+        $collection->expects($this->once())->method('load')->willReturnSelf();
+        $collection->expects($this->once())->method('removeAllItems')->willReturnSelf();
+        $collection->expects($this->once())->method('addItem')->with($item)->willReturnSelf();
+        $invoice = $this->createInvoiceWithItemCollections($collection);
+        $invoice->addItem($item);
+
+        $this->assertSame($collection, $invoice->getItemsCollection());
+        $this->assertSame([$item], $invoice->getItems());
+    }
+
+    private function createInvoiceItem(?int $id = null): Item
+    {
+        $item = $this->helperManager->getObject(Item::class);
+        $item->setId($id);
+        return $item;
+    }
+
+    private function createInvoiceWithItemCollections(ItemCollection ...$collections): Invoice
+    {
+        $collectionFactory = $this->createMock(CollectionFactory::class);
+        $collectionFactory->method('create')->willReturnOnConsecutiveCalls(...$collections);
+
+        return $this->helperManager->getObject(
+            Invoice::class,
+            ['invoiceItemCollectionFactory' => $collectionFactory]
+        );
     }
 
     /**
