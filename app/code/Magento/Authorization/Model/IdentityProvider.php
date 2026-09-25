@@ -22,6 +22,7 @@ class IdentityProvider implements IdentityProviderInterface
      * User context identity type map
      */
     private const USER_CONTEXT_IDENTITY_TYPE_MAP = [
+        UserContextInterface::USER_TYPE_INTEGRATION => ContextInterface::IDENTITY_TYPE_ADMIN,
         UserContextInterface::USER_TYPE_CUSTOMER => ContextInterface::IDENTITY_TYPE_CUSTOMER,
         UserContextInterface::USER_TYPE_ADMIN => ContextInterface::IDENTITY_TYPE_ADMIN
     ];
