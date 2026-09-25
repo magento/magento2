@@ -12,6 +12,7 @@ use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute\Save;
 use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Catalog\Model\Product\Attribute\FilterableAllowedInputTypes;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Catalog\Model\Product\Attribute\Frontend\Inputtype\Presentation;
 use Magento\Catalog\Model\Product\AttributeSet\Build;
@@ -134,8 +135,12 @@ class SaveTest extends AttributeTest
     /**
      * @var Session|MockObject
      */
-
     private $sessionMock;
+
+    /**
+     * @var FilterableAllowedInputTypes
+     */
+    private $filterableAllowedInputTypes;
 
     protected function setUp(): void
     {
@@ -157,6 +162,9 @@ class SaveTest extends AttributeTest
         $this->redirectMock = $this->createMock(ResultRedirect::class);
         $this->jsonResultMock = $this->createMock(ResultJson::class);
         $this->productAttributeMock = $this->createMock(Attribute::class);
+        $this->filterableAllowedInputTypes = new FilterableAllowedInputTypes(
+            ['boolean', 'select', 'multiselect', 'price']
+        );
 
         $this->buildFactoryMock->expects($this->any())
             ->method('create')
@@ -189,6 +197,7 @@ class SaveTest extends AttributeTest
             'formDataSerializer' => $this->formDataSerializerMock,
             'attributeCodeValidator' => $this->attributeCodeValidatorMock,
             'presentation' => $this->presentationMock,
+            'filterableAllowedInputTypes' => $this->filterableAllowedInputTypes,
             '_session' => $this->sessionMock
         ]);
     }
@@ -259,6 +268,9 @@ class SaveTest extends AttributeTest
             if ($type === Presentation::class) {
                 return $this->presentationMock;
             }
+            if ($type === FilterableAllowedInputTypes::class) {
+                return $this->filterableAllowedInputTypes;
+            }
             return null;
         });
         ObjectManager::setInstance($objectManagerMock);
@@ -279,6 +291,7 @@ class SaveTest extends AttributeTest
                 // Intentionally omit 'formDataSerializer' to trigger fallback
                 'formDataSerializer' => null,
                 'presentation' => $this->presentationMock,
+                'filterableAllowedInputTypes' => $this->filterableAllowedInputTypes,
                 '_session' => $this->sessionMock
             ]);
 
@@ -631,6 +644,7 @@ class SaveTest extends AttributeTest
             'layoutFactory' => $this->layoutFactoryMock,
             'formDataSerializer' => $this->formDataSerializerMock,
             'presentation' => $this->presentationMock,
+            'filterableAllowedInputTypes' => $this->filterableAllowedInputTypes,
             '_session' => $this->sessionMock
         ]);
 
@@ -960,6 +974,121 @@ class SaveTest extends AttributeTest
         $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
     }
 
+    public function testExecuteRejectsFilterableForUnsupportedInputType()
+    {
+        $data = [
+            'frontend_input' => 'text',
+            'is_filterable' => '1',
+        ];
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['isAjax', null, null],
+                ['serialized_options', '[]', ''],
+                ['attribute_code', null, 'issue_33055_text'],
+            ]);
+        $this->formDataSerializerMock->expects($this->once())->method('unserialize')->with('')->willReturn([]);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
+        $this->inputTypeValidatorMock->method('isValid')->with('text')->willReturn(true);
+        $this->presentationMock->method('convertPresentationDataToInputType')->willReturnCallback(function ($arg) {
+            return $arg;
+        });
+        $this->productHelperMock->method('getAttributeSourceModelByInputType')->with('text')->willReturn(null);
+        $this->productHelperMock->method('getAttributeBackendModelByInputType')->with('text')->willReturn(null);
+        $this->productAttributeMock->expects($this->never())->method('getDefaultValueByInput');
+        $this->productAttributeMock->expects($this->never())->method('save');
+        $this->messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with(
+                $this->callback(static function ($message) {
+                    return (string)$message ===
+                        'Can be used only with catalog input type Yes/No, Dropdown, Multiple Select and Price.';
+                })
+            );
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('catalog/*/edit', [
+                'attribute_id' => null,
+                '_current' => true,
+            ])
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
+    }
+
+    public function testExecuteRejectsFilterableInSearchForUnsupportedInputType()
+    {
+        $data = [
+            'frontend_input' => 'textarea',
+            'is_filterable_in_search' => '1',
+        ];
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['isAjax', null, null],
+                ['serialized_options', '[]', ''],
+                ['attribute_code', null, 'issue_33055_textarea'],
+            ]);
+        $this->formDataSerializerMock->expects($this->once())->method('unserialize')->with('')->willReturn([]);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
+        $this->inputTypeValidatorMock->method('isValid')->with('textarea')->willReturn(true);
+        $this->presentationMock->method('convertPresentationDataToInputType')->willReturnCallback(function ($arg) {
+            return $arg;
+        });
+        $this->productHelperMock->method('getAttributeSourceModelByInputType')->with('textarea')->willReturn(null);
+        $this->productHelperMock->method('getAttributeBackendModelByInputType')->with('textarea')->willReturn(null);
+        $this->productAttributeMock->expects($this->never())->method('save');
+        $this->messageManager->expects($this->once())->method('addErrorMessage');
+        $this->resultFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(ResultFactory::TYPE_REDIRECT)
+            ->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->any())->method('setPath')->willReturnSelf();
+
+        $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
+    }
+
+    public function testExecuteAllowsFilterableForSupportedInputType()
+    {
+        $data = [
+            'frontend_input' => 'select',
+            'is_filterable' => '1',
+        ];
+
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap([
+                ['isAjax', null, null],
+                ['serialized_options', '[]', ''],
+                ['attribute_code', null, 'filterable_select'],
+            ]);
+        $this->formDataSerializerMock->expects($this->once())->method('unserialize')->with('')->willReturn([]);
+        $this->requestMock->expects($this->once())->method('getPostValue')->willReturn($data);
+        $this->inputTypeValidatorMock->method('isValid')->with('select')->willReturn(true);
+        $this->presentationMock->method('convertPresentationDataToInputType')->willReturnCallback(function ($arg) {
+            return $arg;
+        });
+        $this->productHelperMock->method('getAttributeSourceModelByInputType')->with('select')->willReturn(null);
+        $this->productHelperMock->method('getAttributeBackendModelByInputType')->with('select')->willReturn(null);
+        $this->productAttributeMock->method('getDefaultValueByInput')->with('select')->willReturn(null);
+        $this->productAttributeMock->expects($this->once())
+            ->method('addData')
+            ->with($this->callback(static function ($arg) {
+                return (int)$arg['is_filterable'] === 1;
+            }));
+        $this->messageManager->expects($this->never())->method('addErrorMessage');
+        $this->resultFactoryMock->expects($this->any())->method('create')->willReturn($this->redirectMock);
+        $this->redirectMock->expects($this->any())->method('setPath')->willReturnSelf();
+
+        $this->assertInstanceOf(ResultRedirect::class, $this->getModel()->execute());
+    }
+
     private function createAttributeFactoryForGroupCollectionTest()
     {
         $attributeModel = $this->createPartialMock(
@@ -1032,6 +1161,7 @@ class SaveTest extends AttributeTest
             'layoutFactory' => $this->layoutFactoryMock,
             'formDataSerializer' => $this->formDataSerializerMock,
             'presentation' => $this->presentationMock,
+            'filterableAllowedInputTypes' => $this->filterableAllowedInputTypes,
             '_session' => $this->sessionMock
         ]);
     }
