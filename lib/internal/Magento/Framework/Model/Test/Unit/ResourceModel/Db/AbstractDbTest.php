@@ -328,14 +328,10 @@ class AbstractDbTest extends TestCase
         $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $registryMock = $this->createMock(Registry::class);
-        $abstractModelMock = $this->createMock(
+        $abstractModelMock = $this->createPartialMockWithReflection(
             AbstractModel::class,
-            [$contextMock, $registryMock],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit', 'getData']
+            ['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit', 'getData'],
+            [$contextMock, $registryMock]
         );
         $this->_resourcesMock->expects($this->any())
             ->method('getConnection')
@@ -393,14 +389,10 @@ class AbstractDbTest extends TestCase
     {
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $registryMock = $this->createMock(Registry::class);
-        $abstractModelMock = $this->createMock(
+        $abstractModelMock = $this->createPartialMockWithReflection(
             AbstractModel::class,
-            [$contextMock, $registryMock],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup', 'getOrigData']
+            ['__wakeup', 'getOrigData'],
+            [$contextMock, $registryMock]
         );
         $abstractModelMock->expects($this->any())->method('getOrigData')->willReturn(false);
         $this->assertTrue($this->_model->hasDataChanged($abstractModelMock));
@@ -420,14 +412,10 @@ class AbstractDbTest extends TestCase
         );
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $registryMock = $this->createMock(Registry::class);
-        $abstractModelMock = $this->createMock(
+        $abstractModelMock = $this->createPartialMockWithReflection(
             AbstractModel::class,
-            [$contextMock, $registryMock],
-            '',
-            false,
-            true,
-            true,
-            ['__wakeup', 'getOrigData', 'getData']
+            ['__wakeup', 'getOrigData', 'getData'],
+            [$contextMock, $registryMock]
         );
         $mainTableProperty = new ReflectionProperty(
             AbstractDb::class,
@@ -666,5 +654,65 @@ class AbstractDbTest extends TestCase
         $object->expects($this->once())->method('setHasDataChanges')->with(true);
 
         $model->save($object);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowableDuringSaveTriggersRollback(): void
+    {
+        $this->expectException(\TypeError::class);
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->expects($this->once())->method('rollback');
+
+        /** @var AbstractDb|MockObject $model */
+        $model = $this->getMockBuilder(AbstractDb::class)->disableOriginalConstructor()
+            ->onlyMethods(['getConnection', '_construct'])
+            ->getMock();
+        $model->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        /** @var AbstractModel|MockObject $object */
+        $object = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $object->expects($this->once())->method('hasDataChanges')->willReturn(true);
+        $object->expects($this->once())->method('beforeSave')->willThrowException(new \TypeError('Bad type'));
+        $object->expects($this->once())->method('setHasDataChanges')->with(true);
+
+        $model->save($object);
+    }
+
+    /**
+     * @return void
+     */
+    public function testThrowableDuringDeleteTriggersRollback(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
+        $abstractModelMock = $this->getMockBuilder(AbstractModel::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['__wakeup', 'getId', 'beforeDelete', 'afterDelete', 'afterDeleteCommit', 'getData'])
+            ->getMock();
+        $this->_resourcesMock->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($connectionInterfaceMock);
+
+        $connectionMock = $this->createMock(AdapterInterface::class);
+        $this->transactionManagerMock->expects($this->once())
+            ->method('start')
+            ->with($connectionInterfaceMock)
+            ->willReturn($connectionMock);
+
+        $this->transactionManagerMock->expects($this->once())->method('rollBack');
+        $this->transactionManagerMock->expects($this->never())->method('commit');
+
+        $abstractModelMock->expects($this->once())
+            ->method('beforeDelete')
+            ->willThrowException(new \TypeError('Bad type'));
+        $abstractModelMock->expects($this->never())->method('afterDelete');
+        $abstractModelMock->expects($this->never())->method('afterDeleteCommit');
+
+        $this->_model->delete($abstractModelMock);
     }
 }
