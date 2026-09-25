@@ -6,8 +6,6 @@
 
 /**
  * Extended version of \Magento\Framework\Archive\Tar that supports filtering
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Backup\Archive;
 

@@ -6,8 +6,6 @@
 
 /**
  * Class to work with full filesystem and database backups
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Backup;
 
