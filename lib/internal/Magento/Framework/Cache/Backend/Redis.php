@@ -222,17 +222,53 @@ class Redis extends \Cm_Cache_Backend_Redis implements AtomicPairBackendInterfac
             self::FIELD_INF => $lifetime === null ? 1 : 0,
         ]);
 
+        $this->_queueExpiration($id, $lifetime);
+        $this->_queueAddedTags($id, $tags);
+        $this->_queueRemovedTags($id, $tags, $oldTags);
+        $this->_queueIdTracking($id);
+    }
+
+    /**
+     * Queue the cache entry expiration when one is configured.
+     *
+     * @param string $id
+     * @param int|false|null $lifetime
+     * @return void
+     */
+    private function _queueExpiration(string $id, $lifetime): void
+    {
         if ($lifetime !== false && $lifetime !== null) {
             $this->_redis->expire(self::PREFIX_KEY . $id, min($lifetime, self::MAX_LIFETIME));
         }
+    }
 
+    /**
+     * Queue tag index updates for tags assigned to the cache entry.
+     *
+     * @param string $id
+     * @param array $tags
+     * @return void
+     */
+    private function _queueAddedTags(string $id, array $tags): void
+    {
         if ($tags) {
             $this->_redis->sAdd(self::SET_TAGS, $tags);
             foreach ($tags as $tag) {
                 $this->_redis->sAdd(self::PREFIX_TAG_IDS . $tag, $id);
             }
         }
+    }
 
+    /**
+     * Queue removal of tag index entries no longer assigned to the cache entry.
+     *
+     * @param string $id
+     * @param array $tags
+     * @param array $oldTags
+     * @return void
+     */
+    private function _queueRemovedTags(string $id, array $tags, array $oldTags): void
+    {
         if ($remTags = ($oldTags ? array_diff($oldTags, $tags) : false)) {
             foreach ($remTags as $tag) {
                 if ($tag !== '') {
@@ -240,7 +276,16 @@ class Redis extends \Cm_Cache_Backend_Redis implements AtomicPairBackendInterfac
                 }
             }
         }
+    }
 
+    /**
+     * Queue the cache id in the global index when not-matching tag operations are enabled.
+     *
+     * @param string $id
+     * @return void
+     */
+    private function _queueIdTracking(string $id): void
+    {
         if ($this->_notMatchingTags) {
             $this->_redis->sAdd(self::SET_IDS, $id);
         }
