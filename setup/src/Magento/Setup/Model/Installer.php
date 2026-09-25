@@ -504,7 +504,16 @@ class Installer
             }
         }
         if (!$dryRun) {
-            $this->deploymentConfigWriter->saveConfig([ConfigFilePool::APP_CONFIG => ['modules' => $result]], true);
+            $sortedResult = $result;
+            $sortedCurrentModules = $currentModules;
+            ksort($sortedResult);
+            ksort($sortedCurrentModules);
+            if ($sortedResult !== $sortedCurrentModules) {
+                $this->deploymentConfigWriter->saveConfig(
+                    [ConfigFilePool::APP_CONFIG => ['modules' => $result]],
+                    true
+                );
+            }
         }
         return $result;
     }
