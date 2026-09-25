@@ -18,7 +18,6 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -92,18 +91,17 @@ class CategoryListTest extends TestCase
 
         $categoryFirst = $this->createMock(Category::class);
         $categorySecond = $this->createMock(Category::class);
+        $items = [$categoryIdFirst => $categoryFirst, $categoryIdSecond => $categorySecond];
 
         /** @var SearchCriteriaInterface|MockObject $searchCriteria */
         $searchCriteria = $this->createMock(SearchCriteriaInterface::class);
 
         $collection = $this->createMock(Collection::class);
+        $collection->expects($this->once())->method('addAttributeToSelect')->with('*');
+        $collection->expects($this->once())->method('load');
+        $collection->expects($this->once())->method('getItems')->willReturn($items);
         $collection->expects($this->once())->method('getSize')->willReturn($totalCount);
-        $collection->expects($this->once())->method('getData')->willReturn(
-            [['entity_id' => $categoryIdFirst], ['entity_id' => $categoryIdSecond]]
-        );
-        $collection->method('getEntity')->willReturn(
-            new DataObject(['id_field_name' => 'entity_id'])
-        );
+        $collection->expects($this->never())->method('getData');
 
         $this->collectionProcessorMock->expects($this->once())
             ->method('process')
@@ -111,13 +109,10 @@ class CategoryListTest extends TestCase
 
         $searchResult = $this->createMock(CategorySearchResultsInterface::class);
         $searchResult->expects($this->once())->method('setSearchCriteria')->with($searchCriteria);
-        $searchResult->expects($this->once())->method('setItems')->with([$categoryFirst, $categorySecond]);
+        $searchResult->expects($this->once())->method('setItems')->with($items);
         $searchResult->expects($this->once())->method('setTotalCount')->with($totalCount);
 
-        $this->categoryRepository->expects($this->exactly(2))
-            ->method('get')
-            ->willReturnMap([[$categoryIdFirst, $categoryFirst], [$categoryIdSecond, $categorySecond]])
-            ->willReturn($categoryFirst);
+        $this->categoryRepository->expects($this->never())->method('get');
 
         $this->categorySearchResultsFactory->expects($this->once())->method('create')->willReturn($searchResult);
         $this->categoryCollectionFactory->expects($this->once())->method('create')->willReturn($collection);
