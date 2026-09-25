@@ -247,4 +247,20 @@ class AuthenticationPopupTest extends TestCase
 
         $this->assertEquals(json_encode($result), $this->model->getSerializedConfig());
     }
+
+    /**
+     * Deprecated getCustomerRegisterUrlUrl() must keep returning the same value as its replacement.
+     */
+    public function testGetCustomerRegisterUrlUrlIsDeprecatedAliasForGetCustomerRegisterUrl(): void
+    {
+        $this->urlBuilderMock->expects($this->any())
+            ->method('getUrl')
+            ->with('customer/account/create', [])
+            ->willReturn('customer/account/create/url');
+
+        $this->assertEquals(
+            $this->model->getCustomerRegisterUrl(),
+            $this->model->getCustomerRegisterUrlUrl()
+        );
+    }
 }
