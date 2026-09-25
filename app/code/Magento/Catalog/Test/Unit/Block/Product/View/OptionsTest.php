@@ -111,4 +111,68 @@ class OptionsTest extends TestCase
         // The anonymous class already implements setOption to return $this
         $this->assertEquals('html', $this->_optionsBlock->getOptionHtml($option));
     }
+
+    /**
+     * @return void
+     */
+    public function testGetJsonConfig()
+    {
+        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $optionMock = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
+
+        $productMock->method('getOptions')->willReturn([$optionMock]);
+
+        $optionMock->method('getId')->willReturn(1);
+        $optionMock->method('hasValues')->willReturn(false);
+        $optionMock->method('getPrice')->with(true)->willReturn(35.67);
+        $optionMock->method('getRegularPrice')->willReturn(35.67);
+        $optionMock->method('getPriceType')->willReturn('fixed');
+        $optionMock->method('getProduct')->willReturn($productMock);
+
+        $pricingHelperMock = $this->createMock(\Magento\Framework\Pricing\Helper\Data::class);
+        $pricingHelperMock->method('currency')->with(35.67, false, false)->willReturn(17.842134);
+
+        $catalogDataMock = $this->createMock(\Magento\Catalog\Helper\Data::class);
+        $catalogDataMock->method('getTaxPrice')
+            ->willReturnMap([
+                [$productMock, 17.842134, true, null, null, null, null, null, false, 17.842134],
+                [$productMock, 17.842134, false, null, null, null, null, null, false, 17.842134],
+                [$productMock, 35.67, true, null, null, null, null, null, false, 35.67]
+            ]);
+
+        $jsonEncoderMock = $this->createMock(\Magento\Framework\Json\EncoderInterface::class);
+        $jsonEncoderMock->method('encode')->willReturnCallback('json_encode');
+
+        $optionsBlock = $this->_objectHelper->getObject(
+            Options::class,
+            [
+                'pricingHelper' => $pricingHelperMock,
+                'catalogData' => $catalogDataMock,
+                'jsonEncoder' => $jsonEncoderMock,
+            ]
+        );
+        $optionsBlock->setProduct($productMock);
+
+        $expectedConfig = [
+            1 => [
+                'prices' => [
+                    'oldPrice' => [
+                        'amount' => 17.842134,
+                        'adjustments' => []
+                    ],
+                    'basePrice' => [
+                        'amount' => 17.842134
+                    ],
+                    'finalPrice' => [
+                        'amount' => 17.842134
+                    ]
+                ],
+                'type' => 'fixed',
+                'name' => null
+            ]
+        ];
+
+        $jsonConfig = $optionsBlock->getJsonConfig();
+        $this->assertEquals(json_encode($expectedConfig), $jsonConfig);
+    }
 }
