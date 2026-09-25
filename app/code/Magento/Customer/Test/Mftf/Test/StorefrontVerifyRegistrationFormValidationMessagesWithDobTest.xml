@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2025 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyRegistrationFormValidationMessagesWithDobTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Registration Form Validation"/>
+            <title value="Verify validation error messages display consistently on registration form across multiple submissions when Date of Birth is required"/>
+            <description value="Verify that all required fields on customer registration form, including Date of Birth when enabled, display proper mage-error validation messages when form is submitted without filling any data"/>
+            <severity value="MINOR"/>
+            <testCaseId value="AC-18001"/>
+            <group value="customer"/>
+            <group value="customer_registration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="showDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.required}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminCustomerShowDateOfBirthActionGroup" stepKey="hideDateOfBirth">
+                <argument name="value" value="{{ShowDateOfBirth.no}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Step 3: Navigate to customer registration page -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <!-- Step 4: Submit form without filling any data (Iteration 1) -->
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButton"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButton"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButton"/>
+        <waitForPageLoad stepKey="waitForValidation"/>
+        <!-- Verify all required fields display proper error messages -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration1"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('dob-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertDobErrorIteration1"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('dob-error')}}" stepKey="assertDobErrorClassIteration1"/>
+        <!-- Step 5: Refresh the browser page -->
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <!-- Step 6: Submit form without filling any data (Iteration 2) -->
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButtonAfterRefresh"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButtonAfterRefresh"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButtonAfterRefresh"/>
+        <waitForPageLoad stepKey="waitForValidationAfterRefresh"/>
+        <!-- Verify all validation messages - Iteration 2 -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration2"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('dob-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertDobErrorIteration2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('dob-error')}}" stepKey="assertDobErrorClassIteration2"/>
+        <!-- Step 7: Repeat steps 5 & 6 (Iteration 3) -->
+        <reloadPage stepKey="refreshPageThirdTime"/>
+        <waitForPageLoad stepKey="waitForPageLoadThirdTime"/>
+        <scrollTo selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="scrollToCreateButtonThirdTime"/>
+        <waitForElementClickable selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="waitForCreateAccountButtonThirdTime"/>
+        <click selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}" stepKey="clickCreateAccountButtonThirdTime"/>
+        <waitForPageLoad stepKey="waitForValidationThirdTime"/>
+        <!-- Verify all validation messages - Iteration 3 -->
+        <actionGroup ref="StorefrontAssertCustomerRegistrationValidationMessagesActionGroup" stepKey="assertValidationMessagesIteration3"/>
+        <waitForText selector="{{StorefrontCustomerCreateFormSection.fieldErrorByFieldId('dob-error')}}" userInput="{{ProductWarningMessage.require_Message}}" stepKey="assertDobErrorIteration3"/>
+        <waitForElementVisible selector="{{StorefrontCustomerCreateFormSection.fieldErrorWithClassByFieldId('dob-error')}}" stepKey="assertDobErrorClassIteration3"/>
+        <!-- Step 8: Fill form with valid data and complete registration -->
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.dobField}}" userInput="{{EN_US_DATE.short4DigitYear}}" stepKey="fillDob"/>
+        <!-- Dismiss the datepicker overlay so it cannot intercept the next click -->
+        <pressKey selector="{{StorefrontCustomerCreateFormSection.dobField}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="closeDobDatepicker"/>
+        <!-- Step 9: Click on save button -->
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <!-- Verify success message is displayed -->
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="{{customerSavedSuccessfullyMessage.value}}"/>
+        </actionGroup>
+    </test>
+</tests>
