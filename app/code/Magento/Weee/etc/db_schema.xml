@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="weee_tax" resource="default" engine="innodb" comment="Weee Tax">
-        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="true"
                 comment="Value ID"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
