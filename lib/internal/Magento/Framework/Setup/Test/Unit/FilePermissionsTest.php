@@ -248,12 +248,45 @@ class FilePermissionsTest extends TestCase
     {
         $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
         foreach ($directoryMethods as $method) {
-            $this->directoryWriteMock->expects($this->exactly(2))
+            $this->directoryWriteMock->expects($this->once())
                 ->method($method)
                 ->willReturn(true);
         }
 
         $this->assertEmpty($this->filePermissions->getMissingWritableDirectoriesForDbUpgrade());
+    }
+
+    /**
+     * Database upgrade must not require a writable app/etc (read-only deployments keep config.php and env.php
+     * read-only).
+     *
+     * @return void
+     */
+    public function testGetMissingWritableDirectoriesForDbUpgradeDoesNotRequireWritableConfigDirectory(): void
+    {
+        $readOnlyConfigDirectory = $this->createMock(Write::class);
+        $readOnlyConfigDirectory->method('isExist')->willReturn(true);
+        $readOnlyConfigDirectory->method('isDirectory')->willReturn(true);
+        $readOnlyConfigDirectory->method('isReadable')->willReturn(true);
+        $readOnlyConfigDirectory->method('isWritable')->willReturn(false);
+
+        $this->directoryWriteMock->method('isExist')->willReturn(true);
+        $this->directoryWriteMock->method('isDirectory')->willReturn(true);
+        $this->directoryWriteMock->method('isReadable')->willReturn(true);
+        $this->directoryWriteMock->method('isWritable')->willReturn(true);
+
+        $filesystemMock = $this->createMock(Filesystem::class);
+        $filesystemMock->method('getDirectoryWrite')
+            ->willReturnCallback(
+                fn (string $code) => $code === DirectoryList::CONFIG
+                    ? $readOnlyConfigDirectory
+                    : $this->directoryWriteMock
+            );
+        $this->directoryListMock->expects($this->never())->method('getPath');
+
+        $filePermissions = new FilePermissions($filesystemMock, $this->directoryListMock, $this->stateMock);
+
+        $this->assertEmpty($filePermissions->getMissingWritableDirectoriesForDbUpgrade());
     }
 
     /**
