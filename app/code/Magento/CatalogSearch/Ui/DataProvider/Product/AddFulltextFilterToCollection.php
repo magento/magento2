@@ -10,13 +10,11 @@ use Magento\Framework\Data\Collection;
 use Magento\Ui\DataProvider\AddFilterToCollectionInterface;
 
 /**
- * Class AddFulltextFilterToCollection
+ * Restricts a product collection to the entities matching an admin grid keyword
  */
 class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
 {
     /**
-     * Search Collection
-     *
      * @var SearchCollection
      */
     private $searchCollection;
@@ -38,13 +36,12 @@ class AddFulltextFilterToCollection implements AddFilterToCollectionInterface
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         if (isset($condition['fulltext']) && (string)$condition['fulltext'] !== '') {
-            $this->searchCollection->addBackendSearchFilter($condition['fulltext']);
-            $productIds = $this->searchCollection->load()->getAllIds();
-            if (empty($productIds)) {
-                //add dummy id to prevent returning full unfiltered collection
-                $productIds = -1;
-            }
-            $collection->addIdFilter($productIds);
+            $linkField = $this->searchCollection->getEntity()->getLinkField();
+            $collection->getSelect()->joinInner(
+                ['search_result' => $this->searchCollection->getBackendSearchEntityIdsSelect($condition['fulltext'])],
+                "search_result.{$linkField} = e.{$linkField}",
+                []
+            );
         }
     }
 }
