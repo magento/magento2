@@ -7,8 +7,6 @@ namespace Magento\Catalog\Model\ResourceModel;
 
 /**
  * Catalog url rewrite resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;

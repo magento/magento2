@@ -41,8 +41,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_config;
 
     /**
-     * Class constructor
-     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
