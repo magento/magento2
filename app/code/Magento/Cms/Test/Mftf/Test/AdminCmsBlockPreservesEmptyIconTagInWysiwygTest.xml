@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsBlockPreservesEmptyIconTagInWysiwygTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="WYSIWYG Editor"/>
+            <title value="Empty inline icon tag survives a WYSIWYG source/visual round-trip"/>
+            <description value="An empty tag such as &lt;i class=&quot;icon-x&quot;&gt;&lt;/i&gt;, commonly used for icon fonts, must not be stripped when toggling the WYSIWYG editor between source and visual mode"/>
+            <severity value="MAJOR"/>
+            <group value="cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE"/>
+        </before>
+        <after>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnNewBlockPage"/>
+        <waitForPageLoad stepKey="waitForNewBlockPage"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
+
+        <!-- switch to source view and type an empty icon tag -->
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="switchToSource1"/>
+        <waitForElementVisible selector="{{TinyMCESection.Content}}" stepKey="waitForSourceTextarea1"/>
+        <fillField selector="{{TinyMCESection.Content}}" userInput="&lt;p&gt;Icon test &lt;i class=&quot;icon-test&quot;&gt;&lt;/i&gt; end&lt;/p&gt;" stepKey="fillSourceHtml"/>
+
+        <!-- round-trip through visual mode and back to source -->
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="switchToVisual"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCEAfterVisual"/>
+        <click selector="{{TinyMCESection.ShowHideBtn}}" stepKey="switchToSource2"/>
+        <waitForElementVisible selector="{{TinyMCESection.Content}}" stepKey="waitForSourceTextarea2"/>
+
+        <!-- the empty icon tag must still be there -->
+        <grabValueFrom selector="{{TinyMCESection.Content}}" stepKey="grabSourceHtmlAfterRoundTrip"/>
+        <assertStringContainsString stepKey="assertIconTagSurvived">
+            <actualResult type="const">$grabSourceHtmlAfterRoundTrip</actualResult>
+            <expectedResult type="string">icon-test</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>
