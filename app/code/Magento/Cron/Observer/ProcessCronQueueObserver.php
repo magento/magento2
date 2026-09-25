@@ -14,6 +14,7 @@ use Exception;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
 use Magento\Cron\Model\Schedule;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Event\Observer;
@@ -185,6 +186,11 @@ class ProcessCronQueueObserver implements ObserverInterface
     private $retrier;
 
     /**
+     * @var ResourceConnection|null
+     */
+    private $resourceConnection;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Cron\Model\ScheduleFactory $scheduleFactory
      * @param \Magento\Framework\App\CacheInterface $cache
@@ -201,6 +207,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param DeadlockRetrierInterface $retrier
      * @param Environment $environment
+     * @param ResourceConnection|null $resourceConnection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -219,7 +226,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         DeadlockRetrierInterface $retrier,
-        Environment $environment
+        Environment $environment,
+        ?ResourceConnection $resourceConnection = null
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -237,6 +245,56 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->lockManager = $lockManager;
         $this->eventManager = $eventManager;
         $this->retrier = $retrier;
+        $this->resourceConnection = $resourceConnection;
+    }
+
+    /**
+     * Return the injected resource connection, or null if none was provided.
+     */
+    private function getResourceConnection(): ?ResourceConnection
+    {
+        return $this->resourceConnection;
+    }
+
+    /**
+     * Roll back any leftover transaction on the default connection.
+     *
+     * If a misbehaving cron job throws while inside an open transaction,
+     * the transaction level on the shared default connection stays > 0.
+     * The next cron job in the same process then starts with locks held
+     * and a stale transaction, producing lock-wait timeouts. Detect this
+     * after every job and force the connection back to level 0.
+     *
+     * @param string $jobCode
+     * @return void
+     */
+    private function resetLeftoverTransaction(string $jobCode): void
+    {
+        $resource = $this->getResourceConnection();
+        if ($resource === null) {
+            return;
+        }
+        $connection = $resource->getConnection();
+        while ($connection->getTransactionLevel() > 0) {
+            try {
+                $connection->rollBack();
+            } catch (\Throwable $e) {
+                $this->logger->error(
+                    sprintf(
+                        'Failed to roll back leftover transaction after cron job %s: %s',
+                        $jobCode,
+                        $e->getMessage()
+                    )
+                );
+                break;
+            }
+            $this->logger->warning(
+                sprintf(
+                    'Cron job %s left an open transaction; rolled back to keep the connection clean.',
+                    $jobCode
+                )
+            );
+        }
     }
 
     /**
@@ -871,10 +929,13 @@ class ProcessCronQueueObserver implements ObserverInterface
                 }
             } catch (CronException $e) {
                 $this->logger->warning($e->getMessage());
+                $this->resetLeftoverTransaction($jobCode);
                 continue;
             } catch (\Exception $e) {
                 $this->processError($schedule, $e);
             }
+
+            $this->resetLeftoverTransaction($jobCode);
 
             $this->retrier->execute(
                 function () use ($schedule) {
