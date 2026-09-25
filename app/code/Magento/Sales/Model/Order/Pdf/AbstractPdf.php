@@ -856,7 +856,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
      */
     protected function _getRenderer($type)
     {
-        if (!isset($this->_renderers[$type])) {
+        if ($type === null || !isset($this->_renderers[$type])) {
             $type = 'default';
         }
 
