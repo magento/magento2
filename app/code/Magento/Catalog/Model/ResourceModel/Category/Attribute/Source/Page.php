@@ -7,21 +7,15 @@ namespace Magento\Catalog\Model\ResourceModel\Category\Attribute\Source;
 
 /**
  * Catalog category landing page attribute source
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Page extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Block collection factory
-     *
      * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory
      */
     protected $_blockCollectionFactory;
 
     /**
-     * Construct
-     *
      * @param \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $blockCollectionFactory
      */
     public function __construct(\Magento\Cms\Model\ResourceModel\Block\CollectionFactory $blockCollectionFactory)

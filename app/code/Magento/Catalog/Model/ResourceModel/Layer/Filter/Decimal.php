@@ -9,8 +9,6 @@ namespace Magento\Catalog\Model\ResourceModel\Layer\Filter;
  * Catalog Layer Decimal attribute Filter Resource Model
  *
  * @api
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -88,6 +86,7 @@ class Decimal extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Retrieve clean select with joined index table
+     *
      * Joined table has index
      *
      * @param \Magento\Catalog\Model\Layer\Filter\FilterInterface $filter
