@@ -16,6 +16,9 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContent;
 use Magento\Framework\Api\ImageProcessorInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -51,6 +54,16 @@ class MediaGalleryProcessorTest extends TestCase
      */
     private $productMock;
 
+    /**
+     * @var Config|MockObject
+     */
+    private $mediaConfigMock;
+
+    /**
+     * @var WriteInterface|MockObject
+     */
+    private $mediaDirectoryMock;
+
     protected function setUp(): void
     {
         $this->processorMock = $this->createMock(Processor::class);
@@ -59,11 +72,18 @@ class MediaGalleryProcessorTest extends TestCase
         $this->deleteValidatorMock = $this->createMock(DeleteValidator::class);
         $this->productMock = $this->createPartialMock(Product::class, ['getMediaConfig', 'hasGalleryAttribute']);
 
+        $this->mediaConfigMock = $this->createMock(Config::class);
+        $this->mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $filesystemMock = $this->createMock(Filesystem::class);
+        $filesystemMock->method('getDirectoryWrite')->willReturn($this->mediaDirectoryMock);
+
         $this->galleryProcessor = new MediaGalleryProcessor(
             $this->processorMock,
             $this->contentFactoryMock,
             $this->imageProcessorMock,
-            $this->deleteValidatorMock
+            $this->deleteValidatorMock,
+            $this->mediaConfigMock,
+            $filesystemMock
         );
     }
 
@@ -162,5 +182,46 @@ class MediaGalleryProcessorTest extends TestCase
                 ]
             );
         $this->galleryProcessor->processMediaGallery($this->productMock, $newEntriesData['images']);
+    }
+
+    /**
+     * A media entry that references a value_id absent from the product gallery must be rejected
+     * instead of silently dropping the entry and removing existing images.
+     *
+     * @return void
+     */
+    public function testProcessMediaGalleryThrowsExceptionForUnknownValueId(): void
+    {
+        $this->productMock->setData(
+            'media_gallery',
+            [
+                'images' => [
+                    [
+                        'value_id' => 5,
+                        'label' => 'existing',
+                        'file' => 'filename1',
+                        'position' => 1,
+                        'disabled' => false,
+                        'types' => ['image', 'small_image'],
+                    ],
+                ],
+            ]
+        );
+
+        $entries = [
+            [
+                'value_id' => 999,
+                'label' => 'stale',
+                'file' => 'filename1',
+                'position' => 1,
+                'disabled' => false,
+                'types' => ['image', 'small_image'],
+            ],
+        ];
+
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('The image with the "999" ID doesn\'t exist. Verify the ID and try again.');
+
+        $this->galleryProcessor->processMediaGallery($this->productMock, $entries);
     }
 }
