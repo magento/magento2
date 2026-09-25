@@ -10,6 +10,7 @@ namespace Magento\Framework\Logger\Handler;
 use Exception;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Logger\Handler\Exception as ExceptionHandler;
+use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
 use Monolog\LogRecord;
 
@@ -37,15 +38,17 @@ class System extends Base
      * @param DriverInterface $filesystem
      * @param ExceptionHandler $exceptionHandler
      * @param string|null $filePath
+     * @param FormatterInterface|null $formatter
      * @throws Exception
      */
     public function __construct(
         DriverInterface $filesystem,
         ExceptionHandler $exceptionHandler,
-        ?string $filePath = null
+        ?string $filePath = null,
+        ?FormatterInterface $formatter = null
     ) {
         $this->exceptionHandler = $exceptionHandler;
-        parent::__construct($filesystem, $filePath);
+        parent::__construct($filesystem, $filePath, null, $formatter);
     }
 
     /**

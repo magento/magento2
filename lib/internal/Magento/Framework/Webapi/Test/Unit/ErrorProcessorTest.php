@@ -257,8 +257,9 @@ class ErrorProcessorTest extends TestCase
         $this->_loggerMock->expects($this->once())
             ->method('critical')
             ->willReturnCallback(
-                function (\Exception $loggedException) use ($thrownException) {
-                    $this->assertSame($thrownException, $loggedException->getPrevious());
+                function (string $message, array $context) use ($thrownException) {
+                    $this->assertStringContainsString('Report ID:', $message);
+                    $this->assertSame($thrownException, $context['exception']);
                 }
             );
         $this->_errorProcessor->maskException($thrownException);

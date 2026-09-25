@@ -178,6 +178,7 @@ class ConsumerTest extends TestCase
         $numberOfMessages = 1;
         $consumerName = 'consumer.name';
         $exceptionPhrase = new Phrase('Exception successfully thrown');
+        $notFoundException = new NotFoundException($exceptionPhrase);
         $this->poisonPillRead->expects($this->atLeastOnce())->method('getLatestVersion')->willReturn('version-1');
         $this->poisonPillCompare->expects($this->atLeastOnce())->method('isLatestVersion')->willReturn(true);
         $this->deploymentConfig->expects($this->any())->method('get')
@@ -191,13 +192,12 @@ class ConsumerTest extends TestCase
             ->willReturn($topicConfig);
         $this->configuration->expects($this->atLeastOnce())->method('getConsumerName')->willReturn($consumerName);
         $this->messageController->expects($this->once())->method('lock')->with($envelope, $consumerName)
-            ->willThrowException(
-                new NotFoundException(
-                    $exceptionPhrase
-                )
-            );
+            ->willThrowException($notFoundException);
         $queue->expects($this->once())->method('acknowledge')->with($envelope);
-        $this->logger->expects($this->once())->method('warning')->with($exceptionPhrase->render());
+        $this->logger->expects($this->once())->method('warning')->with(
+            'Message of the {topicName} topic was acknowledged without being processed',
+            ['topicName' => $properties['topic_name'], 'exception' => $notFoundException]
+        );
 
         $this->consumer->process($numberOfMessages);
     }

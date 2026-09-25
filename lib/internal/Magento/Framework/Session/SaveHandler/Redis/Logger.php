@@ -41,7 +41,10 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param int $level
+     * @return void
      */
     public function setLogLevel($level)
     {
@@ -49,7 +52,11 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param string $message
+     * @param int $level
+     * @return void
      */
     public function log($message, $level)
     {
@@ -84,10 +91,13 @@ class Logger implements \Cm\RedisSession\Handler\LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param \Exception $e
+     * @return void
      */
     public function logException(\Exception $e)
     {
-        $this->logger->critical($e->getMessage());
+        $this->logger->critical('Redis session handler failure', ['exception' => $e]);
     }
 }

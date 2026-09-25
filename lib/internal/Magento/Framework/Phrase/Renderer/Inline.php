@@ -73,7 +73,7 @@ class Inline implements RendererInterface
                     . '}}{{' . $this->translator->getTheme() . '}}}';
             }
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
+            $this->logger->critical('Unable to render an inline translation', ['exception' => $e]);
             throw $e;
         }
 

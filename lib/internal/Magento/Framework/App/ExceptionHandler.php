@@ -213,7 +213,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
     private function handleInitException(\Exception $exception): bool
     {
         if ($exception instanceof InitException) {
-            $this->logger->critical($exception);
+            $this->logger->critical($exception->getMessage(), ['exception' => $exception]);
             // phpcs:ignore Magento2.Security.IncludeFile
             require $this->filesystem
                 ->getDirectoryRead(DirectoryList::PUB)
@@ -249,7 +249,10 @@ class ExceptionHandler implements ExceptionHandlerInterface
             $reportData['script_name'] = $params['SCRIPT_NAME'];
         }
         $reportData['report_id'] = $this->encryptor->getHash(implode('', $reportData));
-        $this->logger->critical($exception, ['report_id' => $reportData['report_id']]);
+        $this->logger->critical(
+            $exception->getMessage(),
+            ['report_id' => $reportData['report_id'], 'exception' => $exception]
+        );
         // phpcs:ignore Magento2.Security.IncludeFile
         require $this->filesystem
             ->getDirectoryRead(DirectoryList::PUB)
