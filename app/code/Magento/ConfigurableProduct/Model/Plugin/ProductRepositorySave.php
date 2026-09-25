@@ -66,13 +66,10 @@ class ProductRepositorySave
             $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
             if (!empty($configurableLinks) || !empty($configurableOptions)) {
-                $attributeCodes = [];
-                /** @var OptionInterface $configurableOption */
-                foreach ($configurableOptions as $configurableOption) {
-                    $eavAttribute = $this->productAttributeRepository->get($configurableOption->getAttributeId());
-                    $attributeCode = $eavAttribute->getAttributeCode();
-                    $attributeCodes[] = $attributeCode;
+                if (empty($configurableOptions) && !empty($configurableLinks)) {
+                    $configurableOptions = $this->getExistingConfigurableOptions($product);
                 }
+                $attributeCodes = $this->getAttributeCodes($configurableOptions);
                 $this->validateProductLinks($attributeCodes, $configurableLinks);
             }
         }
@@ -101,6 +98,51 @@ class ProductRepositorySave
         $result->getTypeInstance()->resetConfigurableAttributes($product);
 
         return $result;
+    }
+
+    /**
+     * Load configurable options already stored on the product when the request omitted them.
+     *
+     * @param ProductInterface $product
+     * @return OptionInterface[]
+     */
+    private function getExistingConfigurableOptions(ProductInterface $product): array
+    {
+        $sku = $product->getSku();
+        if (!$sku) {
+            return [];
+        }
+
+        try {
+            $existingProduct = $this->productRepository->get($sku);
+        } catch (NoSuchEntityException $exception) {
+            return [];
+        }
+
+        $existingExtension = $existingProduct->getExtensionAttributes();
+        if ($existingExtension === null) {
+            return [];
+        }
+
+        return (array) $existingExtension->getConfigurableProductOptions();
+    }
+
+    /**
+     * Resolve configurable attribute codes from option data.
+     *
+     * @param OptionInterface[] $configurableOptions
+     * @return string[]
+     * @throws NoSuchEntityException
+     */
+    private function getAttributeCodes(array $configurableOptions): array
+    {
+        $attributeCodes = [];
+        foreach ($configurableOptions as $configurableOption) {
+            $eavAttribute = $this->productAttributeRepository->get($configurableOption->getAttributeId());
+            $attributeCodes[] = $eavAttribute->getAttributeCode();
+        }
+
+        return $attributeCodes;
     }
 
     /**
