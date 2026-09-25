@@ -104,4 +104,71 @@ class CustomOptionPriceModifierTest extends TestCase
 
         $this->priceModifier->modifyPrice($priceTable);
     }
+
+    /**
+     * The modifier must resolve the connection through ResourceConnection on every call and never keep a stale
+     * cached reference. When the price indexer runs in multiple threads, ProcessManager closes all connections
+     * before forking, after which ResourceConnection hands out a brand-new adapter. A cached connection would
+     * survive that cleanup and reconnect to a different MySQL session in the child process, breaking the reindex
+     * with "Base table or view not found: catalog_product_index_price_temp". This test reproduces that swap by
+     * returning a different connection on the second reindex pass and asserting the modifier uses it.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function testConnectionIsNotCachedBetweenModifyPriceCalls(): void
+    {
+        $priceTable = $this->createMock(IndexTableStructure::class);
+        $priceTable->method('getTableName')->willReturn('temporary_table_name');
+
+        $select = $this->createMock(Select::class);
+        $select->method('from')->willReturn($select);
+        $select->method('join')->willReturn($select);
+        $select->method('group')->willReturn($select);
+        $select->method('columns')->willReturn($select);
+
+        $firstConnection = $this->createConnectionMock($select);
+        $secondConnection = $this->createConnectionMock($select);
+
+        // ResourceConnection returns whichever adapter is currently active, mirroring how it rebuilds the
+        // connection after ProcessManager::closeConnection(null) empties its registry.
+        $activeConnection = $firstConnection;
+        $this->resource->method('getConnection')
+            ->willReturnCallback(static function () use (&$activeConnection) {
+                return $activeConnection;
+            });
+        $this->resource->method('getTableName')->willReturn('table');
+        $this->tableStrategy->method('getTableName')->willReturn('table_name');
+
+        $metadata = $this->createMock(EntityMetadataInterface::class);
+        $this->metadataPool->method('getMetadata')->willReturn($metadata);
+        $this->dataHelper->method('isPriceGlobal')->willReturn(true);
+
+        // First pass runs entirely on the first connection.
+        $this->priceModifier->modifyPrice($priceTable);
+
+        // Simulate the pre-fork cleanup: the resource now hands out a fresh adapter. With a cached connection
+        // the modifier would keep using $firstConnection here; the second connection's expectations would then
+        // never be met, failing the test.
+        $activeConnection = $secondConnection;
+        $this->priceModifier->modifyPrice($priceTable);
+    }
+
+    /**
+     * Build a connection mock that expects exactly one full modifyPrice() query sequence.
+     *
+     * @param Select $select
+     * @return AdapterInterface|MockObject
+     */
+    private function createConnectionMock(Select $select): AdapterInterface
+    {
+        $connection = $this->createMock(AdapterInterface::class);
+        $connection->method('select')->willReturn($select);
+        $connection->method('fetchRow')->willReturn(['exists']);
+        $connection->expects($this->exactly(2))->method('delete');
+        $connection->expects($this->exactly(4))->method('query');
+        $connection->expects($this->exactly(2))->method('dropTemporaryTable');
+
+        return $connection;
+    }
 }
