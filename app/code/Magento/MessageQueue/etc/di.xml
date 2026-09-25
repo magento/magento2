@@ -21,6 +21,7 @@
                 <item name="startConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\StartConsumerCommand\Proxy</item>
                 <item name="consumerListCommand" xsi:type="object">Magento\MessageQueue\Console\ConsumerListCommand\Proxy</item>
                 <item name="restartConsumerCommand" xsi:type="object">Magento\MessageQueue\Console\RestartConsumerCommand\Proxy</item>
+                <item name="queueConfigStatusCommand" xsi:type="object">Magento\MessageQueue\Console\QueueConfigStatusCommand\Proxy</item>
             </argument>
         </arguments>
     </type>
