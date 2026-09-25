@@ -14,7 +14,7 @@ use ReflectionMethod;
 use ReflectionProperty;
 
 /**
- * Unit tests for AC-18197: stale tag-index cleanup in the legacy Redis cache backend.
+ * Unit tests for: stale tag-index cleanup in the legacy Redis cache backend.
  *
  * Covers _removeByIds(), _fetchTagsPerId(), _groupIdsByTag() and _removeByMatchingAnyTags().
  */
@@ -86,7 +86,10 @@ class RedisTest extends TestCase
 
         $warnings = [];
         set_error_handler(function (int $errno, string $errstr) use (&$warnings): bool {
-            $warnings[] = $errstr;
+            if ($errno === E_USER_WARNING) {
+                $warnings[] = $errstr;
+            }
+
             return true;
         }, E_USER_WARNING);
 
@@ -192,166 +195,7 @@ class RedisTest extends TestCase
     private function invokeMethod(object $object, string $method, array $args)
     {
         $reflectionMethod = new ReflectionMethod($object, $method);
-        $reflectionMethod->setAccessible(true);
 
         return $reflectionMethod->invokeArgs($object, $args);
-    }
-}
-
-/**
- * Minimal in-memory Credis_Client double used to exercise the tag-index cleanup logic without a
- * real Redis connection. Only implements the small subset of commands the SUT relies on.
- */
-class RedisTestDouble
-{
-    private const PREFIX_KEY = 'zc:k:';
-    private const PREFIX_TAG_IDS = 'zc:ti:';
-
-    /** @var array<int, array> Recorded (command, ...args) tuples, in call order. */
-    public array $calls = [];
-
-    /** @var mixed When set (non-null), overrides the next exec() return value once. */
-    public $execReturnOverride;
-
-    /** @var bool|array */
-    public $evalShaResult = true;
-
-    /** @var array<string, string> id => raw (uncompressed) encoded tags */
-    private array $hashes = [];
-
-    /** @var array<string, string[]> tag => member ids */
-    private array $sets = [];
-
-    private bool $inPipeline = false;
-
-    /** @var array<int, mixed> */
-    private array $pending = [];
-
-    public function seedHash(string $id, string $tags): void
-    {
-        $this->hashes[$id] = $tags;
-    }
-
-    public function seedSet(string $tag, array $ids): void
-    {
-        $this->sets[$tag] = $ids;
-    }
-
-    public function hashExists(string $id): bool
-    {
-        return isset($this->hashes[$id]);
-    }
-
-    public function setMembers(string $tag): array
-    {
-        return array_values($this->sets[$tag] ?? []);
-    }
-
-    public function pipeline(...$_args): self
-    {
-        $this->inPipeline = true;
-        $this->pending = [];
-
-        return $this;
-    }
-
-    public function multi(...$_args): self
-    {
-        return $this;
-    }
-
-    public function hGet(string $key, string $_field)
-    {
-        $this->calls[] = ['hGet', $key];
-        $id = $this->stripPrefix($key, self::PREFIX_KEY);
-        $value = $this->hashes[$id] ?? false;
-
-        if ($this->inPipeline) {
-            $this->pending[] = $value;
-
-            return $this;
-        }
-
-        return $value;
-    }
-
-    public function unlink($keys)
-    {
-        $this->calls[] = ['unlink', $keys];
-        foreach ((array) $keys as $key) {
-            unset($this->hashes[$this->stripPrefix($key, self::PREFIX_KEY)]);
-            unset($this->sets[$this->stripPrefix($key, self::PREFIX_TAG_IDS)]);
-        }
-
-        if ($this->inPipeline) {
-            $this->pending[] = 1;
-
-            return $this;
-        }
-
-        return 1;
-    }
-
-    public function sRem(string $key, $members)
-    {
-        $this->calls[] = ['sRem', $key, $members];
-        $tag = $this->stripPrefix($key, self::PREFIX_TAG_IDS);
-        $this->sets[$tag] = array_values(array_diff($this->sets[$tag] ?? [], (array) $members));
-
-        if ($this->inPipeline) {
-            $this->pending[] = 1;
-
-            return $this;
-        }
-
-        return 1;
-    }
-
-    public function sUnion($keys)
-    {
-        $this->calls[] = ['sUnion', $keys];
-        $union = [];
-        foreach ((array) $keys as $key) {
-            $union = array_merge($union, $this->sets[$this->stripPrefix($key, self::PREFIX_TAG_IDS)] ?? []);
-        }
-
-        return array_values(array_unique($union));
-    }
-
-    public function evalSha(...$args)
-    {
-        $this->calls[] = ['evalSha', $args];
-
-        return $this->evalShaResult;
-    }
-
-    public function eval(...$args)
-    {
-        $this->calls[] = ['eval', $args];
-
-        return true;
-    }
-
-    public function exec()
-    {
-        $this->calls[] = ['exec'];
-        $this->inPipeline = false;
-
-        if ($this->execReturnOverride !== null) {
-            $result = $this->execReturnOverride;
-            $this->execReturnOverride = null;
-
-            return $result;
-        }
-
-        $result = $this->pending;
-        $this->pending = [];
-
-        return $result;
-    }
-
-    private function stripPrefix(string $key, string $prefix): string
-    {
-        return str_starts_with($key, $prefix) ? substr($key, strlen($prefix)) : $key;
     }
 }
