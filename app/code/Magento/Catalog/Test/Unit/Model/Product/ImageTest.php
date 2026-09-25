@@ -29,6 +29,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -352,33 +353,9 @@ class ImageTest extends TestCase
      */
     public function testSetWatermark(): void
     {
-        $website = $this->createPartialMock(Website::class, ['getId', '__sleep']);
-        $website->method('getId')->willReturn(1);
-        $this->storeManager->method('getWebsite')->willReturn($website);
-        $this->mediaDirectory
-            ->method('isExist')
-            ->willReturnCallback(
-                function ($arg) {
-                    if (empty($arg)) {
-                        return null;
-                    } elseif ($arg == 'catalog/product/watermark//somefile.png') {
-                        return true;
-                    }
-                }
-            );
-        $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
-        $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
-            ->with('catalog/product/watermark//somefile.png')
-            ->willReturn($absolutePath);
+        $this->prepareWatermarkFile();
 
-        $imageProcessor = $this->createPartialMock(
-            FrameworkImage::class,
-            [
-                'keepAspectRatio', 'keepFrame', 'keepTransparency', 'constrainOnly', 'backgroundColor', 'quality',
-                'setWatermarkPosition', 'setWatermarkImageOpacity', 'setWatermarkWidth', 'setWatermarkHeight',
-                'watermark'
-            ]
-        );
+        $imageProcessor = $this->createWatermarkImageProcessorMock();
         $imageProcessor->expects($this->once())->method('setWatermarkPosition')->with('center')
             ->willReturn(true);
         $imageProcessor->expects($this->once())->method('setWatermarkImageOpacity')->with(50)
@@ -398,6 +375,77 @@ class ImageTest extends TestCase
             50
         );
         $this->assertSame($this->image, $result);
+    }
+
+    /**
+     * @param int|string|null $opacity
+     * @param int|string $expectedOpacity
+     * @return void
+     */
+    #[DataProvider('watermarkImageOpacityDataProvider')]
+    public function testSetWatermarkImageOpacity($opacity, $expectedOpacity): void
+    {
+        $this->prepareWatermarkFile();
+
+        $imageProcessor = $this->createWatermarkImageProcessorMock();
+        $imageProcessor->expects($this->once())->method('setWatermarkImageOpacity')->with($expectedOpacity)
+            ->willReturn(true);
+        $this->image->setImageProcessor($imageProcessor);
+
+        $this->image->setWatermark('/somefile.png', 'center', null, null, null, $opacity);
+    }
+
+    /**
+     * @return array
+     */
+    public static function watermarkImageOpacityDataProvider(): array
+    {
+        return [
+            'explicit zero is a fully transparent watermark' => [0, 0],
+            'explicit zero as string is a fully transparent watermark' => ['0', '0'],
+            'empty string falls back to the default opacity' => ['', 70],
+            'null falls back to the default opacity' => [null, 70],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    private function prepareWatermarkFile(): void
+    {
+        $website = $this->createPartialMock(Website::class, ['getId', '__sleep']);
+        $website->method('getId')->willReturn(1);
+        $this->storeManager->method('getWebsite')->willReturn($website);
+        $this->mediaDirectory
+            ->method('isExist')
+            ->willReturnCallback(
+                function ($arg) {
+                    if (empty($arg)) {
+                        return null;
+                    } elseif ($arg == 'catalog/product/watermark//somefile.png') {
+                        return true;
+                    }
+                }
+            );
+        $absolutePath = dirname(dirname(__DIR__)) . '/_files/catalog/product/watermark/somefile.png';
+        $this->mediaDirectory->expects($this->any())->method('getAbsolutePath')
+            ->with('catalog/product/watermark//somefile.png')
+            ->willReturn($absolutePath);
+    }
+
+    /**
+     * @return FrameworkImage|MockObject
+     */
+    private function createWatermarkImageProcessorMock()
+    {
+        return $this->createPartialMock(
+            FrameworkImage::class,
+            [
+                'keepAspectRatio', 'keepFrame', 'keepTransparency', 'constrainOnly', 'backgroundColor', 'quality',
+                'setWatermarkPosition', 'setWatermarkImageOpacity', 'setWatermarkWidth', 'setWatermarkHeight',
+                'watermark'
+            ]
+        );
     }
 
     /**
