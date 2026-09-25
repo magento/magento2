@@ -5,30 +5,12 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Setup\Mvc\Bootstrap\InitParamListener;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
+use Magento\Framework\Console\Command\AbstractSetupCommand as FrameworkAbstractSetupCommand;
 
 /**
- * An abstract class for all Magento Setup command.
- * It adds InitParamListener's magento-init-params option to all setup command.
+ * @deprecated Use \Magento\Framework\Console\Command\AbstractSetupCommand instead
+ * @see \Magento\Framework\Console\Command\AbstractSetupCommand
  */
-abstract class AbstractSetupCommand extends Command
+abstract class AbstractSetupCommand extends FrameworkAbstractSetupCommand
 {
-    /**
-     * Initialize basic Magento Setup command
-     *
-     * @return void
-     */
-    protected function configure()
-    {
-        $this->addOption(
-            InitParamListener::BOOTSTRAP_PARAM,
-            null,
-            InputOption::VALUE_REQUIRED,
-            'Add to any command to customize Magento initialization parameters' . PHP_EOL .
-            'For example: `MAGE_MODE=developer&MAGE_DIRS[base][path]' .
-            '=/var/www/example.com&MAGE_DIRS[cache][path]=/var/tmp/cache`'
-        );
-    }
 }
