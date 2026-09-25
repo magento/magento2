@@ -73,4 +73,47 @@ class CleanCache
     {
         $this->cacheCleaner->flush();
     }
+
+    /**
+     * Clear cache when update mview fails, as the after plugin is skipped then
+     *
+     * @param \Magento\Indexer\Model\Processor $subject
+     * @param callable $proceed
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundUpdateMview(\Magento\Indexer\Model\Processor $subject, callable $proceed)
+    {
+        return $this->flushOnException($proceed);
+    }
+
+    /**
+     * Clear cache when reindex of invalid indexers fails, as the after plugin is skipped then
+     *
+     * @param \Magento\Indexer\Model\Processor $subject
+     * @param callable $proceed
+     * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function aroundReindexAllInvalid(\Magento\Indexer\Model\Processor $subject, callable $proceed)
+    {
+        return $this->flushOnException($proceed);
+    }
+
+    /**
+     * Balance the start() of the before plugin and clear cache for data changed before the failure
+     *
+     * @param callable $proceed
+     * @return mixed
+     * @throws \Throwable
+     */
+    private function flushOnException(callable $proceed)
+    {
+        try {
+            return $proceed();
+        } catch (\Throwable $exception) {
+            $this->cacheCleaner->flush();
+            throw $exception;
+        }
+    }
 }
