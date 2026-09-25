@@ -31,13 +31,13 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $this->_setAttributeValue($model);
 
         $attrValue = $model->getData($attrCode);
-        if ($attrValue === null) {
-            if ($this->getOperator() === '<=>') {
-                $this->_restoreOldAttrValue($model, $oldAttrValue);
-                return true;
-            }
+        if ($this->isAttributeValueUndefined($attrValue)) {
+            // Missing/empty values match "is undefined" and negative operators (is not / does not contain / …).
+            // "Is defined" is expressed as a FALSE combine over "is undefined", not a separate operator.
+            $operator = $this->getOperator();
+            $matchesMissingValue = $operator === '<=>' || $this->isNegativeOperator($operator);
             $this->_restoreOldAttrValue($model, $oldAttrValue);
-            return false;
+            return $matchesMissingValue;
         }
 
         $result = $this->validateAttribute($attrValue);
@@ -130,5 +130,16 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         }
 
         return $value;
+    }
+
+    /**
+     * Whether operator is a negative comparison that should match missing attribute values.
+     *
+     * @param string|null $operator
+     * @return bool
+     */
+    private function isNegativeOperator(?string $operator): bool
+    {
+        return in_array($operator, ['!=', '!{}', '!()'], true);
     }
 }

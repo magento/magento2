@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright 2026 Adobe
+ * All Rights Reserved.
+ */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCatalogRuleIsUndefinedConditionActionGroup">
+        <annotations>
+            <description>
+                Add an "is undefined" product attribute condition on Catalog Price Rule Conditions tab.
+                Use defaultOperatorLabel "contains" for multiselect and "is" for select/boolean attributes.
+            </description>
+        </annotations>
+        <arguments>
+            <argument name="condition" type="string"/>
+            <argument name="defaultOperatorLabel" type="string" defaultValue="contains"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTab}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" visible="false" stepKey="openConditionsTab"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForAddConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" stepKey="waitForConditionSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="{{condition}}" stepKey="selectAttributeCondition"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.condition(defaultOperatorLabel)}}" stepKey="waitForDefaultOperator"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition(defaultOperatorLabel)}}" stepKey="clickDefaultOperator"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" stepKey="waitForOperatorSelect"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" userInput="is undefined" stepKey="selectIsUndefinedOperator"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeOperatorSelect"/>
+    </actionGroup>
+</actionGroups>
