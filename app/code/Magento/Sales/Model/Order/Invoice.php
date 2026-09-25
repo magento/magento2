@@ -6,9 +6,11 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Data\Collection;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EntityInterface;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection as ItemCollection;
 
 /**
  * Invoice model.
@@ -493,19 +495,33 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getItemsCollection()
     {
-        if (!$this->hasData('items_collection')) {
-            /** @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection $itemsCollection */
-            $itemsCollection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
-            $this->setData('items_collection', $itemsCollection);
-
-            if ($this->getId() && $itemsCollection->getSize()) {
-                foreach ($itemsCollection->getItems() as $item) {
-                    /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
-                    $item->setInvoice($this);
-                }
-            }
+        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
+            $collection = $this->loadItemsCollection();
+            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
+            return $collection;
         }
-        return $this->getData('items_collection');
+
+        $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+        // Loaded up front so that iterating it never appends the persisted rows next to the items added below.
+        $collection->load()->removeAllItems();
+        foreach ($this->getItems() as $item) {
+            $collection->addItem($item);
+        }
+        return $collection;
+    }
+
+    /**
+     * Load persisted invoice items bound to this invoice
+     *
+     * @return ItemCollection
+     */
+    private function loadItemsCollection(): ItemCollection
+    {
+        $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
+        foreach ($collection as $item) {
+            $item->setInvoice($this);
+        }
+        return $collection;
     }
 
     /**
@@ -516,7 +532,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     public function getAllItems()
     {
         $items = [];
-        foreach ($this->getItemsCollection() as $item) {
+        foreach ($this->getItems() as $item) {
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }
@@ -532,7 +548,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getItemById($itemId)
     {
-        foreach ($this->getItemsCollection() as $item) {
+        foreach ($this->getItems() as $item) {
             if ($item->getId() == $itemId) {
                 return $item;
             }
@@ -552,7 +568,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         $item->setInvoice($this)->setParentId($this->getId())->setStoreId($this->getStoreId());
 
         if (!$item->getId()) {
-            $this->getItemsCollection()->addItem($item);
+            $this->setItems(array_merge($this->getItems(), [$item]));
         }
         return $this;
     }
@@ -799,14 +815,18 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     public function getItems()
     {
-        if ($this->getData(InvoiceInterface::ITEMS) === null && $this->getId()) {
-            $collection = $this->_invoiceItemCollectionFactory->create()->setInvoiceFilter($this->getId());
-            foreach ($collection as $item) {
-                $item->setInvoice($this);
+        $items = $this->getData(InvoiceInterface::ITEMS);
+        if ($items === null) {
+            if (!$this->getId()) {
+                return [];
             }
-            $this->setData(InvoiceInterface::ITEMS, $collection->getItems());
+            $items = $this->loadItemsCollection()->getItems();
+            $this->setData(InvoiceInterface::ITEMS, $items);
         }
-        return $this->getData(InvoiceInterface::ITEMS);
+        if ($items instanceof Collection) {
+            return $items->getItems();
+        }
+        return $items;
     }
 
     /**
