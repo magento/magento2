@@ -6,16 +6,12 @@
 
 /**
  * Captcha image model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Captcha\Model\Config;
 
 class Font implements \Magento\Framework\Option\ArrayInterface
 {
     /**
-     * Captcha data
-     *
      * @var \Magento\Captcha\Helper\Data
      */
     protected $_captchaData = null;
