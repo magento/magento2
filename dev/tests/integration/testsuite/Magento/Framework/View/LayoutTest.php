@@ -623,4 +623,115 @@ class LayoutTest extends TestCase
         $this->layout->generateElements();
         $this->assertFalse($this->layout->isCacheable());
     }
+
+    /**
+     *
+     * @return void
+     */
+    public function testReferenceBlockRemovesBlockWhenNoIfconfig(): void
+    {
+        $this->layout->setXml(
+            simplexml_load_string(
+                '<layout><container name="root"><block class="Magento\\Framework\\View\\Element\\Text" name="target" template="original.phtml"/>'
+                . '<referenceBlock name="target" remove="true"/></container></layout>',
+                Element::class
+            )
+        );
+
+        $this->layout->generateElements();
+
+        $this->assertFalse($this->layout->getBlock('target'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testReferenceBlockIfconfigRemovesBlockWhenIfconfigIsTrue(): void
+    {
+        $this->layout->setXml(
+            simplexml_load_string(
+                '<layout><container name="root"><block class="Magento\\Framework\\View\\Element\\Text" name="target" template="original.phtml"/>'
+                . '<referenceBlock name="target" ifconfig="company_contact/general/enabled" remove="true"/></container></layout>',
+                Element::class
+            )
+        );
+
+        $objectManager = Bootstrap::getObjectManager();
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->setValue('company_contact/general/enabled', '1');
+
+        $this->layout->generateElements();
+
+        $this->assertFalse($this->layout->getBlock('target'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testReferenceBlockIfconfigDoesNotRemoveBlockWhenIfconfigIsFalse(): void
+    {
+        $this->layout->setXml(
+            simplexml_load_string(
+                '<layout><container name="root"><block class="Magento\\Framework\\View\\Element\\Text" name="target" template="original.phtml"/>'
+                . '<referenceBlock name="target" ifconfig="company_contact/general/enabled" remove="true"/></container></layout>',
+                Element::class
+            )
+        );
+
+        $objectManager = Bootstrap::getObjectManager();
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->setValue('company_contact/general/enabled', '0');
+
+        $this->layout->generateElements();
+
+        $this->assertNotFalse($this->layout->getBlock('target'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testReferenceBlockIfconfigAppliesTemplateOverrideWhenIfconfigIsTrue(): void
+    {
+        $this->layout->setXml(
+            simplexml_load_string(
+                '<layout><container name="root"><block class="Magento\\Framework\\View\\Element\\Text" name="target" template="original.phtml"/>'
+                . '<referenceBlock name="target" ifconfig="company_contact/general/enabled" template="override.phtml"/></container></layout>',
+                Element::class
+            )
+        );
+
+        $objectManager = Bootstrap::getObjectManager();
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->setValue('company_contact/general/enabled', '1');
+
+        $this->layout->generateElements();
+
+        $block = $this->layout->getBlock('target');
+        $this->assertNotFalse($block);
+        $this->assertSame('override.phtml', $block->getTemplate());
+    }
+
+    /**
+     * @return void
+     */
+    public function testReferenceBlockIfconfigDoesNotApplyTemplateOverrideWhenIfconfigIsFalse(): void
+    {
+        $this->layout->setXml(
+            simplexml_load_string(
+                '<layout><container name="root"><block class="Magento\\Framework\\View\\Element\\Text" name="target" template="original.phtml"/>'
+                . '<referenceBlock name="target" ifconfig="company_contact/general/enabled" template="override.phtml"/></container></layout>',
+                Element::class
+            )
+        );
+
+        $objectManager = Bootstrap::getObjectManager();
+        $scopeConfig = $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfig->setValue('company_contact/general/enabled', '0');
+
+        $this->layout->generateElements();
+
+        $block = $this->layout->getBlock('target');
+        $this->assertNotFalse($block);
+        $this->assertSame('original.phtml', $block->getTemplate());
+    }
 }

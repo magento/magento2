@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\TestFramework\Unit\Helper\MockCreationTrait;
 use Magento\Framework\View\Layout\Element;
@@ -15,6 +16,7 @@ use Magento\Framework\View\Layout\Reader\Context;
 use Magento\Framework\View\Layout\ReaderPool;
 use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Layout\ScheduledStructure\Helper;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
@@ -132,6 +134,55 @@ class ContainerTest extends TestCase
                 ->method('unsetElementFromListToRemove')
                 ->with($elementCurrent->getAttribute('name'));
         }
+
+        $this->container->interpret($contextMock, $elementCurrent);
+    }
+
+    public function testReferenceContainerWithIfconfigDoesNotScheduleWhenConfigIsDisabled(): void
+    {
+        $scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with('config_path', ScopeInterface::SCOPE_STORE)
+            ->willReturn(false);
+
+        $elementCurrent = self::getElement(
+            '<referenceContainer name="reference" ifconfig="config_path" />',
+            'referenceContainer'
+        );
+
+        $scheduledStructureMock = $this->getMockBuilder(ScheduledStructure::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $scheduledStructureMock->expects($this->never())
+            ->method('getStructureElementData');
+        $scheduledStructureMock->expects($this->never())
+            ->method('setStructureElementData');
+        $scheduledStructureMock->expects($this->never())
+            ->method('setElementToRemoveList');
+        $scheduledStructureMock->expects($this->never())
+            ->method('unsetElementFromListToRemove');
+
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contextMock->expects($this->any())
+            ->method('getScheduledStructure')
+            ->willReturn($scheduledStructureMock);
+
+        $this->readerPoolMock->expects($this->once())
+            ->method('interpret')
+            ->with($contextMock, $elementCurrent)
+            ->willReturnSelf();
+
+        $this->container = $this->objectManagerHelper->getObject(
+            Container::class,
+            [
+                'helper' => $this->helperMock,
+                'readerPool' => $this->readerPoolMock,
+                'scopeConfig' => $scopeConfig,
+            ]
+        );
 
         $this->container->interpret($contextMock, $elementCurrent);
     }
