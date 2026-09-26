@@ -287,9 +287,9 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
         if (!isset($arguments['zone'])) {
             $arguments['zone'] = $renderZone;
         }
-        $arguments['price_id'] = isset($arguments['price_id'])
-            ? $arguments['price_id']
-            : 'old-price-' . $product->getId() . '-' . $priceType;
+        $arguments['price_id_suffix'] = isset($arguments['price_id_suffix'])
+            ? $arguments['price_id_suffix']
+            : '-' . $priceType;
         $arguments['include_container'] = isset($arguments['include_container'])
             ? $arguments['include_container']
             : true;
