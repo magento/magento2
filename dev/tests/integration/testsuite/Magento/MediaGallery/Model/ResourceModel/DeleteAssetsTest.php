@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\ResourceModel;
 
-use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Testing delete assets operation
@@ -94,7 +94,9 @@ class DeleteAssetsTest extends TestCase
         return [
             [['testDirectory/path.png']],
             [['anotherDirectory/path.jpg']],
-            [['path.jpg']]
+            [['path.jpg']],
+            [['testDir']],
+            [['testDirectory/path']]
         ];
     }
 }

@@ -92,9 +92,12 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
 
         $assets = $connection->query($select)->fetchAll();
 
-        // Filter out assets with mixed case that doesn't match the paths
+        // Keep only the asset with this exact path or assets inside this directory: filters out mixed case matches
+        // and other directories or files that only start with the same name ("abc" vs "abc123")
+        $directoryPath = rtrim($path, '/') . '/';
         foreach ($assets as $asset) {
-            if (str_starts_with($asset[self::MEDIA_GALLERY_ASSET_PATH], $path)) {
+            $assetPath = $asset[self::MEDIA_GALLERY_ASSET_PATH];
+            if ($assetPath === $path || str_starts_with($assetPath, $directoryPath)) {
                 $this->deleteAssetById((int)$asset[self::MEDIA_GALLERY_ASSET_ID]);
             }
         }
