@@ -7,8 +7,8 @@ namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\AddProductToCart;
-use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Checkout\Model\Cart\AjaxMessageResponse;
+use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -180,7 +180,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 return $this->goBack(null, $product);
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            if ($this->_checkoutSession->getUseNotice(true)) {
+            $useNotice = $this->_checkoutSession->getUseNotice(true);
+            if ($useNotice) {
                 $this->messageManager->addNoticeMessage(
                     $this->_objectManager->get(\Magento\Framework\Escaper::class)->escapeHtml($e->getMessage())
                 );
@@ -198,7 +199,8 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 $url = $this->_redirect->getRedirectUrl($this->getCartUrl());
             }
 
-            return $this->goBack($url, $product, true);
+            // A notice means options have to be chosen, so send the customer to the product page.
+            return $this->goBack($url, $product, !$useNotice);
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,

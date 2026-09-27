@@ -178,6 +178,43 @@ class AddTest extends AbstractController
     }
 
     /**
+     * Ajax add of a product with not chosen options redirects to the product page
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
+     *
+     * @return void
+     */
+    public function testAjaxAddProductWithNotChosenOptions(): void
+    {
+        $this->prepareReferer();
+        $product = $this->productRepository->get('Configurable product');
+        $this->dispatchAddToCartRequest(['product' => $product->getId(), 'qty' => '1', 'isAjax' => 1]);
+        $response = $this->json->unserialize($this->getResponse()->getBody());
+        $this->assertArrayNotHasKey('displayMessages', $response);
+        $this->assertEquals($product->getProductUrl(), $response['backUrl']);
+        $message = (string)__('You need to choose options for your item.');
+        $this->assertSessionMessages($this->equalTo([$message]), MessageInterface::TYPE_NOTICE);
+    }
+
+    /**
+     * Ajax add with not available qty shows the error on the same page
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     *
+     * @return void
+     */
+    public function testAjaxAddProductWithUnavailableQty(): void
+    {
+        $this->prepareReferer();
+        $product = $this->productRepository->get('simple-1');
+        $this->dispatchAddToCartRequest(['product' => $product->getId(), 'qty' => '1000', 'isAjax' => 1]);
+        $response = $this->json->unserialize($this->getResponse()->getBody());
+        $this->assertTrue($response['displayMessages']);
+        $this->assertArrayNotHasKey('backUrl', $response);
+        $this->assertStringContainsString((string)__('Not enough items for sale'), $response['messages']);
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/products_related_multiple.php
      *
      * @return void
