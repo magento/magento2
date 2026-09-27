@@ -400,7 +400,6 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      * @param array $comparePoint2
      * @param string $adapterType
      */
-    #[Depends('testOpen')]
     #[Depends('testImageSize')]
     #[DataProvider('imageWatermarkWithAlphaTransparencyDataProvider')]
     public function testWatermarkWithAlphaTransparency(
