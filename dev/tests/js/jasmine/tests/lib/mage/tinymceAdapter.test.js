@@ -334,4 +334,32 @@ define([
             expect(obj.getMediaBrowserOpener()).toBe(mockCallback);
         });
     });
+
+    describe('"parseAttributesString" method', function () {
+        it('should keep the widget type when a value has an encoded quote followed by "type"', function () {
+            var attributes = obj.parseAttributesString(
+                ' type="Magento\\Cms\\Block\\Widget\\Page\\Link" anchor_text="&quot; type" page_id="2"'
+            );
+
+            expect(attributes.type).toBe('Magento\\Cms\\Block\\Widget\\Page\\Link');
+            expect(attributes['anchor_text']).toBe('" type');
+            expect(attributes['page_id']).toBe('2');
+        });
+
+        it('should parse values delimited by encoded quotes', function () {
+            var attributes = obj.parseAttributesString(
+                ' type=&quot;Magento\\Cms\\Block\\Widget\\Page\\Link&quot; page_id=&quot;2&quot;'
+            );
+
+            expect(attributes.type).toBe('Magento\\Cms\\Block\\Widget\\Page\\Link');
+            expect(attributes['page_id']).toBe('2');
+        });
+
+        it('should parse image attributes', function () {
+            var attributes = obj.parseAttributesString(' id="abc" src="https://example.com/a.png" ');
+
+            expect(attributes.id).toBe('abc');
+            expect(attributes.src).toBe('https://example.com/a.png');
+        });
+    });
 });
