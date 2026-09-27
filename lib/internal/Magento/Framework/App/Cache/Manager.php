@@ -102,14 +102,10 @@ class Manager
     {
         $flushedBackend = [];
         foreach ($types as $type) {
-            $frontend = $this->pool->get($type);
-            $backend = $frontend->getBackend();
+            $backend = $this->pool->get($type)->getBackend();
             if (in_array($backend, $flushedBackend, true)) { // it was already flushed from another frontend
                 continue;
             }
-            // flush() must PURGE the whole storage (not a tag-scoped clean). Call clean() on the
-            // backend directly, as legacy does — a frontend->clean() is downgraded by TagScope to a
-            // MATCHING_TAG clean, which cannot reach an untagged local (L1) tier and leaves it behind.
             $backend->clean();
             $flushedBackend[] = $backend;
         }

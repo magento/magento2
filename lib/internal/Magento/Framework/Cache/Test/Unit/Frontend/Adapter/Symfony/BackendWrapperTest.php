@@ -7,14 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Frontend\Adapter\Symfony;
 
-use InvalidArgumentException;
 use Magento\Framework\Cache\CacheConstants;
 use Magento\Framework\Cache\Frontend\Adapter\Symfony\BackendWrapper;
 use Magento\Framework\Cache\Frontend\Adapter\SymfonyAdapters\TagAdapterInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\PruneableInterface;
 
 /**
  * Unit test for BackendWrapper
@@ -232,117 +233,89 @@ class BackendWrapperTest extends TestCase
     }
 
     /**
-     * Test clean() with 'all' mode
+     * clean() delegates every mode (and its tags) to the Symfony frontend and returns its result.
+     *
+     * @param string $mode
+     * @param array $tags
      */
-    public function testCleanWithAllMode(): void
+    #[DataProvider('cleanModeDataProvider')]
+    public function testCleanDelegatesToFrontend(string $mode, array $tags): void
     {
-        $this->adapterMock
+        $this->symfonyMock
             ->expects($this->once())
-            ->method('clearAllIndices');
-
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
+            ->method('clean')
+            ->with($mode, $tags)
             ->willReturn(true);
 
-        $result = $this->backendWrapper->clean('all');
-
-        $this->assertTrue($result);
+        $this->assertTrue($this->backendWrapper->clean($mode, $tags));
     }
 
     /**
-     * Test clean() with CLEANING_MODE_ALL constant
+     * All cleaning modes supported by the Symfony frontend, matching the Zend backend's coverage.
+     *
+     * @return array<string, array{0: string, 1: array}>
      */
-    public function testCleanWithAllModeConstant(): void
+    public static function cleanModeDataProvider(): array
     {
-        $this->adapterMock
+        return [
+            'all' => [CacheConstants::CLEANING_MODE_ALL, []],
+            'old' => [CacheConstants::CLEANING_MODE_OLD, []],
+            'matchingTag' => [CacheConstants::CLEANING_MODE_MATCHING_TAG, ['tag1']],
+            'notMatchingTag' => [CacheConstants::CLEANING_MODE_NOT_MATCHING_TAG, ['tag1']],
+            'matchingAnyTag' => [CacheConstants::CLEANING_MODE_MATCHING_ANY_TAG, ['tag1', 'tag2']],
+        ];
+    }
+
+    /**
+     * clean() propagates a false result from the frontend.
+     */
+    public function testCleanReturnsFrontendFailure(): void
+    {
+        $this->symfonyMock
             ->expects($this->once())
-            ->method('clearAllIndices');
+            ->method('clean')
+            ->willReturn(false);
 
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
-            ->willReturn(true);
-
-        $result = $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_ALL);
-
-        $this->assertTrue($result);
+        $this->assertFalse($this->backendWrapper->clean(CacheConstants::CLEANING_MODE_ALL));
     }
 
     /**
-     * Test clean() with 'old' mode
+     * Test setDirectives() is a no-op
      */
-    public function testCleanWithOldMode(): void
+    public function testSetDirectivesIsNoOp(): void
     {
-        // 'old' mode is a no-op (returns true without doing anything)
-        $this->adapterMock
-            ->expects($this->never())
-            ->method('clearAllIndices');
-
-        $this->cacheMock
-            ->expects($this->never())
-            ->method('clear');
-
-        $result = $this->backendWrapper->clean('old');
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test clean() with CLEANING_MODE_OLD constant
-     */
-    public function testCleanWithOldModeConstant(): void
-    {
-        $result = $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_OLD);
-
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Test clean() with unsupported mode throws exception
-     */
-    public function testCleanWithUnsupportedModeThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Backend clean only supports ALL and OLD modes");
-
-        $this->backendWrapper->clean('unsupported_mode');
-    }
-
-    /**
-     * Test clean() with CLEANING_MODE_MATCHING_TAG throws exception
-     */
-    public function testCleanWithMatchingTagModeThrowsException(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Backend clean only supports ALL and OLD modes");
-
-        $this->backendWrapper->clean(CacheConstants::CLEANING_MODE_MATCHING_TAG, ['tag1']);
-    }
-
-    /**
-     * Test setOption() is a no-op
-     */
-    public function testSetOptionIsNoOp(): void
-    {
-        // Should not throw any exceptions
-        $this->backendWrapper->setOption('some_option', 'some_value');
-        $this->backendWrapper->setOption('another_option', 123);
+        // Should not throw any exceptions and Symfony backend options are not stored in the wrapper
+        $this->backendWrapper->setDirectives(['lifetime' => 3600]);
+        $this->backendWrapper->setDirectives([]);
 
         // No assertions needed - just verify it doesn't crash
         $this->assertTrue(true);
     }
 
     /**
-     * Test getOption() returns null for any option
+     * Test prune() returns false when the underlying pool is not pruneable
      */
-    public function testGetOptionReturnsNull(): void
+    public function testPruneReturnsFalseWhenPoolNotPruneable(): void
     {
-        $result1 = $this->backendWrapper->getOption('any_option');
-        $result2 = $this->backendWrapper->getOption('another_option');
+        // The plain CacheItemPoolInterface mock does not implement PruneableInterface
+        $this->assertFalse($this->backendWrapper->prune());
+    }
 
-        $this->assertNull($result1);
-        $this->assertNull($result2);
+    /**
+     * Test prune() delegates to the pool when it is pruneable
+     */
+    public function testPruneDelegatesToPruneablePool(): void
+    {
+        $pruneablePool = $this->createMockForIntersectionOfInterfaces(
+            [CacheItemPoolInterface::class, PruneableInterface::class]
+        );
+        $pruneablePool->expects($this->once())
+            ->method('prune')
+            ->willReturn(true);
+
+        $backendWrapper = new BackendWrapper($pruneablePool, $this->adapterMock, $this->symfonyMock);
+
+        $this->assertTrue($backendWrapper->prune());
     }
 
     /**
