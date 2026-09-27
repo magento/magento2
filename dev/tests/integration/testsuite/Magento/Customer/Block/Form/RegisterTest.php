@@ -7,8 +7,8 @@ namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Block\DataProviders\AddressAttributeData;
 use Magento\Customer\ViewModel\Address\RegionProvider;
-use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\ButtonLockManager;
+use Magento\Framework\View\Element\Template;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -145,6 +145,27 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         $this->setButtonLockManager($block);
 
         $this->assertStringContainsString('title="Fax"', $block->toHtml());
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testCityFieldClass(): void
+    {
+        /** @var \Magento\Customer\Block\Form\Register $block */
+        $block = Bootstrap::getObjectManager()->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
+        $this->setAttributeDataProvider($block);
+        $this->setRegionProvider($block);
+        $block->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
+
+        $this->assertMatchesRegularExpression(
+            '#<div class="field city required">\s*<label for="city"#',
+            $block->toHtml()
+        );
     }
 
     /**
