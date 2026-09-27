@@ -215,6 +215,45 @@ class UpdateCustomOptionsTest extends TestCase
     }
 
     /**
+     * Values of a "Drop-down" option are removed when its type is changed to "Field".
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
+     *
+     * @return void
+     */
+    public function testUpdateDropDownCustomOptionToField(): void
+    {
+        $productSku = 'simple';
+        $this->createCustomOptionWithValue(
+            [
+                'title' => 'Test option',
+                'type' => ProductCustomOptionInterface::OPTION_TYPE_DROP_DOWN,
+                'is_require' => 0,
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'Test option value',
+                'price' => 10,
+                'price_type' => 'fixed',
+                'sku' => 'test-option-value',
+                'sort_order' => 1,
+            ],
+            $productSku
+        );
+        $updatedOption = $this->updateOptionWithValues(
+            [
+                'type' => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+                'price' => 5,
+                'price_type' => 'fixed',
+            ],
+            $productSku
+        );
+
+        $this->assertEquals(ProductCustomOptionInterface::OPTION_TYPE_FIELD, $updatedOption->getType());
+        $this->assertEmpty($updatedOption->getValues());
+    }
+
+    /**
      * Test update product custom options with type "Radio Buttons".
      *
      * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
