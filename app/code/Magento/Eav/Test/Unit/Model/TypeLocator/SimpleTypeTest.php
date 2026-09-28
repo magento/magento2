@@ -13,6 +13,7 @@ use Magento\Eav\Model\TypeLocator\SimpleType;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -37,10 +38,23 @@ class SimpleTypeTest extends TestCase
         );
     }
 
-    public function testGetTypeReturnsAnyTypeForMultiselect(): void
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function multiselectBackendTypeDataProvider(): array
+    {
+        return [
+            'varchar' => ['varchar'],
+            'text' => ['text'],
+        ];
+    }
+
+    #[DataProvider('multiselectBackendTypeDataProvider')]
+    public function testGetTypeReturnsAnyTypeForMultiselect(string $backendType): void
     {
         $attribute = $this->createMock(AttributeInterface::class);
         $attribute->method('getFrontendInput')->willReturn('multiselect');
+        $attribute->method('getBackendType')->willReturn($backendType);
         $this->attributeRepository->method('get')
             ->with('catalog_product', 'color_multi')
             ->willReturn($attribute);
