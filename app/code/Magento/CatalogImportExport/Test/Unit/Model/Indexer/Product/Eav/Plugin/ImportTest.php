@@ -1,16 +1,15 @@
 <?php
 /**
- * Copyright 2015 Adobe
+ * Copyright 2026 Adobe
  * All Rights Reserved.
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Flat\Plugin;
+namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Product\Eav\Plugin;
 
-use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
-use Magento\Catalog\Model\Indexer\Product\Flat\State;
+use Magento\Catalog\Model\Indexer\Product\Eav\Processor;
 use Magento\Catalog\Model\Product;
-use Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import;
+use Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ImportExport\Model\Import as ImportExportImport;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,11 +28,6 @@ class ImportTest extends TestCase
     private $model;
 
     /**
-     * @var State|MockObject
-     */
-    private $flatStateMock;
-
-    /**
      * @var ImportExportImport|MockObject
      */
     private $subjectMock;
@@ -45,43 +39,28 @@ class ImportTest extends TestCase
             ['markIndexerAsInvalid', 'isIndexerScheduled']
         );
 
-        $this->flatStateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
-
         $this->subjectMock = $this->createMock(ImportExportImport::class);
 
         $this->model = (new ObjectManager($this))->getObject(
             Import::class,
             [
-                'productFlatIndexerProcessor' => $this->processorMock,
-                'flatState' => $this->flatStateMock
+                'indexerEavProcessor' => $this->processorMock
             ]
         );
     }
 
-    public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledDisabled()
+    public function testAfterImportSourceWithProductEntityAndIndexerScheduledDisabled()
     {
         $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
-        $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(false);
         $this->processorMock->expects($this->once())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
         $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
     }
 
-    public function testAfterImportSourceWithFlatDisabledAndIndexerScheduledDisabled()
+    public function testAfterImportSourceWithProductEntityAndIndexerScheduledEnabled()
     {
         $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
-        $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(false);
-        $this->processorMock->expects($this->never())->method('isIndexerScheduled')->willReturn(false);
-        $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
-        $someData = [1, 2, 3];
-        $this->assertEquals($someData, $this->model->afterImportSource($this->subjectMock, $someData));
-    }
-
-    public function testAfterImportSourceWithFlatEnabledAndIndexerScheduledEnabled()
-    {
-        $this->subjectMock->method('getEntity')->willReturn(Product::ENTITY);
-        $this->flatStateMock->expects($this->once())->method('isFlatEnabled')->willReturn(true);
         $this->processorMock->expects($this->once())->method('isIndexerScheduled')->willReturn(true);
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
@@ -91,7 +70,6 @@ class ImportTest extends TestCase
     public function testAfterImportSourceWithNonProductEntityDoesNotInvalidateIndexer()
     {
         $this->subjectMock->method('getEntity')->willReturn('customer');
-        $this->flatStateMock->expects($this->never())->method('isFlatEnabled');
         $this->processorMock->expects($this->never())->method('isIndexerScheduled');
         $this->processorMock->expects($this->never())->method('markIndexerAsInvalid');
         $someData = [1, 2, 3];
