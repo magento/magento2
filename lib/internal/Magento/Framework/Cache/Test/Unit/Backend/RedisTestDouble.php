@@ -19,11 +19,11 @@ class RedisTestDouble
     /** @var array<int, array> Recorded (command, ...args) tuples, in call order. */
     public array $calls = [];
 
-    /** @var mixed When set (non-null), overrides the next exec() return value once. */
-    public $execReturnOverride;
+    /** @var array|false|null When set (non-null), overrides the next exec() return value once. */
+    public array|false|null $execReturnOverride = null;
 
     /** @var bool|array */
-    public $evalShaResult = true;
+    public bool|array $evalShaResult = true;
 
     /** @var array<string, string> id => raw (uncompressed) encoded tags */
     private array $hashes = [];
@@ -37,26 +37,57 @@ class RedisTestDouble
     /** @var array<int, mixed> */
     private array $pending = [];
 
+    /**
+     * Seed a cache entry's stored tag list.
+     *
+     * @param string $id
+     * @param string $tags
+     * @return void
+     */
     public function seedHash(string $id, string $tags): void
     {
         $this->hashes[$id] = $tags;
     }
 
+    /**
+     * Seed a tag's id index.
+     *
+     * @param string $tag
+     * @param array $ids
+     * @return void
+     */
     public function seedSet(string $tag, array $ids): void
     {
         $this->sets[$tag] = $ids;
     }
 
+    /**
+     * Check whether the cache entry still exists.
+     *
+     * @param string $id
+     * @return bool
+     */
     public function hashExists(string $id): bool
     {
         return isset($this->hashes[$id]);
     }
 
+    /**
+     * Read the members of a tag's id index.
+     *
+     * @param string $tag
+     * @return array
+     */
     public function setMembers(string $tag): array
     {
         return array_values($this->sets[$tag] ?? []);
     }
 
+    /**
+     * Start collecting pipeline responses.
+     *
+     * @return self
+     */
     public function pipeline(): self
     {
         $this->inPipeline = true;
@@ -65,12 +96,24 @@ class RedisTestDouble
         return $this;
     }
 
+    /**
+     * Simulate the transaction builder used by the backend.
+     *
+     * @return self
+     */
     public function multi(): self
     {
         return $this;
     }
 
-    public function hGet(string $key, string $field)
+    /**
+     * Read a cache entry's tag field, or queue its response in a pipeline.
+     *
+     * @param string $key
+     * @param string $field
+     * @return string|false|self
+     */
+    public function hGet(string $key, string $field): string|false|self
     {
         $this->calls[] = ['hGet', $key, $field];
         $id = $this->stripPrefix($key, self::PREFIX_KEY);
@@ -85,7 +128,13 @@ class RedisTestDouble
         return $value;
     }
 
-    public function unlink($keys)
+    /**
+     * Remove cache data or tag-index keys.
+     *
+     * @param string|array $keys
+     * @return int|self
+     */
+    public function unlink(string|array $keys): int|self
     {
         $this->calls[] = ['unlink', $keys];
         foreach ((array) $keys as $key) {
@@ -102,7 +151,14 @@ class RedisTestDouble
         return 1;
     }
 
-    public function sRem(string $key, $members)
+    /**
+     * Remove ids from a tag index.
+     *
+     * @param string $key
+     * @param string|array $members
+     * @return int|self
+     */
+    public function sRem(string $key, string|array $members): int|self
     {
         $this->calls[] = ['sRem', $key, $members];
         $tag = $this->stripPrefix($key, self::PREFIX_TAG_IDS);
@@ -117,7 +173,13 @@ class RedisTestDouble
         return 1;
     }
 
-    public function sUnion($keys)
+    /**
+     * Find ids matching any of the given tag-index keys.
+     *
+     * @param string|array $keys
+     * @return array
+     */
+    public function sUnion(string|array $keys): array
     {
         $this->calls[] = ['sUnion', $keys];
         $union = [];
@@ -130,21 +192,38 @@ class RedisTestDouble
         return array_values(array_unique($union));
     }
 
-    public function evalSha(...$args)
+    /**
+     * Record an upstream Lua script invocation.
+     *
+     * @param mixed ...$args
+     * @return bool|array
+     */
+    public function evalSha(...$args): bool|array
     {
         $this->calls[] = ['evalSha', $args];
 
         return $this->evalShaResult;
     }
 
-    public function eval(...$args)
+    /**
+     * Record a fallback Lua script invocation.
+     *
+     * @param mixed ...$args
+     * @return bool
+     */
+    public function eval(...$args): bool
     {
         $this->calls[] = ['eval', $args];
 
         return true;
     }
 
-    public function exec()
+    /**
+     * Return queued pipeline responses or the configured failure response.
+     *
+     * @return array|false
+     */
+    public function exec(): array|false
     {
         $this->calls[] = ['exec'];
         $this->inPipeline = false;
@@ -162,6 +241,13 @@ class RedisTestDouble
         return $result;
     }
 
+    /**
+     * Convert a Redis key back to a seeded id or tag.
+     *
+     * @param string $key
+     * @param string $prefix
+     * @return string
+     */
     private function stripPrefix(string $key, string $prefix): string
     {
         return str_starts_with($key, $prefix) ? substr($key, strlen($prefix)) : $key;

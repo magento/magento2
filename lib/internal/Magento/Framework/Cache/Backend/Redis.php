@@ -114,8 +114,9 @@ class Redis extends \Cm_Cache_Backend_Redis
      * set, unlike its own single-id remove() which cleans both
      *
      * @param array $ids
+     * @return void
      */
-    protected function _removeByIds($ids)
+    protected function _removeByIds($ids): void
     {
         if (!$ids) {
             return;
@@ -152,8 +153,9 @@ class Redis extends \Cm_Cache_Backend_Redis
      * an id actually belongs to rather than only the ones supplied here.
      *
      * @param array $tags
+     * @return void
      */
-    protected function _removeByMatchingAnyTags($tags)
+    protected function _removeByMatchingAnyTags($tags): void
     {
         if ($this->_useLua) {
             parent::_removeByMatchingAnyTags($tags);

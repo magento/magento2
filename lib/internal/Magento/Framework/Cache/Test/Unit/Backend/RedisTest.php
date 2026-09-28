@@ -192,7 +192,7 @@ class RedisTest extends TestCase
      * @param array $args
      * @return mixed
      */
-    private function invokeMethod(object $object, string $method, array $args)
+    private function invokeMethod(object $object, string $method, array $args): mixed
     {
         $reflectionMethod = new ReflectionMethod($object, $method);
 

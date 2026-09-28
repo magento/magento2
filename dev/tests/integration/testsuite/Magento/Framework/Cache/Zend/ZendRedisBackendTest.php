@@ -38,7 +38,7 @@ class ZendRedisBackendTest extends CacheFrontendTestCase
         $this->assertInstanceOf(Redis::class, $backend);
 
         $id = $this->cacheId('zend-redis', 'tag_index');
-        $tag = 'AC_18197_TAG_' . uniqid();
+        $tag = 'ZEND_REDIS_TAG_INDEX_' . uniqid();
 
         $backend->save('payload', $id, [$tag]);
         $this->assertContains($id, $backend->getIdsMatchingTags([$tag]));
@@ -63,8 +63,8 @@ class ZendRedisBackendTest extends CacheFrontendTestCase
         $backend = $this->createRedisBackend(['use_lua' => 0], 'ZEND_REDIS_ANY_TAG_NO_LUA');
 
         $id = $this->cacheId('zend-redis', 'any_tag_no_lua');
-        $passedTag = 'AC_18197_PASSED_' . uniqid();
-        $otherTag = 'AC_18197_OTHER_' . uniqid();
+        $passedTag = 'ZEND_REDIS_ANY_PASSED_' . uniqid();
+        $otherTag = 'ZEND_REDIS_ANY_OTHER_' . uniqid();
 
         $backend->save('payload', $id, [$passedTag, $otherTag]);
         $this->assertContains($id, $backend->getIdsMatchingTags([$passedTag]));
@@ -95,7 +95,7 @@ class ZendRedisBackendTest extends CacheFrontendTestCase
         $backend = $this->createRedisBackend(['use_lua' => 1], 'ZEND_REDIS_ANY_TAG_LUA');
 
         $id = $this->cacheId('zend-redis', 'any_tag_lua');
-        $passedTag = 'AC_18197_PASSED_LUA_' . uniqid();
+        $passedTag = 'ZEND_REDIS_ANY_LUA_' . uniqid();
 
         $backend->save('payload', $id, [$passedTag]);
         $this->assertContains($id, $backend->getIdsMatchingTags([$passedTag]));
