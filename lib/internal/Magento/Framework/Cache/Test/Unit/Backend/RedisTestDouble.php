@@ -19,10 +19,18 @@ class RedisTestDouble
     /** @var array<int, array> Recorded (command, ...args) tuples, in call order. */
     public array $calls = [];
 
-    /** @var array|false|null When set (non-null), overrides the next exec() return value once. */
-    public array|false|null $execReturnOverride = null;
+    /**
+     * The next exec() return value override, or null when no override is configured.
+     *
+     * @var array|bool|null
+     */
+    public mixed $execReturnOverride = null;
 
-    /** @var bool|array */
+    /**
+     * Configured response returned by the next evalSha() call.
+     *
+     * @var bool|array
+     */
     public bool|array $evalShaResult = true;
 
     /** @var array<string, string> id => raw (uncompressed) encoded tags */
@@ -31,10 +39,18 @@ class RedisTestDouble
     /** @var array<string, string[]> tag => member ids */
     private array $sets = [];
 
-    /** @var bool */
+    /**
+     * Whether Redis commands are currently being pipelined.
+     *
+     * @var bool
+     */
     private bool $inPipeline = false;
 
-    /** @var array<int, mixed> */
+    /**
+     * Queued pipeline command responses.
+     *
+     * @var array<int, mixed>
+     */
     private array $pending = [];
 
     /**
